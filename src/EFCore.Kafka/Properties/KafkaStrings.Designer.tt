@@ -1,0 +1,5 @@
+<#
+    Session["ResourceFile"] = "KafkaStrings.resx";
+    Session["LoggingDefinitionsClass"] = "Diagnostics.Internal.KafkaLoggingDefinitions";
+#>
+<#@ include file="Resources.tt" #>
