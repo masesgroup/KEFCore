@@ -17,6 +17,7 @@ The project is based on available information within the official [EntityFramewo
 
 * [Roadmap](src/net/Documentation/articles/roadmap.md)
 * [Actual state](src/net/Documentation/articles/actualstate.md)
+* [EntityFramework4Kafka usage](articles/usage.md)
 
 ---
 
