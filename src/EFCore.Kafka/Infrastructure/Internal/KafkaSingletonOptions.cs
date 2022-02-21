@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.KafkaBridge.Streams;
+
 namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
 
 public class KafkaSingletonOptions : IKafkaSingletonOptions
@@ -26,8 +28,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
         if (kafkaOptions != null)
         {
-            ApplicationId = kafkaOptions.ApplicationId;
+            UseNameMatching = kafkaOptions.UseNameMatching;
+            DatabaseName = kafkaOptions.DatabaseName;
             BootstrapServers = kafkaOptions.BootstrapServers;
+            ProducerByEntity = kafkaOptions.ProducerByEntity;
             AutoOffsetReset = kafkaOptions.AutoOffsetReset;
         }
     }
@@ -46,9 +50,13 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
         }
     }
 
-    public virtual string? ApplicationId { get; private set; }
+    public virtual bool UseNameMatching { get; private set; }
+
+    public virtual string? DatabaseName { get; private set; }
 
     public virtual string? BootstrapServers { get; private set; }
 
-    public virtual string? AutoOffsetReset { get; private set; }
+    public virtual bool ProducerByEntity { get; private set; }
+
+    public virtual Topology.AutoOffsetReset AutoOffsetReset { get; private set; }
 }

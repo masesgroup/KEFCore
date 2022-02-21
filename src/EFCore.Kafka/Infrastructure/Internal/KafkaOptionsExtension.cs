@@ -31,11 +31,10 @@ namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
 public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
     private bool _useNameMatching = true;
-    private string? _applicationId = Guid.NewGuid().ToString();
     private string? _databaseName;
     private string? _bootstrapServers;
     private bool _producerByEntity = false;
-    private string? _autoOffsetReset;
+    private Topology.AutoOffsetReset _autoOffsetReset;
     private DbContextOptionsExtensionInfo? _info;
 
     public KafkaOptionsExtension()
@@ -45,7 +44,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     protected KafkaOptionsExtension(KafkaOptionsExtension copyFrom)
     {
         _useNameMatching = copyFrom._useNameMatching;
-        _applicationId = copyFrom._applicationId;
         _databaseName = copyFrom._databaseName;
         _bootstrapServers = copyFrom._bootstrapServers;
         _producerByEntity = copyFrom._producerByEntity;
@@ -60,30 +58,19 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual bool UseNameMatching => _useNameMatching;
 
-    public virtual string ApplicationId => _applicationId!;
-
     public virtual string DatabaseName => _databaseName!;
 
     public virtual string BootstrapServers => _bootstrapServers!;
 
     public virtual bool ProducerByEntity => _producerByEntity;
 
-    public virtual string AutoOffsetReset => _autoOffsetReset!;
+    public virtual Topology.AutoOffsetReset AutoOffsetReset => _autoOffsetReset!;
 
     public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
     {
         var clone = Clone();
 
         clone._useNameMatching = useNameMatching;
-
-        return clone;
-    }
-
-    public virtual KafkaOptionsExtension WithApplicationId(string applicationId)
-    {
-        var clone = Clone();
-
-        clone._applicationId = applicationId;
 
         return clone;
     }
@@ -115,7 +102,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    public virtual KafkaOptionsExtension WithAutoOffsetReset(string autoOffsetReset)
+    public virtual KafkaOptionsExtension WithAutoOffsetReset(Topology.AutoOffsetReset autoOffsetReset)
     {
         var clone = Clone();
 
@@ -186,7 +173,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
                 {
                     var builder = new StringBuilder();
 
-                    builder.Append("StoreName=").Append(Extension._applicationId).Append(' ');
+                    builder.Append("DataBaseName=").Append(Extension._databaseName).Append(' ');
 
                     _logFragment = builder.ToString();
                 }

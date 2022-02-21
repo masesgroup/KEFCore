@@ -18,13 +18,19 @@
 
 #nullable enable
 
+using MASES.KafkaBridge.Streams;
+
 namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
 
 public interface IKafkaSingletonOptions : ISingletonOptions
 {
-    string? ApplicationId { get; }
+    bool UseNameMatching { get; }
+
+    string? DatabaseName { get; }
 
     string? BootstrapServers { get; }
 
-    string? AutoOffsetReset { get; }
+    bool ProducerByEntity { get; }
+
+    Topology.AutoOffsetReset AutoOffsetReset { get; }
 }

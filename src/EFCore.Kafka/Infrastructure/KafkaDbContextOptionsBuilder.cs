@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.KafkaBridge.Streams;
 using System.ComponentModel;
 
 namespace MASES.EntityFrameworkCore.Kafka.Infrastructure;
@@ -66,7 +67,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="nullChecksEnabled">If <see langword="true" />, then nullability check is enforced.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder AutoOffsetReset(string autoOffsetReset = "earliest")
+    public virtual KafkaDbContextOptionsBuilder AutoOffsetReset(Topology.AutoOffsetReset autoOffsetReset = Topology.AutoOffsetReset.EARLIEST)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
