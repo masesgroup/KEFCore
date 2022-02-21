@@ -2,6 +2,8 @@
 
 [![CI_BUILD](https://github.com/masesgroup/EntityFramework4Kafka/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/EntityFramework4Kafka/actions/workflows/build.yaml) [![CI_RELEASE](https://github.com/masesgroup/EntityFramework4Kafka/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/EntityFramework4Kafka/actions/workflows/release.yaml) 
 
+[![latest version](https://img.shields.io/nuget/v/MASES.EntityFrameworkCore.Kafka)](https://www.nuget.org/packages/MASES.EntityFrameworkCore.Kafka) [![downloads](https://img.shields.io/nuget/dt/MASES.EntityFrameworkCore.Kafka)](https://www.nuget.org/packages/MASES.EntityFrameworkCore.Kafka)
+
 EntityFramework4Kafka is the EntityFrameworkCore provider for Apache Kafka.
 Based on [KafkaBridge](https://github.com/masesgroup/KafkaBridge) it allows to use Apache Kafka as a distributed database.
 

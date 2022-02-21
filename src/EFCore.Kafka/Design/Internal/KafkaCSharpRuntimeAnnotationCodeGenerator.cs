@@ -28,7 +28,6 @@ public class KafkaCSharpRuntimeAnnotationCodeGenerator : CSharpRuntimeAnnotation
 {
     public KafkaCSharpRuntimeAnnotationCodeGenerator(
         CSharpRuntimeAnnotationCodeGeneratorDependencies dependencies)
-
         : base(dependencies)
     {
     }
