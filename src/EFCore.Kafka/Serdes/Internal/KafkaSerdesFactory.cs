@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
