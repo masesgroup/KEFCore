@@ -87,4 +87,3 @@ jobs:
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
           add: '.\docs\*.*'
           message: Update documentation after commit ${{ env.GITHUB_COMMIT_MESSAGE }}
- 
