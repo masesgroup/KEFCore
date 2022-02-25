@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>EntityFramework4Kafka usage | Kafka Bridge website </title>
+    <title>EFCoreKafka usage | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="EntityFramework4Kafka usage | Kafka Bridge website ">
+    <meta name="title" content="EFCoreKafka usage | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.0.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
@@ -67,9 +67,65 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="entityframework4kafka-usage">EntityFramework4Kafka usage</h1>
+<h1 id="efcorekafka-usage">EFCoreKafka usage</h1>
 
-<p>TBD</p>
+<blockquote>
+<p>NOTE: you need a working Apache Kafka cluster to use this provider.</p>
+</blockquote>
+<h3 id="installation">Installation</h3>
+<p>EF Core for Apache Kafka is available on <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.Kafka">NuGet</a>:</p>
+<pre><code class="lang-sh">dotnet add package MASES.EntityFrameworkCore.Kafka
+</code></pre>
+<h3 id="basic-usage">Basic usage</h3>
+<p>The following code demonstrates basic usage of EF Core for Apache Kafka.
+For a full tutorial configuring the <code>DbContext</code>, defining the model, and creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs.</p>
+<pre><code class="lang-cs">using (var db = new BloggingContext())
+{
+    // Inserting data into the database
+    db.Add(new Blog { Url = &quot;http://blogs.msdn.com/adonet&quot; });
+    db.SaveChanges();
+
+    // Querying
+    var blog = db.Blogs
+        .OrderBy(b =&gt; b.BlogId)
+        .First();
+
+    // Updating
+    blog.Url = &quot;https://devblogs.microsoft.com/dotnet&quot;;
+    blog.Posts.Add(
+        new Post
+        {
+            Title = &quot;Hello World&quot;,
+            Content = &quot;I wrote an app using EF Core!&quot;
+        });
+    db.SaveChanges();
+
+    // Deleting
+    db.Remove(blog);
+    db.SaveChanges();
+}
+
+public class BloggingContext : DbContext
+{
+	readonly string _serverToUse;
+	public BloggingContext(string serverToUse)
+	{
+		_serverToUse = serverToUse;
+	}
+
+	public DbSet&lt;Blog&gt; Blogs { get; set; }
+	public DbSet&lt;Post&gt; Posts { get; set; }
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.UseKafkaDatabase(&quot;TestDB&quot;, _serverToUse, (o) =&gt;
+		{
+			o.AutoOffsetReset();
+		});
+	}
+
+}
+</code></pre>
 </article>
           </div>
           
@@ -78,7 +134,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/masesgroup/EntityFramework4Kafka/blob/master/src/Documentation/articles/usage.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/masesgroup/EFCoreKafka/blob/master/src/Documentation/articles/usage.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
