@@ -71,7 +71,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: KafkaBridge
+          name: EFCore.Kafka
           path: .\bin\*nupkg
 
       - name: Extract commit SHA
