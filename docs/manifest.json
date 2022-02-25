@@ -1,0 +1,1067 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/EntityFramework4Kafka/EntityFramework4Kafka/src/Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.html",
+          "hash": "dzSF5VaiK/1mkzFjEemBVWGslAtIym9n4EO79/9t8Kg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.KafkaDesignTimeServices.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.KafkaDesignTimeServices.html",
+          "hash": "De9SuPQxHmNxmHKLADWvcQkeLsyvMK5PkrYWYwQGTlk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Design.Internal.html",
+          "hash": "uVpR6Q5a6evpYpqD87FzWmKvaTtFXZ/kdprdwuE5i9A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.KafkaLoggerExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.KafkaLoggerExtensions.html",
+          "hash": "LltEuvBFbwGQXDAJKNbw7Iz97Ba6SCJ4/sKXXUiZMWo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.KafkaLoggingDefinitions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.KafkaLoggingDefinitions.html",
+          "hash": "jn3QptUoLVDCS5FLZstRTJ4VSxEexobdcm9J3Qkrpb0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal.html",
+          "hash": "JBv+S10r0RXhPNwrP0jPmcYpCzf2Ac0ABW7Yn0409Mk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.KafkaEventId.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.KafkaEventId.html",
+          "hash": "o6PdHAArooXVTCC999bt1T2Pfn6lzrLLiRy2BfVcXWY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Diagnostics.html",
+          "hash": "ctwZ3ftfvNnCLEMiQ4W2Gc8WvAYeKWFOENhHaUdOupk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.html",
+          "hash": "xrgX/B3x1rV9MEa37ifotOZ7BhtVCC2vWO44tlqV8b4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html",
+          "hash": "RNcBJa5qUzcuwBpYjKKbcbppoA8/uo4NR12wzl1D8yE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaModelValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaModelValidator.html",
+          "hash": "+OLQX7VLclvRSDo3ekO8i3SL7I908uNco+iZbaw7lQo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html",
+          "hash": "vzA0tldeKScvLbszlGgqVhYypiYi3jw366a4KSeBQA8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html",
+          "hash": "rdm5XvZ5OEgOtiiz8H3BfCJOvrtxlwc+021A+PH2wss="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.html",
+          "hash": "ieunEIBNQZz7x0bhaTN3gWzfJzsR8zvI1YGQPO7LiJY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html",
+          "hash": "1Ont41R2apzJZqcfuo2qLnz7endWm+E2D4Pevg1ELT0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.html",
+          "hash": "nCSt6DVtVapNy9cgdUkd27dPqANEZ8ldMFUKgvB8oeI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.KafkaResources.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.KafkaResources.html",
+          "hash": "ZHCdE+1J+WaAxSNEh2Q36CpuZ3Sbds5URSk7Jdn1vBo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.KafkaStrings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.KafkaStrings.html",
+          "hash": "Qoq8eimCoJLz8CAnZCYfbSWxN0Kf2toBnXy9Q/KcPt4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Internal.html",
+          "hash": "/V+e1w6yOwpM6uadfjCE/i6s/cf7oETYvB2CPvsT/t8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDataHelperExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDataHelperExtensions.html",
+          "hash": "88vWgU7Y+ItxrKXw2KMKmeuzAYzdg9DZGGMiFZomZGw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDatabaseFacadeExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDatabaseFacadeExtensions.html",
+          "hash": "EHIJebrW++4KqM1YSf7Qj+28jRWus2MrL4GY7wrHTWM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDbContextOptionsExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaDbContextOptionsExtensions.html",
+          "hash": "7GDtfM4W0vSNv9NVkjv5HNi1mtXAdzau6Z1f9CK2LWk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaEntityTypeBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaEntityTypeBuilderExtensions.html",
+          "hash": "qqMyPy5dtQT/UPofclhoL725AOwWZtI0B8jD4rDcMek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaEntityTypeExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.KafkaEntityTypeExtensions.html",
+          "hash": "d2Og319qcBMRpJbPOTsyhDxwmaMduX1ZyBDQrbycrPM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.DefiningQueryRewritingConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.DefiningQueryRewritingConvention.html",
+          "hash": "6sd7SFsNn4AcFIXRyjghuddeXcLX6x4TtEq3hukx3hk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.KafkaConventionSetBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.KafkaConventionSetBuilder.html",
+          "hash": "W+BpOxaAmn+iXKux3qWGpnOp1fkpVQJd51JzfJ21VKk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Metadata.Conventions.html",
+          "hash": "A90XdgbBTa+doOKjsa65FBCco+edo5UkUQcjD206m9k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.AnonymousObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.AnonymousObject.html",
+          "hash": "zTgUmVc2N8T9JMyvz53oOkLWgUE9o85pmFR0jCgsEuw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.CollectionResultShaperExpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.CollectionResultShaperExpression.html",
+          "hash": "EAXcBUDyiUyJUmJaHGmSajXUM/lzk2FSAge9WTwnYAw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.EntityProjectionExpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.EntityProjectionExpression.html",
+          "hash": "WDuR+1mMaz39V+sPZ4brkTPTvOeYdWb4Em9H8NTw4Vs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.html",
+          "hash": "6WRBQKXWmJAB+0UIptt8CXI/9eMGVkKaColwDpn9gw8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaProjectionBindingExpressionVisitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaProjectionBindingExpressionVisitor.html",
+          "hash": "aR6Cqbmh2cpqF+tKgPLnAIFf8wSMLUEcxHKLJDUri+Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryContext.html",
+          "hash": "FEkSmL9u7yRprax2fqIizzgBWqySAIm/jDdzNNoKw9w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryContextFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryContextFactory.html",
+          "hash": "vZqMyTisELFRt/QR6EeOA61fmcmGYurdNFoBs/umce8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryExpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryExpression.html",
+          "hash": "G4UQ7ZEYI3jEIihB/Cg7XHbYN61oXVfoX9Y347vG7Kk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html",
+          "hash": "XBAoEx8XtZFdDb0gJGuMwrQIpgpplkmfFJtSL1mLCeA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.html",
+          "hash": "CipOIKAwZGKLQs8Fjn3fHdnvhbQJVvicQ08JauyRYwo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor.html",
+          "hash": "BgvxckNUnNEkT+PJq2092r6ZiAhCCIQhrxxk5dxqz1A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaShapedQueryCompilingExpressionVisitorFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaShapedQueryCompilingExpressionVisitorFactory.html",
+          "hash": "2bBGG6ZmUUsuan6Yb2wEx69kY/gPPiRDXSSweu1oMlI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaTableExpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.KafkaTableExpression.html",
+          "hash": "Li3AH51YlhCR9X74HcALRb+/+NgBxFPT7bXNIEsNFcI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.SingleResultShaperExpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.SingleResultShaperExpression.html",
+          "hash": "1FjrZQZJOx28g6gwp8CzOfSL7EUbYyCFHvkA+2hB7T8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Query.Internal.html",
+          "hash": "PJArgFd1abCdAVHgkPuvX9WkGcDX2sgZnqj3Z17BDjs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.IKafkaSerdesEntityType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.IKafkaSerdesEntityType.html",
+          "hash": "8hmO4Scod6UCB/uzntZGUibXObtv58KR9ewtLLEq3AE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.IKafkaSerdesFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.IKafkaSerdesFactory.html",
+          "hash": "FVitMKlYq9xCFlatzRblMvmxlJ78qu4xfRKb3VT66Vk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesEntityType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesEntityType.html",
+          "hash": "Ix7sZWmC4VrP5A2s8V5NweEjwij2WVGpwSkCTjFPbVY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesEntityTypeData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesEntityTypeData.html",
+          "hash": "H1UhJ3UudlMpfeK+lCH4yia3xpJcuO6zwhok9hl6Ttc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.KafkaSerdesFactory.html",
+          "hash": "KIihDJWKn8LrvVz0osTNIi4uVQZpBhOrPIiuR3MtPBI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Serdes.Internal.html",
+          "hash": "nFx7hzoucClRom90Nd+9iVKB2lvrXhmYemtgA5F0CkQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaCluster.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaCluster.html",
+          "hash": "3c6hkIqkmW9TVMLlZGcnkIUmJUloT/GjVyUFJOX5vCk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaClusterCache.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaClusterCache.html",
+          "hash": "mtZBqBiyKuG4zd7ExHNsusPHknDp4XCf4w70Cw05df0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaDatabase.html",
+          "hash": "olRtxHm0eK7X4ONOF2BdsbC+okCocQjxDnSHz30gqcI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaTable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaTable.html",
+          "hash": "Rsb8EiDFVLhqeI9gRakWd97ETqarWIAzbdVaQ11BrEs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaTableFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaTableFactory.html",
+          "hash": "4fqcG2A5E5OcJCZMKloARCQYmvpXP9GZPS14HE8+cT8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaCluster.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaCluster.html",
+          "hash": "yP1jtYmFSjn/kW5D9U5zntUt7HmzgjNubVGpLE35R6s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaClusterCache.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaClusterCache.html",
+          "hash": "on3cQWV7cUPLpVOfzFNFoyf71DgrHrFdO7dRt123jsk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaClusterCacheExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaClusterCacheExtensions.html",
+          "hash": "+ZQ9BKPf5JAuW7I93ImLmBXZKNqdTn472RQQu9jeuWo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaDatabase.html",
+          "hash": "DR1mdUhMaKMKRKxBhIbilAXo/GdiN3bRf+rGMyBga0M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaDatabaseCreator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaDatabaseCreator.html",
+          "hash": "71Q22ZEb0kmmvJ9WJjA/LDbF3yee5ETW/upYTcGJgNw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTable-1.html",
+          "hash": "PpO7ne1WAfoyLpWLB6jyHJ/fI9MnjejQBgJCRiE4s1o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTableFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTableFactory.html",
+          "hash": "mCV7I3zAv7URVewaok6etLuPF7lC9sAdM/sxZ8ZEiaQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTableSnapshot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTableSnapshot.html",
+          "hash": "jtNFlrTz9SME1jjdprA3o271HgyxAG0IfkWeJdOkwrA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTransaction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTransaction.html",
+          "hash": "IHzSGAvdgvI0rwJkG+w3RDLxwV9tpNOQ1GbbrTewXsE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTransactionManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTransactionManager.html",
+          "hash": "WNWTPLeyTxJYs/YNmG0vNeTbYjEI8A4SatEtzw5muMM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTypeMapping.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTypeMapping.html",
+          "hash": "H6yJjXMhzTCJK7QiOlgxC94DY2feVlDrNYd6dmtkz5k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTypeMappingSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTypeMappingSource.html",
+          "hash": "4CZJcD7ilp4Me87ik460cEv491sBvu+UT0WFdkMU4ng="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.html",
+          "hash": "WRJBQOW1EVeRLj7nsyF9lDsV09zJExuLFAw0uaLGt00="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.IKafkaIntegerValueGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.IKafkaIntegerValueGenerator.html",
+          "hash": "Kuap2QDgLMfLwD9P4qlGg2E+qyu9O35gDej5vZjjJYY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.KafkaIntegerValueGenerator-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.KafkaIntegerValueGenerator-1.html",
+          "hash": "F2y6IvE3uZmUc7X6l7rhJS2Q7ixqH527Q2Cq1933Cwg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.KafkaValueGeneratorSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.KafkaValueGeneratorSelector.html",
+          "hash": "FFfS1oeEJA7zBKN98hctJJdQJ55tFeecA1YmlLg8iP0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal.html",
+          "hash": "GyyHfABx7nDkrQZYvWEIuOzwNqDQhHr6rx931tcMN6M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.Kafka.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.Kafka.html",
+          "hash": "qF/vMXxlzwIozBCsLoNZT9NU5vFvljktK0VYEQ4OJN0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions.html",
+          "hash": "o0y16BvK3U9qWIsUD/OQHI9nYPG245wMxkNjBKRH8oo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Microsoft.Extensions.DependencyInjection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Microsoft.Extensions.DependencyInjection.html",
+          "hash": "8eux2ipTQKUlzmmMOaPWnViZHFEOdXjX+cXodW7lNms="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "HWTOA6k944tAgwhrgn4FvQLH8DhE2LoQON+rw/HoR3A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "L/6OWUIEWZZh9C8b/xRs5OGrYuvL205lUu7Z7hoExyI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/actualstate.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/actualstate.html",
+          "hash": "Ot/uPip/OmHqXul9BkJ2YVbLzhZIc7BvSQNA6+QEtIU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "5ec//tkqNfqEl2sPjKYLw0IYz1exNUF6X6+WLpMXjVU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/roadmap.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/roadmap.html",
+          "hash": "U13b+prHaU1etA8n4HpH+ipIav+iRdbMD5Ch4qhzBpQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "6AQMoIshJmOw5iI4f7UwFl72MehbtnZ1PFDok6dSvSo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/usage.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/usage.html",
+          "hash": "9OdvR/rH72c+VpFQo1E91/0Uw/mgAOz4+AXZ8R6fiFg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "rQOA2AH/FmnarmMv0a8QQxVWdJOd91xeIGO9MMskeVU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "pgmUuQDXzLiVa2NC6kjvUDE2zolekW+sFHoWu87bcTM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 6,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 73,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
