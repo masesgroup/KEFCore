@@ -84,6 +84,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<EmbeddedResource Update="Properties\KafkaStrings.resx">
 			<CustomToolNamespace>MASES.EntityFrameworkCore.Kafka.Internal</CustomToolNamespace>
 		</EmbeddedResource>
@@ -95,8 +99,6 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
+
 
 </Project>
