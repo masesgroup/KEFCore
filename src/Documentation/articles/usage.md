@@ -1,4 +1,4 @@
-# EntityFramework4Kafka usage
+# EFCoreKafka usage
 
 > NOTE: you need a working Apache Kafka cluster to use this provider.
 
