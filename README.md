@@ -26,7 +26,7 @@ EFCoreKafka uses [KafkaBridge](https://github.com/masesgroup/KafkaBridge), and i
   * Any Java/Scala class behind Apache Kafka can be directly managed: Consumer, Producer, Administration, Streams, Server-side, and so on;
   * No need to learn new APIs: we try to expose the same APIs in C# style;
   * No extra validation cycle on protocol and functionality: bug fix, improvements, new features are immediately available;
-  * Documentation is shared;
+  * Documentation is shared.
 
 Have a look at the following resources:
 - [Release notes](https://www.jcobridge.com/release-notes/)
