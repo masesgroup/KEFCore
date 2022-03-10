@@ -20,7 +20,7 @@
 
 using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
 using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Java.Util.Concurrent;
+using Java.Util.Concurrent;
 
 namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
 

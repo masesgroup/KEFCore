@@ -20,6 +20,8 @@
 */
 
 using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.KafkaBridge.Clients.Producer;
+using MASES.KafkaBridge.Common.Config;
 using MASES.KafkaBridge.Streams;
 using System.ComponentModel;
 
@@ -61,21 +63,132 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder
         => OptionsBuilder;
 
+    public ProducerConfigBuilder EmptyProducerConfigBuilder => ProducerConfigBuilder.Create();
+
+    public StreamsConfigBuilder EmptyStreamsConfigBuilder => StreamsConfigBuilder.Create();
+
+    public TopicConfigBuilder EmptyTopicConfigBuilder => TopicConfigBuilder.Create();
+
     /// <summary>
-    ///     Enables nullability check for all properties across all entities within the Kafka database.
+    ///     Enables name matching on <see cref="IEntity"/> instead of <see cref="Type"/> matching
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="nullChecksEnabled">If <see langword="true" />, then nullability check is enforced.</param>
+    /// <param name="useNameMatching">If <see langword="true" />, it is used name matching.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder AutoOffsetReset(Topology.AutoOffsetReset autoOffsetReset = Topology.AutoOffsetReset.EARLIEST)
+    public virtual KafkaDbContextOptionsBuilder WithUseNameMatching(bool useNameMatching = true)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithAutoOffsetReset(autoOffsetReset);
+        extension = extension.WithUseNameMatching(useNameMatching);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Enables creation of producer for each <see cref="IEntity"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="producerByEntity">If <see langword="true" />, then each entity will have its own <see cref="KafkaProducer"/>.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithProducerByEntity(bool producerByEntity = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithProducerByEntity(producerByEntity);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Enables use of <see cref="ForeachAction"/>, otherwise a <see cref="Materialized"/> store will be used
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="retrieveWithForEach">If <see langword="true" />, <see cref="ForeachAction"/> will be used.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithRetrieveWithForEach(bool retrieveWithForEach = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithRetrieveWithForEach(retrieveWithForEach);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KafkaProducer"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="producerConfigBuilder">The <see cref="ProducerConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder ProducerConfig(ProducerConfigBuilder producerConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithProducerConfig(producerConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KafkaStreams"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="streamsConfigBuilder">The <see cref="StreamsConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder StreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithStreamsConfig(streamsConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set properties of <see cref="TopicConfig"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="topicConfig">The <see cref="TopicConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder TopicConfig(TopicConfigBuilder topicConfig)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithTopicConfig(topicConfig);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

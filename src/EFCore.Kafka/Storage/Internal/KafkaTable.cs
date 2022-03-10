@@ -24,7 +24,7 @@ using MASES.KafkaBridge.Streams.KStream;
 using MASES.EntityFrameworkCore.Kafka.Internal;
 using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
 using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Java.Util.Concurrent;
+using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
 
 namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;

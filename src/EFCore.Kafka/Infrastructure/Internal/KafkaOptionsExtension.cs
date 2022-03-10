@@ -18,10 +18,11 @@
 
 #nullable enable
 
+using Java.Util;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KafkaBridge.Clients.Consumer;
 using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Java.Util;
+using MASES.KafkaBridge.Common.Config;
 using MASES.KafkaBridge.Streams;
 using System.Globalization;
 using System.Text;
@@ -34,7 +35,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _databaseName;
     private string? _bootstrapServers;
     private bool _producerByEntity = false;
-    private Topology.AutoOffsetReset _autoOffsetReset;
+    private bool _retrieveWithForEach = true;
+    private ProducerConfigBuilder? _producerConfigBuilder;
+    private StreamsConfigBuilder? _streamsConfigBuilder;
+    private TopicConfigBuilder? _topicConfigBuilder;
     private DbContextOptionsExtensionInfo? _info;
 
     public KafkaOptionsExtension()
@@ -47,7 +51,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _databaseName = copyFrom._databaseName;
         _bootstrapServers = copyFrom._bootstrapServers;
         _producerByEntity = copyFrom._producerByEntity;
-        _autoOffsetReset = copyFrom._autoOffsetReset;
+        _retrieveWithForEach = copyFrom._retrieveWithForEach;
+        _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
+        _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
+        _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
     }
 
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -64,7 +71,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual bool ProducerByEntity => _producerByEntity;
 
-    public virtual Topology.AutoOffsetReset AutoOffsetReset => _autoOffsetReset!;
+    public virtual bool RetrieveWithForEach => _retrieveWithForEach;
+
+    public virtual ProducerConfigBuilder ProducerConfigBuilder => _producerConfigBuilder!;
+
+    public virtual StreamsConfigBuilder StreamsConfigBuilder => _streamsConfigBuilder!;
+
+    public virtual TopicConfigBuilder TopicConfigBuilder => _topicConfigBuilder!;
 
     public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
     {
@@ -102,11 +115,38 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    public virtual KafkaOptionsExtension WithAutoOffsetReset(Topology.AutoOffsetReset autoOffsetReset)
+    public virtual KafkaOptionsExtension WithRetrieveWithForEach(bool retrieveWithForEach = false)
     {
         var clone = Clone();
 
-        clone._autoOffsetReset = autoOffsetReset;
+        clone._retrieveWithForEach = retrieveWithForEach;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
+    {
+        var clone = Clone();
+
+        clone._producerConfigBuilder = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
+    {
+        var clone = Clone();
+
+        clone._streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(streamsConfigBuilder);
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithTopicConfig(TopicConfigBuilder topicConfigBuilder)
+    {
+        var clone = Clone();
+
+        clone._topicConfigBuilder = TopicConfigBuilder.CreateFrom(topicConfigBuilder);
 
         return clone;
     }
@@ -114,6 +154,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual Properties StreamsOptions(string applicationId)
     {
         var props = new Properties();
+        var localCfg = StreamsConfigBuilder.CreateFrom(StreamsConfigBuilder).WithApplicationId(applicationId)
+                                                                            .WithBootstrapServers(BootstrapServers);
+
 
         props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         props.Put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
