@@ -18,6 +18,8 @@
 
 #nullable enable
 
+using MASES.KafkaBridge.Clients.Producer;
+using MASES.KafkaBridge.Common.Config;
 using MASES.KafkaBridge.Streams;
 
 namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
@@ -32,5 +34,11 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     bool ProducerByEntity { get; }
 
-    Topology.AutoOffsetReset AutoOffsetReset { get; }
+    bool RetrieveWithForEach { get; }
+
+    ProducerConfigBuilder? ProducerConfigBuilder { get; }
+
+    StreamsConfigBuilder? StreamsConfigBuilder { get; }
+
+    TopicConfigBuilder? TopicConfigBuilder { get; }
 }

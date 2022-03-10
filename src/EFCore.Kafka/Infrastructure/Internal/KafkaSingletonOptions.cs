@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.KafkaBridge.Clients.Producer;
+using MASES.KafkaBridge.Common.Config;
 using MASES.KafkaBridge.Streams;
 
 namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
@@ -32,7 +34,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DatabaseName = kafkaOptions.DatabaseName;
             BootstrapServers = kafkaOptions.BootstrapServers;
             ProducerByEntity = kafkaOptions.ProducerByEntity;
-            AutoOffsetReset = kafkaOptions.AutoOffsetReset;
+            RetrieveWithForEach = kafkaOptions.RetrieveWithForEach;
+            ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfigBuilder);
+            StreamsConfigBuilder = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfigBuilder);
+            TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfigBuilder);
         }
     }
 
@@ -58,5 +63,11 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
     public virtual bool ProducerByEntity { get; private set; }
 
-    public virtual Topology.AutoOffsetReset AutoOffsetReset { get; private set; }
+    public virtual bool RetrieveWithForEach { get; private set; }
+
+    public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; private set; }
+
+    public virtual StreamsConfigBuilder? StreamsConfigBuilder { get; private set; }
+
+    public virtual TopicConfigBuilder? TopicConfigBuilder { get; private set; }
 }

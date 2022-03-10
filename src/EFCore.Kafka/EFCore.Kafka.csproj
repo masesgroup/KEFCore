@@ -11,7 +11,7 @@
 		<Owners>MASES s.r.l.</Owners>
 		<Authors>MASES s.r.l.</Authors>
 		<Company>MASES s.r.l.</Company>
-		<Version>0.1.0.0</Version>
+		<Version>0.2.0.0</Version>
 		<Product>MASES.EntityFrameworkCore.Kafka</Product>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<TargetFrameworks>net6.0</TargetFrameworks>
@@ -22,7 +22,7 @@
 		<RepositoryUrl>https://github.com/masesgroup/EntityFramework4Kafka</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>https://github.com/masesgroup/EntityFramework4Kafka/releases</PackageReleaseNotes>
-		<PackageLicense>LICENSE</PackageLicense>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>JCOB128x128.png</PackageIcon>
 		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.Kafka</PackageId>
@@ -94,11 +94,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KafkaBridge" Version="1.1.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" PrivateAssets="none" />
+		<PackageReference Include="MASES.KafkaBridge" Version="1.1.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" PrivateAssets="none" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
-
-
-
 </Project>

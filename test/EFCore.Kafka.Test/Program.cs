@@ -24,6 +24,7 @@
 
 using MASES.EntityFrameworkCore.Kafka;
 using MASES.KafkaBridge;
+using MASES.KafkaBridge.Streams;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -79,12 +80,9 @@ namespace MASES.EFCoreKafkaTest
                 var blog = context.Blogs
                                   !.Single(b => b.BlogId == 1);
 
-
-
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
         }
-
     }
 
     public class BloggingContext : DbContext
@@ -102,7 +100,8 @@ namespace MASES.EFCoreKafkaTest
         {
             optionsBuilder.UseKafkaDatabase("TestDB", _serverToUse, (o) =>
             {
-                o.AutoOffsetReset();
+                o.WithRetrieveWithForEach(true)
+                 .StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100));
             });
         }
 
