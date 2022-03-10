@@ -174,19 +174,6 @@ references:
   commentId: T:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions
   nameWithType: IKafkaSingletonOptions
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_AutoOffsetReset
-  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset
-  nameWithType: IKafkaSingletonOptions.AutoOffsetReset
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset*
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_AutoOffsetReset_
-  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.AutoOffsetReset
-  nameWithType: IKafkaSingletonOptions.AutoOffsetReset
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.BootstrapServers
   name: BootstrapServers
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_BootstrapServers
@@ -226,6 +213,58 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerByEntity
   nameWithType: IKafkaSingletonOptions.ProducerByEntity
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+  nameWithType: IKafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder*
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+  nameWithType: IKafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_RetrieveWithForEach
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach
+  nameWithType: IKafkaSingletonOptions.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach*
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_RetrieveWithForEach_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.RetrieveWithForEach
+  nameWithType: IKafkaSingletonOptions.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  nameWithType: IKafkaSingletonOptions.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder*
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  nameWithType: IKafkaSingletonOptions.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  nameWithType: IKafkaSingletonOptions.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder*
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  nameWithType: IKafkaSingletonOptions.TopicConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_IKafkaSingletonOptions_UseNameMatching
@@ -328,19 +367,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ApplyServices
   nameWithType: KafkaOptionsExtension.ApplyServices
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_AutoOffsetReset
-  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset
-  nameWithType: KafkaOptionsExtension.AutoOffsetReset
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset*
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_AutoOffsetReset_
-  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.AutoOffsetReset
-  nameWithType: KafkaOptionsExtension.AutoOffsetReset
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.BootstrapServers
   name: BootstrapServers
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_BootstrapServers
@@ -445,6 +471,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerByEntity
   nameWithType: KafkaOptionsExtension.ProducerByEntity
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+  nameWithType: KafkaOptionsExtension.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder*
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+  nameWithType: KafkaOptionsExtension.ProducerConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptions
   name: ProducerOptions()
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_ProducerOptions
@@ -458,6 +497,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptions
   nameWithType: KafkaOptionsExtension.ProducerOptions
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_RetrieveWithForEach
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach
+  nameWithType: KafkaOptionsExtension.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach*
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_RetrieveWithForEach_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.RetrieveWithForEach
+  nameWithType: KafkaOptionsExtension.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+  nameWithType: KafkaOptionsExtension.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder*
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+  nameWithType: KafkaOptionsExtension.StreamsConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsOptions(System.String)
   name: StreamsOptions(String)
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_StreamsOptions_System_String_
@@ -471,6 +536,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.StreamsOptions
   nameWithType: KafkaOptionsExtension.StreamsOptions
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_TopicConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+  nameWithType: KafkaOptionsExtension.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder*
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_TopicConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+  nameWithType: KafkaOptionsExtension.TopicConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_UseNameMatching
@@ -497,19 +575,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.Validate
   nameWithType: KafkaOptionsExtension.Validate
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  name: WithAutoOffsetReset(Topology.AutoOffsetReset)
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithAutoOffsetReset_MASES_KafkaBridge_Streams_Topology_AutoOffsetReset_
-  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  nameWithType: KafkaOptionsExtension.WithAutoOffsetReset(Topology.AutoOffsetReset)
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset*
-  name: WithAutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithAutoOffsetReset_
-  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithAutoOffsetReset
-  nameWithType: KafkaOptionsExtension.WithAutoOffsetReset
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithBootstrapServers(System.String)
   name: WithBootstrapServers(String)
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithBootstrapServers_System_String_
@@ -549,6 +614,58 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerByEntity
   nameWithType: KafkaOptionsExtension.WithProducerByEntity
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  name: WithProducerConfig(ProducerConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithProducerConfig_MASES_KafkaBridge_Clients_Producer_ProducerConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  nameWithType: KafkaOptionsExtension.WithProducerConfig(ProducerConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig*
+  name: WithProducerConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithProducerConfig
+  nameWithType: KafkaOptionsExtension.WithProducerConfig
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach(System.Boolean)
+  name: WithRetrieveWithForEach(Boolean)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithRetrieveWithForEach_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach(System.Boolean)
+  nameWithType: KafkaOptionsExtension.WithRetrieveWithForEach(Boolean)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach*
+  name: WithRetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithRetrieveWithForEach_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithRetrieveWithForEach
+  nameWithType: KafkaOptionsExtension.WithRetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  name: WithStreamsConfig(StreamsConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithStreamsConfig_MASES_KafkaBridge_Streams_StreamsConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  nameWithType: KafkaOptionsExtension.WithStreamsConfig(StreamsConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig*
+  name: WithStreamsConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithStreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithStreamsConfig
+  nameWithType: KafkaOptionsExtension.WithStreamsConfig
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  name: WithTopicConfig(TopicConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithTopicConfig_MASES_KafkaBridge_Common_Config_TopicConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  nameWithType: KafkaOptionsExtension.WithTopicConfig(TopicConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig*
+  name: WithTopicConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithTopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig
+  nameWithType: KafkaOptionsExtension.WithTopicConfig
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.WithUseNameMatching(System.Boolean)
   name: WithUseNameMatching(Boolean)
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaOptionsExtension_WithUseNameMatching_System_Boolean_
@@ -568,19 +685,6 @@ references:
   commentId: T:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions
   nameWithType: KafkaSingletonOptions
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_AutoOffsetReset
-  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset
-  nameWithType: KafkaSingletonOptions.AutoOffsetReset
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset*
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_AutoOffsetReset_
-  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.AutoOffsetReset
-  nameWithType: KafkaSingletonOptions.AutoOffsetReset
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.BootstrapServers
   name: BootstrapServers
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_BootstrapServers
@@ -633,6 +737,58 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
   nameWithType: KafkaSingletonOptions.ProducerByEntity
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+  nameWithType: KafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder*
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+  nameWithType: KafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_RetrieveWithForEach
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach
+  nameWithType: KafkaSingletonOptions.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach*
+  name: RetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_RetrieveWithForEach_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.RetrieveWithForEach
+  nameWithType: KafkaSingletonOptions.RetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  nameWithType: KafkaSingletonOptions.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder*
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  nameWithType: KafkaSingletonOptions.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_TopicConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  nameWithType: KafkaSingletonOptions.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder*
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_TopicConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  nameWithType: KafkaSingletonOptions.TopicConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_Internal_KafkaSingletonOptions_UseNameMatching
@@ -678,19 +834,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.KafkaDbContextOptionsBuilder
   nameWithType: KafkaDbContextOptionsBuilder.KafkaDbContextOptionsBuilder
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  name: AutoOffsetReset(Topology.AutoOffsetReset)
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_AutoOffsetReset_MASES_KafkaBridge_Streams_Topology_AutoOffsetReset_
-  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset(MASES.KafkaBridge.Streams.Topology.AutoOffsetReset)
-  nameWithType: KafkaDbContextOptionsBuilder.AutoOffsetReset(Topology.AutoOffsetReset)
-- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset*
-  name: AutoOffsetReset
-  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_AutoOffsetReset_
-  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+  name: EmptyProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder*
+  name: EmptyProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.AutoOffsetReset
-  nameWithType: KafkaDbContextOptionsBuilder.AutoOffsetReset
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+  name: EmptyStreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder*
+  name: EmptyStreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  name: EmptyTopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder*
+  name: EmptyTopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  nameWithType: KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
 - uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.MASES#EntityFrameworkCore#Kafka#Infrastructure#IKafkaDbContextOptionsBuilderInfrastructure#OptionsBuilder
   name: IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder
   href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_MASES_EntityFrameworkCore_Kafka_Infrastructure_IKafkaDbContextOptionsBuilderInfrastructure_OptionsBuilder
@@ -721,6 +903,84 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.OptionsBuilder
   nameWithType: KafkaDbContextOptionsBuilder.OptionsBuilder
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  name: ProducerConfig(ProducerConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_MASES_KafkaBridge_Clients_Producer_ProducerConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig(MASES.KafkaBridge.Clients.Producer.ProducerConfigBuilder)
+  nameWithType: KafkaDbContextOptionsBuilder.ProducerConfig(ProducerConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig*
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig
+  nameWithType: KafkaDbContextOptionsBuilder.ProducerConfig
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  name: StreamsConfig(StreamsConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_MASES_KafkaBridge_Streams_StreamsConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig(MASES.KafkaBridge.Streams.StreamsConfigBuilder)
+  nameWithType: KafkaDbContextOptionsBuilder.StreamsConfig(StreamsConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig*
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig
+  nameWithType: KafkaDbContextOptionsBuilder.StreamsConfig
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  name: TopicConfig(TopicConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_MASES_KafkaBridge_Common_Config_TopicConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig(MASES.KafkaBridge.Common.Config.TopicConfigBuilder)
+  nameWithType: KafkaDbContextOptionsBuilder.TopicConfig(TopicConfigBuilder)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig*
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig
+  nameWithType: KafkaDbContextOptionsBuilder.TopicConfig
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)
+  name: WithProducerByEntity(Boolean)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)
+  nameWithType: KafkaDbContextOptionsBuilder.WithProducerByEntity(Boolean)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity*
+  name: WithProducerByEntity
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity
+  nameWithType: KafkaDbContextOptionsBuilder.WithProducerByEntity
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(System.Boolean)
+  name: WithRetrieveWithForEach(Boolean)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(System.Boolean)
+  nameWithType: KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(Boolean)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach*
+  name: WithRetrieveWithForEach
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach
+  nameWithType: KafkaDbContextOptionsBuilder.WithRetrieveWithForEach
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)
+  name: WithUseNameMatching(Boolean)
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)
+  nameWithType: KafkaDbContextOptionsBuilder.WithUseNameMatching(Boolean)
+- uid: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching*
+  name: WithUseNameMatching
+  href: api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_Kafka_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_
+  commentId: Overload:MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching
+  nameWithType: KafkaDbContextOptionsBuilder.WithUseNameMatching
 - uid: MASES.EntityFrameworkCore.Kafka.Internal
   name: MASES.EntityFrameworkCore.Kafka.Internal
   href: api/MASES.EntityFrameworkCore.Kafka.Internal.html

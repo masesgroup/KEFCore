@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.IKafkaSingletonOptions.html",
-          "hash": "ZoNGhIh+6mPxaE848opxN2d9M3Bd0pbyEgCZtkGm6gA="
+          "hash": "kz7Qc0qEPsVeEX1m21BhWpeKFfN8qrsnM9Aqn+iiMSY="
         }
       },
       "is_incremental": false,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaOptionsExtension.html",
-          "hash": "GXjaTlt0PbxBrd3sm+fZfMm1h5ROe/4I+etYELWq+Ks="
+          "hash": "m8OHfTa8DQ0c4Ot+xbb1ZNjgI/XYLtBydIgPAetJedo="
         }
       },
       "is_incremental": false,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal.KafkaSingletonOptions.html",
-          "hash": "l+cSSBaaBXjDxNIEzdqh8DVQkRodAstSajNhyrBqTDc="
+          "hash": "HGVaW/04TGd5HxnFavQR5m+Gc4pfwwNQtzx/tdnGyLg="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Infrastructure.KafkaDbContextOptionsBuilder.html",
-          "hash": "2OVakneibJWuOd35KGH4ltSIZFyNUSUnX7DUsbPy0wY="
+          "hash": "Ss2N+FYythQv2Ir4Y/1qg01W5wVWC/q8Ez2yQzcxP/Q="
         }
       },
       "is_incremental": false,
@@ -621,7 +621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.IKafkaTable.html",
-          "hash": "vvLWznfqh6nWhmEbsmPlTcDTY9tfhzgUxIsO46Pe+7s="
+          "hash": "vWqccgj6mbLM7Qzwxe68T47OsJJLkjGAgZYv9wBn5WI="
         }
       },
       "is_incremental": false,
@@ -645,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaCluster.html",
-          "hash": "vqh29yYZUqwgYo/oXPvpRUdezbab6yoqcSGO/Ryd3k8="
+          "hash": "jxdjbWFSL7BOUOGgZ1LToRpJGLDN35ZOy27n2A2E0R0="
         }
       },
       "is_incremental": false,
@@ -705,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.Kafka.Storage.Internal.KafkaTable-1.html",
-          "hash": "hjgL8lKMPUYe1Lj2yrQH6FxB/RM5tWsadJIMBwSw1kE="
+          "hash": "OzCLGt1ifhd5sQpKgWBaxhRgcD5Bl4oxrjEEX9LVf7I="
         }
       },
       "is_incremental": false,
