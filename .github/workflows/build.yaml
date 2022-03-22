@@ -59,7 +59,7 @@ jobs:
           submodules: 'true'
 
       - name: Recompile to create nuget packages
-        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\EFCore.Kafka.sln
+        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\KEFCore.sln
 
       - name: Clear documentation folder 
         run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml
@@ -72,7 +72,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: EFCore.Kafka
+          name: KEFCore
           path: .\bin\*nupkg
 
       - name: Extract commit SHA
