@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public class SingleResultShaperExpression : Expression, IPrintableExpression
 {

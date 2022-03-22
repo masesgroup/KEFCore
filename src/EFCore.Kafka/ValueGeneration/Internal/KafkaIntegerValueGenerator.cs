@@ -21,7 +21,7 @@
 
 using System.Globalization;
 
-namespace MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
+namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 public class KafkaIntegerValueGenerator<TValue> : ValueGenerator<TValue>, IKafkaIntegerValueGenerator
 {

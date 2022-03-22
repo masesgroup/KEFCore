@@ -21,7 +21,7 @@
 
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public partial class KafkaShapedQueryCompilingExpressionVisitor
 {

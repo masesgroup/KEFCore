@@ -18,11 +18,11 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
-using MASES.KafkaBridge.Clients.Producer;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using MASES.KNet.Clients.Producer;
 using Java.Util.Concurrent;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public interface IKafkaTable
 {

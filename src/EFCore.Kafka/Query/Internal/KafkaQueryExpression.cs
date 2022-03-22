@@ -19,13 +19,13 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public partial class KafkaQueryExpression : Expression, IPrintableExpression
 {

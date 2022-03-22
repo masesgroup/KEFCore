@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
+namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 public interface IKafkaIntegerValueGenerator
 {

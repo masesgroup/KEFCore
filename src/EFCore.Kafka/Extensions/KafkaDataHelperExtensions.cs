@@ -19,10 +19,10 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.JCOBridge.C2JBridge;
 
-namespace MASES.EntityFrameworkCore.Kafka;
+namespace MASES.EntityFrameworkCore.KNet;
 
 /// <summary>
 ///     JCOBridge specific extension methods for <see cref="DbContext.Database" />.

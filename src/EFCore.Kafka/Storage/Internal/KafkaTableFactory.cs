@@ -18,9 +18,9 @@
 
 using System.Collections.Concurrent;
 using JetBrains.Annotations;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaTableFactory : IKafkaTableFactory
 {

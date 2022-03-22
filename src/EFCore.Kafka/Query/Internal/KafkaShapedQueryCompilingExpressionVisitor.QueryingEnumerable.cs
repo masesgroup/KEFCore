@@ -20,9 +20,9 @@
 */
 
 using System.Collections;
-using MASES.EntityFrameworkCore.Kafka.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public partial class KafkaShapedQueryCompilingExpressionVisitor
 {

@@ -18,7 +18,7 @@
 
 using System.Collections.Concurrent;
 
-namespace MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
 public class KafkaSerdesFactory : IKafkaSerdesFactory
 {

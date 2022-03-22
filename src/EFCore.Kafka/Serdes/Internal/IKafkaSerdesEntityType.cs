@@ -16,7 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Serdes.Internal
+namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
     public interface IKafkaSerdesEntityType
     {

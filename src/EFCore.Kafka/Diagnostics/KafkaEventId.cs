@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Diagnostics;
+namespace MASES.EntityFrameworkCore.KNet.Diagnostics;
 
 /// <summary>
 ///     Event IDs for Kafka events that correspond to messages logged to an <see cref="ILogger" />

@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public partial class KafkaQueryExpression
 {

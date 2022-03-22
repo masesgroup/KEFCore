@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 
 public class KafkaLoggingDefinitions : LoggingDefinitions
 {

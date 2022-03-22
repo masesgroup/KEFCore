@@ -22,15 +22,12 @@
  *  SOFTWARE.
  */
 
-using MASES.EntityFrameworkCore.Kafka;
-using MASES.KafkaBridge;
-using MASES.KafkaBridge.Streams;
+using MASES.KNet;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace MASES.EFCoreKafkaTest
+namespace MASES.EntityFrameworkCore.KNet.Test
 {
     class Program
     {
@@ -40,7 +37,8 @@ namespace MASES.EFCoreKafkaTest
 
         static void Main(string[] args)
         {
-            var appArgs = KafkaBridgeCore.ApplicationArgs;
+            KNetCore.CreateGlobalInstance();
+            var appArgs = KNetCore.FilteredArgs;
 
             if (appArgs.Length != 0)
             {

@@ -21,9 +21,9 @@
 
 using Microsoft.EntityFrameworkCore.Design.Internal;
 
-[assembly: DesignTimeProviderServices("MASES.EntityFrameworkCore.Kafka.Design.Internal.KafkaDesignTimeServices")]
+[assembly: DesignTimeProviderServices("MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaDesignTimeServices")]
 
-namespace MASES.EntityFrameworkCore.Kafka.Design.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Design.Internal;
 
 public class KafkaDesignTimeServices : IDesignTimeServices
 {

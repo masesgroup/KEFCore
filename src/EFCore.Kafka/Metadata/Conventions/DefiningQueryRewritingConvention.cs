@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Metadata.Conventions;
+namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 
 /// <summary>
 ///     Convention that converts accesses of <see cref="DbSet{TEntity}" /> inside query filters and defining queries into

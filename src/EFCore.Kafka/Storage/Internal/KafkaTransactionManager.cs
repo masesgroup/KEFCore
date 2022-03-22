@@ -17,10 +17,10 @@
 */
 
 using System.Transactions;
-using MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal;
-using MASES.EntityFrameworkCore.Kafka.Internal;
+using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaTransactionManager : IDbContextTransactionManager, ITransactionEnlistmentManager
 {

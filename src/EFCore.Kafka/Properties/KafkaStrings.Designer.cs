@@ -4,13 +4,13 @@ using System;
 using System.Reflection;
 using System.Resources;
 using System.Threading;
-using MASES.EntityFrameworkCore.Kafka.Diagnostics;
+using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 
 #nullable enable
 
-namespace MASES.EntityFrameworkCore.Kafka.Internal
+namespace MASES.EntityFrameworkCore.KNet.Internal
 {
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -21,7 +21,7 @@ namespace MASES.EntityFrameworkCore.Kafka.Internal
     public static class KafkaStrings
     {
         private static readonly ResourceManager _resourceManager
-            = new ResourceManager("MASES.EntityFrameworkCore.Kafka.Properties.KafkaStrings", typeof(KafkaStrings).Assembly);
+            = new ResourceManager("MASES.EntityFrameworkCore.KNet.Properties.KafkaStrings", typeof(KafkaStrings).Assembly);
 
         /// <summary>
         ///     Cannot apply 'DefaultIfEmpty' after a client-evaluated projection. Consider applying 'DefaultIfEmpty' before last 'Select' or use 'AsEnumerable' before 'DefaultIfEmpty' to apply it on client-side.
@@ -114,7 +114,7 @@ namespace MASES.EntityFrameworkCore.Kafka.Internal
     }
 }
 
-namespace MASES.EntityFrameworkCore.Kafka.Internal
+namespace MASES.EntityFrameworkCore.KNet.Internal
 {
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -125,7 +125,7 @@ namespace MASES.EntityFrameworkCore.Kafka.Internal
     public static class KafkaResources
     {
         private static readonly ResourceManager _resourceManager
-            = new ResourceManager("MASES.EntityFrameworkCore.Kafka.Properties.KafkaStrings", typeof(KafkaResources).Assembly);
+            = new ResourceManager("MASES.EntityFrameworkCore.KNet.Properties.KafkaStrings", typeof(KafkaResources).Assembly);
 
         /// <summary>
         ///     Saved {count} entities to Kafka store.

@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Metadata.Conventions;
+namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 
 /// <summary>
 ///     A builder for building conventions for th Kafka provider.

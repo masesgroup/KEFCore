@@ -21,7 +21,7 @@
 
 using JetBrains.Annotations;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public readonly struct AnonymousObject
 {

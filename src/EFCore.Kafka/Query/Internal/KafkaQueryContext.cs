@@ -19,9 +19,9 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public class KafkaQueryContext : QueryContext
 {

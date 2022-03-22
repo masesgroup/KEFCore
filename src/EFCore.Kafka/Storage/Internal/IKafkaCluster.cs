@@ -16,12 +16,12 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
-using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
-using MASES.KafkaBridge.Clients.Producer;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using MASES.KNet.Clients.Producer;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public interface IKafkaCluster
 {

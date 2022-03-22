@@ -19,9 +19,9 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
+namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 public class KafkaValueGeneratorSelector : ValueGeneratorSelector
 {

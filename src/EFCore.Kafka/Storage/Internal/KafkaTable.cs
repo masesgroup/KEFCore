@@ -20,14 +20,14 @@
 
 using System.Collections;
 using System.Globalization;
-using MASES.KafkaBridge.Streams.KStream;
-using MASES.EntityFrameworkCore.Kafka.Internal;
-using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
-using MASES.KafkaBridge.Clients.Producer;
+using MASES.KNet.Streams.KStream;
+using MASES.EntityFrameworkCore.KNet.Internal;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using MASES.KNet.Clients.Producer;
 using Java.Util.Concurrent;
-using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaTable<TKey> : IKafkaTable
     where TKey : notnull

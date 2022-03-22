@@ -21,7 +21,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
 {

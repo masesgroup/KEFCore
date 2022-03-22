@@ -21,7 +21,7 @@
 
 using Microsoft.EntityFrameworkCore.Design.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Design.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Design.Internal;
 
 #pragma warning disable EF1001 // Internal EF Core API usage.
 public class KafkaCSharpRuntimeAnnotationCodeGenerator : CSharpRuntimeAnnotationCodeGenerator

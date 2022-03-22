@@ -19,13 +19,13 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
-using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Common.Config;
-using MASES.KafkaBridge.Streams;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.KNet.Clients.Producer;
+using MASES.KNet.Common.Config;
+using MASES.KNet.Streams;
 using System.ComponentModel;
 
-namespace MASES.EntityFrameworkCore.Kafka.Infrastructure;
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
 /// <summary>
 ///     Allows Kafka specific configuration to be performed on <see cref="DbContextOptions" />.

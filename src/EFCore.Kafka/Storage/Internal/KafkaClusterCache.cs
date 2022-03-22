@@ -17,10 +17,10 @@
 */
 
 using System.Collections.Concurrent;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaClusterCache : IKafkaClusterCache
 {

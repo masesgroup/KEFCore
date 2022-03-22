@@ -2,16 +2,16 @@
 
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<AssemblyName>MASES.EntityFrameworkCore.Kafka.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.Kafka.Test</RootNamespace>
-		<Title>EntityFrameworkCore Kafka Test</Title>
-		<Description>EntityFrameworkCore Kafka Test</Description>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test</Title>
+		<Description>EntityFrameworkCore KNet Test</Description>
 		<Copyright>Copyright ©  MASES s.r.l. 2022</Copyright>
 		<Owners>MASES s.r.l.</Owners>
 		<Authors>MASES s.r.l.</Authors>
 		<Company>MASES s.r.l.</Company>
-		<Version>0.2.1.0</Version>
-		<Product>MASES.EntityFrameworkCore.Kafka.Test</Product>
+		<Version>0.3.0.0</Version>
+		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputPath>..\..\bin\</OutputPath>

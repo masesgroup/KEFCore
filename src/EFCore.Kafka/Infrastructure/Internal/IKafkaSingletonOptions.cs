@@ -18,11 +18,11 @@
 
 #nullable enable
 
-using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Common.Config;
-using MASES.KafkaBridge.Streams;
+using MASES.KNet.Clients.Producer;
+using MASES.KNet.Common.Config;
+using MASES.KNet.Streams;
 
-namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
 public interface IKafkaSingletonOptions : ISingletonOptions
 {

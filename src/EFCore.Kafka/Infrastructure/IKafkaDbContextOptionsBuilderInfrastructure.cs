@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Infrastructure;
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
 /// <summary>
 ///     Explicitly implemented by <see cref="KafkaDbContextOptionsBuilder" /> to hide

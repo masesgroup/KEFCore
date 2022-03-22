@@ -16,7 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
 public class KafkaModelValidator : ModelValidator
 {

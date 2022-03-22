@@ -19,13 +19,13 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.Kafka.Metadata.Conventions;
-using MASES.EntityFrameworkCore.Kafka.Query.Internal;
-using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
-using MASES.EntityFrameworkCore.Kafka.Storage.Internal;
-using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
+using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
+using MASES.EntityFrameworkCore.KNet.Query.Internal;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using System.ComponentModel;
 
 namespace Microsoft.Extensions.DependencyInjection;

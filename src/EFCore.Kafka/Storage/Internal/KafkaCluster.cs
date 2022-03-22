@@ -18,23 +18,23 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.Kafka.ValueGeneration.Internal;
-using MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
-using MASES.KafkaBridge.Clients.Admin;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.KNet.Clients.Admin;
 using Java.Util;
 using MASES.JCOBridge.C2JBridge;
-using MASES.KafkaBridge.Common.Config;
-using MASES.KafkaBridge.Clients.Producer;
-using MASES.EntityFrameworkCore.Kafka.Serdes.Internal;
+using MASES.KNet.Common.Config;
+using MASES.KNet.Clients.Producer;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using System.Collections.Concurrent;
-using MASES.KafkaBridge.Streams;
-using MASES.KafkaBridge.Streams.KStream;
-using MASES.KafkaBridge.Streams.Errors;
-using MASES.KafkaBridge.Streams.State;
-using MASES.KafkaBridge.Common.Utils;
+using MASES.KNet.Streams;
+using MASES.KNet.Streams.KStream;
+using MASES.KNet.Streams.Errors;
+using MASES.KNet.Streams.State;
+using MASES.KNet.Common.Utils;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaCluster : IKafkaCluster
 {

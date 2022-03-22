@@ -19,9 +19,9 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka;
+namespace MASES.EntityFrameworkCore.KNet;
 
 /// <summary>
 ///     Kafka specific extension methods for <see cref="DbContext.Database" />.

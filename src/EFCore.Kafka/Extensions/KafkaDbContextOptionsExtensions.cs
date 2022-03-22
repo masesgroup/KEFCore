@@ -19,11 +19,11 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Diagnostics;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure;
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Diagnostics;
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka;
+namespace MASES.EntityFrameworkCore.KNet;
 
 /// <summary>
 ///     Kafka specific extension methods for <see cref="DbContextOptionsBuilder" />.

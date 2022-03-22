@@ -20,14 +20,14 @@
 
 using Java.Util;
 using MASES.JCOBridge.C2JBridge;
-using MASES.KafkaBridge.Clients.Consumer;
-using MASES.KafkaBridge.Clients.Producer;
-using MASES.KafkaBridge.Common.Config;
-using MASES.KafkaBridge.Streams;
+using MASES.KNet.Clients.Consumer;
+using MASES.KNet.Clients.Producer;
+using MASES.KNet.Common.Config;
+using MASES.KNet.Streams;
 using System.Globalization;
 using System.Text;
 
-namespace MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
 public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
@@ -161,8 +161,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         props.Put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
         props.Put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, KafkaBridge.Common.Serialization.Serdes.String.Dyn().getClass());
-        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaBridge.Common.Serialization.Serdes.String.Dyn().getClass());
+        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
+        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
 
         // setting offset reset to earliest so that we can re-run the demo code with the same pre-loaded data
         props.Put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

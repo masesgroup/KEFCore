@@ -25,7 +25,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
-namespace MASES.EntityFrameworkCore.Kafka.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 {

@@ -16,9 +16,9 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public interface IKafkaClusterCache
 {

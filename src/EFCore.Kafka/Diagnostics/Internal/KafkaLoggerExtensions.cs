@@ -19,9 +19,9 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.Kafka.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 
-namespace MASES.EntityFrameworkCore.Kafka.Diagnostics.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 
 public static class KafkaLoggerExtensions
 {
