@@ -27,7 +27,7 @@ jobs:
           submodules: 'true'
 
       - name: Compile
-        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\EFCore.Kafka.sln
+        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\KEFCore.sln
 
       - name: Clear documentation folder 
         run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml

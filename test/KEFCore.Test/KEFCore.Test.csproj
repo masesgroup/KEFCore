@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test</Title>
+		<Description>EntityFrameworkCore KNet Test</Description>
+		<Copyright>Copyright ©  MASES s.r.l. 2022</Copyright>
+		<Owners>MASES s.r.l.</Owners>
+		<Authors>MASES s.r.l.</Authors>
+		<Company>MASES s.r.l.</Company>
+		<Version>0.3.0.0</Version>
+		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputPath>..\..\bin\</OutputPath>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\KEFCore\KEFCore.csproj" />
+	</ItemGroup>
+
+</Project>

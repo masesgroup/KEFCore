@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<ImplicitUsings>true</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet</RootNamespace>
+		<Title>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Title>
+		<Description>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Description>
+		<Copyright>Copyright ©  MASES s.r.l. 2022</Copyright>
+		<Owners>MASES s.r.l.</Owners>
+		<Authors>MASES s.r.l.</Authors>
+		<Company>MASES s.r.l.</Company>
+		<Version>0.3.0.0</Version>
+		<Product>MASES.EntityFrameworkCore.KNet</Product>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<OutputPath>..\..\bin\</OutputPath>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageProjectUrl>https://github.com/masesgroup/KEFCore/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/masesgroup/KEFCore</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>https://github.com/masesgroup/KEFCore/releases</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageIcon>JCOB128x128.png</PackageIcon>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
+		<PackageId>MASES.EntityFrameworkCore.KNet</PackageId>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="System.Diagnostics" />
+		<Using Include="System.Linq.Expressions" />
+		<Using Include="System.Reflection" />
+		<Using Include="Microsoft.EntityFrameworkCore" />
+		<Using Include="Microsoft.EntityFrameworkCore.ChangeTracking" />
+		<Using Include="Microsoft.EntityFrameworkCore.Diagnostics" />
+		<Using Include="Microsoft.EntityFrameworkCore.Design" />
+		<Using Include="Microsoft.EntityFrameworkCore.Infrastructure" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Conventions" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure" />
+		<Using Include="Microsoft.EntityFrameworkCore.Query" />
+		<Using Include="Microsoft.EntityFrameworkCore.Storage" />
+		<Using Include="Microsoft.EntityFrameworkCore.Storage.ValueConversion" />
+		<Using Include="Microsoft.EntityFrameworkCore.Update" />
+		<Using Include="Microsoft.EntityFrameworkCore.ValueGeneration" />
+		<Using Include="Microsoft.EntityFrameworkCore.Utilities" />
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="Microsoft.Extensions.DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="..\Common\JCOB128x128.png" Pack="true" PackagePath="" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Properties\KafkaStrings.Designer.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>KafkaStrings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Update="Properties\KafkaStrings.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>KafkaStrings.Designer.tt</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\KafkaStrings.resx">
+			<CustomToolNamespace>MASES.EntityFrameworkCore.KNet.Internal</CustomToolNamespace>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MASES.KNet" Version="1.2.0">
+			<IncludeAssets>All</IncludeAssets>
+			<PrivateAssets>None</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" PrivateAssets="none" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+</Project>

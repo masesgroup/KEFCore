@@ -1,9 +1,9 @@
-# EFCoreKafka: the EntityFrameworkCore provider for Apache Kafka
+# KEFCore: the EntityFrameworkCore provider for Apache Kafka
 
-[![CI_BUILD](https://github.com/masesgroup/EFCoreKafka/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/EFCoreKafka/actions/workflows/build.yaml) [![CI_RELEASE](https://github.com/masesgroup/EFCoreKafka/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/EFCoreKafka/actions/workflows/release.yaml) 
+[![CI_BUILD](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml) [![CI_RELEASE](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml) 
 
-EFCoreKafka is the EntityFrameworkCore provider for Apache Kafka.
-Based on [KafkaBridge](https://github.com/masesgroup/KafkaBridge) it allows to use Apache Kafka as a distributed database.
+KEFCore is the EntityFrameworkCore provider for Apache Kafka.
+Based on [KNet](https://github.com/masesgroup/KNet) it allows to use Apache Kafka as a distributed database.
 
 This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
 
@@ -14,7 +14,7 @@ The project is based on available information within the official [EntityFramewo
 
 ## Runtime engine
 
-EFCoreKafka uses [KafkaBridge](https://github.com/masesgroup/KafkaBridge), and indeed [JCOBridge](https://www.jcobridge.com) with its [features](https://www.jcobridge.com/features/), to obtain many benefits:
+KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](https://www.jcobridge.com) with its [features](https://www.jcobridge.com/features/), to obtain many benefits:
 * **Cyber-security**:
   * [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) and [CLR, or CoreCLR,](https://en.wikipedia.org/wiki/Common_Language_Runtime) runs in the same process, but are insulated from each other;
   * JCOBridge does not make any code injection into JVM;
@@ -36,6 +36,6 @@ Have a look at the following resources:
 
 * [Roadmap](src/net/Documentation/articles/roadmap.md)
 * [Actual state](src/net/Documentation/articles/actualstate.md)
-* [EFCoreKafka usage](articles/usage.md)
+* [KEFCore usage](articles/usage.md)
 
 ---
