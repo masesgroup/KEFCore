@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class KafkaServiceCollectionExtensions
+    <title>Class KafkaDatabaseFacadeExtensions
    | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class KafkaServiceCollectionExtensions
+    <meta name="title" content="Class KafkaDatabaseFacadeExtensions
    | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.0.0">
     
@@ -68,18 +68,18 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions">
+            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions">
   
   
-  <h1 id="Microsoft_Extensions_DependencyInjection_KafkaServiceCollectionExtensions" data-uid="Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions" class="text-break">Class KafkaServiceCollectionExtensions
+  <h1 id="MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions" class="text-break">Class KafkaDatabaseFacadeExtensions
   </h1>
-  <div class="markdown level0 summary"><p>Kafka specific extension methods for <a class="xref" href="https://docs.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection">IServiceCollection</a>.</p>
+  <div class="markdown level0 summary"><p>Kafka specific extension methods for <see cref="!:DbContext.Database"></see>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">KafkaServiceCollectionExtensions</span></div>
+    <div class="level1"><span class="xref">KafkaDatabaseFacadeExtensions</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -105,12 +105,76 @@
       <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Microsoft.Extensions.DependencyInjection.html">Microsoft.Extensions.DependencyInjection</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.html">MASES.EntityFrameworkCore.KNet</a></h6>
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
-  <h5 id="Microsoft_Extensions_DependencyInjection_KafkaServiceCollectionExtensions_syntax">Syntax</h5>
+  <h5 id="MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class KafkaServiceCollectionExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public static class KafkaDatabaseFacadeExtensions</code></pre>
   </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions_IsKafka_DatabaseFacade_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.IsKafka(DatabaseFacade)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Extensions/KafkaDatabaseFacadeExtensions.cs/#L48">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions_IsKafka_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.IsKafka*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions_IsKafka_DatabaseFacade_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.IsKafka(DatabaseFacade)">IsKafka(DatabaseFacade)</h4>
+  <div class="markdown level1 summary"><p>Returns <span class="xref">true</span> if the database provider currently in use is the Kafka provider.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsKafka(this DatabaseFacade database)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DatabaseFacade</span></td>
+        <td><span class="parametername">database</span></td>
+        <td><p>The facade from <see cref="!:DbContext.Database"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><p><span class="xref">true</span> if the Kafka database is being used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions_IsKafka_DatabaseFacade__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>
+    This method can only be used after the <see cref="!:DbContext"></see> has been configured because
+    it is only then that the provider is known. This means that this method cannot be used
+    in <see cref="!:DbContext.OnConfiguring"></see> because this is where application code sets the
+    provider to use as part of configuring the context.
+</p>
+<p>
+    See <a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and
+    examples.
+</p>
+</div>
 </article>
           </div>
           
@@ -119,10 +183,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=Microsoft_Extensions_DependencyInjection_KafkaServiceCollectionExtensions.md&amp;value=---%0Auid%3A%20Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_KafkaDatabaseFacadeExtensions.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Extensions/KafkaServiceCollectionExtensions.cs/#L36" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Extensions/KafkaDatabaseFacadeExtensions.cs/#L29" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

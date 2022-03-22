@@ -1,0 +1,694 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class KafkaDbContextOptionsBuilder
+   | Kafka Bridge website </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class KafkaDbContextOptionsBuilder
+   | Kafka Bridge website ">
+    <meta name="generator" content="docfx 2.59.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder">
+  
+  
+  <h1 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder" class="text-break">Class KafkaDbContextOptionsBuilder
+  </h1>
+  <div class="markdown level0 summary"><p>Allows Kafka specific configuration to be performed on <see cref="!:DbContextOptions"></see>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">KafkaDbContextOptionsBuilder</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.html">IKafkaDbContextOptionsBuilderInfrastructure</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.html">MASES.EntityFrameworkCore.KNet.Infrastructure</a></h6>
+  <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrastructure</code></pre>
+  </div>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>
+    Instances of this class are returned from a call to
+<see cref="!:KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, string, System.Action&lt;KafkaDbContextOptionsBuilder>)"></see>
+and it is not designed to be directly constructed in your application code.
+</p>
+<p>
+    See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.
+</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder__ctor_DbContextOptionsBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.%23ctor(DbContextOptionsBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L51">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder__ctor_DbContextOptionsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.#ctor(DbContextOptionsBuilder)">KafkaDbContextOptionsBuilder(DbContextOptionsBuilder)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DbContextOptionsBuilder</span></td>
+        <td><span class="parametername">optionsBuilder</span></td>
+        <td><p>The options builder.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L66">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder">EmptyProducerConfigBuilder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ProducerConfigBuilder EmptyProducerConfigBuilder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Clients.Producer.ProducerConfigBuilder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L68">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder">EmptyStreamsConfigBuilder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public StreamsConfigBuilder EmptyStreamsConfigBuilder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Streams.StreamsConfigBuilder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L70">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder">EmptyTopicConfigBuilder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TopicConfigBuilder EmptyTopicConfigBuilder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Common.Config.TopicConfigBuilder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_OptionsBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.OptionsBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L60">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_OptionsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.OptionsBuilder*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_OptionsBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.OptionsBuilder">OptionsBuilder</h4>
+  <div class="markdown level1 summary"><p>Clones the configuration in this builder.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual DbContextOptionsBuilder OptionsBuilder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DbContextOptionsBuilder</span></td>
+        <td><p>The cloned configuration.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_MASES_KNet_Clients_Producer_ProducerConfigBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig(MASES.KNet.Clients.Producer.ProducerConfigBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L144">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_MASES_KNet_Clients_Producer_ProducerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ProducerConfig(MASES.KNet.Clients.Producer.ProducerConfigBuilder)">ProducerConfig(ProducerConfigBuilder)</h4>
+  <div class="markdown level1 summary"><p>Set properties of <span class="xref">MASES.KNet.Clients.Producer.KafkaProducer</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder ProducerConfig(ProducerConfigBuilder producerConfigBuilder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Clients.Producer.ProducerConfigBuilder</span></td>
+        <td><span class="parametername">producerConfigBuilder</span></td>
+        <td><p>The <span class="xref">MASES.KNet.Clients.Producer.ProducerConfigBuilder</span> where options are stored.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ProducerConfig_MASES_KNet_Clients_Producer_ProducerConfigBuilder__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_MASES_KNet_Streams_StreamsConfigBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig(MASES.KNet.Streams.StreamsConfigBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L165">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_MASES_KNet_Streams_StreamsConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.StreamsConfig(MASES.KNet.Streams.StreamsConfigBuilder)">StreamsConfig(StreamsConfigBuilder)</h4>
+  <div class="markdown level1 summary"><p>Set properties of <span class="xref">MASES.KNet.Streams.KafkaStreams</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder StreamsConfig(StreamsConfigBuilder streamsConfigBuilder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Streams.StreamsConfigBuilder</span></td>
+        <td><span class="parametername">streamsConfigBuilder</span></td>
+        <td><p>The <span class="xref">MASES.KNet.Streams.StreamsConfigBuilder</span> where options are stored.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_StreamsConfig_MASES_KNet_Streams_StreamsConfigBuilder__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_MASES_KNet_Common_Config_TopicConfigBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig(MASES.KNet.Common.Config.TopicConfigBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L186">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_MASES_KNet_Common_Config_TopicConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.TopicConfig(MASES.KNet.Common.Config.TopicConfigBuilder)">TopicConfig(TopicConfigBuilder)</h4>
+  <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_MASES_KNet_Common_Config_TopicConfigBuilder_">TopicConfig(TopicConfigBuilder)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder TopicConfig(TopicConfigBuilder topicConfig)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">MASES.KNet.Common.Config.TopicConfigBuilder</span></td>
+        <td><span class="parametername">topicConfig</span></td>
+        <td><p>The <span class="xref">MASES.KNet.Common.Config.TopicConfigBuilder</span> where options are stored.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_TopicConfig_MASES_KNet_Common_Config_TopicConfigBuilder__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L102">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)">WithProducerByEntity(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Enables creation of producer for each <see cref="!:IEntity"></see></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithProducerByEntity(bool producerByEntity = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">producerByEntity</span></td>
+        <td><p>If <span class="xref">true</span>, then each entity will have its own <span class="xref">MASES.KNet.Clients.Producer.KafkaProducer</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_System_Boolean__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L123">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithRetrieveWithForEach(System.Boolean)">WithRetrieveWithForEach(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Enables use of <see cref="!:ForeachAction"></see>, otherwise a <see cref="!:Materialized"></see> store will be used</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithRetrieveWithForEach(bool retrieveWithForEach = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">retrieveWithForEach</span></td>
+        <td><p>If <span class="xref">true</span>, <see cref="!:ForeachAction"></see> will be used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithRetrieveWithForEach_System_Boolean__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L81">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)">WithUseNameMatching(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Enables name matching on <see cref="!:IEntity"></see> instead of <see cref="!:Type"></see> matching</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithUseNameMatching(bool useNameMatching = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">useNameMatching</span></td>
+        <td><p>If <span class="xref">true</span>, it is used name matching.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></td>
+        <td><p>The same builder instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_System_Boolean__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_MASES_EntityFrameworkCore_KNet_Infrastructure_IKafkaDbContextOptionsBuilderInfrastructure_OptionsBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.MASES%23EntityFrameworkCore%23KNet%23Infrastructure%23IKafkaDbContextOptionsBuilderInfrastructure%23OptionsBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L63">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_MASES_EntityFrameworkCore_KNet_Infrastructure_IKafkaDbContextOptionsBuilderInfrastructure_OptionsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.MASES#EntityFrameworkCore#KNet#Infrastructure#IKafkaDbContextOptionsBuilderInfrastructure#OptionsBuilder*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_MASES_EntityFrameworkCore_KNet_Infrastructure_IKafkaDbContextOptionsBuilderInfrastructure_OptionsBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.MASES#EntityFrameworkCore#KNet#Infrastructure#IKafkaDbContextOptionsBuilderInfrastructure#OptionsBuilder">IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder</h4>
+  <div class="markdown level1 summary"><p>Gets the core options builder.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder { get; }</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DbContextOptionsBuilder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.html">IKafkaDbContextOptionsBuilderInfrastructure</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L45" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>Copyright © 2022 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
