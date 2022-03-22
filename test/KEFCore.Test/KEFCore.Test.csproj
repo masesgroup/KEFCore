@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\EFCore.Kafka\EFCore.Kafka.csproj" />
+		<ProjectReference Include="..\..\src\KEFCore\KEFCore.csproj" />
 	</ItemGroup>
 
 </Project>
