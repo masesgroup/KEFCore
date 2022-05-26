@@ -41,11 +41,15 @@ public interface IKafkaCluster
 
     bool CreateTable(IEntityType entityType, out string tableName);
 
+    IKafkaSerdesFactory SerdesFactory { get; }
+
     IKafkaSerdesEntityType CreateSerdes(IEntityType entityType);
 
     IProducer<string, string> CreateProducer(IEntityType entityType);
 
     IReadOnlyList<object?[]> GetTables(IEntityType entityType);
+
+    IEnumerable<ValueBuffer> GetData(IEntityType entityType);
 
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property);
 

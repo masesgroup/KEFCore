@@ -66,6 +66,8 @@ public class KafkaCluster : IKafkaCluster
         _kafkaAdminClient = KafkaAdminClient.Create(props);
     }
 
+    public virtual IKafkaSerdesFactory SerdesFactory => _serdesFactory;
+
     public virtual KafkaOptionsExtension Options => _options;
 
     public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
@@ -197,7 +199,7 @@ public class KafkaCluster : IKafkaCluster
     }
 
     private IProducer<string, string> CreateProducer()
-        => new KafkaProducer<string, string>(Options.ProducerOptions());
+        => new KNetProducer<string, string>(Options.ProducerOptions());
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables()
         => new();
@@ -263,7 +265,7 @@ public class KafkaCluster : IKafkaCluster
         //return data;
     }
 
-    private IReadOnlyList<(K, V)> ExecuteTopology<K,V>(StreamsBuilder builder, KStream<K, V> root)
+    private IReadOnlyList<(K, V)> ExecuteTopology<K, V>(StreamsBuilder builder, KStream<K, V> root)
     {
         System.Collections.Generic.List<(K, V)> list = new();
         AutoResetEvent dataReceived = new(false);
@@ -412,6 +414,236 @@ public class KafkaCluster : IKafkaCluster
             stateChanged?.Dispose();
             exceptionSet?.Dispose();
             foreachAction?.Dispose();
+        }
+    }
+
+    public class KafkaEnumerable<K, V> : IEnumerable<ValueBuffer>
+    {
+        private readonly IKafkaCluster _kafkaCluster;
+        private readonly IEntityType _entityType;
+        private readonly StreamsBuilder _builder;
+        private readonly KStream<K, V> _root;
+
+        public KafkaEnumerable(IKafkaCluster kafkaCluster, IEntityType entityType, StreamsBuilder builder, KStream<K, V> root)
+        {
+            _kafkaCluster = kafkaCluster;
+            _entityType = entityType;
+            _builder = builder;
+            _root = root;
+        }
+
+        public IEnumerator<ValueBuffer> GetEnumerator()
+        {
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _builder, _root);
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public class KafkaEnumerator : IEnumerator<ValueBuffer>
+        {
+            private readonly IKafkaCluster _kafkaCluster;
+            private readonly IEntityType _entityType;
+            private readonly StreamsBuilder _builder;
+            private readonly KStream<K, V> _root;
+
+            private readonly AutoResetEvent dataReceived = new(false);
+            private readonly AutoResetEvent resetEvent = new(false);
+            private readonly AutoResetEvent stateChanged = new(false);
+            private readonly AutoResetEvent exceptionSet = new(false);
+
+            private KafkaStreams? streams = null;
+            private StreamsUncaughtExceptionHandler? errorHandler;
+            private StateListener? stateListener;
+
+            private string? tempApplicationId = null;
+            private Exception? resultException = null;
+            private StateType actualState = StateType.NOT_RUNNING;
+            private ReadOnlyKeyValueStore<K, V>? keyValueStore;
+            private KeyValueIterator<K, V>? keyValueIterator = null;
+            private IEnumerator<KeyValue<K, V>>? keyValueEnumerator = null;
+
+            public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, StreamsBuilder builder, KStream<K, V> root)
+            {
+                _kafkaCluster = kafkaCluster;
+                _entityType = entityType;
+                _builder = builder;
+                _root = root;
+
+                StartTopology(_builder, _root);
+            }
+
+            private void StartTopology(StreamsBuilder builder, KStream<K, V> root)
+            {
+                tempApplicationId = _kafkaCluster.Options.DatabaseName + "-" + _entityType.Name + Guid.NewGuid().ToString();
+                var materialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(tempApplicationId);
+                root.ToTable(materialized);
+
+                streams = new(builder.Build(), _kafkaCluster.Options.StreamsOptions(tempApplicationId));
+
+                errorHandler = new((exception) =>
+                {
+                    resultException = exception;
+                    exceptionSet.Set();
+                    return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+                });
+
+                stateListener = new((newState, oldState) =>
+                {
+                    actualState = newState;
+                    Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
+                    stateChanged.Set();
+                });
+
+                streams.SetUncaughtExceptionHandler(errorHandler);
+                streams.SetStateListener(stateListener);
+
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    int waitingTime = Timeout.Infinite;
+                    Stopwatch watcher = new();
+                    try
+                    {
+                        resetEvent.Set();
+                        var index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, exceptionSet });
+                        if (index == 1) return;
+                        while (true)
+                        {
+                            index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, dataReceived, exceptionSet }, waitingTime);
+                            if (index == 2) return;
+                            switch (actualState)
+                            {
+                                case StateType.CREATED:
+                                case StateType.REBALANCING:
+                                    if (index == WaitHandle.WaitTimeout)
+                                    {
+                                        Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
+                                        continue;
+                                    }
+                                    break;
+                                case StateType.RUNNING:
+                                    // exit external wait thread 
+                                    return;
+                                case StateType.NOT_RUNNING:
+                                case StateType.PENDING_ERROR:
+                                case StateType.PENDING_SHUTDOWN:
+                                case StateType.ERROR:
+                                default:
+                                    return;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        resultException = e;
+                    }
+                    finally
+                    {
+                        resetEvent.Set();
+                    }
+                });
+                resetEvent.WaitOne();
+                streams.Start();
+                Trace.WriteLine("Started on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
+                resetEvent.WaitOne(); // wait running state
+                if (resultException != null) throw resultException;
+
+                if (keyValueStore == null)
+                {
+                    keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(tempApplicationId, QueryableStoreTypes.KeyValueStore<K, V>()));
+                }
+
+                if (keyValueIterator == null)
+                {
+                    keyValueIterator = keyValueStore?.All;
+                }
+
+                if (keyValueEnumerator == null)
+                {
+                    keyValueEnumerator = keyValueIterator?.GetEnumerator();
+                }
+            }
+
+            public ValueBuffer Current
+            {
+                get
+                {
+                    if (resultException != null) throw resultException;
+                    if (keyValueEnumerator != null)
+                    {
+                        var kv = keyValueEnumerator.Current;
+                        var data = _kafkaCluster.SerdesFactory.Deserialize(kv.Value as string);
+                        return new ValueBuffer(data);
+                    }
+                    throw new InvalidOperationException("InvalidEnumerator");
+                }
+            }
+
+            object System.Collections.IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+                dataReceived?.Dispose();
+                resetEvent?.Dispose();
+                stateChanged?.Dispose();
+                exceptionSet?.Dispose();
+                streams?.Close();
+                errorHandler?.Dispose();
+                stateListener?.Dispose();
+                keyValueIterator?.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                if (resultException != null) throw resultException;
+                var res = (keyValueEnumerator != null) ? keyValueEnumerator.MoveNext() : false;
+                return res;
+            }
+
+            public void Reset()
+            {
+                if (resultException != null) throw resultException;
+                keyValueIterator?.Dispose();
+                keyValueIterator = keyValueStore?.All;
+                keyValueEnumerator = keyValueIterator?.GetEnumerator();
+            }
+        }
+    }
+
+    public virtual IEnumerable<ValueBuffer> GetData(IEntityType entityType)
+    {
+        Stopwatch watcher = new();
+        StreamsBuilder builder = new();
+        lock (_lock)
+        {
+            try
+            {
+                watcher.Start();
+                if (_tables != null)
+                {
+                    var key = _useNameMatching ? (object)entityType.Name : entityType;
+                    _tables.TryGetValue(key, out var table);
+                    KStream<string, string> root = builder.Stream<string, string>(TopicFrom(entityType));
+                    foreach (var et in entityType.GetDerivedTypes().Where(et => !et.IsAbstract()))
+                    {
+                        key = _useNameMatching ? et.Name : et;
+                        if (_tables.TryGetValue(key, out table))
+                        {
+                            root = root.Merge(builder.Stream<string, string>(TopicFrom(entityType)));
+                        }
+                    }
+
+                    return new KafkaEnumerable<string, string>(this, entityType, builder, root);
+                }
+                else throw new InvalidOperationException("No table available");
+            }
+            finally
+            {
+                watcher.Stop();
+                Trace.WriteLine("GetData - Execution time was " + watcher.ElapsedMilliseconds + " ms");
+            }
         }
     }
 

@@ -37,10 +37,12 @@ public class KafkaQueryContext : QueryContext
             //    .SelectMany(t => t.Rows.Select(vs => new ValueBuffer(vs)))
             //    .ToList();
 
-            valueBuffers = Cluster
-                .GetTables(entityType)
-                .Select(vs => new ValueBuffer(vs))
-                .ToList();
+            //valueBuffers = Cluster
+            //    .GetTables(entityType)
+            //    .Select(vs => new ValueBuffer(vs))
+            //    .ToList();
+
+            valueBuffers = Cluster.GetData(entityType);
 
             _valueBuffersCache[entityType] = valueBuffers;
         }
