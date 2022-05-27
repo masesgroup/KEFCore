@@ -163,7 +163,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             stateListener?.Dispose();
         }
 
-        public sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
+        class KafkaEnumerator : IEnumerator<ValueBuffer>
         {
             private readonly IKafkaCluster _kafkaCluster;
             private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore;
@@ -174,7 +174,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 _kafkaCluster = kafkaCluster;
                 _keyValueStore = keyValueStore;
-                Trace.WriteLine($"KafkaEnumerator - Elements {_keyValueStore?.ApproximateNumEntries}");
+                Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
                 keyValueIterator = _keyValueStore?.All;
                 keyValueEnumerator = keyValueIterator?.GetEnumerator();
             }

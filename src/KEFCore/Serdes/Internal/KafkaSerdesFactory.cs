@@ -17,6 +17,7 @@
 */
 
 using System.Collections.Concurrent;
+using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
@@ -38,6 +39,13 @@ public class KafkaSerdesFactory : IKafkaSerdesFactory
 
     public virtual IKafkaSerdesEntityType Get(string typeName)
         => _serdes[typeName];
+
+    public virtual object[] Deserialize(byte[] data)
+    {
+        var str = Encoding.UTF8.GetString(data);
+        var fulltype = KafkaSerdesEntityType.GetFullType(str);
+        return Get(fulltype!.typeName!).ConvertData(fulltype.data);
+    }
 
     public virtual object[] Deserialize(string data)
     {

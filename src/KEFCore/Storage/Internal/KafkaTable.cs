@@ -51,8 +51,8 @@ public class KafkaTable<TKey> : IKafkaTable
     {
         Cluster = cluster;
         EntityType = entityType;
-
-        cluster.CreateTable(entityType, out _tableAssociatedTopicName);
+        _tableAssociatedTopicName = entityType.TopicFrom(cluster.Options);
+        cluster.CreateTable(entityType);
         _serdes = cluster.CreateSerdes(entityType);
         _kafkaProducer = cluster.CreateProducer(entityType);
         _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType);

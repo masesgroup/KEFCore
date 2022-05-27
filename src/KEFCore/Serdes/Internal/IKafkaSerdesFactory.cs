@@ -24,6 +24,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 
         IKafkaSerdesEntityType Get(string typeName);
 
+        object[] Deserialize(byte[] data);
+
         object[] Deserialize(string data);
     }
 }

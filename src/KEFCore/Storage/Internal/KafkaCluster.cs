@@ -156,12 +156,11 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
 
-    public virtual bool CreateTable(IEntityType entityType, out string tableName)
+    public virtual bool CreateTable(IEntityType entityType)
     {
-        tableName = string.Empty;
         try
         {
-            tableName = entityType.TopicFrom(_options);
+            var tableName = entityType.TopicFrom(_options);
             var topic = new NewTopic(tableName);
             var map = Collections.SingletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
             topic.Configs(map);
