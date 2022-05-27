@@ -92,7 +92,7 @@ public class KafkaCluster : IKafkaCluster
                 var coll = new ArrayList<string>();
                 foreach (var entityType in designModel.GetEntityTypes())
                 {
-                    coll.Add(entityType.TopicFrom(_options));
+                    coll.Add(entityType.TopicName(_options));
                 }
                 var result = _kafkaAdminClient.DeleteTopics(coll.Cast<Collection<string>>());
                 result.All.Get();
@@ -160,8 +160,7 @@ public class KafkaCluster : IKafkaCluster
     {
         try
         {
-            var tableName = entityType.TopicFrom(_options);
-            var topic = new NewTopic(tableName);
+            var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
             var map = Collections.SingletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
             topic.Configs(map);
             var coll = Collections.Singleton(topic);

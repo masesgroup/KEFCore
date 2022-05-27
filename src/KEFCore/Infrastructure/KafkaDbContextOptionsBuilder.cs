@@ -133,6 +133,48 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     }
 
     /// <summary>
+    ///     Defines the default number of partitions to use when a new topic is created
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultNumPartitions">The default number of partitions to use when a new topic is created.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithDefaultNumPartitions(int defaultNumPartitions = 1)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithDefaultNumPartitions(defaultNumPartitions);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Defines the default replication factor to use when a new topic is created
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultReplicationFactor">The default replication factor to use when a new topic is created.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithNewTopicReplicationFactor(short defaultReplicationFactor = 1)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithDefaultReplicationFactor(defaultReplicationFactor);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
     ///     Set properties of <see cref="KafkaProducer"/>.
     /// </summary>
     /// <remarks>

@@ -51,7 +51,7 @@ public class KafkaTable<TKey> : IKafkaTable
     {
         Cluster = cluster;
         EntityType = entityType;
-        _tableAssociatedTopicName = entityType.TopicFrom(cluster.Options);
+        _tableAssociatedTopicName = entityType.TopicName(cluster.Options);
         cluster.CreateTable(entityType);
         _serdes = cluster.CreateSerdes(entityType);
         _kafkaProducer = cluster.CreateProducer(entityType);

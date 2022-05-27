@@ -38,6 +38,10 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     bool UsePersistentStorage { get; }
 
+    int DefaultNumPartitions { get; }
+
+    int DefaultReplicationFactor { get; }
+
     ProducerConfigBuilder? ProducerConfigBuilder { get; }
 
     StreamsConfigBuilder? StreamsConfigBuilder { get; }

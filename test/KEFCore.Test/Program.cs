@@ -118,7 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             optionsBuilder.UseKafkaDatabase("TestApplication", "TestDB", _serverToUse, (o) =>
             {
-                o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100));
+                o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
             });
         }
 

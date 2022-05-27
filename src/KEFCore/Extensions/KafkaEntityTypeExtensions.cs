@@ -91,18 +91,30 @@ public static class KafkaEntityTypeExtensions
 #pragma warning restore CS0612 // Il tipo o il membro è obsoleto
 #pragma warning restore EF1001 // Internal EF Core API usage.
 
-    public static string TopicFrom(this IEntityType entityType, KafkaOptionsExtension options)
+    public static string TopicName(this IEntityType entityType, KafkaOptionsExtension options)
     {
         return $"{options.DatabaseName}.{entityType.Name}";
     }
 
     public static string StorageIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
     {
-        return $"Table_{entityType.TopicFrom(options)}";
+        return $"Table_{entityType.TopicName(options)}";
     }
 
     public static string ApplicationIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
     {
         return $"{options.ApplicationId}_{entityType.Name}";
+    }
+
+    public static short ReplicationFactor(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        var replicationFactor = options.DefaultReplicationFactor;
+        return replicationFactor;
+    }
+
+    public static int NumPartitions(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        var numPartitions = options.DefaultNumPartitions;
+        return numPartitions;
     }
 }

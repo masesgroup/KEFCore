@@ -30,7 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         }
 
         public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, StreamsBuilder builder)
-            : base(kafkaCluster, entityType, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<TKey, string>(entityType.TopicFrom(kafkaCluster.Options)))
+            : base(kafkaCluster, entityType, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<TKey, string>(entityType.TopicName(kafkaCluster.Options)))
         {
         }
     }

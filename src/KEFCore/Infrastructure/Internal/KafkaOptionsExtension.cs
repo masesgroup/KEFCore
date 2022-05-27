@@ -37,6 +37,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _bootstrapServers;
     private bool _producerByEntity = false;
     private bool _usePersistentStorage = false;
+    private int _defaultNumPartitions = 1;
+    private short _defaultReplicationFactor = 1;
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
@@ -54,6 +56,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _bootstrapServers = copyFrom._bootstrapServers;
         _producerByEntity = copyFrom._producerByEntity;
         _usePersistentStorage = copyFrom._usePersistentStorage;
+        _defaultNumPartitions = copyFrom._defaultNumPartitions;
+        _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
@@ -76,6 +80,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual bool ProducerByEntity => _producerByEntity;
 
     public virtual bool UsePersistentStorage => _usePersistentStorage;
+
+    public virtual int DefaultNumPartitions => _defaultNumPartitions;
+
+    public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
 
     public virtual ProducerConfigBuilder ProducerConfigBuilder => _producerConfigBuilder!;
 
@@ -133,6 +141,24 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         var clone = Clone();
 
         clone._usePersistentStorage = usePersistentStorage;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithDefaultNumPartitions(int defaultNumPartitions = 1)
+    {
+        var clone = Clone();
+
+        clone._defaultNumPartitions = defaultNumPartitions;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithDefaultReplicationFactor(short defaultReplicationFactor = 1)
+    {
+        var clone = Clone();
+
+        clone._defaultReplicationFactor = defaultReplicationFactor;
 
         return clone;
     }

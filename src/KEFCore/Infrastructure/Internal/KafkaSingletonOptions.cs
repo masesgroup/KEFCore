@@ -36,6 +36,8 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             BootstrapServers = kafkaOptions.BootstrapServers;
             ProducerByEntity = kafkaOptions.ProducerByEntity;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
+            DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
+            DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
             ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfigBuilder);
             StreamsConfigBuilder = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfigBuilder);
             TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfigBuilder);
@@ -67,6 +69,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual bool ProducerByEntity { get; private set; }
 
     public virtual bool UsePersistentStorage { get; private set; }
+
+    public virtual int DefaultNumPartitions { get; private set; }
+
+    public virtual int DefaultReplicationFactor { get; private set; }
 
     public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; private set; }
 
