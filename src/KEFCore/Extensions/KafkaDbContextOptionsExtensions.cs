@@ -37,10 +37,14 @@ public static class KafkaDbContextOptionsExtensions
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
     /// <typeparam name="TContext">The type of context being configured.</typeparam>
     /// <param name="optionsBuilder">The builder being used to configure the context.</param>
+    /// <param name="applicationId">
+    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Kafka database to be controlled
+    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    /// </param>
     /// <param name="databaseName">
     ///     The name of the Kafka database. This allows the scope of the Kafka database to be controlled
     ///     independently of the context. The Kafka database is shared anywhere the same name is used.
@@ -52,12 +56,13 @@ public static class KafkaDbContextOptionsExtensions
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder<TContext> UseKafkaDatabase<TContext>(
         this DbContextOptionsBuilder<TContext> optionsBuilder,
+        string applicationId,
         string databaseName,
         string bootstrapServers,
         Action<KafkaDbContextOptionsBuilder>? kafkaOptionsAction = null)
         where TContext : DbContext
         => (DbContextOptionsBuilder<TContext>)UseKafkaDatabase(
-            (DbContextOptionsBuilder)optionsBuilder, databaseName, bootstrapServers, kafkaOptionsAction);
+            (DbContextOptionsBuilder)optionsBuilder, applicationId, databaseName, bootstrapServers, kafkaOptionsAction);
 
     /// <summary>
     ///     Configures the context to connect to a named Kafka database.
@@ -66,9 +71,13 @@ public static class KafkaDbContextOptionsExtensions
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
     /// <param name="optionsBuilder">The builder being used to configure the context.</param>
+    /// <param name="applicationId">
+    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Kafka database to be controlled
+    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    /// </param>
     /// <param name="databaseName">
     ///     The name of the Kafka database. This allows the scope of the Kafka database to be controlled
     ///     independently of the context. The Kafka database is shared anywhere the same name is used.
@@ -80,6 +89,7 @@ public static class KafkaDbContextOptionsExtensions
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder UseKafkaDatabase(
         this DbContextOptionsBuilder optionsBuilder,
+        string applicationId,
         string databaseName,
         string bootstrapServers,
         Action<KafkaDbContextOptionsBuilder>? kafkaOptionsAction = null)
@@ -91,7 +101,7 @@ public static class KafkaDbContextOptionsExtensions
         var extension = optionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithDatabaseName(databaseName).WithBootstrapServers(bootstrapServers);
+        extension = extension.WithApplicationId(applicationId).WithDatabaseName(databaseName).WithBootstrapServers(bootstrapServers);
 
         ConfigureWarnings(optionsBuilder);
 

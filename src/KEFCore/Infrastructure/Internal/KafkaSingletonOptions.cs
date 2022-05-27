@@ -32,9 +32,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
         {
             UseNameMatching = kafkaOptions.UseNameMatching;
             DatabaseName = kafkaOptions.DatabaseName;
+            ApplicationId = kafkaOptions.ApplicationId;
             BootstrapServers = kafkaOptions.BootstrapServers;
             ProducerByEntity = kafkaOptions.ProducerByEntity;
-            RetrieveWithForEach = kafkaOptions.RetrieveWithForEach;
+            UsePersistentStorage = kafkaOptions.UsePersistentStorage;
             ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfigBuilder);
             StreamsConfigBuilder = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfigBuilder);
             TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfigBuilder);
@@ -59,11 +60,13 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
     public virtual string? DatabaseName { get; private set; }
 
+    public virtual string? ApplicationId { get; private set; }
+
     public virtual string? BootstrapServers { get; private set; }
 
     public virtual bool ProducerByEntity { get; private set; }
 
-    public virtual bool RetrieveWithForEach { get; private set; }
+    public virtual bool UsePersistentStorage { get; private set; }
 
     public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; private set; }
 

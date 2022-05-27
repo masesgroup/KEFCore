@@ -29,7 +29,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// </summary>
 /// <remarks>
 ///     See <see href="https://aka.ms/efcore-docs-conventions">Model building conventions</see>, and
-///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 /// </remarks>
 public class DefiningQueryRewritingConvention : QueryFilterRewritingConvention
 {

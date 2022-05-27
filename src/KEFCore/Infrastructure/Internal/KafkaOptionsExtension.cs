@@ -33,9 +33,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
     private bool _useNameMatching = true;
     private string? _databaseName;
+    private string? _applicationId;
     private string? _bootstrapServers;
     private bool _producerByEntity = false;
-    private bool _retrieveWithForEach = true;
+    private bool _usePersistentStorage = false;
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
@@ -49,9 +50,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     {
         _useNameMatching = copyFrom._useNameMatching;
         _databaseName = copyFrom._databaseName;
+        _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
         _producerByEntity = copyFrom._producerByEntity;
-        _retrieveWithForEach = copyFrom._retrieveWithForEach;
+        _usePersistentStorage = copyFrom._usePersistentStorage;
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
@@ -67,11 +69,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual string DatabaseName => _databaseName!;
 
+    public virtual string ApplicationId => _applicationId!;
+
     public virtual string BootstrapServers => _bootstrapServers!;
 
     public virtual bool ProducerByEntity => _producerByEntity;
 
-    public virtual bool RetrieveWithForEach => _retrieveWithForEach;
+    public virtual bool UsePersistentStorage => _usePersistentStorage;
 
     public virtual ProducerConfigBuilder ProducerConfigBuilder => _producerConfigBuilder!;
 
@@ -97,6 +101,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
+    public virtual KafkaOptionsExtension WithApplicationId(string applicationId)
+    {
+        var clone = Clone();
+
+        clone._applicationId = applicationId;
+
+        return clone;
+    }
+
     public virtual KafkaOptionsExtension WithBootstrapServers(string bootstrapServers)
     {
         var clone = Clone();
@@ -115,11 +128,11 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    public virtual KafkaOptionsExtension WithRetrieveWithForEach(bool retrieveWithForEach = false)
+    public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = false)
     {
         var clone = Clone();
 
-        clone._retrieveWithForEach = retrieveWithForEach;
+        clone._usePersistentStorage = usePersistentStorage;
 
         return clone;
     }
@@ -151,11 +164,19 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
+    public virtual Properties StreamsOptions(IEntityType entityType)
+    {
+        return StreamsOptions(entityType.ApplicationIdForTable(this));
+    }
+
     public virtual Properties StreamsOptions(string applicationId)
     {
         var props = new Properties();
         var localCfg = StreamsConfigBuilder.CreateFrom(StreamsConfigBuilder).WithApplicationId(applicationId)
-                                                                            .WithBootstrapServers(BootstrapServers);
+                                                                            .WithBootstrapServers(BootstrapServers)
+                                                                            .WithCacheMaxBytesBuffering(0)
+                                                                            .WithDefaultKeySerdeClass(MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass())
+                                                                            .WithDefaultValueSerdeClass(MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
 
 
         props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
@@ -164,7 +185,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
         props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
 
-        // setting offset reset to earliest so that we can re-run the demo code with the same pre-loaded data
         props.Put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return props;
@@ -183,14 +203,17 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return props;
     }
 
-    public virtual int InitialDataWaitingTime => 10000;
-
-    public virtual int MinDataWaitingTime => 100;
-
     public virtual void ApplyServices(IServiceCollection services) => services.AddEntityFrameworkKafkaDatabase();
 
     public virtual void Validate(IDbContextOptions options)
     {
+        var kafkaOptions = options.FindExtension<KafkaOptionsExtension>();
+
+        if (kafkaOptions == null) throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+
+        if (string.IsNullOrEmpty(kafkaOptions.DatabaseName)) throw new ArgumentException("It is manadatory", "DatabaseName");
+        if (string.IsNullOrEmpty(kafkaOptions.ApplicationId)) throw new ArgumentException("It is manadatory", "ApplicationId");
+        if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
     }
 
     private sealed class ExtensionInfo : DbContextOptionsExtensionInfo

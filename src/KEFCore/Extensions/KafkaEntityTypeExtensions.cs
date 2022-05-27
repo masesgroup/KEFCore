@@ -19,6 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet;
@@ -28,7 +29,7 @@ namespace MASES.EntityFrameworkCore.KNet;
 /// </summary>
 /// <remarks>
 ///     See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see>, and
-///     <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 /// </remarks>
 public static class KafkaEntityTypeExtensions
 {
@@ -89,4 +90,19 @@ public static class KafkaEntityTypeExtensions
         => entityType.FindAnnotation(CoreAnnotationNames.DefiningQuery)?.GetConfigurationSource();
 #pragma warning restore CS0612 // Il tipo o il membro è obsoleto
 #pragma warning restore EF1001 // Internal EF Core API usage.
+
+    public static string TopicFrom(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        return $"{options.DatabaseName}.{entityType.Name}";
+    }
+
+    public static string StorageIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        return $"Table_{entityType.TopicFrom(options)}";
+    }
+
+    public static string ApplicationIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        return $"{options.ApplicationId}_{entityType.Name}";
+    }
 }

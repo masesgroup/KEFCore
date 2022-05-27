@@ -39,7 +39,7 @@ public static class KafkaDatabaseFacadeExtensions
     ///         provider to use as part of configuring the context.
     ///     </para>
     ///     <para>
-    ///         See <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and
+    ///         See <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and
     ///         examples.
     ///     </para>
     /// </remarks>
