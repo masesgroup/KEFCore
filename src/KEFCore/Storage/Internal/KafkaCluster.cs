@@ -94,7 +94,7 @@ public class KafkaCluster : IKafkaCluster
                 {
                     coll.Add(entityType.TopicName(_options));
                 }
-                var result = _kafkaAdminClient.DeleteTopics(coll.Cast<Collection<string>>());
+                var result = _kafkaAdminClient.DeleteTopics(coll);
                 result.All.Get();
             }
             catch (ExecutionException ex)
