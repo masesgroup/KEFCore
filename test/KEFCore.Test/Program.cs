@@ -25,6 +25,7 @@
 using MASES.KNet;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
@@ -32,7 +33,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
     class Program
     {
         const string theServer = "localhost:9092";
-
         static string serverToUse = theServer;
 
         static void Main(string[] args)
@@ -62,21 +62,41 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            }
-                    }) ;
+                            },
+                        Rating = i,
+                    });
                 }
                 context.SaveChanges();
-                
+
+            }
+
+            using (var context = new BloggingContext(serverToUse))
+            {
+
                 //var pageObject = (from op in context.Blogs
                 //                  join pg in context.Posts on op.BlogId equals pg.BlogId
                 //                  where pg.BlogId == op.BlogId
                 //                  select new { pg, op }).SingleOrDefault();
 
-                var post = context.Posts
-                                  .Single(b => b.BlogId == 2);
+                Stopwatch watch = Stopwatch.StartNew();
+                var post = context.Posts.Single(b => b.BlogId == 2);
+                watch.Stop();
+                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
 
-                var blog = context.Blogs
-                                  !.Single(b => b.BlogId == 1);
+                watch.Restart();
+                post = context.Posts.Single(b => b.BlogId == 1);
+                watch.Stop();
+                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
+
+                watch.Restart();
+                var all = context.Posts.All((o) => true);
+                watch.Stop();
+                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
+
+                watch.Restart();
+                var blog = context.Blogs!.Single(b => b.BlogId == 1);
+                watch.Stop();
+                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
 
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
@@ -96,10 +116,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseKafkaDatabase("TestDB", _serverToUse, (o) =>
+            optionsBuilder.UseKafkaDatabase("TestApplication", "TestDB", _serverToUse, (o) =>
             {
-                o.WithRetrieveWithForEach(true)
-                 .StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100));
+                o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
             });
         }
 

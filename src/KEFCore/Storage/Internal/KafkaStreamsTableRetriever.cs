@@ -1,4 +1,4 @@
-/*
+﻿/*
 *  Copyright 2022 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,33 +18,20 @@
 
 #nullable enable
 
-using MASES.KNet.Clients.Producer;
-using MASES.KNet.Common.Config;
 using MASES.KNet.Streams;
 
-namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-
-public interface IKafkaSingletonOptions : ISingletonOptions
+namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    bool UseNameMatching { get; }
+    public sealed class KafkaStreamsTableRetriever<TKey> : KafkaStreamsBaseRetriever<TKey, string>
+    {
+        public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType)
+            : this(kafkaCluster, entityType, new StreamsBuilder())
+        {
+        }
 
-    string? DatabaseName { get; }
-
-    string? ApplicationId { get; }
-
-    string? BootstrapServers { get; }
-
-    bool ProducerByEntity { get; }
-
-    bool UsePersistentStorage { get; }
-
-    int DefaultNumPartitions { get; }
-
-    int DefaultReplicationFactor { get; }
-
-    ProducerConfigBuilder? ProducerConfigBuilder { get; }
-
-    StreamsConfigBuilder? StreamsConfigBuilder { get; }
-
-    TopicConfigBuilder? TopicConfigBuilder { get; }
+        public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, StreamsBuilder builder)
+            : base(kafkaCluster, entityType, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<TKey, string>(entityType.TopicName(kafkaCluster.Options)))
+        {
+        }
+    }
 }

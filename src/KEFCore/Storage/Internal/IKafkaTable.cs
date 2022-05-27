@@ -28,6 +28,8 @@ public interface IKafkaTable
 {
     IReadOnlyList<object?[]> SnapshotRows();
 
+    IEnumerable<ValueBuffer> ValueBuffers { get; }
+
     IEnumerable<object?[]> Rows { get; }
 
     ProducerRecord<string, string> Create(IUpdateEntry entry);

@@ -34,7 +34,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///     </para>
 ///     <para>
 ///         See <see href="https://aka.ms/efcore-docs-conventions">Model building conventions</see>, and
-///         <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 ///     </para>
 /// </remarks>
 public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
@@ -95,7 +95,7 @@ public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
             .AddEntityFrameworkKafkaDatabase()
             .AddDbContext<DbContext>(
                 (p, o) =>
-                    o.UseKafkaDatabase(Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+                    o.UseKafkaDatabase(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p))
             .BuildServiceProvider();
 

@@ -32,7 +32,7 @@ namespace MASES.EntityFrameworkCore.KNet.Diagnostics;
 ///     </para>
 ///     <para>
 ///         See <see href="https://aka.ms/efcore-docs-diagnostics">Logging, events, and diagnostics</see>, and
-///         <see href="https://github.com/masesgroup/EntityFramework4Kafka">The EF Core Kafka database provider</see> for more information and examples.
+///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 ///     </para>
 /// </remarks>
 public static class KafkaEventId

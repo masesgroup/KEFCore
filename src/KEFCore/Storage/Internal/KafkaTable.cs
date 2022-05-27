@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Globalization;
-using MASES.KNet.Streams.KStream;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.KNet.Clients.Producer;
@@ -43,6 +42,7 @@ public class KafkaTable<TKey> : IKafkaTable
     private readonly IProducer<string, string> _kafkaProducer;
     private readonly string _tableAssociatedTopicName;
     private readonly IKafkaSerdesEntityType _serdes;
+    private readonly KafkaStreamsTableRetriever<TKey> _streamData;
 
     public KafkaTable(
         IKafkaCluster cluster,
@@ -51,10 +51,11 @@ public class KafkaTable<TKey> : IKafkaTable
     {
         Cluster = cluster;
         EntityType = entityType;
-
-        cluster.CreateTable(entityType, out _tableAssociatedTopicName);
+        _tableAssociatedTopicName = entityType.TopicName(cluster.Options);
+        cluster.CreateTable(entityType);
         _serdes = cluster.CreateSerdes(entityType);
         _kafkaProducer = cluster.CreateProducer(entityType);
+        _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType);
 
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
@@ -67,14 +68,14 @@ public class KafkaTable<TKey> : IKafkaTable
 
             if (converter != null)
             {
-                _valueConverters ??= new System.Collections.Generic.List<(int, ValueConverter)>();
+                _valueConverters ??= new List<(int, ValueConverter)>();
                 _valueConverters.Add((property.GetIndex(), converter));
             }
 
             var comparer = property.GetKeyValueComparer();
             if (!comparer.IsDefault())
             {
-                _valueComparers ??= new System.Collections.Generic.List<(int, ValueComparer)>();
+                _valueComparers ??= new List<(int, ValueComparer)>();
                 _valueComparers.Add((property.GetIndex(), comparer));
             }
         }
@@ -107,6 +108,8 @@ public class KafkaTable<TKey> : IKafkaTable
 
         return (KafkaIntegerValueGenerator<TProperty>)generator;
     }
+
+    public virtual IEnumerable<ValueBuffer> ValueBuffers => _streamData;
 
     public virtual IEnumerable<object?[]> Rows
         => RowsInTable();

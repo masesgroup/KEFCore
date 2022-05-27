@@ -32,15 +32,7 @@ public class KafkaQueryContext : QueryContext
     {
         if (!_valueBuffersCache.TryGetValue(entityType, out var valueBuffers))
         {
-            //valueBuffers = Cluster
-            //    .GetTables(entityType)
-            //    .SelectMany(t => t.Rows.Select(vs => new ValueBuffer(vs)))
-            //    .ToList();
-
-            valueBuffers = Cluster
-                .GetTables(entityType)
-                .Select(vs => new ValueBuffer(vs))
-                .ToList();
+            valueBuffers = Cluster.GetData(entityType);
 
             _valueBuffersCache[entityType] = valueBuffers;
         }

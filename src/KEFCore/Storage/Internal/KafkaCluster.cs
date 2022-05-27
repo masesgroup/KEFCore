@@ -28,11 +28,8 @@ using MASES.KNet.Common.Config;
 using MASES.KNet.Clients.Producer;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using System.Collections.Concurrent;
-using MASES.KNet.Streams;
-using MASES.KNet.Streams.KStream;
-using MASES.KNet.Streams.Errors;
-using MASES.KNet.Streams.State;
-using MASES.KNet.Common.Utils;
+using MASES.KNet.Common.Errors;
+using Java.Util.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -66,6 +63,8 @@ public class KafkaCluster : IKafkaCluster
         _kafkaAdminClient = KafkaAdminClient.Create(props);
     }
 
+    public virtual IKafkaSerdesFactory SerdesFactory => _serdesFactory;
+
     public virtual KafkaOptionsExtension Options => _options;
 
     public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
@@ -93,14 +92,15 @@ public class KafkaCluster : IKafkaCluster
                 var coll = new ArrayList<string>();
                 foreach (var entityType in designModel.GetEntityTypes())
                 {
-                    coll.Add(TopicFrom(entityType));
+                    coll.Add(entityType.TopicName(_options));
                 }
-                var result = _kafkaAdminClient.DeleteTopics(coll.Cast<Collection<string>>());
-                result.Dyn().all().get();
+                var result = _kafkaAdminClient.DeleteTopics(coll);
+                result.All.Get();
             }
-            catch (Exception ex)
+            catch (ExecutionException ex)
             {
-
+                if (ex.InnerException is UnknownTopicOrPartitionException) { Trace.WriteLine(ex.InnerException.Message); }
+                else throw ex.InnerException;
             }
         }
 
@@ -156,13 +156,11 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
 
-    public virtual bool CreateTable(IEntityType entityType, out string tableName)
+    public virtual bool CreateTable(IEntityType entityType)
     {
-        tableName = string.Empty;
         try
         {
-            tableName = TopicFrom(entityType);
-            var topic = new NewTopic(tableName);
+            var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
             var map = Collections.SingletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
             topic.Configs(map);
             var coll = Collections.Singleton(topic);
@@ -177,8 +175,7 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
 
-    public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType)
-        => _serdesFactory.GetOrCreate(entityType);
+    public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
 
     public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
     {
@@ -196,222 +193,31 @@ public class KafkaCluster : IKafkaCluster
         }
     }
 
-    private IProducer<string, string> CreateProducer()
-        => new KafkaProducer<string, string>(Options.ProducerOptions());
+    private IProducer<string, string> CreateProducer() => new KNetProducer<string, string>(Options.ProducerOptions());
 
-    private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables()
-        => new();
+    private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 
-    public virtual IReadOnlyList<object?[]> GetTables(IEntityType entityType)
+    public virtual IEnumerable<ValueBuffer> GetData(IEntityType entityType)
     {
         Stopwatch watcher = new();
-        StreamsBuilder builder = new();
         lock (_lock)
         {
             try
             {
                 watcher.Start();
-                if (_tables != null)
+                EnsureTable(entityType);
+                var key = _useNameMatching ? (object)entityType.Name : entityType;
+                if (_tables != null && _tables.TryGetValue(key, out var table))
                 {
-                    var key = _useNameMatching ? (object)entityType.Name : entityType;
-                    _tables.TryGetValue(key, out var table);
-                    KStream<string, string> root = builder.Stream<string, string>(TopicFrom(entityType));
-                    foreach (var et in entityType.GetDerivedTypes().Where(et => !et.IsAbstract()))
-                    {
-                        key = _useNameMatching ? (object)et.Name : et;
-                        if (_tables.TryGetValue(key, out table))
-                        {
-                            root = root.Merge(builder.Stream<string, string>(TopicFrom(entityType)));
-                        }
-                    }
-
-                    var list = new System.Collections.Generic.List<object?[]>();
-
-                    foreach (var item in ExecuteTopology<string, string>(builder, root))
-                    {
-                        list.Add(_serdesFactory.Deserialize(item.Item2));
-                    }
-
-                    return list;
+                    return table.ValueBuffers;
                 }
+                throw new InvalidOperationException("No table available");
             }
             finally
             {
                 watcher.Stop();
-                Trace.WriteLine("Execution time was " + watcher.ElapsedMilliseconds + " ms");
+                Trace.WriteLine("GetData - Execution time was " + watcher.ElapsedMilliseconds + " ms");
             }
-        }
-
-        return new System.Collections.Generic.List<object?[]>();
-
-        //var data = new System.Collections.Generic.List<KafkaTableSnapshot>();
-        //lock (_lock)
-        //{
-        //    if (_tables != null)
-        //    {
-        //        foreach (var et in entityType.GetDerivedTypesInclusive().Where(et => !et.IsAbstract()))
-        //        {
-        //            var key = _useNameMatching ? (object)et.Name : et;
-        //            if (_tables.TryGetValue(key, out var table))
-        //            {
-        //                data.Add(new KafkaTableSnapshot(et, table.SnapshotRows()));
-        //            }
-        //        }
-        //    }
-        //}
-
-        //return data;
-    }
-
-    private IReadOnlyList<(K, V)> ExecuteTopology<K,V>(StreamsBuilder builder, KStream<K, V> root)
-    {
-        System.Collections.Generic.List<(K, V)> list = new();
-        AutoResetEvent dataReceived = new(false);
-        AutoResetEvent resetEvent = new(false);
-        AutoResetEvent stateChanged = new(false);
-        AutoResetEvent exceptionSet = new(false);
-        ForeachAction<K, V>? foreachAction = null;
-
-        try
-        {
-            string tempApplicationId = Options.DatabaseName + "-" + Guid.NewGuid().ToString();
-
-            if (Options.RetrieveWithForEach)
-            {
-                foreachAction = new((key, value) =>
-                {
-                    list.Add((key, value));
-                    dataReceived.Set();
-                });
-                root.Foreach(foreachAction);
-            }
-            else
-            {
-                var materialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(tempApplicationId);
-                root.ToTable(materialized);
-            }
-
-            Exception? resultException = null;
-            StateType actualState = StateType.NOT_RUNNING;
-
-            using KafkaStreams streams = new(builder.Build(), Options.StreamsOptions(tempApplicationId));
-            using StreamsUncaughtExceptionHandler errorHandler = new((exception) =>
-            {
-                resultException = exception;
-                exceptionSet.Set();
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-            });
-            using StateListener stateListener = new((newState, oldState) =>
-            {
-                actualState = newState;
-                Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-                stateChanged.Set();
-            });
-            streams.SetUncaughtExceptionHandler(errorHandler);
-            streams.SetStateListener(stateListener);
-            try
-            {
-                ThreadPool.QueueUserWorkItem((o) =>
-                {
-                    IList<(K, V)>? innerResult = o as IList<(K, V)>;
-                    bool firstTimeRunning = true;
-                    int waitingTime = Timeout.Infinite;
-                    Stopwatch watcher = new();
-                    try
-                    {
-                        resetEvent.Set();
-                        var index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, exceptionSet });
-                        if (index == 1) return;
-                        while (true)
-                        {
-                            index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, dataReceived, exceptionSet }, waitingTime);
-                            if (index == 2) return;
-                            switch (actualState)
-                            {
-                                case StateType.CREATED:
-                                case StateType.REBALANCING:
-                                    if (index == WaitHandle.WaitTimeout)
-                                    {
-                                        Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
-                                        continue;
-                                    }
-                                    break;
-                                case StateType.RUNNING:
-                                    if (Options.RetrieveWithForEach)
-                                    {
-                                        if (firstTimeRunning)
-                                        {
-                                            //Trace.WriteLine("State: " + actualState + " FirstTimeRunning");
-                                            firstTimeRunning = false;
-                                            waitingTime = Options.InitialDataWaitingTime;
-                                            watcher.Start();
-                                        }
-                                        else
-                                        {
-                                            if (index == 1)
-                                            {
-                                                watcher.Stop();
-                                                //Trace.WriteLine("State: " + actualState + " dataReceived Set after " + watcher.ElapsedMilliseconds + " ms");
-                                                waitingTime = Options.MinDataWaitingTime + (int)watcher.ElapsedMilliseconds;
-                                                watcher.Restart();
-                                            }
-                                            if (index == WaitHandle.WaitTimeout)
-                                            {
-                                                Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // Get the key-value store CountsKeyValueStore
-                                        ReadOnlyKeyValueStore<K, V> keyValueStore =
-                                                streams.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(tempApplicationId, QueryableStoreTypes.KeyValueStore<K, V>()));
-
-                                        foreach (var item in keyValueStore.All)
-                                        {
-                                            innerResult?.Add((item.Key, item.Value));
-                                        }
-                                        return;
-                                    }
-                                    break;
-                                case StateType.NOT_RUNNING:
-                                case StateType.PENDING_ERROR:
-                                case StateType.PENDING_SHUTDOWN:
-                                case StateType.ERROR:
-                                default:
-                                    return;
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        resultException = e;
-                    }
-                    finally
-                    {
-                        resetEvent.Set();
-                    }
-                }, list);
-                resetEvent.WaitOne();
-                streams.Start();
-                Trace.WriteLine("Started on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-                resetEvent.WaitOne();
-            }
-            finally
-            {
-                streams.Close();
-            }
-            if (resultException != null) throw resultException;
-            return list;
-        }
-        finally
-        {
-            dataReceived?.Dispose();
-            resetEvent?.Dispose();
-            stateChanged?.Dispose();
-            exceptionSet?.Dispose();
-            foreachAction?.Dispose();
         }
     }
 
@@ -498,10 +304,5 @@ public class KafkaCluster : IKafkaCluster
         }
 
         return _tables[_useNameMatching ? entityType.Name : entityType];
-    }
-
-    private string TopicFrom(IEntityType entityType)
-    {
-        return _options.DatabaseName + "." + entityType.Name;
     }
 }
