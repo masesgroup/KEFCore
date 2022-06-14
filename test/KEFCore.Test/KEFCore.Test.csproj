@@ -10,7 +10,7 @@
 		<Owners>MASES s.r.l.</Owners>
 		<Authors>MASES s.r.l.</Authors>
 		<Company>MASES s.r.l.</Company>
-		<Version>0.4.0.0</Version>
+		<Version>0.4.1.0</Version>
 		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<TargetFramework>net6.0</TargetFramework>
