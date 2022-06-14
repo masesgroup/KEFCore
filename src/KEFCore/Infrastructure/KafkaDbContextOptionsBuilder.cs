@@ -162,7 +162,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="defaultReplicationFactor">The default replication factor to use when a new topic is created.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithNewTopicReplicationFactor(short defaultReplicationFactor = 1)
+    public virtual KafkaDbContextOptionsBuilder WithDefaultReplicationFactor(short defaultReplicationFactor = 1)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
