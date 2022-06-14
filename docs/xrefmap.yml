@@ -1091,19 +1091,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultNumPartitions
   nameWithType: KafkaDbContextOptionsBuilder.WithDefaultNumPartitions
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor(System.Int16)
-  name: WithNewTopicReplicationFactor(Int16)
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithNewTopicReplicationFactor_System_Int16_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor(System.Int16)
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor(System.Int16)
-  nameWithType: KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor(Int16)
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor*
-  name: WithNewTopicReplicationFactor
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithNewTopicReplicationFactor_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor(System.Int16)
+  name: WithDefaultReplicationFactor(Int16)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithDefaultReplicationFactor_System_Int16_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor(System.Int16)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor(System.Int16)
+  nameWithType: KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor(Int16)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor*
+  name: WithDefaultReplicationFactor
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithDefaultReplicationFactor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor
-  nameWithType: KafkaDbContextOptionsBuilder.WithNewTopicReplicationFactor
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor
+  nameWithType: KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerByEntity(System.Boolean)
   name: WithProducerByEntity(Boolean)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerByEntity_System_Boolean_
