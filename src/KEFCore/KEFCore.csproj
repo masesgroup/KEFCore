@@ -11,7 +11,7 @@
 		<Owners>MASES s.r.l.</Owners>
 		<Authors>MASES s.r.l.</Authors>
 		<Company>MASES s.r.l.</Company>
-		<Version>0.4.1.0</Version>
+		<Version>0.4.2.0</Version>
 		<Product>MASES.EntityFrameworkCore.KNet</Product>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<TargetFrameworks>net6.0</TargetFrameworks>
@@ -94,11 +94,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="1.3.1">
+		<PackageReference Include="MASES.KNet" Version="1.3.4">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" PrivateAssets="none" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" PrivateAssets="none" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 </Project>
