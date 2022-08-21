@@ -70,7 +70,7 @@ jobs:
         run: |
           # choco install docfx
           cd src\Documentation
-          ..\..\..\docfx\docfx
+          ..\..\docfx\docfx
 
       - uses: actions/upload-artifact@v2
         with:

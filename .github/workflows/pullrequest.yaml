@@ -36,4 +36,4 @@ jobs:
         run: |
           # choco install docfx
           cd src\Documentation
-          ..\..\..\docfx\docfx
+          ..\..\docfx\docfx
