@@ -1,20 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<ImplicitUsings>true</ImplicitUsings>
-		<LangVersion>latest</LangVersion>
 		<AssemblyName>MASES.EntityFrameworkCore.KNet</AssemblyName>
 		<RootNamespace>MASES.EntityFrameworkCore.KNet</RootNamespace>
 		<Title>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Title>
 		<Description>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Description>
-		<Copyright>Copyright ©  MASES s.r.l. 2022</Copyright>
-		<Owners>MASES s.r.l.</Owners>
-		<Authors>MASES s.r.l.</Authors>
-		<Company>MASES s.r.l.</Company>
-		<Version>0.4.5.0</Version>
 		<Product>MASES.EntityFrameworkCore.KNet</Product>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<TargetFrameworks>net6.0</TargetFrameworks>
 		<OutputPath>..\..\bin\</OutputPath>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -33,10 +26,6 @@
 		<AssemblyOriginatorKeyFile>..\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -94,7 +83,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="1.4.0">
+		<PackageReference Include="MASES.KNet" Version="1.4.1">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
