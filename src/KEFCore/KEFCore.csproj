@@ -7,23 +7,9 @@
 		<Title>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Title>
 		<Description>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet</Product>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<OutputPath>..\..\bin\</OutputPath>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageProjectUrl>https://github.com/masesgroup/KEFCore/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/masesgroup/KEFCore</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>https://github.com/masesgroup/KEFCore/releases</PackageReleaseNotes>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageIcon>JCOB128x128.png</PackageIcon>
 		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet</PackageId>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -52,12 +38,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-		<None Include="..\Common\JCOB128x128.png" Pack="true" PackagePath="" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="Properties\KafkaStrings.Designer.tt">
 			<Generator>TextTemplatingFileGenerator</Generator>
 			<LastGenOutput>KafkaStrings.Designer.cs</LastGenOutput>
@@ -83,11 +63,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="1.4.1">
+		<PackageReference Include="MASES.KNet" Version="1.4.3">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" PrivateAssets="none" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" PrivateAssets="none" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 </Project>

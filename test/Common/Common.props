@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="..\..\src\Common\Common.props" />
+	<PropertyGroup>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<AssemblyOriginatorKeyFile>..\..\src\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="..\..\src\Common\JCOB128x128.png" Pack="true" PackagePath="" />
+		<None Include="..\..\src\Common\efcorekafka.snk" Link="efcorekafka.snk" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\KEFCore\KEFCore.csproj" />
+	</ItemGroup>
+</Project>
