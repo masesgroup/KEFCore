@@ -1,22 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\..\src\Common\Common.props" />
+	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
+		<OutputType>Exe</OutputType>
 		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test</AssemblyName>
 		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test</RootNamespace>
 		<Title>EntityFrameworkCore KNet Test</Title>
 		<Description>EntityFrameworkCore KNet Test</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<OutputPath>..\..\bin\</OutputPath>
-		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\KEFCore\KEFCore.csproj" />
-	</ItemGroup>
-
 </Project>

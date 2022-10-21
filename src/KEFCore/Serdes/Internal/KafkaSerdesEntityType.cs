@@ -20,10 +20,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
     public class KafkaSerdesEntityTypeData
     {
-        public KafkaSerdesEntityTypeData()
-        {
-
-        }
+        public KafkaSerdesEntityTypeData() { }
 
         public KafkaSerdesEntityTypeData(string tName, object[] rData)
         {
@@ -52,13 +49,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             return ConvertData(des!.data);
         }
 
-        public TKey Deserialize<TKey>(string arg) => Newtonsoft.Json.JsonConvert.DeserializeObject<TKey>(arg)!;
+        public TKey Deserialize<TKey>(string arg) => System.Text.Json.JsonSerializer.Deserialize<TKey>(arg)!;
 
-        public string Serialize(params object?[]? args) => Newtonsoft.Json.JsonConvert.SerializeObject(new KafkaSerdesEntityTypeData(_type.Name, args!));
+        public string Serialize(params object?[]? args) => System.Text.Json.JsonSerializer.Serialize(new KafkaSerdesEntityTypeData(_type.Name, args!));
 
-        public string Serialize<TKey>(TKey key) => Newtonsoft.Json.JsonConvert.SerializeObject(key);
+        public string Serialize<TKey>(TKey key) => System.Text.Json.JsonSerializer.Serialize(key);
 
-        public static KafkaSerdesEntityTypeData? GetFullType(string arg) => Newtonsoft.Json.JsonConvert.DeserializeObject<KafkaSerdesEntityTypeData>(arg);
+        public static KafkaSerdesEntityTypeData? GetFullType(string arg) => System.Text.Json.JsonSerializer.Deserialize<KafkaSerdesEntityTypeData>(arg);
 
         public object[] ConvertData(object[]? input)
         {
