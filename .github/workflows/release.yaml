@@ -23,7 +23,7 @@ jobs:
         run: git config --system core.longpaths true
       
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it                                                                                  
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '1'
           submodules: 'true'
@@ -31,7 +31,7 @@ jobs:
       - name: Compile
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\KEFCore.sln
 
-      - uses: nuget/setup-nuget@v1
+      - uses: nuget/setup-nuget@v1.1.1
         with:
           nuget-version: '5.x'
 

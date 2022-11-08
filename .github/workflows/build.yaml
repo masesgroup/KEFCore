@@ -28,12 +28,12 @@ jobs:
           for added_modified_file in "${added_modified_files[@]}"; do
               if [[ $added_modified_file == ".github/workflows/build.yaml"* ]]; then
                 echo "$added_modified_file is myself."
-                echo "::set-output name=run_build_windows::true"
+                echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
               fi
               if [[ $added_modified_file == "src/"* ]]; then
                 echo "$added_modified_file file is under the directory 'src/'."
-                echo "::set-output name=run_build_windows::true"
+                echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
               fi
           done
@@ -55,7 +55,7 @@ jobs:
         run: git config --system core.longpaths true
     
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '1'
           submodules: 'true'
@@ -72,7 +72,7 @@ jobs:
           cd src\Documentation
           docfx
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: KEFCore
           path: .\bin\*nupkg
@@ -84,7 +84,7 @@ jobs:
 
       - name: Commit changes
         if: ${{ github.repository_owner == 'masesgroup'}} #do not push any changes outside main repo
-        uses: EndBug/add-and-commit@v5
+        uses: EndBug/add-and-commit@v9
         with:
           author_name: github-actions
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
