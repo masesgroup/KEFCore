@@ -1558,6 +1558,12 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.KafkaEntityTypeExtensions.TopicName
   nameWithType: KafkaEntityTypeExtensions.TopicName
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore
+  name: KEFCore
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.KEFCore
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore
+  nameWithType: KEFCore
 - uid: MASES.EntityFrameworkCore.KNet.Metadata.Conventions
   name: MASES.EntityFrameworkCore.KNet.Metadata.Conventions
   href: api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.html
@@ -2473,12 +2479,6 @@ references:
   commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(IEntityType)
   fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(IEntityType)
   nameWithType: KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(IEntityType)
-- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Type)
-  name: CreateShapedQueryExpression(Type)
-  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_CreateShapedQueryExpression_Type_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Type)
-  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Type)
-  nameWithType: KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Type)
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression*
   name: CreateShapedQueryExpression
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_CreateShapedQueryExpression_

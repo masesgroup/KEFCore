@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.html",
-          "hash": "PRIFX2AtpFpBS/l1JsuElChgROk5d0Mry+KjAVzb9hw="
+          "hash": "tm8DyGMNf6YVgz5tlvM2Sbz3NJVKaVPAt+0inktsRes="
         }
       },
       "is_incremental": false,
@@ -233,6 +233,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCore.html",
+          "hash": "viKmTebnn4pYh/QwIa4RpBrwfk6A5XNqqSOn48fhtnc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.yml",
       "output": {
         ".html": {
@@ -417,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html",
-          "hash": "2ctopfyEIIF3UmDuBfvHoMgUUm2y7Wb3Dh/rogQgTPI="
+          "hash": "Yq3EnS5fNLe48mDwNjmc3mb0o4zIE9lMOfg5VxS3f28="
         }
       },
       "is_incremental": false,
@@ -861,7 +873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.html",
-          "hash": "oOOpn153gjXj3GBkJcJ+ENVH2Lg5gczF/qn6aPKfPTg="
+          "hash": "JYu6mKR4DBgI22ewaCRoHJoSWRw0kDTZm+zasXXtkgQ="
         }
       },
       "is_incremental": false,
@@ -909,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "px3RlqPJ5dhxrX1oc6zKCjXNo1stp0+nqfszPupzIv8="
+          "hash": "2j0scYYcYoYD/DHfhzxHzT1am/4YaWXnM9nk4zwipKg="
         }
       },
       "is_incremental": false,
@@ -1037,7 +1049,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 74,
+          "total_file_count": 75,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
