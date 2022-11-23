@@ -1251,10 +1251,4 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 return shaper1;
         }
     }
-
-    [Obsolete]
-    protected override ShapedQueryExpression CreateShapedQueryExpression(Type elementType)
-    {
-        throw new NotImplementedException();
-    }
 }

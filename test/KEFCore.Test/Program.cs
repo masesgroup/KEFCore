@@ -22,7 +22,6 @@
  *  SOFTWARE.
  */
 
-using MASES.KNet;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,8 +36,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void Main(string[] args)
         {
-            KNetCore.CreateGlobalInstance();
-            var appArgs = KNetCore.FilteredArgs;
+            KEFCore.CreateGlobalInstance();
+            var appArgs = KEFCore.FilteredArgs;
 
             if (appArgs.Length != 0)
             {
