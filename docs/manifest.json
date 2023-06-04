@@ -585,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html",
-          "hash": "GQ8nS3SXi/2VRGjhGMd2ZeJdGEyUtuGFv8wZMs7xvLs="
+          "hash": "Blels4CwEPp66Nay9tdlqS8xaG4XJbkwHzD+50+69kA="
         }
       },
       "is_incremental": false,
@@ -645,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html",
-          "hash": "VUQw3Kdtb8FGu4RSHYl5K+kKMyR2hx60BAbX7w9URGg="
+          "hash": "A/9lBhoWAPjIUeZsyR7y3Gceut0/TurnwCx0neDe11g="
         }
       },
       "is_incremental": false,
