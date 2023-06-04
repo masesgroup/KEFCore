@@ -45,8 +45,8 @@ public class KafkaCluster : IKafkaCluster
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
 
-    private IProducer<string, string>? _globalProducer = null;
-    private readonly ConcurrentDictionary<IEntityType, IProducer<string, string>> _producers;
+    private IKNetProducer<string, string>? _globalProducer = null;
+    private readonly ConcurrentDictionary<IEntityType, IKNetProducer<string, string>> _producers;
 
     public KafkaCluster(
         KafkaOptionsExtension options,
@@ -177,7 +177,7 @@ public class KafkaCluster : IKafkaCluster
 
     public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
 
-    public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
+    public virtual IKNetProducer<string, string> CreateProducer(IEntityType entityType)
     {
         if (!Options.ProducerByEntity)
         {
@@ -193,7 +193,7 @@ public class KafkaCluster : IKafkaCluster
         }
     }
 
-    private IProducer<string, string> CreateProducer() => new KNetProducer<string, string>(Options.ProducerOptions());
+    private IKNetProducer<string, string> CreateProducer() => new KNetProducer<string, string>(Options.ProducerOptions());
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 

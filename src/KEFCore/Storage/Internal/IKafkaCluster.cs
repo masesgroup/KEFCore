@@ -45,7 +45,7 @@ public interface IKafkaCluster
 
     IKafkaSerdesEntityType CreateSerdes(IEntityType entityType);
 
-    IProducer<string, string> CreateProducer(IEntityType entityType);
+    IKNetProducer<string, string> CreateProducer(IEntityType entityType);
 
     IEnumerable<ValueBuffer> GetData(IEntityType entityType);
 

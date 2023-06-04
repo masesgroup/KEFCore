@@ -39,7 +39,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
     private Dictionary<int, IKafkaIntegerValueGenerator>? _integerGenerators;
 
-    private readonly IProducer<string, string> _kafkaProducer;
+    private readonly IKNetProducer<string, string> _kafkaProducer;
     private readonly string _tableAssociatedTopicName;
     private readonly IKafkaSerdesEntityType _serdes;
     private readonly KafkaStreamsTableRetriever<TKey> _streamData;
