@@ -63,10 +63,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="1.5.4">
+		<PackageReference Include="MASES.KNet" Version="1.5.5">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" PrivateAssets="none" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" PrivateAssets="none" />
 	</ItemGroup>
 </Project>
