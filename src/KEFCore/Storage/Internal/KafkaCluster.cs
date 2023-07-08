@@ -21,15 +21,15 @@
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.KNet.Clients.Admin;
 using Java.Util;
-using MASES.JCOBridge.C2JBridge;
-using MASES.KNet.Common.Config;
-using MASES.KNet.Clients.Producer;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using System.Collections.Concurrent;
-using MASES.KNet.Common.Errors;
 using Java.Util.Concurrent;
+using MASES.KNet.Producer;
+using Org.Apache.Kafka.Clients.Admin;
+using Org.Apache.Kafka.Common.Config;
+using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Common.Errors;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -95,7 +95,7 @@ public class KafkaCluster : IKafkaCluster
                     coll.Add(entityType.TopicName(_options));
                 }
                 var result = _kafkaAdminClient.DeleteTopics(coll);
-                result.All.Get();
+                result.All().Get();
             }
             catch (ExecutionException ex)
             {
@@ -165,7 +165,7 @@ public class KafkaCluster : IKafkaCluster
             topic.Configs(map);
             var coll = Collections.Singleton(topic);
             var result = _kafkaAdminClient.CreateTopics(coll);
-            result.All.Get();
+            result.All().Get();
         }
         catch (Java.Util.Concurrent.ExecutionException ex)
         {
@@ -222,11 +222,11 @@ public class KafkaCluster : IKafkaCluster
     }
 
     public virtual int ExecuteTransaction(
-        IList<IUpdateEntry> entries,
+        System.Collections.Generic.IList<IUpdateEntry> entries,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var rowsAffected = 0;
-        System.Collections.Generic.Dictionary<IKafkaTable, IList<ProducerRecord<string, string>>> _dataInTransaction = new();
+        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<KNetProducerRecord<string, string>>> _dataInTransaction = new();
 
         lock (_lock)
         {
@@ -240,7 +240,7 @@ public class KafkaCluster : IKafkaCluster
 
                 var table = EnsureTable(entityType);
 
-                ProducerRecord<string, string> record;
+                KNetProducerRecord<string, string> record;
 
                 if (entry.SharedIdentityEntry != null)
                 {
@@ -267,9 +267,9 @@ public class KafkaCluster : IKafkaCluster
                         continue;
                 }
 
-                if (!_dataInTransaction.TryGetValue(table, out IList<ProducerRecord<string, string>>? recordList))
+                if (!_dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<KNetProducerRecord<string, string>>? recordList))
                 {
-                    recordList = new System.Collections.Generic.List<ProducerRecord<string, string>>();
+                    recordList = new System.Collections.Generic.List<KNetProducerRecord<string, string>>();
                     _dataInTransaction[table] = recordList;
                 }
                 recordList?.Add(record);

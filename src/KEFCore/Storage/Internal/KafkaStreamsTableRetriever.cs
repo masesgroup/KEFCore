@@ -18,7 +18,7 @@
 
 #nullable enable
 
-using MASES.KNet.Streams;
+using Org.Apache.Kafka.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {

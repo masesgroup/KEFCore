@@ -19,8 +19,9 @@
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using MASES.KNet.Clients.Producer;
 using Java.Util.Concurrent;
+using Org.Apache.Kafka.Clients.Producer;
+using MASES.KNet.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -32,13 +33,13 @@ public interface IKafkaTable
 
     IEnumerable<object?[]> Rows { get; }
 
-    ProducerRecord<string, string> Create(IUpdateEntry entry);
+    KNetProducerRecord<string, string> Create(IUpdateEntry entry);
 
-    ProducerRecord<string, string> Delete(IUpdateEntry entry);
+    KNetProducerRecord<string, string> Delete(IUpdateEntry entry);
 
-    ProducerRecord<string, string> Update(IUpdateEntry entry);
+    KNetProducerRecord<string, string> Update(IUpdateEntry entry);
 
-    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<ProducerRecord<string, string>> records);
+    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<KNetProducerRecord<string, string>> records);
 
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property,
