@@ -20,10 +20,12 @@
 
 using Java.Util;
 using MASES.JCOBridge.C2JBridge;
-using MASES.KNet.Clients.Consumer;
-using MASES.KNet.Clients.Producer;
-using MASES.KNet.Common.Config;
+using MASES.KNet.Common;
+using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Clients.Consumer;
+using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Streams;
 using System.Globalization;
 using System.Text;
 
@@ -200,16 +202,14 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         var props = new Properties();
         var localCfg = StreamsConfigBuilder.CreateFrom(StreamsConfigBuilder).WithApplicationId(applicationId)
                                                                             .WithBootstrapServers(BootstrapServers)
-                                                                            .WithCacheMaxBytesBuffering(0)
-                                                                            .WithDefaultKeySerdeClass(MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass())
-                                                                            .WithDefaultValueSerdeClass(MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
+                                                                            .WithDefaultKeySerdeClass(Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass())
+                                                                            .WithDefaultValueSerdeClass(Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
 
 
         props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
         props.Put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
-        props.Put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
-        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MASES.KNet.Common.Serialization.Serdes.String.Dyn().getClass());
+        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
+        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
 
         props.Put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 

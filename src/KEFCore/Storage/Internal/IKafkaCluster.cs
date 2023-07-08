@@ -19,7 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using MASES.KNet.Clients.Producer;
+using MASES.KNet.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 

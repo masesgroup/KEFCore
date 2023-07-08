@@ -22,9 +22,10 @@ using System.Collections;
 using System.Globalization;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using MASES.KNet.Clients.Producer;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
+using MASES.KNet.Producer;
+using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -156,7 +157,7 @@ public class KafkaTable<TKey> : IKafkaTable
     private static System.Collections.Generic.List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties)
         => properties.Select(p => p.GetKeyValueComparer()).ToList();
 
-    public virtual ProducerRecord<string, string> Create(IUpdateEntry entry)
+    public virtual KNetProducerRecord<string, string> Create(IUpdateEntry entry)
     {
         var properties = entry.EntityType.GetProperties().ToList();
         var row = new object?[properties.Count];
@@ -183,7 +184,7 @@ public class KafkaTable<TKey> : IKafkaTable
         return NewRecord(entry, key, row);
     }
 
-    public virtual ProducerRecord<string, string> Delete(IUpdateEntry entry)
+    public virtual KNetProducerRecord<string, string> Delete(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
 
@@ -243,7 +244,7 @@ public class KafkaTable<TKey> : IKafkaTable
         return false;
     }
 
-    public virtual ProducerRecord<string, string> Update(IUpdateEntry entry)
+    public virtual KNetProducerRecord<string, string> Update(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
 
@@ -294,7 +295,7 @@ public class KafkaTable<TKey> : IKafkaTable
         }
     }
 
-    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<ProducerRecord<string, string>> records)
+    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<KNetProducerRecord<string, string>> records)
     {
         System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
         foreach (var record in records)
@@ -319,9 +320,9 @@ public class KafkaTable<TKey> : IKafkaTable
         }
     }
 
-    private ProducerRecord<string, string> NewRecord(IUpdateEntry entry, TKey key, object?[]? row)
+    private KNetProducerRecord<string, string> NewRecord(IUpdateEntry entry, TKey key, object?[]? row)
     {
-        var record = new ProducerRecord<string, string>(_tableAssociatedTopicName, _serdes.Serialize<TKey>(key), _serdes.Serialize(row));
+        var record = new KNetProducerRecord<string, string>(_tableAssociatedTopicName, _serdes.Serialize<TKey>(key), _serdes.Serialize(row));
 
         return record;
     }

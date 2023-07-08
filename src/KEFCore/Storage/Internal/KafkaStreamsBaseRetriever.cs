@@ -18,12 +18,13 @@
 
 #nullable enable
 
-using MASES.KNet.Common.Serialization;
-using MASES.KNet.Common.Utils;
-using MASES.KNet.Streams;
-using MASES.KNet.Streams.Errors;
-using MASES.KNet.Streams.KStream;
-using MASES.KNet.Streams.State;
+using Org.Apache.Kafka.Common.Utils;
+using Org.Apache.Kafka.Streams;
+using Org.Apache.Kafka.Streams.Errors;
+using Org.Apache.Kafka.Streams.Kstream;
+using Org.Apache.Kafka.Streams.State;
+using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
+using static Org.Apache.Kafka.Streams.KafkaStreams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -45,7 +46,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private readonly string _storageId;
         private Exception? resultException = null;
-        private StateType actualState = StateType.NOT_RUNNING;
+        private State actualState = State.NOT_RUNNING;
         private ReadOnlyKeyValueStore<K, V>? keyValueStore;
 
         public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, string storageId, StreamsBuilder builder, KStream<K, V> root)
@@ -67,19 +68,25 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             streams = new(builder.Build(), _kafkaCluster.Options.StreamsOptions(_entityType));
 
-            errorHandler = new((exception) =>
+            errorHandler = new()
             {
-                resultException = exception;
-                exceptionSet.Set();
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-            });
+                OnHandle = (exception) =>
+                {
+                    resultException = exception;
+                    exceptionSet.Set();
+                    return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+                }
+            };
 
-            stateListener = new((newState, oldState) =>
+            stateListener = new()
             {
-                actualState = newState;
-                Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-                stateChanged.Set();
-            });
+                OnOnChange = (newState, oldState) =>
+                {
+                    actualState = newState;
+                    Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
+                    stateChanged.Set();
+                }
+            };
 
             streams.SetUncaughtExceptionHandler(errorHandler);
             streams.SetStateListener(stateListener);
@@ -97,25 +104,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, dataReceived, exceptionSet }, waitingTime);
                         if (index == 2) return;
-                        switch (actualState)
+                        if (actualState.Equals(State.CREATED) || actualState.Equals(State.REBALANCING))
                         {
-                            case StateType.CREATED:
-                            case StateType.REBALANCING:
-                                if (index == WaitHandle.WaitTimeout)
-                                {
-                                    Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
-                                    continue;
-                                }
-                                break;
-                            case StateType.RUNNING:
-                                // exit external wait thread 
-                                return;
-                            case StateType.NOT_RUNNING:
-                            case StateType.PENDING_ERROR:
-                            case StateType.PENDING_SHUTDOWN:
-                            case StateType.ERROR:
-                            default:
-                                return;
+                            if (index == WaitHandle.WaitTimeout)
+                            {
+                                Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
+                                continue;
+                            }
+                        }
+                        else // exit external wait thread 
+                        {
+                            return;
                         }
                     }
                 }
@@ -174,8 +173,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 _kafkaCluster = kafkaCluster;
                 _keyValueStore = keyValueStore;
-                Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
-                keyValueIterator = _keyValueStore?.All;
+                Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+                keyValueIterator = _keyValueStore?.All();
                 keyValueEnumerator = keyValueIterator?.GetEnumerator();
             }
 
@@ -186,7 +185,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     if (keyValueEnumerator != null)
                     {
                         var kv = keyValueEnumerator.Current;
-                        var data = _kafkaCluster.SerdesFactory.Deserialize(kv.Value as string);
+                        object? v = kv.value;
+                        var data = _kafkaCluster.SerdesFactory.Deserialize(v as string);
                         return new ValueBuffer(data);
                     }
                     throw new InvalidOperationException("InvalidEnumerator");
@@ -209,7 +209,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public void Reset()
             {
                 keyValueIterator?.Dispose();
-                keyValueIterator = _keyValueStore?.All;
+                keyValueIterator = _keyValueStore?.All();
                 keyValueEnumerator = keyValueIterator?.GetEnumerator();
             }
         }

@@ -20,8 +20,8 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.KNet.Clients.Producer;
-using MASES.KNet.Common.Config;
+using MASES.KNet.Common;
+using MASES.KNet.Producer;
 using MASES.KNet.Streams;
 using System.ComponentModel;
 
