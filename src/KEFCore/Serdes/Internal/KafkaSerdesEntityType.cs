@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using Org.Apache.Kafka.Common.Header;
+
 namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
     public class KafkaSerdesEntityTypeData
@@ -28,8 +30,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             data = rData;
         }
 
-        public string? typeName;
-        public object[]? data;
+        public string typeName;
+        public object[] data;
     }
 
     public class KafkaSerdesEntityType : IKafkaSerdesEntityType
@@ -43,17 +45,17 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             _properties = _type.GetProperties().ToArray();
         }
 
-        public object[] Deserialize(string arg)
+        public object[] Deserialize(Headers headers, string arg)
         {
             var des = GetFullType(arg);
             return ConvertData(des!.data);
         }
 
-        public TKey Deserialize<TKey>(string arg) => System.Text.Json.JsonSerializer.Deserialize<TKey>(arg)!;
+        public TKey Deserialize<TKey>(Headers headers, string arg) => System.Text.Json.JsonSerializer.Deserialize<TKey>(arg)!;
 
-        public string Serialize(params object?[]? args) => System.Text.Json.JsonSerializer.Serialize(new KafkaSerdesEntityTypeData(_type.Name, args!));
+        public string Serialize(Headers headers, params object?[]? args) => System.Text.Json.JsonSerializer.Serialize(new KafkaSerdesEntityTypeData(_type.Name, args!));
 
-        public string Serialize<TKey>(TKey key) => System.Text.Json.JsonSerializer.Serialize(key);
+        public string Serialize<TKey>(Headers headers, TKey key) => System.Text.Json.JsonSerializer.Serialize(key);
 
         public static KafkaSerdesEntityTypeData? GetFullType(string arg) => System.Text.Json.JsonSerializer.Deserialize<KafkaSerdesEntityTypeData>(arg);
 

@@ -20,6 +20,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.KNet.Producer;
+using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -45,7 +46,7 @@ public interface IKafkaCluster
 
     IKafkaSerdesEntityType CreateSerdes(IEntityType entityType);
 
-    IKNetProducer<string, string> CreateProducer(IEntityType entityType);
+    IProducer<string, string> CreateProducer(IEntityType entityType);
 
     IEnumerable<ValueBuffer> GetData(IEntityType entityType);
 

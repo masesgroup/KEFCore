@@ -22,5 +22,10 @@ namespace MASES.EntityFrameworkCore.KNet
 {
     public class KEFCore : KNetCore<KEFCore>
     {
+#if DEBUG
+        public override bool EnableDebug => true;
+
+        public override bool LogClassPath => true;
+#endif
     }
 }

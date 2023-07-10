@@ -22,6 +22,8 @@
  *  SOFTWARE.
  */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,7 +46,16 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 serverToUse = args[0];
             }
 
-            using (var context = new BloggingContext(serverToUse))
+            var streamConfig = StreamsConfigBuilder.Create();
+            streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+
+            using (var context = new BloggingContext()
+            {
+                BootstrapServers = serverToUse,
+                ApplicationId = "TestApplication",
+                DbName = "TestDB",
+                StreamsConfigBuilder = streamConfig,
+            })
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -69,7 +80,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
             }
 
-            using (var context = new BloggingContext(serverToUse))
+            using (var context = new BloggingContext()
+            {
+                BootstrapServers = serverToUse,
+                ApplicationId = "TestApplication",
+                DbName = "TestDB",
+                StreamsConfigBuilder = streamConfig,
+            })
             {
 
                 //var pageObject = (from op in context.Blogs
@@ -102,24 +119,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         }
     }
 
-    public class BloggingContext : DbContext
+    public class BloggingContext : KafkaDbContext
     {
-        readonly string _serverToUse;
-        public BloggingContext(string serverToUse)
-        {
-            _serverToUse = serverToUse;
-        }
-
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseKafkaDatabase("TestApplication", "TestDB", _serverToUse, (o) =>
-            {
-                o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
-            });
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseKafkaDatabase(ApplicationId, DbName, BootstrapServers, (o) =>
+        //    {
+        //        o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
+        //    });
+        //}
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

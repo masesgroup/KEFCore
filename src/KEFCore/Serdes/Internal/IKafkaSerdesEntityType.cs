@@ -16,17 +16,19 @@
 *  Refer to LICENSE for more information.
 */
 
+using Org.Apache.Kafka.Common.Header;
+
 namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
     public interface IKafkaSerdesEntityType
     {
-        string Serialize(params object?[]? args);
+        string Serialize(Headers headers, params object?[]? args);
 
-        string Serialize<TKey>(TKey key);
+        string Serialize<TKey>(Headers headers, TKey key);
 
-        object[] Deserialize(string arg);
+        object[] Deserialize(Headers headers, string arg);
 
-        TKey Deserialize<TKey>(string arg);
+        TKey Deserialize<TKey>(Headers headers, string arg);
 
         object[] ConvertData(object[]? input);
     }
