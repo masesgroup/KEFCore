@@ -32,8 +32,6 @@ KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](
 
 Have a look at the following JCOBridge resources:
 - [Release notes](https://www.jcobridge.com/release-notes/)
-- ~~[Non Profit or University](https://www.jcobridge.com/pricing/)~~
-- ~~[Commercial info: Professional or Enterprise](https://www.jcobridge.com/pricing/)~~
 - [Community Edition](https://www.jcobridge.com/pricing-25/)
 - [Commercial Edition](https://www.jcobridge.com/pricing-25/)
 - Latest release: [![JCOBridge nuget](https://img.shields.io/nuget/v/MASES.JCOBridge)](https://www.nuget.org/packages/MASES.JCOBridge)
