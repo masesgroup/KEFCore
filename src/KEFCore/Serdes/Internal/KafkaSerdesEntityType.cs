@@ -17,9 +17,13 @@
 */
 
 using Org.Apache.Kafka.Common.Header;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
+    [JsonSerializable(typeof(KafkaSerdesEntityTypeData))]
     public class KafkaSerdesEntityTypeData
     {
         public KafkaSerdesEntityTypeData() { }
@@ -29,8 +33,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             typeName = tName;
             data = rData;
         }
-
+        [JsonInclude()]
         public string typeName;
+        [JsonInclude()]
         public object[] data;
     }
 
@@ -61,11 +66,48 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 
         public object[] ConvertData(object[]? input)
         {
+            if (input == null) return null;
+            List<object> data = new List<object>();
+
             for (int i = 0; i < input!.Length; i++)
             {
-                input[i] = Convert.ChangeType(input[i], _properties[i].ClrType);
+                if (input[i] is JsonElement elem)
+                {
+                    switch (elem.ValueKind)
+                    {
+                        case JsonValueKind.Undefined:
+                            break;
+                        case JsonValueKind.Object:
+                            break;
+                        case JsonValueKind.Array:
+                            break;
+                        case JsonValueKind.String:
+                            data.Add(elem.GetString());
+                            break;
+                        case JsonValueKind.Number:
+                            var tmp = elem.GetInt64();
+                            data.Add(Convert.ChangeType(tmp, _properties[i].ClrType));
+                            break;
+                        case JsonValueKind.True:
+                            data.Add(true);
+                            break;
+                        case JsonValueKind.False:
+                            data.Add(false);
+                            break;
+                        case JsonValueKind.Null:
+                            data.Add(null);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                else
+                {
+                    data.Add(Convert.ChangeType(input[i], _properties[i].ClrType));
+                }
             }
-            return input;
+            return data.ToArray();
         }
     }
 }

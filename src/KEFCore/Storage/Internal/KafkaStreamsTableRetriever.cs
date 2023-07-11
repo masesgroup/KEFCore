@@ -22,7 +22,7 @@ using Org.Apache.Kafka.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    public sealed class KafkaStreamsTableRetriever<TKey> : KafkaStreamsBaseRetriever<TKey, string>
+    public sealed class KafkaStreamsTableRetriever<TKey> : KafkaStreamsBaseRetriever<TKey, byte[]>
     {
         public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType)
             : this(kafkaCluster, entityType, new StreamsBuilder())
@@ -30,7 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         }
 
         public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, StreamsBuilder builder)
-            : base(kafkaCluster, entityType, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<TKey, string>(entityType.TopicName(kafkaCluster.Options)))
+            : base(kafkaCluster, entityType, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<TKey, byte[]>(entityType.TopicName(kafkaCluster.Options)))
         {
         }
     }
