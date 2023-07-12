@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using Java.Lang;
 using Java.Util;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Common;
@@ -45,6 +46,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
     private DbContextOptionsExtensionInfo? _info;
+
+    static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
+    static Java.Lang.ClassLoader SystemClassLoader => _loader;
 
     public KafkaOptionsExtension()
     {
@@ -199,18 +203,31 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual Properties StreamsOptions(string applicationId)
     {
-        var props = new Properties();
-        var localCfg = StreamsConfigBuilder.CreateFrom(StreamsConfigBuilder).WithApplicationId(applicationId)
-                                                                            .WithBootstrapServers(BootstrapServers)
-                                                                            .WithDefaultKeySerdeClass(Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass())
-                                                                            .WithDefaultValueSerdeClass(Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
-
-
+        Properties props = _streamsConfigBuilder ?? new();
+        if (props.ContainsKey(StreamsConfig.APPLICATION_ID_CONFIG))
+        {
+            props.Remove(StreamsConfig.APPLICATION_ID_CONFIG);
+        }
         props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
+        if (props.ContainsKey(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG))
+        {
+            props.Remove(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG);
+        }
         props.Put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
-        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Org.Apache.Kafka.Common.Serialization.Serdes.String().Dyn().getClass());
-
+        if (props.ContainsKey(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG))
+        {
+            props.Remove(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
+        }
+        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$StringSerde", true, SystemClassLoader));
+        if (props.ContainsKey(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
+        {
+            props.Remove(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
+        }
+        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        if (props.ContainsKey(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
+        {
+            props.Remove(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
+        }
         props.Put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return props;
@@ -218,13 +235,34 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual Properties ProducerOptions()
     {
-        Properties props = new();
+        Properties props = _producerConfigBuilder ?? new();
+        if (props.ContainsKey(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG))
+        {
+            props.Remove(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG);
+        }
         props.Put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
-        props.Put(ProducerConfig.ACKS_CONFIG, "all");
-        props.Put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.Put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        if (!props.ContainsKey(ProducerConfig.ACKS_CONFIG))
+        {
+            props.Put(ProducerConfig.ACKS_CONFIG, "all");
+        }
+        if (!props.ContainsKey(ProducerConfig.RETRIES_CONFIG))
+        {
+            props.Put(ProducerConfig.RETRIES_CONFIG, 0);
+        }
+        if (!props.ContainsKey(ProducerConfig.LINGER_MS_CONFIG))
+        {
+            props.Put(ProducerConfig.LINGER_MS_CONFIG, 1);
+        }
+        if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
+        {
+            props.Remove(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG);
+        }
+        props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
+        if (props.ContainsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
+        {
+            props.Remove(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
+        }
+        props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
 
         return props;
     }
@@ -263,7 +301,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
             {
                 if (_logFragment == null)
                 {
-                    var builder = new StringBuilder();
+                    var builder = new System.Text.StringBuilder();
 
                     builder.Append("DataBaseName=").Append(Extension._databaseName).Append(' ');
 

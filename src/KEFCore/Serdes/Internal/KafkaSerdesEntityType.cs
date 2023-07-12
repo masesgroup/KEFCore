@@ -16,8 +16,14 @@
 *  Refer to LICENSE for more information.
 */
 
+using Org.Apache.Kafka.Common.Header;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+
 namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
 {
+    [JsonSerializable(typeof(KafkaSerdesEntityTypeData))]
     public class KafkaSerdesEntityTypeData
     {
         public KafkaSerdesEntityTypeData() { }
@@ -27,9 +33,10 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             typeName = tName;
             data = rData;
         }
-
-        public string? typeName;
-        public object[]? data;
+        [JsonInclude()]
+        public string typeName;
+        [JsonInclude()]
+        public object[] data;
     }
 
     public class KafkaSerdesEntityType : IKafkaSerdesEntityType
@@ -43,27 +50,64 @@ namespace MASES.EntityFrameworkCore.KNet.Serdes.Internal
             _properties = _type.GetProperties().ToArray();
         }
 
-        public object[] Deserialize(string arg)
+        public object[] Deserialize(Headers headers, string arg)
         {
             var des = GetFullType(arg);
             return ConvertData(des!.data);
         }
 
-        public TKey Deserialize<TKey>(string arg) => System.Text.Json.JsonSerializer.Deserialize<TKey>(arg)!;
+        public TKey Deserialize<TKey>(Headers headers, string arg) => System.Text.Json.JsonSerializer.Deserialize<TKey>(arg)!;
 
-        public string Serialize(params object?[]? args) => System.Text.Json.JsonSerializer.Serialize(new KafkaSerdesEntityTypeData(_type.Name, args!));
+        public string Serialize(Headers headers, params object?[]? args) => System.Text.Json.JsonSerializer.Serialize(new KafkaSerdesEntityTypeData(_type.Name, args!));
 
-        public string Serialize<TKey>(TKey key) => System.Text.Json.JsonSerializer.Serialize(key);
+        public string Serialize<TKey>(Headers headers, TKey key) => System.Text.Json.JsonSerializer.Serialize(key);
 
         public static KafkaSerdesEntityTypeData? GetFullType(string arg) => System.Text.Json.JsonSerializer.Deserialize<KafkaSerdesEntityTypeData>(arg);
 
         public object[] ConvertData(object[]? input)
         {
+            if (input == null) return null;
+            List<object> data = new List<object>();
+
             for (int i = 0; i < input!.Length; i++)
             {
-                input[i] = Convert.ChangeType(input[i], _properties[i].ClrType);
+                if (input[i] is JsonElement elem)
+                {
+                    switch (elem.ValueKind)
+                    {
+                        case JsonValueKind.Undefined:
+                            break;
+                        case JsonValueKind.Object:
+                            break;
+                        case JsonValueKind.Array:
+                            break;
+                        case JsonValueKind.String:
+                            data.Add(elem.GetString());
+                            break;
+                        case JsonValueKind.Number:
+                            var tmp = elem.GetInt64();
+                            data.Add(Convert.ChangeType(tmp, _properties[i].ClrType));
+                            break;
+                        case JsonValueKind.True:
+                            data.Add(true);
+                            break;
+                        case JsonValueKind.False:
+                            data.Add(false);
+                            break;
+                        case JsonValueKind.Null:
+                            data.Add(null);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                else
+                {
+                    data.Add(Convert.ChangeType(input[i], _properties[i].ClrType));
+                }
             }
-            return input;
+            return data.ToArray();
         }
     }
 }

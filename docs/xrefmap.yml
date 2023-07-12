@@ -951,6 +951,155 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.Validate
   nameWithType: KafkaSingletonOptions.Validate
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext
+  name: KafkaDbContext
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext
+  nameWithType: KafkaDbContext
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId
+  name: ApplicationId
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId
+  nameWithType: KafkaDbContext.ApplicationId
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId*
+  name: ApplicationId
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId
+  nameWithType: KafkaDbContext.ApplicationId
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
+  name: BootstrapServers
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
+  nameWithType: KafkaDbContext.BootstrapServers
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers*
+  name: BootstrapServers
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
+  nameWithType: KafkaDbContext.BootstrapServers
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+  name: DbName
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+  nameWithType: KafkaDbContext.DbName
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName*
+  name: DbName
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+  nameWithType: KafkaDbContext.DbName
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
+  name: DefaultNumPartitions
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
+  nameWithType: KafkaDbContext.DefaultNumPartitions
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions*
+  name: DefaultNumPartitions
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
+  nameWithType: KafkaDbContext.DefaultNumPartitions
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
+  name: DefaultReplicationFactor
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
+  nameWithType: KafkaDbContext.DefaultReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor*
+  name: DefaultReplicationFactor
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
+  nameWithType: KafkaDbContext.DefaultReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)
+  name: OnConfiguring(DbContextOptionsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)
+  nameWithType: KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring*
+  name: OnConfiguring
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring
+  nameWithType: KafkaDbContext.OnConfiguring
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+  nameWithType: KafkaDbContext.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder*
+  name: ProducerConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+  nameWithType: KafkaDbContext.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  nameWithType: KafkaDbContext.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder*
+  name: StreamsConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  nameWithType: KafkaDbContext.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  nameWithType: KafkaDbContext.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder*
+  name: TopicConfigBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  nameWithType: KafkaDbContext.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
+  name: UsePersistentStorage
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
+  nameWithType: KafkaDbContext.UsePersistentStorage
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage*
+  name: UsePersistentStorage
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
+  nameWithType: KafkaDbContext.UsePersistentStorage
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity
+  name: UseProducerByEntity
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseProducerByEntity
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity
+  nameWithType: KafkaDbContext.UseProducerByEntity
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity*
+  name: UseProducerByEntity
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseProducerByEntity_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseProducerByEntity
+  nameWithType: KafkaDbContext.UseProducerByEntity
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder
   name: KafkaDbContextOptionsBuilder
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html
@@ -3721,12 +3870,12 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.ConvertData
   nameWithType: IKafkaSerdesEntityType.ConvertData
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(System.String)
-  name: Deserialize(String)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Deserialize_System_String_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(System.String)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(System.String)
-  nameWithType: IKafkaSerdesEntityType.Deserialize(String)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name: Deserialize(Headers, String)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Deserialize_Org_Apache_Kafka_Common_Header_Headers_System_String_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  nameWithType: IKafkaSerdesEntityType.Deserialize(Headers, String)
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize*
   name: Deserialize
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Deserialize_
@@ -3734,24 +3883,24 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize
   nameWithType: IKafkaSerdesEntityType.Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize``1(System.String)
-  name: Deserialize<TKey>(String)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Deserialize__1_System_String_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize``1(System.String)
-  name.vb: Deserialize(Of TKey)(String)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize<TKey>(System.String)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(Of TKey)(System.String)
-  nameWithType: IKafkaSerdesEntityType.Deserialize<TKey>(String)
-  nameWithType.vb: IKafkaSerdesEntityType.Deserialize(Of TKey)(String)
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(System.Object[])
-  name: Serialize(Object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Serialize_System_Object___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(System.Object[])
-  name.vb: Serialize(Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(System.Object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(System.Object())
-  nameWithType: IKafkaSerdesEntityType.Serialize(Object[])
-  nameWithType.vb: IKafkaSerdesEntityType.Serialize(Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize``1(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name: Deserialize<TKey>(Headers, String)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Deserialize__1_Org_Apache_Kafka_Common_Header_Headers_System_String_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize``1(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name.vb: Deserialize(Of TKey)(Headers, String)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize<TKey>(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Deserialize(Of TKey)(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  nameWithType: IKafkaSerdesEntityType.Deserialize<TKey>(Headers, String)
+  nameWithType.vb: IKafkaSerdesEntityType.Deserialize(Of TKey)(Headers, String)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers,System.Object[])
+  name: Serialize(Headers, Object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Serialize_Org_Apache_Kafka_Common_Header_Headers_System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers,System.Object[])
+  name.vb: Serialize(Headers, Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers, System.Object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers, System.Object())
+  nameWithType: IKafkaSerdesEntityType.Serialize(Headers, Object[])
+  nameWithType.vb: IKafkaSerdesEntityType.Serialize(Headers, Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize*
   name: Serialize
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Serialize_
@@ -3759,15 +3908,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize
   nameWithType: IKafkaSerdesEntityType.Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize``1(``0)
-  name: Serialize<TKey>(TKey)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Serialize__1___0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize``1(``0)
-  name.vb: Serialize(Of TKey)(TKey)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize<TKey>(TKey)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Of TKey)(TKey)
-  nameWithType: IKafkaSerdesEntityType.Serialize<TKey>(TKey)
-  nameWithType.vb: IKafkaSerdesEntityType.Serialize(Of TKey)(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize``1(Org.Apache.Kafka.Common.Header.Headers,``0)
+  name: Serialize<TKey>(Headers, TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_Serialize__1_Org_Apache_Kafka_Common_Header_Headers___0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize``1(Org.Apache.Kafka.Common.Header.Headers,``0)
+  name.vb: Serialize(Of TKey)(Headers, TKey)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize<TKey>(Org.Apache.Kafka.Common.Header.Headers, TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.Serialize(Of TKey)(Org.Apache.Kafka.Common.Header.Headers, TKey)
+  nameWithType: IKafkaSerdesEntityType.Serialize<TKey>(Headers, TKey)
+  nameWithType.vb: IKafkaSerdesEntityType.Serialize(Of TKey)(Headers, TKey)
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesFactory
   name: IKafkaSerdesFactory
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesFactory.html
@@ -3857,12 +4006,12 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.ConvertData
   nameWithType: KafkaSerdesEntityType.ConvertData
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(System.String)
-  name: Deserialize(String)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Deserialize_System_String_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(System.String)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(System.String)
-  nameWithType: KafkaSerdesEntityType.Deserialize(String)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name: Deserialize(Headers, String)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Deserialize_Org_Apache_Kafka_Common_Header_Headers_System_String_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  nameWithType: KafkaSerdesEntityType.Deserialize(Headers, String)
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize*
   name: Deserialize
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Deserialize_
@@ -3870,15 +4019,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize
   nameWithType: KafkaSerdesEntityType.Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize``1(System.String)
-  name: Deserialize<TKey>(String)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Deserialize__1_System_String_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize``1(System.String)
-  name.vb: Deserialize(Of TKey)(String)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize<TKey>(System.String)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(Of TKey)(System.String)
-  nameWithType: KafkaSerdesEntityType.Deserialize<TKey>(String)
-  nameWithType.vb: KafkaSerdesEntityType.Deserialize(Of TKey)(String)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize``1(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name: Deserialize<TKey>(Headers, String)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Deserialize__1_Org_Apache_Kafka_Common_Header_Headers_System_String_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize``1(Org.Apache.Kafka.Common.Header.Headers,System.String)
+  name.vb: Deserialize(Of TKey)(Headers, String)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize<TKey>(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Deserialize(Of TKey)(Org.Apache.Kafka.Common.Header.Headers, System.String)
+  nameWithType: KafkaSerdesEntityType.Deserialize<TKey>(Headers, String)
+  nameWithType.vb: KafkaSerdesEntityType.Deserialize(Of TKey)(Headers, String)
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.GetFullType(System.String)
   name: GetFullType(String)
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_GetFullType_System_String_
@@ -3892,15 +4041,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.GetFullType
   nameWithType: KafkaSerdesEntityType.GetFullType
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(System.Object[])
-  name: Serialize(Object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Serialize_System_Object___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(System.Object[])
-  name.vb: Serialize(Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(System.Object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(System.Object())
-  nameWithType: KafkaSerdesEntityType.Serialize(Object[])
-  nameWithType.vb: KafkaSerdesEntityType.Serialize(Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers,System.Object[])
+  name: Serialize(Headers, Object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Serialize_Org_Apache_Kafka_Common_Header_Headers_System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers,System.Object[])
+  name.vb: Serialize(Headers, Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers, System.Object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Org.Apache.Kafka.Common.Header.Headers, System.Object())
+  nameWithType: KafkaSerdesEntityType.Serialize(Headers, Object[])
+  nameWithType.vb: KafkaSerdesEntityType.Serialize(Headers, Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize*
   name: Serialize
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Serialize_
@@ -3908,15 +4057,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize
   nameWithType: KafkaSerdesEntityType.Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize``1(``0)
-  name: Serialize<TKey>(TKey)
-  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Serialize__1___0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize``1(``0)
-  name.vb: Serialize(Of TKey)(TKey)
-  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize<TKey>(TKey)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Of TKey)(TKey)
-  nameWithType: KafkaSerdesEntityType.Serialize<TKey>(TKey)
-  nameWithType.vb: KafkaSerdesEntityType.Serialize(Of TKey)(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize``1(Org.Apache.Kafka.Common.Header.Headers,``0)
+  name: Serialize<TKey>(Headers, TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.html#MASES_EntityFrameworkCore_KNet_Serdes_Internal_KafkaSerdesEntityType_Serialize__1_Org_Apache_Kafka_Common_Header_Headers___0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize``1(Org.Apache.Kafka.Common.Header.Headers,``0)
+  name.vb: Serialize(Of TKey)(Headers, TKey)
+  fullName: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize<TKey>(Org.Apache.Kafka.Common.Header.Headers, TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityType.Serialize(Of TKey)(Org.Apache.Kafka.Common.Header.Headers, TKey)
+  nameWithType: KafkaSerdesEntityType.Serialize<TKey>(Headers, TKey)
+  nameWithType.vb: KafkaSerdesEntityType.Serialize(Of TKey)(Headers, TKey)
 - uid: MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityTypeData
   name: KafkaSerdesEntityTypeData
   href: api/MASES.EntityFrameworkCore.KNet.Serdes.Internal.KafkaSerdesEntityTypeData.html
@@ -4319,15 +4468,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Cluster
   nameWithType: IKafkaTable.Cluster
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable{MASES.KNet.Producer.KNetProducerRecord{System.String,System.String}})
-  name: Commit(IEnumerable<KNetProducerRecord<String, String>>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Commit_IEnumerable_MASES_KNet_Producer_KNetProducerRecord_System_String_System_String___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable{MASES.KNet.Producer.KNetProducerRecord{System.String,System.String}})
-  name.vb: Commit(IEnumerable(Of KNetProducerRecord(Of String, String)))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable<MASES.KNet.Producer.KNetProducerRecord<System.String, System.String>>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable(Of MASES.KNet.Producer.KNetProducerRecord(Of System.String, System.String)))
-  nameWithType: IKafkaTable.Commit(IEnumerable<KNetProducerRecord<String, String>>)
-  nameWithType.vb: IKafkaTable.Commit(IEnumerable(Of KNetProducerRecord(Of String, String)))
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable{Org.Apache.Kafka.Clients.Producer.ProducerRecord{System.String,System.String}})
+  name: Commit(IEnumerable<ProducerRecord<String, String>>)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Commit_IEnumerable_Org_Apache_Kafka_Clients_Producer_ProducerRecord_System_String_System_String___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable{Org.Apache.Kafka.Clients.Producer.ProducerRecord{System.String,System.String}})
+  name.vb: Commit(IEnumerable(Of ProducerRecord(Of String, String)))
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable<Org.Apache.Kafka.Clients.Producer.ProducerRecord<System.String, System.String>>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit(IEnumerable(Of Org.Apache.Kafka.Clients.Producer.ProducerRecord(Of System.String, System.String)))
+  nameWithType: IKafkaTable.Commit(IEnumerable<ProducerRecord<String, String>>)
+  nameWithType.vb: IKafkaTable.Commit(IEnumerable(Of ProducerRecord(Of String, String)))
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Commit*
   name: Commit
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Commit_
@@ -5080,15 +5229,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey).Cluster
   nameWithType: KafkaTable<TKey>.Cluster
   nameWithType.vb: KafkaTable(Of TKey).Cluster
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`1.Commit(System.Collections.IEnumerable{MASES.KNet.Producer.KNetProducerRecord{System.String,System.String}})
-  name: Commit(IEnumerable<KNetProducerRecord<String, String>>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_1_Commit_System_Collections_IEnumerable_MASES_KNet_Producer_KNetProducerRecord_System_String_System_String___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`1.Commit(System.Collections.IEnumerable{MASES.KNet.Producer.KNetProducerRecord{System.String,System.String}})
-  name.vb: Commit(IEnumerable(Of KNetProducerRecord(Of String, String)))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey>.Commit(System.Collections.IEnumerable<MASES.KNet.Producer.KNetProducerRecord<System.String, System.String>>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey).Commit(System.Collections.IEnumerable(Of MASES.KNet.Producer.KNetProducerRecord(Of System.String, System.String)))
-  nameWithType: KafkaTable<TKey>.Commit(IEnumerable<KNetProducerRecord<String, String>>)
-  nameWithType.vb: KafkaTable(Of TKey).Commit(IEnumerable(Of KNetProducerRecord(Of String, String)))
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`1.Commit(System.Collections.IEnumerable{Org.Apache.Kafka.Clients.Producer.ProducerRecord{System.String,System.String}})
+  name: Commit(IEnumerable<ProducerRecord<String, String>>)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_1_Commit_System_Collections_IEnumerable_Org_Apache_Kafka_Clients_Producer_ProducerRecord_System_String_System_String___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`1.Commit(System.Collections.IEnumerable{Org.Apache.Kafka.Clients.Producer.ProducerRecord{System.String,System.String}})
+  name.vb: Commit(IEnumerable(Of ProducerRecord(Of String, String)))
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey>.Commit(System.Collections.IEnumerable<Org.Apache.Kafka.Clients.Producer.ProducerRecord<System.String, System.String>>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey).Commit(System.Collections.IEnumerable(Of Org.Apache.Kafka.Clients.Producer.ProducerRecord(Of System.String, System.String)))
+  nameWithType: KafkaTable<TKey>.Commit(IEnumerable<ProducerRecord<String, String>>)
+  nameWithType.vb: KafkaTable(Of TKey).Commit(IEnumerable(Of ProducerRecord(Of String, String)))
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`1.Commit*
   name: Commit
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_1_Commit_

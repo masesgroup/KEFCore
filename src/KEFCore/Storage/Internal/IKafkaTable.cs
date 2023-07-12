@@ -33,13 +33,13 @@ public interface IKafkaTable
 
     IEnumerable<object?[]> Rows { get; }
 
-    KNetProducerRecord<string, string> Create(IUpdateEntry entry);
+    ProducerRecord<string, string> Create(IUpdateEntry entry);
 
-    KNetProducerRecord<string, string> Delete(IUpdateEntry entry);
+    ProducerRecord<string, string> Delete(IUpdateEntry entry);
 
-    KNetProducerRecord<string, string> Update(IUpdateEntry entry);
+    ProducerRecord<string, string> Update(IUpdateEntry entry);
 
-    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<KNetProducerRecord<string, string>> records);
+    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<ProducerRecord<string, string>> records);
 
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property,

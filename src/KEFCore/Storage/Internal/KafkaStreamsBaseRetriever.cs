@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using MASES.JCOBridge.C2JBridge;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Errors;
@@ -133,10 +134,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             resetEvent.WaitOne(); // wait running state
             if (resultException != null) throw resultException;
 
-            if (keyValueStore == null)
-            {
-                keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-            }
+            keyValueStore ??= streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         }
 
         public IEnumerator<ValueBuffer> GetEnumerator()
@@ -175,7 +173,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _keyValueStore = keyValueStore;
                 Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
                 keyValueIterator = _keyValueStore?.All();
-                keyValueEnumerator = keyValueIterator?.GetEnumerator();
+                keyValueEnumerator = keyValueIterator?.ToIEnumerator();
             }
 
             public ValueBuffer Current
@@ -186,7 +184,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         var kv = keyValueEnumerator.Current;
                         object? v = kv.value;
-                        var data = _kafkaCluster.SerdesFactory.Deserialize(v as string);
+                        var data = _kafkaCluster.SerdesFactory.Deserialize(v as byte[]);
                         return new ValueBuffer(data);
                     }
                     throw new InvalidOperationException("InvalidEnumerator");
@@ -210,7 +208,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 keyValueIterator?.Dispose();
                 keyValueIterator = _keyValueStore?.All();
-                keyValueEnumerator = keyValueIterator?.GetEnumerator();
+                keyValueEnumerator = keyValueIterator?.ToIEnumerator();
             }
         }
     }
