@@ -13,10 +13,15 @@ dotnet add package MASES.EntityFrameworkCore.KNet
 ### Basic usage
 
 The following code demonstrates basic usage of EF Core for Apache Kafka. 
-For a full tutorial configuring the `DbContext`, defining the model, and creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs.
+For a full tutorial configuring the `KafkaDbContext`, defining the model, and creating the database, see [KafkaDbContext](kafkadbcontext.md) in the docs.
 
 ```cs
-using (var db = new BloggingContext())
+using (var context = new BloggingContext()
+{
+    BootstrapServers = serverToUse,
+    ApplicationId = "TestApplication",
+    DbName = "TestDB",
+})
 {
     // Inserting data into the database
     db.Add(new Blog { Url = "http://blogs.msdn.com/adonet" });
@@ -42,24 +47,27 @@ using (var db = new BloggingContext())
     db.SaveChanges();
 }
 
-public class BloggingContext : DbContext
+public class BloggingContext : KafkaDbContext
 {
-	readonly string _serverToUse;
-	public BloggingContext(string serverToUse)
-	{
-		_serverToUse = serverToUse;
-	}
+    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<Post> Posts { get; set; }
+}
 
-	public DbSet<Blog> Blogs { get; set; }
-	public DbSet<Post> Posts { get; set; }
+public class Blog
+{
+    public int BlogId { get; set; }
+    public string Url { get; set; }
+    public long Rating { get; set; }
+    public List<Post> Posts { get; set; }
+}
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		optionsBuilder.UseKafkaDatabase("TestDB", _serverToUse, (o) =>
-		{
-			o.AutoOffsetReset();
-		});
-	}
+public class Post
+{
+    public int PostId { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
 
+    public int BlogId { get; set; }
+    public Blog Blog { get; set; }
 }
 ```
