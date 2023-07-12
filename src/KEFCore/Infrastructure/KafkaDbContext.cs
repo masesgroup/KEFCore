@@ -43,10 +43,21 @@ public class KafkaDbContext : DbContext
     /// </summary>
     public string? DbName { get; set; }
     /// <summary>
-    /// Database name
+    /// Database number of partitions
     /// </summary>
     public int DefaultNumPartitions { get; set; } = 10;
-
+    /// <summary>
+    /// Database replication factor
+    /// </summary>
+    public short DefaultReplicationFactor { get; set; } = 1;
+    /// <summary>
+    /// Use persistent storage
+    /// </summary>
+    public bool UsePersistentStorage { get; set; } = false;
+    /// <summary>
+    /// Use a producer for each Entity
+    /// </summary>
+    public bool UseProducerByEntity { get; set; } = false;
 
     public ProducerConfigBuilder? ProducerConfigBuilder { get; set; }
 
@@ -56,12 +67,19 @@ public class KafkaDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (BootstrapServers == null) throw new ArgumentNullException(nameof(BootstrapServers));
+        if (BootstrapServers == null)
+        {
+            throw new ArgumentNullException(nameof(BootstrapServers));
+        }
+
         if (DbName == null) throw new ArgumentNullException(nameof(DbName));
 
         optionsBuilder.UseKafkaDatabase(ApplicationId, DbName, BootstrapServers, (o) =>
         {
             o.StreamsConfig(StreamsConfigBuilder??o.EmptyStreamsConfigBuilder).WithDefaultNumPartitions(DefaultNumPartitions);
+            o.WithUsePersistentStorage(UsePersistentStorage);
+            o.WithProducerByEntity(UseProducerByEntity);
+            o.WithDefaultReplicationFactor(DefaultReplicationFactor);
         });
     }
 }

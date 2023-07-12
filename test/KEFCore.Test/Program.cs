@@ -77,7 +77,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     });
                 }
                 context.SaveChanges();
-
             }
 
             using (var context = new BloggingContext()

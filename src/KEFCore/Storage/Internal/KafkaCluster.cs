@@ -31,6 +31,7 @@ using Org.Apache.Kafka.Common.Config;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using MASES.KNet.Serialization;
+using MASES.KNet.Extensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -161,18 +162,30 @@ public class KafkaCluster : IKafkaCluster
     {
         try
         {
-            var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
-            var map = Collections.SingletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
-            topic.Configs(map);
-            var coll = Collections.Singleton(topic);
-            var result = _kafkaAdminClient.CreateTopics(coll);
-            result.All().Get();
+            try
+            {
+                var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
+                _options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
+                var map = _options.TopicConfigBuilder.ToMap();
+                topic.Configs(map);
+                var coll = Collections.Singleton(topic);
+                var result = _kafkaAdminClient.CreateTopics(coll);
+                result.All().Get();
+            }
+            catch (Java.Util.Concurrent.ExecutionException ex)
+            {
+                throw ex.InnerException;
+            }
         }
-        catch (Java.Util.Concurrent.ExecutionException ex)
+        catch (TopicExistsException ex)
         {
+            if (ex.Message.Contains("deletion"))
+            {
+                Thread.Sleep(1000); // wait a while to complete topic deletion
+                return CreateTable(entityType);
+            }
             return false;
         }
-
         return true;
     }
 

@@ -134,10 +134,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             resetEvent.WaitOne(); // wait running state
             if (resultException != null) throw resultException;
 
-            if (keyValueStore == null)
-            {
-                keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-            }
+            keyValueStore ??= streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         }
 
         public IEnumerator<ValueBuffer> GetEnumerator()

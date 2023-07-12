@@ -47,15 +47,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private TopicConfigBuilder? _topicConfigBuilder;
     private DbContextOptionsExtensionInfo? _info;
 
-    static Java.Lang.ClassLoader _loader;
-    static Java.Lang.ClassLoader SystemClassLoader
-    {
-        get
-        {
-            if (_loader == null) _loader = Java.Lang.ClassLoader.SystemClassLoader;
-            return _loader;
-        }
-    }
+    static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
+    static Java.Lang.ClassLoader SystemClassLoader => _loader;
 
     public KafkaOptionsExtension()
     {
