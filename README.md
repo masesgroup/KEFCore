@@ -39,9 +39,9 @@ Have a look at the following JCOBridge resources:
 ---
 ## Summary
 
-* [Roadmap](src/Documentation/articles/roadmap.md)
-* [Actual state](src/Documentation/articles/actualstate.md)
-* [KEFCore usage](src/Documentation/articles/usage.md)
+* [Roadmap](src/documentation/articles/roadmap.md)
+* [Actual state](src/documentation/articles/actualstate.md)
+* [KEFCore usage](src/documentation/articles/usage.md)
 
 ---
 
