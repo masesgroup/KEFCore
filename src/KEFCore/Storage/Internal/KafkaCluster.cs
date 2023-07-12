@@ -30,6 +30,8 @@ using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common.Config;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
+using MASES.KNet.Serialization;
+using MASES.KNet.Extensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -45,8 +47,8 @@ public class KafkaCluster : IKafkaCluster
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
 
-    private IKNetProducer<string, string>? _globalProducer = null;
-    private readonly ConcurrentDictionary<IEntityType, IKNetProducer<string, string>> _producers;
+    private IProducer<string, string>? _globalProducer = null;
+    private readonly ConcurrentDictionary<IEntityType, IProducer<string, string>> _producers;
 
     public KafkaCluster(
         KafkaOptionsExtension options,
@@ -160,24 +162,36 @@ public class KafkaCluster : IKafkaCluster
     {
         try
         {
-            var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
-            var map = Collections.SingletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
-            topic.Configs(map);
-            var coll = Collections.Singleton(topic);
-            var result = _kafkaAdminClient.CreateTopics(coll);
-            result.All().Get();
+            try
+            {
+                var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
+                _options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
+                var map = _options.TopicConfigBuilder.ToMap();
+                topic.Configs(map);
+                var coll = Collections.Singleton(topic);
+                var result = _kafkaAdminClient.CreateTopics(coll);
+                result.All().Get();
+            }
+            catch (Java.Util.Concurrent.ExecutionException ex)
+            {
+                throw ex.InnerException;
+            }
         }
-        catch (Java.Util.Concurrent.ExecutionException ex)
+        catch (TopicExistsException ex)
         {
+            if (ex.Message.Contains("deletion"))
+            {
+                Thread.Sleep(1000); // wait a while to complete topic deletion
+                return CreateTable(entityType);
+            }
             return false;
         }
-
         return true;
     }
 
     public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
 
-    public virtual IKNetProducer<string, string> CreateProducer(IEntityType entityType)
+    public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
     {
         if (!Options.ProducerByEntity)
         {
@@ -193,7 +207,7 @@ public class KafkaCluster : IKafkaCluster
         }
     }
 
-    private IKNetProducer<string, string> CreateProducer() => new KNetProducer<string, string>(Options.ProducerOptions());
+    private IProducer<string, string> CreateProducer() => new KafkaProducer<string, string>(Options.ProducerOptions());
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 
@@ -226,7 +240,7 @@ public class KafkaCluster : IKafkaCluster
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var rowsAffected = 0;
-        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<KNetProducerRecord<string, string>>> _dataInTransaction = new();
+        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<ProducerRecord<string, string>>> _dataInTransaction = new();
 
         lock (_lock)
         {
@@ -240,7 +254,7 @@ public class KafkaCluster : IKafkaCluster
 
                 var table = EnsureTable(entityType);
 
-                KNetProducerRecord<string, string> record;
+                ProducerRecord<string, string> record;
 
                 if (entry.SharedIdentityEntry != null)
                 {
@@ -267,9 +281,9 @@ public class KafkaCluster : IKafkaCluster
                         continue;
                 }
 
-                if (!_dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<KNetProducerRecord<string, string>>? recordList))
+                if (!_dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<ProducerRecord<string, string>>? recordList))
                 {
-                    recordList = new System.Collections.Generic.List<KNetProducerRecord<string, string>>();
+                    recordList = new System.Collections.Generic.List<ProducerRecord<string, string>>();
                     _dataInTransaction[table] = recordList;
                 }
                 recordList?.Add(record);

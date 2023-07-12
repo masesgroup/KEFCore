@@ -43,8 +43,7 @@ public class KafkaSerdesFactory : IKafkaSerdesFactory
     public virtual object[] Deserialize(byte[] data)
     {
         var str = Encoding.UTF8.GetString(data);
-        var fulltype = KafkaSerdesEntityType.GetFullType(str);
-        return Get(fulltype!.typeName!).ConvertData(fulltype.data);
+        return Deserialize(str);
     }
 
     public virtual object[] Deserialize(string data)
