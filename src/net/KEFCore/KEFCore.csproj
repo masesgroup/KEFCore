@@ -7,7 +7,7 @@
 		<Title>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Title>
 		<Description>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet</Product>
-		<OutputPath>..\..\bin\</OutputPath>
+		<OutputPath>..\..\..\bin\</OutputPath>
 		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet</PackageId>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
