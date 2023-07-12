@@ -1,4 +1,4 @@
-# EFCoreKafka roadmap
+# KEFCore: roadmap
 
 The roadmap can be synthetized in the following points:
 

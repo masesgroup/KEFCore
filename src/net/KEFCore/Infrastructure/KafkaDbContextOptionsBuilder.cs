@@ -23,6 +23,9 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Streams;
+using Org.Apache.Kafka.Streams.Kstream;
 using System.ComponentModel;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;

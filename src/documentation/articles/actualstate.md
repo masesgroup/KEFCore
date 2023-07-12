@@ -1,4 +1,4 @@
-# EFCoreKafka development state
+# KEFCore: development state
 
 This release had implemented this features:
 

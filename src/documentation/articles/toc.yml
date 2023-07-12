@@ -6,3 +6,5 @@
   href: actualstate.md
 - name: Usage
   href: usage.md
+- name: KafkaDbContext
+  href: kafkadbcontext.md
