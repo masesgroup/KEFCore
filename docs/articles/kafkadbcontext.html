@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions
-   | Kafka Bridge website </title>
+    <title>KEFCore: KafkaDbContext | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions
-   | Kafka Bridge website ">
+    <meta name="title" content="KEFCore: KafkaDbContext | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
@@ -68,24 +66,27 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions">
-  
-  <h1 id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions" data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions" class="text-break">Namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions
-  </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
-  </h3>
-      <h4><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.html">DefiningQueryRewritingConvention</a></h4>
-      <section><p>Convention that converts accesses of <see cref="!:DbSet&lt;TEntity>"></see> inside query filters and defining queries into
-<see cref="!:QueryRootExpression"></see>.
-This makes them consistent with how DbSet accesses in the actual queries are represented, which allows for easier processing in the
-query pipeline.</p>
-</section>
-      <h4><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaConventionSetBuilder.html">KafkaConventionSetBuilder</a></h4>
-      <section><p>A builder for building conventions for th Kafka provider.</p>
-</section>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="kefcore-kafkadbcontext">KEFCore: KafkaDbContext</h1>
+
+<p><code>KafkaDbContext</code> is a special class to define the <code>DbContext</code> to use with EntityFrameworkCore:</p>
+<ul>
+<li>it inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs</li>
+<li>it defines the following properties:
+<ul>
+<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka</li>
+<li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
+<li><strong>DbName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>
+<li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</li>
+<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka</li>
+<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persintent storage between multiple application startup</li>
+<li><strong>UseProducerByEntity</strong>: use a different producer for each enity of EntityFrameworkCore model</li>
+<li><strong>ProducerConfigBuilder</strong>: parameters to use for Producer</li>
+<li><strong>StreamsConfigBuilder</strong>: parameters to use for Stream application</li>
+<li><strong>TopicConfigBuilder</strong>: parameters to use on topic creation for each entity</li>
+</ul>
+</li>
+</ul>
 </article>
           </div>
           
@@ -93,6 +94,9 @@ query pipeline.</p>
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/kafkadbcontext.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
