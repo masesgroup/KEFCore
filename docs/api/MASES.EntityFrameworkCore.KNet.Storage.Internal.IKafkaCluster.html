@@ -88,7 +88,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Options.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.Options%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L58">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L59">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Options_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.Options*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Options" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.Options">Options</h4>
@@ -118,7 +118,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_SerdesFactory.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.SerdesFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L44">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L45">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_SerdesFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.SerdesFactory*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_SerdesFactory" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.SerdesFactory">SerdesFactory</h4>
@@ -150,7 +150,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateProducer_IEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateProducer(IEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L48">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L49">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateProducer*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateProducer_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateProducer(IEntityType)">CreateProducer(IEntityType)</h4>
@@ -158,7 +158,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IKNetProducer&lt;string, string&gt; CreateProducer(IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">IProducer&lt;string, string&gt; CreateProducer(IEntityType entityType)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -187,7 +187,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">MASES.KNet.Producer.IKNetProducer</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>&gt;</td>
+        <td><span class="xref">Org.Apache.Kafka.Clients.Producer.IProducer</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -197,7 +197,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateSerdes_IEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateSerdes(IEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L46">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L47">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateSerdes_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateSerdes*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateSerdes_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateSerdes(IEntityType)">CreateSerdes(IEntityType)</h4>
@@ -244,7 +244,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_IEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(IEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L42">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L43">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(IEntityType)">CreateTable(IEntityType)</h4>
@@ -291,7 +291,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureConnected_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureConnected(IModel%2CIDiagnosticsLogger%7BDbLoggerCategory.Update%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L38">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L39">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureConnected_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureConnected*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureConnected_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureConnected(IModel,IDiagnosticsLogger{DbLoggerCategory.Update})">EnsureConnected(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt;)</h4>
@@ -343,7 +343,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureCreated_IUpdateAdapterFactory_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureCreated(IUpdateAdapterFactory%2CIModel%2CIDiagnosticsLogger%7BDbLoggerCategory.Update%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L33">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L34">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureCreated_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureCreated*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureCreated_IUpdateAdapterFactory_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureCreated(IUpdateAdapterFactory,IModel,IDiagnosticsLogger{DbLoggerCategory.Update})">EnsureCreated(IUpdateAdapterFactory, IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt;)</h4>
@@ -400,7 +400,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureDeleted_IUpdateAdapterFactory_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureDeleted(IUpdateAdapterFactory%2CIModel%2CIDiagnosticsLogger%7BDbLoggerCategory.Update%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L28">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L29">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureDeleted_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureDeleted*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureDeleted_IUpdateAdapterFactory_IModel_IDiagnosticsLogger_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureDeleted(IUpdateAdapterFactory,IModel,IDiagnosticsLogger{DbLoggerCategory.Update})">EnsureDeleted(IUpdateAdapterFactory, IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt;)</h4>
@@ -457,7 +457,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_ExecuteTransaction_IList_IUpdateEntry__IDiagnosticsLogger_DbLoggerCategory_Update__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ExecuteTransaction(IList%7BIUpdateEntry%7D%2CIDiagnosticsLogger%7BDbLoggerCategory.Update%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L54">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L55">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_ExecuteTransaction_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ExecuteTransaction*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_ExecuteTransaction_IList_IUpdateEntry__IDiagnosticsLogger_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ExecuteTransaction(IList{IUpdateEntry},IDiagnosticsLogger{DbLoggerCategory.Update})">ExecuteTransaction(IList&lt;IUpdateEntry&gt;, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt;)</h4>
@@ -509,7 +509,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetData_IEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetData(IEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L50">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L51">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetData_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetData*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetData_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetData(IEntityType)">GetData(IEntityType)</h4>
@@ -556,7 +556,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetIntegerValueGenerator__1_IProperty_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetIntegerValueGenerator%60%601(IProperty)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L52">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L53">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetIntegerValueGenerator_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetIntegerValueGenerator*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_GetIntegerValueGenerator__1_IProperty_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.GetIntegerValueGenerator``1(IProperty)">GetIntegerValueGenerator&lt;TProperty&gt;(IProperty)</h4>
@@ -624,7 +624,7 @@
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L26" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/KEFCore/Storage/Internal/IKafkaCluster.cs/#L27" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
