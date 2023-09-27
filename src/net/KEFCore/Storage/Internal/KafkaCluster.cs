@@ -109,7 +109,17 @@ public class KafkaCluster : IKafkaCluster
             foreach (var entityType in designModel.GetEntityTypes())
             {
                 var topic = entityType.TopicName(Options);
-
+                if (!Options.UseCompactedReplicator)
+                {
+                    try
+                    {
+                        StreamsResetter.ResetApplicationForced(Options.BootstrapServers, entityType.ApplicationIdForTable(Options), topic);
+                    }
+                    catch (ExecutionException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
                 coll.Add(topic);
             }
 
