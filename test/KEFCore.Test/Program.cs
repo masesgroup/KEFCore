@@ -25,47 +25,76 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
-    class Program
+    partial class Program
     {
         const string theServer = "localhost:9092";
         static string serverToUse = theServer;
+        static string databaseName = "TestDB";
+        static string databaseNameWithModel = "TestDBWithModel";
+        static string applicationId = "TestApplication";
 
         static void Main(string[] args)
         {
-            KEFCore.CreateGlobalInstance();
-            var appArgs = KEFCore.FilteredArgs;
-
-            if (appArgs.Length != 0)
+            if (!UseInMemoryProvider)
             {
-                serverToUse = args[0];
+                KEFCore.CreateGlobalInstance();
+                var appArgs = KEFCore.FilteredArgs;
+
+                if (appArgs.Length > 0)
+                {
+                    serverToUse = args[0];
+                }
+
+                if (appArgs.Length > 1)
+                {
+                    deleteApplication = args[1].ToLowerInvariant() == "true";
+                }
+
+                if (appArgs.Length > 2)
+                {
+                    applicationId = args[2];
+                }
             }
 
-            var streamConfig = StreamsConfigBuilder.Create();
-            streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+            DatabaseName = UseModelBuilder ? databaseNameWithModel : databaseName;
 
-            using (var context = new BloggingContext()
+            var globalWatcher = Stopwatch.StartNew();
+            StreamsConfigBuilder streamConfig = null;
+            if (!UseInMemoryProvider)
+            {
+                streamConfig = StreamsConfigBuilder.Create();
+                streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+            }
+
+            var context = new BloggingContext()
             {
                 BootstrapServers = serverToUse,
-                ApplicationId = "TestApplication",
-                DbName = "TestDB",
+                ApplicationId = applicationId,
+                DbName = DatabaseName,
                 StreamsConfigBuilder = streamConfig,
-            })
+            };
+
+            if (deleteApplication)
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
+            }
 
-                for (int i = 0; i < 1000; i++)
+            var testWatcher = Stopwatch.StartNew();
+            Stopwatch watch = Stopwatch.StartNew();
+            for (int i = 0; i < 1000; i++)
+            {
+                context.Add(new Blog
                 {
-                    context.Add(new Blog
-                    {
-                        Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                        Posts = new List<Post>()
+                    Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                    Posts = new List<Post>()
                             {
                                 new Post()
                                 {
@@ -73,68 +102,127 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                                     Content = i.ToString()
                                 }
                             },
-                        Rating = i,
-                    });
-                }
-                context.SaveChanges();
+                    Rating = i,
+                });
+            }
+            watch.Stop();
+            Trace.WriteLine($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+
+            watch.Restart();
+            context.SaveChanges();
+            watch.Stop();
+            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+            if (UseModelBuilder)
+            {
+                watch.Restart();
+                var pageObject = (from op in context.Blogs
+                                  join pg in context.Posts on op.BlogId equals pg.BlogId
+                                  where pg.BlogId == op.BlogId
+                                  select new { pg, op }).SingleOrDefault();
+                watch.Stop();
+                Trace.WriteLine($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
             }
 
-            using (var context = new BloggingContext()
+            watch.Restart();
+            var post = context.Posts.Single(b => b.BlogId == 2);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
+
+            watch.Restart();
+            post = context.Posts.Single(b => b.BlogId == 1);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
+
+            watch.Restart();
+            var all = context.Posts.All((o) => true);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+
+            watch.Restart();
+            var blog = context.Blogs!.Single(b => b.BlogId == 1);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+
+            watch.Restart();
+            context.Remove(post);
+            context.Remove(blog);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
+
+            watch.Restart();
+            context.SaveChanges();
+            watch.Stop();
+            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+            watch.Restart();
+            for (int i = 1000; i < 1100; i++)
             {
-                BootstrapServers = serverToUse,
-                ApplicationId = "TestApplication",
-                DbName = "TestDB",
-                StreamsConfigBuilder = streamConfig,
-            })
-            {
-
-                //var pageObject = (from op in context.Blogs
-                //                  join pg in context.Posts on op.BlogId equals pg.BlogId
-                //                  where pg.BlogId == op.BlogId
-                //                  select new { pg, op }).SingleOrDefault();
-
-                Stopwatch watch = Stopwatch.StartNew();
-                var post = context.Posts.Single(b => b.BlogId == 2);
-                watch.Stop();
-                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
-
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == 1);
-                watch.Stop();
-                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
-
-                watch.Restart();
-                var all = context.Posts.All((o) => true);
-                watch.Stop();
-                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
-
-                watch.Restart();
-                var blog = context.Blogs!.Single(b => b.BlogId == 1);
-                watch.Stop();
-                Trace.WriteLine($"Elapsed {watch.ElapsedMilliseconds} ms");
-
-                var value = context.Blogs.AsQueryable().ToQueryString();
+                context.Add(new Blog
+                {
+                    Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                    Posts = new List<Post>()
+                            {
+                                new Post()
+                                {
+                                    Title = "title",
+                                    Content = i.ToString()
+                                }
+                            },
+                    Rating = i,
+                });
             }
+            watch.Stop();
+            Trace.WriteLine($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+
+            watch.Restart();
+            context.SaveChanges();
+            watch.Stop();
+            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+            watch.Restart();
+            post = context.Posts.Single(b => b.BlogId == 1009);
+            watch.Stop();
+            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 1009) {watch.ElapsedMilliseconds} ms. Result is {post}");
+
+            var value = context.Blogs.AsQueryable().ToQueryString();
+
+            context?.Dispose();
+            testWatcher.Stop();
+            globalWatcher.Stop();
+            Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
         }
     }
 
     public class BloggingContext : KafkaDbContext
     {
+        public override bool UseCompactedReplicator { get; set; } = Program.UseCompactedReplicator;
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseKafkaDatabase(ApplicationId, DbName, BootstrapServers, (o) =>
-        //    {
-        //        o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
-        //    });
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (Program.UseInMemoryProvider)
+            {
+                optionsBuilder.UseInMemoryDatabase(Program.DatabaseName);
+            }
+            else
+            {
+                base.OnConfiguring(optionsBuilder);
+            }
+            //optionsBuilder.UseKafkaDatabase(ApplicationId, DbName, BootstrapServers, (o) =>
+            //{
+            //    o.StreamsConfig(o.EmptyStreamsConfigBuilder.WithAcceptableRecoveryLag(100)).WithDefaultNumPartitions(10);
+            //});
+        }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            if (!Program.UseModelBuilder) return;
+
+            modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+        }
     }
 
     public class Blog
@@ -143,6 +231,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public string Url { get; set; }
         public long Rating { get; set; }
         public List<Post> Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
+        }
     }
 
     public class Post
@@ -153,5 +246,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
     }
 }
