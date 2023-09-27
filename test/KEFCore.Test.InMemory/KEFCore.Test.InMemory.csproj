@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.InMemory</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.InMemory</RootNamespace>
+		<Title>EntityFrameworkCore InMemory Test</Title>
+		<Description>EntityFrameworkCore InMemory Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.InMemory</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\KEFCore.Test\Program.cs" Link="Program.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
+	</ItemGroup>
+</Project>
