@@ -115,6 +115,27 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     }
 
     /// <summary>
+    ///     Enables use of <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useCompactedReplicator">If <see langword="true" /> then <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> will be used instead of Apache Kafka Streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithCompactedReplicator(bool useCompactedReplicator = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithCompactedReplicator(useCompactedReplicator);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
     ///     Enables use of persistent storage, otherwise a <see cref="Materialized"/> storage will be in-memory
     /// </summary>
     /// <remarks>
@@ -150,6 +171,27 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
             ?? new KafkaOptionsExtension();
 
         extension = extension.WithDefaultNumPartitions(defaultNumPartitions);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Defines the default number of consumer instances to be used in conjunction with <see cref="WithCompactedReplicator(bool)"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultConsumerInstances">The default number of consumer instances to be used in conjunction with <see cref="WithCompactedReplicator(bool)"/></param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithDefaultConsumerInstances(int? defaultConsumerInstances = null)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithDefaultConsumerInstances(defaultConsumerInstances);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

@@ -117,4 +117,10 @@ public static class KafkaEntityTypeExtensions
         var numPartitions = options.DefaultNumPartitions;
         return numPartitions;
     }
+
+    public static int? ConsumerInstances(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        var consumerInstances = options.DefaultConsumerInstances;
+        return consumerInstances;
+    }
 }

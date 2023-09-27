@@ -20,7 +20,6 @@
 
 using Java.Lang;
 using Java.Util;
-using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Common;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
@@ -28,7 +27,6 @@ using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Streams;
 using System.Globalization;
-using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
@@ -39,8 +37,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _applicationId;
     private string? _bootstrapServers;
     private bool _producerByEntity = false;
+    private bool _useCompactedReplicator = false;
     private bool _usePersistentStorage = false;
     private int _defaultNumPartitions = 1;
+    private int? _defaultConsumerInstances = null;
     private short _defaultReplicationFactor = 1;
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
@@ -61,8 +61,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
         _producerByEntity = copyFrom._producerByEntity;
+        _useCompactedReplicator = copyFrom._useCompactedReplicator;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
+        _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
         _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
@@ -85,9 +87,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual bool ProducerByEntity => _producerByEntity;
 
+    public virtual bool UseCompactedReplicator => _useCompactedReplicator;
+
     public virtual bool UsePersistentStorage => _usePersistentStorage;
 
     public virtual int DefaultNumPartitions => _defaultNumPartitions;
+
+    public virtual int? DefaultConsumerInstances => _defaultConsumerInstances;
 
     public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
 
@@ -142,6 +148,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
+    public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = false)
+    {
+        var clone = Clone();
+
+        clone._useCompactedReplicator = useCompactedReplicator;
+
+        return clone;
+    }
+
     public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = false)
     {
         var clone = Clone();
@@ -156,6 +171,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         var clone = Clone();
 
         clone._defaultNumPartitions = defaultNumPartitions;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithDefaultConsumerInstances(int? defaultConsumerInstances = null)
+    {
+        var clone = Clone();
+
+        clone._defaultConsumerInstances = defaultConsumerInstances;
 
         return clone;
     }
