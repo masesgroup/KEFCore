@@ -28,6 +28,10 @@ using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Header;
 using Org.Apache.Kafka.Connect.Transforms;
+using MASES.KNet;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.Apache.Kafka.Common;
+using MASES.KNet.Replicator;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -42,6 +46,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
     private Dictionary<int, IKafkaIntegerValueGenerator>? _integerGenerators;
 
+    private readonly IKNetCompactedReplicator<string, string> _kafkaCompactedReplicator;
     private readonly IProducer<string, string> _kafkaProducer;
     private readonly string _tableAssociatedTopicName;
     private readonly IKafkaSerdesEntityType _serdes;
@@ -57,8 +62,16 @@ public class KafkaTable<TKey> : IKafkaTable
         _tableAssociatedTopicName = entityType.TopicName(cluster.Options);
         cluster.CreateTable(entityType);
         _serdes = cluster.CreateSerdes(entityType);
-        _kafkaProducer = cluster.CreateProducer(entityType);
-        _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType);
+        if (cluster.Options.UseCompactedReplicator)
+        {
+            _kafkaCompactedReplicator = cluster.CreateCompactedReplicator(entityType);
+            _kafkaCompactedReplicator.Start();
+        }
+        else
+        {
+            _kafkaProducer = cluster.CreateProducer(entityType);
+            _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType);
+        }
 
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
@@ -81,6 +94,19 @@ public class KafkaTable<TKey> : IKafkaTable
                 _valueComparers ??= new List<(int, ValueComparer)>();
                 _valueComparers.Add((property.GetIndex(), comparer));
             }
+        }
+    }
+
+    public virtual void Dispose()
+    {
+        if (Cluster.Options.UseCompactedReplicator)
+        {
+            _kafkaCompactedReplicator?.Dispose();
+        }
+        else
+        {
+            _kafkaProducer?.Dispose();
+            _streamData?.Dispose();
         }
     }
 
@@ -112,7 +138,14 @@ public class KafkaTable<TKey> : IKafkaTable
         return (KafkaIntegerValueGenerator<TProperty>)generator;
     }
 
-    public virtual IEnumerable<ValueBuffer> ValueBuffers => _streamData;
+    public virtual IEnumerable<ValueBuffer> ValueBuffers => GetValueBuffer();
+
+    private IEnumerable<ValueBuffer> GetValueBuffer()
+    {
+        if (_streamData != null) return _streamData;
+        _kafkaCompactedReplicator.SyncWait();
+        return _kafkaCompactedReplicator.Values.Select((item) => new ValueBuffer(_serdes.Deserialize(item)));
+    }
 
     public virtual IEnumerable<object?[]> Rows
         => RowsInTable();
@@ -159,7 +192,7 @@ public class KafkaTable<TKey> : IKafkaTable
     private static System.Collections.Generic.List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties)
         => properties.Select(p => p.GetKeyValueComparer()).ToList();
 
-    public virtual ProducerRecord<string, string> Create(IUpdateEntry entry)
+    public virtual IKafkaRowBag Create(IUpdateEntry entry)
     {
         var properties = entry.EntityType.GetProperties().ToList();
         var row = new object?[properties.Count];
@@ -183,10 +216,10 @@ public class KafkaTable<TKey> : IKafkaTable
 
         BumpValueGenerators(row);
 
-        return NewRecord(entry, key, row);
+        return new KafkaRowBag<TKey>(entry, key, row);
     }
 
-    public virtual ProducerRecord<string, string> Delete(IUpdateEntry entry)
+    public virtual IKafkaRowBag Delete(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
 
@@ -207,7 +240,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
             _rows.Remove(key);
 
-            return NewRecord(entry, key, null);
+            return new KafkaRowBag<TKey>(entry, key, null);
         }
         else
         {
@@ -246,7 +279,7 @@ public class KafkaTable<TKey> : IKafkaTable
         return false;
     }
 
-    public virtual ProducerRecord<string, string> Update(IUpdateEntry entry)
+    public virtual IKafkaRowBag Update(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
 
@@ -289,7 +322,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
             BumpValueGenerators(valueBuffer);
 
-            return NewRecord(entry, key, valueBuffer);
+            return new KafkaRowBag<TKey>(entry, key, valueBuffer);
         }
         else
         {
@@ -297,18 +330,32 @@ public class KafkaTable<TKey> : IKafkaTable
         }
     }
 
-    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<ProducerRecord<string, string>> records)
+    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
     {
-        System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
-        foreach (var record in records)
+        if (Cluster.Options.UseCompactedReplicator)
         {
-            var future = _kafkaProducer.Send(record);
-            futures.Add(future);
+            foreach (KafkaRowBag<TKey> record in records)
+            {
+                var key = record.GetKey(_serdes);
+                var value = record.GetValue(_serdes);
+                _kafkaCompactedReplicator[key] = value;
+            }
+
+            return null;
         }
+        else
+        {
+            System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
+            foreach (KafkaRowBag<TKey> record in records)
+            {
+                var future = _kafkaProducer.Send(record.GetRecord(_tableAssociatedTopicName, _serdes));
+                futures.Add(future);
+            }
 
-        _kafkaProducer.Flush();
+            _kafkaProducer.Flush();
 
-        return futures;
+            return futures;
+        }
     }
 
     public virtual void BumpValueGenerators(object?[] row)

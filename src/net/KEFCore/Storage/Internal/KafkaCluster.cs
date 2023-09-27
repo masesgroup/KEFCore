@@ -32,6 +32,10 @@ using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using MASES.KNet.Serialization;
 using MASES.KNet.Extensions;
+using MASES.KNet;
+using Org.Apache.Kafka.Common;
+using MASES.KNet.Replicator;
+using Org.Apache.Kafka.Tools;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -65,6 +69,18 @@ public class KafkaCluster : IKafkaCluster
         _kafkaAdminClient = KafkaAdminClient.Create(props);
     }
 
+    public virtual void Dispose()
+    {
+        if (_tables != null)
+        {
+            foreach (var item in _tables?.Values)
+            {
+                item?.Dispose();
+            }
+            _kafkaAdminClient?.Dispose();
+        }
+    }
+
     public virtual IKafkaSerdesFactory SerdesFactory => _serdesFactory;
 
     public virtual KafkaOptionsExtension Options => _options;
@@ -89,13 +105,16 @@ public class KafkaCluster : IKafkaCluster
     {
         lock (_lock)
         {
+            var coll = new ArrayList<string>();
+            foreach (var entityType in designModel.GetEntityTypes())
+            {
+                var topic = entityType.TopicName(Options);
+
+                coll.Add(topic);
+            }
+
             try
             {
-                var coll = new ArrayList<string>();
-                foreach (var entityType in designModel.GetEntityTypes())
-                {
-                    coll.Add(entityType.TopicName(_options));
-                }
                 var result = _kafkaAdminClient.DeleteTopics(coll);
                 result.All().Get();
             }
@@ -164,9 +183,10 @@ public class KafkaCluster : IKafkaCluster
         {
             try
             {
-                var topic = new NewTopic(entityType.TopicName(_options), entityType.NumPartitions(_options), entityType.ReplicationFactor(_options));
-                _options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
-                var map = _options.TopicConfigBuilder.ToMap();
+                var topic = new NewTopic(entityType.TopicName(Options), entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                Options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
+                Options.TopicConfigBuilder.RetentionBytes = 1024 * 1024 * 1024;
+                var map = Options.TopicConfigBuilder.ToMap();
                 topic.Configs(map);
                 var coll = Collections.Singleton(topic);
                 var result = _kafkaAdminClient.CreateTopics(coll);
@@ -190,6 +210,24 @@ public class KafkaCluster : IKafkaCluster
     }
 
     public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
+
+    public virtual IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType)
+    {
+        lock (_lock)
+        {
+            return new KNetCompactedReplicator<string, string>()
+            {
+                UpdateMode = UpdateModeTypes.OnConsume,
+                BootstrapServers = Options.BootstrapServers,
+                StateName = entityType.TopicName(Options),
+                Partitions = entityType.NumPartitions(Options),
+                ConsumerInstances = entityType.ConsumerInstances(Options),
+                ReplicationFactor = entityType.ReplicationFactor(Options),
+                TopicConfig = Options.TopicConfigBuilder,
+                ProducerConfig = Options.ProducerConfigBuilder,
+            };
+        }
+    }
 
     public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
     {
@@ -240,7 +278,7 @@ public class KafkaCluster : IKafkaCluster
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var rowsAffected = 0;
-        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<ProducerRecord<string, string>>> _dataInTransaction = new();
+        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = new();
 
         lock (_lock)
         {
@@ -254,7 +292,7 @@ public class KafkaCluster : IKafkaCluster
 
                 var table = EnsureTable(entityType);
 
-                ProducerRecord<string, string> record;
+                IKafkaRowBag record;
 
                 if (entry.SharedIdentityEntry != null)
                 {
@@ -281,10 +319,10 @@ public class KafkaCluster : IKafkaCluster
                         continue;
                 }
 
-                if (!_dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<ProducerRecord<string, string>>? recordList))
+                if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag>? recordList))
                 {
-                    recordList = new System.Collections.Generic.List<ProducerRecord<string, string>>();
-                    _dataInTransaction[table] = recordList;
+                    recordList = new System.Collections.Generic.List<IKafkaRowBag>();
+                    dataInTransaction[table] = recordList;
                 }
                 recordList?.Add(record);
 
@@ -294,7 +332,7 @@ public class KafkaCluster : IKafkaCluster
 
         updateLogger.ChangesSaved(entries, rowsAffected);
 
-        foreach (var tableData in _dataInTransaction)
+        foreach (var tableData in dataInTransaction)
         {
             tableData.Key.Commit(tableData.Value);
         }

@@ -36,9 +36,13 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     bool ProducerByEntity { get; }
 
+    bool UseCompactedReplicator { get; }
+
     bool UsePersistentStorage { get; }
 
     int DefaultNumPartitions { get; }
+
+    int? DefaultConsumerInstances { get; }
 
     int DefaultReplicationFactor { get; }
 

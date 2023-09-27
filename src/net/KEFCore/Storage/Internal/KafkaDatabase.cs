@@ -40,6 +40,11 @@ public class KafkaDatabase : Database, IKafkaDatabase
         _updateLogger = updateLogger;
     }
 
+    public void Dispose()
+    {
+        _cluster?.Dispose();
+    }
+
     public virtual IKafkaCluster Cluster => _cluster;
 
     public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(entries, _updateLogger);

@@ -25,7 +25,7 @@ using MASES.KNet.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaTable
+public interface IKafkaTable : IDisposable
 {
     IReadOnlyList<object?[]> SnapshotRows();
 
@@ -33,13 +33,13 @@ public interface IKafkaTable
 
     IEnumerable<object?[]> Rows { get; }
 
-    ProducerRecord<string, string> Create(IUpdateEntry entry);
+    IKafkaRowBag Create(IUpdateEntry entry);
 
-    ProducerRecord<string, string> Delete(IUpdateEntry entry);
+    IKafkaRowBag Delete(IUpdateEntry entry);
 
-    ProducerRecord<string, string> Update(IUpdateEntry entry);
+    IKafkaRowBag Update(IUpdateEntry entry);
 
-    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<ProducerRecord<string, string>> records);
+    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
 
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property,

@@ -85,7 +85,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     actualState = newState;
                     Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-                    stateChanged.Set();
+                    if (stateChanged != null && !stateChanged.SafeWaitHandle.IsClosed) stateChanged.Set();
                 }
             };
 
@@ -151,13 +151,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public void Dispose()
         {
+            streams?.Close();
             dataReceived?.Dispose();
             resetEvent?.Dispose();
-            stateChanged?.Dispose();
             exceptionSet?.Dispose();
-            streams?.Close();
             errorHandler?.Dispose();
             stateListener?.Dispose();
+            stateChanged?.Dispose();
+
+            streams = null;
+            errorHandler = null;
+            stateListener = null;
         }
 
         class KafkaEnumerator : IEnumerator<ValueBuffer>
@@ -169,6 +173,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public KafkaEnumerator(IKafkaCluster kafkaCluster, ReadOnlyKeyValueStore<K, V>? keyValueStore)
             {
+                if (kafkaCluster == null) throw new ArgumentNullException(nameof(kafkaCluster));
+                if (keyValueStore == null) throw new ArgumentNullException(nameof(keyValueStore));
                 _kafkaCluster = kafkaCluster;
                 _keyValueStore = keyValueStore;
                 Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");

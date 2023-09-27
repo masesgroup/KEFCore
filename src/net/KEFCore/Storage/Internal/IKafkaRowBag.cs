@@ -16,15 +16,17 @@
 *  Refer to LICENSE for more information.
 */
 
+#nullable enable
+
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using Java.Util.Concurrent;
+using Org.Apache.Kafka.Clients.Producer;
+using MASES.KNet.Producer;
+using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaDatabase : IDatabase, IDisposable
+public interface IKafkaRowBag
 {
-    IKafkaCluster Cluster { get; }
-
-    bool EnsureDatabaseDeleted();
-
-    bool EnsureDatabaseCreated();
-
-    bool EnsureDatabaseConnected();
+    IUpdateEntry UpdateEntry { get; }
 }
