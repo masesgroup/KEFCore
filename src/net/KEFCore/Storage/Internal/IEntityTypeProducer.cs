@@ -18,13 +18,14 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
+using Java.Util.Concurrent;
+using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaRowBag
+public interface IEntityTypeProducer : IDisposable
 {
-    IUpdateEntry UpdateEntry { get; }
+    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
 
-    string AssociatedTopicName { get; }
+    IEnumerable<ValueBuffer> GetValueBuffer();
 }

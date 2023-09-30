@@ -30,6 +30,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public static bool UseModelBuilder = false;
         public static bool UseCompactedReplicator = false;
         public static string DatabaseName = null;
-        static bool deleteApplication = false;
+        static bool deleteApplication = true;
     }
 }

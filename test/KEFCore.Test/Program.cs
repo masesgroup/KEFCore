@@ -25,6 +25,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -89,7 +90,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
             var testWatcher = Stopwatch.StartNew();
             Stopwatch watch = Stopwatch.StartNew();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 1; i <= 1000; i++)
             {
                 context.Add(new Blog
                 {
@@ -229,7 +230,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
     {
         public int BlogId { get; set; }
         public string Url { get; set; }
-        public long Rating { get; set; }
+        public int Rating { get; set; }
         public List<Post> Posts { get; set; }
 
         public override string ToString()

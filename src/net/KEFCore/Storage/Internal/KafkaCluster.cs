@@ -36,6 +36,7 @@ using MASES.KNet;
 using Org.Apache.Kafka.Common;
 using MASES.KNet.Replicator;
 using Org.Apache.Kafka.Tools;
+using MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -51,9 +52,6 @@ public class KafkaCluster : IKafkaCluster
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
 
-    private IProducer<string, string>? _globalProducer = null;
-    private readonly ConcurrentDictionary<IEntityType, IProducer<string, string>> _producers;
-
     public KafkaCluster(
         KafkaOptionsExtension options,
         IKafkaTableFactory tableFactory,
@@ -63,7 +61,6 @@ public class KafkaCluster : IKafkaCluster
         _tableFactory = tableFactory;
         _serdesFactory = serdesFactory;
         _useNameMatching = options.UseNameMatching;
-        _producers = new();
         Properties props = new();
         props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
         _kafkaAdminClient = KafkaAdminClient.Create(props);
@@ -187,13 +184,14 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
 
-    public virtual bool CreateTable(IEntityType entityType)
+    public virtual string CreateTable(IEntityType entityType)
     {
+        var topicName = entityType.TopicName(Options);
         try
         {
             try
             {
-                var topic = new NewTopic(entityType.TopicName(Options), entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
                 Options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
                 Options.TopicConfigBuilder.RetentionBytes = 1024 * 1024 * 1024;
                 var map = Options.TopicConfigBuilder.ToMap();
@@ -214,48 +212,56 @@ public class KafkaCluster : IKafkaCluster
                 Thread.Sleep(1000); // wait a while to complete topic deletion
                 return CreateTable(entityType);
             }
-            return false;
         }
-        return true;
+        return topicName;
     }
 
-    public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
+    //public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => 
 
-    public virtual IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType)
-    {
-        lock (_lock)
-        {
-            return new KNetCompactedReplicator<string, string>()
-            {
-                UpdateMode = UpdateModeTypes.OnConsume,
-                BootstrapServers = Options.BootstrapServers,
-                StateName = entityType.TopicName(Options),
-                Partitions = entityType.NumPartitions(Options),
-                ConsumerInstances = entityType.ConsumerInstances(Options),
-                ReplicationFactor = entityType.ReplicationFactor(Options),
-                TopicConfig = Options.TopicConfigBuilder,
-                ProducerConfig = Options.ProducerConfigBuilder,
-            };
-        }
-    }
+    //public virtual IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType)
+    //{
+    //    lock (_lock)
+    //    {
+    //        return new KNetCompactedReplicator<string, string>()
+    //        {
+    //            UpdateMode = UpdateModeTypes.OnConsume,
+    //            BootstrapServers = Options.BootstrapServers,
+    //            StateName = entityType.TopicName(Options),
+    //            Partitions = entityType.NumPartitions(Options),
+    //            ConsumerInstances = entityType.ConsumerInstances(Options),
+    //            ReplicationFactor = entityType.ReplicationFactor(Options),
+    //            TopicConfig = Options.TopicConfigBuilder,
+    //            ProducerConfig = Options.ProducerConfigBuilder,
+    //        };
+    //    }
+    //}
 
-    public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
-    {
-        if (!Options.ProducerByEntity)
-        {
-            lock (_lock)
-            {
-                if (_globalProducer == null) _globalProducer = CreateProducer();
-                return _globalProducer;
-            }
-        }
-        else
-        {
-            return _producers.GetOrAdd(entityType, _ => CreateProducer());
-        }
-    }
+    //public virtual IEntityTypeProducer CreateProducer(IEntityType entityType) => EntityTypeProducer.Create(entityType, Options);
+    //{
+    //    return 
 
-    private IProducer<string, string> CreateProducer() => new KafkaProducer<string, string>(Options.ProducerOptions());
+
+    //    //if (!Options.ProducerByEntity)
+    //    //{
+    //    //    lock (_lock)
+    //    //    {
+    //    //        if (_globalProducer == null) _globalProducer = CreateProducerLocal(entityType);
+    //    //        return _globalProducer;
+    //    //    }
+    //    //}
+    //    //else
+    //    //{
+    //    //    return _producers.GetOrAdd(entityType, _ => CreateProducerLocal(entityType));
+    //    //}
+    //}
+
+   // private IEntityTypeProducer CreateProducerLocal(IEntityType entityType) => EntityTypeProducer.Create(entityType, Options);
+    //{
+    //    var type = typeof(KafkaProducer<,>).MakeGenericType(typeof(string), typeof(string));
+    //    var ctor = type.GetTypeInfo().DeclaredConstructors.Single(c => c.GetParameters().Length == 1 && c.GetParameters()[0].ParameterType == typeof(Properties));
+    //    return ctor.Invoke(new object[] { Options.ProducerOptions() });
+    //    new KafkaProducer<string, string>(Options.ProducerOptions());
+    //}
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 

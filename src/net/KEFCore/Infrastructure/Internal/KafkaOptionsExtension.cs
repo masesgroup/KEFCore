@@ -242,7 +242,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         {
             props.Remove(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
         }
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$StringSerde", true, SystemClassLoader));
+        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
         if (props.ContainsKey(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
         {
             props.Remove(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
@@ -277,16 +277,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         {
             props.Put(ProducerConfig.LINGER_MS_CONFIG, 1);
         }
-        if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
-        {
-            props.Remove(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG);
-        }
-        props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
-        if (props.ContainsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-        {
-            props.Remove(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
-        }
-        props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
+        //if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
+        //{
+        //    props.Remove(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG);
+        //}
+        //props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
+        //if (props.ContainsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
+        //{
+        //    props.Remove(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
+        //}
+        //props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
 
         return props;
     }
