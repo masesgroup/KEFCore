@@ -195,7 +195,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _keySerdes = keySerdes;
                 _valueSerdes = valueSerdes;
                 _keyValueStore = keyValueStore;
-                Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+                Trace.WriteLine($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
                 keyValueIterator = _keyValueStore?.All();
                 keyValueEnumerator = keyValueIterator?.ToIEnumerator();
             }

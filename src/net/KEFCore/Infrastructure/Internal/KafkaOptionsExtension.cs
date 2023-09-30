@@ -36,7 +36,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _databaseName;
     private string? _applicationId;
     private string? _bootstrapServers;
-    private bool _producerByEntity = false;
+    //private bool _producerByEntity = false;
     private bool _useCompactedReplicator = false;
     private bool _usePersistentStorage = false;
     private int _defaultNumPartitions = 1;
@@ -60,7 +60,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _databaseName = copyFrom._databaseName;
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
-        _producerByEntity = copyFrom._producerByEntity;
+        //_producerByEntity = copyFrom._producerByEntity;
         _useCompactedReplicator = copyFrom._useCompactedReplicator;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
@@ -85,7 +85,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual string BootstrapServers => _bootstrapServers!;
 
-    public virtual bool ProducerByEntity => _producerByEntity;
+    //public virtual bool ProducerByEntity => _producerByEntity;
 
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
 
@@ -139,14 +139,14 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    public virtual KafkaOptionsExtension WithProducerByEntity(bool producerByEntity = false)
-    {
-        var clone = Clone();
+    //public virtual KafkaOptionsExtension WithProducerByEntity(bool producerByEntity = false)
+    //{
+    //    var clone = Clone();
 
-        clone._producerByEntity = producerByEntity;
+    //    clone._producerByEntity = producerByEntity;
 
-        return clone;
-    }
+    //    return clone;
+    //}
 
     public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = false)
     {

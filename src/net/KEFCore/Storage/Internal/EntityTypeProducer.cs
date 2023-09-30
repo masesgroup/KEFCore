@@ -40,18 +40,18 @@ public class EntityTypeProducers
 
     public static IEntityTypeProducer Create<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull
     {
-        if (!cluster.Options.ProducerByEntity)
-        {
-            lock (_producers)
-            {
-                if (_globalProducer == null) _globalProducer = CreateProducerLocal<TKey>(entityType, cluster);
-                return _globalProducer;
-            }
-        }
-        else
-        {
+        //if (!cluster.Options.ProducerByEntity)
+        //{
+        //    lock (_producers)
+        //    {
+        //        if (_globalProducer == null) _globalProducer = CreateProducerLocal<TKey>(entityType, cluster);
+        //        return _globalProducer;
+        //    }
+        //}
+        //else
+        //{
             return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
-        }
+        //}
     }
 
     static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
