@@ -18,14 +18,12 @@
 
 #nullable enable
 
-using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Errors;
 using Org.Apache.Kafka.Streams.Kstream;
 using Org.Apache.Kafka.Streams.State;
-using System.Collections;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 using static Org.Apache.Kafka.Streams.KafkaStreams;
 

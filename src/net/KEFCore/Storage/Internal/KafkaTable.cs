@@ -25,7 +25,6 @@ using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common.Header;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -292,34 +291,6 @@ public class KafkaTable<TKey> : IKafkaTable
     }
 
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
-    //{
-    //    return 
-
-    //    //if (Cluster.Options.UseCompactedReplicator)
-    //    //{
-    //    //    foreach (KafkaRowBag<TKey> record in records)
-    //    //    {
-    //    //        var key = record.GetKey(_serdes);
-    //    //        var value = record.GetValue(_serdes);
-    //    //        _kafkaCompactedReplicator[key] = value;
-    //    //    }
-
-    //    //    return null;
-    //    //}
-    //    //else
-    //    //{
-    //    //    System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
-    //    //    foreach (KafkaRowBag<TKey> record in records)
-    //    //    {
-    //    //        var future = _kafkaProducer.Send(record.GetRecord(_tableAssociatedTopicName, _serdes));
-    //    //        futures.Add(future);
-    //    //    }
-
-    //    //    _kafkaProducer.Flush();
-
-    //    //    return futures;
-    //    //}
-    //}
 
     public virtual void BumpValueGenerators(object?[] row)
     {
@@ -330,14 +301,6 @@ public class KafkaTable<TKey> : IKafkaTable
                 generator.Bump(row);
             }
         }
-    }
-
-    private ProducerRecord<string, string> NewRecord(IUpdateEntry entry, TKey key, object?[]? row)
-    {
-        Headers headers = Headers.Create();
-        var record = new ProducerRecord<string, string>(_tableAssociatedTopicName, 0, new System.DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds(), _serdes.Serialize<TKey>(headers, key), _serdes.Serialize(headers, row), headers);
-
-        return record;
     }
 
     private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry);

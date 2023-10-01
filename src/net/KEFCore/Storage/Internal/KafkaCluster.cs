@@ -23,20 +23,10 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
-using System.Collections.Concurrent;
 using Java.Util.Concurrent;
-using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Admin;
-using Org.Apache.Kafka.Common.Config;
-using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
-using MASES.KNet.Serialization;
-using MASES.KNet.Extensions;
-using MASES.KNet;
-using Org.Apache.Kafka.Common;
-using MASES.KNet.Replicator;
 using Org.Apache.Kafka.Tools;
-using MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -215,53 +205,6 @@ public class KafkaCluster : IKafkaCluster
         }
         return topicName;
     }
-
-    //public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => 
-
-    //public virtual IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType)
-    //{
-    //    lock (_lock)
-    //    {
-    //        return new KNetCompactedReplicator<string, string>()
-    //        {
-    //            UpdateMode = UpdateModeTypes.OnConsume,
-    //            BootstrapServers = Options.BootstrapServers,
-    //            StateName = entityType.TopicName(Options),
-    //            Partitions = entityType.NumPartitions(Options),
-    //            ConsumerInstances = entityType.ConsumerInstances(Options),
-    //            ReplicationFactor = entityType.ReplicationFactor(Options),
-    //            TopicConfig = Options.TopicConfigBuilder,
-    //            ProducerConfig = Options.ProducerConfigBuilder,
-    //        };
-    //    }
-    //}
-
-    //public virtual IEntityTypeProducer CreateProducer(IEntityType entityType) => EntityTypeProducer.Create(entityType, Options);
-    //{
-    //    return 
-
-
-    //    //if (!Options.ProducerByEntity)
-    //    //{
-    //    //    lock (_lock)
-    //    //    {
-    //    //        if (_globalProducer == null) _globalProducer = CreateProducerLocal(entityType);
-    //    //        return _globalProducer;
-    //    //    }
-    //    //}
-    //    //else
-    //    //{
-    //    //    return _producers.GetOrAdd(entityType, _ => CreateProducerLocal(entityType));
-    //    //}
-    //}
-
-   // private IEntityTypeProducer CreateProducerLocal(IEntityType entityType) => EntityTypeProducer.Create(entityType, Options);
-    //{
-    //    var type = typeof(KafkaProducer<,>).MakeGenericType(typeof(string), typeof(string));
-    //    var ctor = type.GetTypeInfo().DeclaredConstructors.Single(c => c.GetParameters().Length == 1 && c.GetParameters()[0].ParameterType == typeof(Properties));
-    //    return ctor.Invoke(new object[] { Options.ProducerOptions() });
-    //    new KafkaProducer<string, string>(Options.ProducerOptions());
-    //}
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 

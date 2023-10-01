@@ -57,90 +57,6 @@ public class EntityTypeProducers
     static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
 }
 
-//public class ListStringObjectTupleConverter : JsonConverterFactory
-//{
-//    public override bool CanConvert(Type typeToConvert)
-//    {
-//        if (typeToConvert != typeof(List<(Type, object)>))
-//        {
-//            return false;
-//        }
-
-//        return true;
-//    }
-
-//    public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
-//    {
-//        return new ListStringObjectTupleConverterInner();
-//    }
-
-//    private class ListStringObjectTupleConverterInner : JsonConverter<List<(Type, object)>>
-//    {
-//        public override List<(Type, object)> Read(
-//            ref Utf8JsonReader reader,
-//            Type typeToConvert,
-//            JsonSerializerOptions options)
-//        {
-//            if (reader.TokenType != JsonTokenType.StartObject)
-//            {
-//                throw new JsonException();
-//            }
-
-//            var dictionary = new List<(Type, object)>();
-
-//            while (reader.Read())
-//            {
-//                if (reader.TokenType == JsonTokenType.EndObject)
-//                {
-//                    return dictionary;
-//                }
-
-//                // Get the key.
-//                if (reader.TokenType != JsonTokenType.PropertyName)
-//                {
-//                    throw new JsonException();
-//                }
-
-//                string? propertyName = reader.GetString();
-//                var type = Type.GetType(propertyName!);
-//                if (type == null)
-//                {
-//                    throw new JsonException($"Unable to convert \"{propertyName}\" to known CLR Type.");
-//                }
-
-//                var valueConverter = (JsonConverter<object>)options.GetConverter(type);
-
-//                // Get the value.
-//                reader.Read();
-//                object value = valueConverter.Read(ref reader, type, options)!;
-
-//                // Add to dictionary.
-//                dictionary.Add((type, value));
-//            }
-
-//            throw new JsonException();
-//        }
-
-//        public override void Write(
-//            Utf8JsonWriter writer,
-//            List<(Type, object)> dictionary,
-//            JsonSerializerOptions options)
-//        {
-//            writer.WriteStartObject();
-//            foreach ((Type key, object value) in dictionary)
-//            {
-//                var propertyName = key.FullName.ToString();
-//                writer.WritePropertyName(options.PropertyNamingPolicy?.ConvertName(propertyName) ?? propertyName);
-//                JsonConverter valueConverter = options.GetConverter(key);
-//                valueConverter.
-//                valueConverter.Write(writer, value, options);
-//            }
-
-//            writer.WriteEndObject();
-//        }
-//    }
-//}
-
 [JsonSerializable(typeof(ObjectType))]
 public class ObjectType : IJsonOnDeserialized
 {
@@ -318,7 +234,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
     }
 
-    public IEnumerable<Java.Util.Concurrent.Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
+    public IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
     {
         if (_useCompactedReplicator)
         {
@@ -332,7 +248,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
         else
         {
-            System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
+            List<Future<RecordMetadata>> futures = new();
             foreach (KafkaRowBag<TKey> record in records)
             {
                 var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, KNetEntityTypeData<TKey>>(record.AssociatedTopicName, 0, record.Key, record.Value!));
