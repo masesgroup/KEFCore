@@ -73,11 +73,11 @@
 <p>NOTE: you need a working Apache Kafka cluster to use this provider.</p>
 </blockquote>
 <h3 id="installation">Installation</h3>
-<p>EF Core for Apache Kafka is available on <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet">NuGet</a>:</p>
+<p>Entity Framework Core provider for Apache Kafka is available on <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet">NuGet</a>:</p>
 <pre><code class="lang-sh">dotnet add package MASES.EntityFrameworkCore.KNet
 </code></pre>
 <h3 id="basic-usage">Basic usage</h3>
-<p>The following code demonstrates basic usage of EF Core for Apache Kafka.
+<p>The following code demonstrates basic usage of Entity Framework Core provider for Apache Kafka.
 For a full tutorial configuring the <code>KafkaDbContext</code>, defining the model, and creating the database, see <a href="kafkadbcontext.html">KafkaDbContext</a> in the docs.</p>
 <pre><code class="lang-cs">using (var context = new BloggingContext()
 {

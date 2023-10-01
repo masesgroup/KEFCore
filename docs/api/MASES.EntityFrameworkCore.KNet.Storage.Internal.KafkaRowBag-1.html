@@ -133,18 +133,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry__0_System_Object___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.%23ctor(IUpdateEntry%2C%600%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry_System_String__0_IProperty___System_Object___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.%23ctor(IUpdateEntry%2CSystem.String%2C%600%2CIProperty%5B%5D%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L32">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L25">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry__0_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.#ctor(IUpdateEntry,`0,System.Object[])">KafkaRowBag(IUpdateEntry, TKey, Object[])</h4>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry_System_String__0_IProperty___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.#ctor(IUpdateEntry,System.String,`0,IProperty[],System.Object[])">KafkaRowBag(IUpdateEntry, String, TKey, IProperty[], Object[])</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaRowBag(IUpdateEntry entry, TKey key, object[] row)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, IProperty[] properties, object[] row)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -162,8 +162,18 @@
         <td></td>
       </tr>
       <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">topicName</span></td>
+        <td></td>
+      </tr>
+      <tr>
         <td><span class="xref">TKey</span></td>
         <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IProperty</span>[]</td>
+        <td><span class="parametername">properties</span></td>
         <td></td>
       </tr>
       <tr>
@@ -177,10 +187,40 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.AssociatedTopicName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L36">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.AssociatedTopicName*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.AssociatedTopicName">AssociatedTopicName</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string AssociatedTopicName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Key%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L41">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L38">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Key*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Key">Key</h4>
@@ -207,10 +247,40 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Properties%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L40">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Properties*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Properties">Properties</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProperty[] Properties { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IProperty</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.UpdateEntry%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L39">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L34">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.UpdateEntry*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.UpdateEntry">UpdateEntry</h4>
@@ -237,10 +307,40 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Value%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L42">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Value*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Value">Value</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KNetEntityTypeData&lt;TKey&gt; Value { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData-1.html">KNetEntityTypeData</a>&lt;TKey&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.ValueBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L43">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L44">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.ValueBuffer*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.ValueBuffer">ValueBuffer</h4>
@@ -265,154 +365,6 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetKey_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.GetKey(MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L45">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetKey_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetKey*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetKey_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetKey(MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)">GetKey(IKafkaSerdesEntityType)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string GetKey(IKafkaSerdesEntityType _serdes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html">IKafkaSerdesEntityType</a></td>
-        <td><span class="parametername">_serdes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetRecord_System_String_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.GetRecord(System.String%2CMASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L55">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetRecord_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetRecord*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetRecord_System_String_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetRecord(System.String,MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)">GetRecord(String, IKafkaSerdesEntityType)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ProducerRecord&lt;string, string&gt; GetRecord(string topicName, IKafkaSerdesEntityType _serdes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">topicName</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html">IKafkaSerdesEntityType</a></td>
-        <td><span class="parametername">_serdes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Org.Apache.Kafka.Clients.Producer.ProducerRecord</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetValue_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.GetValue(MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L50">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetValue*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_GetValue_MASES_EntityFrameworkCore_KNet_Serdes_Internal_IKafkaSerdesEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.GetValue(MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType)">GetValue(IKafkaSerdesEntityType)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string GetValue(IKafkaSerdesEntityType _serdes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serdes.Internal.IKafkaSerdesEntityType.html">IKafkaSerdesEntityType</a></td>
-        <td><span class="parametername">_serdes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html">IKafkaRowBag</a>
@@ -428,7 +380,7 @@
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L30" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L23" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
