@@ -93,26 +93,26 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
         return this;
     }
 
-    /// <summary>
-    ///     Enables creation of producer for each <see cref="IEntity"/>
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="producerByEntity">If <see langword="true" />, then each entity will have its own <see cref="KafkaProducer"/>.</param>
-    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithProducerByEntity(bool producerByEntity = false)
-    {
-        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
-            ?? new KafkaOptionsExtension();
+    ///// <summary>
+    /////     Enables creation of producer for each <see cref="IEntity"/>
+    ///// </summary>
+    ///// <remarks>
+    /////     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    /////     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    ///// </remarks>
+    ///// <param name="producerByEntity">If <see langword="true" />, then each entity will have its own <see cref="KafkaProducer"/>.</param>
+    ///// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    //public virtual KafkaDbContextOptionsBuilder WithProducerByEntity(bool producerByEntity = false)
+    //{
+    //    var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+    //        ?? new KafkaOptionsExtension();
 
-        extension = extension.WithProducerByEntity(producerByEntity);
+    //    extension = extension.WithProducerByEntity(producerByEntity);
 
-        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+    //    ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
-        return this;
-    }
+    //    return this;
+    //}
 
     /// <summary>
     ///     Enables use of <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/>

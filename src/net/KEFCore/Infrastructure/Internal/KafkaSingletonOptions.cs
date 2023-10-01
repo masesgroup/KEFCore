@@ -34,7 +34,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DatabaseName = kafkaOptions.DatabaseName;
             ApplicationId = kafkaOptions.ApplicationId;
             BootstrapServers = kafkaOptions.BootstrapServers;
-            ProducerByEntity = kafkaOptions.ProducerByEntity;
+            //ProducerByEntity = kafkaOptions.ProducerByEntity;
             UseCompactedReplicator = kafkaOptions.UseCompactedReplicator;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;

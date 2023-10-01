@@ -18,47 +18,28 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using Java.Util.Concurrent;
-using Org.Apache.Kafka.Clients.Producer;
-using MASES.KNet.Producer;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
-using Org.Apache.Kafka.Common.Header;
-
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaRowBag<TKey> : IKafkaRowBag
 {
-    public KafkaRowBag(IUpdateEntry entry, TKey key, object?[]? row)
+    public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, IProperty[] properties, object?[]? row)
     {
         UpdateEntry = entry;
+        AssociatedTopicName = topicName;
         Key = key;
+        Properties = properties;
         ValueBuffer = row;
     }
 
     public IUpdateEntry UpdateEntry { get; private set; }
 
+    public string AssociatedTopicName { get; private set; }
+
     public TKey Key { get; private set; }
 
+    public IProperty[] Properties { get; private set; }
+
+    public KNetEntityTypeData<TKey>? Value => UpdateEntry.EntityState == EntityState.Deleted ? null : new KNetEntityTypeData<TKey>(UpdateEntry.EntityType, Properties, ValueBuffer!);
+
     public object?[]? ValueBuffer { get; private set; }
-
-    public string GetKey(IKafkaSerdesEntityType _serdes)
-    {
-        return _serdes.Serialize<TKey>(Key);
-    }
-
-    public string GetValue(IKafkaSerdesEntityType _serdes)
-    {
-        return _serdes.Serialize(ValueBuffer);
-    }
-
-    public ProducerRecord<string, string> GetRecord(string topicName, IKafkaSerdesEntityType _serdes)
-    {
-        Headers headers = Headers.Create();
-        string key = _serdes.Serialize<TKey>(headers, Key);
-        string? value = UpdateEntry.EntityState == EntityState.Deleted ? null : _serdes.Serialize(headers, ValueBuffer);
-        var record = new ProducerRecord<string, string>(topicName, 0, DateTime.Now, key, value!, headers);
-
-        return record;
-    }
 }

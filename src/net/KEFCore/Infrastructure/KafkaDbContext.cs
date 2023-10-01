@@ -70,10 +70,10 @@ public class KafkaDbContext : DbContext
     /// Use persistent storage
     /// </summary>
     public virtual bool UsePersistentStorage { get; set; } = false;
-    /// <summary>
-    /// Use a producer for each Entity
-    /// </summary>
-    public bool UseProducerByEntity { get; set; } = false;
+    ///// <summary>
+    ///// Use a producer for each Entity
+    ///// </summary>
+    //public bool UseProducerByEntity { get; set; } = false;
     /// <summary>
     /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka Streams
     /// </summary>
@@ -104,7 +104,7 @@ public class KafkaDbContext : DbContext
         {
             o.StreamsConfig(StreamsConfigBuilder ?? o.EmptyStreamsConfigBuilder).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithUsePersistentStorage(UsePersistentStorage);
-            o.WithProducerByEntity(UseProducerByEntity);
+            //o.WithProducerByEntity(UseProducerByEntity);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
         });

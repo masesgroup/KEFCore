@@ -17,7 +17,6 @@
 */
 
 using System.Collections.Concurrent;
-using JetBrains.Annotations;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;

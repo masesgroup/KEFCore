@@ -18,7 +18,7 @@
 
 #nullable enable
 
-using MASES.JCOBridge.C2JBridge;
+using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Errors;
@@ -29,10 +29,16 @@ using static Org.Apache.Kafka.Streams.KafkaStreams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    public class KafkaStreamsBaseRetriever<K, V> : IEnumerable<ValueBuffer>, IDisposable
+    public interface IKafkaStreamsBaseRetriever : IEnumerable<ValueBuffer>, IDisposable
+    {
+    }
+
+    public class KafkaStreamsBaseRetriever<K, V> : IKafkaStreamsBaseRetriever
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
+        private readonly IKNetSerDes<K> _keySerdes;
+        private readonly IKNetSerDes<KNetEntityTypeData<K>> _valueSerdes;
         private readonly StreamsBuilder _builder;
         private readonly KStream<K, V> _root;
 
@@ -50,10 +56,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private State actualState = State.NOT_RUNNING;
         private ReadOnlyKeyValueStore<K, V>? keyValueStore;
 
-        public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, string storageId, StreamsBuilder builder, KStream<K, V> root)
+        public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<K> keySerdes, IKNetSerDes<KNetEntityTypeData<K>> valueSerdes, string storageId, StreamsBuilder builder, KStream<K, V> root)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
+            _keySerdes = keySerdes;
+            _valueSerdes = valueSerdes;
             _builder = builder;
             _root = root;
             _storageId = _kafkaCluster.Options.UsePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
@@ -141,7 +149,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (resultException != null) throw resultException;
             Trace.WriteLine("Requested KafkaEnumerator on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-            return new KafkaEnumerator(_kafkaCluster, keyValueStore);
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, keyValueStore);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -167,17 +175,25 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         class KafkaEnumerator : IEnumerator<ValueBuffer>
         {
             private readonly IKafkaCluster _kafkaCluster;
+            private readonly IEntityType _entityType;
+            private readonly IKNetSerDes<K> _keySerdes;
+            private readonly IKNetSerDes<KNetEntityTypeData<K>> _valueSerdes;
             private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore;
             private KeyValueIterator<K, V>? keyValueIterator = null;
             private IEnumerator<KeyValue<K, V>>? keyValueEnumerator = null;
 
-            public KafkaEnumerator(IKafkaCluster kafkaCluster, ReadOnlyKeyValueStore<K, V>? keyValueStore)
+            public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<K> keySerdes, IKNetSerDes<KNetEntityTypeData<K>> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore)
             {
                 if (kafkaCluster == null) throw new ArgumentNullException(nameof(kafkaCluster));
+                if (keySerdes == null) throw new ArgumentNullException(nameof(keySerdes));
+                if (valueSerdes == null) throw new ArgumentNullException(nameof(valueSerdes));
                 if (keyValueStore == null) throw new ArgumentNullException(nameof(keyValueStore));
                 _kafkaCluster = kafkaCluster;
+                _entityType = entityType;
+                _keySerdes = keySerdes;
+                _valueSerdes = valueSerdes;
                 _keyValueStore = keyValueStore;
-                Trace.WriteLine($"KafkaEnumerator - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+                Trace.WriteLine($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
                 keyValueIterator = _keyValueStore?.All();
                 keyValueEnumerator = keyValueIterator?.ToIEnumerator();
             }
@@ -190,8 +206,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         var kv = keyValueEnumerator.Current;
                         object? v = kv.value;
-                        var data = _kafkaCluster.SerdesFactory.Deserialize(v as byte[]);
-                        return new ValueBuffer(data);
+                        KNetEntityTypeData<K> entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v as byte[]);
+                        var data = new ValueBuffer(entityTypeData.GetData(_entityType));
+                        if (data.IsEmpty)
+                        {
+                            throw new InvalidOperationException("Data is Empty");
+                        }
+                        return data;
                     }
                     throw new InvalidOperationException("InvalidEnumerator");
                 }

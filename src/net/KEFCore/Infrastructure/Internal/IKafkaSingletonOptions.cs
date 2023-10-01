@@ -34,7 +34,7 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     string? BootstrapServers { get; }
 
-    bool ProducerByEntity { get; }
+    //bool ProducerByEntity { get; }
 
     bool UseCompactedReplicator { get; }
 

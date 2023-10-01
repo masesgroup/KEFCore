@@ -18,35 +18,14 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaTable : IDisposable
+public interface IEntityTypeProducer : IDisposable
 {
-    IReadOnlyList<object?[]> SnapshotRows();
-
-    IEnumerable<ValueBuffer> ValueBuffers { get; }
-
-    IEnumerable<object?[]> Rows { get; }
-
-    IKafkaRowBag Create(IUpdateEntry entry);
-
-    IKafkaRowBag Delete(IUpdateEntry entry);
-
-    IKafkaRowBag Update(IUpdateEntry entry);
-
     IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
 
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
-        IProperty property,
-        IReadOnlyList<IKafkaTable> tables);
-
-    void BumpValueGenerators(object?[] row);
-
-    IKafkaCluster Cluster { get; }
-
-    IEntityType EntityType { get; }
+    IEnumerable<ValueBuffer> GetValueBuffer();
 }

@@ -23,18 +23,9 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
-using System.Collections.Concurrent;
 using Java.Util.Concurrent;
-using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Admin;
-using Org.Apache.Kafka.Common.Config;
-using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
-using MASES.KNet.Serialization;
-using MASES.KNet.Extensions;
-using MASES.KNet;
-using Org.Apache.Kafka.Common;
-using MASES.KNet.Replicator;
 using Org.Apache.Kafka.Tools;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -51,9 +42,6 @@ public class KafkaCluster : IKafkaCluster
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
 
-    private IProducer<string, string>? _globalProducer = null;
-    private readonly ConcurrentDictionary<IEntityType, IProducer<string, string>> _producers;
-
     public KafkaCluster(
         KafkaOptionsExtension options,
         IKafkaTableFactory tableFactory,
@@ -63,7 +51,6 @@ public class KafkaCluster : IKafkaCluster
         _tableFactory = tableFactory;
         _serdesFactory = serdesFactory;
         _useNameMatching = options.UseNameMatching;
-        _producers = new();
         Properties props = new();
         props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
         _kafkaAdminClient = KafkaAdminClient.Create(props);
@@ -187,13 +174,14 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
 
-    public virtual bool CreateTable(IEntityType entityType)
+    public virtual string CreateTable(IEntityType entityType)
     {
+        var topicName = entityType.TopicName(Options);
         try
         {
             try
             {
-                var topic = new NewTopic(entityType.TopicName(Options), entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
                 Options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
                 Options.TopicConfigBuilder.RetentionBytes = 1024 * 1024 * 1024;
                 var map = Options.TopicConfigBuilder.ToMap();
@@ -214,48 +202,9 @@ public class KafkaCluster : IKafkaCluster
                 Thread.Sleep(1000); // wait a while to complete topic deletion
                 return CreateTable(entityType);
             }
-            return false;
         }
-        return true;
+        return topicName;
     }
-
-    public virtual IKafkaSerdesEntityType CreateSerdes(IEntityType entityType) => _serdesFactory.GetOrCreate(entityType);
-
-    public virtual IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType)
-    {
-        lock (_lock)
-        {
-            return new KNetCompactedReplicator<string, string>()
-            {
-                UpdateMode = UpdateModeTypes.OnConsume,
-                BootstrapServers = Options.BootstrapServers,
-                StateName = entityType.TopicName(Options),
-                Partitions = entityType.NumPartitions(Options),
-                ConsumerInstances = entityType.ConsumerInstances(Options),
-                ReplicationFactor = entityType.ReplicationFactor(Options),
-                TopicConfig = Options.TopicConfigBuilder,
-                ProducerConfig = Options.ProducerConfigBuilder,
-            };
-        }
-    }
-
-    public virtual IProducer<string, string> CreateProducer(IEntityType entityType)
-    {
-        if (!Options.ProducerByEntity)
-        {
-            lock (_lock)
-            {
-                if (_globalProducer == null) _globalProducer = CreateProducer();
-                return _globalProducer;
-            }
-        }
-        else
-        {
-            return _producers.GetOrAdd(entityType, _ => CreateProducer());
-        }
-    }
-
-    private IProducer<string, string> CreateProducer() => new KafkaProducer<string, string>(Options.ProducerOptions());
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 

@@ -4,7 +4,7 @@
 
 ### Installation
 
-EF Core for Apache Kafka is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet):
+Entity Framework Core provider for Apache Kafka is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet):
 
 ```sh
 dotnet add package MASES.EntityFrameworkCore.KNet
@@ -12,7 +12,7 @@ dotnet add package MASES.EntityFrameworkCore.KNet
 
 ### Basic usage
 
-The following code demonstrates basic usage of EF Core for Apache Kafka. 
+The following code demonstrates basic usage of Entity Framework Core provider for Apache Kafka. 
 For a full tutorial configuring the `KafkaDbContext`, defining the model, and creating the database, see [KafkaDbContext](kafkadbcontext.md) in the docs.
 
 ```cs

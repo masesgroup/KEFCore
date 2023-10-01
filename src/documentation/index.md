@@ -1,8 +1,8 @@
-# KEFCore: the EntityFrameworkCore provider for Apache Kafka
+# KEFCore: Entity Framework Core provider for Apache Kafka
 
 [![CI_BUILD](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml) [![CI_RELEASE](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml) 
 
-KEFCore is the EntityFrameworkCore provider for Apache Kafka.
+KEFCore is the Entity Framework Core provider for Apache Kafka.
 Based on [KNet](https://github.com/masesgroup/KNet) it allows to use Apache Kafka as a distributed database.
 
 This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.

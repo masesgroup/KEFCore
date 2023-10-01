@@ -36,7 +36,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _databaseName;
     private string? _applicationId;
     private string? _bootstrapServers;
-    private bool _producerByEntity = false;
+    //private bool _producerByEntity = false;
     private bool _useCompactedReplicator = false;
     private bool _usePersistentStorage = false;
     private int _defaultNumPartitions = 1;
@@ -60,7 +60,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _databaseName = copyFrom._databaseName;
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
-        _producerByEntity = copyFrom._producerByEntity;
+        //_producerByEntity = copyFrom._producerByEntity;
         _useCompactedReplicator = copyFrom._useCompactedReplicator;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
@@ -85,7 +85,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual string BootstrapServers => _bootstrapServers!;
 
-    public virtual bool ProducerByEntity => _producerByEntity;
+    //public virtual bool ProducerByEntity => _producerByEntity;
 
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
 
@@ -139,14 +139,14 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    public virtual KafkaOptionsExtension WithProducerByEntity(bool producerByEntity = false)
-    {
-        var clone = Clone();
+    //public virtual KafkaOptionsExtension WithProducerByEntity(bool producerByEntity = false)
+    //{
+    //    var clone = Clone();
 
-        clone._producerByEntity = producerByEntity;
+    //    clone._producerByEntity = producerByEntity;
 
-        return clone;
-    }
+    //    return clone;
+    //}
 
     public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = false)
     {
@@ -242,7 +242,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         {
             props.Remove(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
         }
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$StringSerde", true, SystemClassLoader));
+        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
         if (props.ContainsKey(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
         {
             props.Remove(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
@@ -277,16 +277,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         {
             props.Put(ProducerConfig.LINGER_MS_CONFIG, 1);
         }
-        if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
-        {
-            props.Remove(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG);
-        }
-        props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
-        if (props.ContainsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
-        {
-            props.Remove(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
-        }
-        props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
+        //if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
+        //{
+        //    props.Remove(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG);
+        //}
+        //props.Put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
+        //if (props.ContainsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG))
+        //{
+        //    props.Remove(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG);
+        //}
+        //props.Put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.StringSerializer", true, SystemClassLoader));
 
         return props;
     }

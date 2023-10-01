@@ -19,10 +19,6 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using MASES.KNet;
-using MASES.KNet.Producer;
-using MASES.KNet.Replicator;
-using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -42,15 +38,9 @@ public interface IKafkaCluster :IDisposable
         IModel designModel,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
-    bool CreateTable(IEntityType entityType);
+    string CreateTable(IEntityType entityType);
 
     IKafkaSerdesFactory SerdesFactory { get; }
-
-    IKafkaSerdesEntityType CreateSerdes(IEntityType entityType);
-
-    IKNetCompactedReplicator<string, string> CreateCompactedReplicator(IEntityType entityType);
-
-    IProducer<string, string> CreateProducer(IEntityType entityType);
 
     IEnumerable<ValueBuffer> GetData(IEntityType entityType);
 

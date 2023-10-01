@@ -18,10 +18,6 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using Java.Util.Concurrent;
-using Org.Apache.Kafka.Clients.Producer;
-using MASES.KNet.Producer;
 using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -29,4 +25,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaRowBag
 {
     IUpdateEntry UpdateEntry { get; }
+
+    string AssociatedTopicName { get; }
 }
