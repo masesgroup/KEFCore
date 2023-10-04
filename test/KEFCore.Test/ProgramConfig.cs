@@ -24,12 +24,17 @@
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
-    partial class Program
+    public class ProgramConfig
     {
-        public static bool UseInMemoryProvider = false;
-        public static bool UseModelBuilder = false;
-        public static bool UseCompactedReplicator = false;
-        public static string DatabaseName = null;
-        static bool deleteApplication = true;
+        public bool UseInMemoryProvider { get; set; } = false;
+        public bool UseModelBuilder { get; set; } = false;
+        public bool UseCompactedReplicator { get; set; } = false;
+        public string DatabaseName { get; set; } = "TestDB";
+        public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
+        public string ApplicationId { get; set; } = "TestApplication";
+        public bool DeleteApplication { get; set; } = true;
+        public string BootstrapServers { get; set; } = "localhost:9092";
+        public int NumberOfElements { get; set; } = 1000;
+        public int NumberOfExtraElements { get; set; } = 100;
     }
 }

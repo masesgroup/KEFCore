@@ -25,50 +25,48 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
     partial class Program
     {
-        const string theServer = "localhost:9092";
-        static string serverToUse = theServer;
-        static string databaseName = "TestDB";
-        static string databaseNameWithModel = "TestDBWithModel";
-        static string applicationId = "TestApplication";
+        internal static ProgramConfig config = new();
+
+        static void ReportString(string message)
+        {
+            if (Debugger.IsAttached)
+            {
+                ReportString(message);
+            }
+            else
+            {
+                Console.WriteLine(message);
+            }
+        }
 
         static void Main(string[] args)
         {
-            if (!UseInMemoryProvider)
+            if (args.Length > 0)
             {
-                KEFCore.CreateGlobalInstance();
-                var appArgs = KEFCore.FilteredArgs;
-
-                if (appArgs.Length > 0)
-                {
-                    serverToUse = args[0];
-                }
-
-                if (appArgs.Length > 1)
-                {
-                    deleteApplication = args[1].ToLowerInvariant() == "true";
-                }
-
-                if (appArgs.Length > 2)
-                {
-                    applicationId = args[2];
-                }
+                config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
             }
 
-            DatabaseName = UseModelBuilder ? databaseNameWithModel : databaseName;
+            if (!config.UseInMemoryProvider)
+            {
+                KEFCore.CreateGlobalInstance();
+            }
+
+            var databaseName = config.UseModelBuilder ? config.DatabaseNameWithModel : config.DatabaseName;
 
             var globalWatcher = Stopwatch.StartNew();
             StreamsConfigBuilder streamConfig = null;
-            if (!UseInMemoryProvider)
+            if (!config.UseInMemoryProvider)
             {
                 streamConfig = StreamsConfigBuilder.Create();
                 streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
@@ -76,13 +74,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
             var context = new BloggingContext()
             {
-                BootstrapServers = serverToUse,
-                ApplicationId = applicationId,
-                DbName = DatabaseName,
+                BootstrapServers = config.BootstrapServers,
+                ApplicationId = config.ApplicationId,
+                DbName = databaseName,
                 StreamsConfigBuilder = streamConfig,
             };
 
-            if (deleteApplication)
+            if (config.DeleteApplication)
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -90,7 +88,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
             var testWatcher = Stopwatch.StartNew();
             Stopwatch watch = Stopwatch.StartNew();
-            for (int i = 1; i <= 1000; i++)
+            for (int i = 0; i < config.NumberOfElements; i++)
             {
                 context.Add(new Blog
                 {
@@ -107,14 +105,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 });
             }
             watch.Stop();
-            Trace.WriteLine($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
 
             watch.Restart();
             context.SaveChanges();
             watch.Stop();
-            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
 
-            if (UseModelBuilder)
+            if (config.UseModelBuilder)
             {
                 watch.Restart();
                 var pageObject = (from op in context.Blogs
@@ -122,42 +120,42 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                                   where pg.BlogId == op.BlogId
                                   select new { pg, op }).SingleOrDefault();
                 watch.Stop();
-                Trace.WriteLine($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
+                ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
             }
 
             watch.Restart();
             var post = context.Posts.Single(b => b.BlogId == 2);
             watch.Stop();
-            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
+            ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
             watch.Restart();
             post = context.Posts.Single(b => b.BlogId == 1);
             watch.Stop();
-            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
+            ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
             watch.Restart();
             var all = context.Posts.All((o) => true);
             watch.Stop();
-            Trace.WriteLine($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+            ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
             watch.Restart();
             var blog = context.Blogs!.Single(b => b.BlogId == 1);
             watch.Stop();
-            Trace.WriteLine($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+            ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
 
             watch.Restart();
             context.Remove(post);
             context.Remove(blog);
             watch.Stop();
-            Trace.WriteLine($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
 
             watch.Restart();
             context.SaveChanges();
             watch.Stop();
-            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
 
             watch.Restart();
-            for (int i = 1000; i < 1100; i++)
+            for (int i = config.NumberOfElements; i < config.NumberOfElements + config.NumberOfExtraElements; i++)
             {
                 context.Add(new Blog
                 {
@@ -174,17 +172,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 });
             }
             watch.Stop();
-            Trace.WriteLine($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
 
             watch.Restart();
             context.SaveChanges();
             watch.Stop();
-            Trace.WriteLine($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+            ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
 
             watch.Restart();
             post = context.Posts.Single(b => b.BlogId == 1009);
             watch.Stop();
-            Trace.WriteLine($"Elapsed context.Posts.Single(b => b.BlogId == 1009) {watch.ElapsedMilliseconds} ms. Result is {post}");
+            ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1009) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
             var value = context.Blogs.AsQueryable().ToQueryString();
 
@@ -197,16 +195,16 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     public class BloggingContext : KafkaDbContext
     {
-        public override bool UseCompactedReplicator { get; set; } = Program.UseCompactedReplicator;
+        public override bool UseCompactedReplicator { get; set; } = Program.config.UseCompactedReplicator;
 
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (Program.UseInMemoryProvider)
+            if (Program.config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(Program.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(Program.config.DatabaseName);
             }
             else
             {
@@ -220,7 +218,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (!Program.UseModelBuilder) return;
+            if (!Program.config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
         }
