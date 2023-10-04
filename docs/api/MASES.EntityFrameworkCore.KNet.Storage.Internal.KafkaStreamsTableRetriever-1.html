@@ -78,7 +78,7 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-2.html">KafkaStreamsBaseRetriever</a>&lt;TKey, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]&gt;</div>
+    <div class="level1"><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html">KafkaStreamsBaseRetriever</a>&lt;TKey, <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData-1.html">KNetEntityTypeData</a>&lt;TKey&gt;, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[], <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]&gt;</div>
     <div class="level2"><span class="xref">KafkaStreamsTableRetriever&lt;TKey&gt;</span></div>
   </div>
   <div class="implements">
@@ -90,13 +90,13 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_2_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, Byte[]&gt;.GetEnumerator()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.GetEnumerator()</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_2_System_Collections_IEnumerable_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, Byte[]&gt;.IEnumerable.GetEnumerator()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_System_Collections_IEnumerable_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.IEnumerable.GetEnumerator()</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_2_Dispose">KafkaStreamsBaseRetriever&lt;TKey, Byte[]&gt;.Dispose()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.Dispose()</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
@@ -124,7 +124,7 @@
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
   <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class KafkaStreamsTableRetriever&lt;TKey&gt; : KafkaStreamsBaseRetriever&lt;TKey, byte[]&gt;, IKafkaStreamsBaseRetriever</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class KafkaStreamsTableRetriever&lt;TKey&gt; : KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, byte[], byte[]&gt;, IKafkaStreamsBaseRetriever</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
