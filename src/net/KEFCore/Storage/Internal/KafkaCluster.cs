@@ -16,13 +16,14 @@
 *  Refer to LICENSE for more information.
 */
 
+// #define DEBUG_PERFORMANCE
+
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using Java.Util;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common.Errors;
@@ -34,7 +35,6 @@ public class KafkaCluster : IKafkaCluster
 {
     private readonly KafkaOptionsExtension _options;
     private readonly IKafkaTableFactory _tableFactory;
-    private readonly IKafkaSerdesFactory _serdesFactory;
     private readonly bool _useNameMatching;
     private readonly IAdmin _kafkaAdminClient;
 
@@ -42,14 +42,10 @@ public class KafkaCluster : IKafkaCluster
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
 
-    public KafkaCluster(
-        KafkaOptionsExtension options,
-        IKafkaTableFactory tableFactory,
-        IKafkaSerdesFactory serdesFactory)
+    public KafkaCluster(KafkaOptionsExtension options, IKafkaTableFactory tableFactory)
     {
         _options = options;
         _tableFactory = tableFactory;
-        _serdesFactory = serdesFactory;
         _useNameMatching = options.UseNameMatching;
         Properties props = new();
         props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
@@ -67,8 +63,6 @@ public class KafkaCluster : IKafkaCluster
             _kafkaAdminClient?.Dispose();
         }
     }
-
-    public virtual IKafkaSerdesFactory SerdesFactory => _serdesFactory;
 
     public virtual KafkaOptionsExtension Options => _options;
 
@@ -208,27 +202,31 @@ public class KafkaCluster : IKafkaCluster
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
 
-    public virtual IEnumerable<ValueBuffer> GetData(IEntityType entityType)
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
-        Stopwatch watcher = new();
         lock (_lock)
         {
+#if DEBUG_PERFORMANCE
+            Stopwatch watcher = new();
             try
             {
                 watcher.Start();
-                EnsureTable(entityType);
-                var key = _useNameMatching ? (object)entityType.Name : entityType;
-                if (_tables != null && _tables.TryGetValue(key, out var table))
-                {
-                    return table.ValueBuffers;
-                }
-                throw new InvalidOperationException("No table available");
+#endif
+            EnsureTable(entityType);
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.ValueBuffers;
             }
+            throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
             finally
             {
                 watcher.Stop();
                 Trace.WriteLine("GetData - Execution time was " + watcher.ElapsedMilliseconds + " ms");
             }
+#endif
         }
     }
 
