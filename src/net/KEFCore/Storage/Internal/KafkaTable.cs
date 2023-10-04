@@ -23,7 +23,6 @@ using System.Globalization;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -40,8 +39,6 @@ public class KafkaTable<TKey> : IKafkaTable
     private Dictionary<int, IKafkaIntegerValueGenerator>? _integerGenerators;
     readonly IEntityTypeProducer _producer;
     private readonly string _tableAssociatedTopicName;
-    private readonly IKafkaSerdesEntityType _serdes;
-
 
     public KafkaTable(
         IKafkaCluster cluster,
@@ -51,7 +48,6 @@ public class KafkaTable<TKey> : IKafkaTable
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTable(entityType);
-        _serdes = Cluster.SerdesFactory.GetOrCreate(entityType);
         _producer = EntityTypeProducers.Create<TKey>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
@@ -110,7 +106,9 @@ public class KafkaTable<TKey> : IKafkaTable
         return (KafkaIntegerValueGenerator<TProperty>)generator;
     }
 
-    public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.GetValueBuffer();
+    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
+
+    public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
 
     public virtual IEnumerable<object?[]> Rows => RowsInTable();
 
@@ -289,8 +287,6 @@ public class KafkaTable<TKey> : IKafkaTable
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
         }
     }
-
-    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
 
     public virtual void BumpValueGenerators(object?[] row)
     {

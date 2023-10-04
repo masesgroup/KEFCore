@@ -18,26 +18,22 @@
 
 using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaClusterCache : IKafkaClusterCache
 {
     private readonly IKafkaTableFactory _tableFactory;
-    private readonly IKafkaSerdesFactory _serdesFactory;
     private readonly ConcurrentDictionary<string, IKafkaCluster> _namedClusters;
 
     public KafkaClusterCache(
         IKafkaTableFactory tableFactory,
-        IKafkaSerdesFactory serdesFactory,
         IKafkaSingletonOptions? options)
     {
         _tableFactory = tableFactory;
-        _serdesFactory = serdesFactory;
         _namedClusters = new ConcurrentDictionary<string, IKafkaCluster>();
     }
 
     public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, _serdesFactory));
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory));
 }

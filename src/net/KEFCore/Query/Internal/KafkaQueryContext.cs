@@ -32,7 +32,7 @@ public class KafkaQueryContext : QueryContext
     {
         if (!_valueBuffersCache.TryGetValue(entityType, out var valueBuffers))
         {
-            valueBuffers = Cluster.GetData(entityType);
+            valueBuffers = Cluster.GetValueBuffers(entityType);
 
             _valueBuffersCache[entityType] = valueBuffers;
         }
@@ -40,9 +40,7 @@ public class KafkaQueryContext : QueryContext
         return valueBuffers;
     }
 
-    public KafkaQueryContext(
-        QueryContextDependencies dependencies,
-        IKafkaCluster cluster)
+    public KafkaQueryContext(QueryContextDependencies dependencies, IKafkaCluster cluster)
         : base(dependencies)
     {
         Cluster = cluster;

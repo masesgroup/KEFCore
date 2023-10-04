@@ -18,8 +18,6 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
-
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public interface IKafkaRowBag
