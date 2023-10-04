@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+// #define DEBUG_PERFORMANCE
+
 #nullable enable
 
 using MASES.KNet.Serialization;
@@ -25,7 +27,6 @@ using Org.Apache.Kafka.Streams.Errors;
 using Org.Apache.Kafka.Streams.Kstream;
 using Org.Apache.Kafka.Streams.State;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
-using static Org.Apache.Kafka.Streams.KafkaStreams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -33,30 +34,31 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     {
     }
 
-    public class KafkaStreamsBaseRetriever<K, V> : IKafkaStreamsBaseRetriever
+    public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRetriever
+        where TValue : IEntityTypeData
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
-        private readonly IKNetSerDes<K> _keySerdes;
-        private readonly IKNetSerDes<KNetEntityTypeData<K>> _valueSerdes;
+        private readonly IKNetSerDes<TKey> _keySerdes;
+        private readonly IKNetSerDes<TValue> _valueSerdes;
         private readonly StreamsBuilder _builder;
         private readonly KStream<K, V> _root;
 
-        private readonly AutoResetEvent dataReceived = new(false);
-        private readonly AutoResetEvent resetEvent = new(false);
-        private readonly AutoResetEvent stateChanged = new(false);
-        private readonly AutoResetEvent exceptionSet = new(false);
+        private readonly AutoResetEvent _dataReceived = new(false);
+        private readonly AutoResetEvent _resetEvent = new(false);
+        private readonly AutoResetEvent _stateChanged = new(false);
+        private readonly AutoResetEvent _exceptionSet = new(false);
 
-        private KafkaStreams? streams = null;
-        private StreamsUncaughtExceptionHandler? errorHandler;
-        private StateListener? stateListener;
+        private KafkaStreams? _streams = null;
+        private StreamsUncaughtExceptionHandler? _errorHandler;
+        private KafkaStreams.StateListener? _stateListener;
 
         private readonly string _storageId;
-        private Exception? resultException = null;
-        private State actualState = State.NOT_RUNNING;
+        private Exception? _resultException = null;
+        private KafkaStreams.State _currentState = KafkaStreams.State.NOT_RUNNING;
         private ReadOnlyKeyValueStore<K, V>? keyValueStore;
 
-        public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<K> keySerdes, IKNetSerDes<KNetEntityTypeData<K>> valueSerdes, string storageId, StreamsBuilder builder, KStream<K, V> root)
+        public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValue> valueSerdes, string storageId, StreamsBuilder builder, KStream<K, V> root)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
@@ -75,30 +77,32 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var materialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(storeSupplier);
             root.ToTable(materialized);
 
-            streams = new(builder.Build(), _kafkaCluster.Options.StreamsOptions(_entityType));
+            _streams = new(builder.Build(), _kafkaCluster.Options.StreamsOptions(_entityType));
 
-            errorHandler = new()
+            _errorHandler = new()
             {
                 OnHandle = (exception) =>
                 {
-                    resultException = exception;
-                    exceptionSet.Set();
+                    _resultException = exception;
+                    _exceptionSet.Set();
                     return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
                 }
             };
 
-            stateListener = new()
+            _stateListener = new()
             {
                 OnOnChange = (newState, oldState) =>
                 {
-                    actualState = newState;
-                    Trace.WriteLine("StateListener oldState: " + oldState + " newState: " + newState + " on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-                    if (stateChanged != null && !stateChanged.SafeWaitHandle.IsClosed) stateChanged.Set();
+                    _currentState = newState;
+#if DEBUG_PERFORMANCE
+                    Trace.WriteLine($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
+                    if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
                 }
             };
 
-            streams.SetUncaughtExceptionHandler(errorHandler);
-            streams.SetStateListener(stateListener);
+            _streams.SetUncaughtExceptionHandler(_errorHandler);
+            _streams.SetStateListener(_stateListener);
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
@@ -106,18 +110,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 Stopwatch watcher = new();
                 try
                 {
-                    resetEvent.Set();
-                    var index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, exceptionSet });
+                    _resetEvent.Set();
+                    var index = WaitHandle.WaitAny(new WaitHandle[] { _stateChanged, _exceptionSet });
                     if (index == 1) return;
                     while (true)
                     {
-                        index = WaitHandle.WaitAny(new WaitHandle[] { stateChanged, dataReceived, exceptionSet }, waitingTime);
+                        index = WaitHandle.WaitAny(new WaitHandle[] { _stateChanged, _dataReceived, _exceptionSet }, waitingTime);
                         if (index == 2) return;
-                        if (actualState.Equals(State.CREATED) || actualState.Equals(State.REBALANCING))
+                        if (_currentState.Equals(KafkaStreams.State.CREATED) || _currentState.Equals(KafkaStreams.State.REBALANCING))
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
-                                Trace.WriteLine("State: " + actualState + " No handle set within " + waitingTime + " ms");
+#if DEBUG_PERFORMANCE
+                                Trace.WriteLine($"State: {_currentState} No handle set within {waitingTime} ms");
+#endif
                                 continue;
                             }
                         }
@@ -129,26 +135,30 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 catch (Exception e)
                 {
-                    resultException = e;
+                    _resultException = e;
                 }
                 finally
                 {
-                    resetEvent.Set();
+                    _resetEvent.Set();
                 }
             });
-            resetEvent.WaitOne();
-            streams.Start();
-            Trace.WriteLine("Started on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
-            resetEvent.WaitOne(); // wait running state
-            if (resultException != null) throw resultException;
+            _resetEvent.WaitOne();
+            _streams.Start();
+#if DEBUG_PERFORMANCE
+            Trace.WriteLine($"KafkaStreamsBaseRetriever Started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
+            _resetEvent.WaitOne(); // wait running state
+            if (_resultException != null) throw _resultException;
 
-            keyValueStore ??= streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+            keyValueStore ??= _streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         }
 
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
-            if (resultException != null) throw resultException;
-            Trace.WriteLine("Requested KafkaEnumerator on " + DateTime.Now.ToString("HH:mm:ss.FFFFFFF"));
+            if (_resultException != null) throw _resultException;
+#if DEBUG_PERFORMANCE
+            Trace.WriteLine($"Requested KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
             return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, keyValueStore);
         }
 
@@ -159,41 +169,47 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public void Dispose()
         {
-            streams?.Close();
-            dataReceived?.Dispose();
-            resetEvent?.Dispose();
-            exceptionSet?.Dispose();
-            errorHandler?.Dispose();
-            stateListener?.Dispose();
-            stateChanged?.Dispose();
+            _streams?.Close();
+            _dataReceived?.Dispose();
+            _resetEvent?.Dispose();
+            _exceptionSet?.Dispose();
+            _errorHandler?.Dispose();
+            _stateListener?.Dispose();
+            _stateChanged?.Dispose();
 
-            streams = null;
-            errorHandler = null;
-            stateListener = null;
+            _streams = null;
+            _errorHandler = null;
+            _stateListener = null;
         }
 
         class KafkaEnumerator : IEnumerator<ValueBuffer>
         {
             private readonly IKafkaCluster _kafkaCluster;
             private readonly IEntityType _entityType;
-            private readonly IKNetSerDes<K> _keySerdes;
-            private readonly IKNetSerDes<KNetEntityTypeData<K>> _valueSerdes;
+            private readonly IKNetSerDes<TKey> _keySerdes;
+            private readonly IKNetSerDes<TValue> _valueSerdes;
             private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore;
             private KeyValueIterator<K, V>? keyValueIterator = null;
             private IEnumerator<KeyValue<K, V>>? keyValueEnumerator = null;
 
-            public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<K> keySerdes, IKNetSerDes<KNetEntityTypeData<K>> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore)
+#if DEBUG_PERFORMANCE
+            Stopwatch _moveNextSw = new Stopwatch();
+            Stopwatch _currentSw = new Stopwatch();
+            Stopwatch _valueSerdesSw = new Stopwatch();
+            Stopwatch _valueBufferSw = new Stopwatch();
+#endif
+
+            public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValue> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore)
             {
-                if (kafkaCluster == null) throw new ArgumentNullException(nameof(kafkaCluster));
-                if (keySerdes == null) throw new ArgumentNullException(nameof(keySerdes));
-                if (valueSerdes == null) throw new ArgumentNullException(nameof(valueSerdes));
                 if (keyValueStore == null) throw new ArgumentNullException(nameof(keyValueStore));
-                _kafkaCluster = kafkaCluster;
+                _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
                 _entityType = entityType;
-                _keySerdes = keySerdes;
-                _valueSerdes = valueSerdes;
+                _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
+                _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
                 _keyValueStore = keyValueStore;
+#if DEBUG_PERFORMANCE
                 Trace.WriteLine($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+#endif
                 keyValueIterator = _keyValueStore?.All();
                 keyValueEnumerator = keyValueIterator?.ToIEnumerator();
             }
@@ -202,12 +218,29 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 get
                 {
+#if DEBUG_PERFORMANCE
+                    try
+                    {
+                        _currentSw.Start();
+#endif
                     if (keyValueEnumerator != null)
                     {
                         var kv = keyValueEnumerator.Current;
                         object? v = kv.value;
-                        KNetEntityTypeData<K> entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v as byte[]);
-                        var data = new ValueBuffer(entityTypeData.GetData(_entityType));
+#if DEBUG_PERFORMANCE
+                        _valueSerdesSw.Start();
+#endif
+                        TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v as byte[]);
+#if DEBUG_PERFORMANCE
+                        _valueSerdesSw.Stop();
+                        _valueBufferSw.Start();
+#endif
+                        object[] array = null;
+                        entityTypeData.GetData(_entityType, ref array);
+#if DEBUG_PERFORMANCE
+                        _valueBufferSw.Stop();
+#endif
+                        var data = new ValueBuffer(array);
                         if (data.IsEmpty)
                         {
                             throw new InvalidOperationException("Data is Empty");
@@ -215,6 +248,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         return data;
                     }
                     throw new InvalidOperationException("InvalidEnumerator");
+#if DEBUG_PERFORMANCE
+                    }
+                    finally
+                    {
+                        _currentSw.Stop();
+                    }
+#endif
                 }
             }
 
@@ -222,13 +262,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void Dispose()
             {
+#if DEBUG_PERFORMANCE
+                Trace.WriteLine($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+#endif
                 keyValueIterator?.Dispose();
             }
 
             public bool MoveNext()
             {
-                var res = (keyValueEnumerator != null) ? keyValueEnumerator.MoveNext() : false;
-                return res;
+#if DEBUG_PERFORMANCE
+                try
+                {
+                    _moveNextSw.Start();
+#endif
+                return (keyValueEnumerator != null) && keyValueEnumerator.MoveNext();
+#if DEBUG_PERFORMANCE
+                }
+                finally { _moveNextSw.Stop(); }
+#endif
             }
 
             public void Reset()

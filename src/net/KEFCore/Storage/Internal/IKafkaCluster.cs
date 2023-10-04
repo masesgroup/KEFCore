@@ -17,38 +17,25 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaCluster :IDisposable
+public interface IKafkaCluster : IDisposable
 {
-    bool EnsureDeleted(
-        IUpdateAdapterFactory updateAdapterFactory,
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureDeleted(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
-    bool EnsureCreated(
-        IUpdateAdapterFactory updateAdapterFactory,
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureCreated(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
-    bool EnsureConnected(
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureConnected(IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
     string CreateTable(IEntityType entityType);
 
-    IKafkaSerdesFactory SerdesFactory { get; }
-
-    IEnumerable<ValueBuffer> GetData(IEntityType entityType);
+    IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
 
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property);
 
-    int ExecuteTransaction(
-        IList<IUpdateEntry> entries,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
     KafkaOptionsExtension Options { get; }
 }

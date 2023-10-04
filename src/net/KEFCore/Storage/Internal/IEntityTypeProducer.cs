@@ -27,5 +27,5 @@ public interface IEntityTypeProducer : IDisposable
 {
     IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
 
-    IEnumerable<ValueBuffer> GetValueBuffer();
+    IEnumerable<ValueBuffer> ValueBuffers { get; }
 }

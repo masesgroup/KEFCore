@@ -24,11 +24,9 @@ using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
-public interface IKafkaTable : IDisposable
+public interface IKafkaTable : IEntityTypeProducer
 {
     IReadOnlyList<object?[]> SnapshotRows();
-
-    IEnumerable<ValueBuffer> ValueBuffers { get; }
 
     IEnumerable<object?[]> Rows { get; }
 
@@ -38,11 +36,7 @@ public interface IKafkaTable : IDisposable
 
     IKafkaRowBag Update(IUpdateEntry entry);
 
-    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
-
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
-        IProperty property,
-        IReadOnlyList<IKafkaTable> tables);
+    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables);
 
     void BumpValueGenerators(object?[] row);
 

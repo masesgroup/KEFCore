@@ -16,10 +16,11 @@
 *  Refer to LICENSE for more information.
 */
 
+// #define DEBUG_PERFORMANCE
+
 #nullable enable
 
 using Java.Util.Concurrent;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
@@ -28,8 +29,6 @@ using System.Text.Json.Serialization;
 using MASES.KNet.Serialization.Json;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Text.Json;
-using Javax.Xml.Crypto;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -50,7 +49,7 @@ public class EntityTypeProducers
         //}
         //else
         //{
-            return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
         //}
     }
 
@@ -114,8 +113,13 @@ public class ObjectType : IJsonOnDeserialized
     public object Value { get; set; }
 }
 
+public interface IEntityTypeData
+{
+    void GetData(IEntityType tName, ref object[] array);
+}
+
 [JsonSerializable(typeof(KNetEntityTypeData<>))]
-public class KNetEntityTypeData<TKey>
+public class KNetEntityTypeData<TKey> : IEntityTypeData
 {
     public KNetEntityTypeData() { }
 
@@ -130,59 +134,41 @@ public class KNetEntityTypeData<TKey>
     }
 
     public string TypeName { get; set; }
-    // [JsonConverter(typeof(ListStringObjectTupleConverter))]
+
     public Dictionary<int, ObjectType> Data { get; set; }
 
-    public object[] GetData(IEntityType tName)
+    public void GetData(IEntityType tName, ref object[] array)
     {
-        if (Data == null) return null;
-
-        var array = Data.Select((o) => o.Value.Value).ToArray();
-
-        return array;
-
-        var _properties = tName.GetProperties().ToArray();
-        List<object> data = new List<object>();
-
-        for (int i = 0; i < Data!.Count; i++)
+#if DEBUG_PERFORMANCE
+        Stopwatch fullSw = new Stopwatch();
+        Stopwatch newSw = new Stopwatch();
+        Stopwatch iterationSw = new Stopwatch();
+        try
         {
-            if (Data[i].Value is JsonElement elem)
-            {
-                switch (elem.ValueKind)
-                {
-                    case JsonValueKind.Undefined:
-                        break;
-                    case JsonValueKind.Object:
-                        break;
-                    case JsonValueKind.Array:
-                        break;
-                    case JsonValueKind.String:
-                        data.Add(elem.GetString());
-                        break;
-                    case JsonValueKind.Number:
-                        var tmp = elem.GetInt64();
-                        data.Add(Convert.ChangeType(tmp, _properties[i].ClrType));
-                        break;
-                    case JsonValueKind.True:
-                        data.Add(true);
-                        break;
-                    case JsonValueKind.False:
-                        data.Add(false);
-                        break;
-                    case JsonValueKind.Null:
-                        data.Add(null);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            else
-            {
-                data.Add(Convert.ChangeType(Data[i], _properties[i].ClrType));
-            }
+            fullSw.Start();
+#endif
+        if (Data == null) { return; }
+#if DEBUG_PERFORMANCE
+            newSw.Start();
+#endif
+        array = new object[Data.Count];
+#if DEBUG_PERFORMANCE
+            newSw.Stop();
+            iterationSw.Start();
+#endif
+        for (int i = 0; i < Data.Count; i++)
+        {
+            array[i] = Data[i].Value;
         }
-        return data.ToArray();
+#if DEBUG_PERFORMANCE
+            iterationSw.Stop();
+            fullSw.Stop();
+        }
+        finally
+        {
+            Trace.WriteLine($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+        }
+#endif
     }
 }
 
@@ -274,11 +260,20 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
     }
 
-    public IEnumerable<ValueBuffer> GetValueBuffer()
+    public IEnumerable<ValueBuffer> ValueBuffers
     {
-        if (_streamData != null) return _streamData;
-        _kafkaCompactedReplicator?.SyncWait();
-        if (_kafkaCompactedReplicator == null) throw new InvalidOperationException("Missing _kafkaCompactedReplicator");
-        return _kafkaCompactedReplicator.Values.Select((item) => new ValueBuffer(item.GetData(_entityType)));
+        get
+        {
+            if (_streamData != null) return _streamData;
+            _kafkaCompactedReplicator?.SyncWait();
+            if (_kafkaCompactedReplicator == null) throw new InvalidOperationException("Missing _kafkaCompactedReplicator");
+            return _kafkaCompactedReplicator.Values.Select((item) =>
+            {
+                object[] array = null;
+                item.GetData(_entityType, ref array);
+                return new ValueBuffer(array);
+            }
+            );
+        }
     }
 }

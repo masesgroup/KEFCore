@@ -23,7 +23,6 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 using MASES.EntityFrameworkCore.KNet.Query.Internal;
-using MASES.EntityFrameworkCore.KNet.Serdes.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using System.ComponentModel;
@@ -72,8 +71,7 @@ public static class KafkaServiceCollectionExtensions
                     .TryAddSingleton<IKafkaSingletonOptions, KafkaSingletonOptions>()
                     .TryAddSingleton<IKafkaClusterCache, KafkaClusterCache>()
                     .TryAddSingleton<IKafkaTableFactory, KafkaTableFactory>()
-                    .TryAddScoped<IKafkaDatabase, KafkaDatabase>()
-                    .TryAddScoped<IKafkaSerdesFactory, KafkaSerdesFactory>());
+                    .TryAddScoped<IKafkaDatabase, KafkaDatabase>());
 
         builder.TryAddCoreServices();
 
