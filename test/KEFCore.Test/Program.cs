@@ -42,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             if (Debugger.IsAttached)
             {
-                ReportString(message);
+                Trace.WriteLine(message);
             }
             else
             {
