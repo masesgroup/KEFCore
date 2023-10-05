@@ -4003,13 +4003,13 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).EntityTypeProducer
   nameWithType: EntityTypeProducer<TKey>.EntityTypeProducer
   nameWithType.vb: EntityTypeProducer(Of TKey).EntityTypeProducer
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit(IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit(System.Collections.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})
   name: Commit(IEnumerable<IKafkaRowBag>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Commit_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit(IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Commit_System_Collections_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit(System.Collections.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})
   name.vb: Commit(IEnumerable(Of IKafkaRowBag))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey>.Commit(IEnumerable<MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).Commit(IEnumerable(Of MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag))
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey>.Commit(System.Collections.IEnumerable<MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).Commit(System.Collections.IEnumerable(Of MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag))
   nameWithType: EntityTypeProducer<TKey>.Commit(IEnumerable<IKafkaRowBag>)
   nameWithType.vb: EntityTypeProducer(Of TKey).Commit(IEnumerable(Of IKafkaRowBag))
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit*
