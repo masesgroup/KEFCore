@@ -29,6 +29,7 @@ using System.Text.Json.Serialization;
 using MASES.KNet.Serialization.Json;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Text.Json;
+using System.Collections;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -183,6 +184,69 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
     private readonly KNetSerDes<TKey> _keySerdes;
     private readonly KNetSerDes<KNetEntityTypeData<TKey>> _valueSerdes;
 
+    class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
+    {
+        readonly IEntityType _entityType;
+        readonly IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? _kafkaCompactedReplicator;
+        class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
+        {
+            readonly IEntityType _entityType;
+            readonly IEnumerator<KeyValuePair<TKey, KNetEntityTypeData<TKey>>> _enumerator;
+            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? kafkaCompactedReplicator)
+            {
+                _entityType = entityType;
+                kafkaCompactedReplicator?.SyncWait();
+                _enumerator = kafkaCompactedReplicator?.GetEnumerator();
+            }
+
+            ValueBuffer? _current = null;
+
+            public ValueBuffer Current => _current.HasValue ? _current.Value : default;
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+                _enumerator?.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                if (_enumerator.MoveNext())
+                {
+                    object[] array = null;
+                    _enumerator.Current.Value.GetData(_entityType, ref array);
+                    _current = new ValueBuffer(array);
+                    return true;
+                }
+                _current = null;
+                return false;
+            }
+
+            public void Reset()
+            {
+                _enumerator?.Reset();
+            }
+        }
+
+        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? kafkaCompactedReplicator)
+        {
+            _entityType = entityType;
+            _kafkaCompactedReplicator = kafkaCompactedReplicator;
+        }
+
+        public IEnumerator<ValueBuffer> GetEnumerator()
+        {
+            return new KNetCompactedReplicatorEnumerator(_entityType, _kafkaCompactedReplicator);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+
     public EntityTypeProducer(IEntityType entityType, IKafkaCluster cluster)
     {
         _entityType = entityType;
@@ -212,6 +276,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
+            _kafkaCompactedReplicator.StartAndWait();
         }
         else
         {
@@ -265,15 +330,8 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         get
         {
             if (_streamData != null) return _streamData;
-            _kafkaCompactedReplicator?.SyncWait();
             if (_kafkaCompactedReplicator == null) throw new InvalidOperationException("Missing _kafkaCompactedReplicator");
-            return _kafkaCompactedReplicator.Values.Select((item) =>
-            {
-                object[] array = null;
-                item.GetData(_entityType, ref array);
-                return new ValueBuffer(array);
-            }
-            );
+            return new KNetCompactedReplicatorEnumerable(_entityType, _kafkaCompactedReplicator);
         }
     }
 }
