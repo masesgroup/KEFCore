@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 /*
-*  Copyright 2022 MASES s.r.l.
+*  Copyright 2023 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 ///     <para>
 ///         Instances of this class are returned from a call to
 ///         <see
-///             cref="KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, string, System.Action{KafkaDbContextOptionsBuilder})" />
+///             cref="KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, string, Action{KafkaDbContextOptionsBuilder})" />
 ///         and it is not designed to be directly constructed in your application code.
 ///     </para>
 ///     <para>
@@ -63,17 +63,25 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     protected virtual DbContextOptionsBuilder OptionsBuilder { get; }
 
     /// <inheritdoc />
-    DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder
-        => OptionsBuilder;
-
+    DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder => OptionsBuilder;
+    /// <summary>
+    ///     The default <see cref="ProducerConfigBuilder"/> configuration
+    /// </summary>
+    /// <returns>The default <see cref="ProducerConfigBuilder"/> configuration.</returns>
     public ProducerConfigBuilder EmptyProducerConfigBuilder => ProducerConfigBuilder.Create();
-
+    /// <summary>
+    ///     The default <see cref="StreamsConfigBuilder"/> configuration
+    /// </summary>
+    /// <returns>The default <see cref="StreamsConfigBuilder"/> configuration.</returns>
     public StreamsConfigBuilder EmptyStreamsConfigBuilder => StreamsConfigBuilder.Create();
-
+    /// <summary>
+    ///     The default <see cref="TopicConfigBuilder"/> configuration
+    /// </summary>
+    /// <returns>The default <see cref="TopicConfigBuilder"/> configuration.</returns>
     public TopicConfigBuilder EmptyTopicConfigBuilder => TopicConfigBuilder.Create();
 
     /// <summary>
-    ///     Enables name matching on <see cref="IEntity"/> instead of <see cref="Type"/> matching
+    ///     Enables name matching on <see cref="IEntityType"/> instead of <see cref="Type"/> matching
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and

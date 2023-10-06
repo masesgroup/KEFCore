@@ -1,8 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
-*  Copyright 2022 MASES s.r.l.
+*  Copyright 2023 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -19,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.KNet;
 using MASES.KNet.Common;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
