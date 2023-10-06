@@ -95,7 +95,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     _currentState = newState;
 #if DEBUG_PERFORMANCE
-                    Trace.WriteLine($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+                    Trace.WriteLine($"StateListener of {_entityType.Name} oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
                     if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
                 }
@@ -122,7 +122,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             if (index == WaitHandle.WaitTimeout)
                             {
 #if DEBUG_PERFORMANCE
-                                Trace.WriteLine($"State: {_currentState} No handle set within {waitingTime} ms");
+                                Trace.WriteLine($"State of {_entityType.Name}: {_currentState} No handle set within {waitingTime} ms");
 #endif
                                 continue;
                             }
@@ -145,7 +145,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _resetEvent.WaitOne();
             _streams.Start();
 #if DEBUG_PERFORMANCE
-            Trace.WriteLine($"KafkaStreamsBaseRetriever Started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+            Trace.WriteLine($"KafkaStreamsBaseRetriever on {_entityType.Name} started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
             _resetEvent.WaitOne(); // wait running state
             if (_resultException != null) throw _resultException;

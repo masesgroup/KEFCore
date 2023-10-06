@@ -276,7 +276,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
-            _kafkaCompactedReplicator.StartAndWait();
+            if (!_kafkaCompactedReplicator.StartAndWait()) throw new InvalidOperationException($"Failed to synchronize with {_kafkaCompactedReplicator.StateName}");
         }
         else
         {
