@@ -56,12 +56,12 @@ public class KafkaCluster : IKafkaCluster
     {
         if (_tables != null)
         {
-            foreach (var item in _tables?.Values)
+            foreach (var item in _tables.Values)
             {
                 item?.Dispose();
             }
-            _kafkaAdminClient?.Dispose();
         }
+        _kafkaAdminClient?.Dispose();
     }
 
     public virtual KafkaOptionsExtension Options => _options;
