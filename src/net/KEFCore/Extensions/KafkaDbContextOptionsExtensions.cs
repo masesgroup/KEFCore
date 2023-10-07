@@ -31,63 +31,63 @@ namespace MASES.EntityFrameworkCore.KNet;
 public static class KafkaDbContextOptionsExtensions
 {
     /// <summary>
-    ///     Configures the context to connect to an Kafka database.
-    ///     The Kafka database is shared anywhere the same name is used, but only for a given
+    ///     Configures the context to connect to an Apache Kafka cluster.
+    ///     The Apache Kafka cluster is shared anywhere the same name is used, but only for a given
     ///     service provider.
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Apache Kafka cluster provider</see> for more information and examples.
     /// </remarks>
     /// <typeparam name="TContext">The type of context being configured.</typeparam>
     /// <param name="optionsBuilder">The builder being used to configure the context.</param>
     /// <param name="applicationId">
-    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Kafka database to be controlled
-    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="databaseName">
-    ///     The name of the Kafka database. This allows the scope of the Kafka database to be controlled
-    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    ///     The name of the Apache Kafka cluster. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="bootstrapServers">
     ///     The bootstrap servers of the Kafka cluster.
     /// </param>
-    /// <param name="kafkaOptionsAction">An optional action to allow additional Kafka specific configuration.</param>
+    /// <param name="kafkaOptionsAction">An optional action to allow additional Apache Kafka cluster specific configuration.</param>
     /// <returns>The options builder so that further configuration can be chained.</returns>
-    public static DbContextOptionsBuilder<TContext> UseKafkaDatabase<TContext>(
+    public static DbContextOptionsBuilder<TContext> UseKafkaCluster<TContext>(
         this DbContextOptionsBuilder<TContext> optionsBuilder,
         string applicationId,
         string databaseName,
         string bootstrapServers,
         Action<KafkaDbContextOptionsBuilder>? kafkaOptionsAction = null)
         where TContext : DbContext
-        => (DbContextOptionsBuilder<TContext>)UseKafkaDatabase(
+        => (DbContextOptionsBuilder<TContext>)UseKafkaCluster(
             (DbContextOptionsBuilder)optionsBuilder, applicationId, databaseName, bootstrapServers, kafkaOptionsAction);
 
     /// <summary>
-    ///     Configures the context to connect to a named Kafka database.
-    ///     The Kafka database is shared anywhere the same name is used, but only for a given
+    ///     Configures the context to connect to a named Apache Kafka cluster.
+    ///     The Apache Kafka cluster is shared anywhere the same name is used, but only for a given
     ///     service provider.
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Apache Kafka cluster provider</see> for more information and examples.
     /// </remarks>
     /// <param name="optionsBuilder">The builder being used to configure the context.</param>
     /// <param name="applicationId">
-    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Kafka database to be controlled
-    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="databaseName">
-    ///     The name of the Kafka database. This allows the scope of the Kafka database to be controlled
-    ///     independently of the context. The Kafka database is shared anywhere the same name is used.
+    ///     The name of the Apache Kafka cluster. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="bootstrapServers">
     ///     The bootstrap servers of the Kafka cluster.
     /// </param>
     /// <param name="kafkaOptionsAction">An optional action to allow additional Kafka specific configuration.</param>
     /// <returns>The options builder so that further configuration can be chained.</returns>
-    public static DbContextOptionsBuilder UseKafkaDatabase(
+    public static DbContextOptionsBuilder UseKafkaCluster(
         this DbContextOptionsBuilder optionsBuilder,
         string applicationId,
         string databaseName,

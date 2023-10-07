@@ -31,7 +31,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaQueryContextFactory : IQueryContextFactory
 {
     private readonly IKafkaCluster _cluster;
-    readonly KafkaQueryContext context;
+    private readonly KafkaQueryContext _context;
 
     public KafkaQueryContextFactory(
         QueryContextDependencies dependencies,
@@ -40,7 +40,7 @@ public class KafkaQueryContextFactory : IQueryContextFactory
     {
         _cluster = clusterCache.GetCluster(contextOptions);
         Dependencies = dependencies;
-        context = new KafkaQueryContext(Dependencies, _cluster);
+        _context = new KafkaQueryContext(Dependencies, _cluster);
     }
 
     /// <summary>
@@ -48,5 +48,5 @@ public class KafkaQueryContextFactory : IQueryContextFactory
     /// </summary>
     protected virtual QueryContextDependencies Dependencies { get; }
 
-    public virtual QueryContext Create() => context; // new KafkaQueryContext(Dependencies, _cluster);
+    public virtual QueryContext Create() => _context; // new KafkaQueryContext(Dependencies, _cluster);
 }

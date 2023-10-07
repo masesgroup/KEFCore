@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 ///     <para>
 ///         Instances of this class are returned from a call to
 ///         <see
-///             cref="KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, string, Action{KafkaDbContextOptionsBuilder})" />
+///             cref="KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder, string, string, string, Action{KafkaDbContextOptionsBuilder}?)" />
 ///         and it is not designed to be directly constructed in your application code.
 ///     </para>
 ///     <para>

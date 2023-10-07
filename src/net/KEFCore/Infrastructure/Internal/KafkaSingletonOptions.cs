@@ -60,7 +60,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
         {
             throw new InvalidOperationException(
                 CoreStrings.SingletonOptionChanged(
-                    nameof(KafkaDbContextOptionsExtensions.UseKafkaDatabase),
+                    nameof(KafkaDbContextOptionsExtensions.UseKafkaCluster),
                     nameof(DbContextOptionsBuilder.UseInternalServiceProvider)));
         }
     }

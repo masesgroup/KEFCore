@@ -95,7 +95,7 @@ public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
             .AddEntityFrameworkKafkaDatabase()
             .AddDbContext<DbContext>(
                 (p, o) =>
-                    o.UseKafkaDatabase(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+                    o.UseKafkaCluster(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p))
             .BuildServiceProvider();
 

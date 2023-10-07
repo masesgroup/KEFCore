@@ -20,6 +20,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// <summary>
@@ -30,8 +31,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaQueryContext : QueryContext
 {
-    private readonly IDictionary<IEntityType, IEnumerable<ValueBuffer>> _valueBuffersCache
-        = new Dictionary<IEntityType, IEnumerable<ValueBuffer>>();
+    private readonly IDictionary<IEntityType, IEnumerable<ValueBuffer>> _valueBuffersCache = new ConcurrentDictionary<IEntityType, IEnumerable<ValueBuffer>>();
 
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
