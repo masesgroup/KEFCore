@@ -19,6 +19,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="ComplexTest.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="KNetReplicatorComplexTest.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

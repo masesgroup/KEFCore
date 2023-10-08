@@ -1,0 +1,6 @@
+{
+  "UsePersistentStorage": true,
+  "DeleteApplicationData": false,
+  "LoadApplicationData": false,
+  "BootstrapServers": "192.168.1.103:9092"
+}
