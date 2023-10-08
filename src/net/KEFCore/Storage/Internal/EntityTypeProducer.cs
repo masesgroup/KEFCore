@@ -24,175 +24,35 @@ using Java.Util.Concurrent;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
-using System.Collections.Concurrent;
-using System.Text.Json.Serialization;
 using MASES.KNet.Serialization.Json;
 using Org.Apache.Kafka.Clients.Producer;
-using System.Text.Json;
 using System.Collections;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
-
-public class EntityTypeProducers
-{
-    static IEntityTypeProducer? _globalProducer = null;
-    static readonly ConcurrentDictionary<IEntityType, IEntityTypeProducer> _producers = new ConcurrentDictionary<IEntityType, IEntityTypeProducer>();
-
-    public static IEntityTypeProducer Create<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull
-    {
-        //if (!cluster.Options.ProducerByEntity)
-        //{
-        //    lock (_producers)
-        //    {
-        //        if (_globalProducer == null) _globalProducer = CreateProducerLocal<TKey>(entityType, cluster);
-        //        return _globalProducer;
-        //    }
-        //}
-        //else
-        //{
-        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
-        //}
-    }
-
-    static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
-}
-
-[JsonSerializable(typeof(ObjectType))]
-public class ObjectType : IJsonOnDeserialized
-{
-    public ObjectType()
-    {
-
-    }
-
-    public ObjectType(IProperty typeName, object value)
-    {
-        TypeName = typeName.ClrType?.FullName;
-        Value = value;
-    }
-
-    public void OnDeserialized()
-    {
-        if (Value is JsonElement elem)
-        {
-            switch (elem.ValueKind)
-            {
-                case JsonValueKind.Undefined:
-                    break;
-                case JsonValueKind.Object:
-                    break;
-                case JsonValueKind.Array:
-                    break;
-                case JsonValueKind.String:
-                    Value = elem.GetString()!;
-                    break;
-                case JsonValueKind.Number:
-                    var tmp = elem.GetInt64();
-                    Value = Convert.ChangeType(tmp, Type.GetType(TypeName!)!);
-                    break;
-                case JsonValueKind.True:
-                    Value = true;
-                    break;
-                case JsonValueKind.False:
-                    Value = false;
-                    break;
-                case JsonValueKind.Null:
-                    Value = null;
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            Value = Convert.ChangeType(Value, Type.GetType(TypeName!)!);
-        }
-    }
-
-    public string? TypeName { get; set; }
-
-    public object Value { get; set; }
-}
-
-public interface IEntityTypeData
-{
-    void GetData(IEntityType tName, ref object[] array);
-}
-
-[JsonSerializable(typeof(KNetEntityTypeData<>))]
-public class KNetEntityTypeData<TKey> : IEntityTypeData
-{
-    public KNetEntityTypeData() { }
-
-    public KNetEntityTypeData(IEntityType tName, IProperty[] properties, object[] rData)
-    {
-        TypeName = tName.Name;
-        Data = new Dictionary<int, ObjectType>();
-        for (int i = 0; i < properties.Length; i++)
-        {
-            Data.Add(properties[i].GetIndex(), new ObjectType(properties[i], rData[i]));
-        }
-    }
-
-    public string TypeName { get; set; }
-
-    public Dictionary<int, ObjectType> Data { get; set; }
-
-    public void GetData(IEntityType tName, ref object[] array)
-    {
-#if DEBUG_PERFORMANCE
-        Stopwatch fullSw = new Stopwatch();
-        Stopwatch newSw = new Stopwatch();
-        Stopwatch iterationSw = new Stopwatch();
-        try
-        {
-            fullSw.Start();
-#endif
-        if (Data == null) { return; }
-#if DEBUG_PERFORMANCE
-            newSw.Start();
-#endif
-        array = new object[Data.Count];
-#if DEBUG_PERFORMANCE
-            newSw.Stop();
-            iterationSw.Start();
-#endif
-        for (int i = 0; i < Data.Count; i++)
-        {
-            array[i] = Data[i].Value;
-        }
-#if DEBUG_PERFORMANCE
-            iterationSw.Stop();
-            fullSw.Stop();
-        }
-        finally
-        {
-            Trace.WriteLine($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
-        }
-#endif
-    }
-}
 
 public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
 {
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
-    private readonly IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? _kafkaCompactedReplicator;
-    private readonly IKNetProducer<TKey, KNetEntityTypeData<TKey>>? _kafkaProducer;
+    private readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
+    private readonly IKNetProducer<TKey, EntityTypeDataStorage<TKey>>? _kafkaProducer;
     private readonly IKafkaStreamsBaseRetriever _streamData;
     private readonly KNetSerDes<TKey> _keySerdes;
-    private readonly KNetSerDes<KNetEntityTypeData<TKey>> _valueSerdes;
+    private readonly KNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
 
+    #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
     {
         readonly IEntityType _entityType;
-        readonly IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? _kafkaCompactedReplicator;
+        readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
+
+        #region KNetCompactedReplicatorEnumerator
         class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
         {
             readonly IEntityType _entityType;
-            readonly IEnumerator<KeyValuePair<TKey, KNetEntityTypeData<TKey>>> _enumerator;
-            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? kafkaCompactedReplicator)
+            readonly IEnumerator<KeyValuePair<TKey, EntityTypeDataStorage<TKey>>> _enumerator;
+            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
                 kafkaCompactedReplicator?.SyncWait();
@@ -228,8 +88,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 _enumerator?.Reset();
             }
         }
+        #endregion
 
-        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>? kafkaCompactedReplicator)
+        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
         {
             _entityType = entityType;
             _kafkaCompactedReplicator = kafkaCompactedReplicator;
@@ -245,7 +106,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             return GetEnumerator();
         }
     }
-
+    #endregion
 
     public EntityTypeProducer(IEntityType entityType, IKafkaCluster cluster)
     {
@@ -259,11 +120,11 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
         else _keySerdes = new JsonSerDes<TKey>();
 
-        _valueSerdes = new JsonSerDes<KNetEntityTypeData<TKey>>();
+        _valueSerdes = new JsonSerDes<EntityTypeDataStorage<TKey>>();
 
         if (_useCompactedReplicator)
         {
-            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, KNetEntityTypeData<TKey>>()
+            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>()
             {
                 UpdateMode = UpdateModeTypes.OnConsume,
                 BootstrapServers = _cluster.Options.BootstrapServers,
@@ -280,7 +141,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
         else
         {
-            _kafkaProducer = new KNetProducer<TKey, KNetEntityTypeData<TKey>>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
+            _kafkaProducer = new KNetProducer<TKey, EntityTypeDataStorage<TKey>>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
             _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType, _keySerdes, _valueSerdes);
         }
     }
@@ -302,7 +163,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             List<Future<RecordMetadata>> futures = new();
             foreach (KafkaRowBag<TKey> record in records)
             {
-                var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, KNetEntityTypeData<TKey>>(record.AssociatedTopicName, 0, record.Key, record.Value!));
+                var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, EntityTypeDataStorage<TKey>>(record.AssociatedTopicName, 0, record.Key, record.Value!));
                 futures.Add(future);
             }
 
