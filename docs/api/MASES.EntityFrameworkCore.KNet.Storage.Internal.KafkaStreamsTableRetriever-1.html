@@ -73,12 +73,16 @@
   
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1" class="text-break">Class KafkaStreamsTableRetriever&lt;TKey&gt;
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html">KafkaStreamsBaseRetriever</a>&lt;TKey, <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData-1.html">KNetEntityTypeData</a>&lt;TKey&gt;, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[], <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]&gt;</div>
+    <div class="level1"><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html">KafkaStreamsBaseRetriever</a>&lt;TKey, <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage-1.html">EntityTypeDataStorage</a>&lt;TKey&gt;, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[], <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]&gt;</div>
     <div class="level2"><span class="xref">KafkaStreamsTableRetriever&lt;TKey&gt;</span></div>
   </div>
   <div class="implements">
@@ -90,13 +94,13 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.GetEnumerator()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, EntityTypeDataStorage&lt;TKey&gt;, Byte[], Byte[]&gt;.GetEnumerator()</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_System_Collections_IEnumerable_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.IEnumerable.GetEnumerator()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_System_Collections_IEnumerable_GetEnumerator">KafkaStreamsBaseRetriever&lt;TKey, EntityTypeDataStorage&lt;TKey&gt;, Byte[], Byte[]&gt;.IEnumerable.GetEnumerator()</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose">KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, Byte[], Byte[]&gt;.Dispose()</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose">KafkaStreamsBaseRetriever&lt;TKey, EntityTypeDataStorage&lt;TKey&gt;, Byte[], Byte[]&gt;.Dispose()</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a>
@@ -124,7 +128,7 @@
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
   <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class KafkaStreamsTableRetriever&lt;TKey&gt; : KafkaStreamsBaseRetriever&lt;TKey, KNetEntityTypeData&lt;TKey&gt;, byte[], byte[]&gt;, IKafkaStreamsBaseRetriever</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class KafkaStreamsTableRetriever&lt;TKey&gt; : KafkaStreamsBaseRetriever&lt;TKey, EntityTypeDataStorage&lt;TKey&gt;, byte[], byte[]&gt;, IKafkaStreamsBaseRetriever</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -145,18 +149,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetEntityTypeData__0___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever%601.%23ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster%2CIEntityType%2CMASES.KNet.Serialization.IKNetSerDes%7B%600%7D%2CMASES.KNet.Serialization.IKNetSerDes%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData%7B%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeDataStorage__0___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever%601.%23ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster%2CIEntityType%2CMASES.KNet.Serialization.IKNetSerDes%7B%600%7D%2CMASES.KNet.Serialization.IKNetSerDes%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage%7B%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L28">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L34">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetEntityTypeData__0___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData{`0}})">KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;KNetEntityTypeData&lt;TKey&gt;&gt;)</h4>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeDataStorage__0___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage{`0}})">KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;EntityTypeDataStorage&lt;TKey&gt;&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;KNetEntityTypeData&lt;TKey&gt;&gt; valueSerdes)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;EntityTypeDataStorage&lt;TKey&gt;&gt; valueSerdes)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,7 +188,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">MASES.KNet.Serialization.IKNetSerDes</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData-1.html">KNetEntityTypeData</a>&lt;TKey&gt;&gt;</td>
+        <td><span class="xref">MASES.KNet.Serialization.IKNetSerDes</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage-1.html">EntityTypeDataStorage</a>&lt;TKey&gt;&gt;</td>
         <td><span class="parametername">valueSerdes</span></td>
         <td></td>
       </tr>
@@ -192,18 +196,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetEntityTypeData__0___Org_Apache_Kafka_Streams_StreamsBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever%601.%23ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster%2CIEntityType%2CMASES.KNet.Serialization.IKNetSerDes%7B%600%7D%2CMASES.KNet.Serialization.IKNetSerDes%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData%7B%600%7D%7D%2COrg.Apache.Kafka.Streams.StreamsBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeDataStorage__0___Org_Apache_Kafka_Streams_StreamsBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever%601.%23ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster%2CIEntityType%2CMASES.KNet.Serialization.IKNetSerDes%7B%600%7D%2CMASES.KNet.Serialization.IKNetSerDes%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage%7B%600%7D%7D%2COrg.Apache.Kafka.Streams.StreamsBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L33">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L39">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetEntityTypeData__0___Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData{`0}},Org.Apache.Kafka.Streams.StreamsBuilder)">KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;KNetEntityTypeData&lt;TKey&gt;&gt;, StreamsBuilder)</h4>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes_MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeDataStorage__0___Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`1.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage{`0}},Org.Apache.Kafka.Streams.StreamsBuilder)">KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;EntityTypeDataStorage&lt;TKey&gt;&gt;, StreamsBuilder)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;KNetEntityTypeData&lt;TKey&gt;&gt; valueSerdes, StreamsBuilder builder)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;EntityTypeDataStorage&lt;TKey&gt;&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -231,7 +235,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">MASES.KNet.Serialization.IKNetSerDes</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetEntityTypeData-1.html">KNetEntityTypeData</a>&lt;TKey&gt;&gt;</td>
+        <td><span class="xref">MASES.KNet.Serialization.IKNetSerDes</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage-1.html">EntityTypeDataStorage</a>&lt;TKey&gt;&gt;</td>
         <td><span class="parametername">valueSerdes</span></td>
         <td></td>
       </tr>
@@ -263,7 +267,7 @@
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_1.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L26" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L32" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
