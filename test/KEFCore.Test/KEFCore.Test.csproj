@@ -9,6 +9,9 @@
 		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
