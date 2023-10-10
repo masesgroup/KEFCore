@@ -50,37 +50,85 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         #region KNetCompactedReplicatorEnumerator
         class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
         {
+#if DEBUG_PERFORMANCE
+            Stopwatch _moveNextSw = new Stopwatch();
+            Stopwatch _currentSw = new Stopwatch();
+            Stopwatch _valueBufferSw = new Stopwatch();
+#endif
             readonly IEntityType _entityType;
             readonly IEnumerator<KeyValuePair<TKey, EntityTypeDataStorage<TKey>>> _enumerator;
             public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
-                kafkaCompactedReplicator?.SyncWait();
+#if DEBUG_PERFORMANCE
+                Stopwatch sw = Stopwatch.StartNew();
+#endif
+                if (!kafkaCompactedReplicator!.SyncWait()) throw new InvalidOperationException($"Failed to synchronize with {kafkaCompactedReplicator.StateName}");
+#if DEBUG_PERFORMANCE
+                sw.Stop();
+                Trace.WriteLine($"KNetCompactedReplicatorEnumerator SyncWait for {_entityType.Name} tooks {sw.Elapsed}");
+#endif
                 _enumerator = kafkaCompactedReplicator?.GetEnumerator();
             }
 
             ValueBuffer? _current = null;
 
-            public ValueBuffer Current => _current.HasValue ? _current.Value : default;
+            public ValueBuffer Current
+            {
+                get
+                {
+#if DEBUG_PERFORMANCE
+                    try
+                    {
+                        _currentSw.Start();
+#endif
+                    return _current.HasValue ? _current.Value : default;
+#if DEBUG_PERFORMANCE
+                    }
+                    finally
+                    {
+                        _currentSw.Stop();
+                    }
+#endif
+                }
+            }
 
             object IEnumerator.Current => Current;
 
             public void Dispose()
             {
+#if DEBUG_PERFORMANCE
+                Trace.WriteLine($"KNetCompactedReplicatorEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+#endif
                 _enumerator?.Dispose();
             }
 
             public bool MoveNext()
             {
+#if DEBUG_PERFORMANCE
+                try
+                {
+                    _moveNextSw.Start();
+#endif
                 if (_enumerator.MoveNext())
                 {
+#if DEBUG_PERFORMANCE
+                        _valueBufferSw.Start();
+#endif
                     object[] array = null;
                     _enumerator.Current.Value.GetData(_entityType, ref array);
+#if DEBUG_PERFORMANCE
+                        _valueBufferSw.Stop();
+#endif
                     _current = new ValueBuffer(array);
                     return true;
                 }
                 _current = null;
                 return false;
+#if DEBUG_PERFORMANCE
+                }
+                finally { _moveNextSw.Stop(); }
+#endif
             }
 
             public void Reset()
