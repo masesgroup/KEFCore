@@ -56,19 +56,21 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             Stopwatch _valueBufferSw = new Stopwatch();
 #endif
             readonly IEntityType _entityType;
+            IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
             readonly IEnumerator<KeyValuePair<TKey, EntityTypeDataStorage<TKey>>> _enumerator;
             public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
+                _kafkaCompactedReplicator = kafkaCompactedReplicator;
 #if DEBUG_PERFORMANCE
                 Stopwatch sw = Stopwatch.StartNew();
 #endif
-                if (!kafkaCompactedReplicator!.SyncWait()) throw new InvalidOperationException($"Failed to synchronize with {kafkaCompactedReplicator.StateName}");
+                if (!_kafkaCompactedReplicator!.SyncWait()) throw new InvalidOperationException($"Failed to synchronize with {_kafkaCompactedReplicator.StateName}");
 #if DEBUG_PERFORMANCE
                 sw.Stop();
-                Trace.WriteLine($"KNetCompactedReplicatorEnumerator SyncWait for {_entityType.Name} tooks {sw.Elapsed}");
+                Infrastructure.KafkaDbContext.ReportString($"KNetCompactedReplicatorEnumerator SyncWait for {_entityType.Name} tooks {sw.Elapsed}");
 #endif
-                _enumerator = kafkaCompactedReplicator?.GetEnumerator();
+                _enumerator = _kafkaCompactedReplicator?.GetEnumerator();
             }
 
             ValueBuffer? _current = null;
@@ -82,7 +84,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                     {
                         _currentSw.Start();
 #endif
-                    return _current.HasValue ? _current.Value : default;
+                        return _current.HasValue ? _current.Value : default;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -98,10 +100,14 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             public void Dispose()
             {
 #if DEBUG_PERFORMANCE
-                Trace.WriteLine($"KNetCompactedReplicatorEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+                Infrastructure.KafkaDbContext.ReportString($"KNetCompactedReplicatorEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
                 _enumerator?.Dispose();
             }
+
+#if DEBUG_PERFORMANCE
+            int _cycles = 0;
+#endif
 
             public bool MoveNext()
             {
@@ -110,24 +116,32 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 {
                     _moveNextSw.Start();
 #endif
-                if (_enumerator.MoveNext())
-                {
+                    if (_enumerator.MoveNext())
+                    {
 #if DEBUG_PERFORMANCE
+                        _cycles++;
                         _valueBufferSw.Start();
 #endif
-                    object[] array = null;
-                    _enumerator.Current.Value.GetData(_entityType, ref array);
+                        object[] array = null;
+                        _enumerator.Current.Value.GetData(_entityType, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
-                    _current = new ValueBuffer(array);
-                    return true;
-                }
-                _current = null;
-                return false;
+                        _current = new ValueBuffer(array);
+                        return true;
+                    }
+                    _current = null;
+                    return false;
 #if DEBUG_PERFORMANCE
                 }
-                finally { _moveNextSw.Stop(); }
+                finally
+                {
+                    _moveNextSw.Stop();
+                    if (_cycles == 0)
+                    {
+                        throw new InvalidOperationException($"KNetCompactedReplicatorEnumerator - No data returned from {_kafkaCompactedReplicator}");
+                    }
+                }
 #endif
             }
 
@@ -158,6 +172,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
 
     public EntityTypeProducer(IEntityType entityType, IKafkaCluster cluster)
     {
+#if DEBUG_PERFORMANCE
+        Infrastructure.KafkaDbContext.ReportString($"Creating new EntityTypeProducer for {entityType.Name}");
+#endif
         _entityType = entityType;
         _cluster = cluster;
         _useCompactedReplicator = _cluster.Options.UseCompactedReplicator;
@@ -185,7 +202,14 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
+#if DEBUG_PERFORMANCE
+            Stopwatch sw = Stopwatch.StartNew();
+#endif
             if (!_kafkaCompactedReplicator.StartAndWait()) throw new InvalidOperationException($"Failed to synchronize with {_kafkaCompactedReplicator.StateName}");
+#if DEBUG_PERFORMANCE
+            sw.Stop();
+            Infrastructure.KafkaDbContext.ReportString($"EntityTypeProducer - KNetCompactedReplicator::StartAndWait for {entityType.Name} in {sw.Elapsed}");
+#endif
         }
         else
         {
@@ -193,6 +217,8 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType, _keySerdes, _valueSerdes);
         }
     }
+
+    public virtual IEntityType EntityType => _entityType;
 
     public IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
     {

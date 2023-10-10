@@ -19,7 +19,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.KNet;
 using MASES.KNet.Common;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
@@ -31,6 +30,35 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 /// </summary>
 public class KafkaDbContext : DbContext
 {
+#if DEBUG_PERFORMANCE
+    public const bool IsPerformanceVersion = true;
+    public static bool EnableKEFCoreTracing = true;
+    public static bool TraceEntityTypeDataStorageGetData = false;
+
+    public static void ReportString(string message)
+    {
+        if (!EnableKEFCoreTracing) return;
+
+        if (Debugger.IsAttached)
+        {
+            Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+        }
+        else
+        {
+            Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+        }
+    }
+#else
+    /// <summary>
+    /// Reports if the library was compiled to reports performance information
+    /// </summary>
+    public const bool IsPerformanceVersion = false;
+    /// <summary>
+    /// Available only for compilation of some test projects, changing it has no effects
+    /// </summary>
+    public static bool EnableKEFCoreTracing = false;
+#endif
+
     /// <inheritdoc cref="DbContext.DbContext()"/>
     public KafkaDbContext()
     {

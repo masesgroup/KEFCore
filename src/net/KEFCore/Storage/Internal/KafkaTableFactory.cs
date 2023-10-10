@@ -18,6 +18,8 @@
 
 using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.Apache.Kafka.Common;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -36,6 +38,15 @@ public class KafkaTableFactory : IKafkaTableFactory
 
     public virtual IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType)
         => _factories.GetOrAdd((cluster, entityType), e => CreateTable(e.Cluster, e.EntityType))();
+
+    public void Dispose(IKafkaTable table)
+    {
+        //if (!_factories.TryRemove(new KeyValuePair<(IKafkaCluster Cluster, IEntityType EntityType), Func<IKafkaTable>>((table.Cluster, table.EntityType), CreateTable(table.Cluster, table.EntityType))))
+        //{
+        //    throw new InvalidOperationException($"Unable to remove reference table for {table.EntityType.Name}");
+        //}
+        table.Dispose();
+    }
 
     private Func<IKafkaTable> CreateTable(IKafkaCluster cluster, IEntityType entityType)
         => (Func<IKafkaTable>)typeof(KafkaTableFactory).GetTypeInfo()

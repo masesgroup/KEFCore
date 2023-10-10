@@ -169,7 +169,10 @@ public class EntityTypeDataStorage<TKey> : IEntityTypeData
         }
         finally
         {
-            Trace.WriteLine($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+            if (Infrastructure.KafkaDbContext.TraceEntityTypeDataStorageGetData)
+            {
+                Infrastructure.KafkaDbContext.ReportString($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+            }
         }
 #endif
     }

@@ -50,11 +50,14 @@ public class KafkaCluster : IKafkaCluster
 
     public virtual void Dispose()
     {
+#if DEBUG_PERFORMANCE
+        Infrastructure.KafkaDbContext.ReportString($"Disposing KafkaCluster");
+#endif
         if (_tables != null)
         {
             foreach (var item in _tables.Values)
             {
-                item?.Dispose();
+                _tableFactory.Dispose(item);
             }
         }
         _tables?.Clear();
@@ -116,7 +119,7 @@ public class KafkaCluster : IKafkaCluster
             }
             catch (ExecutionException ex)
             {
-                if (ex.InnerException is UnknownTopicOrPartitionException) { Trace.WriteLine(ex.InnerException.Message); }
+                if (ex.InnerException is UnknownTopicOrPartitionException) { Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); }
                 else throw ex.InnerException;
             }
         }
@@ -202,7 +205,7 @@ public class KafkaCluster : IKafkaCluster
         {
             if (ex.Message.Contains("deletion"))
             {
-                Thread.Sleep(1000); // wait a while to complete topic deletion
+                Thread.Sleep(1000); // wait a while to complete topic deletion and try again
                 return CreateTable(entityType);
             }
         }
@@ -216,12 +219,16 @@ public class KafkaCluster : IKafkaCluster
         lock (_lock)
         {
 #if DEBUG_PERFORMANCE
-            Stopwatch watcher = new();
+            Stopwatch tableSw = new();
+            Stopwatch valueBufferSw = new();
             try
             {
-                watcher.Start();
+                tableSw.Start();
 #endif
             EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+                valueBufferSw.Start();
+#endif
             var key = _useNameMatching ? (object)entityType.Name : entityType;
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
@@ -229,11 +236,11 @@ public class KafkaCluster : IKafkaCluster
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
-        }
+            }
             finally
             {
-                watcher.Stop();
-                Trace.WriteLine("GetData - Execution time was " + watcher.ElapsedMilliseconds + " ms");
+                valueBufferSw.Stop();
+                Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
             }
 #endif
         }
@@ -317,6 +324,9 @@ public class KafkaCluster : IKafkaCluster
             var key = _useNameMatching ? (object)currentEntityType.Name : currentEntityType;
             if (!_tables.TryGetValue(key, out _))
             {
+#if DEBUG_PERFORMANCE
+                Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
+#endif
                 _tables.Add(key, _ = _tableFactory.Create(this, currentEntityType));
             }
         }

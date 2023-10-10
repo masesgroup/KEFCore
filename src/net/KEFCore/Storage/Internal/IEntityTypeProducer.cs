@@ -25,6 +25,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public interface IEntityTypeProducer : IDisposable
 {
+    IEntityType EntityType { get; }
+
     IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
 
     IEnumerable<ValueBuffer> ValueBuffers { get; }
