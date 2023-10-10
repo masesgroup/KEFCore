@@ -31,13 +31,15 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 public class KafkaDbContext : DbContext
 {
 #if DEBUG_PERFORMANCE
-    public const bool IsPerformanceVersion = true;
-    public static bool EnableKEFCoreTracing = true;
+    const bool perf = true;
+    /// <summary>
+    /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage{TKey}"/>
+    /// </summary>
     public static bool TraceEntityTypeDataStorageGetData = false;
 
     public static void ReportString(string message)
     {
-        if (!EnableKEFCoreTracing) return;
+        if (!_enableKEFCoreTracing) return;
 
         if (Debugger.IsAttached)
         {
@@ -49,15 +51,29 @@ public class KafkaDbContext : DbContext
         }
     }
 #else
+const bool perf = false;
+#endif
     /// <summary>
     /// Reports if the library was compiled to reports performance information
     /// </summary>
-    public const bool IsPerformanceVersion = false;
+    public const bool IsPerformanceVersion = perf;
+    static bool _enableKEFCoreTracing = false;
     /// <summary>
-    /// Available only for compilation of some test projects, changing it has no effects
+    /// Set to <see langword="true"/> to enable tracing of KEFCore
     /// </summary>
-    public static bool EnableKEFCoreTracing = false;
+    /// <remarks>Can be set only if the project is compiled with DEBUG_PERFORMANCE preprocessor directive, otherwise an <see cref="InvalidOperationException"/> is raised</remarks>
+    public static bool EnableKEFCoreTracing
+    {
+        get { return _enableKEFCoreTracing; }
+        set 
+        {
+#if DEBUG_PERFORMANCE
+            _enableKEFCoreTracing = value;
+#else
+            throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE preprocessor directive");
 #endif
+        }
+    }
 
     /// <inheritdoc cref="DbContext.DbContext()"/>
     public KafkaDbContext()

@@ -1,3 +1,4 @@
 {
-  "UseInMemoryProvider": true
+  "UseInMemoryProvider": true,
+  "NumberOfExecutions":  10
 }

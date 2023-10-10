@@ -42,11 +42,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             if (Debugger.IsAttached)
             {
-                Trace.WriteLine(message);
+                Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
             }
             else
             {
-                Console.WriteLine(message);
+                Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
             }
         }
 
@@ -60,6 +60,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             {
                 config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
             }
+
+            KafkaDbContext.EnableKEFCoreTracing = config.EnableKEFCoreTracing;
 
             if (!config.UseInMemoryProvider)
             {
@@ -78,31 +80,40 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
                 }
 
-                context = new BloggingContext()
+
+                using (context = new BloggingContext()
                 {
                     BootstrapServers = config.BootstrapServers,
                     ApplicationId = config.ApplicationId,
                     DbName = databaseName,
                     StreamsConfigBuilder = streamConfig,
-                };
-
-                if (config.DeleteApplicationData)
+                })
                 {
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                }
 
-                testWatcher.Start();
-                Stopwatch watch = new Stopwatch();
-                if (config.LoadApplicationData)
-                {
-                    watch.Start();
-                    for (int i = 0; i < config.NumberOfElements; i++)
+                    if (config.DeleteApplicationData)
                     {
-                        context.Add(new Blog
+                        context.Database.EnsureDeleted();
+                        if (context.Database.EnsureCreated())
                         {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
+                            ReportString("EnsureCreated created database");
+                        }
+                        else
+                        {
+                            ReportString("EnsureCreated does not created database");
+                        }
+                    }
+
+                    testWatcher.Start();
+                    Stopwatch watch = new Stopwatch();
+                    if (config.LoadApplicationData)
+                    {
+                        watch.Start();
+                        for (int i = 0; i < config.NumberOfElements; i++)
+                        {
+                            context.Add(new Blog
+                            {
+                                Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                                Posts = new List<Post>()
                             {
                                 new Post()
                                 {
@@ -110,119 +121,90 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                                     Content = i.ToString()
                                 }
                             },
-                            Rating = i,
-                        });
+                                Rating = i,
+                            });
+                        }
+                        watch.Stop();
+                        ReportString($"Elapsed data load: {watch.Elapsed}");
+                        watch.Restart();
+                        context.SaveChanges();
+                        watch.Stop();
+                        ReportString($"Elapsed SaveChanges: {watch.Elapsed}");
                     }
-                    watch.Stop();
-                    ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                 }
 
-                if (config.UseModelBuilder)
+                for (int execution = 0; execution < config.NumberOfExecutions; execution++)
                 {
-                    watch.Restart();
-                    var selector = (from op in context.Blogs
-                                    join pg in context.Posts on op.BlogId equals pg.BlogId
-                                    where pg.BlogId == op.BlogId
-                                    select new { pg, op });
-                    var pageObject = selector.SingleOrDefault();
-                    watch.Stop();
-                    ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
-                }
-
-                watch.Restart();
-                var post = context.Posts.Single(b => b.BlogId == 2);
-                watch.Stop();
-                ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
-                try
-                {
-                    watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 1);
-                    watch.Stop();
-                    ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
-                }
-                catch
-                {
-                    if (config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
-                }
-
-                watch.Restart();
-                var all = context.Posts.All((o) => true);
-                watch.Stop();
-                ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
-
-                Blog blog = null;
-                try
-                {
-                    watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 1);
-                    watch.Stop();
-                    ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
-                }
-                catch
-                {
-                    if (config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
-                }
-
-                if (config.LoadApplicationData)
-                {
-                    watch.Restart();
-                    context.Remove(post);
-                    context.Remove(blog);
-                    watch.Stop();
-                    ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
-                    for (int i = config.NumberOfElements; i < config.NumberOfElements + config.NumberOfExtraElements; i++)
+                    ReportString($"Starting cycle number {execution}");
+                    using (context = new BloggingContext()
                     {
-                        context.Add(new Blog
-                        {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            },
-                            Rating = i,
-                        });
+                        BootstrapServers = config.BootstrapServers,
+                        ApplicationId = config.ApplicationId,
+                        DbName = databaseName,
+                        StreamsConfigBuilder = streamConfig,
+                    })
+                    {
+                        Stopwatch watch = new Stopwatch();
+                        watch.Restart();
+                        var post = context.Posts.Single(b => b.BlogId == 2);
+                        watch.Stop();
+                        ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
+
+                        watch.Restart();
+                        post = context.Posts.Single(b => b.BlogId == 2);
+                        watch.Stop();
+                        ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
+
+                        watch.Restart();
+                        post = context.Posts.Single(b => b.BlogId == config.NumberOfElements - 1);
+                        watch.Stop();
+                        ReportString($"Execution of context.Posts.Single(b => b.BlogId == {config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}");
+
+                        watch.Restart();
+                        var all = context.Posts.All((o) => true);
+                        watch.Stop();
+                        ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
+
+                        Blog blog = null;
+                        watch.Restart();
+                        blog = context.Blogs!.Single(b => b.BlogId == 1);
+                        watch.Stop();
+                        ReportString($"First execution of context.Blogs!.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+                        watch.Restart();
+                        blog = context.Blogs!.Single(b => b.BlogId == 1);
+                        watch.Stop();
+                        ReportString($"Second execution of context.Blogs!.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+
+                        watch.Restart();
+                        var selector = (from op in context.Blogs
+                                        join pg in context.Posts on op.BlogId equals pg.BlogId
+                                        where pg.BlogId == op.BlogId
+                                        select new { pg, op });
+                        watch.Stop();
+                        var result = selector.ToList();
+                        ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
+
+                        watch.Restart();
+                        var selector2 = (from op in context.Blogs
+                                        join pg in context.Posts on op.BlogId equals pg.BlogId
+                                        where op.Rating >= 100
+                                        select new { pg, op });
+                        watch.Stop();
+                        var result2 = selector.ToList();
+                        ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
                     }
-                    watch.Stop();
-                    ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                 }
-
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == 1009);
-                watch.Stop();
-                ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1009) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
-                var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                ReportString(ex.ToString());
             }
             finally
             {
                 context?.Dispose();
                 testWatcher.Stop();
                 globalWatcher.Stop();
-                Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
+                ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
         }
     }

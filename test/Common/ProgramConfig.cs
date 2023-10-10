@@ -26,6 +26,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 {
     public class ProgramConfig
     {
+        public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
         public bool UseCompactedReplicator { get; set; } = false;
@@ -37,6 +38,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public bool LoadApplicationData { get; set; } = true;
         public string BootstrapServers { get; set; } = "localhost:9092";
         public int NumberOfElements { get; set; } = 1000;
+        public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
     }
 }
