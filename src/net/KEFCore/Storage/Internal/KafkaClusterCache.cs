@@ -36,4 +36,13 @@ public class KafkaClusterCache : IKafkaClusterCache
 
     public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options)
         => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory));
+
+    public virtual void Dispose(IKafkaCluster cluster)
+    {
+        if (cluster != null)
+        {
+            cluster.Dispose();
+            _namedClusters.TryRemove(cluster.ClusterId, out _);
+        }
+    }
 }

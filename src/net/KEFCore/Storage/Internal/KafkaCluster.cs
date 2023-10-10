@@ -36,7 +36,6 @@ public class KafkaCluster : IKafkaCluster
     private readonly KafkaOptionsExtension _options;
     private readonly IKafkaTableFactory _tableFactory;
     private readonly bool _useNameMatching;
-    private readonly IAdmin _kafkaAdminClient;
 
     private readonly object _lock = new();
 
@@ -47,9 +46,6 @@ public class KafkaCluster : IKafkaCluster
         _options = options;
         _tableFactory = tableFactory;
         _useNameMatching = options.UseNameMatching;
-        Properties props = new();
-        props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
-        _kafkaAdminClient = KafkaAdminClient.Create(props);
     }
 
     public virtual void Dispose()
@@ -61,8 +57,10 @@ public class KafkaCluster : IKafkaCluster
                 item?.Dispose();
             }
         }
-        _kafkaAdminClient?.Dispose();
+        _tables?.Clear();
     }
+
+    public virtual string ClusterId => _options.ClusterId;
 
     public virtual KafkaOptionsExtension Options => _options;
 
@@ -106,8 +104,15 @@ public class KafkaCluster : IKafkaCluster
 
             try
             {
-                var result = _kafkaAdminClient.DeleteTopics(coll);
-                result.All().Get();
+                using (Properties props = new())
+                {
+                    props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
+                    using (var kafkaAdminClient = KafkaAdminClient.Create(props))
+                    {
+                        var result = kafkaAdminClient.DeleteTopics(coll);
+                        result.All().Get();
+                    }
+                }
             }
             catch (ExecutionException ex)
             {
@@ -171,17 +176,21 @@ public class KafkaCluster : IKafkaCluster
     public virtual string CreateTable(IEntityType entityType)
     {
         var topicName = entityType.TopicName(Options);
+
         try
         {
             try
             {
-                var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                using var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
                 Options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
                 Options.TopicConfigBuilder.RetentionBytes = 1024 * 1024 * 1024;
-                var map = Options.TopicConfigBuilder.ToMap();
+                using var map = Options.TopicConfigBuilder.ToMap();
                 topic.Configs(map);
-                var coll = Collections.Singleton(topic);
-                var result = _kafkaAdminClient.CreateTopics(coll);
+                using var coll = Collections.Singleton(topic);
+                using Properties props = new();
+                props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
+                using var kafkaAdminClient = KafkaAdminClient.Create(props);
+                var result = kafkaAdminClient.CreateTopics(coll);
                 result.All().Get();
             }
             catch (Java.Util.Concurrent.ExecutionException ex)
