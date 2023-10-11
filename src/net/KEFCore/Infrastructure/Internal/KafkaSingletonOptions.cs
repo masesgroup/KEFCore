@@ -46,10 +46,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
             DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
-            ConsumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfigBuilder);
-            ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfigBuilder);
-            StreamsConfigBuilder = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfigBuilder);
-            TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfigBuilder);
+            ConsumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfig);
+            ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
+            StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
+            TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
         }
     }
 
@@ -87,11 +87,11 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
     public virtual int DefaultReplicationFactor { get; private set; }
 
-    public virtual ConsumerConfigBuilder? ConsumerConfigBuilder { get; private set; }
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
 
-    public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; private set; }
+    public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
 
-    public virtual StreamsConfigBuilder? StreamsConfigBuilder { get; private set; }
+    public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
 
-    public virtual TopicConfigBuilder? TopicConfigBuilder { get; private set; }
+    public virtual TopicConfigBuilder? TopicConfig { get; private set; }
 }

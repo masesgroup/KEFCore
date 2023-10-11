@@ -197,9 +197,9 @@ public class KafkaCluster : IKafkaCluster
             try
             {
                 using var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
-                Options.TopicConfigBuilder.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
-                Options.TopicConfigBuilder.RetentionBytes = 1024 * 1024 * 1024;
-                using var map = Options.TopicConfigBuilder.ToMap();
+                Options.TopicConfig.CleanupPolicy = MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete;
+                Options.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
+                using var map = Options.TopicConfig.ToMap();
                 topic.Configs(map);
                 using var coll = Collections.Singleton(topic);
                 using Properties props = new();

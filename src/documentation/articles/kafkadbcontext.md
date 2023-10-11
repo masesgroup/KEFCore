@@ -11,23 +11,23 @@
   - **DefaultConsumerInstances**: the consumer instances to be allocated when UseCompactedReplicator is **true**
   - **UsePersistentStorage**: set to **true** to use a persintent storage between multiple application startup
   - **UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka Streams to manage data to or from topics
-  - **ConsumerConfigBuilder**: parameters to use for Producer
-  - **ProducerConfigBuilder**: parameters to use for Producer
-  - **StreamsConfigBuilder**: parameters to use for Apche Kafka Streams application
-  - **TopicConfigBuilder**: parameters to use on topic creation for each entity
+  - **ConsumerConfig**: parameters to use for Producer
+  - **ProducerConfig**: parameters to use for Producer
+  - **StreamsConfig**: parameters to use for Apche Kafka Streams application
+  - **TopicConfig**: parameters to use on topic creation for each entity
 
 ## How to use `KafkaDbContext` class
 
 The most simple example of usage can be found in [KEFCore usage](usage.md). By default, `KafkaDbContext` automatically manages `OnConfiguring` method of `DbContext`:
 - `KafkaDbContext` checks the mandatory options like **BootstrapServers** and **DbName**
 - `KafkaDbContext` setup the options needed to use an Apache Kafka cluster:
-  - default `ConsumerConfig` can be overridden using **ConsumerConfigBuilder** property of `KafkaDbContext`
-  - default `ProducerConfig` can be overridden using **ProducerConfigBuilder** property of `KafkaDbContext`
-  - default `StreamsConfig` can be overridden using **StreamsConfigBuilder** property of `KafkaDbContext`
-  - default `TopicConfig` can be overridden using **TopicConfigBuilder** property of `KafkaDbContext`
+  - default `ConsumerConfig` can be overridden using **ConsumerConfig** property of `KafkaDbContext`
+  - default `ProducerConfig` can be overridden using **ProducerConfig** property of `KafkaDbContext`
+  - default `StreamsConfig` can be overridden using **StreamsConfig** property of `KafkaDbContext`
+  - default `TopicConfig` can be overridden using **TopicConfig** property of `KafkaDbContext`
 
 
-### Default **ConsumerConfigBuilder**
+### Default **ConsumerConfig**
 
 Over the Apache Kafka defaults it applies:
 
@@ -35,15 +35,15 @@ Over the Apache Kafka defaults it applies:
 - AutoOffsetReset set to **EARLIEST**
 - AllowAutoCreateTopics set to **false**
 
-### Default **ProducerConfigBuilder**
+### Default **ProducerConfig**
 
 Does not change anything than the Apache Kafka defaults
 
-### Default **ConsumerConfigBuilder**
+### Default **ConsumerConfig**
 
 Does not change anything than the Apache Kafka defaults
 
-### Default **TopicConfigBuilder**
+### Default **TopicConfig**
 
 Over the Apache Kafka defaults it applies:
 

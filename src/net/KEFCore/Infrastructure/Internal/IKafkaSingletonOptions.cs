@@ -52,11 +52,11 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     int DefaultReplicationFactor { get; }
 
-    ConsumerConfigBuilder? ConsumerConfigBuilder { get; }
+    ConsumerConfigBuilder? ConsumerConfig { get; }
 
-    ProducerConfigBuilder? ProducerConfigBuilder { get; }
+    ProducerConfigBuilder? ProducerConfig { get; }
 
-    StreamsConfigBuilder? StreamsConfigBuilder { get; }
+    StreamsConfigBuilder? StreamsConfig { get; }
 
-    TopicConfigBuilder? TopicConfigBuilder { get; }
+    TopicConfigBuilder? TopicConfig { get; }
 }

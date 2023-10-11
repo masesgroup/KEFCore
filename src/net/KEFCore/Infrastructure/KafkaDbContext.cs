@@ -107,30 +107,30 @@ const bool perf = false;
     }
 
     /// <summary>
-    ///     The default <see cref="ConsumerConfigBuilder"/> configuration
+    ///     The default <see cref="ConsumerConfig"/> configuration
     /// </summary>
-    /// <returns>The default <see cref="ConsumerConfigBuilder"/> configuration.</returns>
-    public static ConsumerConfigBuilder DefaultConsumerConfigBuilder => ConsumerConfigBuilder.Create().WithEnableAutoCommit(true)
-                                                                                                      .WithAutoOffsetReset(ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
-                                                                                                      .WithAllowAutoCreateTopics(false);
+    /// <returns>The default <see cref="ConsumerConfig"/> configuration.</returns>
+    public static ConsumerConfigBuilder DefaultConsumerConfig => ConsumerConfigBuilder.Create().WithEnableAutoCommit(true)
+                                                                                               .WithAutoOffsetReset(ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
+                                                                                               .WithAllowAutoCreateTopics(false);
     /// <summary>
-    ///     The default <see cref="ProducerConfigBuilder"/> configuration
+    ///     The default <see cref="ProducerConfig"/> configuration
     /// </summary>
-    /// <returns>The default <see cref="ProducerConfigBuilder"/> configuration.</returns>
-    public static ProducerConfigBuilder DefaultProducerConfigBuilder => ProducerConfigBuilder.Create();
+    /// <returns>The default <see cref="ProducerConfig"/> configuration.</returns>
+    public static ProducerConfigBuilder DefaultProducerConfig => ProducerConfigBuilder.Create();
     /// <summary>
-    ///     The default <see cref="StreamsConfigBuilder"/> configuration
+    ///     The default <see cref="StreamsConfig"/> configuration
     /// </summary>
-    /// <returns>The default <see cref="StreamsConfigBuilder"/> configuration.</returns>
-    public static StreamsConfigBuilder DefaultStreamsConfigBuilder => StreamsConfigBuilder.Create();
+    /// <returns>The default <see cref="StreamsConfig"/> configuration.</returns>
+    public static StreamsConfigBuilder DefaultStreamsConfig => StreamsConfigBuilder.Create();
     /// <summary>
-    ///     The default <see cref="TopicConfigBuilder"/> configuration
+    ///     The default <see cref="TopicConfig"/> configuration
     /// </summary>
-    /// <returns>The default <see cref="TopicConfigBuilder"/> configuration.</returns>
-    public static TopicConfigBuilder DefaultTopicConfigBuilder => TopicConfigBuilder.Create().WithDeleteRetentionMs(100)
-                                                                                             .WithMinCleanableDirtyRatio(0.01)
-                                                                                             .WithSegmentMs(100)
-                                                                                             .WithRetentionBytes(1073741824);
+    /// <returns>The default <see cref="TopicConfig"/> configuration.</returns>
+    public static TopicConfigBuilder DefaultTopicConfig => TopicConfigBuilder.Create().WithDeleteRetentionMs(100)
+                                                                                      .WithMinCleanableDirtyRatio(0.01)
+                                                                                      .WithSegmentMs(100)
+                                                                                      .WithRetentionBytes(1073741824);
 
     /// <inheritdoc cref="DbContext.DbContext()"/>
     public KafkaDbContext()
@@ -182,19 +182,19 @@ const bool perf = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
-    public virtual ConsumerConfigBuilder? ConsumerConfigBuilder { get; set; }
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
     /// <summary>
     /// The optional <see cref="ProducerConfigBuilder"/>
     /// </summary>
-    public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; set; }
+    public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
     /// <summary>
-    /// The optional <see cref="StreamsConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="false"/>
+    /// The optional <see cref="StreamsConfig"/> used when <see cref="UseCompactedReplicator"/> is <see langword="false"/>
     /// </summary>
-    public virtual StreamsConfigBuilder? StreamsConfigBuilder { get; set; }
+    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
     /// <summary>
     /// The optional <see cref="TopicConfigBuilder"/> used when topics shall be created
     /// </summary>
-    public virtual TopicConfigBuilder? TopicConfigBuilder { get; set; }
+    public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -203,10 +203,10 @@ const bool perf = false;
 
         optionsBuilder.UseKafkaCluster(ApplicationId, DbName, BootstrapServers, (o) =>
         {
-            o.ConsumerConfig(ConsumerConfigBuilder ?? DefaultConsumerConfigBuilder);
-            o.ProducerConfig(ProducerConfigBuilder ?? DefaultProducerConfigBuilder);
-            o.StreamsConfig(StreamsConfigBuilder ?? DefaultStreamsConfigBuilder).WithDefaultNumPartitions(DefaultNumPartitions);
-            o.TopicConfig(TopicConfigBuilder ?? DefaultTopicConfigBuilder);
+            o.ConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
+            o.ProducerConfig(ProducerConfig ?? DefaultProducerConfig);
+            o.StreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
+            o.TopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
             //o.WithProducerByEntity(UseProducerByEntity);
             o.WithCompactedReplicator(UseCompactedReplicator);

@@ -202,9 +202,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 Partitions = _entityType.NumPartitions(_cluster.Options),
                 ConsumerInstances = _entityType.ConsumerInstances(_cluster.Options),
                 ReplicationFactor = _entityType.ReplicationFactor(_cluster.Options),
-                ConsumerConfig = _cluster.Options.ConsumerConfigBuilder,
-                TopicConfig = _cluster.Options.TopicConfigBuilder,
-                ProducerConfig = _cluster.Options.ProducerConfigBuilder,
+                ConsumerConfig = _cluster.Options.ConsumerConfig,
+                TopicConfig = _cluster.Options.TopicConfig,
+                ProducerConfig = _cluster.Options.ProducerConfig,
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
