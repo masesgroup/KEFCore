@@ -1,5 +1,5 @@
 /*
-*  Copyright 2022 MASES s.r.l.
+*  Copyright 2023 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -29,7 +29,12 @@ using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
-
+/// <summary>
+///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+///     any release. You should only use it directly in your code with extreme caution and knowing that
+///     doing so can result in application failures when updating to a new Entity Framework Core release.
+/// </summary>
 public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
 {
     private readonly bool _useCompactedReplicator;
@@ -38,8 +43,8 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
     private readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
     private readonly IKNetProducer<TKey, EntityTypeDataStorage<TKey>>? _kafkaProducer;
     private readonly IKafkaStreamsBaseRetriever _streamData;
-    private readonly KNetSerDes<TKey> _keySerdes;
-    private readonly KNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
+    private readonly IKNetSerDes<TKey> _keySerdes;
+    private readonly IKNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>

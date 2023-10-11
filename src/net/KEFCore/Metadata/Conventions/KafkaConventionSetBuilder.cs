@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 /*
-*  Copyright 2022 MASES s.r.l.
+*  Copyright 2023 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
             .AddEntityFrameworkKafkaDatabase()
             .AddDbContext<DbContext>(
                 (p, o) =>
-                    o.UseKafkaDatabase(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+                    o.UseKafkaCluster(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
                         .UseInternalServiceProvider(p))
             .BuildServiceProvider();
 
