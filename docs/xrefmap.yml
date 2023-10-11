@@ -1122,6 +1122,25 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
   nameWithType: KafkaDbContext.DefaultReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
+  name: EnableKEFCoreTracing
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
+  nameWithType: KafkaDbContext.EnableKEFCoreTracing
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing*
+  name: EnableKEFCoreTracing
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
+  nameWithType: KafkaDbContext.EnableKEFCoreTracing
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.IsPerformanceVersion
+  name: IsPerformanceVersion
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_IsPerformanceVersion
+  commentId: F:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.IsPerformanceVersion
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.IsPerformanceVersion
+  nameWithType: KafkaDbContext.IsPerformanceVersion
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)
   name: OnConfiguring(DbContextOptionsBuilder)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_
@@ -3364,19 +3383,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.KafkaQueryContext
   nameWithType: KafkaQueryContext.KafkaQueryContext
-- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster
-  name: Cluster
-  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryContext_Cluster
-  commentId: P:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster
-  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster
-  nameWithType: KafkaQueryContext.Cluster
-- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster*
-  name: Cluster
-  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryContext_Cluster_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.Cluster
-  nameWithType: KafkaQueryContext.Cluster
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.GetValueBuffers(IEntityType)
   name: GetValueBuffers(IEntityType)
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryContext_GetValueBuffers_IEntityType_
@@ -4125,6 +4131,23 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).Dispose
   nameWithType: EntityTypeProducer<TKey>.Dispose
   nameWithType.vb: EntityTypeProducer(Of TKey).Dispose
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_EntityType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey>.EntityType
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).EntityType
+  nameWithType: EntityTypeProducer<TKey>.EntityType
+  nameWithType.vb: EntityTypeProducer(Of TKey).EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType*
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_EntityType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey>.EntityType
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey).EntityType
+  nameWithType: EntityTypeProducer<TKey>.EntityType
+  nameWithType.vb: EntityTypeProducer(Of TKey).EntityType
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.ValueBuffers
   name: ValueBuffers
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_ValueBuffers
@@ -4164,6 +4187,19 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create(Of TKey)(IEntityType, MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
   nameWithType: EntityTypeProducers.Create<TKey>(IEntityType, IKafkaCluster)
   nameWithType.vb: EntityTypeProducers.Create(Of TKey)(IEntityType, IKafkaCluster)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)
+  name: Dispose(IEntityTypeProducer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)
+  nameWithType: EntityTypeProducers.Dispose(IEntityTypeProducer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose*
+  name: Dispose
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose
+  nameWithType: EntityTypeProducers.Dispose
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeData
   name: IEntityTypeData
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeData.html
@@ -4208,6 +4244,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.Commit
   nameWithType: IEntityTypeProducer.Commit
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_EntityType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType
+  nameWithType: IEntityTypeProducer.EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType*
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_EntityType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.EntityType
+  nameWithType: IEntityTypeProducer.EntityType
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.ValueBuffers
   name: ValueBuffers
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_ValueBuffers
@@ -4227,6 +4276,19 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster
   nameWithType: IKafkaCluster
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
+  name: ClusterId
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_ClusterId
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
+  nameWithType: IKafkaCluster.ClusterId
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId*
+  name: ClusterId
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_ClusterId_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
+  nameWithType: IKafkaCluster.ClusterId
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(IEntityType)
   name: CreateTable(IEntityType)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_IEntityType_
@@ -4352,6 +4414,19 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache
   nameWithType: IKafkaClusterCache
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  name: Dispose(IKafkaCluster)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaClusterCache_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  nameWithType: IKafkaClusterCache.Dispose(IKafkaCluster)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose*
+  name: Dispose
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaClusterCache_Dispose_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.Dispose
+  nameWithType: IKafkaClusterCache.Dispose
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.GetCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension)
   name: GetCluster(KafkaOptionsExtension)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaClusterCache_GetCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_
@@ -4609,6 +4684,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Create
   nameWithType: IKafkaTableFactory.Create
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  name: Dispose(IKafkaTable)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTableFactory_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  nameWithType: IKafkaTableFactory.Dispose(IKafkaTable)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose*
+  name: Dispose
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTableFactory_Dispose_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.Dispose
+  nameWithType: IKafkaTableFactory.Dispose
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster
   name: KafkaCluster
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html
@@ -4628,6 +4716,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.KafkaCluster
   nameWithType: KafkaCluster.KafkaCluster
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
+  name: ClusterId
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_ClusterId
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
+  nameWithType: KafkaCluster.ClusterId
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId*
+  name: ClusterId
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_ClusterId_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
+  nameWithType: KafkaCluster.ClusterId
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable(IEntityType)
   name: CreateTable(IEntityType)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_CreateTable_IEntityType_
@@ -4779,6 +4880,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.KafkaClusterCache
   nameWithType: KafkaClusterCache.KafkaClusterCache
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  name: Dispose(IKafkaCluster)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaClusterCache_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)
+  nameWithType: KafkaClusterCache.Dispose(IKafkaCluster)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose*
+  name: Dispose
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaClusterCache_Dispose_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.Dispose
+  nameWithType: KafkaClusterCache.Dispose
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.GetCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension)
   name: GetCluster(KafkaOptionsExtension)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaClusterCache_GetCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_
@@ -5568,6 +5682,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Create
   nameWithType: KafkaTableFactory.Create
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  name: Dispose(IKafkaTable)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableFactory_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable)
+  nameWithType: KafkaTableFactory.Dispose(IKafkaTable)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose*
+  name: Dispose
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableFactory_Dispose_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose
+  nameWithType: KafkaTableFactory.Dispose
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot
   name: KafkaTableSnapshot
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html
