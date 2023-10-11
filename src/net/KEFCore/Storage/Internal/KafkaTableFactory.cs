@@ -41,10 +41,6 @@ public class KafkaTableFactory : IKafkaTableFactory
 
     public void Dispose(IKafkaTable table)
     {
-        //if (!_factories.TryRemove(new KeyValuePair<(IKafkaCluster Cluster, IEntityType EntityType), Func<IKafkaTable>>((table.Cluster, table.EntityType), CreateTable(table.Cluster, table.EntityType))))
-        //{
-        //    throw new InvalidOperationException($"Unable to remove reference table for {table.EntityType.Name}");
-        //}
         table.Dispose();
     }
 
