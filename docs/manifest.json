@@ -753,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-1.html",
-          "hash": "bDkqRfNEsVS5H/4U+2Pigk3MKHLgInaLJRgMzcDSaz8="
+          "hash": "QZFMj5wU02ksNxKSZiV/VvPkEB/znzpdIEU0o+/zveE="
         }
       },
       "is_incremental": false,
@@ -1027,15 +1027,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Toc",
       "source_relative_path": "articles/toc.yml",
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "b8cddVuuSxAhQaHLmF25L2XJwm5kpn096bAErIfzzT0="
+          "hash": "SvR3hG4khPSYsw75ljHikbUH30lOaIz3jf9d3hLotbs="
         }
       },
       "is_incremental": false,
@@ -1085,7 +1082,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "pgmUuQDXzLiVa2NC6kjvUDE2zolekW+sFHoWu87bcTM="
+          "hash": "B8SLsaOMOuowHdF+9RWMN7XOP5cuidIu+xI58hBsN7o="
         }
       },
       "is_incremental": false,
