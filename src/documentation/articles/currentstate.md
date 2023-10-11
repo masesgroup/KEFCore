@@ -1,6 +1,6 @@
 # KEFCore: development state
 
-This release had implemented this features:
+The latest release implementes these features:
 
-* Created a first working provider
-* Initial development of Kafka Connect (under development)
+* [x] A working provider based on Apache Kafka Streams
+* [x] The provider can use KNetCompactedReplicator

@@ -19,6 +19,7 @@
 #nullable enable
 
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
 
@@ -50,6 +51,8 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     int? DefaultConsumerInstances { get; }
 
     int DefaultReplicationFactor { get; }
+
+    ConsumerConfigBuilder? ConsumerConfigBuilder { get; }
 
     ProducerConfigBuilder? ProducerConfigBuilder { get; }
 

@@ -21,7 +21,9 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using MASES.KNet.Replicator;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Streams;
@@ -64,21 +66,6 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
 
     /// <inheritdoc />
     DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder => OptionsBuilder;
-    /// <summary>
-    ///     The default <see cref="ProducerConfigBuilder"/> configuration
-    /// </summary>
-    /// <returns>The default <see cref="ProducerConfigBuilder"/> configuration.</returns>
-    public ProducerConfigBuilder EmptyProducerConfigBuilder => ProducerConfigBuilder.Create();
-    /// <summary>
-    ///     The default <see cref="StreamsConfigBuilder"/> configuration
-    /// </summary>
-    /// <returns>The default <see cref="StreamsConfigBuilder"/> configuration.</returns>
-    public StreamsConfigBuilder EmptyStreamsConfigBuilder => StreamsConfigBuilder.Create();
-    /// <summary>
-    ///     The default <see cref="TopicConfigBuilder"/> configuration
-    /// </summary>
-    /// <returns>The default <see cref="TopicConfigBuilder"/> configuration.</returns>
-    public TopicConfigBuilder EmptyTopicConfigBuilder => TopicConfigBuilder.Create();
 
     /// <summary>
     ///     Enables name matching on <see cref="IEntityType"/> instead of <see cref="Type"/> matching
@@ -221,6 +208,27 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
             ?? new KafkaOptionsExtension();
 
         extension = extension.WithDefaultReplicationFactor(defaultReplicationFactor);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KNetCompactedReplicator{TKey, TValue}"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="consumerConfigBuilder">The <see cref="ConsumerConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder ConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithConsumerConfig(consumerConfigBuilder);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

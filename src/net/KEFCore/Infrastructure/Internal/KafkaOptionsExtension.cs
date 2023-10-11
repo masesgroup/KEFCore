@@ -21,6 +21,7 @@
 using Java.Lang;
 using Java.Util;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Consumer;
@@ -47,6 +48,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private int _defaultNumPartitions = 1;
     private int? _defaultConsumerInstances = null;
     private short _defaultReplicationFactor = 1;
+    private ConsumerConfigBuilder? _consumerConfigBuilder;
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
@@ -71,6 +73,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
         _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
         _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
+        _consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(copyFrom._consumerConfigBuilder);
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
@@ -101,6 +104,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual int? DefaultConsumerInstances => _defaultConsumerInstances;
 
     public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
+
+    public virtual ConsumerConfigBuilder ConsumerConfigBuilder => _consumerConfigBuilder!;
 
     public virtual ProducerConfigBuilder ProducerConfigBuilder => _producerConfigBuilder!;
 
@@ -194,6 +199,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         var clone = Clone();
 
         clone._defaultReplicationFactor = defaultReplicationFactor;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    {
+        var clone = Clone();
+
+        clone._consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
 
         return clone;
     }
