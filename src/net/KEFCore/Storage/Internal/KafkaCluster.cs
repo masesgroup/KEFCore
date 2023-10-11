@@ -179,8 +179,14 @@ public class KafkaCluster : IKafkaCluster
 
     public virtual string CreateTable(IEntityType entityType)
     {
-        var topicName = entityType.TopicName(Options);
+        return CreateTable(entityType, 0);
+    }
 
+    private string CreateTable(IEntityType entityType, int cycle)
+    {
+        if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
+
+        var topicName = entityType.TopicName(Options);
         try
         {
             try
@@ -197,7 +203,7 @@ public class KafkaCluster : IKafkaCluster
                 var result = kafkaAdminClient.CreateTopics(coll);
                 result.All().Get();
             }
-            catch (Java.Util.Concurrent.ExecutionException ex)
+            catch (ExecutionException ex)
             {
                 throw ex.InnerException;
             }
@@ -207,7 +213,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.Message.Contains("deletion"))
             {
                 Thread.Sleep(1000); // wait a while to complete topic deletion and try again
-                return CreateTable(entityType);
+                return CreateTable(entityType, cycle++);
             }
         }
         return topicName;
