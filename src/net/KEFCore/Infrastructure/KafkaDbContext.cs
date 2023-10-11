@@ -67,10 +67,9 @@ const bool perf = false;
         get { return _enableKEFCoreTracing; }
         set 
         {
-#if DEBUG_PERFORMANCE
             _enableKEFCoreTracing = value;
-#else
-            throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE preprocessor directive");
+#if DEBUG_PERFORMANCE
+            if (_enableKEFCoreTracing) throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE preprocessor directive");
 #endif
         }
     }
