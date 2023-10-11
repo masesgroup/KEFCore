@@ -1639,31 +1639,31 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions
   fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions
   nameWithType: KafkaDbContextOptionsExtensions
-- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder,System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
-  name: UseKafkaDatabase(DbContextOptionsBuilder, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
-  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaDatabase_DbContextOptionsBuilder_System_String_System_String_System_String_System_Nullable_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder___
-  commentId: M:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder,System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
-  name.vb: UseKafkaDatabase(DbContextOptionsBuilder, String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
-  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, System.String, System.String, System.String, System.Nullable<Action<MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder>>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, System.String, System.String, System.String, System.Nullable(Of Action(Of MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder)))
-  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
-  nameWithType.vb: KafkaDbContextOptionsExtensions.UseKafkaDatabase(DbContextOptionsBuilder, String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
-- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase*
-  name: UseKafkaDatabase
-  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaDatabase_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase
+- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder,System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
+  name: UseKafkaCluster(DbContextOptionsBuilder, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
+  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaCluster_DbContextOptionsBuilder_System_String_System_String_System_String_System_Nullable_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder___
+  commentId: M:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder,System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
+  name.vb: UseKafkaCluster(DbContextOptionsBuilder, String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
+  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder, System.String, System.String, System.String, System.Nullable<Action<MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder>>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder, System.String, System.String, System.String, System.Nullable(Of Action(Of MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder)))
+  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
+  nameWithType.vb: KafkaDbContextOptionsExtensions.UseKafkaCluster(DbContextOptionsBuilder, String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
+- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster*
+  name: UseKafkaCluster
+  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaCluster_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase
-  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaDatabase
-- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase``1(DbContextOptionsBuilder{``0},System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
-  name: UseKafkaDatabase<TContext>(DbContextOptionsBuilder<TContext>, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
-  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaDatabase__1_DbContextOptionsBuilder___0__System_String_System_String_System_String_System_Nullable_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder___
-  commentId: M:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase``1(DbContextOptionsBuilder{``0},System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
-  name.vb: UseKafkaDatabase(Of TContext)(DbContextOptionsBuilder(Of TContext), String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
-  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase<TContext>(DbContextOptionsBuilder<TContext>, System.String, System.String, System.String, System.Nullable<Action<MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder>>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaDatabase(Of TContext)(DbContextOptionsBuilder(Of TContext), System.String, System.String, System.String, System.Nullable(Of Action(Of MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder)))
-  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaDatabase<TContext>(DbContextOptionsBuilder<TContext>, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
-  nameWithType.vb: KafkaDbContextOptionsExtensions.UseKafkaDatabase(Of TContext)(DbContextOptionsBuilder(Of TContext), String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
+  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster
+  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaCluster
+- uid: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster``1(DbContextOptionsBuilder{``0},System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
+  name: UseKafkaCluster<TContext>(DbContextOptionsBuilder<TContext>, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
+  href: api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaCluster__1_DbContextOptionsBuilder___0__System_String_System_String_System_String_System_Nullable_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder___
+  commentId: M:MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster``1(DbContextOptionsBuilder{``0},System.String,System.String,System.String,System.Nullable{Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder}})
+  name.vb: UseKafkaCluster(Of TContext)(DbContextOptionsBuilder(Of TContext), String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
+  fullName: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster<TContext>(DbContextOptionsBuilder<TContext>, System.String, System.String, System.String, System.Nullable<Action<MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder>>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(Of TContext)(DbContextOptionsBuilder(Of TContext), System.String, System.String, System.String, System.Nullable(Of Action(Of MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder)))
+  nameWithType: KafkaDbContextOptionsExtensions.UseKafkaCluster<TContext>(DbContextOptionsBuilder<TContext>, String, String, String, Nullable<Action<KafkaDbContextOptionsBuilder>>)
+  nameWithType.vb: KafkaDbContextOptionsExtensions.UseKafkaCluster(Of TContext)(DbContextOptionsBuilder(Of TContext), String, String, String, Nullable(Of Action(Of KafkaDbContextOptionsBuilder)))
 - uid: MASES.EntityFrameworkCore.KNet.KafkaEntityTypeBuilderExtensions
   name: KafkaEntityTypeBuilderExtensions
   href: api/MASES.EntityFrameworkCore.KNet.KafkaEntityTypeBuilderExtensions.html

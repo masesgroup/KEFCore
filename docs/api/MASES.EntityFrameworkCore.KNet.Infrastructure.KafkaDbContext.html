@@ -73,7 +73,8 @@
   
   <h1 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext" class="text-break">Class KafkaDbContext
   </h1>
-  <div class="markdown level0 summary"><p>Allows Kafka specific configuration to be performed on <see cref="!:DbContext"></see>.</p>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> instance represents a session with the Apache Kafka cluster and can be used to query and save
+instances of your entities. <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> extends <see cref="!:DbContext"></see> and it is a combination of the Unit Of Work and Repository patterns.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -87,6 +88,39 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class KafkaDbContext : DbContext</code></pre>
   </div>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>
+    Entity Framework Core does not support multiple parallel operations being run on the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> instance. This
+    includes both parallel execution of async queries and any explicit concurrent use from multiple threads.
+    Therefore, always await async calls immediately, or use separate DbContext instances for operations that execute
+    in parallel. See <a href="https://aka.ms/efcore-docs-threading">Avoiding DbContext threading issues</a> for more information
+    and examples.
+</p>
+<p>
+    Typically you create a class that derives from DbContext and contains <see cref="!:DbSet&lt;TEntity>"></see>
+    properties for each entity in the model. If the <see cref="!:DbSet&lt;TEntity>"></see> properties have a public setter,
+    they are automatically initialized when the instance of the derived context is created.
+</p>
+<p>
+    Typically you don&apos;t need to override the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_">OnConfiguring(DbContextOptionsBuilder)</a> method to configure the database (and
+    other options) to be used for the context, just set the properties associated to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> class.
+    Alternatively, if you would rather perform configuration externally instead of inline in your context, you can use <see cref="!:DbContextOptionsBuilder&lt;TContext>"></see>
+    (or <see cref="!:DbContextOptionsBuilder"></see>) to externally create an instance of <see cref="!:DbContextOptions&lt;TContext>"></see>
+    (or <see cref="!:DbContextOptions"></see>) and pass it to a base constructor of <see cref="!:DbContext"></see>.
+</p>
+<p>
+    The model is discovered by running a set of conventions over the entity classes found in the
+<see cref="!:DbSet&lt;TEntity>"></see> properties on the derived context. To further configure the model that
+is discovered by convention, you can override the <see cref="!:DbContext.OnModelCreating(ModelBuilder)"></see> method.
+</p>
+<p>
+    See <a href="https://masesgroup.github.io/KEFCore/articles/kafkadbcontext.html">KafkaDbContext configuration and initialization</a>,
+<a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>,
+<a href="https://aka.ms/efcore-docs-query">Querying data with EF Core</a>,
+<a href="https://aka.ms/efcore-docs-change-tracking">Changing tracking</a>, and
+<a href="https://aka.ms/efcore-docs-saving-data">Saving data with EF Core</a> for more information and examples.
+</p>
+</div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
@@ -94,7 +128,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L78">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L109">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.#ctor*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.#ctor">KafkaDbContext()</h4>
@@ -109,7 +143,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor_DbContextOptions_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.%23ctor(DbContextOptions)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L83">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L114">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.#ctor*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext__ctor_DbContextOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.#ctor(DbContextOptions)">KafkaDbContext(DbContextOptions)</h4>
@@ -143,7 +177,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_IsPerformanceVersion.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.IsPerformanceVersion%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L59">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L90">View Source</a>
   </span>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_IsPerformanceVersion" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.IsPerformanceVersion">IsPerformanceVersion</h4>
   <div class="markdown level1 summary"><p>Reports if the library was compiled to reports performance information</p>
@@ -175,7 +209,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L95">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L126">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ApplicationId">ApplicationId</h4>
@@ -206,7 +240,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L91">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L122">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers">BootstrapServers</h4>
@@ -237,7 +271,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L99">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L130">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName">DbName</h4>
@@ -268,11 +302,11 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerInstances.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerInstances%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L111">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L142">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerInstances_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerInstances*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerInstances" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerInstances">DefaultConsumerInstances</h4>
-  <div class="markdown level1 summary"><p>Database consumr instances used in conjunction with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a></p>
+  <div class="markdown level1 summary"><p>Default consumr instances used in conjunction with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -289,7 +323,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a>&gt;</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -299,11 +333,11 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L103">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L134">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions">DefaultNumPartitions</h4>
-  <div class="markdown level1 summary"><p>Database number of partitions</p>
+  <div class="markdown level1 summary"><p>Default number of partitions associated to each topic</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -330,11 +364,11 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L107">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L138">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor">DefaultReplicationFactor</h4>
-  <div class="markdown level1 summary"><p>Database replication factor</p>
+  <div class="markdown level1 summary"><p>Default replication factor associated to each topic</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -361,7 +395,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L65">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L96">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing">EnableKEFCoreTracing</h4>
@@ -395,7 +429,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L127">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L158">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder">ProducerConfigBuilder</h4>
@@ -426,7 +460,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L131">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L162">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder">StreamsConfigBuilder</h4>
@@ -457,7 +491,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L135">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L166">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder">TopicConfigBuilder</h4>
@@ -488,7 +522,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseCompactedReplicator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L123">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L154">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseCompactedReplicator*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseCompactedReplicator">UseCompactedReplicator</h4>
@@ -519,11 +553,11 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L115">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L146">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage">UsePersistentStorage</h4>
-  <div class="markdown level1 summary"><p>Use persistent storage</p>
+  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka Streams is in use</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -552,7 +586,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L137">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L168">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)">OnConfiguring(DbContextOptionsBuilder)</h4>
@@ -590,7 +624,7 @@
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L31" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L62" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

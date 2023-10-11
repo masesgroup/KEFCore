@@ -69,23 +69,30 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="kefcore-kafkadbcontext">KEFCore: KafkaDbContext</h1>
 
-<p><code>KafkaDbContext</code> is a special class to define the <code>DbContext</code> to use with EntityFrameworkCore:</p>
+<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use Entity Framework Core with Apache Kafka:</p>
 <ul>
-<li>it inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs</li>
-<li>it defines the following properties:
+<li><code>KafkaDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
+<li><code>KafkaDbContext</code> defines the following properties:
 <ul>
 <li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka</li>
 <li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
 <li><strong>DbName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>
 <li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</li>
 <li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka</li>
+<li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
 <li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persintent storage between multiple application startup</li>
-<li><strong>UseProducerByEntity</strong>: use a different producer for each enity of EntityFrameworkCore model</li>
+<li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka Streams to manage data to or from topics</li>
 <li><strong>ProducerConfigBuilder</strong>: parameters to use for Producer</li>
-<li><strong>StreamsConfigBuilder</strong>: parameters to use for Stream application</li>
+<li><strong>StreamsConfigBuilder</strong>: parameters to use for Apche Kafka Streams application</li>
 <li><strong>TopicConfigBuilder</strong>: parameters to use on topic creation for each entity</li>
 </ul>
 </li>
+</ul>
+<h2 id="how-to-use-kafkadbcontext-class">How to use <code>KafkaDbContext</code> class</h2>
+<p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KafkaDbContext</code> automatically manages <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
+<ul>
+<li>checks for mandatory opions like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
+<li>setup the options to use an Apache Kafka cluster</li>
 </ul>
 </article>
           </div>
