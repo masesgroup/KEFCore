@@ -24,6 +24,7 @@ using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Producer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -45,6 +46,9 @@ public class KafkaTable<TKey> : IKafkaTable
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
     {
+#if DEBUG_PERFORMANCE
+        Infrastructure.KafkaDbContext.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
+#endif
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTable(entityType);
@@ -75,7 +79,10 @@ public class KafkaTable<TKey> : IKafkaTable
 
     public virtual void Dispose()
     {
-        _producer?.Dispose();
+#if DEBUG_PERFORMANCE
+        Infrastructure.KafkaDbContext.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
+#endif
+        EntityTypeProducers.Dispose(_producer!);
     }
 
     public virtual IKafkaCluster Cluster { get; }

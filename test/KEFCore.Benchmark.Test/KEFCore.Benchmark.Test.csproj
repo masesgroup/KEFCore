@@ -2,11 +2,11 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Complex.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Complex.Test</RootNamespace>
-		<Title>EntityFrameworkCore KNet Complex Test</Title>
-		<Description>EntityFrameworkCore KNet Complex.Test</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Complex.Test</Product>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Benchmark.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Benchmark.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Benchmark Test</Title>
+		<Description>EntityFrameworkCore KNet Benchmark.Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Benchmark.Test</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
@@ -19,10 +19,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="ComplexTest.KNetReplicator.json">
+	  <None Update="BenchmarkTest.InMemory.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="KNetReplicatorComplexTest.json">
+	  <None Update="BenchmarkTest.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="BenchmarkTest.KNetReplicator.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

@@ -37,5 +37,7 @@ public interface IKafkaCluster : IDisposable
 
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 
+    string ClusterId { get; }
+
     KafkaOptionsExtension Options { get; }
 }

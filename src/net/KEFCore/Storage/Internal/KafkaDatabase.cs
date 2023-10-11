@@ -20,6 +20,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 public class KafkaDatabase : Database, IKafkaDatabase
 {
+    private readonly IKafkaClusterCache _clusterCache;
     private readonly IKafkaCluster _cluster;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
@@ -34,7 +35,8 @@ public class KafkaDatabase : Database, IKafkaDatabase
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
         : base(dependencies)
     {
-        _cluster = clusterCache.GetCluster(options);
+        _clusterCache = clusterCache;
+        _cluster = _clusterCache.GetCluster(options);
         _designTimeModel = designTimeModel;
         _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
@@ -42,7 +44,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
 
     public void Dispose()
     {
-        _cluster?.Dispose();
+        _clusterCache.Dispose(_cluster);
     }
 
     public virtual IKafkaCluster Cluster => _cluster;

@@ -34,18 +34,16 @@ public class EntityTypeProducers
 
     public static IEntityTypeProducer Create<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull
     {
-        //if (!cluster.Options.ProducerByEntity)
-        //{
-        //    lock (_producers)
-        //    {
-        //        if (_globalProducer == null) _globalProducer = CreateProducerLocal<TKey>(entityType, cluster);
-        //        return _globalProducer;
-        //    }
-        //}
-        //else
-        //{
         return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
-        //}
+    }
+
+    public static void Dispose(IEntityTypeProducer producer)
+    {
+        if (!_producers.TryRemove(new KeyValuePair<IEntityType, IEntityTypeProducer>(producer.EntityType, producer)))
+        {
+            throw new InvalidOperationException($"Failed to remove IEntityTypeProducer for {producer.EntityType.Name}");
+        }
+        producer.Dispose();
     }
 
     static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
