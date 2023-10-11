@@ -83,7 +83,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     BootstrapServers = config.BootstrapServers,
                     ApplicationId = config.ApplicationId,
                     DbName = databaseName,
-                    StreamsConfigBuilder = streamConfig,
+                    StreamsConfig = streamConfig,
                 };
 
                 if (config.DeleteApplicationData)

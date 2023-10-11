@@ -21,6 +21,7 @@
 using Java.Lang;
 using Java.Util;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Consumer;
@@ -47,6 +48,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private int _defaultNumPartitions = 1;
     private int? _defaultConsumerInstances = null;
     private short _defaultReplicationFactor = 1;
+    private ConsumerConfigBuilder? _consumerConfigBuilder;
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
@@ -71,6 +73,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
         _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
         _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
+        _consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(copyFrom._consumerConfigBuilder);
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
@@ -102,11 +105,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
 
-    public virtual ProducerConfigBuilder ProducerConfigBuilder => _producerConfigBuilder!;
+    public virtual ConsumerConfigBuilder ConsumerConfig => _consumerConfigBuilder!;
 
-    public virtual StreamsConfigBuilder StreamsConfigBuilder => _streamsConfigBuilder!;
+    public virtual ProducerConfigBuilder ProducerConfig => _producerConfigBuilder!;
 
-    public virtual TopicConfigBuilder TopicConfigBuilder => _topicConfigBuilder!;
+    public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
+
+    public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
 
     public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
     {
@@ -198,6 +203,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
+    public virtual KafkaOptionsExtension WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    {
+        var clone = Clone();
+
+        clone._consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
+
+        return clone;
+    }
+
     public virtual KafkaOptionsExtension WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
     {
         var clone = Clone();
@@ -233,31 +247,31 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual Properties StreamsOptions(string applicationId)
     {
         Properties props = _streamsConfigBuilder ?? new();
-        if (props.ContainsKey(StreamsConfig.APPLICATION_ID_CONFIG))
+        if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         {
-            props.Remove(StreamsConfig.APPLICATION_ID_CONFIG);
+            props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG);
         }
-        props.Put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
-        if (props.ContainsKey(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG))
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
+        if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG))
         {
-            props.Remove(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG);
+            props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG);
         }
-        props.Put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
-        if (props.ContainsKey(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG))
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
+        if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG))
         {
-            props.Remove(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
+            props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
         }
-        props.Put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
-        if (props.ContainsKey(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
         {
-            props.Remove(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
+            props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
         }
-        props.Put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
-        if (props.ContainsKey(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        if (props.ContainsKey(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
         {
-            props.Remove(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
+            props.Remove(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
         }
-        props.Put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.Put(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return props;
     }
@@ -265,22 +279,22 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual Properties ProducerOptions()
     {
         Properties props = _producerConfigBuilder ?? new();
-        if (props.ContainsKey(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG))
+        if (props.ContainsKey(Org.Apache.Kafka.Clients.Producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG))
         {
-            props.Remove(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG);
+            props.Remove(Org.Apache.Kafka.Clients.Producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG);
         }
-        props.Put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
-        if (!props.ContainsKey(ProducerConfig.ACKS_CONFIG))
+        props.Put(Org.Apache.Kafka.Clients.Producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
+        if (!props.ContainsKey(Org.Apache.Kafka.Clients.Producer.ProducerConfig.ACKS_CONFIG))
         {
-            props.Put(ProducerConfig.ACKS_CONFIG, "all");
+            props.Put(Org.Apache.Kafka.Clients.Producer.ProducerConfig.ACKS_CONFIG, "all");
         }
-        if (!props.ContainsKey(ProducerConfig.RETRIES_CONFIG))
+        if (!props.ContainsKey(Org.Apache.Kafka.Clients.Producer.ProducerConfig.RETRIES_CONFIG))
         {
-            props.Put(ProducerConfig.RETRIES_CONFIG, 0);
+            props.Put(Org.Apache.Kafka.Clients.Producer.ProducerConfig.RETRIES_CONFIG, 0);
         }
-        if (!props.ContainsKey(ProducerConfig.LINGER_MS_CONFIG))
+        if (!props.ContainsKey(Org.Apache.Kafka.Clients.Producer.ProducerConfig.LINGER_MS_CONFIG))
         {
-            props.Put(ProducerConfig.LINGER_MS_CONFIG, 1);
+            props.Put(Org.Apache.Kafka.Clients.Producer.ProducerConfig.LINGER_MS_CONFIG, 1);
         }
         //if (props.ContainsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG))
         //{

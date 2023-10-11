@@ -34,8 +34,8 @@ Have a look at the following resources:
 ---
 ## Summary
 
-* [Roadmap](src/net/Documentation/articles/roadmap.md)
-* [Actual state](src/net/Documentation/articles/actualstate.md)
+* [Roadmap](articles/roadmap.md)
+* [Current state](articles/currentstate.md)
 * [KEFCore usage](articles/usage.md)
 
 ---

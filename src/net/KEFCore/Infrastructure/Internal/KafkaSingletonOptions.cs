@@ -17,6 +17,7 @@
 */
 
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
 
@@ -45,9 +46,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
             DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
-            ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfigBuilder);
-            StreamsConfigBuilder = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfigBuilder);
-            TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfigBuilder);
+            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfig);
+            ProducerConfig = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
+            StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
+            TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
         }
     }
 
@@ -85,9 +87,11 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
     public virtual int DefaultReplicationFactor { get; private set; }
 
-    public virtual ProducerConfigBuilder? ProducerConfigBuilder { get; private set; }
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
 
-    public virtual StreamsConfigBuilder? StreamsConfigBuilder { get; private set; }
+    public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
 
-    public virtual TopicConfigBuilder? TopicConfigBuilder { get; private set; }
+    public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
+
+    public virtual TopicConfigBuilder? TopicConfig { get; private set; }
 }
