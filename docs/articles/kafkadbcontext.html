@@ -82,17 +82,44 @@
 <li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
 <li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persintent storage between multiple application startup</li>
 <li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka Streams to manage data to or from topics</li>
-<li><strong>ProducerConfigBuilder</strong>: parameters to use for Producer</li>
-<li><strong>StreamsConfigBuilder</strong>: parameters to use for Apche Kafka Streams application</li>
-<li><strong>TopicConfigBuilder</strong>: parameters to use on topic creation for each entity</li>
+<li><strong>ConsumerConfig</strong>: parameters to use for Producer</li>
+<li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
+<li><strong>StreamsConfig</strong>: parameters to use for Apche Kafka Streams application</li>
+<li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity</li>
 </ul>
 </li>
 </ul>
 <h2 id="how-to-use-kafkadbcontext-class">How to use <code>KafkaDbContext</code> class</h2>
 <p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KafkaDbContext</code> automatically manages <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
 <ul>
-<li>checks for mandatory opions like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
-<li>setup the options to use an Apache Kafka cluster</li>
+<li><code>KafkaDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
+<li><code>KafkaDbContext</code> setup the options needed to use an Apache Kafka cluster:
+<ul>
+<li>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KafkaDbContext</code></li>
+<li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property of <code>KafkaDbContext</code></li>
+<li>default <code>StreamsConfig</code> can be overridden using <strong>StreamsConfig</strong> property of <code>KafkaDbContext</code></li>
+<li>default <code>TopicConfig</code> can be overridden using <strong>TopicConfig</strong> property of <code>KafkaDbContext</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="default-consumerconfig">Default <strong>ConsumerConfig</strong></h3>
+<p>Over the Apache Kafka defaults it applies:</p>
+<ul>
+<li>EnableAutoCommit is <strong>true</strong></li>
+<li>AutoOffsetReset set to <strong>EARLIEST</strong></li>
+<li>AllowAutoCreateTopics set to <strong>false</strong></li>
+</ul>
+<h3 id="default-producerconfig">Default <strong>ProducerConfig</strong></h3>
+<p>Does not change anything than the Apache Kafka defaults</p>
+<h3 id="default-consumerconfig-1">Default <strong>ConsumerConfig</strong></h3>
+<p>Does not change anything than the Apache Kafka defaults</p>
+<h3 id="default-topicconfig">Default <strong>TopicConfig</strong></h3>
+<p>Over the Apache Kafka defaults it applies:</p>
+<ul>
+<li>DeleteRetentionMs set to 100 ms</li>
+<li>MinCleanableDirtyRatio set to 0.01</li>
+<li>SegmentMs set to 100 ms</li>
+<li>RetentionBytes set to 1073741824 bytes (1 Gb)</li>
 </ul>
 </article>
           </div>

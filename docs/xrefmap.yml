@@ -200,6 +200,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.BootstrapServers
   nameWithType: IKafkaSingletonOptions.BootstrapServers
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ConsumerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig
+  nameWithType: IKafkaSingletonOptions.ConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig*
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig
+  nameWithType: IKafkaSingletonOptions.ConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.DatabaseName
   name: DatabaseName
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_DatabaseName
@@ -252,45 +265,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.DefaultReplicationFactor
   nameWithType: IKafkaSingletonOptions.DefaultReplicationFactor
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
-  nameWithType: IKafkaSingletonOptions.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder*
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig
+  nameWithType: IKafkaSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig*
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfigBuilder
-  nameWithType: IKafkaSingletonOptions.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
-  nameWithType: IKafkaSingletonOptions.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder*
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig
+  nameWithType: IKafkaSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig
+  nameWithType: IKafkaSingletonOptions.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig*
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfigBuilder
-  nameWithType: IKafkaSingletonOptions.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
-  nameWithType: IKafkaSingletonOptions.TopicConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder*
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig
+  nameWithType: IKafkaSingletonOptions.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig
+  nameWithType: IKafkaSingletonOptions.TopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig*
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfigBuilder
-  nameWithType: IKafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig
+  nameWithType: IKafkaSingletonOptions.TopicConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseCompactedReplicator
   name: UseCompactedReplicator
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseCompactedReplicator
@@ -471,6 +484,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ClusterId
   nameWithType: KafkaOptionsExtension.ClusterId
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ConsumerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig
+  nameWithType: KafkaOptionsExtension.ConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig*
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ConsumerConfig
+  nameWithType: KafkaOptionsExtension.ConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.DatabaseName
   name: DatabaseName
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_DatabaseName
@@ -536,19 +562,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.Info
   nameWithType: KafkaOptionsExtension.Info
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
-  nameWithType: KafkaOptionsExtension.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder*
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig
+  nameWithType: KafkaOptionsExtension.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig*
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfigBuilder
-  nameWithType: KafkaOptionsExtension.ProducerConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerConfig
+  nameWithType: KafkaOptionsExtension.ProducerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptions
   name: ProducerOptions()
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerOptions
@@ -562,19 +588,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptions
   nameWithType: KafkaOptionsExtension.ProducerOptions
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
-  nameWithType: KafkaOptionsExtension.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder*
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
+  nameWithType: KafkaOptionsExtension.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig*
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfigBuilder
-  nameWithType: KafkaOptionsExtension.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
+  nameWithType: KafkaOptionsExtension.StreamsConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsOptions(IEntityType)
   name: StreamsOptions(IEntityType)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsOptions_IEntityType_
@@ -594,19 +620,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsOptions
   nameWithType: KafkaOptionsExtension.StreamsOptions
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_TopicConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
-  nameWithType: KafkaOptionsExtension.TopicConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder*
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_TopicConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_TopicConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig
+  nameWithType: KafkaOptionsExtension.TopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig*
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_TopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfigBuilder
-  nameWithType: KafkaOptionsExtension.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.TopicConfig
+  nameWithType: KafkaOptionsExtension.TopicConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseCompactedReplicator
   name: UseCompactedReplicator
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_UseCompactedReplicator
@@ -698,6 +724,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithCompactedReplicator
   nameWithType: KafkaOptionsExtension.WithCompactedReplicator
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  name: WithConsumerConfig(ConsumerConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithConsumerConfig_MASES_KNet_Consumer_ConsumerConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  nameWithType: KafkaOptionsExtension.WithConsumerConfig(ConsumerConfigBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig*
+  name: WithConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithConsumerConfig
+  nameWithType: KafkaOptionsExtension.WithConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithDatabaseName(System.String)
   name: WithDatabaseName(String)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithDatabaseName_System_String_
@@ -850,6 +889,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.BootstrapServers
   nameWithType: KafkaSingletonOptions.BootstrapServers
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ConsumerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig
+  nameWithType: KafkaSingletonOptions.ConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig*
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ConsumerConfig
+  nameWithType: KafkaSingletonOptions.ConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.DatabaseName
   name: DatabaseName
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_DatabaseName
@@ -928,45 +980,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
   nameWithType: KafkaSingletonOptions.ProducerByEntity
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
-  nameWithType: KafkaSingletonOptions.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder*
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
+  nameWithType: KafkaSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig*
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfigBuilder
-  nameWithType: KafkaSingletonOptions.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
-  nameWithType: KafkaSingletonOptions.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder*
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
+  nameWithType: KafkaSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig
+  nameWithType: KafkaSingletonOptions.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig*
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_StreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfigBuilder
-  nameWithType: KafkaSingletonOptions.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_TopicConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
-  nameWithType: KafkaSingletonOptions.TopicConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder*
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_TopicConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.StreamsConfig
+  nameWithType: KafkaSingletonOptions.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_TopicConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig
+  nameWithType: KafkaSingletonOptions.TopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig*
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_TopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfigBuilder
-  nameWithType: KafkaSingletonOptions.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.TopicConfig
+  nameWithType: KafkaSingletonOptions.TopicConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseCompactedReplicator
   name: UseCompactedReplicator
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_UseCompactedReplicator
@@ -1070,6 +1122,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.BootstrapServers
   nameWithType: KafkaDbContext.BootstrapServers
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ConsumerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
+  nameWithType: KafkaDbContext.ConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig*
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
+  nameWithType: KafkaDbContext.ConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
   name: DbName
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName
@@ -1083,6 +1148,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
   nameWithType: KafkaDbContext.DbName
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
+  name: DefaultConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
+  nameWithType: KafkaDbContext.DefaultConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig*
+  name: DefaultConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
+  nameWithType: KafkaDbContext.DefaultConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerInstances
   name: DefaultConsumerInstances
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerInstances
@@ -1109,6 +1187,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultNumPartitions
   nameWithType: KafkaDbContext.DefaultNumPartitions
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig
+  name: DefaultProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultProducerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig
+  nameWithType: KafkaDbContext.DefaultProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig*
+  name: DefaultProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultProducerConfig
+  nameWithType: KafkaDbContext.DefaultProducerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
   name: DefaultReplicationFactor
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor
@@ -1122,6 +1213,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultReplicationFactor
   nameWithType: KafkaDbContext.DefaultReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig
+  name: DefaultStreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultStreamsConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig
+  nameWithType: KafkaDbContext.DefaultStreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig*
+  name: DefaultStreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultStreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultStreamsConfig
+  nameWithType: KafkaDbContext.DefaultStreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig
+  name: DefaultTopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultTopicConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig
+  nameWithType: KafkaDbContext.DefaultTopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig*
+  name: DefaultTopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultTopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultTopicConfig
+  nameWithType: KafkaDbContext.DefaultTopicConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.EnableKEFCoreTracing
   name: EnableKEFCoreTracing
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing
@@ -1154,45 +1271,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring
   nameWithType: KafkaDbContext.OnConfiguring
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
-  nameWithType: KafkaDbContext.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder*
-  name: ProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig
+  nameWithType: KafkaDbContext.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig*
+  name: ProducerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfigBuilder
-  nameWithType: KafkaDbContext.ProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
-  nameWithType: KafkaDbContext.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder*
-  name: StreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig
+  nameWithType: KafkaDbContext.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig
+  nameWithType: KafkaDbContext.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig*
+  name: StreamsConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfigBuilder
-  nameWithType: KafkaDbContext.StreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
-  nameWithType: KafkaDbContext.TopicConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder*
-  name: TopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.StreamsConfig
+  nameWithType: KafkaDbContext.StreamsConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig
+  nameWithType: KafkaDbContext.TopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig*
+  name: TopicConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfigBuilder
-  nameWithType: KafkaDbContext.TopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.TopicConfig
+  nameWithType: KafkaDbContext.TopicConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseCompactedReplicator
   name: UseCompactedReplicator
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator
@@ -1238,45 +1355,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.KafkaDbContextOptionsBuilder
   nameWithType: KafkaDbContextOptionsBuilder.KafkaDbContextOptionsBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-  name: EmptyProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder*
-  name: EmptyProducerConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyProducerConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  name: ConsumerConfig(ConsumerConfigBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ConsumerConfig_MASES_KNet_Consumer_ConsumerConfigBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)
+  nameWithType: KafkaDbContextOptionsBuilder.ConsumerConfig(ConsumerConfigBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig*
+  name: ConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_ConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyProducerConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-  name: EmptyStreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder*
-  name: EmptyStreamsConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyStreamsConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyStreamsConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-  name: EmptyTopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder*
-  name: EmptyTopicConfigBuilder
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_EmptyTopicConfigBuilder_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
-  nameWithType: KafkaDbContextOptionsBuilder.EmptyTopicConfigBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.ConsumerConfig
+  nameWithType: KafkaDbContextOptionsBuilder.ConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.MASES#EntityFrameworkCore#KNet#Infrastructure#IKafkaDbContextOptionsBuilderInfrastructure#OptionsBuilder
   name: IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_MASES_EntityFrameworkCore_KNet_Infrastructure_IKafkaDbContextOptionsBuilderInfrastructure_OptionsBuilder
