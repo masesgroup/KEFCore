@@ -43,8 +43,8 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
     private readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
     private readonly IKNetProducer<TKey, EntityTypeDataStorage<TKey>>? _kafkaProducer;
     private readonly IKafkaStreamsBaseRetriever _streamData;
-    private readonly KNetSerDes<TKey> _keySerdes;
-    private readonly KNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
+    private readonly IKNetSerDes<TKey> _keySerdes;
+    private readonly IKNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
