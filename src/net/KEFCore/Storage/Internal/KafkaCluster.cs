@@ -107,19 +107,20 @@ public class KafkaCluster : IKafkaCluster
 
             try
             {
-                using (Properties props = new())
-                {
-                    props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
-                    using (var kafkaAdminClient = KafkaAdminClient.Create(props))
-                    {
-                        var result = kafkaAdminClient.DeleteTopics(coll);
-                        result.All().Get();
-                    }
-                }
+                using Properties props = new();
+                props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
+                using var kafkaAdminClient = KafkaAdminClient.Create(props);
+                var result = kafkaAdminClient.DeleteTopics(coll);
+                result.All().Get();
             }
             catch (ExecutionException ex)
             {
-                if (ex.InnerException is UnknownTopicOrPartitionException) { Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); }
+                if (ex.InnerException is UnknownTopicOrPartitionException)
+                {
+#if DEBUG_PERFORMANCE
+                    Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); 
+#endif
+                }
                 else throw ex.InnerException;
             }
         }
