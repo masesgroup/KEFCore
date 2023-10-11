@@ -46,10 +46,10 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
             DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
-            ConsumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfig);
-            ProducerConfigBuilder = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
+            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfig);
+            ProducerConfig = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
             StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
-            TopicConfigBuilder = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
+            TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
         }
     }
 
