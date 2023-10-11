@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Complex.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Complex.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Complex Test</Title>
+		<Description>EntityFrameworkCore KNet Complex.Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Complex.Test</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="ComplexTest.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="KNetReplicatorComplexTest.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

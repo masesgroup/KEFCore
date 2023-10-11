@@ -28,4 +28,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaClusterCache
 {
     IKafkaCluster GetCluster(KafkaOptionsExtension options);
+
+    void Dispose(IKafkaCluster cluster);
 }

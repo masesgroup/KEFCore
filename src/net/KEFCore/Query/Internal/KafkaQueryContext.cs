@@ -31,25 +31,16 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaQueryContext : QueryContext
 {
-    private readonly IDictionary<IEntityType, IEnumerable<ValueBuffer>> _valueBuffersCache = new ConcurrentDictionary<IEntityType, IEnumerable<ValueBuffer>>();
+    private readonly IKafkaCluster _cluster;
 
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
-        if (!_valueBuffersCache.TryGetValue(entityType, out var valueBuffers))
-        {
-            valueBuffers = Cluster.GetValueBuffers(entityType);
-
-            _valueBuffersCache[entityType] = valueBuffers;
-        }
-
-        return valueBuffers;
+        return _cluster.GetValueBuffers(entityType);
     }
 
     public KafkaQueryContext(QueryContextDependencies dependencies, IKafkaCluster cluster)
         : base(dependencies)
     {
-        Cluster = cluster;
+        _cluster = cluster;
     }
-
-    public virtual IKafkaCluster Cluster { get; }
 }

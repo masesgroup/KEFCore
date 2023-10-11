@@ -26,4 +26,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaTableFactory
 {
     IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType);
+
+    void Dispose(IKafkaTable table);
 }

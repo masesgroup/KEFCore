@@ -44,7 +44,7 @@ public class KafkaRowBag<TKey> : IKafkaRowBag
 
     public IProperty[] Properties { get; private set; }
 
-    public KNetEntityTypeData<TKey>? Value => UpdateEntry.EntityState == EntityState.Deleted ? null : new KNetEntityTypeData<TKey>(UpdateEntry.EntityType, Properties, ValueBuffer!);
+    public EntityTypeDataStorage<TKey>? Value => UpdateEntry.EntityState == EntityState.Deleted ? null : new EntityTypeDataStorage<TKey>(UpdateEntry.EntityType, Properties, ValueBuffer!);
 
     public object?[]? ValueBuffer { get; private set; }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 *  Copyright 2023 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,27 +18,33 @@
 
 #nullable enable
 
-using MASES.KNet.Serialization;
-using Org.Apache.Kafka.Streams;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
-
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public sealed class KafkaStreamsTableRetriever<TKey> : KafkaStreamsBaseRetriever<TKey, EntityTypeDataStorage<TKey>, byte[], byte[]>
+public class EntityTypeProducers
 {
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<EntityTypeDataStorage<TKey>> valueSerdes)
-        : this(kafkaCluster, entityType, keySerdes, valueSerdes, new StreamsBuilder())
+    static IEntityTypeProducer? _globalProducer = null;
+    static readonly ConcurrentDictionary<IEntityType, IEntityTypeProducer> _producers = new ConcurrentDictionary<IEntityType, IEntityTypeProducer>();
+
+    public static IEntityTypeProducer Create<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull
     {
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
     }
 
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<EntityTypeDataStorage<TKey>> valueSerdes, StreamsBuilder builder)
-        : base(kafkaCluster, entityType, keySerdes, valueSerdes, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<byte[], byte[]>(entityType.TopicName(kafkaCluster.Options)))
+    public static void Dispose(IEntityTypeProducer producer)
     {
+        if (!_producers.TryRemove(new KeyValuePair<IEntityType, IEntityTypeProducer>(producer.EntityType, producer)))
+        {
+            throw new InvalidOperationException($"Failed to remove IEntityTypeProducer for {producer.EntityType.Name}");
+        }
+        producer.Dispose();
     }
+
+    static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
 }
-

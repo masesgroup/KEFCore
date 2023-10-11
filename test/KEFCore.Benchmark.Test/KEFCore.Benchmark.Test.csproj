@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Benchmark.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Benchmark.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Benchmark Test</Title>
+		<Description>EntityFrameworkCore KNet Benchmark.Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Benchmark.Test</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="BenchmarkTest.InMemory.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="BenchmarkTest.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="BenchmarkTest.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

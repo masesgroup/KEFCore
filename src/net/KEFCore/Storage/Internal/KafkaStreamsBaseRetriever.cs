@@ -106,7 +106,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
             {
                 _currentState = newState;
 #if DEBUG_PERFORMANCE
-                    Trace.WriteLine($"StateListener of {_entityType.Name} oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+                    Infrastructure.KafkaDbContext.ReportString($"StateListener of {_entityType.Name} oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             }
@@ -133,7 +133,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
                         if (index == WaitHandle.WaitTimeout)
                         {
 #if DEBUG_PERFORMANCE
-                                Trace.WriteLine($"State of {_entityType.Name}: {_currentState} No handle set within {waitingTime} ms");
+                                Infrastructure.KafkaDbContext.ReportString($"State of {_entityType.Name}: {_currentState} No handle set within {waitingTime} ms");
 #endif
                             continue;
                         }
@@ -156,7 +156,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
         _resetEvent.WaitOne();
         _streams.Start();
 #if DEBUG_PERFORMANCE
-            Trace.WriteLine($"KafkaStreamsBaseRetriever on {_entityType.Name} started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+            Infrastructure.KafkaDbContext.ReportString($"KafkaStreamsBaseRetriever on {_entityType.Name} started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
         _resetEvent.WaitOne(); // wait running state
         if (_resultException != null) throw _resultException;
@@ -168,7 +168,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
     {
         if (_resultException != null) throw _resultException;
 #if DEBUG_PERFORMANCE
-            Trace.WriteLine($"Requested KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+            Infrastructure.KafkaDbContext.ReportString($"Requested KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
         return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, keyValueStore);
     }
@@ -219,7 +219,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
             _keyValueStore = keyValueStore;
 #if DEBUG_PERFORMANCE
-                Trace.WriteLine($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+                Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
             keyValueIterator = _keyValueStore?.All();
             keyValueEnumerator = keyValueIterator?.ToIEnumerator();
@@ -274,7 +274,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
         public void Dispose()
         {
 #if DEBUG_PERFORMANCE
-                Trace.WriteLine($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+                Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
             keyValueIterator?.Dispose();
         }
