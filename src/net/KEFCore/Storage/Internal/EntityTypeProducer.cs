@@ -21,10 +21,11 @@
 #nullable enable
 
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
-using MASES.KNet.Serialization.Json;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 
@@ -188,9 +189,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         {
             _keySerdes = new KNetSerDes<TKey>();
         }
-        else _keySerdes = new JsonSerDes<TKey>();
+        else _keySerdes = new KEFCoreSerDes<TKey>();
 
-        _valueSerdes = new JsonSerDes<EntityTypeDataStorage<TKey>>();
+        _valueSerdes = new KEFCoreSerDes<EntityTypeDataStorage<TKey>>();
 
         if (_useCompactedReplicator)
         {

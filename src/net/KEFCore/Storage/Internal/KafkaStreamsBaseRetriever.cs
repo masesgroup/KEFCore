@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
