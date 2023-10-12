@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>KEFCore: Getting started | Kafka Bridge website </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="KEFCore: Getting started | Kafka Bridge website ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="kefcore-getting-started">KEFCore: Getting started</h1>
+
+<p>To use KEFCore you must have at least:</p>
+<ul>
+<li>an installed JRE/JDK (11+)</li>
+<li>an accessible Apache Kafka broker (a full cluster or a local Dockerized version)</li>
+</ul>
+<h2 id="first-project-setup">First project setup</h2>
+<ul>
+<li>Create a new simple empty project:</li>
+</ul>
+<pre><code class="lang-pwsh">dotnet new console
+</code></pre>
+<ul>
+<li>Entity Framework Core provider for Apache Kafka is available on <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet">NuGet</a>. Execute the following command to add the package to the newly created project:</li>
+</ul>
+<pre><code class="lang-pwsh">dotnet add package MASES.EntityFrameworkCore.KNet
+</code></pre>
+<ul>
+<li>Edit Program.cs and replace the content with the following code:</li>
+</ul>
+<pre><code class="lang-c#">using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using System.Collections.Generic;
+
+namespace MASES.EntityFrameworkCore.KNet.Test
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            KEFCore.CreateGlobalInstance();
+            using var context = new BloggingContext()
+            {
+                BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
+                ApplicationId = &quot;MyAppId&quot;,
+                DbName = &quot;MyDBName&quot;,
+            };
+            // add standard EFCore queries
+        }
+    }
+
+    public class BloggingContext : KafkaDbContext { }
+
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+        public List&lt;Post&gt; Posts { get; set; }
+    }
+
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+    }
+}
+</code></pre>
+<p>The previous code follows the example of <a href="https://learn.microsoft.com/en-us/ef/core/">https://learn.microsoft.com/en-us/ef/core/</a>. See <a href="usage.html">KEFCore usage</a> and <a href="kafkadbcontext.html">KafkaDbContext</a> to find more information.</p>
+<ul>
+<li>Build the project</li>
+</ul>
+<pre><code class="lang-pwsh">dotnet build
+</code></pre>
+<h2 id="environment-initialization">Environment initialization</h2>
+<p>KEFCore shall initialize the environment before any operation can be done. The initialization is done executing the following command at first stages of your application:</p>
+<pre><code class="lang-c#">KEFCore.CreateGlobalInstance();
+</code></pre>
+<p>The previous command identify the JVM and start it, loads the needed libraries and setup the environment. Browsing the <a href="https://github.com/masesgroup/KEFCore">repository</a> within the test folder there are some examples.
+KEFCore accepts many command-line switches to customize its behavior, the full list is available at <a href="https://masesgroup.github.io/KNet/articles/commandlineswitch.html">Command line switch</a> of KNet.</p>
+<h3 id="jvm-identification">JVM identification</h3>
+<p>One of the most important command-line switch is <strong>JVMPath</strong> and it is available in <a href="https://www.jcobridge.com/net-examples/command-line-options/">JCOBridge switches</a>: it can be used to set-up the location of the JVM library if JCOBridge is not able to identify a suitable JRE/JDK installation.
+If a developer is using KEFCore within its own product it is possible to override the <strong>JVMPath</strong> property with a snippet like the following one:</p>
+<pre><code class="lang-c#">    class MyKEFCore : KEFCore
+    {
+        public override string JVMPath
+        {
+            get
+            {
+                string pathToJVM = &quot;Set here the path to JVM library or use your own search method&quot;;
+                return pathToJVM;
+            }
+        }
+    }
+</code></pre>
+<p><strong>IMPORTANT NOTE</strong>: <code>pathToJVM</code> shall be escaped</p>
+<ol>
+<li><code>string pathToJVM = &quot;C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.18.10-hotspot\\bin\\server\\jvm.dll&quot;;</code></li>
+<li><code>string pathToJVM = @&quot;C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\bin\server\jvm.dll&quot;;</code></li>
+</ol>
+<h3 id="special-initialization-conditions">Special initialization conditions</h3>
+<p><a href="https://www.jcobridge.com/">JCOBridge</a> try to identify a suitable JRE/JDK installation within the system using some standard mechanism of JRE/JDK: <code>JAVA_HOME</code> environment variable or Windows registry if available.
+However it is possible, on Windows operating systems, that the library raises an <strong>InvalidOperationException: Missing Java Key in registry: Couldn't find Java installed on the machine</strong>.
+This means that neither <code>JAVA_HOME</code> nor Windows registry contains information about a default installed JRE/JDK: some vendors may not setup them.
+If the developer/user encounter this condition can do the following steps:</p>
+<ol>
+<li>On a command prompt execute <code>set | findstr JAVA_HOME</code> and verify the result;</li>
+<li>If something was reported maybe the <code>JAVA_HOME</code> environment variable is not set at system level, but at a different level like user level which is not visible from the KEFCore process that raised the exception;</li>
+<li>Try to set <code>JAVA_HOME</code> at system level e.g. <code>JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\</code>;</li>
+<li>Try to set <code>JCOBRIDGE_JVMPath</code> at system level e.g. <code>JCOBRIDGE_JVMPath=C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\</code>.</li>
+</ol>
+<p><strong>IMPORTANT NOTES</strong>:</p>
+<ul>
+<li>One of <code>JCOBRIDGE_JVMPath</code> or <code>JAVA_HOME</code> environment variables or Windows registry (on Windows OSes) shall be available</li>
+<li><code>JCOBRIDGE_JVMPath</code> environment variable takes precedence over <code>JAVA_HOME</code> and Windows registry: you can set <code>JCOBRIDGE_JVMPath</code> to <code>C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\bin\server\jvm.dll</code> and avoid to override <code>JVMPath</code> in your code</li>
+<li>After first initialization steps, <code>JVMPath</code> takes precedence over <code>JCOBRIDGE_JVMPath</code>/<code>JAVA_HOME</code> environment variables or Windows registry</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/gettingstarted.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

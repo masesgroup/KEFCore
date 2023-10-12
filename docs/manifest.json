@@ -988,6 +988,18 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "articles/gettingstarted.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/gettingstarted.html",
+          "hash": "i1qzntbOnGb/anHaBfH18vfs34sEeltgeGcHex7FuB8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "InvalidFileLink"
       ],
@@ -1008,7 +1020,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/kafkadbcontext.html",
-          "hash": "4asuiKOf5nwhUXiTg9HpsjDqopvwjZO/7HSOlZt0CN0="
+          "hash": "KzxvR3SJgnuNw/UDB2M/zRNhptrZKybBlIyOauUoo3M="
         }
       },
       "is_incremental": false,
@@ -1032,7 +1044,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "SvR3hG4khPSYsw75ljHikbUH30lOaIz3jf9d3hLotbs="
+          "hash": "VcLC+1jT5YjRLV6OlALzyAczxrfz3ICjVWWAIbJ/mqw="
         }
       },
       "is_incremental": false,
@@ -1044,7 +1056,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/usage.html",
-          "hash": "nbeB+fif792m/uC4u7gVBmviemQ5Zk3onCLTKbroms0="
+          "hash": "bPi1AfulGtR4muWavKl6V0IkohibWQ/JOBpWtifsUuc="
         }
       },
       "is_incremental": false,
@@ -1070,7 +1082,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "+3dEymRz33eRjjIg+q8d4AQH7CdQ6xTlzdyyXI6D0xw="
+          "hash": "bQF3V6eH9TgcAGDY7MGggfcmH7Dm6THmN610K1zOjok="
         }
       },
       "is_incremental": false,
@@ -1103,7 +1115,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 7,
+          "total_file_count": 8,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
