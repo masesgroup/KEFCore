@@ -1,16 +1,8 @@
 # KEFCore usage
 
-> NOTE: you need a working Apache Kafka cluster to use this provider.
+Read [Getting started](gettingstarted.md) to find out info and tips.
 
-### Installation
-
-Entity Framework Core provider for Apache Kafka is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet):
-
-```sh
-dotnet add package MASES.EntityFrameworkCore.KNet
-```
-
-### Basic usage
+## Basic example
 
 The following code demonstrates basic usage of Entity Framework Core provider for Apache Kafka. 
 For a full tutorial configuring the `KafkaDbContext`, defining the model, and creating the database, see [KafkaDbContext](kafkadbcontext.md) in the docs.
