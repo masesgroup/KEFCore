@@ -26,10 +26,9 @@ The most simple example of usage can be found in [KEFCore usage](usage.md). By d
   - default `StreamsConfig` can be overridden using **StreamsConfig** property of `KafkaDbContext`
   - default `TopicConfig` can be overridden using **TopicConfig** property of `KafkaDbContext`
 
-
 ### Default **ConsumerConfig**
 
-Over the Apache Kafka defaults it applies:
+Over the [Apache Kafka defaults](https://kafka.apache.org/documentation/#consumerconfigs) it applies:
 
 - EnableAutoCommit is **true**
 - AutoOffsetReset set to **EARLIEST**
@@ -37,15 +36,15 @@ Over the Apache Kafka defaults it applies:
 
 ### Default **ProducerConfig**
 
-Does not change anything than the Apache Kafka defaults
+Does not change anything over the [Apache Kafka defaults](https://kafka.apache.org/documentation/#producerconfigs)
 
-### Default **ConsumerConfig**
+### Default **StreamsConfig**
 
-Does not change anything than the Apache Kafka defaults
+Does not change anything over the [Apache Kafka defaults](https://kafka.apache.org/documentation/#streamsconfigs)
 
 ### Default **TopicConfig**
 
-Over the Apache Kafka defaults it applies:
+Over the [Apache Kafka defaults](https://kafka.apache.org/documentation/#topicconfigs) it applies:
 
 - DeleteRetentionMs set to 100 ms
 - MinCleanableDirtyRatio set to 0.01

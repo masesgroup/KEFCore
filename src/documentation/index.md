@@ -12,6 +12,16 @@ This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDU
 This project aims to create a provider to access the information stored within an Apache Kafka cluster using the paradigm behind Entity Framework.
 The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider.
 
+---
+## Summary
+
+* [Getting started](articles/gettingstarted.md)
+* [KEFCore usage](articles/usage.md)
+* [Roadmap](articles/roadmap.md)
+* [Current state](articles/currentstate.md)
+
+---
+
 ## Runtime engine
 
 KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](https://www.jcobridge.com) with its [features](https://www.jcobridge.com/features/), to obtain many benefits:
@@ -26,16 +36,14 @@ KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](
   * No extra validation cycle on protocol and functionality: bug fix, improvements, new features are immediately available;
   * Documentation is shared;
 
-Have a look at the following resources:
+### JCOBridge resources
+
+Have a look at the following JCOBridge resources:
 - [Release notes](https://www.jcobridge.com/release-notes/)
-- [Commercial info](https://www.jcobridge.com/pricing/)
-- [![JCOBridge nuget](https://img.shields.io/nuget/v/MASES.JCOBridge)](https://www.nuget.org/packages/MASES.JCOBridge)
+- [Community Edition](https://www.jcobridge.com/pricing-25/)
+- [Commercial Edition](https://www.jcobridge.com/pricing-25/)
+- Latest release: [![JCOBridge nuget](https://img.shields.io/nuget/v/MASES.JCOBridge)](https://www.nuget.org/packages/MASES.JCOBridge)
 
----
-## Summary
-
-* [Roadmap](articles/roadmap.md)
-* [Current state](articles/currentstate.md)
-* [KEFCore usage](articles/usage.md)
-
----
+KAFKA is a registered trademark of The Apache Software Foundation. KEFCore has no affiliation with and is not endorsed by The Apache Software Foundation.
+Microsoft is a registered trademark of Microsoft Corporation.
+EntityFramework is a registered trademark of Microsoft Corporation.
