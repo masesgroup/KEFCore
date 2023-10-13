@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Streams;
 
@@ -29,14 +30,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public sealed class KafkaStreamsTableRetriever<TKey> : KafkaStreamsBaseRetriever<TKey, EntityTypeDataStorage<TKey>, byte[], byte[]>
+public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer> : KafkaStreamsBaseRetriever<TKey, TValueContainer, byte[], byte[]>
+    where TValueContainer : IValueContainer<TKey>
 {
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<EntityTypeDataStorage<TKey>> valueSerdes)
+    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValueContainer> valueSerdes)
         : this(kafkaCluster, entityType, keySerdes, valueSerdes, new StreamsBuilder())
     {
     }
 
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<EntityTypeDataStorage<TKey>> valueSerdes, StreamsBuilder builder)
+    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValueContainer> valueSerdes, StreamsBuilder builder)
         : base(kafkaCluster, entityType, keySerdes, valueSerdes, entityType.StorageIdForTable(kafkaCluster.Options), builder, builder.Stream<byte[], byte[]>(entityType.TopicName(kafkaCluster.Options)))
     {
     }

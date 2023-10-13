@@ -32,6 +32,12 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public interface IKafkaSingletonOptions : ISingletonOptions
 {
+    Type KeySerializationType { get; }
+
+    Type ValueSerializationType { get; }
+
+    Type ValueContainerType { get; }
+
     bool UseNameMatching { get; }
 
     string? DatabaseName { get; }

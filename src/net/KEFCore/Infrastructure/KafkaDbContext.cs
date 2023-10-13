@@ -16,9 +16,13 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json;
+using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
@@ -142,7 +146,27 @@ const bool perf = false;
     {
 
     }
-
+    /// <summary>
+    /// The optional <see cref="Type"/> to use for key serialization
+    /// <para>
+    /// Default value is <see cref="KNetSerDes{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
+    /// </para>
+    /// </summary>
+    public virtual Type? KeySerializationType { get; set; } = null;
+    /// <summary>
+    /// The optional <see cref="Type"/> to use for value serialization
+    /// <para>
+    /// Default value is <see cref="KEFCoreSerDes{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
+    /// </para>
+    /// </summary>
+    public virtual Type? ValueSerializationType { get; set; } = null;
+    /// <summary>
+    /// The optional <see cref="Type"/> to use as value container
+    /// <para>
+    /// Default value is <see cref="DefaultValueContainer{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IValueContainer{T}"/>
+    /// </para>
+    /// </summary>
+    public virtual Type? ValueContainerType { get; set; } = null;
     /// <summary>
     /// The bootstrap servers of the Apache Kafka cluster
     /// </summary>
@@ -211,6 +235,9 @@ const bool perf = false;
             //o.WithProducerByEntity(UseProducerByEntity);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
+            if (KeySerializationType != null) o.WithKeySerializationType(KeySerializationType);
+            if (ValueSerializationType != null) o.WithValueSerializationType(ValueSerializationType);
+            if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
         });
     }
 }

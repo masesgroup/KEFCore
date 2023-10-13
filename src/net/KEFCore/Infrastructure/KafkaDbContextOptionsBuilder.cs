@@ -68,6 +68,75 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder => OptionsBuilder;
 
     /// <summary>
+    ///     Define the external serialization <see cref="Type"/> for key
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithKeySerializationType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithKeySerializationType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Define the external serialization <see cref="Type"/> for value
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithValueSerializationType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithValueSerializationType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Define the external <see cref="Type"/> which contains the values
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithValueContainerType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithValueContainerType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
     ///     Enables name matching on <see cref="IEntityType"/> instead of <see cref="Type"/> matching
     /// </summary>
     /// <remarks>

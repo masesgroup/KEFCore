@@ -1,9 +1,9 @@
-# KEFCore: Entity Framework Core provider for Apache Kafka
+# KEFCore: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/)
 
 [![CI_BUILD](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml) [![CI_RELEASE](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml) 
 
-KEFCore is the Entity Framework Core provider for Apache Kafka.
-Based on [KNet](https://github.com/masesgroup/KNet) it allows to use Apache Kafka as a distributed database.
+KEFCore is the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).
+Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka](https://kafka.apache.org/) as a distributed database and more.
 
 This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
 
@@ -17,6 +17,7 @@ The project is based on available information within the official [EntityFramewo
 
 * [Getting started](articles/gettingstarted.md)
 * [KEFCore usage](articles/usage.md)
+* [KEFCore serialization](articles/serialization.md)
 * [Roadmap](articles/roadmap.md)
 * [Current state](articles/currentstate.md)
 

@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
@@ -46,7 +47,8 @@ public interface IKafkaStreamsBaseRetriever : IEnumerable<ValueBuffer>, IDisposa
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
 public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRetriever
-    where TValue : IEntityTypeData
+    where TKey : notnull
+    where TValue : IValueContainer<TKey>
 {
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;

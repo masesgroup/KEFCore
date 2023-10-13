@@ -4,7 +4,7 @@ Read [Getting started](gettingstarted.md) to find out info and tips.
 
 ## Basic example
 
-The following code demonstrates basic usage of Entity Framework Core provider for Apache Kafka. 
+The following code demonstrates basic usage of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).. 
 For a full tutorial configuring the `KafkaDbContext`, defining the model, and creating the database, see [KafkaDbContext](kafkadbcontext.md) in the docs.
 
 ```cs

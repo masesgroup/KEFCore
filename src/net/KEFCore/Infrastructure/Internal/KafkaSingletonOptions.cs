@@ -36,6 +36,9 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
         if (kafkaOptions != null)
         {
+            KeySerializationType = kafkaOptions.KeySerializationType;
+            ValueSerializationType = kafkaOptions.ValueSerializationType;
+            ValueContainerType = kafkaOptions.ValueContainerType;
             UseNameMatching = kafkaOptions.UseNameMatching;
             DatabaseName = kafkaOptions.DatabaseName;
             ApplicationId = kafkaOptions.ApplicationId;
@@ -66,6 +69,12 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
                     nameof(DbContextOptionsBuilder.UseInternalServiceProvider)));
         }
     }
+
+    public virtual Type KeySerializationType { get; private set; }
+
+    public virtual Type ValueSerializationType { get; private set; }
+
+    public virtual Type ValueContainerType { get; private set; }
 
     public virtual bool UseNameMatching { get; private set; }
 

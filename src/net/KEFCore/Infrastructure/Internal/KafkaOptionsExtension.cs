@@ -20,13 +20,13 @@
 
 using Java.Lang;
 using Java.Util;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json;
+using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
-using Org.Apache.Kafka.Clients.Consumer;
-using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Streams;
 using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
@@ -38,6 +38,9 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
+    private Type _keySerializationType = typeof(KNetSerDes<>);
+    private Type _valueSerializationType = typeof(KEFCoreSerDes<>);
+    private Type _valueContainerType = typeof(DefaultValueContainer<>);
     private bool _useNameMatching = true;
     private string? _databaseName;
     private string? _applicationId;
@@ -63,6 +66,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     protected KafkaOptionsExtension(KafkaOptionsExtension copyFrom)
     {
+        _keySerializationType = copyFrom._keySerializationType;
+        _valueSerializationType = copyFrom._valueSerializationType;
+        _valueContainerType = copyFrom._valueContainerType;
         _useNameMatching = copyFrom._useNameMatching;
         _databaseName = copyFrom._databaseName;
         _applicationId = copyFrom._applicationId;
@@ -84,6 +90,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     protected virtual KafkaOptionsExtension Clone() => new(this);
 
     public virtual string ClusterId => _bootstrapServers!;
+
+    public virtual Type KeySerializationType => _keySerializationType;
+
+    public virtual Type ValueSerializationType => _valueSerializationType;
+
+    public virtual Type ValueContainerType => _valueContainerType;
 
     public virtual bool UseNameMatching => _useNameMatching;
 
@@ -112,6 +124,39 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
 
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
+
+    public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var clone = Clone();
+
+        clone._keySerializationType = serializationType;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithValueSerializationType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var clone = Clone();
+
+        clone._valueSerializationType = serializationType;
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithValueContainerType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var clone = Clone();
+
+        clone._valueContainerType = serializationType;
+
+        return clone;
+    }
 
     public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
     {

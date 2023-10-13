@@ -24,7 +24,7 @@ using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Producer;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -33,8 +33,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaTable<TKey> : IKafkaTable
+public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
     where TKey : notnull
+    where TValueContainer : class, IValueContainer<TKey>
+    where TKeySerializer : class
+    where TValueSerializer : class
 {
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly bool _sensitiveLoggingEnabled;
@@ -57,7 +60,7 @@ public class KafkaTable<TKey> : IKafkaTable
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTable(entityType);
-        _producer = EntityTypeProducers.Create<TKey>(entityType, Cluster);
+        _producer = EntityTypeProducers.Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
         _rows = new Dictionary<TKey, object?[]>(_keyValueFactory.EqualityComparer);
@@ -186,7 +189,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
         BumpValueGenerators(row);
 
-        return new KafkaRowBag<TKey>(entry, _tableAssociatedTopicName, key, properties, row);
+        return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, row);
     }
 
     public virtual IKafkaRowBag Delete(IUpdateEntry entry)
@@ -210,7 +213,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
             _rows.Remove(key);
 
-            return new KafkaRowBag<TKey>(entry, _tableAssociatedTopicName, key, properties, null);
+            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, null);
         }
         else
         {
@@ -292,7 +295,7 @@ public class KafkaTable<TKey> : IKafkaTable
 
             BumpValueGenerators(valueBuffer);
 
-            return new KafkaRowBag<TKey>(entry, _tableAssociatedTopicName, key, properties, valueBuffer);
+            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, valueBuffer);
         }
         else
         {

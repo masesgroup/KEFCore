@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -30,11 +31,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class EntityTypeProducers
 {
     static IEntityTypeProducer? _globalProducer = null;
-    static readonly ConcurrentDictionary<IEntityType, IEntityTypeProducer> _producers = new ConcurrentDictionary<IEntityType, IEntityTypeProducer>();
+    static readonly ConcurrentDictionary<IEntityType, IEntityTypeProducer> _producers = new();
 
-    public static IEntityTypeProducer Create<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull
+    public static IEntityTypeProducer Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
+        where TKey : notnull
+        where TValueContainer : class, IValueContainer<TKey>
+        where TKeySerializer : class
+        where TValueSerializer : class
     {
-        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey>(entityType, cluster));
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster));
     }
 
     public static void Dispose(IEntityTypeProducer producer)
@@ -46,5 +51,10 @@ public class EntityTypeProducers
         producer.Dispose();
     }
 
-    static IEntityTypeProducer CreateProducerLocal<TKey>(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull => new EntityTypeProducer<TKey>(entityType, cluster);
+    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
+        where TKey : notnull
+        where TValueContainer : class, IValueContainer<TKey>
+        where TKeySerializer : class
+        where TValueSerializer : class
+        => new EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster);
 }
