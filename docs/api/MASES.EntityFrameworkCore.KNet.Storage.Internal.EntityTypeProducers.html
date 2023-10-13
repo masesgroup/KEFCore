@@ -130,7 +130,8 @@ doing so can result in application failures when updating to a new Entity Framew
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static IEntityTypeProducer Create&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;(IEntityType entityType, IKafkaCluster cluster)
-    where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class where TValueSerializer : class</code></pre>
+    where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class, new()
+    where TValueSerializer : class, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">

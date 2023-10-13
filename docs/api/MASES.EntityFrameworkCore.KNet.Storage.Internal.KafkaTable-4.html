@@ -118,7 +118,8 @@ doing so can result in application failures when updating to a new Entity Framew
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
   <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; : IKafkaTable, IEntityTypeProducer where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class where TValueSerializer : class</code></pre>
+    <pre><code class="lang-csharp hljs">public class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; : IKafkaTable, IEntityTypeProducer where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class, new()
+    where TValueSerializer : class, new()</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
