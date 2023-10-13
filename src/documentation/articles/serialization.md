@@ -155,7 +155,7 @@ public class CustomSerDes<T> : KNetSerDes<T>
 }
 ```
 
-### How to use custom serialzer 
+### How to use custom types 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
 - **KeySerializationType**: set the value of the **Key SerDes** type in the form `CustomSerDes<>`
