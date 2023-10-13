@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>KEFCore: serialization | Kafka Bridge website </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="KEFCore: serialization | Kafka Bridge website ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="kefcore-serialization">KEFCore: serialization</h1>
+
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities used within the model in something viable from the backend.
+Each backend has its own schema to convert entities into something else; database providers converts entities into database schema or blob in Cosmos.</p>
+<h2 id="basic-concepts">Basic concepts</h2>
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities into record will be stored in the topics of Apache Kafka cluster.
+The way the entities are converted shall follows a schema.
+The current schema follows a JSON pattern and reports the information of each entity as:</p>
+<ul>
+<li><p>Primary Key:</p>
+<ul>
+<li>Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka default serializer for that type</li>
+<li>Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using a JSON serializer</li>
+</ul>
+</li>
+<li><p>Entity data: the Entity is managed, from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a>, as an array of objects associated to properties of the Entity.
+The schema of the Apache Kafka record value follows the code definition in <code>DefaultValueContainer&lt;T&gt;</code>. Below two examples:</p>
+<pre><code class="lang-json">{
+  &quot;EntityName&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Blog&quot;,
+  &quot;ClrType&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Blog&quot;,
+  &quot;Data&quot;: {
+    &quot;0&quot;: {
+      &quot;PropertyName&quot;: &quot;BlogId&quot;,
+      &quot;ClrType&quot;: &quot;System.Int32&quot;,
+      &quot;Value&quot;: 8
+    },
+    &quot;1&quot;: {
+      &quot;PropertyName&quot;: &quot;Rating&quot;,
+      &quot;ClrType&quot;: &quot;System.Int32&quot;,
+      &quot;Value&quot;: 7
+    },
+    &quot;2&quot;: {
+      &quot;PropertyName&quot;: &quot;Url&quot;,
+      &quot;ClrType&quot;: &quot;System.String&quot;,
+      &quot;Value&quot;: &quot;http://blogs.msdn.com/adonet7&quot;
+    }
+  }
+}
+</code></pre>
+<pre><code class="lang-json">{
+  &quot;EntityName&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Post&quot;,
+  &quot;ClrType&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Post&quot;,
+  &quot;Data&quot;: {
+    &quot;0&quot;: {
+      &quot;PropertyName&quot;: &quot;PostId&quot;,
+      &quot;ClrType&quot;: &quot;System.Int32&quot;,
+      &quot;Value&quot;: 44
+    },
+    &quot;1&quot;: {
+      &quot;PropertyName&quot;: &quot;BlogId&quot;,
+      &quot;ClrType&quot;: &quot;System.Int32&quot;,
+      &quot;Value&quot;: 44
+    },
+    &quot;2&quot;: {
+      &quot;PropertyName&quot;: &quot;Content&quot;,
+      &quot;ClrType&quot;: &quot;System.String&quot;,
+      &quot;Value&quot;: &quot;43&quot;
+    },
+    &quot;3&quot;: {
+      &quot;PropertyName&quot;: &quot;Title&quot;,
+      &quot;ClrType&quot;: &quot;System.String&quot;,
+      &quot;Value&quot;: &quot;title&quot;
+    }
+  }
+}
+</code></pre>
+</li>
+</ul>
+<p>The equivalent JSON schema is not available till now.</p>
+<h2 id="code-and-user-override">Code and user override</h2>
+<p>The code is based on three elements shall be available to <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> in order to work:</p>
+<ul>
+<li><strong>ValueContainer type</strong>: a type which encapsulate the Entity and stores needed information</li>
+<li><strong>Key SerDes</strong>: the serializer of the Primary Key</li>
+<li><strong>ValueContainer SerDes</strong>: the serializer of the ValueContainer</li>
+</ul>
+<h3 id="default-types">Default types</h3>
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
+<ul>
+<li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
+<li><strong>Key SerDes</strong> class: KEFCore uses <code>KNetSerDes&lt;T&gt;</code> for simple Primary Key or <code>KEFCoreSerDes&lt;T&gt;</code> for complex Primary Key</li>
+<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>KEFCoreSerDes&lt;T&gt;</code></li>
+</ul>
+<h3 id="user-override">User override</h3>
+<p>The default serialization can be overridden with user defined <strong>ValueContainer</strong> class, <strong>Key SerDes</strong> or <strong>ValueContainer SerDes</strong>.</p>
+<h4 id="valuecontainer-class"><strong>ValueContainer</strong> class</h4>
+<p>A custom <strong>ValueContainer</strong> class must contains enough information and shall follow the following rules:</p>
+<ul>
+<li>must implements the <code>IValueContainer&lt;T&gt;</code> interface</li>
+<li>must be a generic type</li>
+<li>must have at least a constructor which accept two parameters: a first parameter which is <code>IEntityType</code> and a second paramater of <code>object[]</code></li>
+</ul>
+<p>An example snippet is the follow:</p>
+<pre><code class="lang-C#">public class CustomValueContainer&lt;TKey&gt; : IValueContainer&lt;TKey&gt; where TKey : notnull
+{
+    /// &lt;summary&gt;
+    /// Initialize a new instance of &lt;see cref=&quot;CustomValueContainer{TKey}&quot;/&gt;
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;tName&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; requesting the ValueContainer for &lt;paramref name=&quot;rData&quot;/&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;rData&quot;&gt;The data, built from EFCore, to be stored in the ValueContainer&lt;/param&gt;
+    /// &lt;remarks&gt;This constructor is mandatory and it is used from KEFCore to request a ValueContainer&lt;/remarks&gt;
+    public CustomValueContainer(IEntityType tName, object[] rData)
+    {
+
+    }
+
+    public void GetData(IEntityType tName, ref object[] array)
+    {
+
+    }
+}
+</code></pre>
+<h4 id="key-serdes-and-valuecontainer-serdes-class"><strong>Key SerDes</strong> and <strong>ValueContainer SerDes</strong> class</h4>
+<p>A custom <strong>Key SerDes</strong> class shall follow the following rules:</p>
+<ul>
+<li>must implements the <code>IKNetSerDes&lt;T&gt;</code> interface or extend <code>KNetSerDes&lt;T&gt;</code></li>
+<li>must be a generic type</li>
+<li>must have a parameterless constructor</li>
+</ul>
+<p>An example snippet is the follow based on JSON serializer:</p>
+<pre><code class="lang-C#">public class CustomSerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
+{
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Serialize(string, T)&quot;/&gt;
+    public override byte[] Serialize(string topic, T data)
+    {
+        return SerializeWithHeaders(topic, null, data);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
+    public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+    {
+        var jsonStr = System.Text.Json.JsonSerializer.Serialize&lt;T&gt;(data);
+        return Encoding.UTF8.GetBytes(jsonStr);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Deserialize(string, byte[])&quot;/&gt;
+    public override T Deserialize(string topic, byte[] data)
+    {
+        return DeserializeWithHeaders(topic, null, data);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])&quot;/&gt;
+    public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+    {
+        if (data == null) return default;
+        return System.Text.Json.JsonSerializer.Deserialize&lt;T&gt;(data)!;
+    }
+}
+</code></pre>
+<h3 id="how-to-use-custom-types">How to use custom types</h3>
+<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<ul>
+<li><strong>KeySerializationType</strong>: set the value of the <strong>Key SerDes</strong> type in the form <code>CustomSerDes&lt;&gt;</code></li>
+<li><strong>ValueSerializationType</strong>: set the value of the <strong>ValueContainer SerDes</strong> type in the form <code>CustomSerDes&lt;&gt;</code></li>
+<li><strong>ValueContainerType</strong>: set the value of the <strong>ValueContainer</strong> type in the form <code>CustomValueContainer&lt;&gt;</code></li>
+</ul>
+<blockquote>
+<p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KafkaDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> will apply the right generic type when needed.</p>
+</blockquote>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/serialization.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class EntityTypeProducer&lt;TKey&gt;
+    <title>Class EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;
    | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class EntityTypeProducer&lt;TKey&gt;
+    <meta name="title" content="Class EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;
    | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -68,10 +68,10 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1">
+            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4">
   
   
-  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1" class="text-break">Class EntityTypeProducer&lt;TKey&gt;
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4" class="text-break">Class EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;
   </h1>
   <div class="markdown level0 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -82,7 +82,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">EntityTypeProducer&lt;TKey&gt;</span></div>
+    <div class="level1"><span class="xref">EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;</span></div>
   </div>
   <div class="implements">
     <h5>Implements</h5>
@@ -115,9 +115,9 @@ doing so can result in application failures when updating to a new Entity Framew
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.html">MASES.EntityFrameworkCore.KNet.Storage.Internal</a></h6>
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
-  <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_syntax">Syntax</h5>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class EntityTypeProducer&lt;TKey&gt; : IEntityTypeProducer</code></pre>
+    <pre><code class="lang-csharp hljs">public class EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; : IEntityTypeProducer where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class where TValueSerializer : class</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -132,19 +132,31 @@ doing so can result in application failures when updating to a new Entity Framew
         <td><span class="parametername">TKey</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="parametername">TValueContainer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TKeySerializer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValueSerializer</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1__ctor_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601.%23ctor(IEntityType%2CMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4__ctor_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604.%23ctor(IEntityType%2CMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L178">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L183">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1__ctor_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.#ctor(IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)">EntityTypeProducer(IEntityType, IKafkaCluster)</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4__ctor_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.#ctor(IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)">EntityTypeProducer(IEntityType, IKafkaCluster)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -177,13 +189,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_EntityType.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601.EntityType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_EntityType.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604.EntityType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L227">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L230">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_EntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_EntityType" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.EntityType">EntityType</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_EntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.EntityType*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_EntityType" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.EntityType">EntityType</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -207,13 +219,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_ValueBuffers.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601.ValueBuffers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_ValueBuffers.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604.ValueBuffers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L269">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L272">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_ValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.ValueBuffers*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_ValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.ValueBuffers">ValueBuffers</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_ValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.ValueBuffers*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_ValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.ValueBuffers">ValueBuffers</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -239,13 +251,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Commit_System_Collections_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601.Commit(System.Collections.IEnumerable%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Commit_System_Collections_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604.Commit(System.Collections.IEnumerable%7BMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L229">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L232">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Commit_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Commit_System_Collections_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Commit(System.Collections.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})">Commit(IEnumerable&lt;IKafkaRowBag&gt;)</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Commit_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Commit*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Commit_System_Collections_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Commit(System.Collections.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})">Commit(IEnumerable&lt;IKafkaRowBag&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -286,13 +298,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Dispose.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Dispose.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L256">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L259">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Dispose*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`1.Dispose">Dispose()</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Dispose*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Dispose">Dispose()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -314,7 +326,7 @@ doing so can result in application failures when updating to a new Entity Framew
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_1.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer%604%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducer.cs/#L38" class="contribution-link">View Source</a>

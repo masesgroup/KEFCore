@@ -118,18 +118,19 @@ doing so can result in application failures when updating to a new Entity Framew
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create__1_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create%60%601(IEntityType%2CMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create__4_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create%60%604(IEntityType%2CMASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L35">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L36">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create__1_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create``1(IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)">Create&lt;TKey&gt;(IEntityType, IKafkaCluster)</h4>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create__4_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create``4(IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)">Create&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;(IEntityType, IKafkaCluster)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEntityTypeProducer Create&lt;TKey&gt;(IEntityType entityType, IKafkaCluster cluster)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEntityTypeProducer Create&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;(IEntityType entityType, IKafkaCluster cluster)
+    where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class where TValueSerializer : class</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -181,6 +182,18 @@ doing so can result in application failures when updating to a new Entity Framew
         <td><span class="parametername">TKey</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="parametername">TValueContainer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TKeySerializer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValueSerializer</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
@@ -188,7 +201,7 @@ doing so can result in application failures when updating to a new Entity Framew
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L40">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L45">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)">Dispose(IEntityTypeProducer)</h4>
@@ -226,7 +239,7 @@ doing so can result in application failures when updating to a new Entity Framew
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L30" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L31" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

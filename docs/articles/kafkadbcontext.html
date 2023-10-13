@@ -69,11 +69,14 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="kefcore-kafkadbcontext">KEFCore: KafkaDbContext</h1>
 
-<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use Entity Framework Core with Apache Kafka:</p>
+<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a>:</p>
 <ul>
 <li><code>KafkaDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
 <li><code>KafkaDbContext</code> defines the following properties:
 <ul>
+<li><strong>KeySerializationType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record key</li>
+<li><strong>ValueSerializationType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record value</li>
+<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka record value</li>
 <li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka</li>
 <li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
 <li><strong>DbName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>

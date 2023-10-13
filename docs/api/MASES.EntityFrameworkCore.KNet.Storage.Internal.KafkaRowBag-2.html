@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class KafkaRowBag&lt;TKey&gt;
+    <title>Class KafkaRowBag&lt;TKey, TValueContainer&gt;
    | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class KafkaRowBag&lt;TKey&gt;
+    <meta name="title" content="Class KafkaRowBag&lt;TKey, TValueContainer&gt;
    | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.4.0">
     
@@ -68,10 +68,10 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1">
+            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2">
   
   
-  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1" class="text-break">Class KafkaRowBag&lt;TKey&gt;
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2" class="text-break">Class KafkaRowBag&lt;TKey, TValueContainer&gt;
   </h1>
   <div class="markdown level0 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -82,7 +82,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">KafkaRowBag&lt;TKey&gt;</span></div>
+    <div class="level1"><span class="xref">KafkaRowBag&lt;TKey, TValueContainer&gt;</span></div>
   </div>
   <div class="implements">
     <h5>Implements</h5>
@@ -114,9 +114,9 @@ doing so can result in application failures when updating to a new Entity Framew
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.html">MASES.EntityFrameworkCore.KNet.Storage.Internal</a></h6>
   <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
-  <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_syntax">Syntax</h5>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KafkaRowBag&lt;TKey&gt; : IKafkaRowBag</code></pre>
+    <pre><code class="lang-csharp hljs">public class KafkaRowBag&lt;TKey, TValueContainer&gt; : IKafkaRowBag where TValueContainer : IValueContainer&lt;TKey&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -131,24 +131,28 @@ doing so can result in application failures when updating to a new Entity Framew
         <td><span class="parametername">TKey</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="parametername">TValueContainer</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry_System_String__0_IProperty___System_Object___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.%23ctor(IUpdateEntry%2CSystem.String%2C%600%2CIProperty%5B%5D%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2__ctor_IUpdateEntry_System_String__0_System_Object___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.%23ctor(IUpdateEntry%2CSystem.String%2C%600%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L30">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L34">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1__ctor_IUpdateEntry_System_String__0_IProperty___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.#ctor(IUpdateEntry,System.String,`0,IProperty[],System.Object[])">KafkaRowBag(IUpdateEntry, String, TKey, IProperty[], Object[])</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2__ctor_IUpdateEntry_System_String__0_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.#ctor(IUpdateEntry,System.String,`0,System.Object[])">KafkaRowBag(IUpdateEntry, String, TKey, Object[])</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, IProperty[] properties, object[] row)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, object[] row)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -176,11 +180,6 @@ doing so can result in application failures when updating to a new Entity Framew
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">IProperty</span>[]</td>
-        <td><span class="parametername">properties</span></td>
-        <td></td>
-      </tr>
-      <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>[]</td>
         <td><span class="parametername">row</span></td>
         <td></td>
@@ -191,13 +190,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.AssociatedTopicName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_AssociatedTopicName.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.AssociatedTopicName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L41">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L44">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.AssociatedTopicName*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_AssociatedTopicName" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.AssociatedTopicName">AssociatedTopicName</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_AssociatedTopicName_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.AssociatedTopicName*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_AssociatedTopicName" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.AssociatedTopicName">AssociatedTopicName</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -221,13 +220,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Key%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Key.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.Key%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L43">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L46">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Key*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Key" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Key">Key</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Key*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Key" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Key">Key</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -251,43 +250,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Properties%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_UpdateEntry.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.UpdateEntry%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L45">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L42">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Properties*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Properties" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Properties">Properties</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IProperty[] Properties { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IProperty</span>[]</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.UpdateEntry%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L39">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.UpdateEntry*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_UpdateEntry" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.UpdateEntry">UpdateEntry</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_UpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_UpdateEntry" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry">UpdateEntry</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -311,43 +280,13 @@ doing so can result in application failures when updating to a new Entity Framew
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.Value%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_ValueBuffer.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.ValueBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L47">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L50">View Source</a>
   </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Value*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_Value" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.Value">Value</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public EntityTypeDataStorage&lt;TKey&gt; Value { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage-1.html">EntityTypeDataStorage</a>&lt;TKey&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601.ValueBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L49">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.ValueBuffer*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1_ValueBuffer" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`1.ValueBuffer">ValueBuffer</h4>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_ValueBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.ValueBuffer*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_ValueBuffer" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.ValueBuffer">ValueBuffer</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -369,6 +308,55 @@ doing so can result in application failures when updating to a new Entity Framew
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Value_ConstructorInfo_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602.Value(ConstructorInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L48">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Value_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Value*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Value_ConstructorInfo_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Value(ConstructorInfo)">Value(ConstructorInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TValueContainer Value(ConstructorInfo ci)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ConstructorInfo</span></td>
+        <td><span class="parametername">ci</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TValueContainer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html">IKafkaRowBag</a>
@@ -381,10 +369,10 @@ doing so can result in application failures when updating to a new Entity Framew
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_1.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag%602%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L28" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaRowBag.cs/#L30" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
