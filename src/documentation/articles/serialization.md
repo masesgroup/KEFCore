@@ -12,7 +12,8 @@ The current schema follows a JSON pattern and reports the information of each en
   - Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka default serializer for that type
   - Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using a JSON serializer
 
-- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), as an array of objects associated to properties of the Entity. The schema of the Apache Kafka record value follows the code definition in `EntityTypeDataStorage`. Below two examples:
+- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), as an array of objects associated to properties of the Entity. 
+  The schema of the Apache Kafka record value follows the code definition in `DefaultValueContainer<T>`. Below two examples:
   ```json
   {
     "EntityName": "MASES.EntityFrameworkCore.KNet.Test.Blog",
@@ -79,9 +80,9 @@ The code is based on three elements shall be available to [Entity Framework Core
 ### Default types
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) comes with some default values:
-- **ValueContainer** class: KEFCore uses `EntityTypeDataStorage` which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
-- **Key SerDes** class: KEFCore uses `KNetSerDes` for simple Primary Key or `KEFCoreSerDes` for complex Primary Key
-- **ValueContainer SerDes** class: KEFCore uses `KEFCoreSerDes`
+- **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
+- **Key SerDes** class: KEFCore uses `KNetSerDes<T>` for simple Primary Key or `KEFCoreSerDes<T>` for complex Primary Key
+- **ValueContainer SerDes** class: KEFCore uses `KEFCoreSerDes<T>`
 
 ### User override
 
@@ -154,4 +155,12 @@ public class CustomSerDes<T> : KNetSerDes<T>
 }
 ```
 
+### How to use custom serialzer 
+
+`KafkaDbContext` contains three properties can be used to override the default types:
+- **KeySerializationType**: set the value of the **Key SerDes** type in the form `CustomSerDes<>`
+- **ValueSerializationType**: set the value of the **ValueContainer SerDes** type in the form `CustomSerDes<>`
+- **ValueContainerType**: set the value of the **ValueContainer** type in the form `CustomValueContainer<>`
+
+> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) will apply the right generic type when needed.
 
