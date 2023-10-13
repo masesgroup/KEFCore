@@ -22,35 +22,34 @@ using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
 using System.Text;
 
-namespace MASES.EntityFrameworkCore.KNet.Serialization
+namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
+
+/// <summary>
+/// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class KEFCoreSerDes<T> : KNetSerDes<T>
 {
-    /// <summary>
-    /// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class KEFCoreSerDes<T> : KNetSerDes<T>
+    /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+    public override byte[] Serialize(string topic, T data)
     {
-        /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
-        public override byte[] Serialize(string topic, T data)
-        {
-            return SerializeWithHeaders(topic, null, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
-        public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
-        {
-            var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
-            return Encoding.UTF8.GetBytes(jsonStr);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
-        public override T Deserialize(string topic, byte[] data)
-        {
-            return DeserializeWithHeaders(topic, null, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
-        public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
-        {
-            if (data == null) return default;
-            return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
-        }
+        return SerializeWithHeaders(topic, null, data);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+    public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+    {
+        var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
+        return Encoding.UTF8.GetBytes(jsonStr);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+    public override T Deserialize(string topic, byte[] data)
+    {
+        return DeserializeWithHeaders(topic, null, data);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+    public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+    {
+        if (data == null) return default;
+        return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
     }
 }

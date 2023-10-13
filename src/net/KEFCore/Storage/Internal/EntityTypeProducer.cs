@@ -22,7 +22,6 @@
 
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
@@ -36,22 +35,27 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
+public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IEntityTypeProducer
+    where TKey : notnull
+    where TValueContainer : class, IEntityTypeData<TKey>
+    where TKeySerializer : class
+    where TValueSerializer : class
 {
+    private readonly ConstructorInfo TValueContainerConstructor;
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
-    private readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
-    private readonly IKNetProducer<TKey, EntityTypeDataStorage<TKey>>? _kafkaProducer;
+    private readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
+    private readonly IKNetProducer<TKey, TValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsBaseRetriever _streamData;
     private readonly IKNetSerDes<TKey> _keySerdes;
-    private readonly IKNetSerDes<EntityTypeDataStorage<TKey>> _valueSerdes;
+    private readonly IKNetSerDes<TValueContainer> _valueSerdes;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
     {
         readonly IEntityType _entityType;
-        readonly IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
+        readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
 
         #region KNetCompactedReplicatorEnumerator
         class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
@@ -62,9 +66,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
             Stopwatch _valueBufferSw = new Stopwatch();
 #endif
             readonly IEntityType _entityType;
-            IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? _kafkaCompactedReplicator;
-            readonly IEnumerator<KeyValuePair<TKey, EntityTypeDataStorage<TKey>>> _enumerator;
-            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
+            IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
+            readonly IEnumerator<KeyValuePair<TKey, TValueContainer>> _enumerator;
+            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
                 _kafkaCompactedReplicator = kafkaCompactedReplicator;
@@ -90,7 +94,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                     {
                         _currentSw.Start();
 #endif
-                        return _current.HasValue ? _current.Value : default;
+                    return _current.HasValue ? _current.Value : default;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -122,22 +126,22 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
                 {
                     _moveNextSw.Start();
 #endif
-                    if (_enumerator.MoveNext())
-                    {
+                if (_enumerator.MoveNext())
+                {
 #if DEBUG_PERFORMANCE
                         _cycles++;
                         _valueBufferSw.Start();
 #endif
-                        object[] array = null;
-                        _enumerator.Current.Value.GetData(_entityType, ref array);
+                    object[] array = null;
+                    _enumerator.Current.Value.GetData(_entityType, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
-                        _current = new ValueBuffer(array);
-                        return true;
-                    }
-                    _current = null;
-                    return false;
+                    _current = new ValueBuffer(array);
+                    return true;
+                }
+                _current = null;
+                return false;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -158,7 +162,7 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
         #endregion
 
-        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>? kafkaCompactedReplicator)
+        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator)
         {
             _entityType = entityType;
             _kafkaCompactedReplicator = kafkaCompactedReplicator;
@@ -185,17 +189,15 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         _cluster = cluster;
         _useCompactedReplicator = _cluster.Options.UseCompactedReplicator;
 
-        if (KNetSerialization.IsInternalManaged<TKey>())
-        {
-            _keySerdes = new KNetSerDes<TKey>();
-        }
-        else _keySerdes = new KEFCoreSerDes<TKey>();
+        var tTValueContainer = typeof(TValueContainer);
+        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
 
-        _valueSerdes = new KEFCoreSerDes<EntityTypeDataStorage<TKey>>();
+        _keySerdes = Activator.CreateInstance(typeof(TKeySerializer)) as IKNetSerDes<TKey>;
+        _valueSerdes = Activator.CreateInstance(typeof(TValueSerializer)) as IKNetSerDes<TValueContainer>;
 
         if (_useCompactedReplicator)
         {
-            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, EntityTypeDataStorage<TKey>>()
+            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, TValueContainer>()
             {
                 UpdateMode = UpdateModeTypes.OnConsume,
                 BootstrapServers = _cluster.Options.BootstrapServers,
@@ -220,8 +222,8 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         }
         else
         {
-            _kafkaProducer = new KNetProducer<TKey, EntityTypeDataStorage<TKey>>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
-            _streamData = new KafkaStreamsTableRetriever<TKey>(cluster, entityType, _keySerdes, _valueSerdes);
+            _kafkaProducer = new KNetProducer<TKey, TValueContainer>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
+            _streamData = new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes, _valueSerdes);
         }
     }
 
@@ -231,9 +233,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
     {
         if (_useCompactedReplicator)
         {
-            foreach (KafkaRowBag<TKey> record in records)
+            foreach (KafkaRowBag<TKey, TValueContainer> record in records)
             {
-                var value = record.Value;
+                var value = record.Value(TValueContainerConstructor);
                 if (_kafkaCompactedReplicator != null) _kafkaCompactedReplicator[record.Key] = value!;
             }
 
@@ -242,9 +244,9 @@ public class EntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
         else
         {
             List<Future<RecordMetadata>> futures = new();
-            foreach (KafkaRowBag<TKey> record in records)
+            foreach (KafkaRowBag<TKey, TValueContainer> record in records)
             {
-                var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, EntityTypeDataStorage<TKey>>(record.AssociatedTopicName, 0, record.Key, record.Value!));
+                var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, TValueContainer>(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!));
                 futures.Add(future);
             }
 

@@ -10,7 +10,7 @@
 		<OutputPath>..\..\..\bin\</OutputPath>
 		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization</PackageId>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>serialization.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>

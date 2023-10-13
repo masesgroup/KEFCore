@@ -18,7 +18,7 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -27,14 +27,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaRowBag<TKey> : IKafkaRowBag
+public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
+    where TKey : notnull
+    where TValueContainer : IEntityTypeData<TKey>
 {
-    public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, IProperty[] properties, object?[]? row)
+    public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, object?[]? row)
     {
         UpdateEntry = entry;
         AssociatedTopicName = topicName;
         Key = key;
-        Properties = properties;
         ValueBuffer = row;
     }
 
@@ -44,9 +45,7 @@ public class KafkaRowBag<TKey> : IKafkaRowBag
 
     public TKey Key { get; private set; }
 
-    public IProperty[] Properties { get; private set; }
-
-    public EntityTypeDataStorage<TKey>? Value => UpdateEntry.EntityState == EntityState.Deleted ? null : new EntityTypeDataStorage<TKey>(UpdateEntry.EntityType, Properties, ValueBuffer!);
+    public TValueContainer? Value(ConstructorInfo ci) => UpdateEntry.EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke(new object[] { UpdateEntry.EntityType, ValueBuffer! });
 
     public object?[]? ValueBuffer { get; private set; }
 }

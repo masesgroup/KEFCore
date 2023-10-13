@@ -109,24 +109,19 @@ public class ObjectType : IJsonOnDeserialized
     public object Value { get; set; }
 }
 
-/// <summary>
-///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-///     any release. You should only use it directly in your code with extreme caution and knowing that
-///     doing so can result in application failures when updating to a new Entity Framework Core release.
-/// </summary>
 [JsonSerializable(typeof(EntityTypeDataStorage<>))]
-public class EntityTypeDataStorage<TKey> : IEntityTypeData
+public class EntityTypeDataStorage<TKey> : IEntityTypeData<TKey> where TKey : notnull
 {
     public EntityTypeDataStorage() { }
 
-    public EntityTypeDataStorage(IEntityType tName, IProperty[] properties, object[] rData)
+    public EntityTypeDataStorage(IEntityType tName, object[] rData)
     {
         TypeName = tName.Name;
         Data = new Dictionary<int, ObjectType>();
-        for (int i = 0; i < properties.Length; i++)
+        foreach (var item in tName.GetProperties())
         {
-            Data.Add(properties[i].GetIndex(), new ObjectType(properties[i], rData[i]));
+            int index = item.GetIndex();
+            Data.Add(index, new ObjectType(item, rData[index]));
         }
     }
 

@@ -18,8 +18,7 @@
 
 using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Org.Apache.Kafka.Common;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -30,6 +29,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaTableFactory : IKafkaTableFactory
 {
+    private readonly IKafkaSingletonOptions _options;
     private readonly bool _sensitiveLoggingEnabled;
 
     private readonly ConcurrentDictionary<(IKafkaCluster Cluster, IEntityType EntityType), Func<IKafkaTable>> _factories = new();
@@ -38,6 +38,7 @@ public class KafkaTableFactory : IKafkaTableFactory
         ILoggingOptions loggingOptions,
         IKafkaSingletonOptions options)
     {
+        _options = options;
         _sensitiveLoggingEnabled = loggingOptions.IsSensitiveDataLoggingEnabled;
     }
 
@@ -52,13 +53,19 @@ public class KafkaTableFactory : IKafkaTableFactory
     private Func<IKafkaTable> CreateTable(IKafkaCluster cluster, IEntityType entityType)
         => (Func<IKafkaTable>)typeof(KafkaTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
-            .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType())
+            .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(), 
+                               _options.ValueContainerType(entityType), 
+                               _options.SerializerTypeForKey(entityType), 
+                               _options.SerializerTypeForValue(entityType))
             .Invoke(null, new object?[] { cluster, entityType, _sensitiveLoggingEnabled })!;
 
-    private static Func<IKafkaTable> CreateFactory<TKey>(
+    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TKeySerializer, TValueSerializer>(
         IKafkaCluster cluster,
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
         where TKey : notnull
-        => () => new KafkaTable<TKey>(cluster, entityType, sensitiveLoggingEnabled);
+        where TValueContainer : class, IEntityTypeData<TKey>
+        where TKeySerializer : class
+        where TValueSerializer : class
+        => () => new KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>(cluster, entityType, sensitiveLoggingEnabled);
 }

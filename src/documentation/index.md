@@ -17,6 +17,7 @@ The project is based on available information within the official [EntityFramewo
 
 * [Getting started](articles/gettingstarted.md)
 * [KEFCore usage](articles/usage.md)
+* [KEFCore serialization](articles/serialization.md)
 * [Roadmap](articles/roadmap.md)
 * [Current state](articles/currentstate.md)
 
