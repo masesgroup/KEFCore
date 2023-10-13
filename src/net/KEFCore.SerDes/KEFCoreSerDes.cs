@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
 using System.Text;
@@ -27,7 +28,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
 /// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
 public class KEFCoreSerDes<T> : KNetSerDes<T>
 {
     /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>

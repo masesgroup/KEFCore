@@ -163,7 +163,7 @@ const bool perf = false;
     /// <summary>
     /// The optional <see cref="Type"/> to use as value container
     /// <para>
-    /// Default value is <see cref="EntityTypeDataStorage{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IEntityTypeData{T}"/>
+    /// Default value is <see cref="DefaultValueContainer{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IValueContainer{T}"/>
     /// </para>
     /// </summary>
     public virtual Type? ValueContainerType { get; set; } = null;

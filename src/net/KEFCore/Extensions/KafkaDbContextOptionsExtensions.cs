@@ -22,6 +22,8 @@
 using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
@@ -129,7 +131,12 @@ public static class KafkaDbContextOptionsExtensions
     public static Type SerializerTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.KeySerializationType.MakeGenericType(primaryKey);
+        var serdesType = options.KeySerializationType;
+        if (!KNetSerialization.IsInternalManaged(primaryKey) && serdesType == typeof(KNetSerDes<>))
+        {
+            serdesType = typeof(KEFCoreSerDes<>);
+        }
+        return serdesType.MakeGenericType(primaryKey);
     }
 
     public static Type SerializerTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)

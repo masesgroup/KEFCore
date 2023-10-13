@@ -29,7 +29,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
     where TKey : notnull
-    where TValueContainer : IEntityTypeData<TKey>
+    where TValueContainer : IValueContainer<TKey>
 {
     public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, object?[]? row)
     {

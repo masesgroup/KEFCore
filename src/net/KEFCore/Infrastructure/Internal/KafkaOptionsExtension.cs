@@ -40,7 +40,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
     private Type _keySerializationType = typeof(KNetSerDes<>);
     private Type _valueSerializationType = typeof(KEFCoreSerDes<>);
-    private Type _valueContainerType = typeof(EntityTypeDataStorage<>);
+    private Type _valueContainerType = typeof(DefaultValueContainer<>);
     private bool _useNameMatching = true;
     private string? _databaseName;
     private string? _applicationId;

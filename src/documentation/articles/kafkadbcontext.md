@@ -1,8 +1,11 @@
 # KEFCore: KafkaDbContext
 
-`KafkaDbContext` is a special class which helps to define the `DbContext` and use Entity Framework Core with Apache Kafka:
+`KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/):
 - `KafkaDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
 - `KafkaDbContext` defines the following properties:
+  - **KeySerializationType**: the .NET type to be used to allocate an external serializer for Apache Kafka record key
+  - **ValueSerializationType**: the .NET type to be used to allocate an external serializer for Apache Kafka record value
+  - **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka record value
   - **BootstrapServers**: the server hosting the broker of Apache Kafka
   - **ApplicationId**: the application identifier used to identify the context
   - **DbName**: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database

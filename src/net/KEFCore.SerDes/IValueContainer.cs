@@ -20,12 +20,15 @@
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 /// <summary>
-///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-///     any release. You should only use it directly in your code with extreme caution and knowing that
-///     doing so can result in application failures when updating to a new Entity Framework Core release.
+/// This is the main interface a class must implmenet to be a ValueContainer. More info <see href="https://masesgroup.github.io/KEFCore/articles/serialization.html">here</see>
 /// </summary>
-public interface IEntityTypeData<in T> where T : notnull
+/// <typeparam name="T">It is the key <see cref="Type"/> passed from Entity Framework associated to the Entity data will be stored in the ValueContainer</typeparam>
+public interface IValueContainer<in T> where T : notnull
 {
+    /// <summary>
+    /// Returns back the raw data associated to the Entity
+    /// </summary>
+    /// <param name="tName">The <see cref="IEntityType"/> requesting to get the data back</param>
+    /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
     void GetData(IEntityType tName, ref object[] array);
 }

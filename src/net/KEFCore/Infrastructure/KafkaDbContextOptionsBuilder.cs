@@ -20,7 +20,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;

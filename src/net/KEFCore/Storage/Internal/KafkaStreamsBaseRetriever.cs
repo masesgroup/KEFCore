@@ -48,7 +48,7 @@ public interface IKafkaStreamsBaseRetriever : IEnumerable<ValueBuffer>, IDisposa
 /// </summary>
 public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRetriever
     where TKey : notnull
-    where TValue : IEntityTypeData<TKey>
+    where TValue : IValueContainer<TKey>
 {
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;

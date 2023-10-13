@@ -64,7 +64,7 @@ public class KafkaTableFactory : IKafkaTableFactory
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
         where TKey : notnull
-        where TValueContainer : class, IEntityTypeData<TKey>
+        where TValueContainer : class, IValueContainer<TKey>
         where TKeySerializer : class
         where TValueSerializer : class
         => () => new KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>(cluster, entityType, sensitiveLoggingEnabled);

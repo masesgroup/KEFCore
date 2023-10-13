@@ -35,7 +35,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
     where TKey : notnull
-    where TValueContainer : class, IEntityTypeData<TKey>
+    where TValueContainer : class, IValueContainer<TKey>
     where TKeySerializer : class
     where TValueSerializer : class
 {

@@ -24,22 +24,33 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Storage;
-
-[JsonSerializable(typeof(ObjectType))]
-public class ObjectType : IJsonOnDeserialized
+/// <summary>
+/// This is a supporting class used from <see cref="DefaultValueContainer{TKey}"/>
+/// </summary>
+[JsonSerializable(typeof(PropertyData))]
+public class PropertyData : IJsonOnDeserialized
 {
-    public ObjectType()
+    /// <summary>
+    /// Initialize a new instance of <see cref="PropertyData"/>
+    /// </summary>
+    /// <remarks>It is mainly used from the JSON serializer</remarks>
+    public PropertyData()
     {
 
     }
-
-    public ObjectType(IProperty typeName, object value)
+    /// <summary>
+    /// Initialize a new instance of <see cref="PropertyData"/>
+    /// </summary>
+    /// <param name="property">The <see cref="IProperty"/> to be stored into <see cref="PropertyData"/> associated to <paramref name="value"/></param>
+    /// <param name="value">The data, built from EFCore, to be stored in the <see cref="PropertyData"/></param>
+    /// <remarks>This constructor is mandatory and it is used from <see cref="DefaultValueContainer{TKey}"/></remarks>
+    public PropertyData(IProperty property, object value)
     {
-        TypeName = typeName.ClrType?.FullName;
-        PropertyName = typeName.Name;
+        ClrType = property.ClrType?.FullName;
+        PropertyName = property.Name;
         Value = value;
     }
-
+    /// <inheritdoc/>
     public void OnDeserialized()
     {
         if (Value is JsonElement elem)
@@ -48,24 +59,24 @@ public class ObjectType : IJsonOnDeserialized
             {
                 case JsonValueKind.String:
                     Value = elem.GetString()!;
-                    if (TypeName != typeof(string).FullName)
+                    if (ClrType != typeof(string).FullName)
                     {
                         try
                         {
-                            Value = Convert.ChangeType(Value, Type.GetType(TypeName!)!);
+                            Value = Convert.ChangeType(Value, Type.GetType(ClrType!)!);
                         }
                         catch (InvalidCastException)
                         {
                             // failed conversion, try with other methods for known types
-                            if (TypeName == typeof(Guid).FullName)
+                            if (ClrType == typeof(Guid).FullName)
                             {
                                 Value = elem.GetGuid();
                             }
-                            else if (TypeName == typeof(DateTime).FullName)
+                            else if (ClrType == typeof(DateTime).FullName)
                             {
                                 Value = elem.GetDateTime();
                             }
-                            else if (TypeName == typeof(DateTimeOffset).FullName)
+                            else if (ClrType == typeof(DateTimeOffset).FullName)
                             {
                                 Value = elem.GetDateTimeOffset();
                             }
@@ -78,7 +89,7 @@ public class ObjectType : IJsonOnDeserialized
                     break;
                 case JsonValueKind.Number:
                     var tmp = elem.GetInt64();
-                    Value = Convert.ChangeType(tmp, Type.GetType(TypeName!)!);
+                    Value = Convert.ChangeType(tmp, Type.GetType(ClrType!)!);
                     break;
                 case JsonValueKind.True:
                     Value = true;
@@ -98,37 +109,64 @@ public class ObjectType : IJsonOnDeserialized
         }
         else
         {
-            Value = Convert.ChangeType(Value, Type.GetType(TypeName!)!);
+            Value = Convert.ChangeType(Value, Type.GetType(ClrType!)!);
         }
     }
-
-    public string? TypeName { get; set; }
-
+    /// <summary>
+    /// The name of the <see cref="IProperty"/>
+    /// </summary>
     public string? PropertyName { get; set; }
-
-    public object Value { get; set; }
+    /// <summary>
+    /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>
+    /// </summary>
+    public string? ClrType { get; set; }
+    /// <summary>
+    /// The raw value associated to the <see cref="IProperty"/>
+    /// </summary>
+    public object? Value { get; set; }
 }
-
-[JsonSerializable(typeof(EntityTypeDataStorage<>))]
-public class EntityTypeDataStorage<TKey> : IEntityTypeData<TKey> where TKey : notnull
+/// <summary>
+/// The default ValueContainer used from KEFCore
+/// </summary>
+/// <typeparam name="TKey">It is the key <see cref="Type"/> passed from Entity Framework associated to the Entity data will be stored in the <see cref="DefaultValueContainer{TKey}"/></typeparam>
+[JsonSerializable(typeof(DefaultValueContainer<>))]
+public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : notnull
 {
-    public EntityTypeDataStorage() { }
-
-    public EntityTypeDataStorage(IEntityType tName, object[] rData)
+    /// <summary>
+    /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
+    /// </summary>
+    /// <remarks>It is mainly used from the JSON serializer</remarks>
+    public DefaultValueContainer() { }
+    /// <summary>
+    /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
+    /// </summary>
+    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="DefaultValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/></param>
+    /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="DefaultValueContainer{TKey}"/></remarks>
+    public DefaultValueContainer(IEntityType tName, object[] rData)
     {
-        TypeName = tName.Name;
-        Data = new Dictionary<int, ObjectType>();
+        EntityName = tName.Name;
+        ClrType = tName.ClrType.FullName!;
+        Data = new Dictionary<int, PropertyData>();
         foreach (var item in tName.GetProperties())
         {
             int index = item.GetIndex();
-            Data.Add(index, new ObjectType(item, rData[index]));
+            Data.Add(index, new PropertyData(item, rData[index]));
         }
     }
-
-    public string TypeName { get; set; }
-
-    public Dictionary<int, ObjectType> Data { get; set; }
-
+    /// <summary>
+    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
+    /// </summary>
+    public string? EntityName { get; set; }
+    /// <summary>
+    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
+    /// </summary>
+    public string? ClrType { get; set; }
+    /// <summary>
+    /// The data stored associated to the <see cref="IEntityType"/>
+    /// </summary>
+    public Dictionary<int, PropertyData>? Data { get; set; }
+    /// <inheritdoc/>
     public void GetData(IEntityType tName, ref object[] array)
     {
 #if DEBUG_PERFORMANCE
@@ -150,7 +188,7 @@ public class EntityTypeDataStorage<TKey> : IEntityTypeData<TKey> where TKey : no
 #endif
         for (int i = 0; i < Data.Count; i++)
         {
-            array[i] = Data[i].Value;
+            array[i] = Data[i].Value!;
         }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

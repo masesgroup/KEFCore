@@ -31,7 +31,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
 public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer> : KafkaStreamsBaseRetriever<TKey, TValueContainer, byte[], byte[]>
-    where TValueContainer : IEntityTypeData<TKey>
+    where TValueContainer : IValueContainer<TKey>
 {
     public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValueContainer> valueSerdes)
         : this(kafkaCluster, entityType, keySerdes, valueSerdes, new StreamsBuilder())
