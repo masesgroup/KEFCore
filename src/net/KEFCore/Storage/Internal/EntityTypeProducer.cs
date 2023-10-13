@@ -38,8 +38,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IEntityTypeProducer
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
-    where TKeySerializer : class
-    where TValueSerializer : class
+    where TKeySerializer : class, new()
+    where TValueSerializer : class, new()
 {
     private readonly ConstructorInfo TValueContainerConstructor;
     private readonly bool _useCompactedReplicator;
@@ -192,8 +192,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         var tTValueContainer = typeof(TValueContainer);
         TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
 
-        _keySerdes = Activator.CreateInstance(typeof(TKeySerializer)) as IKNetSerDes<TKey>;
-        _valueSerdes = Activator.CreateInstance(typeof(TValueSerializer)) as IKNetSerDes<TValueContainer>;
+        _keySerdes = new TKeySerializer() as IKNetSerDes<TKey>;
+        _valueSerdes = new TValueSerializer() as IKNetSerDes<TValueContainer>;
 
         if (_useCompactedReplicator)
         {
