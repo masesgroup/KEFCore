@@ -36,8 +36,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
-    where TKeySerializer : class
-    where TValueSerializer : class
+    where TKeySerializer : class, new()
+    where TValueSerializer : class, new()
 {
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly bool _sensitiveLoggingEnabled;

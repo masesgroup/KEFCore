@@ -36,8 +36,8 @@ public class EntityTypeProducers
     public static IEntityTypeProducer Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerializer : class
-        where TValueSerializer : class
+        where TKeySerializer : class, new()
+        where TValueSerializer : class, new()
     {
         return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster));
     }
@@ -54,7 +54,7 @@ public class EntityTypeProducers
     static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerializer : class
-        where TValueSerializer : class
+        where TKeySerializer : class, new()
+        where TValueSerializer : class, new()
         => new EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster);
 }
