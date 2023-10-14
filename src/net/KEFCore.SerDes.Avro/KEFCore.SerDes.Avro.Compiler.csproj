@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<ImplicitUsings>true</ImplicitUsings>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Serialization.Avro</RootNamespace>
+		<Title>EntityFrameworkCore KNet - Avro Serialization support for EntityFrameworkCore provider for Apache Kafka</Title>
+		<Description>EntityFrameworkCore KNet - Avro Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Serialization.Avro</Product>
+		<OutputPath>..\..\..\bin\</OutputPath>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;avro;sql kafka apache-kafka dotnet clr netcore net5 net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="AvroValueContainer.cs" />
+	  <Compile Remove="KEFCoreSerDes.Avro.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Apache.Avro" Version="1.11.3" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="AvroValueContainer.avsc">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

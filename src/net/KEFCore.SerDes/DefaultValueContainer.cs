@@ -23,7 +23,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MASES.EntityFrameworkCore.KNet.Serialization.Storage;
+namespace MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 /// <summary>
 /// This is a supporting class used from <see cref="DefaultValueContainer{TKey}"/>
 /// </summary>

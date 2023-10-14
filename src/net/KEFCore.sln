@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore", "KEFCore\KEFCore.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes", "KEFCore.SerDes\KEFCore.SerDes.csproj", "{FFA73185-E980-48D9-8016-BC5434A4E1B4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Avro", "KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj", "{87EB9CF6-D275-460F-B3F5-A5DED0E40196}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Avro.Compiler", "KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.Compiler.csproj", "{19F6B000-2C24-4431-8F39-DBF79BFD98F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{FFA73185-E980-48D9-8016-BC5434A4E1B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA73185-E980-48D9-8016-BC5434A4E1B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA73185-E980-48D9-8016-BC5434A4E1B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87EB9CF6-D275-460F-B3F5-A5DED0E40196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EB9CF6-D275-460F-B3F5-A5DED0E40196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EB9CF6-D275-460F-B3F5-A5DED0E40196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EB9CF6-D275-460F-B3F5-A5DED0E40196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F6B000-2C24-4431-8F39-DBF79BFD98F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F6B000-2C24-4431-8F39-DBF79BFD98F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F6B000-2C24-4431-8F39-DBF79BFD98F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F6B000-2C24-4431-8F39-DBF79BFD98F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

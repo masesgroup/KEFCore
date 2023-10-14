@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Benchmark.Avro.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Benchmark.Avro.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Benchmark Avro Test</Title>
+		<Description>EntityFrameworkCore KNet Benchmark.Avro.Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Benchmark.Avro.Test</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Benchmark.Avro.Test.InMemory.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Benchmark.Avro.Test.KafkaStreams.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Benchmark.Avro.Test.KNetReplicator.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>
