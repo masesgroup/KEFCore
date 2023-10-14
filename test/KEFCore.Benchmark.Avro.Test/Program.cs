@@ -54,8 +54,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void Main(string[] args)
         {
-            //AvroSerialization.TestAvroSerialization();
-
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
@@ -91,7 +89,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     DbName = databaseName,
                     StreamsConfig = streamConfig,
                     ValueContainerType = typeof(AvroValueContainer<>),
-                    ValueSerializationType = typeof(KEFCoreSerDesAvro<>),
+                    ValueSerializationType = config.UseAvroBinary ? typeof(KEFCoreSerDesAvroBinary<>) : typeof(KEFCoreSerDesAvroJson<>),
                 })
                 {
 

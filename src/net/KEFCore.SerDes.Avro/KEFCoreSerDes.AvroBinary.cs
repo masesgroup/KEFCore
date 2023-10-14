@@ -27,13 +27,13 @@ using Org.Apache.Kafka.Common.Header;
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 
 /// <summary>
-/// Avro extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Avro Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class KEFCoreSerDesAvro<T> : KNetSerDes<T>
+public class KEFCoreSerDesAvroBinary<T> : KNetSerDes<T>
 {
-    static SpecificDefaultWriter SpecificWriter = new SpecificDefaultWriter(AvroValueContainer._SCHEMA);
-    static SpecificDefaultReader SpecificReader = new SpecificDefaultReader(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+    static readonly SpecificDefaultWriter SpecificWriter = new SpecificDefaultWriter(AvroValueContainer._SCHEMA);
+    static readonly SpecificDefaultReader SpecificReader = new SpecificDefaultReader(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
 
     /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)

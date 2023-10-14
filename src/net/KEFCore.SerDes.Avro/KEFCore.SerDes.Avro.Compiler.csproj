@@ -15,7 +15,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="AvroValueContainer.cs" />
-	  <Compile Remove="KEFCoreSerDes.Avro.cs" />
+	  <Compile Remove="KEFCoreSerDes.AvroBinary.cs" />
+	  <Compile Remove="KEFCoreSerDes.AvroJson.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
