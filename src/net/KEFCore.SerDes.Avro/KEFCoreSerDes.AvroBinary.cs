@@ -18,19 +18,23 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
+using Avro.IO;
+using Avro.Specific;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
-using System.Text;
 
-namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
+namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 
 /// <summary>
-/// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Avro Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
-/// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-public class KEFCoreSerDes<T> : KNetSerDes<T>
+/// <typeparam name="T"></typeparam>
+public class KEFCoreSerDesAvroBinary<T> : KNetSerDes<T>
 {
+    static readonly SpecificDefaultWriter SpecificWriter = new SpecificDefaultWriter(AvroValueContainer._SCHEMA);
+    static readonly SpecificDefaultReader SpecificReader = new SpecificDefaultReader(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+
     /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)
     {
@@ -39,8 +43,10 @@ public class KEFCoreSerDes<T> : KNetSerDes<T>
     /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
-        var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
-        return Encoding.UTF8.GetBytes(jsonStr);
+        using MemoryStream memStream = new();
+        BinaryEncoder encoder = new(memStream);
+        SpecificWriter.Write(data, encoder);
+        return memStream.ToArray();
     }
     /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
     public override T Deserialize(string topic, byte[] data)
@@ -50,7 +56,10 @@ public class KEFCoreSerDes<T> : KNetSerDes<T>
     /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
-        if (data == null) return default!;
-        return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
+        using MemoryStream memStream = new(data);
+        BinaryDecoder decoder = new(memStream);
+        T t = (T)Activator.CreateInstance(typeof(T))!;
+        t = SpecificReader.Read(t!, decoder);
+        return t;
     }
 }

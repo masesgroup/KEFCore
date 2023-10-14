@@ -18,7 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
-using MASES.EntityFrameworkCore.KNet.Serialization.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;

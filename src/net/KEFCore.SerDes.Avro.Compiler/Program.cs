@@ -22,24 +22,33 @@
  *  SOFTWARE.
  */
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+using System.Diagnostics;
+
+namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler;
+
+partial class Program
 {
-    public class ProgramConfig
+    static void ReportString(string message)
     {
-        public bool UseAvroBinary { get; set; } = false;
-        public bool EnableKEFCoreTracing { get; set; } = false;
-        public bool UseInMemoryProvider { get; set; } = false;
-        public bool UseModelBuilder { get; set; } = false;
-        public bool UseCompactedReplicator { get; set; } = false;
-        public bool UsePersistentStorage { get; set; } = false;
-        public string DatabaseName { get; set; } = "TestDB";
-        public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
-        public string ApplicationId { get; set; } = "TestApplication";
-        public bool DeleteApplicationData { get; set; } = true;
-        public bool LoadApplicationData { get; set; } = true;
-        public string BootstrapServers { get; set; } = "localhost:9092";
-        public int NumberOfElements { get; set; } = 1000;
-        public int NumberOfExecutions { get; set; } = 1;
-        public int NumberOfExtraElements { get; set; } = 100;
+        if (Debugger.IsAttached)
+        {
+            Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+        }
+        else
+        {
+            Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        try
+        {
+            AvroSerializationHelper.BuildDefaultSchema("Generated");
+        }
+        catch (Exception ex)
+        {
+            ReportString(ex.ToString());
+        }
     }
 }
