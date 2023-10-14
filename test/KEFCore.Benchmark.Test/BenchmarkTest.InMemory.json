@@ -1,4 +1,5 @@
 {
+  "DatabaseName": "TestDBBenchmark",
   "UseInMemoryProvider": true,
-  "NumberOfExecutions":  10
+  "NumberOfExecutions": 10
 }

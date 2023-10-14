@@ -30,7 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
-        public bool UseCompactedReplicator { get; set; } = false;
+        public bool UseCompactedReplicator { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string DatabaseName { get; set; } = "TestDB";
         public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
