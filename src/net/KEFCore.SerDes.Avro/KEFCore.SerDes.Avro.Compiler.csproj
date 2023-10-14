@@ -14,6 +14,11 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Generated\**" />
+	  <EmbeddedResource Remove="Generated\**" />
+	  <None Remove="Generated\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Compile Remove="AvroValueContainer.cs" />
 	  <Compile Remove="KEFCoreSerDes.AvroBinary.cs" />
 	  <Compile Remove="KEFCoreSerDes.AvroJson.cs" />
