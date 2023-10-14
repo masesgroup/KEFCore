@@ -202,7 +202,7 @@ const bool perf = false;
     /// <summary>
     /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka Streams
     /// </summary>
-    public virtual bool UseCompactedReplicator { get; set; } = false;
+    public virtual bool UseCompactedReplicator { get; set; } = true;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>

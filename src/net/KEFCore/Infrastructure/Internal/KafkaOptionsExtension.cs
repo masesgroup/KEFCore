@@ -46,7 +46,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _applicationId;
     private string? _bootstrapServers;
     //private bool _producerByEntity = false;
-    private bool _useCompactedReplicator = false;
+    private bool _useCompactedReplicator = true;
     private bool _usePersistentStorage = false;
     private int _defaultNumPartitions = 1;
     private int? _defaultConsumerInstances = null;
@@ -203,7 +203,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     //    return clone;
     //}
 
-    public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = false)
+    public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
     {
         var clone = Clone();
 
