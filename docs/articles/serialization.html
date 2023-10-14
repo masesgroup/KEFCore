@@ -223,6 +223,91 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <blockquote>
 <p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KafkaDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> will apply the right generic type when needed.</p>
 </blockquote>
+<h2 id="avro-serialization"><strong>Avro</strong> serialization</h2>
+<p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a> an user can choose two different Avro serializers:
+The engine comes with two different encoders:</p>
+<ul>
+<li>Binary: <code>KEFCoreSerDesAvroBinary</code></li>
+<li>Json: <code>KEFCoreSerDesAvroJson</code></li>
+</ul>
+<h3 id="avro-schema">Avro schema</h3>
+<p>The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:</p>
+<pre><code class="lang-json">{
+	&quot;namespace&quot;: &quot;MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage&quot;,
+	&quot;type&quot;: &quot;record&quot;,
+	&quot;name&quot;: &quot;AvroValueContainer&quot;,
+	&quot;doc&quot;: &quot;Represents the storage container type to be used from KEFCore&quot;,
+	&quot;fields&quot;: [
+		{
+			&quot;name&quot;: &quot;EntityName&quot;,
+			&quot;type&quot;: &quot;string&quot;
+		},
+		{
+			&quot;name&quot;: &quot;ClrType&quot;,
+			&quot;type&quot;: &quot;string&quot;
+		},
+		{
+			&quot;name&quot;: &quot;Data&quot;,
+			&quot;type&quot;: {
+				&quot;type&quot;: &quot;array&quot;,
+				&quot;items&quot;: {
+					&quot;namespace&quot;: &quot;MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage&quot;,
+					&quot;type&quot;: &quot;record&quot;,
+					&quot;name&quot;: &quot;PropertyDataRecord&quot;,
+					&quot;doc&quot;: &quot;Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore&quot;,
+					&quot;fields&quot;: [
+						{
+							&quot;name&quot;: &quot;PropertyIndex&quot;,
+							&quot;type&quot;: &quot;int&quot;
+						},
+						{
+							&quot;name&quot;: &quot;PropertyName&quot;,
+							&quot;type&quot;: &quot;string&quot;
+						},
+						{
+							&quot;name&quot;: &quot;ClrType&quot;,
+							&quot;type&quot;: &quot;string&quot;
+						},
+						{
+							&quot;name&quot;: &quot;Value&quot;,
+							&quot;type&quot;: [
+								&quot;null&quot;,
+								&quot;boolean&quot;,
+								&quot;int&quot;,
+								&quot;long&quot;,
+								&quot;float&quot;,
+								&quot;double&quot;,
+								&quot;string&quot;
+							]
+						}
+					]
+				}
+			}
+		}
+	]
+}
+</code></pre>
+<p>The extension converted this schema into code to speedup the exection of serialization/deserialization operations.</p>
+<h3 id="how-to-use-avro">How to use Avro</h3>
+<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<ul>
+<li><strong>KeySerializationType</strong>: Leave this value untouched, till now the engine uses the default serializer</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>KEFCoreSerDesAvroBinary&lt;&gt;</code> or <code>KEFCoreSerDesAvroJson&lt;&gt;</code></li>
+<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code></li>
+</ul>
+<p>An example is:</p>
+<pre><code class="lang-C#">using (context = new BloggingContext()
+{
+    BootstrapServers = &quot;KAFKA-SERVER:9092&quot;,
+    ApplicationId = &quot;MyAppid&quot;,
+    DbName = &quot;MyDBName&quot;,
+    ValueContainerType = typeof(AvroValueContainer&lt;&gt;),
+    ValueSerializationType = UseAvroBinary ? typeof(KEFCoreSerDesAvroBinary&lt;&gt;) : typeof(KEFCoreSerDesAvroJson&lt;&gt;),
+})
+{
+	// execute stuff here
+}
+</code></pre>
 </article>
           </div>
           
