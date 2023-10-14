@@ -16,10 +16,6 @@
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="AvroSerializationHelper.cs" />
-	  <Compile Remove="Program.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Using Include="System.Diagnostics" />
