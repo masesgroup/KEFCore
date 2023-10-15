@@ -4,6 +4,8 @@ To use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provi
 - an installed JRE/JDK (11+)
 - an accessible Apache Kafka broker (a full cluster or a local Dockerized version)
 
+> IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can be change without notice.
+
 ## First project setup
 
 - Create a new simple empty project:
