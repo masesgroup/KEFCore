@@ -131,12 +131,7 @@ public static class KafkaDbContextOptionsExtensions
     public static Type SerializerTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        var serdesType = options.KeySerializationType;
-        if (!KNetSerialization.IsInternalManaged(primaryKey) && serdesType == typeof(KNetSerDes<>))
-        {
-            serdesType = typeof(KEFCoreSerDes<>);
-        }
-        return serdesType.MakeGenericType(primaryKey);
+        return options.KeySerializationType.MakeGenericType(primaryKey);
     }
 
     public static Type SerializerTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)

@@ -88,9 +88,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ApplicationId = config.ApplicationId,
                     DbName = databaseName,
                     StreamsConfig = streamConfig,
-                    KeySerializationType = config.UseAvroBinary ? typeof(KEFCoreSerDesKeyAvroBinary<>) : typeof(KEFCoreSerDesKeyAvroJson<>),
+                    KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>),
                     ValueContainerType = typeof(AvroValueContainer<>),
-                    ValueSerializationType = config.UseAvroBinary ? typeof(KEFCoreSerDesValueContainerAvroBinary<>) : typeof(KEFCoreSerDesValueContainerAvroJson<>),
+                    ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>),
                 })
                 {
 
