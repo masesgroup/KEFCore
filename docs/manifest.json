@@ -545,11 +545,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html",
-          "hash": "rgIKeaMkllLkD3OplYG0HsuXPw4Iqes0NoXXjU6Pguk="
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html",
+          "hash": "NnMB7WC/V1db5Wl/o2+pJvjX+YNSVZBkg9gW7aURSyQ="
         }
       },
       "is_incremental": false,
@@ -557,11 +557,47 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html",
-          "hash": "t8aQ3VPlZcw9m5rE/TePa/PmCO4Mw561WGGDCxdkpAo="
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html",
+          "hash": "e4bMkPRyW2hfwS0XUzg4Jrv7S2jRzTavhx09SRqKdXM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html",
+          "hash": "HqIHxf4Uz4VGtRQrAV0Et77GwioaVOfpxG8XUtSXj1c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html",
+          "hash": "NYfE3cZ9eCa57NyH+UvaPlLl2/RLdssayFY/WD1fvp4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html",
+          "hash": "RhMHeDz9lkPbrGNta3/+N+h1fo4sqjPnxyuC1Nxvwss="
         }
       },
       "is_incremental": false,
@@ -609,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.html",
-          "hash": "Bvu3mGiGQeXtDq3FFGrsd2FuzYuz+sz0kYHr8HHOXrY="
+          "hash": "RGL0pu1pQ9iHjl/LOfa04ZiphRtYKbPjHUUznDgwpgM="
         }
       },
       "is_incremental": false,
@@ -621,7 +657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.html",
-          "hash": "ZQiufkZqLCvjWpye9Z7JU2EW2pUZRxTKsBCrFpOsneI="
+          "hash": "qOZoK9RPd6jIq56exKdIAYwmPVz02Hv8HlgukTLprYc="
         }
       },
       "is_incremental": false,
@@ -1125,7 +1161,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "KOALY2QIhDtBfBCbOiobVMa+coxWUWFgIVn0qDXG654="
+          "hash": "8kt4x3BXn8NHQQ6AG3H4dCAh4ATubd6Ox8EVHBWr+Qw="
         }
       },
       "is_incremental": false,
@@ -1200,7 +1236,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/serialization.html",
-          "hash": "KmeiRbShfvrPQrpBEYw9DF4jQ9ITrGWZLXm5Pc2A1g8="
+          "hash": "ZAwpoq0IA6oqhjiLBFRzH61UIX59pwRz99fih0ck7qc="
         }
       },
       "is_incremental": false,
@@ -1289,7 +1325,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 92,
+          "total_file_count": 95,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

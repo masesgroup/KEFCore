@@ -4410,170 +4410,426 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.AvroSerializationHelper.BuildSchemaClassesFromFiles
   nameWithType: AvroSerializationHelper.BuildSchemaClassesFromFiles
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1
-  name: KEFCoreSerDesAvroBinary<T>
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1
-  name.vb: KEFCoreSerDesAvroBinary(Of T)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T)
-  nameWithType: KEFCoreSerDesAvroBinary<T>
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Deserialize(System.String,System.Byte[])
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1
+  name: KEFCoreSerDesKeyAvroBinary<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1
+  name.vb: KEFCoreSerDesKeyAvroBinary(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T)
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.#ctor
+  name: KEFCoreSerDesKeyAvroBinary()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1__ctor
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.#ctor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.KEFCoreSerDesKeyAvroBinary()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).KEFCoreSerDesKeyAvroBinary()
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.KEFCoreSerDesKeyAvroBinary()
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).KEFCoreSerDesKeyAvroBinary()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.#ctor*
+  name: KEFCoreSerDesKeyAvroBinary
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.#ctor
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.KEFCoreSerDesKeyAvroBinary
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).KEFCoreSerDesKeyAvroBinary
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.KEFCoreSerDesKeyAvroBinary
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).KEFCoreSerDesKeyAvroBinary
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Deserialize(System.String,System.Byte[])
   name: Deserialize(String, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_Deserialize_System_String_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Deserialize(System.String,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Deserialize(System.String,System.Byte[])
   name.vb: Deserialize(String, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.Deserialize(System.String, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).Deserialize(System.String, System.Byte())
-  nameWithType: KEFCoreSerDesAvroBinary<T>.Deserialize(String, Byte[])
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).Deserialize(String, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Deserialize*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.Deserialize(String, Byte[])
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Deserialize*
   name: Deserialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_Deserialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Deserialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.Deserialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).Deserialize
-  nameWithType: KEFCoreSerDesAvroBinary<T>.Deserialize
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).Deserialize
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.Deserialize
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name: DeserializeWithHeaders(String, Headers, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name.vb: DeserializeWithHeaders(String, Headers, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
-  nameWithType: KEFCoreSerDesAvroBinary<T>.DeserializeWithHeaders(String, Headers, Byte[])
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).DeserializeWithHeaders(String, Headers, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.DeserializeWithHeaders*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.DeserializeWithHeaders*
   name: DeserializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_DeserializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.DeserializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.DeserializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).DeserializeWithHeaders
-  nameWithType: KEFCoreSerDesAvroBinary<T>.DeserializeWithHeaders
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).DeserializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).DeserializeWithHeaders
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.DeserializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Serialize(System.String,`0)
   name: Serialize(String, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_Serialize_System_String__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Serialize(System.String,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.Serialize(System.String, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).Serialize(System.String, T)
-  nameWithType: KEFCoreSerDesAvroBinary<T>.Serialize(String, T)
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).Serialize(String, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Serialize*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).Serialize(System.String, T)
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.Serialize(String, T)
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Serialize*
   name: Serialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_Serialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.Serialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.Serialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).Serialize
-  nameWithType: KEFCoreSerDesAvroBinary<T>.Serialize
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).Serialize
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.Serialize
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
   name: SerializeWithHeaders(String, Headers, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  nameWithType: KEFCoreSerDesAvroBinary<T>.SerializeWithHeaders(String, Headers, T)
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).SerializeWithHeaders(String, Headers, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.SerializeWithHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.SerializeWithHeaders*
   name: SerializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroBinary_1_SerializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary`1.SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroBinary_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary`1.SerializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary<T>.SerializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroBinary(Of T).SerializeWithHeaders
-  nameWithType: KEFCoreSerDesAvroBinary<T>.SerializeWithHeaders
-  nameWithType.vb: KEFCoreSerDesAvroBinary(Of T).SerializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1
-  name: KEFCoreSerDesAvroJson<T>
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1
-  name.vb: KEFCoreSerDesAvroJson(Of T)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T)
-  nameWithType: KEFCoreSerDesAvroJson<T>
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Deserialize(System.String,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroBinary(Of T).SerializeWithHeaders
+  nameWithType: KEFCoreSerDesKeyAvroBinary<T>.SerializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesKeyAvroBinary(Of T).SerializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1
+  name: KEFCoreSerDesKeyAvroJson<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1
+  name.vb: KEFCoreSerDesKeyAvroJson(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T)
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.#ctor
+  name: KEFCoreSerDesKeyAvroJson()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1__ctor
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.#ctor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.KEFCoreSerDesKeyAvroJson()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).KEFCoreSerDesKeyAvroJson()
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.KEFCoreSerDesKeyAvroJson()
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).KEFCoreSerDesKeyAvroJson()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.#ctor*
+  name: KEFCoreSerDesKeyAvroJson
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.#ctor
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.KEFCoreSerDesKeyAvroJson
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).KEFCoreSerDesKeyAvroJson
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.KEFCoreSerDesKeyAvroJson
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).KEFCoreSerDesKeyAvroJson
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Deserialize(System.String,System.Byte[])
   name: Deserialize(String, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_Deserialize_System_String_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Deserialize(System.String,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Deserialize(System.String,System.Byte[])
   name.vb: Deserialize(String, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.Deserialize(System.String, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).Deserialize(System.String, System.Byte())
-  nameWithType: KEFCoreSerDesAvroJson<T>.Deserialize(String, Byte[])
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).Deserialize(String, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Deserialize*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.Deserialize(String, Byte[])
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Deserialize*
   name: Deserialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_Deserialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Deserialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.Deserialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).Deserialize
-  nameWithType: KEFCoreSerDesAvroJson<T>.Deserialize
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).Deserialize
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.Deserialize
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name: DeserializeWithHeaders(String, Headers, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name.vb: DeserializeWithHeaders(String, Headers, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
-  nameWithType: KEFCoreSerDesAvroJson<T>.DeserializeWithHeaders(String, Headers, Byte[])
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).DeserializeWithHeaders(String, Headers, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.DeserializeWithHeaders*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.DeserializeWithHeaders*
   name: DeserializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_DeserializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.DeserializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.DeserializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).DeserializeWithHeaders
-  nameWithType: KEFCoreSerDesAvroJson<T>.DeserializeWithHeaders
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).DeserializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).DeserializeWithHeaders
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.DeserializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Serialize(System.String,`0)
   name: Serialize(String, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_Serialize_System_String__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Serialize(System.String,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.Serialize(System.String, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).Serialize(System.String, T)
-  nameWithType: KEFCoreSerDesAvroJson<T>.Serialize(String, T)
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).Serialize(String, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Serialize*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).Serialize(System.String, T)
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.Serialize(String, T)
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Serialize*
   name: Serialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_Serialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.Serialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.Serialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).Serialize
-  nameWithType: KEFCoreSerDesAvroJson<T>.Serialize
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).Serialize
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.Serialize
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
   name: SerializeWithHeaders(String, Headers, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  nameWithType: KEFCoreSerDesAvroJson<T>.SerializeWithHeaders(String, Headers, T)
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).SerializeWithHeaders(String, Headers, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.SerializeWithHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.SerializeWithHeaders*
   name: SerializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesAvroJson_1_SerializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson`1.SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesKeyAvroJson_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson`1.SerializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson<T>.SerializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesAvroJson(Of T).SerializeWithHeaders
-  nameWithType: KEFCoreSerDesAvroJson<T>.SerializeWithHeaders
-  nameWithType.vb: KEFCoreSerDesAvroJson(Of T).SerializeWithHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesKeyAvroJson(Of T).SerializeWithHeaders
+  nameWithType: KEFCoreSerDesKeyAvroJson<T>.SerializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesKeyAvroJson(Of T).SerializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1
+  name: KEFCoreSerDesValueContainerAvroBinary<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1
+  name.vb: KEFCoreSerDesValueContainerAvroBinary(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T)
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Deserialize(System.String,System.Byte[])
+  name: Deserialize(String, Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Deserialize(System.String,System.Byte[])
+  name.vb: Deserialize(String, Byte())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.Deserialize(String, Byte[])
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Deserialize*
+  name: Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Deserialize
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).Deserialize
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.Deserialize
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  name: DeserializeWithHeaders(String, Headers, Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  name.vb: DeserializeWithHeaders(String, Headers, Byte())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.DeserializeWithHeaders*
+  name: DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.DeserializeWithHeaders
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).DeserializeWithHeaders
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.DeserializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Serialize(System.String,`0)
+  name: Serialize(String, T)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).Serialize(System.String, T)
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.Serialize(String, T)
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Serialize*
+  name: Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.Serialize
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).Serialize
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.Serialize
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  name: SerializeWithHeaders(String, Headers, T)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.SerializeWithHeaders*
+  name: SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroBinary_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary`1.SerializeWithHeaders
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroBinary(Of T).SerializeWithHeaders
+  nameWithType: KEFCoreSerDesValueContainerAvroBinary<T>.SerializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroBinary(Of T).SerializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1
+  name: KEFCoreSerDesValueContainerAvroJson<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1
+  name.vb: KEFCoreSerDesValueContainerAvroJson(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T)
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Deserialize(System.String,System.Byte[])
+  name: Deserialize(String, Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Deserialize(System.String,System.Byte[])
+  name.vb: Deserialize(String, Byte())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.Deserialize(String, Byte[])
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Deserialize*
+  name: Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Deserialize
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).Deserialize
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.Deserialize
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  name: DeserializeWithHeaders(String, Headers, Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  name.vb: DeserializeWithHeaders(String, Headers, Byte())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.DeserializeWithHeaders*
+  name: DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.DeserializeWithHeaders
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).DeserializeWithHeaders
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.DeserializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Serialize(System.String,`0)
+  name: Serialize(String, T)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).Serialize(System.String, T)
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.Serialize(String, T)
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Serialize*
+  name: Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.Serialize
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).Serialize
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.Serialize
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  name: SerializeWithHeaders(String, Headers, T)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.SerializeWithHeaders*
+  name: SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_KEFCoreSerDesValueContainerAvroJson_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson`1.SerializeWithHeaders
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.KEFCoreSerDesValueContainerAvroJson(Of T).SerializeWithHeaders
+  nameWithType: KEFCoreSerDesValueContainerAvroJson<T>.SerializeWithHeaders
+  nameWithType.vb: KEFCoreSerDesValueContainerAvroJson(Of T).SerializeWithHeaders
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
   name: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.html
   commentId: N:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
   nameWithType: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer
+  name: AvroKeyContainer
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer
+  nameWithType: AvroKeyContainer
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer._SCHEMA
+  name: _SCHEMA
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer__SCHEMA
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer._SCHEMA
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer._SCHEMA
+  nameWithType: AvroKeyContainer._SCHEMA
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get(System.Int32)
+  name: Get(Int32)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Get_System_Int32_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get(System.Int32)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get(System.Int32)
+  nameWithType: AvroKeyContainer.Get(Int32)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get*
+  name: Get
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Get_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Get
+  nameWithType: AvroKeyContainer.Get
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey
+  name: PrimaryKey
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_PrimaryKey
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey
+  nameWithType: AvroKeyContainer.PrimaryKey
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey*
+  name: PrimaryKey
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_PrimaryKey_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.PrimaryKey
+  nameWithType: AvroKeyContainer.PrimaryKey
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put(System.Int32,System.Object)
+  name: Put(Int32, Object)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Put_System_Int32_System_Object_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put(System.Int32,System.Object)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put(System.Int32, System.Object)
+  nameWithType: AvroKeyContainer.Put(Int32, Object)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put*
+  name: Put
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Put_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Put
+  nameWithType: AvroKeyContainer.Put
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema
+  name: Schema
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Schema
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema
+  nameWithType: AvroKeyContainer.Schema
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema*
+  name: Schema
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroKeyContainer_Schema_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.Schema
+  nameWithType: AvroKeyContainer.Schema
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer
   name: AvroValueContainer
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.html
