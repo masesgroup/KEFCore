@@ -52,6 +52,7 @@ public static class AvroSerializationHelper
     public static void BuildDefaultSchema(string outputFolder)
     {
         BuildSchemaClassesFromFiles(outputFolder, "AvroValueContainer.avsc");
+        BuildSchemaClassesFromFiles(outputFolder, "AvroKeyContainer.avsc");
     }
 }
 

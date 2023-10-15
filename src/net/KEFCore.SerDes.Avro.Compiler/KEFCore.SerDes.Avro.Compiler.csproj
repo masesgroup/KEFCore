@@ -13,6 +13,14 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Include="..\KEFCore.SerDes.Avro\AvroKeyContainer.avsc" Link="AvroKeyContainer.avsc">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\KEFCore.SerDes.Avro\AvroValueContainer.avsc" Link="AvroValueContainer.avsc">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Apache.Avro" Version="1.11.3" />
