@@ -1,0 +1,23 @@
+{
+	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
+	"type": "record",
+	"name": "AvroKeyContainer",
+	"doc": "Represents the storage container type to be used from KEFCore for keys",
+	"fields": [
+		{
+			"name": "PrimaryKey",
+			"type": {
+				"type": "array",
+				"items": [
+					"null",
+					"boolean",
+					"int",
+					"long",
+					"float",
+					"double",
+					"string"
+				]
+			}
+		}
+	]
+}

@@ -175,69 +175,98 @@ The engine comes with two different encoders:
 
 The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:
 
-```json
-{
-	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
-	"type": "record",
-	"name": "AvroValueContainer",
-	"doc": "Represents the storage container type to be used from KEFCore",
-	"fields": [
-		{
-			"name": "EntityName",
-			"type": "string"
-		},
-		{
-			"name": "ClrType",
-			"type": "string"
-		},
-		{
-			"name": "Data",
-			"type": {
-				"type": "array",
-				"items": {
-					"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
-					"type": "record",
-					"name": "PropertyDataRecord",
-					"doc": "Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore",
-					"fields": [
-						{
-							"name": "PropertyIndex",
-							"type": "int"
-						},
-						{
-							"name": "PropertyName",
-							"type": "string"
-						},
-						{
-							"name": "ClrType",
-							"type": "string"
-						},
-						{
-							"name": "Value",
-							"type": [
-								"null",
-								"boolean",
-								"int",
-								"long",
-								"float",
-								"double",
-								"string"
-							]
-						}
-					]
-				}
-			}
-		}
-	]
-}
-```
+- Complex Primary Key schema:
+  ```json
+  {
+  	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
+  	"type": "record",
+  	"name": "AvroKeyContainer",
+  	"doc": "Represents the storage container type to be used from KEFCore for keys",
+  	"fields": [
+  		{
+  			"name": "PrimaryKey",
+  			"type": {
+  				"type": "array",
+  				"items": [
+  					"null",
+  					"boolean",
+  					"int",
+  					"long",
+  					"float",
+  					"double",
+  					"string"
+  				]
+  			}
+  		}
+  	]
+  }
+  ```
+
+
+- ValueContainer schema:
+  ```json
+  {
+  	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
+  	"type": "record",
+  	"name": "AvroValueContainer",
+  	"doc": "Represents the storage container type to be used from KEFCore",
+  	"fields": [
+  		{
+  			"name": "EntityName",
+  			"type": "string"
+  		},
+  		{
+  			"name": "ClrType",
+  			"type": "string"
+  		},
+  		{
+  			"name": "Data",
+  			"type": {
+  				"type": "array",
+  				"items": {
+  					"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
+  					"type": "record",
+  					"name": "PropertyDataRecord",
+  					"doc": "Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore",
+  					"fields": [
+  						{
+  							"name": "PropertyIndex",
+  							"type": "int"
+  						},
+  						{
+  							"name": "PropertyName",
+  							"type": "string"
+  						},
+  						{
+  							"name": "ClrType",
+  							"type": "string"
+  						},
+  						{
+  							"name": "Value",
+  							"type": [
+  								"null",
+  								"boolean",
+  								"int",
+  								"long",
+  								"float",
+  								"double",
+  								"string"
+  							]
+  						}
+  					]
+  				}
+  			}
+  		}
+  	]
+  }
+  ```
 The extension converted this schema into code to speedup the exection of serialization/deserialization operations.
 
 ### How to use Avro 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
-- **KeySerializationType**: Leave this value untouched, till now the engine uses the default serializer
-- **ValueSerializationType**: set this value to `KEFCoreSerDesAvroBinary<>` or `KEFCoreSerDesAvroJson<>`
+- **KeySerializationType**: set this value to `KEFCoreSerDesKeyAvroBinary<>` or `KEFCoreSerDesKeyAvroJson<>`, the type automatically fallback to default serializer for simple Primary Key
+- **ValueSerializationType**: set this value to `KEFCoreSerDesValueContainerAvroBinary<>` or `KEFCoreSerDesValueContainerAvroJson<>`
 - **ValueContainerType**: set this value to `AvroValueContainer<>`
 
 An example is:
@@ -248,8 +277,9 @@ using (context = new BloggingContext()
     BootstrapServers = "KAFKA-SERVER:9092",
     ApplicationId = "MyAppid",
     DbName = "MyDBName",
+    KeySerializationType = UseAvroBinary ? typeof(KEFCoreSerDesKeyAvroBinary<>) : typeof(KEFCoreSerDesKeyAvroJson<>),
     ValueContainerType = typeof(AvroValueContainer<>),
-    ValueSerializationType = UseAvroBinary ? typeof(KEFCoreSerDesAvroBinary<>) : typeof(KEFCoreSerDesAvroJson<>),
+    ValueSerializationType = UseAvroBinary ? typeof(KEFCoreSerDesValueContainerAvroBinary<>) : typeof(KEFCoreSerDesValueContainerAvroJson<>),
 })
 {
 	// execute stuff here

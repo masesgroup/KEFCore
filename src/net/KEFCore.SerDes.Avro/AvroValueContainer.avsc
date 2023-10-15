@@ -2,7 +2,7 @@
 	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
 	"type": "record",
 	"name": "AvroValueContainer",
-	"doc": "Represents the storage container type to be used from KEFCore",
+	"doc": "Represents the storage container type to be used from KEFCore values",
 	"fields": [
 		{
 			"name": "EntityName",

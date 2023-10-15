@@ -27,13 +27,28 @@ using Org.Apache.Kafka.Common.Header;
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 
 /// <summary>
-/// Avro Json encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Avro Key Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class KEFCoreSerDesAvroJson<T> : KNetSerDes<T>
+public class KEFCoreSerDesKeyAvroBinary<T> : KNetSerDes<T>
 {
-    static readonly SpecificDefaultWriter SpecificWriter = new SpecificDefaultWriter(AvroValueContainer._SCHEMA);
-    static readonly SpecificDefaultReader SpecificReader = new SpecificDefaultReader(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+    static readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
+    static readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
+    readonly IKNetSerDes<T> _defaultSerDes = default;
+    /// <summary>
+    /// Default initializer
+    /// </summary>
+    public KEFCoreSerDesKeyAvroBinary()
+    {
+        if (KNetSerialization.IsInternalManaged<T>())
+        {
+            _defaultSerDes = new KNetSerDes<T>();
+        }
+        else if (!typeof(T).IsArray)
+        {
+            throw new InvalidOperationException($"KEFCoreSerDesKeyAvroBinary cannot manage {typeof(T).Name}, override or build a new serializaer");
+        }
+    }
 
     /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)
@@ -43,10 +58,11 @@ public class KEFCoreSerDesAvroJson<T> : KNetSerDes<T>
     /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
+        if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
         using MemoryStream memStream = new();
-        JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
+        BinaryEncoder encoder = new(memStream);
         SpecificWriter.Write(data, encoder);
-        encoder.Flush();
         return memStream.ToArray();
     }
     /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
@@ -57,8 +73,10 @@ public class KEFCoreSerDesAvroJson<T> : KNetSerDes<T>
     /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
+        if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+
         using MemoryStream memStream = new(data);
-        JsonDecoder decoder = new(AvroValueContainer._SCHEMA, memStream);
+        BinaryDecoder decoder = new(memStream);
         T t = (T)Activator.CreateInstance(typeof(T))!;
         t = SpecificReader.Read(t!, decoder);
         return t;
