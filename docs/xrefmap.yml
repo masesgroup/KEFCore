@@ -330,6 +330,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseCompactedReplicator
   nameWithType: IKafkaSingletonOptions.UseCompactedReplicator
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseDeletePolicyForTopic
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic
+  nameWithType: IKafkaSingletonOptions.UseDeletePolicyForTopic
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic*
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseDeletePolicyForTopic
+  nameWithType: IKafkaSingletonOptions.UseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseNameMatching
@@ -698,6 +711,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseCompactedReplicator
   nameWithType: KafkaOptionsExtension.UseCompactedReplicator
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_UseDeletePolicyForTopic
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic
+  nameWithType: KafkaOptionsExtension.UseDeletePolicyForTopic
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic*
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_UseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseDeletePolicyForTopic
+  nameWithType: KafkaOptionsExtension.UseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_UseNameMatching
@@ -922,6 +948,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithTopicConfig
   nameWithType: KafkaOptionsExtension.WithTopicConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic(System.Boolean)
+  name: WithUseDeletePolicyForTopic(Boolean)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithUseDeletePolicyForTopic_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic(System.Boolean)
+  nameWithType: KafkaOptionsExtension.WithUseDeletePolicyForTopic(Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic*
+  name: WithUseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithUseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseDeletePolicyForTopic
+  nameWithType: KafkaOptionsExtension.WithUseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithUseNameMatching(System.Boolean)
   name: WithUseNameMatching(Boolean)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithUseNameMatching_System_Boolean_
@@ -1097,19 +1136,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.KeySerializationType
   nameWithType: KafkaSingletonOptions.KeySerializationType
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
-  name: ProducerByEntity
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerByEntity
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
-  nameWithType: KafkaSingletonOptions.ProducerByEntity
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity*
-  name: ProducerByEntity
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerByEntity_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerByEntity
-  nameWithType: KafkaSingletonOptions.ProducerByEntity
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.ProducerConfig
   name: ProducerConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_ProducerConfig
@@ -1162,6 +1188,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseCompactedReplicator
   nameWithType: KafkaSingletonOptions.UseCompactedReplicator
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_UseDeletePolicyForTopic
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic
+  nameWithType: KafkaSingletonOptions.UseDeletePolicyForTopic
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic*
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_UseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseDeletePolicyForTopic
+  nameWithType: KafkaSingletonOptions.UseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.UseNameMatching
   name: UseNameMatching
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaSingletonOptions_UseNameMatching
@@ -1492,6 +1531,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseCompactedReplicator
   nameWithType: KafkaDbContext.UseCompactedReplicator
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseDeletePolicyForTopic
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
+  nameWithType: KafkaDbContext.UseDeletePolicyForTopic
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic*
+  name: UseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
+  nameWithType: KafkaDbContext.UseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
   name: UsePersistentStorage
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage
@@ -1700,6 +1752,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerializationType
   nameWithType: KafkaDbContextOptionsBuilder.WithKeySerializationType
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic(System.Boolean)
+  name: WithUseDeletePolicyForTopic(Boolean)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseDeletePolicyForTopic_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic(System.Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic(System.Boolean)
+  nameWithType: KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic(Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic*
+  name: WithUseDeletePolicyForTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseDeletePolicyForTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic
+  nameWithType: KafkaDbContextOptionsBuilder.WithUseDeletePolicyForTopic
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseNameMatching(System.Boolean)
   name: WithUseNameMatching(Boolean)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseNameMatching_System_Boolean_

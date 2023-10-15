@@ -83,7 +83,8 @@
 <li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</li>
 <li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka</li>
 <li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
-<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persintent storage between multiple application startup</li>
+<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persistent storage between multiple application startup</li>
+<li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a></li>
 <li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka Streams to manage data to or from topics</li>
 <li><strong>ConsumerConfig</strong>: parameters to use for Producer</li>
 <li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
