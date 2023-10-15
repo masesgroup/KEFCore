@@ -45,7 +45,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _databaseName;
     private string? _applicationId;
     private string? _bootstrapServers;
-    //private bool _producerByEntity = false;
+    private bool _useDeletePolicyForTopic = false;
     private bool _useCompactedReplicator = true;
     private bool _usePersistentStorage = false;
     private int _defaultNumPartitions = 1;
@@ -73,7 +73,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _databaseName = copyFrom._databaseName;
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
-        //_producerByEntity = copyFrom._producerByEntity;
+        _useDeletePolicyForTopic = copyFrom._useDeletePolicyForTopic;
         _useCompactedReplicator = copyFrom._useCompactedReplicator;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
@@ -105,7 +105,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     public virtual string BootstrapServers => _bootstrapServers!;
 
-    //public virtual bool ProducerByEntity => _producerByEntity;
+    public virtual bool UseDeletePolicyForTopic => _useDeletePolicyForTopic;
 
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
 
@@ -194,14 +194,14 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
 
-    //public virtual KafkaOptionsExtension WithProducerByEntity(bool producerByEntity = false)
-    //{
-    //    var clone = Clone();
+    public virtual KafkaOptionsExtension WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
+    {
+        var clone = Clone();
 
-    //    clone._producerByEntity = producerByEntity;
+        clone._useDeletePolicyForTopic = useDeletePolicyForTopic;
 
-    //    return clone;
-    //}
+        return clone;
+    }
 
     public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
     {

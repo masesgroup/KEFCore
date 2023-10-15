@@ -6,3 +6,4 @@ The roadmap can be synthetized in the following points:
 * [ ] Extends the first provider with new features able to create Apache Kafka Streams topology to retrieve information
 * [x] Use KNetCompactedReplicator beside Apache Kafka Streams
 * [x] Add external package to manage data serialization
+* [x] Add Avro external package to manage data serialization

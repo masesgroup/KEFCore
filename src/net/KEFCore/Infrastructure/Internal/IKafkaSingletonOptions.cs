@@ -46,7 +46,7 @@ public interface IKafkaSingletonOptions : ISingletonOptions
 
     string? BootstrapServers { get; }
 
-    //bool ProducerByEntity { get; }
+    bool UseDeletePolicyForTopic { get; }
 
     bool UseCompactedReplicator { get; }
 

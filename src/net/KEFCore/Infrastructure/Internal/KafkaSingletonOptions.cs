@@ -43,7 +43,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             DatabaseName = kafkaOptions.DatabaseName;
             ApplicationId = kafkaOptions.ApplicationId;
             BootstrapServers = kafkaOptions.BootstrapServers;
-            //ProducerByEntity = kafkaOptions.ProducerByEntity;
+            UseDeletePolicyForTopic = kafkaOptions.UseDeletePolicyForTopic;
             UseCompactedReplicator = kafkaOptions.UseCompactedReplicator;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
@@ -84,7 +84,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
     public virtual string? BootstrapServers { get; private set; }
 
-    public virtual bool ProducerByEntity { get; private set; }
+    public virtual bool UseDeletePolicyForTopic { get; private set; }
 
     public virtual bool UseCompactedReplicator { get; private set; }
 

@@ -5,12 +5,24 @@
 KEFCore is the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).
 Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka](https://kafka.apache.org/) as a distributed database and more.
 
-This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
+> IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can be change without notice.
 
 ## Scope of the project
 
 This project aims to create a provider to access the information stored within an Apache Kafka cluster using the paradigm behind Entity Framework.
 The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider.
+
+### Community and Contribution
+
+Do you like the project? 
+- Request your free [community subscription](https://www.jcobridge.com/pricing-25/).
+
+Do you want to help us?
+- put a :star: on this project
+- open [issues](https://github.com/masesgroup/KEFCore/issues) to request features or report bugs :bug:
+- improves the project with Pull Requests
+
+This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
 
 ---
 ## Summary

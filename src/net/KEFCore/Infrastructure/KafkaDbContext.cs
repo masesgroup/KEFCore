@@ -195,10 +195,10 @@ const bool perf = false;
     /// Use persistent storage when Apache Kafka Streams is in use
     /// </summary>
     public virtual bool UsePersistentStorage { get; set; } = false;
-    ///// <summary>
-    ///// Use a producer for each Entity
-    ///// </summary>
-    //public bool UseProducerByEntity { get; set; } = false;
+    /// <summary>
+    /// Use <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when a topic is created
+    /// </summary>
+    public bool UseDeletePolicyForTopic { get; set; } = false;
     /// <summary>
     /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka Streams
     /// </summary>
@@ -232,7 +232,7 @@ const bool perf = false;
             o.StreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.TopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
-            //o.WithProducerByEntity(UseProducerByEntity);
+            o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             if (KeySerializationType != null) o.WithKeySerializationType(KeySerializationType);
