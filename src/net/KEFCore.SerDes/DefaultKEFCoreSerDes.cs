@@ -101,10 +101,17 @@ public static class DefaultKEFCoreSerDes
             /// </summary>
             public Json()
             {
-                if (!typeof(IValueContainer<>).IsAssignableFrom(typeof(T)))
+                var tt = typeof(T);
+                if (tt.IsGenericType)
                 {
-                    throw new ArgumentException($"{typeof(T).Name} cannot be used because it is not a valid ValueContainer type");
+                    var t = tt.GetGenericTypeDefinition();
+                    if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
+                    {
+                        return;
+                    }
+                    else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
                 }
+                throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
 
             /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>

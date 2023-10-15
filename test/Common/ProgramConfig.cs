@@ -26,7 +26,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 {
     public class ProgramConfig
     {
-        public bool UseAvroBinary { get; set; } = false;
+        public bool UseAvro { get; set; } = false;
+        public bool UseAvroBinary { get; set; } = true;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;

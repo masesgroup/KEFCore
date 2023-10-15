@@ -88,11 +88,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ApplicationId = config.ApplicationId,
                     DbName = databaseName,
                     StreamsConfig = streamConfig,
-                    KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>),
-                    ValueContainerType = typeof(AvroValueContainer<>),
-                    ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>),
+
                 })
                 {
+                    if (config.UseAvro)
+                    {
+                        context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                        context.ValueContainerType = typeof(AvroValueContainer<>);
+                        context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+                    }
 
                     if (config.DeleteApplicationData)
                     {
@@ -190,9 +194,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                         watch.Restart();
                         var selector2 = (from op in context.Blogs
-                                        join pg in context.Posts on op.BlogId equals pg.BlogId
-                                        where op.Rating >= 100
-                                        select new { pg, op });
+                                         join pg in context.Posts on op.BlogId equals pg.BlogId
+                                         where op.Rating >= 100
+                                         select new { pg, op });
                         watch.Stop();
                         var result2 = selector.ToList();
                         ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
