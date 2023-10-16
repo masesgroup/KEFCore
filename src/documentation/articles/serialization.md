@@ -95,7 +95,7 @@ The default serialization can be overridden with user defined **ValueContainer**
 A custom **ValueContainer** class must contains enough information and shall follow the following rules:
 - must implements the `IValueContainer<T>` interface
 - must be a generic type
-- must have at least a constructor which accept two parameters: a first parameter which is `IEntityType` and a second paramater of `object[]`
+- must have at least a default constructor and a constructor which accept two parameters: a first parameter which is `IEntityType` and a second paramater of `object[]`
 
 An example snippet is the follow:
 
@@ -113,9 +113,19 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
 
     }
 
+    /// <inheritdoc/>
+    public string EntityName { get; set; }
+    /// <inheritdoc/>
+    public string ClrType { get; set; }
+    /// <inheritdoc/>
     public void GetData(IEntityType tName, ref object[] array)
     {
 
+    }
+    /// <inheritdoc/>
+    public IReadOnlyDictionary<int, string> GetProperties()
+    {
+        // build properties
     }
 }
 ```

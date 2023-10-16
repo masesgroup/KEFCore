@@ -40,6 +40,7 @@ This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDU
 * [Getting started](src/documentation/articles/gettingstarted.md)
 * [KEFCore usage](src/documentation/articles/usage.md)
 * [KEFCore serialization](src/documentation/articles/serialization.md)
+* [KEFCore external application](src/documentation/articles/externalapplication.md)
 * [Roadmap](src/documentation/articles/roadmap.md)
 * [Current state](src/documentation/articles/currentstate.md)
 
