@@ -31,6 +31,13 @@ foreach(var record in records)
 
 A full working example can be found under test folder of the [repository](https://github.com/masesgroup/KEFCore).
 
+### Mandatory information
+
+The method `EntityExtractor.FromRecord` use the reflection to get back the types referring to serializer and model whih were stored in the topics.
+To work properly it needs, to be loaded in memory, at least:
+- The assembly containing the serializer: if the serializer used was the default, this inforation is available
+- The model types (i.e. the types used to build the `DbContext` or `KafkaDbContext`)
+
 ## Possible usages
 
 TDB
