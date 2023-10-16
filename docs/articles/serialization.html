@@ -160,7 +160,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <ul>
 <li>must implements the <code>IValueContainer&lt;T&gt;</code> interface</li>
 <li>must be a generic type</li>
-<li>must have at least a constructor which accept two parameters: a first parameter which is <code>IEntityType</code> and a second paramater of <code>object[]</code></li>
+<li>must have at least a default constructor and a constructor which accept two parameters: a first parameter which is <code>IEntityType</code> and a second paramater of <code>object[]</code></li>
 </ul>
 <p>An example snippet is the follow:</p>
 <pre><code class="lang-C#">public class CustomValueContainer&lt;TKey&gt; : IValueContainer&lt;TKey&gt; where TKey : notnull
@@ -176,9 +176,19 @@ The schema of the Apache Kafka record value follows the code definition in <code
 
     }
 
+    /// &lt;inheritdoc/&gt;
+    public string EntityName { get; set; }
+    /// &lt;inheritdoc/&gt;
+    public string ClrType { get; set; }
+    /// &lt;inheritdoc/&gt;
     public void GetData(IEntityType tName, ref object[] array)
     {
 
+    }
+    /// &lt;inheritdoc/&gt;
+    public IReadOnlyDictionary&lt;int, string&gt; GetProperties()
+    {
+        // build properties
     }
 }
 </code></pre>

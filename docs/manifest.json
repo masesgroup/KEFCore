@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html",
-          "hash": "PVl9cHAt4JbyboIUtVyebkiMuvTdOfIhIlj8wyvkBYc="
+          "hash": "m/lJiUjfDXzvHT68V8q0TZICIWDJI+9y3g81dwKA8v8="
         }
       },
       "is_incremental": false,
@@ -273,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html",
-          "hash": "0fu+GdDfkzTYe6jL/WsasQPtUyJSMqAT63kMb2YBG3o="
+          "hash": "WdR7eIE2Kwe8xm2RYdohQvx5HD3iCnCLU8SHdTfH+jE="
         }
       },
       "is_incremental": false,
@@ -525,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.html",
-          "hash": "1tfHryBXOllbv2D2YSRwLvKzgWsuyC5NWygVaHOaWzI="
+          "hash": "WuuZiT9m2QIkuvqAst8BzwGbIGbX8r1y2z0/L2KRrdA="
         }
       },
       "is_incremental": false,
@@ -537,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.html",
-          "hash": "l32y70cRFIFFCxNc5Cd1cuLhMPv5OftVI8yfF4bk0Ss="
+          "hash": "3h4jiyt/1Ma1IiXaGIRUe+GUZDKk4uMqDnoCGmiKLPA="
         }
       },
       "is_incremental": false,
@@ -549,7 +549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.html",
-          "hash": "89owVMthB/csRk5WvUgN0F3tbOr+VLMkCh6luX6yyCQ="
+          "hash": "3H/x+2GbmX9jApp0vcthBAVPel0wdIOzQlxLCyNBR/A="
         }
       },
       "is_incremental": false,
@@ -561,7 +561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.html",
-          "hash": "3X/E/odfCQpnjyJtgmYJgMcrPAEGlHPjo/6C+3+Fwgo="
+          "hash": "o60BhcBzOTEmGQ5Td/xJrRe+dgicRg+xsSn9UJ6p8zk="
         }
       },
       "is_incremental": false,
@@ -573,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.html",
-          "hash": "a5NZbdMWY36D/wez66f1vScd0h3AlBDCNdpvtai/xK0="
+          "hash": "Vn00LX1o7d6ZteBTuT9rPjG0XFgROv3DoOQMJR8/OJw="
         }
       },
       "is_incremental": false,
@@ -585,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.html",
-          "hash": "sWW3E9YxswXJDMlVHOqHpIkOYsHGTBaMCTYcBh7W6cc="
+          "hash": "UbS7TBODslBqgUIRc9XkdBPBAfUFypTouIfNE0cVEH0="
         }
       },
       "is_incremental": false,
@@ -597,7 +597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html",
-          "hash": "KOQKZwXcWpkpIcsBkkJTHz/RBp6xN0i5T16/i7nxDl0="
+          "hash": "XIQfzSO8R7XG2v/9keaP94CpFyf6g6oI6Jqs+KCTyWg="
         }
       },
       "is_incremental": false,
@@ -645,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html",
-          "hash": "qC2Bv/GI9BSnJF6YdsVMelCKibjgGH+egFigTayUoHY="
+          "hash": "cxJNK+cZr8MyFzTP1uJF/U956Bmz9/tRTwjNLzOxWvE="
         }
       },
       "is_incremental": false,
@@ -701,11 +701,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html",
+          "hash": "mCFJ4CUn85xaRdvhoqR9Ve1dz10vQBb8VdzJz3gK+Ic="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.yml",
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html",
-          "hash": "BZo53/9Sv45pdkIh6X4JKiCCSFrDGnhaZGMzJrYaoKI="
+          "hash": "Hm8Qj4vAEK8MoOCxOoriFOI8hQgthXgV4O6J6YyTO7I="
         }
       },
       "is_incremental": false,
@@ -717,7 +729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key.Json-1.html",
-          "hash": "olFN6qDbtkm77lbAYcA/BAHvGBWIqWq26lTm/G5Qw/M="
+          "hash": "2ecbG32aB9xcxeSR3k9HYtO4urA/7QvwEfv4RP10LTU="
         }
       },
       "is_incremental": false,
@@ -741,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer.Json-1.html",
-          "hash": "1I2QvkGHMy5xaPcKxAFyzgddnRM4SQAci9ZNE7d97fk="
+          "hash": "2T78nbqreBv+lsdOo2YuMoEp+VVg0gvEJrsYYtqLykc="
         }
       },
       "is_incremental": false,
@@ -753,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer.html",
-          "hash": "TlVL5Hqna6DWsw0w3f76GwUB3get+T7r1V7FTwhmQas="
+          "hash": "bk3+kBu7+umHBfB75DyTqQk1Q4yfAVtMX5BdmGz0cho="
         }
       },
       "is_incremental": false,
@@ -777,7 +789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html",
-          "hash": "1u3WJmw6F5hElxlN9YABGt7JQQG283qTyDEGgfaUWos="
+          "hash": "I9P94o6vw2u/mFN4NjXnIK7u7pwvMNHyJou73o6sbxg="
         }
       },
       "is_incremental": false,
@@ -821,11 +833,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html",
+          "hash": "TCicQ8TX7KNFZ6ZI8girFAoTht8BJJVP14zkuug1gWM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.yml",
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.html",
-          "hash": "7XAj/1LHgHdvD7UzT7nckkcLIf8jgFmu2+Bm4/XtNu8="
+          "hash": "+78HMZzlyddzHMMCgqv+C50nUDiXa9pXG0sytYGF7tY="
         }
       },
       "is_incremental": false,
@@ -1245,7 +1269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "pr0AEauEMrvE2tczb7MruP6eCk4AGwxI6UAFcqS1dSk="
+          "hash": "JtxFWBjMnC0iLQw3YKrXew5OBWchs3YwCP6Qkd1DQ80="
         }
       },
       "is_incremental": false,
@@ -1258,6 +1282,18 @@
         ".html": {
           "relative_path": "articles/currentstate.html",
           "hash": "AEJqbWKhDPgMH9H0vuOltBq10FOeOCCydMiPd798PeQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/externalapplication.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/externalapplication.html",
+          "hash": "7AxW7kSND0JsKaGWCHYAMYbC5TlRB0fBO1ZCUyO75ss="
         }
       },
       "is_incremental": false,
@@ -1320,7 +1356,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/serialization.html",
-          "hash": "lAX3/nfS5pbAbLd2SMO3nULWcsb50cDdQuwWWlh3dso="
+          "hash": "k4iLhZMu+T/E2U1ZZUf+bK7iXxqAtfDNk7WnE4J5pcQ="
         }
       },
       "is_incremental": false,
@@ -1332,7 +1368,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "n7rz03082vquANspCKp5i+bAfF/o4hrbFCHpSMVrYyA="
+          "hash": "s5VyOWkauuGE8SWCupBy3sO5vT65bWakxtkk1uj/xF0="
         }
       },
       "is_incremental": false,
@@ -1370,7 +1406,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "zZDHatL33w3Y87AXH9ly5sIMY13X8CqEcUc0mEATooA="
+          "hash": "THupCbPDRtSojP1pVJ2MOO3W10xqBrBScVQufaX1VEg="
         }
       },
       "is_incremental": false,
@@ -1403,13 +1439,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 9,
+          "total_file_count": 10,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 102,
+          "total_file_count": 104,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

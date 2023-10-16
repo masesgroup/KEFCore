@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Namespace MASES.EntityFrameworkCore.KNet.Serialization
-   | Kafka Bridge website </title>
+    <title>KEFCore: external application | Kafka Bridge website </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Namespace MASES.EntityFrameworkCore.KNet.Serialization
-   | Kafka Bridge website ">
+    <meta name="title" content="KEFCore: external application | Kafka Bridge website ">
     <meta name="generator" content="docfx 2.59.4.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
@@ -68,26 +66,43 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Serialization">
-  
-  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization" data-uid="MASES.EntityFrameworkCore.KNet.Serialization" class="text-break">Namespace MASES.EntityFrameworkCore.KNet.Serialization
-  </h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
-  </h3>
-      <h4><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html">EntityExtractor</a></h4>
-      <section><p>This is an helper class to extract data information from a Kafka Record</p>
-</section>
-      <h4><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html">KEFCoreSerDesNames</a></h4>
-      <section><p>Stores some fixed names expected from serialization system</p>
-</section>
-    <h3 id="interfaces">Interfaces
-  </h3>
-      <h4><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a></h4>
-      <section><p>This is the main interface a class must implement to be a ValueContainer. More info <a href="https://masesgroup.github.io/KEFCore/articles/serialization.html">here</a></p>
-</section>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="kefcore-external-application">KEFCore: external application</h1>
+
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities used within the model in something viable from the backend.
+Continuing from the concepts introduced in <a href="serialization.html">serialization</a>, an external application can use the data stored in the topics in a way it decide: <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> gives some helpers to get back the CLR Entity objects stored in the topics.</p>
+<blockquote>
+<p>IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can be change without notice.</p>
+</blockquote>
+<h2 id="basic-concepts">Basic concepts</h2>
+<p>An external application may want to be informed about data changes in the topics and want to analyze the Entity was previously managed from the EFCore application.
+Within the core packages there is the <code>EntityExtractor</code> class which contains, till now, a method accepting a raw <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> from Apache Kafka.
+The method reads the info stored in it and returns the Entity object with the filled properties.</p>
+<p>It is possible to build a new application which subscribe to a topic created from the EFCore application.
+The following is a possible snippet of the logic can be applied:</p>
+<pre><code class="lang-c#">const string topicFrom = &quot;TheKEFCoreTopicWithData&quot;;
+
+KafkaConsumer&lt;byte[], byte[]&gt; consumer = new KafkaConsumer&lt;byte[], byte[]&gt;();
+consumer.Subscribe(topicFrom); // the callback was omitted for simplicity
+
+var records = consumer.Poll(100);
+
+foreach(var record in records)
+{
+	var entity = EntityExtractor.FromRecord(record);
+	Console.WriteLine(entity);
+}
+</code></pre>
+<p>A full working example can be found under test folder of the <a href="https://github.com/masesgroup/KEFCore">repository</a>.</p>
+<h3 id="mandatory-information">Mandatory information</h3>
+<p>The method <code>EntityExtractor.FromRecord</code> use the reflection to get back the types referring to serializer and model whih were stored in the topics.
+To work properly it needs, to be loaded in memory, at least:</p>
+<ul>
+<li>The assembly containing the serializer: if the serializer used was the default, this inforation is available</li>
+<li>The model types (i.e. the types used to build the <code>DbContext</code> or <code>KafkaDbContext</code>)</li>
+</ul>
+<h2 id="possible-usages">Possible usages</h2>
+<p>TDB</p>
 </article>
           </div>
           
@@ -95,6 +110,9 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/externalapplication.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
