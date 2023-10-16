@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.Benchmark.Avro.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Avro.Compiler", "..\src\net\KEFCore.SerDes.Avro.Compiler\KEFCore.SerDes.Avro.Compiler.csproj", "{BED3DF6D-B60E-486D-96E9-AD069D0600D2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.Extractor.Test", "KEFCore.Extractor.Test\KEFCore.Extractor.Test.csproj", "{E1BE56EB-4701-47E7-876A-D2146619C211}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{BED3DF6D-B60E-486D-96E9-AD069D0600D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BED3DF6D-B60E-486D-96E9-AD069D0600D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BED3DF6D-B60E-486D-96E9-AD069D0600D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1BE56EB-4701-47E7-876A-D2146619C211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1BE56EB-4701-47E7-876A-D2146619C211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1BE56EB-4701-47E7-876A-D2146619C211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1BE56EB-4701-47E7-876A-D2146619C211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{3F5C48E6-02E8-4921-AA1D-24F8F644F67E} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
 		{40D1001C-EC50-4994-BE40-F410DB20AF4F} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 		{BED3DF6D-B60E-486D-96E9-AD069D0600D2} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
+		{E1BE56EB-4701-47E7-876A-D2146619C211} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36C294ED-9ECE-42AA-8273-31E008749AF3}

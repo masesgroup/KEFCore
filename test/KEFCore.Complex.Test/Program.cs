@@ -99,12 +99,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Start();
                     for (int i = 0; i < config.NumberOfElements; i++)
                     {
-                        context.Add(new Blog
+                        context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
+                            BooleanValue = i % 2 == 0,
+                            PostComplexs = new List<PostComplex>()
                             {
-                                new Post()
+                                new PostComplex()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
@@ -186,13 +187,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Restart();
                     for (int i = config.NumberOfElements; i < config.NumberOfElements + config.NumberOfExtraElements; i++)
                     {
-                        context.Add(new Blog
+                        context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
-                            Posts = new List<Post>()
+                            PostComplexs = new List<PostComplex>()
                             {
-                                new Post()
+                                new PostComplex()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
@@ -260,34 +261,26 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         }
     }
 
-    public class Blog
+    public class BlogComplex : Blog
     {
-        public int BlogId { get; set; }
-        public string Url { get; set; }
-        public int Rating { get; set; }
         public bool BooleanValue { get; set; }
-        public List<Post> Posts { get; set; }
+
+        public List<PostComplex> PostComplexs { get; set; }
 
         public override string ToString()
         {
-            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating} BooleanValue: {BooleanValue}";
         }
     }
 
-    public class Post
+    public class PostComplex : Post
     {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
         public DateTime CreationTime { get; set; }
         public Guid Identifier { get; set; }
 
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
-
         public override string ToString()
         {
-            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId} CreationTime: {CreationTime} Identifier: {Identifier}";
         }
     }
 }
