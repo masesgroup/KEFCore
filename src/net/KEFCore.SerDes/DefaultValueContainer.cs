@@ -136,7 +136,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
     /// </summary>
     /// <remarks>It is mainly used from the JSON serializer</remarks>
-    public DefaultValueContainer() { }
+    public DefaultValueContainer() { EntityName = ClrType = null!; }
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
     /// </summary>
@@ -154,14 +154,10 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             Data.Add(index, new PropertyData(item, rData[index]));
         }
     }
-    /// <summary>
-    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
-    /// </summary>
-    public string? EntityName { get; set; }
-    /// <summary>
-    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
-    /// </summary>
-    public string? ClrType { get; set; }
+    /// <inheritdoc/>
+    public string EntityName { get; set; }
+    /// <inheritdoc/>
+    public string ClrType { get; set; }
     /// <summary>
     /// The data stored associated to the <see cref="IEntityType"/>
     /// </summary>
@@ -202,5 +198,15 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
         }
 #endif
+    }
+    /// <inheritdoc/>
+    public IReadOnlyDictionary<int, string> GetProperties()
+    {
+        Dictionary<int, string> props = new();
+        for (int i = 0; i < Data!.Count; i++)
+        {
+            props.Add(i, Data[i].PropertyName!);
+        }
+        return props;
     }
 }

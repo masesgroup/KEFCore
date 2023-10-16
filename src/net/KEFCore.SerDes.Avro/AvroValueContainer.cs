@@ -34,7 +34,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     /// Initialize a new instance of <see cref="AvroValueContainer{TKey}"/>
     /// </summary>
     /// <remarks>It is mainly used from the JSON serializer</remarks>
-    public AvroValueContainer() { }
+    public AvroValueContainer() { EntityName = ClrType = null!; }
     /// <summary>
     /// Initialize a new instance of <see cref="AvroValueContainer{TKey}"/>
     /// </summary>
@@ -95,5 +95,15 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             }
         }
 #endif
+    }
+    /// <inheritdoc/>
+    public IReadOnlyDictionary<int, string> GetProperties()
+    {
+        Dictionary<int, string> props = new();
+        for (int i = 0; i < Data.Count; i++)
+        {
+            props.Add(Data[i].PropertyIndex, Data[i].PropertyName);
+        }
+        return props;
     }
 }

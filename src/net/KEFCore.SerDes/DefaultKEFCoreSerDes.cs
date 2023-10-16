@@ -40,7 +40,10 @@ public static class DefaultKEFCoreSerDes
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class Json<T> : KNetSerDes<T>
         {
-            readonly IKNetSerDes<T> _defaultSerDes = default;
+            readonly byte[] keySerDesName = Encoding.ASCII.GetBytes(typeof(Json<>).FullName!);
+            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -64,6 +67,8 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, keySerDesName);
+
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
@@ -96,6 +101,11 @@ public static class DefaultKEFCoreSerDes
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class Json<T> : KNetSerDes<T>
         {
+            readonly byte[] valueContainerSerDesName = Encoding.ASCII.GetBytes(typeof(Json<>).FullName!);
+            readonly byte[] keyTypeName = null!;
+            readonly byte[] valueContainerName = null!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -104,9 +114,13 @@ public static class DefaultKEFCoreSerDes
                 var tt = typeof(T);
                 if (tt.IsGenericType)
                 {
+                    var keyT = tt.GetGenericArguments();
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
                     var t = tt.GetGenericTypeDefinition();
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
+                        keyTypeName = Encoding.UTF8.GetBytes(keyT[0].FullName!);
+                        valueContainerName = Encoding.UTF8.GetBytes(t.FullName!);
                         return;
                     }
                     else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -122,6 +136,10 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
