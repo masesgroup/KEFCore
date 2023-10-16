@@ -150,8 +150,8 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
 <ul>
 <li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
-<li><strong>Key SerDes</strong> class: KEFCore uses <code>KNetSerDes&lt;T&gt;</code> for simple Primary Key or <code>KEFCoreSerDes&lt;T&gt;</code> for complex Primary Key</li>
-<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>KEFCoreSerDes&lt;T&gt;</code></li>
+<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code>, the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
 </ul>
 <h3 id="user-override">User override</h3>
 <p>The default serialization can be overridden with user defined <strong>ValueContainer</strong> class, <strong>Key SerDes</strong> or <strong>ValueContainer SerDes</strong>.</p>
@@ -228,10 +228,10 @@ The schema of the Apache Kafka record value follows the code definition in <code
 </blockquote>
 <h2 id="avro-serialization"><strong>Avro</strong> serialization</h2>
 <p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a> an user can choose two different Avro serializers:
-The engine comes with two different encoders:</p>
+The engine comes with two different encoders</p>
 <ul>
-<li>Binary: <code>KEFCoreSerDesAvroBinary</code></li>
-<li>Json: <code>KEFCoreSerDesAvroJson</code></li>
+<li>Binary</li>
+<li>Json</li>
 </ul>
 <h3 id="avro-schema">Avro schema</h3>
 <p>The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:</p>
@@ -324,8 +324,8 @@ The engine comes with two different encoders:</p>
 <h3 id="how-to-use-avro">How to use Avro</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>KEFCoreSerDesKeyAvroBinary&lt;&gt;</code> or <code>KEFCoreSerDesKeyAvroJson&lt;&gt;</code>, the type automatically fallback to default serializer for simple Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>KEFCoreSerDesValueContainerAvroBinary&lt;&gt;</code> or <code>KEFCoreSerDesValueContainerAvroJson&lt;&gt;</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code>, both types automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
 <li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code></li>
 </ul>
 <p>An example is:</p>
@@ -334,9 +334,9 @@ The engine comes with two different encoders:</p>
     BootstrapServers = &quot;KAFKA-SERVER:9092&quot;,
     ApplicationId = &quot;MyAppid&quot;,
     DbName = &quot;MyDBName&quot;,
-    KeySerializationType = UseAvroBinary ? typeof(KEFCoreSerDesKeyAvroBinary&lt;&gt;) : typeof(KEFCoreSerDesKeyAvroJson&lt;&gt;),
+    KeySerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary&lt;&gt;) : typeof(AvroKEFCoreSerDes.Key.Json&lt;&gt;),
     ValueContainerType = typeof(AvroValueContainer&lt;&gt;),
-    ValueSerializationType = UseAvroBinary ? typeof(KEFCoreSerDesValueContainerAvroBinary&lt;&gt;) : typeof(KEFCoreSerDesValueContainerAvroJson&lt;&gt;),
+    ValueSerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;) : typeof(AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;),
 })
 {
 	// execute stuff here
