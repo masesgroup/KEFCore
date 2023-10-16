@@ -244,32 +244,4 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
         }
     }
-
-    public class Blog
-    {
-        public int BlogId { get; set; }
-        public string Url { get; set; }
-        public int Rating { get; set; }
-        public List<Post> Posts { get; set; }
-
-        public override string ToString()
-        {
-            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
-        }
-    }
-
-    public class Post
-    {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
-
-        public override string ToString()
-        {
-            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
-        }
-    }
 }

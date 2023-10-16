@@ -6,6 +6,8 @@
   href: usage.md
 - name: Serialization
   href: serialization.md 
+- name: External application
+  href: externalapplication.md 
 - name: Roadmap
   href: roadmap.md
 - name: Current state

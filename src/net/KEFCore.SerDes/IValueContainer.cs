@@ -26,9 +26,22 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization;
 public interface IValueContainer<in T> where T : notnull
 {
     /// <summary>
+    /// The Entity name of <see cref="IEntityType"/>
+    /// </summary>
+    string EntityName { get; }
+    /// <summary>
+    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
+    /// </summary>
+    string ClrType { get; }
+    /// <summary>
     /// Returns back the raw data associated to the Entity
     /// </summary>
-    /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back</param>
+    /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
     /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
     void GetData(IEntityType tName, ref object[] array);
+    /// <summary>
+    /// Returns back a dictionary of properties (PropertyIndex, PropertyName) associated to the Entity
+    /// </summary>
+    /// <returns>A dictionary of properties (PropertyIndex, PropertyName) filled in with the data stored in the ValueContainer</returns>
+    IReadOnlyDictionary<int, string> GetProperties();
 }

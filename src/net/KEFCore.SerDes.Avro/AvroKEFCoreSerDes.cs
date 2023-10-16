@@ -23,6 +23,7 @@ using Avro.Specific;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
+using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 
@@ -42,9 +43,12 @@ public static class AvroKEFCoreSerDes
         /// <typeparam name="T"></typeparam>
         public class Binary<T> : KNetSerDes<T>
         {
-            static readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
-            static readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly IKNetSerDes<T> _defaultSerDes = default;
+            readonly byte[] keySerDesName = Encoding.ASCII.GetBytes(typeof(Binary<>).FullName!);
+            readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
+            readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
+            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -68,11 +72,15 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, keySerDesName);
+
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
                 using MemoryStream memStream = new();
                 BinaryEncoder encoder = new(memStream);
-                SpecificWriter.Write(data, encoder);
+                var container = new AvroKeyContainer();
+                container.PrimaryKey = new List<object>(data as object[]);
+                SpecificWriter.Write(container, encoder);
                 return memStream.ToArray();
             }
             /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
@@ -87,9 +95,9 @@ public static class AvroKEFCoreSerDes
 
                 using MemoryStream memStream = new(data);
                 BinaryDecoder decoder = new(memStream);
-                T t = (T)Activator.CreateInstance(typeof(T))!;
+                AvroKeyContainer t = new AvroKeyContainer();
                 t = SpecificReader.Read(t!, decoder);
-                return t;
+                return (T)(object)(t.PrimaryKey.ToArray());
             }
         }
 
@@ -99,9 +107,12 @@ public static class AvroKEFCoreSerDes
         /// <typeparam name="T"></typeparam>
         public class Json<T> : KNetSerDes<T>
         {
-            static readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
-            static readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly IKNetSerDes<T> _defaultSerDes = default;
+            readonly byte[] keySerDesName = Encoding.ASCII.GetBytes(typeof(Json<>).FullName!);
+            readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
+            readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
+            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -125,6 +136,8 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, keySerDesName);
+
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
                 using MemoryStream memStream = new();
@@ -163,8 +176,13 @@ public static class AvroKEFCoreSerDes
         /// <typeparam name="T"></typeparam>
         public class Binary<T> : KNetSerDes<T>
         {
-            static readonly SpecificDefaultWriter SpecificWriter = new(AvroValueContainer._SCHEMA);
-            static readonly SpecificDefaultReader SpecificReader = new(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+            readonly byte[] valueContainerSerDesName = Encoding.ASCII.GetBytes(typeof(Binary<>).FullName!);
+            readonly byte[] keyTypeName = null!;
+            readonly byte[] valueContainerName = null!;
+            readonly SpecificDefaultWriter SpecificWriter = new(AvroValueContainer._SCHEMA);
+            readonly SpecificDefaultReader SpecificReader = new(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -173,9 +191,13 @@ public static class AvroKEFCoreSerDes
                 var tt = typeof(T);
                 if (tt.IsGenericType)
                 {
+                    var keyT = tt.GetGenericArguments();
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
                     var t = tt.GetGenericTypeDefinition();
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
+                        keyTypeName = Encoding.UTF8.GetBytes(keyT[0].FullName!);
+                        valueContainerName = Encoding.UTF8.GetBytes(t.FullName!);
                         return;
                     }
                     else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -191,6 +213,10 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+
                 using MemoryStream memStream = new();
                 BinaryEncoder encoder = new(memStream);
                 SpecificWriter.Write(data, encoder);
@@ -218,8 +244,13 @@ public static class AvroKEFCoreSerDes
         /// <typeparam name="T"></typeparam>
         public class Json<T> : KNetSerDes<T>
         {
-            static readonly SpecificDefaultWriter SpecificWriter = new(AvroValueContainer._SCHEMA);
-            static readonly SpecificDefaultReader SpecificReader = new(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Json<>).FullName!);
+            readonly byte[] keyTypeName = null!;
+            readonly byte[] valueContainerName = null!;
+            readonly SpecificDefaultWriter SpecificWriter = new(AvroValueContainer._SCHEMA);
+            readonly SpecificDefaultReader SpecificReader = new(AvroValueContainer._SCHEMA, AvroValueContainer._SCHEMA);
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
@@ -228,9 +259,13 @@ public static class AvroKEFCoreSerDes
                 var tt = typeof(T);
                 if (tt.IsGenericType)
                 {
+                    var keyT = tt.GetGenericArguments();
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
                     var t = tt.GetGenericTypeDefinition();
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
+                        keyTypeName = Encoding.UTF8.GetBytes(keyT[0].FullName!);
+                        valueContainerName = Encoding.UTF8.GetBytes(t.FullName!);
                         return;
                     }
                     else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -246,6 +281,10 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
+                headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+
                 using MemoryStream memStream = new();
                 JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                 SpecificWriter.Write(data, encoder);

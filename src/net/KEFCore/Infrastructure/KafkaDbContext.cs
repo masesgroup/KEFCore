@@ -149,14 +149,14 @@ const bool perf = false;
     /// <summary>
     /// The optional <see cref="Type"/> to use for key serialization
     /// <para>
-    /// Default value is <see cref="KNetSerDes{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
+    /// Default value is <see cref="DefaultKEFCoreSerDes.Key.Json{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
     /// </para>
     /// </summary>
     public virtual Type? KeySerializationType { get; set; } = null;
     /// <summary>
     /// The optional <see cref="Type"/> to use for value serialization
     /// <para>
-    /// Default value is <see cref="KEFCoreSerDes{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
+    /// Default value is <see cref="DefaultKEFCoreSerDes.ValueContainer.Json{T}"/>, any custom <see cref="Type"/> shall implement <see cref="IKNetSerDes{T}"/>
     /// </para>
     /// </summary>
     public virtual Type? ValueSerializationType { get; set; } = null;

@@ -22,26 +22,36 @@
  *  SOFTWARE.
  */
 
+using System;
+using System.Collections.Generic;
+
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
-    public class ProgramConfig
+    public class Blog
     {
-        public bool UseAvro { get; set; } = false;
-        public bool UseAvroBinary { get; set; } = true;
-        public bool EnableKEFCoreTracing { get; set; } = false;
-        public bool UseInMemoryProvider { get; set; } = false;
-        public bool UseModelBuilder { get; set; } = false;
-        public bool UseCompactedReplicator { get; set; } = true;
-        public bool UsePersistentStorage { get; set; } = false;
-        public string DatabaseName { get; set; } = "TestDB";
-        public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
-        public string ApplicationId { get; set; } = "TestApplication";
-        public bool DeleteApplicationData { get; set; } = true;
-        public bool LoadApplicationData { get; set; } = true;
-        public string BootstrapServers { get; set; } = "localhost:9092";
-        public string TopicToSubscribe { get; set; }
-        public int NumberOfElements { get; set; } = 1000;
-        public int NumberOfExecutions { get; set; } = 1;
-        public int NumberOfExtraElements { get; set; } = 100;
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+        public List<Post> Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
+        }
+    }
+
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
     }
 }

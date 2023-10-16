@@ -23,6 +23,8 @@
  */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -86,6 +88,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     StreamsConfig = streamConfig,
                 };
 
+                if (config.UseAvro)
+                {
+                    context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                    context.ValueContainerType = typeof(AvroValueContainer<>);
+                    context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+                }
+
                 if (config.DeleteApplicationData)
                 {
                     context.Database.EnsureDeleted();
@@ -128,7 +137,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                                     join pg in context.Posts on op.BlogId equals pg.BlogId
                                     where pg.BlogId == op.BlogId
                                     select new { pg, op });
-                    var pageObject = selector.SingleOrDefault();
+                    var pageObject = selector.FirstOrDefault();
                     watch.Stop();
                     ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
                 }
@@ -252,34 +261,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             if (!Program.config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
-        }
-    }
-
-    public class Blog
-    {
-        public int BlogId { get; set; }
-        public string Url { get; set; }
-        public int Rating { get; set; }
-        public List<Post> Posts { get; set; }
-
-        public override string ToString()
-        {
-            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
-        }
-    }
-
-    public class Post
-    {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
-
-        public override string ToString()
-        {
-            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
         }
     }
 }

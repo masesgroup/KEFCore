@@ -2,11 +2,11 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Benchmark.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Benchmark.Test</RootNamespace>
-		<Title>EntityFrameworkCore KNet Benchmark Test</Title>
-		<Description>EntityFrameworkCore KNet Benchmark.Test</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Benchmark.Test</Product>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Extractor.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Extractor.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Extractor Test</Title>
+		<Description>EntityFrameworkCore KNet.Extractor Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Extractor.Test</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
@@ -20,13 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="BenchmarkTest.InMemory.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="BenchmarkTest.KafkaStreams.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="BenchmarkTest.KNetReplicator.json">
+	  <None Update="Extractor.Test.Blog.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

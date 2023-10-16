@@ -22,8 +22,6 @@
 using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.Serialization.Json;
-using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
