@@ -38,8 +38,8 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KafkaOptionsExtension : IDbContextOptionsExtension
 {
-    private Type _keySerializationType = typeof(KNetSerDes<>);
-    private Type _valueSerializationType = typeof(KEFCoreSerDes<>);
+    private Type _keySerializationType = typeof(DefaultKEFCoreSerDes.Key.Json<>);
+    private Type _valueSerializationType = typeof(DefaultKEFCoreSerDes.ValueContainer.Json<>);
     private Type _valueContainerType = typeof(DefaultValueContainer<>);
     private bool _useNameMatching = true;
     private string? _databaseName;

@@ -83,8 +83,8 @@ The code is based on three elements shall be available to [Entity Framework Core
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) comes with some default values:
 - **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
-- **Key SerDes** class: KEFCore uses `KNetSerDes<T>` for simple Primary Key or `KEFCoreSerDes<T>` for complex Primary Key
-- **ValueContainer SerDes** class: KEFCore uses `KEFCoreSerDes<T>`
+- **Key SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.Key.Json<T>`, the type automatically manages simple or complex Primary Key
+- **ValueContainer SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.ValueContainer.Json<>`
 
 ### User override
 
@@ -169,9 +169,9 @@ public class CustomSerDes<T> : KNetSerDes<T>
 ## **Avro** serialization
 
 With package [MASES.EntityFrameworkCore.KNet.Serialization.Avro](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/) an user can choose two different Avro serializers:
-The engine comes with two different encoders:
-- Binary: `KEFCoreSerDesAvroBinary`
-- Json: `KEFCoreSerDesAvroJson`
+The engine comes with two different encoders 
+- Binary
+- Json
 
 ### Avro schema
 
@@ -267,8 +267,8 @@ The extension converted this schema into code to speedup the exection of seriali
 ### How to use Avro 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
-- **KeySerializationType**: set this value to `KEFCoreSerDesKeyAvroBinary<>` or `KEFCoreSerDesKeyAvroJson<>`, the type automatically fallback to default serializer for simple Primary Key
-- **ValueSerializationType**: set this value to `KEFCoreSerDesValueContainerAvroBinary<>` or `KEFCoreSerDesValueContainerAvroJson<>`
+- **KeySerializationType**: set this value to `AvroKEFCoreSerDes.Key.Binary<>` or `AvroKEFCoreSerDes.Key.Json<>`, both types automatically manages simple or complex Primary Key
+- **ValueSerializationType**: set this value to `AvroKEFCoreSerDes.ValueContainer.Binary<>` or `AvroKEFCoreSerDes.ValueContainer.Json<>`
 - **ValueContainerType**: set this value to `AvroValueContainer<>`
 
 An example is:
@@ -279,9 +279,9 @@ using (context = new BloggingContext()
     BootstrapServers = "KAFKA-SERVER:9092",
     ApplicationId = "MyAppid",
     DbName = "MyDBName",
-    KeySerializationType = UseAvroBinary ? typeof(KEFCoreSerDesKeyAvroBinary<>) : typeof(KEFCoreSerDesKeyAvroJson<>),
+    KeySerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>),
     ValueContainerType = typeof(AvroValueContainer<>),
-    ValueSerializationType = UseAvroBinary ? typeof(KEFCoreSerDesValueContainerAvroBinary<>) : typeof(KEFCoreSerDesValueContainerAvroJson<>),
+    ValueSerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>),
 })
 {
 	// execute stuff here
