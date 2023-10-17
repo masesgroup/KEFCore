@@ -4,6 +4,8 @@
   href: gettingstarted.md
 - name: Usage
   href: usage.md
+- name: Use cases
+  href: usecases.md
 - name: Serialization
   href: serialization.md 
 - name: External application

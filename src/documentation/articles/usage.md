@@ -63,3 +63,7 @@ public class Post
     public Blog Blog { get; set; }
 }
 ```
+
+## Possible usages
+
+For possible usages of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), and this feature, see [use cases](usecases.md)

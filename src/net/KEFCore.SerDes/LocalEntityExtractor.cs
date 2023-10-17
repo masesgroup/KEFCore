@@ -62,9 +62,9 @@ class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializ
                     {
                         propInfo.SetValue(newEntity, data[property.Key]);
                     }
-                    if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {data[property.Key]}");
+                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {data[property.Key]}");
                 }
-                if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+                else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }
 
             return newEntity!;

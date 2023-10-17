@@ -32,12 +32,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
     partial class Program
     {
-        internal static bool runApplication = true;
+        internal static CancellationTokenSource runApplication = new CancellationTokenSource();
         internal static ProgramConfig config = new();
 
         static void ReportString(string message)
@@ -54,38 +55,23 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void Main(string[] args)
         {
-            if (args.Length > 0)
-            {
-                config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
-            }
-
-            if (string.IsNullOrWhiteSpace(config.TopicToSubscribe)) throw new ArgumentException("TopicToSubscribe must be set");
-
-            KEFCore.CreateGlobalInstance();
-
             try
             {
-                Console.CancelKeyPress += Console_CancelKeyPress;
-                ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create()
-                                                                             .WithBootstrapServers(config.BootstrapServers)
-                                                                             .WithGroupId(Guid.NewGuid().ToString())
-                                                                             .WithAutoOffsetReset(ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
-                                                                             .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
-                                                                             .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
-
-                KafkaConsumer<byte[], byte[]> kafkaConsumer = new KafkaConsumer<byte[], byte[]>(consumerBuilder);
-                using var collection = Collections.Singleton(config.TopicToSubscribe);
-                kafkaConsumer.Subscribe(collection);
-
-                while (runApplication)
+                if (args.Length > 0)
                 {
-                    var records = kafkaConsumer.Poll(100);
-                    foreach (var record in records)
-                    {
-                        var entity = EntityExtractor.FromRecord(record);
-                        Console.WriteLine(entity.ToString());
-                    }
+                    config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
                 }
+
+                if (string.IsNullOrWhiteSpace(config.BootstrapServers)) throw new ArgumentException("BootstrapServers must be set");
+                if (string.IsNullOrWhiteSpace(config.TopicToSubscribe)) throw new ArgumentException("TopicToSubscribe must be set");
+
+                KEFCore.CreateGlobalInstance();
+                Console.CancelKeyPress += Console_CancelKeyPress;
+                EntityExtractor.FromTopic(config.BootstrapServers, config.TopicToSubscribe, runApplication.Token, (entity, exception) =>
+                {
+                    if (exception != null) { Console.Error.WriteLine(exception.Message); }
+                    if (entity != null) { Console.Out.WriteLine(entity.ToString()); }
+                });
             }
             catch (Exception ex)
             {
@@ -95,7 +81,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
-            runApplication = false;
+            runApplication.Cancel();
         }
     }
 }
