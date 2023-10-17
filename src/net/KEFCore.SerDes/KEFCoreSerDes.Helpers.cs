@@ -18,12 +18,12 @@
 
 #nullable enable
 
-using Javax.Sound.Midi;
+using Java.Util;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Consumer;
-using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
+using Org.Apache.Kafka.Common.Serialization;
 using System.Text;
-using static MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 /// <summary>
@@ -47,13 +47,94 @@ public static class KEFCoreSerDesNames
     /// Identity the ValueContainer type used
     /// </summary>
     public const string ValueContainerIdentifier = "value-container-type";
+    /// <summary>
+    /// Returns the typename with the assembly qualification to help reload better the types
+    /// </summary>
+    /// <param name="type">The <see cref="Type"/> to be converted</param>
+    /// <returns>A string with <see cref="Type.FullName"/> along with <see cref="Assembly.FullName"/></returns>
+    public static string ToAssemblyQualified(this Type type)
+    {
+        return $"{type.FullName}, {type.Assembly.GetName().Name}";
+    }
 }
 
 /// <summary>
-/// This is an helper class to extract data information from a Kafka Record
+/// This is an helper class to extract data information from Kafka Records stored in topics
 /// </summary>
 public class EntityExtractor
 {
+    /// <summary>
+    /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+    /// </summary>
+    /// <param name="bootstrapServer">The Apache Kafka <see href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</see></param>
+    /// <param name="topicName">The topic containing the data</param>
+    /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
+    /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
+    /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
+    public static void FromTopic(string bootstrapServer, string topicName, CancellationToken token, Action<object?, Exception?> cb, bool onlyLatest = false)
+    {
+        FromTopic<object>(bootstrapServer, topicName, token, cb);
+    }
+    /// <summary>
+    /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+    /// </summary>
+    /// <typeparam name="TEntity">The Entity type if it is known</typeparam>
+    /// <param name="bootstrapServer">The Apache Kafka <see href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</see></param>
+    /// <param name="topicName">The topic containing the data</param>
+    /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
+    /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
+    /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
+    public static void FromTopic<TEntity>(string bootstrapServer, string topicName, CancellationToken token, Action<TEntity?, Exception?> cb, bool onlyLatest = false)
+        where TEntity : class
+    {
+        try
+        {
+            ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create()
+                                                                         .WithBootstrapServers(bootstrapServer)
+                                                                         .WithGroupId(Guid.NewGuid().ToString())
+                                                                         .WithAutoOffsetReset(onlyLatest ? ConsumerConfigBuilder.AutoOffsetResetTypes.LATEST : ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
+                                                                         .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
+                                                                         .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
+
+            KafkaConsumer<byte[], byte[]> kafkaConsumer = new KafkaConsumer<byte[], byte[]>(consumerBuilder);
+            using var collection = Collections.Singleton(topicName);
+            kafkaConsumer.Subscribe(collection);
+
+            while (!token.IsCancellationRequested)
+            {
+                var records = kafkaConsumer.Poll(100);
+                foreach (var record in records)
+                {
+                    TEntity? entity = null;
+                    Exception? exception = null;
+                    try
+                    {
+                        entity = FromRecord<TEntity>(record, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        entity = null;
+                        exception = ex;
+                    }
+                    cb.Invoke(entity, exception);
+                }
+            }
+        }
+        catch (OperationCanceledException) { return; }
+    }
+
+    /// <summary>
+    /// Extract information for Entity from <paramref name="record"/> in input
+    /// </summary>
+    /// <param name="record">The Apache Kafka record containing the information</param>
+    /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
+    /// <returns>The extracted entity</returns>
+    public static TEntity FromRecord<TEntity>(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
+        where TEntity : class
+    {
+        return (TEntity)FromRecord(record, throwUnmatch);
+    }
+
     /// <summary>
     /// Extract information for Entity from <paramref name="record"/> in input
     /// </summary>

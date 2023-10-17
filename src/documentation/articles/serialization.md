@@ -136,12 +136,16 @@ A custom **Key SerDes** class shall follow the following rules:
 - must implements the `IKNetSerDes<T>` interface or extend `KNetSerDes<T>`
 - must be a generic type
 - must have a parameterless constructor
+- can store serialization information using Headers of Apache Kafka record (this information will be used from `EntityExtractor`)
 
 An example snippet is the follow based on JSON serializer:
 
 ```C#
-public class CustomSerDes<T> : KNetSerDes<T>
+public class CustomKeySerDes<T> : KNetSerDes<T>
 {
+    readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
+    readonly byte[] customSerDesName = Encoding.UTF8.GetBytes(typeof(CustomKeySerDes<>).FullName!);
+
     /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)
     {
@@ -150,6 +154,63 @@ public class CustomSerDes<T> : KNetSerDes<T>
     /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
+        headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
+        headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, customSerDesName);
+
+        var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
+        return Encoding.UTF8.GetBytes(jsonStr);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+    public override T Deserialize(string topic, byte[] data)
+    {
+        return DeserializeWithHeaders(topic, null, data);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+    public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+    {
+        if (data == null) return default;
+        return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
+    }
+}
+```
+
+```C#
+public class CustomValueContainerSerDes<T> : KNetSerDes<T>
+{
+    readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(CustomValueContainerSerDes<>).FullName!);
+    readonly byte[] valueContainerName = null!;
+    /// <summary>
+    /// Default initializer
+    /// </summary>
+    public CustomValueContainerSerDes()
+    {
+        var tt = typeof(T);
+        if (tt.IsGenericType)
+        {
+            var keyT = tt.GetGenericArguments();
+            if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
+            var t = tt.GetGenericTypeDefinition();
+            if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
+            {
+                valueContainerName = Encoding.UTF8.GetBytes(t.FullName!);
+                return;
+            }
+            else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
+        }
+        throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
+    }
+
+    /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+    public override byte[] Serialize(string topic, T data)
+    {
+        return SerializeWithHeaders(topic, null, data);
+    }
+    /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+    public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+    {
+        headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
+        headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+
         var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
