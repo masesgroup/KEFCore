@@ -61,7 +61,7 @@ public static class AvroKEFCoreSerDes
                 }
                 else if (!typeof(T).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(Binary<>).FullName} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(Binary<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
                 }
             }
 
@@ -127,7 +127,7 @@ public static class AvroKEFCoreSerDes
                 }
                 else if (!typeof(T).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(Json<>).FullName} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(Json<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
                 }
             }
 
