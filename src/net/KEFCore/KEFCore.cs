@@ -20,11 +20,29 @@ using MASES.KNet;
 
 namespace MASES.EntityFrameworkCore.KNet
 {
+    /// <summary>
+    /// This is the primary class shall be used to initialize the environment to use Entity Framework Core for Apache Kafka
+    /// </summary>
+    /// <example>
+    /// The most simple way to use this class is to execute the following code at the beginning of the application:
+    /// <code>
+    /// KEFCore.CreateGlobalInstance();
+    /// </code>
+    /// The class reads configuration parameters in multiple ways: command line, environment variables and code override.
+    /// To insert values in the code an user can create a custom class like the following and overrides the interested properties:
+    /// <code>
+    /// public class CustomKEFCore : KEFCore
+    /// {
+    ///     public override string JVMPath =&gt; "MySpecialPath";
+    /// }
+    /// </code>
+    /// </example>
     public class KEFCore : KNetCore<KEFCore>
     {
 #if DEBUG
+        /// <inheritdoc/>
         public override bool EnableDebug => true;
-
+        /// <inheritdoc/>
         public override bool LogClassPath => true;
 #endif
     }
