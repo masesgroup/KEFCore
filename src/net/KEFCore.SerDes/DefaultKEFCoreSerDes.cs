@@ -56,7 +56,7 @@ public static class DefaultKEFCoreSerDes
                 }
                 else if (!typeof(T).IsArray)
                 {
-                    throw new InvalidOperationException($"KEFCoreSerDes cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(Json<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
                 }
             }
 
