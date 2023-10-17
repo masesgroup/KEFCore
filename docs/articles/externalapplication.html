@@ -70,14 +70,14 @@
 <h1 id="kefcore-external-application">KEFCore: external application</h1>
 
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities used within the model in something viable from the backend.
-Continuing from the concepts introduced in <a href="serialization.html">serialization</a>, an external application can use the data stored in the topics in a way it decide: <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> gives some helpers to get back the CLR Entity objects stored in the topics.</p>
+Continuing from the concepts introduced in <a href="serialization.html">serialization</a>, an external application can use the data stored in the topics in a way it decides: <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> gives some helpers to get back the CLR Entity objects stored in the topics.</p>
 <blockquote>
 <p>IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can be change without notice.</p>
 </blockquote>
 <h2 id="basic-concepts">Basic concepts</h2>
 <p>An external application may want to be informed about data changes in the topics and want to analyze the Entity was previously managed from the EFCore application.
-Within the core packages there is the <code>EntityExtractor</code> class which contains, till now, a method accepting a raw <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> from Apache Kafka.
-The method reads the info stored in it and returns the Entity object with the filled properties.</p>
+Within the core packages there is the <code>EntityExtractor</code> class which contains, till now, few methods and one accepts a raw <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> from Apache Kafka.
+The method reads the info stored in the <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> and returns the Entity object with the filled properties.</p>
 <p>It is possible to build a new application which subscribe to a topic created from the EFCore application.
 The following is a possible snippet of the logic can be applied:</p>
 <pre><code class="lang-c#">const string topicFrom = &quot;TheKEFCoreTopicWithData&quot;;
@@ -95,14 +95,14 @@ foreach(var record in records)
 </code></pre>
 <p>A full working example can be found under test folder of the <a href="https://github.com/masesgroup/KEFCore">repository</a>.</p>
 <h3 id="mandatory-information">Mandatory information</h3>
-<p>The method <code>EntityExtractor.FromRecord</code> use the reflection to get back the types referring to serializer and model whih were stored in the topics.
+<p>The method <code>EntityExtractor.FromTopic</code>, and then <code>EntityExtractor.FromRecord</code>, use the reflection to get back the types referring to serializer and types of the model which were stored in the topics.
 To work properly it needs, to be loaded in memory, at least:</p>
 <ul>
-<li>The assembly containing the serializer: if the serializer used was the default, this inforation is available</li>
+<li>The assembly containing the serializer: if the serializer are the default this information is intrisecally available</li>
 <li>The model types (i.e. the types used to build the <code>DbContext</code> or <code>KafkaDbContext</code>)</li>
 </ul>
 <h2 id="possible-usages">Possible usages</h2>
-<p>TDB</p>
+<p>For possible usages of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a>, and this feature, see <a href="usecases.html">use cases</a></p>
 </article>
           </div>
           

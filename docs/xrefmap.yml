@@ -5316,6 +5316,40 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord
   nameWithType: EntityExtractor.FromRecord
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord``1(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)
+  name: FromRecord<TEntity>(ConsumerRecord<Byte[], Byte[]>, Boolean)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html#MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord__1_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord``1(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)
+  name.vb: FromRecord(Of TEntity)(ConsumerRecord(Of Byte(), Byte()), Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord<TEntity>(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<System.Byte[], System.Byte[]>, System.Boolean)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord(Of TEntity)(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord(Of System.Byte(), System.Byte()), System.Boolean)
+  nameWithType: EntityExtractor.FromRecord<TEntity>(ConsumerRecord<Byte[], Byte[]>, Boolean)
+  nameWithType.vb: EntityExtractor.FromRecord(Of TEntity)(ConsumerRecord(Of Byte(), Byte()), Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String,System.String,CancellationToken,Action{System.Object,System.Nullable{Exception}},System.Boolean)
+  name: FromTopic(String, String, CancellationToken, Action<Object, Nullable<Exception>>, Boolean)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html#MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_System_String_System_String_CancellationToken_Action_System_Object_System_Nullable_Exception___System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String,System.String,CancellationToken,Action{System.Object,System.Nullable{Exception}},System.Boolean)
+  name.vb: FromTopic(String, String, CancellationToken, Action(Of Object, Nullable(Of Exception)), Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String, System.String, CancellationToken, Action<System.Object, System.Nullable<Exception>>, System.Boolean)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String, System.String, CancellationToken, Action(Of System.Object, System.Nullable(Of Exception)), System.Boolean)
+  nameWithType: EntityExtractor.FromTopic(String, String, CancellationToken, Action<Object, Nullable<Exception>>, Boolean)
+  nameWithType.vb: EntityExtractor.FromTopic(String, String, CancellationToken, Action(Of Object, Nullable(Of Exception)), Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic*
+  name: FromTopic
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html#MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic
+  nameWithType: EntityExtractor.FromTopic
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(System.String,System.String,CancellationToken,Action{``0,System.Nullable{Exception}},System.Boolean)
+  name: FromTopic<TEntity>(String, String, CancellationToken, Action<TEntity, Nullable<Exception>>, Boolean)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html#MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_System_String_System_String_CancellationToken_Action___0_System_Nullable_Exception___System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(System.String,System.String,CancellationToken,Action{``0,System.Nullable{Exception}},System.Boolean)
+  name.vb: FromTopic(Of TEntity)(String, String, CancellationToken, Action(Of TEntity, Nullable(Of Exception)), Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic<TEntity>(System.String, System.String, CancellationToken, Action<TEntity, System.Nullable<Exception>>, System.Boolean)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(Of TEntity)(System.String, System.String, CancellationToken, Action(Of TEntity, System.Nullable(Of Exception)), System.Boolean)
+  nameWithType: EntityExtractor.FromTopic<TEntity>(String, String, CancellationToken, Action<TEntity, Nullable<Exception>>, Boolean)
+  nameWithType.vb: EntityExtractor.FromTopic(Of TEntity)(String, String, CancellationToken, Action(Of TEntity, Nullable(Of Exception)), Boolean)
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1
   name: IValueContainer<T>
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html
@@ -5866,6 +5900,19 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.KeyTypeIdentifier
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.KeyTypeIdentifier
   nameWithType: KEFCoreSerDesNames.KeyTypeIdentifier
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified(Type)
+  name: ToAssemblyQualified(Type)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html#MASES_EntityFrameworkCore_KNet_Serialization_KEFCoreSerDesNames_ToAssemblyQualified_Type_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified(Type)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified(Type)
+  nameWithType: KEFCoreSerDesNames.ToAssemblyQualified(Type)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified*
+  name: ToAssemblyQualified
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html#MASES_EntityFrameworkCore_KNet_Serialization_KEFCoreSerDesNames_ToAssemblyQualified_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ToAssemblyQualified
+  nameWithType: KEFCoreSerDesNames.ToAssemblyQualified
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.ValueContainerIdentifier
   name: ValueContainerIdentifier
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html#MASES_EntityFrameworkCore_KNet_Serialization_KEFCoreSerDesNames_ValueContainerIdentifier

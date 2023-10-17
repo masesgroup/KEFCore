@@ -525,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.html",
-          "hash": "WuuZiT9m2QIkuvqAst8BzwGbIGbX8r1y2z0/L2KRrdA="
+          "hash": "s34oOKfguzkFxmj9bXYchKncJweON6i//GRx9JIFqR8="
         }
       },
       "is_incremental": false,
@@ -537,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.html",
-          "hash": "3h4jiyt/1Ma1IiXaGIRUe+GUZDKk4uMqDnoCGmiKLPA="
+          "hash": "9gUw5PeT/RP5UUXOFmJLWQBsyOJvbnloicF5jBRh55c="
         }
       },
       "is_incremental": false,
@@ -561,7 +561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.html",
-          "hash": "o60BhcBzOTEmGQ5Td/xJrRe+dgicRg+xsSn9UJ6p8zk="
+          "hash": "QWSCRkzzbjRdRPv2GsEvtoQnhRQO1jTXUgyzBQmy9ho="
         }
       },
       "is_incremental": false,
@@ -573,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.html",
-          "hash": "Vn00LX1o7d6ZteBTuT9rPjG0XFgROv3DoOQMJR8/OJw="
+          "hash": "YKSHse5CFZlxM9a39vmMUO+plGZIIA/8bnN7mqU3y5M="
         }
       },
       "is_incremental": false,
@@ -585,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.html",
-          "hash": "UbS7TBODslBqgUIRc9XkdBPBAfUFypTouIfNE0cVEH0="
+          "hash": "QTtpNxIQVu7ZUpuVNIErkvLzVlNnSupxnt8Zt5wCTmU="
         }
       },
       "is_incremental": false,
@@ -705,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html",
-          "hash": "mCFJ4CUn85xaRdvhoqR9Ve1dz10vQBb8VdzJz3gK+Ic="
+          "hash": "3YPclFKsnzOj4epjq/JYSLI7eI5NYKV9EuqddICzgCs="
         }
       },
       "is_incremental": false,
@@ -729,7 +729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key.Json-1.html",
-          "hash": "2ecbG32aB9xcxeSR3k9HYtO4urA/7QvwEfv4RP10LTU="
+          "hash": "MV6qHs6rpJJvai+ZlhxcF9myPtsnwYPQ7F5wez31oMk="
         }
       },
       "is_incremental": false,
@@ -753,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer.Json-1.html",
-          "hash": "2T78nbqreBv+lsdOo2YuMoEp+VVg0gvEJrsYYtqLykc="
+          "hash": "HkIk2+lj+94jJulZK3Q3YBJdLECKeGjitRaIyrfI/9s="
         }
       },
       "is_incremental": false,
@@ -765,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer.html",
-          "hash": "bk3+kBu7+umHBfB75DyTqQk1Q4yfAVtMX5BdmGz0cho="
+          "hash": "OjgEV2sK/4UB/8mGBeNruQg96i1vcERUsRC3cosOi8Q="
         }
       },
       "is_incremental": false,
@@ -837,7 +837,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.KEFCoreSerDesNames.html",
-          "hash": "TCicQ8TX7KNFZ6ZI8girFAoTht8BJJVP14zkuug1gWM="
+          "hash": "OcS6zDkOoouX1XAdCwmQnYrqvTJHbo6IHw//oGjRSy8="
         }
       },
       "is_incremental": false,
@@ -849,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.html",
-          "hash": "+78HMZzlyddzHMMCgqv+C50nUDiXa9pXG0sytYGF7tY="
+          "hash": "ktp/kvnL+fjpK/t260Wqm9tVlXvGneYXfEc63R9km2E="
         }
       },
       "is_incremental": false,
@@ -1065,7 +1065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-2.html",
-          "hash": "6ljHW7EcSIlhu5ZyOhn3/tlS83JYF5zd31C+JdLly1I="
+          "hash": "rBhwd0luKLVMVqvMYX/vwpRyr51CrNb+07OJ94/aRBc="
         }
       },
       "is_incremental": false,
@@ -1293,7 +1293,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/externalapplication.html",
-          "hash": "7AxW7kSND0JsKaGWCHYAMYbC5TlRB0fBO1ZCUyO75ss="
+          "hash": "loAwqXQQRPRQRLYPmtAY6ZoA4CMAcoRsPqtaMOw4RIo="
         }
       },
       "is_incremental": false,
@@ -1356,7 +1356,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/serialization.html",
-          "hash": "k4iLhZMu+T/E2U1ZZUf+bK7iXxqAtfDNk7WnE4J5pcQ="
+          "hash": "/HlEq6uYMU2oHiK87pN3T++hoYoBk9jdOM8IYLW4vls="
         }
       },
       "is_incremental": false,
@@ -1368,7 +1368,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "s5VyOWkauuGE8SWCupBy3sO5vT65bWakxtkk1uj/xF0="
+          "hash": "pDIPeMMPByPtbj+l4fxJsfL1FW76aqHxeGMjnHqgo1Q="
         }
       },
       "is_incremental": false,
@@ -1380,7 +1380,19 @@
       "output": {
         ".html": {
           "relative_path": "articles/usage.html",
-          "hash": "fxwtUrMiyADyAodFlJEl2HOVlTR9rlYWutOJnxII+zU="
+          "hash": "Cv5dGF5TAJ4WZNT0d3jcpUm/+L4A3w34lK2hXrNABwQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/usecases.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/usecases.html",
+          "hash": "zWSNjyZ0rlLufGv0Mj/epVICTyxFpTcceW6rqg9oeWo="
         }
       },
       "is_incremental": false,
@@ -1406,7 +1418,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "THupCbPDRtSojP1pVJ2MOO3W10xqBrBScVQufaX1VEg="
+          "hash": "pUEn0xZ61EbnIGDUZD4pd5Dk72FJXYwgpHIOYteav04="
         }
       },
       "is_incremental": false,
@@ -1439,7 +1451,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 10,
+          "total_file_count": 11,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

@@ -198,10 +198,14 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <li>must implements the <code>IKNetSerDes&lt;T&gt;</code> interface or extend <code>KNetSerDes&lt;T&gt;</code></li>
 <li>must be a generic type</li>
 <li>must have a parameterless constructor</li>
+<li>can store serialization information using Headers of Apache Kafka record (this information will be used from <code>EntityExtractor</code>)</li>
 </ul>
 <p>An example snippet is the follow based on JSON serializer:</p>
-<pre><code class="lang-C#">public class CustomSerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
+<pre><code class="lang-C#">public class CustomKeySerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
 {
+    readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
+    readonly byte[] customSerDesName = Encoding.UTF8.GetBytes(typeof(CustomKeySerDes&lt;&gt;).FullName!);
+
     /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Serialize(string, T)&quot;/&gt;
     public override byte[] Serialize(string topic, T data)
     {
@@ -210,6 +214,61 @@ The schema of the Apache Kafka record value follows the code definition in <code
     /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
+        headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
+        headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, customSerDesName);
+
+        var jsonStr = System.Text.Json.JsonSerializer.Serialize&lt;T&gt;(data);
+        return Encoding.UTF8.GetBytes(jsonStr);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Deserialize(string, byte[])&quot;/&gt;
+    public override T Deserialize(string topic, byte[] data)
+    {
+        return DeserializeWithHeaders(topic, null, data);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])&quot;/&gt;
+    public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+    {
+        if (data == null) return default;
+        return System.Text.Json.JsonSerializer.Deserialize&lt;T&gt;(data)!;
+    }
+}
+</code></pre>
+<pre><code class="lang-C#">public class CustomValueContainerSerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
+{
+    readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(CustomValueContainerSerDes&lt;&gt;).FullName!);
+    readonly byte[] valueContainerName = null!;
+    /// &lt;summary&gt;
+    /// Default initializer
+    /// &lt;/summary&gt;
+    public CustomValueContainerSerDes()
+    {
+        var tt = typeof(T);
+        if (tt.IsGenericType)
+        {
+            var keyT = tt.GetGenericArguments();
+            if (keyT.Length != 1) { throw new ArgumentException($&quot;{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type&quot;); }
+            var t = tt.GetGenericTypeDefinition();
+            if (t.GetInterface(typeof(IValueContainer&lt;&gt;).Name) != null)
+            {
+                valueContainerName = Encoding.UTF8.GetBytes(t.FullName!);
+                return;
+            }
+            else throw new ArgumentException($&quot;{typeof(T).Name} does not implement IValueContainer&lt;&gt; and cannot be used because it is not a valid ValueContainer type&quot;);
+        }
+        throw new ArgumentException($&quot;{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type&quot;);
+    }
+
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Serialize(string, T)&quot;/&gt;
+    public override byte[] Serialize(string topic, T data)
+    {
+        return SerializeWithHeaders(topic, null, data);
+    }
+    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
+    public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+    {
+        headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
+        headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+
         var jsonStr = System.Text.Json.JsonSerializer.Serialize&lt;T&gt;(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }

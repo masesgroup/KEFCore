@@ -73,7 +73,7 @@
   
   <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor" class="text-break">Class EntityExtractor
   </h1>
-  <div class="markdown level0 summary"><p>This is an helper class to extract data information from a Kafka Record</p>
+  <div class="markdown level0 summary"><p>This is an helper class to extract data information from Kafka Records stored in topics</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -118,7 +118,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_Type_Type_Type_Type_System_String_System_Byte___System_Byte___System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData(Type%2CType%2CType%2CType%2CSystem.String%2CSystem.Byte%5B%5D%2CSystem.Byte%5B%5D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L113">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L194">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_Type_Type_Type_Type_System_String_System_Byte___System_Byte___System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData(Type,Type,Type,Type,System.String,System.Byte[],System.Byte[],System.Boolean)">FromRawValueData(Type, Type, Type, Type, String, Byte[], Byte[], Boolean)</h4>
@@ -169,13 +169,13 @@
         <td></td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="xref">System.Byte</span>[]</td>
         <td><span class="parametername">recordValue</span></td>
         <td><p>The Apache Kafka record value containing the information</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
+        <td><span class="xref">System.Byte</span>[]</td>
         <td><span class="parametername">recordKey</span></td>
         <td><p>The Apache Kafka record key containing the information</p>
 </td>
@@ -209,7 +209,7 @@
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord%7BSystem.Byte%5B%5D%2CSystem.Byte%5B%5D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L63">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L144">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)">FromRecord(ConsumerRecord&lt;Byte[], Byte[]&gt;, Boolean)</h4>
@@ -231,7 +231,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Org.Apache.Kafka.Clients.Consumer.ConsumerRecord</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[], <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">Byte</a>[]&gt;</td>
+        <td><span class="xref">Org.Apache.Kafka.Clients.Consumer.ConsumerRecord</span>&lt;<span class="xref">System.Byte</span>[], <span class="xref">System.Byte</span>[]&gt;</td>
         <td><span class="parametername">record</span></td>
         <td><p>The Apache Kafka record containing the information</p>
 </td>
@@ -260,6 +260,211 @@
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord__1_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord%60%601(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord%7BSystem.Byte%5B%5D%2CSystem.Byte%5B%5D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L132">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord__1_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord``1(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)">FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;Byte[], Byte[]&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Extract information for Entity from <code data-dev-comment-type="paramref" class="paramref">record</code> in input</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TEntity FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;byte[], byte[]&gt; record, bool throwUnmatch = false)
+    where TEntity : class</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Org.Apache.Kafka.Clients.Consumer.ConsumerRecord</span>&lt;<span class="xref">System.Byte</span>[], <span class="xref">System.Byte</span>[]&gt;</td>
+        <td><span class="parametername">record</span></td>
+        <td><p>The Apache Kafka record containing the information</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">throwUnmatch</span></td>
+        <td><p>Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TEntity</span></td>
+        <td><p>The extracted entity</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_System_String_System_String_CancellationToken_Action_System_Object_System_Nullable_Exception___System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String%2CSystem.String%2CCancellationToken%2CAction%7BSystem.Object%2CSystem.Nullable%7BException%7D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L74">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_System_String_System_String_CancellationToken_Action_System_Object_System_Nullable_Exception___System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String,System.String,CancellationToken,Action{System.Object,System.Nullable{Exception}},System.Boolean)">FromTopic(String, String, CancellationToken, Action&lt;Object, Nullable&lt;Exception&gt;&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Extract information for Entity from <code data-dev-comment-type="paramref" class="paramref">bootstrapServer</code> within a <code data-dev-comment-type="paramref" class="paramref">topicName</code> and send them to <code data-dev-comment-type="paramref" class="paramref">cb</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void FromTopic(string bootstrapServer, string topicName, CancellationToken token, Action&lt;object, Exception?&gt; cb, bool onlyLatest = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">bootstrapServer</span></td>
+        <td><p>The Apache Kafka <a href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</a></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">topicName</span></td>
+        <td><p>The topic containing the data</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">token</span></td>
+        <td><p>The <see cref="!:CancellationToken"></see> to use to stop execution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Action</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<span class="xref">Exception</span>&gt;&gt;</td>
+        <td><span class="parametername">cb</span></td>
+        <td><p>The <see cref="!:Action&lt;T1, T2>"></see> where data will be available</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">onlyLatest</span></td>
+        <td><p>Start execution only for newest messages and does not execute for oldest, default is from beginning</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_System_String_System_String_CancellationToken_Action___0_System_Nullable_Exception___System_Boolean_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic%60%601(System.String%2CSystem.String%2CCancellationToken%2CAction%7B%60%600%2CSystem.Nullable%7BException%7D%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L87">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_System_String_System_String_CancellationToken_Action___0_System_Nullable_Exception___System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(System.String,System.String,CancellationToken,Action{``0,System.Nullable{Exception}},System.Boolean)">FromTopic&lt;TEntity&gt;(String, String, CancellationToken, Action&lt;TEntity, Nullable&lt;Exception&gt;&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Extract information for Entity from <code data-dev-comment-type="paramref" class="paramref">bootstrapServer</code> within a <code data-dev-comment-type="paramref" class="paramref">topicName</code> and send them to <code data-dev-comment-type="paramref" class="paramref">cb</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void FromTopic&lt;TEntity&gt;(string bootstrapServer, string topicName, CancellationToken token, Action&lt;TEntity, Exception?&gt; cb, bool onlyLatest = false)
+    where TEntity : class</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">bootstrapServer</span></td>
+        <td><p>The Apache Kafka <a href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</a></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">topicName</span></td>
+        <td><p>The topic containing the data</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">token</span></td>
+        <td><p>The <see cref="!:CancellationToken"></see> to use to stop execution</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Action</span>&lt;TEntity, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<span class="xref">Exception</span>&gt;&gt;</td>
+        <td><span class="parametername">cb</span></td>
+        <td><p>The <see cref="!:Action&lt;T1, T2>"></see> where data will be available</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><span class="parametername">onlyLatest</span></td>
+        <td><p>Start execution only for newest messages and does not execute for oldest, default is from beginning</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>The Entity type if it is known</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -271,7 +476,7 @@
                     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L55" class="contribution-link">View Source</a>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L64" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
