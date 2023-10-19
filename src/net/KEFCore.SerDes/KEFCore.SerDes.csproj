@@ -41,11 +41,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.23" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'"/>
 		<PackageReference Include="MASES.KNet" Version="2.2.0">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" PrivateAssets="none" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

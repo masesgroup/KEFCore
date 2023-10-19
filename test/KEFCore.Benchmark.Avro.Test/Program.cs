@@ -88,7 +88,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ApplicationId = config.ApplicationId,
                     DbName = databaseName,
                     StreamsConfig = streamConfig,
-
                 })
                 {
                     if (config.UseAvro)
