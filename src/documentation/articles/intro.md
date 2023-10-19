@@ -14,16 +14,15 @@ Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kaf
 [![CI_BUILD](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/build.yaml) 
 [![CI_RELEASE](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml/badge.svg)](https://github.com/masesgroup/KEFCore/actions/workflows/release.yaml) 
 
-### Disclaimer
+### Project disclaimer
 
-<em>
-KEFCore is a project, curated by MASES Group, can be supported by the open-source community. 
-Its primary scope is to supports other, public or internal, MASES Group projects: Open-source community can use and support this project, moreover there is a dedicated community subscription plan.
+KEFCore is a project, curated by MASES Group, can be supported by the open-source community.
 
-The release cycle depends from KNet release, critical discovered issues and/or enhancement requested from this or other projects.
+Its primary scope is to support other, public or internal, MASES Group projects: open-source community and commercial entities can use it for their needs and support this project, moreover there are dedicated community and commercial subscription plans.
+
+The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.
 
 Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) applications.
-</em>
 
 ---
 
