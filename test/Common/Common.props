@@ -10,7 +10,18 @@
 		<None Include="..\..\src\net\Common\JCOB128x128.png" Pack="true" PackagePath="" />
 		<None Include="..\..\src\net\Common\efcorekafka.snk" Link="efcorekafka.snk" />
 	</ItemGroup>
+
 	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.23" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.23" Condition="'$(TargetFramework)' == 'net6.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" Condition="'$(TargetFramework)' == 'net7.0'"/>
 		<ProjectReference Include="..\..\src\net\KEFCore\KEFCore.csproj" />
+		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj" />
+
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 </Project>

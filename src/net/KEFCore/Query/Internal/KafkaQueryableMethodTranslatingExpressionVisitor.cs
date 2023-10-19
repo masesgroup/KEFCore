@@ -89,7 +89,12 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return base.VisitMethodCall(methodCallExpression);
     }
-
+#if NET6_0
+    protected override ShapedQueryExpression CreateShapedQueryExpression(Type elementType)
+    {
+        throw new NotImplementedException();
+    }
+#endif
     protected override ShapedQueryExpression CreateShapedQueryExpression(IEntityType entityType)
         => CreateShapedQueryExpressionStatic(entityType);
 
