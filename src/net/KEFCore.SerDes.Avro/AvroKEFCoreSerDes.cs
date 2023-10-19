@@ -73,8 +73,8 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
-                headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
@@ -139,8 +139,8 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
-                headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
@@ -215,8 +215,8 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
-                headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
 
                 using MemoryStream memStream = new();
                 BinaryEncoder encoder = new(memStream);
@@ -280,8 +280,8 @@ public static class AvroKEFCoreSerDes
             /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
-                headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
 
                 using MemoryStream memStream = new();
                 JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
