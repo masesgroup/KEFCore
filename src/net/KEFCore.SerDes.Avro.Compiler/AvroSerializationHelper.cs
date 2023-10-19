@@ -20,39 +20,16 @@
 
 #nullable enable
 
-using Avro;
+using MASES.KNet.Serialization.Avro;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler;
 
 public static class AvroSerializationHelper
 {
-    public static void BuildSchemaClasses( string outputFolder, params string[] schemas)
-    {
-        var codegen = new CodeGen();
-        foreach (var schema in schemas)
-        {
-            codegen.AddSchema(schema);
-        }
-        codegen.GenerateCode();
-        codegen.WriteTypes(outputFolder, true);
-    }
-
-    public static void BuildSchemaClassesFromFiles( string outputFolder, params string[] schemaFiles)
-    {
-        var codegen = new CodeGen();
-        foreach (var schemaFile in schemaFiles)
-        {
-            var schema = File.ReadAllText(schemaFile);
-            codegen.AddSchema(schema);
-        }
-        codegen.GenerateCode();
-        codegen.WriteTypes(outputFolder, true);
-    }
-
     public static void BuildDefaultSchema(string outputFolder)
     {
-        BuildSchemaClassesFromFiles(outputFolder, "AvroValueContainer.avsc");
-        BuildSchemaClassesFromFiles(outputFolder, "AvroKeyContainer.avsc");
+       AvroSerDes.CompilerSupport.BuildSchemaClassesFromFiles(outputFolder, "AvroValueContainer.avsc");
+        AvroSerDes.CompilerSupport.BuildSchemaClassesFromFiles(outputFolder, "AvroKeyContainer.avsc");
     }
 }
 

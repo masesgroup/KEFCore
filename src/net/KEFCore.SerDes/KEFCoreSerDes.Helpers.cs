@@ -21,48 +21,30 @@
 using Java.Util;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Consumer;
+using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Common.Serialization;
 using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 /// <summary>
-/// Stores some fixed names expected from serialization system
-/// </summary>
-public static class KEFCoreSerDesNames
-{
-    /// <summary>
-    /// Identity the serializer for the key
-    /// </summary>
-    public const string KeySerializerIdentifier = "key-serializer-type";
-    /// <summary>
-    /// Identity the serializer for the ValueContainer
-    /// </summary>
-    public const string ValueContainerSerializerIdentifier = "value-container-serializer-type";
-    /// <summary>
-    /// Identity the type of the key used
-    /// </summary>
-    public const string KeyTypeIdentifier = "key-type";
-    /// <summary>
-    /// Identity the ValueContainer type used
-    /// </summary>
-    public const string ValueContainerIdentifier = "value-container-type";
-    /// <summary>
-    /// Returns the typename with the assembly qualification to help reload better the types
-    /// </summary>
-    /// <param name="type">The <see cref="Type"/> to be converted</param>
-    /// <returns>A string with <see cref="Type.FullName"/> along with <see cref="Assembly.FullName"/></returns>
-    public static string ToAssemblyQualified(this Type type)
-    {
-        return $"{type.FullName}, {type.Assembly.GetName().Name}";
-    }
-}
-
-/// <summary>
 /// This is an helper class to extract data information from Kafka Records stored in topics
 /// </summary>
 public class EntityExtractor
 {
+    /// <summary>
+    /// Extract information for Entity using <paramref name="consumerConfig"/> configurtion within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+    /// </summary>
+    /// <param name="consumerConfig">The <see cref="ConsumerConfigBuilder"/> with configuration</param>
+    /// <param name="topicName">The topic containing the data</param>
+    /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
+    /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
+    /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
+    public static void FromTopic(ConsumerConfigBuilder consumerConfig, string topicName, Action<object?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
+    {
+        FromTopic<object>(consumerConfig, topicName, cb, token, onlyLatest);
+    }
+
     /// <summary>
     /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
     /// </summary>
@@ -71,9 +53,9 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic(string bootstrapServer, string topicName, CancellationToken token, Action<object?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic(string bootstrapServer, string topicName, Action<object?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
     {
-        FromTopic<object>(bootstrapServer, topicName, token, cb);
+        FromTopic<object>(bootstrapServer, topicName, cb, token, onlyLatest);
     }
     /// <summary>
     /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
@@ -84,13 +66,28 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic<TEntity>(string bootstrapServer, string topicName, CancellationToken token, Action<TEntity?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic<TEntity>(string bootstrapServer, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
+        where TEntity : class
+    {
+        ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create().WithBootstrapServers(bootstrapServer);
+        FromTopic<TEntity>(consumerBuilder, topicName, cb, token, onlyLatest);
+    }
+
+    /// <summary>
+    /// Extract information for Entity using <paramref name="consumerConfig"/> configurtion within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+    /// </summary>
+    /// <typeparam name="TEntity">The Entity type if it is known</typeparam>
+    /// <param name="consumerConfig">The <see cref="ConsumerConfigBuilder"/> with configuration</param>
+    /// <param name="topicName">The topic containing the data</param>
+    /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
+    /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
+    /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
+    public static void FromTopic<TEntity>(ConsumerConfigBuilder consumerConfig, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
         where TEntity : class
     {
         try
         {
-            ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create()
-                                                                         .WithBootstrapServers(bootstrapServer)
+            ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfig)
                                                                          .WithGroupId(Guid.NewGuid().ToString())
                                                                          .WithAutoOffsetReset(onlyLatest ? ConsumerConfigBuilder.AutoOffsetResetTypes.LATEST : ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
                                                                          .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
@@ -143,10 +140,10 @@ public class EntityExtractor
     /// <returns>The extracted entity</returns>
     public static object FromRecord(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
     {
-        Type keySerializerType = null;
-        Type valueContainerSerializerType = null;
-        Type keyType = null;
-        Type valueContainerType = null;
+        Type? keySerializerType = null;
+        Type? valueSerializerType = null;
+        Type? keyType = null;
+        Type? valueType = null;
 
         var headers = record.Headers();
         if (headers != null)
@@ -154,30 +151,35 @@ public class EntityExtractor
             foreach (var header in headers.ToArray())
             {
                 var key = header.Key();
-                if (key == KEFCoreSerDesNames.KeySerializerIdentifier)
-                {
-                    var strType = Encoding.UTF8.GetString(header.Value());
-                    keySerializerType = Type.GetType(strType, true)!;
-                }
-                if (key == KEFCoreSerDesNames.ValueContainerSerializerIdentifier)
-                {
-                    var strType = Encoding.UTF8.GetString(header.Value());
-                    valueContainerSerializerType = Type.GetType(strType, true)!;
-                }
-                if (key == KEFCoreSerDesNames.KeyTypeIdentifier)
+                if (key == KNetSerialization.KeyTypeIdentifier)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
                     keyType = Type.GetType(strType, true)!;
                 }
-                if (key == KEFCoreSerDesNames.ValueContainerIdentifier)
+                if (key == KNetSerialization.KeySerializerIdentifier)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
-                    valueContainerType = Type.GetType(strType, true)!;
+                    keySerializerType = Type.GetType(strType, true)!;
+                }
+                if (key == KNetSerialization.ValueTypeIdentifier)
+                {
+                    var strType = Encoding.UTF8.GetString(header.Value());
+                    valueType = Type.GetType(strType, true)!;
+                }
+                if (key == KNetSerialization.ValueSerializerIdentifier)
+                {
+                    var strType = Encoding.UTF8.GetString(header.Value());
+                    valueSerializerType = Type.GetType(strType, true)!;
                 }
             }
         }
 
-        return FromRawValueData(keyType!, valueContainerType!, keySerializerType!, valueContainerSerializerType!, record.Topic(), record.Value(), record.Key(), throwUnmatch);
+        if (keyType == null || keySerializerType == null || valueType == null || valueSerializerType == null)
+        {
+            throw new InvalidOperationException($"Missing one, or more, mandatory information in record: keyType: {keyType} - keySerializerType: {keySerializerType} - valueType: {valueType} - valueSerializerType: {valueSerializerType}");
+        }
+
+        return FromRawValueData(keyType!, valueType!, keySerializerType!, valueSerializerType!, record.Topic(), record.Value(), record.Key(), throwUnmatch);
     }
 
     /// <summary>
