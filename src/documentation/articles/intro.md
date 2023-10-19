@@ -22,7 +22,7 @@ Its primary scope is to supports other, public or internal, MASES Group projects
 
 The release cycle depends from KNet release, critical discovered issues and/or enhancement requested from this or other projects.
 
-Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) over [Apache Kafka](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) over [Apache Kafka](https://kafka.apache.org/) applications.
+Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) applications.
 </em>
 
 ---
