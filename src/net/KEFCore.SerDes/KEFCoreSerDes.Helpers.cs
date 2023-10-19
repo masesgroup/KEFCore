@@ -40,9 +40,9 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic(ConsumerConfigBuilder consumerConfig, string topicName, CancellationToken token, Action<object?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic(ConsumerConfigBuilder consumerConfig, string topicName, Action<object?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
     {
-        FromTopic<object>(consumerConfig, topicName, token, cb, onlyLatest);
+        FromTopic<object>(consumerConfig, topicName, cb, token, onlyLatest);
     }
 
     /// <summary>
@@ -53,9 +53,9 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic(string bootstrapServer, string topicName, CancellationToken token, Action<object?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic(string bootstrapServer, string topicName, Action<object?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
     {
-        FromTopic<object>(bootstrapServer, topicName, token, cb, onlyLatest);
+        FromTopic<object>(bootstrapServer, topicName, cb, token, onlyLatest);
     }
     /// <summary>
     /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
@@ -66,11 +66,11 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic<TEntity>(string bootstrapServer, string topicName, CancellationToken token, Action<TEntity?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic<TEntity>(string bootstrapServer, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
         where TEntity : class
     {
         ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create().WithBootstrapServers(bootstrapServer);
-        FromTopic<TEntity>(consumerBuilder, topicName, token, cb, onlyLatest);
+        FromTopic<TEntity>(consumerBuilder, topicName, cb, token, onlyLatest);
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class EntityExtractor
     /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
     /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
     /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-    public static void FromTopic<TEntity>(ConsumerConfigBuilder consumerConfig, string topicName, CancellationToken token, Action<TEntity?, Exception?> cb, bool onlyLatest = false)
+    public static void FromTopic<TEntity>(ConsumerConfigBuilder consumerConfig, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
         where TEntity : class
     {
         try
@@ -140,10 +140,10 @@ public class EntityExtractor
     /// <returns>The extracted entity</returns>
     public static object FromRecord(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
     {
-        Type keySerializerType = null;
-        Type valueSerializerType = null;
-        Type keyType = null;
-        Type valueType = null;
+        Type? keySerializerType = null;
+        Type? valueSerializerType = null;
+        Type? keyType = null;
+        Type? valueType = null;
 
         var headers = record.Headers();
         if (headers != null)

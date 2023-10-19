@@ -67,16 +67,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                 KEFCore.CreateGlobalInstance();
                 Console.CancelKeyPress += Console_CancelKeyPress;
-                EntityExtractor.FromTopic(config.BootstrapServers, config.TopicToSubscribe, runApplication.Token, (entity, exception) =>
-                {
-                    if (exception != null) { Console.Error.WriteLine(exception.Message); }
-                    if (entity != null) { Console.Out.WriteLine(entity.ToString()); }
-                });
+                EntityExtractor.FromTopic(config.BootstrapServers, config.TopicToSubscribe, ReportData, runApplication.Token);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+
+        static void ReportData(object entity, Exception exception)
+        {
+            if (exception != null) { Console.Error.WriteLine(exception.Message); }
+            if (entity != null) { Console.Out.WriteLine(entity.ToString()); }
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
