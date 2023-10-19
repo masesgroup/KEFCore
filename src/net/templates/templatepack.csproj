@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputPath>..\..\..\bin\</OutputPath>
+		<PackageType>Template</PackageType>
+		<PackageId>MASES.EntityFrameworkCore.KNet.Templates</PackageId>
+		<Title>EntityFrameworkCore KNet Templates - Templates to use with KNet</Title>
+		<Summary>Ready made templates to create applications based on Entity Framework Core provider for Apache Kafka</Summary>
+		<Description>Ready made templates to create applications based on Entity Framework Core provider for Apache Kafka. The templates are ready made starting points, all information and APIs are available in the official website https://masesgroup.github.io/KEFCore</Description>
+		<PackageTags>knet kafka apache-kafka dotnet clr netcore net6 template kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
+		<Product>MASES.EntityFrameworkCore.KNet Templates</Product>
+		<IncludeSymbols>false</IncludeSymbols>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<ContentTargetFolders>content</ContentTargetFolders>
+		<PackageReadmeFile>usageTemplates.md</PackageReadmeFile>
+		<RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\documentation\articles\usageTemplates.md" Pack="true" PackagePath="\" />
+		<Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**;templates\**\.vscode\**" />
+		<Compile Remove="**\*" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
+</Project>
