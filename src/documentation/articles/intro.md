@@ -19,9 +19,9 @@ Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kaf
 <em>
 KEFCore is a suite for Apache Kafka curated by MASES Group and can be supported by the open-source community. 
 Its primary scope is to supports other, public or internal, MASES Group projects: Open-source community can use and support this project, moreover there is a dedicated community subscription plan.
-</p>
+
 The release cycle depends from KNet release, critical discovered issues and/or enhancement requested from this or other projects.
-</p>
+
 Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) over [Apache Kafka](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) over [Apache Kafka](https://kafka.apache.org/) applications.
 </em>
 
