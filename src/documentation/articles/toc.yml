@@ -16,3 +16,5 @@
   href: currentstate.md
 - name: KafkaDbContext
   href: kafkadbcontext.md
+- name: Template usage
+  href: usageTemplates.md  
