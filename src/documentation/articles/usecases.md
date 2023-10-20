@@ -7,7 +7,7 @@ Before read following chapters it is important to understand [how it works](howi
 
 ## [Apache Kafka](https://kafka.apache.org/) as Database
 
-The first use cases can be coupled to a standard usage of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), the same when it is used with standard database providers.
+The first use cases can be coupled to a standard usage of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), the same when it is used with database providers.
 In [getting started](gettingstarted.md) is proposed a simple example following the online documentation.
 In the example the data within the model are stored in multiple Apache Kafka topics, each topic is correlated to the `DbSet` described from the `DbContext`.
 
@@ -39,7 +39,7 @@ When a change event is triggered the application can react to it and take an act
 
 ### SignalR
 
-The triggered distributed cache can be used side-by-side with [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr): combining [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) and a SignalR in an application, subscribing to the change events, it is possible to feed the connected applications. 
+The triggered distributed cache can be used side-by-side with [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr): combining [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) and [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr) in an application, subscribing to the change events, it is possible to feed the connected applications to [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr). 
 
 ### Redis
 
@@ -55,16 +55,17 @@ The schema used to write the information in the topics are available, or can be 
 
 An application, not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), can subscribe to the topics to:
 - store all change events to another medium
-- analyze the data or the changes 
+- analyze the data or the changes
+- and so on
 
 ### Apache Kafka Streams
 
 Apache Kafka comes with the powerful Streams feature. An application based on Streams can analyze streams of data to extract some information or converts the data into something else.
-It is possible to build an application, based on Apache Kafka Streams, which hear on change events and produce something else or just sores them in another topic containing all events not only the latest (e.g. transaction log of SQL Server). 
+It is possible to build an application, based on Apache Kafka Streams, which hear on change events and produce something else or just sores them in another topic containing all events not only the latest (e.g. just like the transaction log of SQL Server does it). 
 
 ### Apache Kafka Connect
 
-Apache Kafka comes with another powerful feature called Connect: it somes with some ready-made connector which connects Apache Kafka with other systems (database, storage, etc).
+Apache Kafka comes with another powerful feature called Connect: it comes with some ready-made connector which connect Apache Kafka with other systems (database, storage, etc).
 There are sink or source connectors, each connector has its own specificity:
 - Database: the data in the topics can be converted and stored in a database
 - File: the data in the topics can be converted and stored in one, or more, files

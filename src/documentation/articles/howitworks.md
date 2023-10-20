@@ -26,13 +26,13 @@ An application based on [Entity Framework Core](https://learn.microsoft.com/it-i
 - when an entity is created/updated/deleted (e.g. calling [SaveChanges](https://learn.microsoft.com/en-us/ef/core/saving/basic)) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka cluster
 - then the consumer subscribed will be informed about this new record and will store it back: this seems not useful till now, but it will be more clear later
 
-Apache Kafka cluster is used as:
+Apache Kafka cluster becams a:
 1. a central routing for data changes in [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) based applications.
 2. a reliable storage because, when the application restarts, the data stored in the topics will be read back from the consumers so the state will be aligned to the latest available.
 
-The point 2 is optimized thanks to the [topic compaction](https://kafka.apache.org/documentation/#compaction) feature of Apache Kafka.
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) is interested to store the latest value/state of the entity.
-With the [topic compaction](https://kafka.apache.org/documentation/#compaction) the Apache Kafka cluster can apply the CRUD operations:
+Apache Kafka comes with [topic compaction](https://kafka.apache.org/documentation/#compaction) feature, thanks to it the point 2 is optimized.
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) is interested to store only the latest state of the entity and not the changes.
+Using the [topic compaction](https://kafka.apache.org/documentation/#compaction), the combination of producer, consumer and Apache Kafka cluster can apply the CRUD operations on data:
 - Create: a producer stores a new record with a unique key
 - Read: a consumer retrieves records from topic
 - Update: a producer storing a new record with a previously stored unique key will discard the old records
@@ -42,7 +42,7 @@ All CRUD operations are helped, behind the scene, from [`KNetCompactedReplicator
 
 ### Data storage
 
-Apache Kafka stores the information using records. It is important to convert entities in something viable from Apache Kafka.
+Apache Kafka stores the information using records. It is important to convert entities in something usable from Apache Kafka.
 The conversion is done using serializers that converts the Entities (data in the model) into Apache Kafka records and viceversa: see [serialization chapter](serialization.md) for more info.
 
 ## [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) compared to other providers
@@ -61,7 +61,7 @@ Here a list of features [Entity Framework Core](https://learn.microsoft.com/it-i
 
 ### Distributed cache
 
-In the previous chapter was stated that consumers are allocated to align the application data to the last topics information.
+In the previous chapter was stated that consumers align the application data to the last topics information.
 The alignment is managed from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/), everything is driven from the Apache Kafka back-end.
 Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
 This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka back-end:
@@ -76,7 +76,7 @@ Generally, an application based on [Entity Framework Core](https://learn.microso
 The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode.
 These change events are used from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) to align the local state.
 Moreover [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can inform, using callbacks and at zero cost, the registered application about these events.
-The application can use the reported events to execute some actions:
+Then the application can use the reported events to execute some actions:
 - execute a query
 - write something to disk
 - execute a REST call
@@ -84,7 +84,7 @@ The application can use the reported events to execute some actions:
 
 ### Applications not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/)
 
-Till now was considered only applications based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), however this provider can be used to feed applications not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/).
+Till now was spoken about applications based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), however this provider can be used to feed applications not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/).
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) comes with ready-made helping classes to subscribe to any topic of the Apache Kafka cluster to retrieve the data stored from an application based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/).
 Any application can use this feature to:
 - read latest data stored in the topics from the application based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) 
