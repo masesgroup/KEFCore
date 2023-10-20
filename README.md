@@ -51,6 +51,7 @@ This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDU
 * [Usage](src/documentation/articles/usage.md)
 * [Use cases](src/documentation/articles/usecases.md)
 * [Serialization](src/documentation/articles/serialization.md)
+* [Templates usage](src/documentation/articles/usageTemplates.md)
 * [External application](src/documentation/articles/externalapplication.md)
 * [Roadmap](src/documentation/articles/roadmap.md)
 * [Current state](src/documentation/articles/currentstate.md)
