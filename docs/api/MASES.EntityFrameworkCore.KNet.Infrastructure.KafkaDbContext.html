@@ -620,6 +620,40 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnChangeEvent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L226">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnChangeEvent*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnChangeEvent">OnChangeEvent</h4>
+  <div class="markdown level1 summary"><p>The optional handler to be used to receive notification when the back-end triggers a data change.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Action&lt;IEntityType, bool, object&gt;? OnChangeEvent { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<span class="xref">Action</span>&lt;<span class="xref">IEntityType</span>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Works if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <span class="xref">true</span></p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfig.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ProducerConfig%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
@@ -879,7 +913,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
     <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L223">View Source</a>
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContext.cs/#L229">View Source</a>
   </span>
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring*"></a>
   <h4 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_DbContextOptionsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)">OnConfiguring(DbContextOptionsBuilder)</h4>
