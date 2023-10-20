@@ -48,7 +48,7 @@ This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDU
 ## Summary
 
 * [Getting started](src/documentation/articles/gettingstarted.md)
-* [How works](src/documentation/articles/howitworks.md)
+* [How it works](src/documentation/articles/howitworks.md)
 * [Usage](src/documentation/articles/usage.md)
 * [Use cases](src/documentation/articles/usecases.md)
 * [Templates usage](src/documentation/articles/usageTemplates.md)
