@@ -219,6 +219,12 @@ const bool perf = false;
     /// The optional <see cref="TopicConfigBuilder"/> used when topics shall be created
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
+    /// <summary>
+    /// The optional handler to be used to receive notification when the back-end triggers a data change.
+    /// </summary>
+    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/></remarks>
+    public virtual Action<IEntityType, bool, object>? OnChangeEvent { get; set; } = null;
+
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -227,10 +233,10 @@ const bool perf = false;
 
         optionsBuilder.UseKafkaCluster(ApplicationId, DbName, BootstrapServers, (o) =>
         {
-            o.ConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
-            o.ProducerConfig(ProducerConfig ?? DefaultProducerConfig);
-            o.StreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
-            o.TopicConfig(TopicConfig ?? DefaultTopicConfig);
+            o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
+            o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
+            o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
+            o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
             o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
@@ -238,6 +244,7 @@ const bool perf = false;
             if (KeySerializationType != null) o.WithKeySerializationType(KeySerializationType);
             if (ValueSerializationType != null) o.WithValueSerializationType(ValueSerializationType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
+            if (OnChangeEvent != null) o.WithOnChangeEvent(OnChangeEvent);
         });
     }
 }

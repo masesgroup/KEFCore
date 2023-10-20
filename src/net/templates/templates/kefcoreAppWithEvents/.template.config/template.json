@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "MASES s.r.l.",
+  "classifications": [ "Common", "Library" ],
+  "identity": "MASES.EntityFrameworkCore.KNet.Templates.AppWithEvents",
+  "name": "Executable template: Simple Console with events for EntityFrameworkCore provider for Apache Kafka project",
+  "shortName": "kefcoreAppWithEvents",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

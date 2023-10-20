@@ -292,7 +292,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="consumerConfigBuilder">The <see cref="ConsumerConfigBuilder"/> where options are stored.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder ConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    public virtual KafkaDbContextOptionsBuilder WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
@@ -313,7 +313,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="producerConfigBuilder">The <see cref="ProducerConfigBuilder"/> where options are stored.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder ProducerConfig(ProducerConfigBuilder producerConfigBuilder)
+    public virtual KafkaDbContextOptionsBuilder WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
@@ -334,7 +334,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="streamsConfigBuilder">The <see cref="StreamsConfigBuilder"/> where options are stored.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder StreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
+    public virtual KafkaDbContextOptionsBuilder WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
@@ -355,12 +355,33 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="topicConfig">The <see cref="TopicConfigBuilder"/> where options are stored.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder TopicConfig(TopicConfigBuilder topicConfig)
+    public virtual KafkaDbContextOptionsBuilder WithTopicConfig(TopicConfigBuilder topicConfig)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
         extension = extension.WithTopicConfig(topicConfig);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set the optional handler to be used to receive notification when the back-end triggers a data change. Works if <see cref="WithCompactedReplicator(bool)"/> is invoked with <see langword="true"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="onChangeEvent">The <see cref="Action{IEntityType, Boolean, Object}"/> will be used to report change event.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithOnChangeEvent(Action<IEntityType, bool, object> onChangeEvent)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithOnChangeEvent(onChangeEvent);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
