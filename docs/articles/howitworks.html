@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>KEFCore: how it works | Kafka Bridge website </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="KEFCore: how it works | Kafka Bridge website ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="kefcore-how-it-works">KEFCore: how it works</h1>
+
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> can be used in some operative conditions.</p>
+<p>However it is important to start with a simple description on how it works.</p>
+<h2 id="basic-concepts">Basic concepts</h2>
+<p>Here below an image from Wikipedia describing simple concepts:</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Overview_of_Apache_Kafka.svg" alt="Alt text" title="Kafka basic concepts"></p>
+<p>Simplifying there are three active elements:</p>
+<ul>
+<li><strong>Topics</strong>: storage of the records (the data), they are hosted in the Apache Kafka cluster and can be partitioned</li>
+<li><strong>Producers</strong>: entities producing records to be stored in one or more topics</li>
+<li><strong>Consumers</strong>: entities receiving records from the topics</li>
+</ul>
+<p>When a producer send a record to Apache Kafka cluster, the record will be sent to the consumers subscribed to the topics the producer is producing on: this is a classic pub-sub pattern.
+Apache Kafka cluster adds the ability to store this information within the topic the producer has produced on, this feature guarantee that:</p>
+<ul>
+<li>an application consuming from the Apache Kafka cluster can hear only latest changes or position to a specific position in the past and start from that point to receive data</li>
+<li>the standard way to consume from Apache Kafka cluster is to start from the end (latest available record) or start from the beginning (first available record)</li>
+</ul>
+<h2 id="how-entity-framework-core-provider-for-apache-kafka-works">How <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> works</h2>
+<p>An application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> is both a producer and a consumer at the same time:</p>
+<ul>
+<li>when an entity is created/updated/deleted (e.g. calling <a href="https://learn.microsoft.com/en-us/ef/core/saving/basic">SaveChanges</a>) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka cluster</li>
+<li>then the consumer subscribed will be informed about this new record and will store it back: this seems not useful till now, but it will be more clear later</li>
+</ul>
+<p>Apache Kafka cluster becams a:</p>
+<ol>
+<li>a central routing for data changes in <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> based applications.</li>
+<li>a reliable storage because, when the application restarts, the data stored in the topics will be read back from the consumers so the state will be aligned to the latest available.</li>
+</ol>
+<p>Apache Kafka comes with <a href="https://kafka.apache.org/documentation/#compaction">topic compaction</a> feature, thanks to it the point 2 is optimized.
+<a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> is interested to store only the latest state of the entity and not the changes.
+Using the <a href="https://kafka.apache.org/documentation/#compaction">topic compaction</a>, the combination of producer, consumer and Apache Kafka cluster can apply the CRUD operations on data:</p>
+<ul>
+<li>Create: a producer stores a new record with a unique key</li>
+<li>Read: a consumer retrieves records from topic</li>
+<li>Update: a producer storing a new record with a previously stored unique key will discard the old records</li>
+<li>Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key</li>
+</ul>
+<p>All CRUD operations are helped, behind the scene, from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a>.</p>
+<h3 id="data-storage">Data storage</h3>
+<p>Apache Kafka stores the information using records. It is important to convert entities in something usable from Apache Kafka.
+The conversion is done using serializers that converts the Entities (data in the model) into Apache Kafka records and viceversa: see <a href="serialization.html">serialization chapter</a> for more info.</p>
+<h2 id="entity-framework-core-provider-for-apache-kafka-compared-to-other-providers"><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> compared to other providers</h2>
+<p>In the previous chapter was described how <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> permits to reproduce the CRUD operations.
+Starting from the model defined in the code, the data will be stored in the topics and each topic can be seen as a table of a database filled in with the same data.
+From the point of view of an application, the use of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> is similar to the use of the InMemory provider.</p>
+<h3 id="a-note-on-migrations">A note on <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations">migrations</a></h3>
+<p>The current version of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> does not support <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations">migrations</a>.</p>
+<h2 id="entity-framework-core-provider-for-apache-kafka-features-not-available-in-other-providers"><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> features not available in other providers</h2>
+<p>Here a list of features <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> gives to its user and useful in some use cases.</p>
+<h3 id="distributed-cache">Distributed cache</h3>
+<p>In the previous chapter was stated that consumers align the application data to the last topics information.
+The alignment is managed from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a>, everything is driven from the Apache Kafka back-end.
+Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
+This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka back-end:</p>
+<ul>
+<li>Apache Kafka stores physically the cache (shared state) within the topics and routes changes to the subscribed applications</li>
+<li>Applications use latest cache version (local state) received from Apache Kafka back-end</li>
+</ul>
+<p>If an application restarts it will be able to retrieve latest data (latest cache) and aligns to the shared state.</p>
+<h3 id="events">Events</h3>
+<p>Generally, an application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, executes queries to the back-end to store, or retrieve, information on demand.
+The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode.
+These change events are used from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a> to align the local state.
+Moreover <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> can inform, using callbacks and at zero cost, the registered application about these events.
+Then the application can use the reported events to execute some actions:</p>
+<ul>
+<li>execute a query</li>
+<li>write something to disk</li>
+<li>execute a REST call</li>
+<li>and so on</li>
+</ul>
+<h3 id="applications-not-based-on-entity-framework-core">Applications not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></h3>
+<p>Till now was spoken about applications based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, however this provider can be used to feed applications not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>.
+<a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with ready-made helping classes to subscribe to any topic of the Apache Kafka cluster to retrieve the data stored from an application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>.
+Any application can use this feature to:</p>
+<ul>
+<li>read latest data stored in the topics from the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></li>
+<li>attach to the topics involved from the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> and receive change events upon something was produced</li>
+</ul>
+<p>The ready-made helping classes upon a record is received, deserialize it and returns back the filled Entity.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/howitworks.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

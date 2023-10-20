@@ -71,7 +71,59 @@
 
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> can be used in some operative conditions.
 Here a possible, non exausthive list, of use cases.</p>
-<p>TBD</p>
+<p>Before read following chapters it is important to understand <a href="howitworks.html">how it works</a>.</p>
+<h2 id="apache-kafka-as-database"><a href="https://kafka.apache.org/">Apache Kafka</a> as Database</h2>
+<p>The first use cases can be coupled to a standard usage of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, the same when it is used with database providers.
+In <a href="gettingstarted.html">getting started</a> is proposed a simple example following the online documentation.
+In the example the data within the model are stored in multiple Apache Kafka topics, each topic is correlated to the <code>DbSet</code> described from the <code>DbContext</code>.</p>
+<p>The constraint are managed using <code>OnModelCreating</code> of <code>DbContext</code>.</p>
+<h2 id="apache-kafka-as-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka</a> as distributed cache</h2>
+<p>Changing the mind a model is written it is possible to define a set of classes which acts as storage for data we want to use as a cache.
+It is possible to build a new model like:</p>
+<pre><code class="lang-cs">public class CachingContext : KafkaDbContext
+{
+    public DbSet&lt;SingleItem&gt; Items { get; set; }
+}
+
+public class Item
+{
+    public int ItemId { get; set; }
+    public string Data { get; set; }
+}
+</code></pre>
+<p>Sharing it between multiple applications and allocating the <code>CachingContext</code> in each application, the cache is shared and the same data are available.</p>
+<h2 id="apache-kafka-as-a-triggered-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka</a> as a triggered distributed cache</h2>
+<p>Continuing from the previous use case, using the events reported from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> it is possible to write a reactive application.
+When a change event is triggered the application can react to it and take an action.</p>
+<h3 id="signalr">SignalR</h3>
+<p>The triggered distributed cache can be used side-by-side with <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>: combining <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> and <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a> in an application, subscribing to the change events, it is possible to feed the connected applications to <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>.</p>
+<h3 id="redis">Redis</h3>
+<p>The triggered distributed cache can be seen as a <a href="https://redis.io/">Redis</a> backend.</p>
+<h2 id="data-processing-out-side-entity-framework-core-application">Data processing out-side <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> application</h2>
+<p>The schema used to write the information in the topics are available, or can be defined from the user, so an external application can use the data in many mode:</p>
+<ul>
+<li>Using the feature to extract the entities stored in the topics outside the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></li>
+<li>Use some features of Apache Kafka like Apache Kafka Streams or Apache Kafka Connect.</li>
+</ul>
+<h3 id="external-application">External application</h3>
+<p>An application, not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, can subscribe to the topics to:</p>
+<ul>
+<li>store all change events to another medium</li>
+<li>analyze the data or the changes</li>
+<li>and so on</li>
+</ul>
+<h3 id="apache-kafka-streams">Apache Kafka Streams</h3>
+<p>Apache Kafka comes with the powerful Streams feature. An application based on Streams can analyze streams of data to extract some information or converts the data into something else.
+It is possible to build an application, based on Apache Kafka Streams, which hear on change events and produce something else or just sores them in another topic containing all events not only the latest (e.g. just like the transaction log of SQL Server does it).</p>
+<h3 id="apache-kafka-connect">Apache Kafka Connect</h3>
+<p>Apache Kafka comes with another powerful feature called Connect: it comes with some ready-made connector which connect Apache Kafka with other systems (database, storage, etc).
+There are sink or source connectors, each connector has its own specificity:</p>
+<ul>
+<li>Database: the data in the topics can be converted and stored in a database</li>
+<li>File: the data in the topics can be converted and stored in one, or more, files</li>
+<li>Other: there are many ready-made connectors or a connector can be built using a <a href="https://github.com/masesgroup/KNet/blob/master/src/documentation/articles/connectSDK.md">Connect SDK</a></li>
+</ul>
+<p><strong>NOTE</strong>: While Apache Kafka Streams is an application running alone, Apache Kafka Connect can allocate the connectors using the distributed feature which load-balance the load and automatically restarts operation if something is going wrong.</p>
 </article>
           </div>
           
