@@ -29,12 +29,14 @@ public class KafkaIntegerValueGenerator<TValue> : ValueGenerator<TValue>, IKafka
 {
     private readonly int _propertyIndex;
     private long _current;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaIntegerValueGenerator(int propertyIndex)
     {
         _propertyIndex = propertyIndex;
     }
-
+    /// <inheritdoc/>
     public virtual void Bump(object?[] row)
     {
         var newValue = (long)Convert.ChangeType(row[_propertyIndex]!, typeof(long));
@@ -44,10 +46,10 @@ public class KafkaIntegerValueGenerator<TValue> : ValueGenerator<TValue>, IKafka
             Interlocked.Exchange(ref _current, newValue);
         }
     }
-
+    /// <inheritdoc/>
     public override TValue Next(EntityEntry entry)
         => (TValue)Convert.ChangeType(Interlocked.Increment(ref _current), typeof(TValue), CultureInfo.InvariantCulture);
-
+    /// <inheritdoc/>
     public override bool GeneratesTemporaryValues
         => false;
 }

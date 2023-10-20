@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright 2023 MASES s.r.l.
 *
@@ -45,6 +42,6 @@ public class KafkaQueryContextFactory : IQueryContextFactory
     ///     Dependencies for this service.
     /// </summary>
     protected virtual QueryContextDependencies Dependencies { get; }
-
+    /// <inheritdoc/>
     public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, _cluster);
 }
