@@ -344,7 +344,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     }
 
     /// <summary>
-    ///      Set properties of <see cref="TopicConfig"/>.
+    ///      Set properties of <see cref="KafkaDbContext.TopicConfig"/>.
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and

@@ -316,7 +316,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
         }
     }
 
-    private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry);
+    private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry)!;
 
     private static object? SnapshotValue(IProperty property, ValueComparer? comparer, IUpdateEntry entry)
     {

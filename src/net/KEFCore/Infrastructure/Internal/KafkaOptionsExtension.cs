@@ -94,7 +94,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
     /// <inheritdoc/>
     protected virtual KafkaOptionsExtension Clone() => new(this);
-    /// <inheritdoc cref="KafkaDbContext.ClusterId"/>
+    /// <summary>
+    /// Internal property
+    /// </summary>
     public virtual string ClusterId => _bootstrapServers!;
     /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     public virtual Type KeySerializationType => _keySerializationType;
@@ -102,7 +104,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual Type ValueSerializationType => _valueSerializationType;
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType => _valueContainerType;
-    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
+    /// <summary>
+    /// Use name instead of type for matching
+    /// </summary>
     public virtual bool UseNameMatching => _useNameMatching;
     /// <inheritdoc cref="KafkaDbContext.DbName"/>
     public virtual string DatabaseName => _databaseName!;

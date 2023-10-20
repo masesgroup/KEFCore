@@ -72,11 +72,11 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
         }
     }
     /// <inheritdoc/>
-    public virtual Type KeySerializationType { get; private set; }
+    public virtual Type? KeySerializationType { get; private set; }
     /// <inheritdoc/>
-    public virtual Type ValueSerializationType { get; private set; }
+    public virtual Type? ValueSerializationType { get; private set; }
     /// <inheritdoc/>
-    public virtual Type ValueContainerType { get; private set; }
+    public virtual Type? ValueContainerType { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseNameMatching { get; private set; }
     /// <inheritdoc/>
@@ -106,5 +106,5 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
     /// <inheritdoc/>
-    public virtual Action<IEntityType, bool, object> OnChangeEvent { get; private set; }
+    public virtual Action<IEntityType, bool, object>? OnChangeEvent { get; private set; }
 }
