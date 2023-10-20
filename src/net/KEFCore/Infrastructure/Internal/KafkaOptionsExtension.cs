@@ -55,6 +55,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
+    private Action<IEntityType, bool, object>? _onChangeEvent = null;
     private DbContextOptionsExtensionInfo? _info;
 
     static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
@@ -83,6 +84,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
+        _onChangeEvent = copyFrom._onChangeEvent;
     }
 
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -124,6 +126,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
 
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
+
+    public virtual Action<IEntityType, bool, object> OnChangeEvent => _onChangeEvent!;
 
     public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
     {
@@ -280,6 +284,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         var clone = Clone();
 
         clone._topicConfigBuilder = TopicConfigBuilder.CreateFrom(topicConfigBuilder);
+
+        return clone;
+    }
+
+    public virtual KafkaOptionsExtension WithOnChangeEvent(Action<IEntityType, bool, object> onChangeEvent)
+    {
+        var clone = Clone();
+
+        clone._onChangeEvent = onChangeEvent;
 
         return clone;
     }

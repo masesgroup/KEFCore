@@ -65,4 +65,6 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     StreamsConfigBuilder? StreamsConfig { get; }
 
     TopicConfigBuilder? TopicConfig { get; }
+
+    Action<IEntityType, bool, object> OnChangeEvent { get; }
 }
