@@ -2,10 +2,14 @@
   href: intro.md
 - name: Getting started
   href: gettingstarted.md
+- name: How works
+  href: howitworks.md
 - name: Usage
   href: usage.md
 - name: Use cases
   href: usecases.md
+- name: Template usage
+  href: usageTemplates.md  
 - name: Serialization
   href: serialization.md 
 - name: External application
@@ -16,5 +20,3 @@
   href: currentstate.md
 - name: KafkaDbContext
   href: kafkadbcontext.md
-- name: Template usage
-  href: usageTemplates.md  

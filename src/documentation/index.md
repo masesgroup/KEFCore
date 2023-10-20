@@ -42,10 +42,11 @@ This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDU
 ## Summary
 
 * [Getting started](articles/gettingstarted.md)
+* [How works](articles/howitworks.md)
 * [Usage](articles/usage.md)
 * [Use cases](articles/usecases.md)
-* [Serialization](articles/serialization.md)
 * [Templates usage](articles/usageTemplates.md)
+* [Serialization](articles/serialization.md)
 * [External application](articles/externalapplication.md)
 * [Roadmap](articles/roadmap.md)
 * [Current state](articles/currentstate.md)
