@@ -53,6 +53,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             ProducerConfig = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
             StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
             TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
+            OnChangeEvent = kafkaOptions.OnChangeEvent;
         }
     }
 
@@ -103,4 +104,6 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
 
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
+
+    public virtual Action<IEntityType, bool, object> OnChangeEvent { get; private set; }
 }

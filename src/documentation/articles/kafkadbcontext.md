@@ -19,6 +19,7 @@
   - **ProducerConfig**: parameters to use for Producer
   - **StreamsConfig**: parameters to use for Apche Kafka Streams application
   - **TopicConfig**: parameters to use on topic creation for each entity
+  - **OnChangeEvent**: handler to receive change events from back-end
 
 ## How to use `KafkaDbContext` class
 
