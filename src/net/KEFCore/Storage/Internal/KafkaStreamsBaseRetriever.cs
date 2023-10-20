@@ -70,7 +70,9 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
     private Exception? _resultException = null;
     private KafkaStreams.State _currentState = KafkaStreams.State.NOT_RUNNING;
     private ReadOnlyKeyValueStore<K, V>? keyValueStore;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValue> valueSerdes, string storageId, StreamsBuilder builder, KStream<K, V> root)
     {
         _kafkaCluster = kafkaCluster;
@@ -165,7 +167,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
 
         keyValueStore ??= _streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
     }
-
+    /// <inheritdoc/>
     public IEnumerator<ValueBuffer> GetEnumerator()
     {
         if (_resultException != null) throw _resultException;
@@ -179,7 +181,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
     {
         return GetEnumerator();
     }
-
+    /// <inheritdoc/>
     public void Dispose()
     {
         _streams?.Close();
@@ -248,7 +250,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
                         _valueSerdesSw.Stop();
                         _valueBufferSw.Start();
 #endif
-                    object[] array = null;
+                    object[] array = null!;
                     entityTypeData.GetData(_entityType, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();

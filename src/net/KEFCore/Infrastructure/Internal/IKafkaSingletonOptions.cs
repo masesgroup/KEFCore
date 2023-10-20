@@ -32,39 +32,40 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public interface IKafkaSingletonOptions : ISingletonOptions
 {
+    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     Type KeySerializationType { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
     Type ValueSerializationType { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     Type ValueContainerType { get; }
-
+    /// <inheritdoc cref="KafkaOptionsExtension.WithUseNameMatching(bool)"/>
     bool UseNameMatching { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.DbName"/>
     string? DatabaseName { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     string? ApplicationId { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.BootstrapServers"/>
     string? BootstrapServers { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.UseDeletePolicyForTopic"/>
     bool UseDeletePolicyForTopic { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
     bool UseCompactedReplicator { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     bool UsePersistentStorage { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     int DefaultNumPartitions { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>
     int? DefaultConsumerInstances { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultReplicationFactor"/>
     int DefaultReplicationFactor { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.ConsumerConfig"/>
     ConsumerConfigBuilder? ConsumerConfig { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.ProducerConfig"/>
     ProducerConfigBuilder? ProducerConfig { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.StreamsConfig"/>
     StreamsConfigBuilder? StreamsConfig { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     TopicConfigBuilder? TopicConfig { get; }
-
+    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     Action<IEntityType, bool, object> OnChangeEvent { get; }
 }

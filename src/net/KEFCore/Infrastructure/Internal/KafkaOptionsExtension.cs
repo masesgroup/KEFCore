@@ -60,11 +60,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
     static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
     static Java.Lang.ClassLoader SystemClassLoader => _loader;
-
+    /// <summary>
+    /// Initializer
+    /// </summary>
     public KafkaOptionsExtension()
     {
     }
-
+    /// <summary>
+    /// Initializer
+    /// </summary>
     protected KafkaOptionsExtension(KafkaOptionsExtension copyFrom)
     {
         _keySerializationType = copyFrom._keySerializationType;
@@ -86,49 +90,49 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
         _onChangeEvent = copyFrom._onChangeEvent;
     }
-
+    /// <inheritdoc/>
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
-
+    /// <inheritdoc/>
     protected virtual KafkaOptionsExtension Clone() => new(this);
-
+    /// <inheritdoc cref="KafkaDbContext.ClusterId"/>
     public virtual string ClusterId => _bootstrapServers!;
-
+    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     public virtual Type KeySerializationType => _keySerializationType;
-
+    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
     public virtual Type ValueSerializationType => _valueSerializationType;
-
+    /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType => _valueContainerType;
-
+    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
     public virtual bool UseNameMatching => _useNameMatching;
-
+    /// <inheritdoc cref="KafkaDbContext.DbName"/>
     public virtual string DatabaseName => _databaseName!;
-
+    /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     public virtual string ApplicationId => _applicationId!;
-
+    /// <inheritdoc cref="KafkaDbContext.BootstrapServers"/>
     public virtual string BootstrapServers => _bootstrapServers!;
-
+    /// <inheritdoc cref="KafkaDbContext.UseDeletePolicyForTopic"/>
     public virtual bool UseDeletePolicyForTopic => _useDeletePolicyForTopic;
-
+    /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
-
+    /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage => _usePersistentStorage;
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     public virtual int DefaultNumPartitions => _defaultNumPartitions;
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>
     public virtual int? DefaultConsumerInstances => _defaultConsumerInstances;
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultReplicationFactor"/>
     public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
-
+    /// <inheritdoc cref="KafkaDbContext.ConsumerConfig"/>
     public virtual ConsumerConfigBuilder ConsumerConfig => _consumerConfigBuilder!;
-
+    /// <inheritdoc cref="KafkaDbContext.ProducerConfig"/>
     public virtual ProducerConfigBuilder ProducerConfig => _producerConfigBuilder!;
-
+    /// <inheritdoc cref="KafkaDbContext.StreamsConfig"/>
     public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
-
+    /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
-
+    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     public virtual Action<IEntityType, bool, object> OnChangeEvent => _onChangeEvent!;
-
+    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
@@ -139,7 +143,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
     public virtual KafkaOptionsExtension WithValueSerializationType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
@@ -150,7 +154,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual KafkaOptionsExtension WithValueContainerType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
@@ -161,7 +165,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
     {
         var clone = Clone();
@@ -170,7 +174,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.DbName"/>
     public virtual KafkaOptionsExtension WithDatabaseName(string databaseName)
     {
         var clone = Clone();
@@ -179,7 +183,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     public virtual KafkaOptionsExtension WithApplicationId(string applicationId)
     {
         var clone = Clone();
@@ -188,7 +192,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.BootstrapServers"/>
     public virtual KafkaOptionsExtension WithBootstrapServers(string bootstrapServers)
     {
         var clone = Clone();
@@ -197,7 +201,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.UseDeletePolicyForTopic"/>
     public virtual KafkaOptionsExtension WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
     {
         var clone = Clone();
@@ -206,7 +210,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
     public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
     {
         var clone = Clone();
@@ -215,7 +219,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = false)
     {
         var clone = Clone();
@@ -224,7 +228,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     public virtual KafkaOptionsExtension WithDefaultNumPartitions(int defaultNumPartitions = 1)
     {
         var clone = Clone();
@@ -233,7 +237,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>
     public virtual KafkaOptionsExtension WithDefaultConsumerInstances(int? defaultConsumerInstances = null)
     {
         var clone = Clone();
@@ -242,7 +246,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.DefaultReplicationFactor"/>
     public virtual KafkaOptionsExtension WithDefaultReplicationFactor(short defaultReplicationFactor = 1)
     {
         var clone = Clone();
@@ -251,7 +255,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.ConsumerConfig"/>
     public virtual KafkaOptionsExtension WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
     {
         var clone = Clone();
@@ -260,7 +264,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.ProducerConfig"/>
     public virtual KafkaOptionsExtension WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
     {
         var clone = Clone();
@@ -269,7 +273,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.StreamsConfig"/>
     public virtual KafkaOptionsExtension WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
     {
         var clone = Clone();
@@ -278,7 +282,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     public virtual KafkaOptionsExtension WithTopicConfig(TopicConfigBuilder topicConfigBuilder)
     {
         var clone = Clone();
@@ -287,7 +291,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     public virtual KafkaOptionsExtension WithOnChangeEvent(Action<IEntityType, bool, object> onChangeEvent)
     {
         var clone = Clone();
@@ -296,12 +300,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-
+    /// <summary>
+    /// Build <see cref="Properties"/> for <see cref="IEntityType"/>
+    /// </summary>
     public virtual Properties StreamsOptions(IEntityType entityType)
     {
         return StreamsOptions(entityType.ApplicationIdForTable(this));
     }
-
+    /// <summary>
+    /// Build <see cref="Properties"/> for applicationId
+    /// </summary>
     public virtual Properties StreamsOptions(string applicationId)
     {
         Properties props = _streamsConfigBuilder ?? new();
@@ -333,7 +341,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return props;
     }
-
+    /// <summary>
+    /// Build <see cref="Properties"/> for producers
+    /// </summary>
     public virtual Properties ProducerOptions()
     {
         Properties props = _producerConfigBuilder ?? new();
@@ -367,9 +377,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return props;
     }
-
+    /// <inheritdoc/>
     public virtual void ApplyServices(IServiceCollection services) => services.AddEntityFrameworkKafkaDatabase();
-
+    /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
         var kafkaOptions = options.FindExtension<KafkaOptionsExtension>();
