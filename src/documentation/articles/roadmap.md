@@ -7,3 +7,4 @@ The roadmap can be synthetized in the following points:
 * [x] Use KNetCompactedReplicator beside Apache Kafka Streams
 * [x] Add external package to manage data serialization
 * [x] Add Avro external package to manage data serialization
+* [x] Add Templates package
