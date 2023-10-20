@@ -25,5 +25,8 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// </summary>
 public interface IKafkaIntegerValueGenerator
 {
+    /// <summary>
+    /// Execute a bump on data
+    /// </summary>
     void Bump(object?[] row);
 }

@@ -32,20 +32,22 @@ public class KafkaTransactionManager : IDbContextTransactionManager, ITransactio
     private static readonly KafkaTransaction StubTransaction = new();
 
     private readonly IDiagnosticsLogger<DbLoggerCategory.Database.Transaction> _logger;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTransactionManager(
         IDiagnosticsLogger<DbLoggerCategory.Database.Transaction> logger)
     {
         _logger = logger;
     }
-
+    /// <inheritdoc/>
     public virtual IDbContextTransaction BeginTransaction()
     {
         _logger.TransactionIgnoredWarning();
 
         return StubTransaction;
     }
-
+    /// <inheritdoc/>
     public virtual Task<IDbContextTransaction> BeginTransactionAsync(
         CancellationToken cancellationToken = default)
     {
@@ -53,38 +55,38 @@ public class KafkaTransactionManager : IDbContextTransactionManager, ITransactio
 
         return Task.FromResult<IDbContextTransaction>(StubTransaction);
     }
-
+    /// <inheritdoc/>
     public virtual void CommitTransaction()
         => _logger.TransactionIgnoredWarning();
-
+    /// <inheritdoc/>
     public virtual Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
         _logger.TransactionIgnoredWarning();
         return Task.CompletedTask;
     }
-
+    /// <inheritdoc/>
     public virtual void RollbackTransaction()
         => _logger.TransactionIgnoredWarning();
-
+    /// <inheritdoc/>
     public virtual Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
         _logger.TransactionIgnoredWarning();
         return Task.CompletedTask;
     }
-
+    /// <inheritdoc/>
     public virtual IDbContextTransaction? CurrentTransaction
         => null;
-
+    /// <inheritdoc/>
     public virtual Transaction? EnlistedTransaction
         => null;
-
+    /// <inheritdoc/>
     public virtual void EnlistTransaction(Transaction? transaction)
         => _logger.TransactionIgnoredWarning();
-
+    /// <inheritdoc/>
     public virtual void ResetState()
     {
     }
-
+    /// <inheritdoc/>
     public virtual Task ResetStateAsync(CancellationToken cancellationToken = default)
     {
         ResetState();

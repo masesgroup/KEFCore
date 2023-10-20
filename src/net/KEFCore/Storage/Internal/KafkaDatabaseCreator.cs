@@ -26,30 +26,35 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KafkaDatabaseCreator : IDatabaseCreator
 {
     private readonly IDatabase _database;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
+    /// <param name="database"></param>
     public KafkaDatabaseCreator(IDatabase database)
     {
         _database = database;
     }
-
+    /// <summary>
+    /// The <see cref="IKafkaDatabase"/>
+    /// </summary>
     protected virtual IKafkaDatabase Database
         => (IKafkaDatabase)_database;
-
+    /// <inheritdoc/>
     public virtual bool EnsureDeleted()
         => Database.EnsureDatabaseDeleted();
-
+    /// <inheritdoc/>
     public virtual Task<bool> EnsureDeletedAsync(CancellationToken cancellationToken = default)
         => Task.FromResult(Database.EnsureDatabaseDeleted());
-
+    /// <inheritdoc/>
     public virtual bool EnsureCreated()
         => Database.EnsureDatabaseCreated();
-
+    /// <inheritdoc/>
     public virtual Task<bool> EnsureCreatedAsync(CancellationToken cancellationToken = default)
         => Task.FromResult(Database.EnsureDatabaseCreated());
-
+    /// <inheritdoc/>
     public virtual bool CanConnect()
         => Database.EnsureDatabaseConnected();
-
+    /// <inheritdoc/>
     public virtual Task<bool> CanConnectAsync(CancellationToken cancellationToken = default)
         => Task.FromResult(Database.EnsureDatabaseConnected());
 }

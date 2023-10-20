@@ -30,7 +30,9 @@ public class KafkaClusterCache : IKafkaClusterCache
 {
     private readonly IKafkaTableFactory _tableFactory;
     private readonly ConcurrentDictionary<string, IKafkaCluster> _namedClusters;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaClusterCache(
         IKafkaTableFactory tableFactory,
         IKafkaSingletonOptions? options)
@@ -38,10 +40,10 @@ public class KafkaClusterCache : IKafkaClusterCache
         _tableFactory = tableFactory;
         _namedClusters = new ConcurrentDictionary<string, IKafkaCluster>();
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options)
         => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory));
-
+    /// <inheritdoc/>
     public virtual void Dispose(IKafkaCluster cluster)
     {
         if (cluster != null)

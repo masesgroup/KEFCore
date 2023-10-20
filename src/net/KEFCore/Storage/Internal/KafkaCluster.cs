@@ -45,14 +45,16 @@ public class KafkaCluster : IKafkaCluster
     private readonly object _lock = new();
 
     private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
-
+    /// <summary>
+    /// Dfault initializer
+    /// </summary>
     public KafkaCluster(KafkaOptionsExtension options, IKafkaTableFactory tableFactory)
     {
         _options = options;
         _tableFactory = tableFactory;
         _useNameMatching = options.UseNameMatching;
     }
-
+    /// <inheritdoc/>
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
@@ -67,11 +69,11 @@ public class KafkaCluster : IKafkaCluster
         }
         _tables?.Clear();
     }
-
+    /// <inheritdoc/>
     public virtual string ClusterId => _options.ClusterId;
-
+    /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
-
+    /// <inheritdoc/>
     public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property)
     {
@@ -84,7 +86,7 @@ public class KafkaCluster : IKafkaCluster
                 entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
         }
     }
-
+    /// <inheritdoc/>
     public virtual bool EnsureDeleted(
         IUpdateAdapterFactory updateAdapterFactory,
         IModel designModel,
@@ -139,7 +141,7 @@ public class KafkaCluster : IKafkaCluster
 
         return true;
     }
-
+    /// <inheritdoc/>
     public virtual bool EnsureCreated(
         IUpdateAdapterFactory updateAdapterFactory,
         IModel designModel,
@@ -174,14 +176,14 @@ public class KafkaCluster : IKafkaCluster
             return valuesSeeded;
         }
     }
-
+    /// <inheritdoc/>
     public virtual bool EnsureConnected(
         IModel designModel,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         return true;
     }
-
+    /// <inheritdoc/>
     public virtual string CreateTable(IEntityType entityType)
     {
         return CreateTable(entityType, 0);
@@ -227,7 +229,7 @@ public class KafkaCluster : IKafkaCluster
     }
 
     private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
-
+    /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
         lock (_lock)
@@ -259,7 +261,7 @@ public class KafkaCluster : IKafkaCluster
 #endif
         }
     }
-
+    /// <inheritdoc/>
     public virtual int ExecuteTransaction(
         System.Collections.Generic.IList<IUpdateEntry> entries,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)

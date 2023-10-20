@@ -25,11 +25,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaTypeMappingSource : TypeMappingSource
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTypeMappingSource(TypeMappingSourceDependencies dependencies)
         : base(dependencies)
     {
     }
-
+    /// <inheritdoc/>
     protected override CoreTypeMapping? FindMapping(in TypeMappingInfo mappingInfo)
     {
         var clrType = mappingInfo.ClrType;

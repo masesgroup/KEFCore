@@ -29,21 +29,36 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaTable : IEntityTypeProducer
 {
+    /// <summary>
+    /// Create snapshot
+    /// </summary>
     IReadOnlyList<object?[]> SnapshotRows();
-
+    /// <summary>
+    /// Current rows
+    /// </summary>
     IEnumerable<object?[]> Rows { get; }
-
+    /// <summary>
+    /// Creates a new row
+    /// </summary>
     IKafkaRowBag Create(IUpdateEntry entry);
-
+    /// <summary>
+    /// Deletes a row
+    /// </summary>
     IKafkaRowBag Delete(IUpdateEntry entry);
-
+    /// <summary>
+    /// Updates a row
+    /// </summary>
     IKafkaRowBag Update(IUpdateEntry entry);
-
+    /// <summary>
+    /// Get an <see cref="KafkaIntegerValueGenerator{TValue}"/>
+    /// </summary>
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables);
-
+    /// <summary>
+    /// Bumps values
+    /// </summary>
     void BumpValueGenerators(object?[] row);
-
+    /// <summary>
+    /// The referring <see cref="IKafkaCluster"/>
+    /// </summary>
     IKafkaCluster Cluster { get; }
-
-    IEntityType EntityType { get; }
 }
