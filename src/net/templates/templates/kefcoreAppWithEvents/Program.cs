@@ -1,7 +1,6 @@
-﻿using Javax.Naming;
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
+﻿using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +10,17 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
     partial class Program
     {
         static BloggingContext context = null;
-        static void OnEvent(IEntityType entity, bool state, object key)
+        static void OnEvent(EntityTypeChanged change)
         {
             object value = null;
             try
             {
-                value = context?.Find(entity.ClrType, key);
+                value = context?.Find(change.EntityType.ClrType, change.Key);
             }
             catch (ObjectDisposedException) { } // the context can be disposed if the program exited
             catch (InvalidOperationException) { } // there are multiple concurrent operations on context https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues
 
-            Console.WriteLine($"Entity {entity.Name} has {(state ? "removed" : "added/updated")} the key {key} with value {value}");
+            Console.WriteLine($"Entity {change.EntityType.Name} has {(change.KeyRemoved ? "removed" : "added/updated")} the key {change.Key} with value {value}");
         }
 
         static void Main(string[] args)

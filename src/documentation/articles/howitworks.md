@@ -77,14 +77,17 @@ If an application restarts it will be able to retrieve latest data (latest cache
 ### Events
 
 Generally, an application based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/), executes queries to the back-end to store, or retrieve, information on demand.
-The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode.
-These change events are used from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) to align the local state.
-Moreover [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can inform, using callbacks and at zero cost, the registered application about these events.
-Then the application can use the reported events to execute some actions:
+The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode:
+- Mainly these change events are used from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) to align the local state;
+- Moreover [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can inform, using callbacks and at zero cost, the registered application about these events.
+
+Then the application can use the reported events in many modes:
 - execute a query
 - write something to disk
 - execute a REST call
 - and so on
+
+> **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
 
 ### Applications not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/)
 

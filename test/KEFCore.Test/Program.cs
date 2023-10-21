@@ -25,6 +25,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -239,17 +240,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             }
         }
 
-        static void OnEvent(IEntityType entity, bool isDeleted, object key)
+        static void OnEvent(EntityTypeChanged change)
         {
             object value = null;
             try
             {
-                value = context.Find(entity.ClrType, key);
+                value = context.Find(change.EntityType.ClrType, change.Key);
             }
             catch (ObjectDisposedException) { }
             catch (InvalidOperationException ) { }
 
-            ReportString($"{entity.Name} -> {(isDeleted ? "deleted" : "updated/added")}: {key} - {value}");
+            ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 

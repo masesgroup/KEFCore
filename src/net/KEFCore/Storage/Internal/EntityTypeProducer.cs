@@ -50,7 +50,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     private readonly IKafkaStreamsBaseRetriever? _streamData;
     private readonly IKNetSerDes<TKey>? _keySerdes;
     private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
-    private readonly Action<IEntityType, bool, object>? _onChangeEvent;
+    private readonly Action<EntityTypeChanged>? _onChangeEvent;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
@@ -300,7 +300,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     {
         try
         {
-            _onChangeEvent?.Invoke(_entityType, false, arg2.Key);
+            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Upserted, arg2.Key));
         }
         catch { }
     }
@@ -309,7 +309,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     {
         try
         {
-            _onChangeEvent?.Invoke(_entityType, true, arg2.Key);
+            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Removed, arg2.Key));
         }
         catch { }
     }

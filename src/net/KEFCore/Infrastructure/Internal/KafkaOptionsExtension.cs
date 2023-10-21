@@ -22,6 +22,7 @@ using Java.Lang;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -54,7 +55,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
-    private Action<IEntityType, bool, object>? _onChangeEvent = null;
+    private Action<EntityTypeChanged>? _onChangeEvent = null;
     private DbContextOptionsExtensionInfo? _info;
 
     static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
@@ -132,7 +133,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    public virtual Action<IEntityType, bool, object> OnChangeEvent => _onChangeEvent!;
+    public virtual Action<EntityTypeChanged> OnChangeEvent => _onChangeEvent!;
     /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
     {
@@ -293,7 +294,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    public virtual KafkaOptionsExtension WithOnChangeEvent(Action<IEntityType, bool, object> onChangeEvent)
+    public virtual KafkaOptionsExtension WithOnChangeEvent(Action<EntityTypeChanged> onChangeEvent)
     {
         var clone = Clone();
 
