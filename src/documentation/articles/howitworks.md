@@ -38,7 +38,11 @@ Using the [topic compaction](https://kafka.apache.org/documentation/#compaction)
 - Update: a producer storing a new record with a previously stored unique key will discard the old records
 - Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key
 
-All CRUD operations are helped, behind the scene, from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [`KNetProducer`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs)/[Apache Kafka Streams](https://kafka.apache.org/documentation/streams/).
+All CRUD operations are helped, behind the scene, from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or [`KNetProducer`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs)/[Apache Kafka Streams](https://kafka.apache.org/documentation/streams/).
+
+### First-level cache
+
+[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) act as first-level cache of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/): **data coming from the Apache Kafka cluster updates their content while the system is running without a specific request**.
 
 ### Data storage
 
