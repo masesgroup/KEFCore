@@ -30,6 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KafkaSingletonOptions : IKafkaSingletonOptions
 {
+    /// <inheritdoc/>
     public virtual void Initialize(IDbContextOptions options)
     {
         var kafkaOptions = options.FindExtension<KafkaOptionsExtension>();
@@ -56,7 +57,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             OnChangeEvent = kafkaOptions.OnChangeEvent;
         }
     }
-
+    /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
         var kafkaOptions = options.FindExtension<KafkaOptionsExtension>();
@@ -70,40 +71,40 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
                     nameof(DbContextOptionsBuilder.UseInternalServiceProvider)));
         }
     }
-
-    public virtual Type KeySerializationType { get; private set; }
-
-    public virtual Type ValueSerializationType { get; private set; }
-
-    public virtual Type ValueContainerType { get; private set; }
-
+    /// <inheritdoc/>
+    public virtual Type? KeySerializationType { get; private set; }
+    /// <inheritdoc/>
+    public virtual Type? ValueSerializationType { get; private set; }
+    /// <inheritdoc/>
+    public virtual Type? ValueContainerType { get; private set; }
+    /// <inheritdoc/>
     public virtual bool UseNameMatching { get; private set; }
-
+    /// <inheritdoc/>
     public virtual string? DatabaseName { get; private set; }
-
+    /// <inheritdoc/>
     public virtual string? ApplicationId { get; private set; }
-
+    /// <inheritdoc/>
     public virtual string? BootstrapServers { get; private set; }
-
+    /// <inheritdoc/>
     public virtual bool UseDeletePolicyForTopic { get; private set; }
-
+    /// <inheritdoc/>
     public virtual bool UseCompactedReplicator { get; private set; }
-
+    /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
-
+    /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
-
+    /// <inheritdoc/>
     public virtual int? DefaultConsumerInstances { get; private set; }
-
+    /// <inheritdoc/>
     public virtual int DefaultReplicationFactor { get; private set; }
-
+    /// <inheritdoc/>
     public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
-
+    /// <inheritdoc/>
     public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
-
+    /// <inheritdoc/>
     public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
-
+    /// <inheritdoc/>
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
-
-    public virtual Action<IEntityType, bool, object> OnChangeEvent { get; private set; }
+    /// <inheritdoc/>
+    public virtual Action<IEntityType, bool, object>? OnChangeEvent { get; private set; }
 }

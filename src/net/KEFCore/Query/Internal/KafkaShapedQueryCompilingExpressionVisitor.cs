@@ -30,7 +30,9 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
 {
     private readonly Type _contextType;
     private readonly bool _threadSafetyChecksEnabled;
-
+    /// <summary>
+    /// Default initilizer
+    /// </summary>
     public KafkaShapedQueryCompilingExpressionVisitor(
         ShapedQueryCompilingExpressionVisitorDependencies dependencies,
         QueryCompilationContext queryCompilationContext)
@@ -39,7 +41,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
         _contextType = queryCompilationContext.ContextType;
         _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
     }
-
+    /// <inheritdoc/>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
         switch (extensionExpression)
@@ -53,7 +55,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
 
         return base.VisitExtension(extensionExpression);
     }
-
+    /// <inheritdoc/>
     protected override Expression VisitShapedQuery(ShapedQueryExpression shapedQueryExpression)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)shapedQueryExpression.QueryExpression;

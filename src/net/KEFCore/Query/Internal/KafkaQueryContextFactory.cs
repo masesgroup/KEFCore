@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright 2023 MASES s.r.l.
 *
@@ -31,7 +28,9 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaQueryContextFactory : IQueryContextFactory
 {
     private readonly IKafkaCluster _cluster;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaQueryContextFactory(
         QueryContextDependencies dependencies,
         IKafkaClusterCache clusterCache,
@@ -45,6 +44,6 @@ public class KafkaQueryContextFactory : IQueryContextFactory
     ///     Dependencies for this service.
     /// </summary>
     protected virtual QueryContextDependencies Dependencies { get; }
-
+    /// <inheritdoc/>
     public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, _cluster);
 }

@@ -28,7 +28,9 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 public class KafkaValueGeneratorSelector : ValueGeneratorSelector
 {
     private readonly IKafkaCluster _kafkaCluster;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaValueGeneratorSelector(
         ValueGeneratorSelectorDependencies dependencies,
         IKafkaDatabase kafkaDatabase)
@@ -36,7 +38,7 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
     {
         _kafkaCluster = kafkaDatabase.Cluster;
     }
-
+    /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, IEntityType entityType)
         => property.GetValueGeneratorFactory() == null
             && property.ClrType.IsInteger()

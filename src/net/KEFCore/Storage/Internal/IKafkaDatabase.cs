@@ -25,11 +25,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaDatabase : IDatabase, IDisposable
 {
+    /// <summary>
+    /// The referring <see cref="IKafkaCluster"/>
+    /// </summary>
     IKafkaCluster Cluster { get; }
-
+    /// <summary>
+    /// Execute the <see cref="IDatabaseCreator.EnsureDeleted"/>
+    /// </summary>
     bool EnsureDatabaseDeleted();
-
+    /// <summary>
+    /// Execute the <see cref="IDatabaseCreator.EnsureCreated"/>
+    /// </summary>
     bool EnsureDatabaseCreated();
-
+    /// <summary>
+    /// Execute the <see cref="IDatabaseCreator.CanConnect"/>
+    /// </summary>
     bool EnsureDatabaseConnected();
 }

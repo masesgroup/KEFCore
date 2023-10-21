@@ -28,19 +28,24 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaTableExpression : Expression, IPrintableExpression
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTableExpression(IEntityType entityType)
     {
         EntityType = entityType;
     }
-
+    /// <inheritdoc/>
     public override Type Type
         => typeof(IEnumerable<ValueBuffer>);
-
+    /// <summary>
+    /// <see cref="IEntityType"/> associated to the <see cref="Expression"/>
+    /// </summary>
     public virtual IEntityType EntityType { get; }
-
+    /// <inheritdoc/>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
-
+    /// <inheritdoc/>
     protected override Expression VisitChildren(ExpressionVisitor visitor)
         => this;
 

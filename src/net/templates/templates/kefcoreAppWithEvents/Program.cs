@@ -23,7 +23,7 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
                 {
                     BootstrapServers = "KAFKA-BROKER:9092",
                     ApplicationId = "MyApplicationId",
-                    DbName = "MyDB",
+                    DatabaseName = "MyDB",
                     OnChangeEvent = OnEvent
                 };
                 // cleanup topics on Broker

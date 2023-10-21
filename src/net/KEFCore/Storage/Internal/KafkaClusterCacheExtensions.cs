@@ -27,6 +27,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public static class KafkaClusterCacheExtensions
 {
+    /// <summary>
+    /// Gets the <see cref="IKafkaCluster"/>
+    /// </summary>
     public static IKafkaCluster GetCluster(this IKafkaClusterCache storeCache, IDbContextOptions options)
         => storeCache.GetCluster(options.Extensions.OfType<KafkaOptionsExtension>().First());
 }

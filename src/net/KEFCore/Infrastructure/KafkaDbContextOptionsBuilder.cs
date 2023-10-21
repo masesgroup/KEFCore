@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright 2023 MASES s.r.l.
 *
@@ -26,6 +23,7 @@ using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Common.Config;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Kstream;
 using System.ComponentModel;

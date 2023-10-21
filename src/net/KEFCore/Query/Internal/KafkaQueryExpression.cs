@@ -639,7 +639,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
 
         return entityShaper;
     }
-
+    /// <inheritdoc/>
     public virtual ShapedQueryExpression Clone(Expression shaperExpression)
     {
         var clonedKafkaQueryExpression = Clone();
@@ -667,10 +667,10 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
 
     public virtual void ConvertToSingleResult(MethodInfo methodInfo)
         => _singleResultMethodInfo = methodInfo;
-
+    /// <inheritdoc/>
     public override Type Type
         => typeof(IEnumerable<ValueBuffer>);
-
+    /// <inheritdoc/>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
 

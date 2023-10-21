@@ -168,6 +168,10 @@ const bool perf = false;
     /// </summary>
     public virtual Type? ValueContainerType { get; set; } = null;
     /// <summary>
+    /// Set to <see langword="false"/> to avoid match of <see cref="IEntityType"/>s using <see cref="IReadOnlyTypeBase.Name"/>
+    /// </summary>
+    public virtual bool UseNameMatching { get; set; } = true;
+    /// <summary>
     /// The bootstrap servers of the Apache Kafka cluster
     /// </summary>
     public virtual string? BootstrapServers { get; set; }
@@ -176,9 +180,9 @@ const bool perf = false;
     /// </summary>
     public virtual string ApplicationId { get; set; } = Guid.NewGuid().ToString();
     /// <summary>
-    /// Database name
+    /// Database name means whe prefix of the topics associated to the instance of <see cref="KafkaDbContext"/>
     /// </summary>
-    public virtual string? DbName { get; set; }
+    public virtual string? DatabaseName { get; set; }
     /// <summary>
     /// Default number of partitions associated to each topic
     /// </summary>
@@ -229,10 +233,11 @@ const bool perf = false;
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (BootstrapServers == null) throw new ArgumentNullException(nameof(BootstrapServers));
-        if (DbName == null) throw new ArgumentNullException(nameof(DbName));
+        if (DatabaseName == null) throw new ArgumentNullException(nameof(DatabaseName));
 
-        optionsBuilder.UseKafkaCluster(ApplicationId, DbName, BootstrapServers, (o) =>
+        optionsBuilder.UseKafkaCluster(ApplicationId, DatabaseName, BootstrapServers, (o) =>
         {
+            o.WithUseNameMatching(UseNameMatching);
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);

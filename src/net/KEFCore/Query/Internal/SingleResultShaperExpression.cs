@@ -28,6 +28,9 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class SingleResultShaperExpression : Expression, IPrintableExpression
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public SingleResultShaperExpression(
         Expression projection,
         Expression innerShaper)
@@ -36,7 +39,7 @@ public class SingleResultShaperExpression : Expression, IPrintableExpression
         InnerShaper = innerShaper;
         Type = innerShaper.Type;
     }
-
+    /// <inheritdoc/>
     protected override Expression VisitChildren(ExpressionVisitor visitor)
     {
         var projection = visitor.Visit(Projection);
@@ -49,14 +52,18 @@ public class SingleResultShaperExpression : Expression, IPrintableExpression
         => projection != Projection || innerShaper != InnerShaper
             ? new SingleResultShaperExpression(projection, innerShaper)
             : this;
-
+    /// <inheritdoc/>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
-
+    /// <inheritdoc/>
     public override Type Type { get; }
-
+    /// <summary>
+    /// Projection <see cref="Expression"/>
+    /// </summary>
     public virtual Expression Projection { get; }
-
+    /// <summary>
+    /// Inner shaper <see cref="Expression"/>
+    /// </summary>
     public virtual Expression InnerShaper { get; }
 
     void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)

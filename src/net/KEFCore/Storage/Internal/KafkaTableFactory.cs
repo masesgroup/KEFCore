@@ -33,7 +33,9 @@ public class KafkaTableFactory : IKafkaTableFactory
     private readonly bool _sensitiveLoggingEnabled;
 
     private readonly ConcurrentDictionary<(IKafkaCluster Cluster, IEntityType EntityType), Func<IKafkaTable>> _factories = new();
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTableFactory(
         ILoggingOptions loggingOptions,
         IKafkaSingletonOptions options)
@@ -41,10 +43,10 @@ public class KafkaTableFactory : IKafkaTableFactory
         _options = options;
         _sensitiveLoggingEnabled = loggingOptions.IsSensitiveDataLoggingEnabled;
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType)
         => _factories.GetOrAdd((cluster, entityType), e => CreateTable(e.Cluster, e.EntityType))();
-
+    /// <inheritdoc/>
     public void Dispose(IKafkaTable table)
     {
         table.Dispose();

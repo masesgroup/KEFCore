@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright 2023 MASES s.r.l.
 *
@@ -125,22 +122,28 @@ public static class KafkaDbContextOptionsExtensions
 
         ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(coreOptionsExtension);
     }
-
+    /// <summary>
+    /// Creates a serializer <see cref="Type"/> for keys
+    /// </summary>
     public static Type SerializerTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.KeySerializationType.MakeGenericType(primaryKey);
+        return options.KeySerializationType?.MakeGenericType(primaryKey)!;
     }
-
+    /// <summary>
+    /// Creates a serialzier <see cref="Type"/> for values
+    /// </summary>
     public static Type SerializerTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.ValueSerializationType.MakeGenericType(ValueContainerType(options, entityType));
+        return options.ValueSerializationType?.MakeGenericType(ValueContainerType(options, entityType))!;
     }
-
+    /// <summary>
+    /// Create the ValueContainer <see cref="Type"/>
+    /// </summary>
     public static Type ValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.ValueContainerType.MakeGenericType(primaryKey);
+        return options.ValueContainerType?.MakeGenericType(primaryKey)!;
     }
 }

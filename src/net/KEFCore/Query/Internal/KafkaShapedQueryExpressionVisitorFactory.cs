@@ -28,6 +28,9 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCompilingExpressionVisitorFactory
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaShapedQueryCompilingExpressionVisitorFactory(
         ShapedQueryCompilingExpressionVisitorDependencies dependencies)
     {
@@ -38,7 +41,7 @@ public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCom
     ///     Dependencies for this service.
     /// </summary>
     protected virtual ShapedQueryCompilingExpressionVisitorDependencies Dependencies { get; }
-
+    /// <inheritdoc/>
     public virtual ShapedQueryCompilingExpressionVisitor Create(QueryCompilationContext queryCompilationContext)
         => new KafkaShapedQueryCompilingExpressionVisitor(Dependencies, queryCompilationContext);
 }

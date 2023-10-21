@@ -31,6 +31,9 @@ public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, object?[]? row)
     {
         UpdateEntry = entry;
@@ -38,14 +41,20 @@ public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
         Key = key;
         ValueBuffer = row;
     }
-
+    /// <inheritdoc/>
     public IUpdateEntry UpdateEntry { get; private set; }
-
+    /// <inheritdoc/>
     public string AssociatedTopicName { get; private set; }
-
+    /// <summary>
+    /// The Key
+    /// </summary>
     public TKey Key { get; private set; }
-
+    /// <summary>
+    /// The Value
+    /// </summary>
     public TValueContainer? Value(ConstructorInfo ci) => UpdateEntry.EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke(new object[] { UpdateEntry.EntityType, ValueBuffer! });
-
+    /// <summary>
+    /// The <see cref="ValueBuffer"/> content
+    /// </summary>
     public object?[]? ValueBuffer { get; private set; }
 }

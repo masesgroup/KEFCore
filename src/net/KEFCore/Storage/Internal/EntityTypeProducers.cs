@@ -30,9 +30,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class EntityTypeProducers
 {
-    static IEntityTypeProducer? _globalProducer = null;
     static readonly ConcurrentDictionary<IEntityType, IEntityTypeProducer> _producers = new();
-
+    /// <summary>
+    /// Allocates a new <see cref="IEntityTypeProducer"/>
+    /// </summary>
     public static IEntityTypeProducer Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
@@ -41,7 +42,9 @@ public class EntityTypeProducers
     {
         return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster));
     }
-
+    /// <summary>
+    /// Dispose a previously allocated <see cref="IEntityTypeProducer"/>
+    /// </summary>
     public static void Dispose(IEntityTypeProducer producer)
     {
         if (!_producers.TryRemove(new KeyValuePair<IEntityType, IEntityTypeProducer>(producer.EntityType, producer)))

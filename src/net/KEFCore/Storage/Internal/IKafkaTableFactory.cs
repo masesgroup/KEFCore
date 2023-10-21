@@ -25,7 +25,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaTableFactory
 {
+    /// <summary>
+    /// Allocate a new <see cref="IKafkaTable"/>
+    /// </summary>
+    /// <param name="cluster"></param>
+    /// <param name="entityType"></param>
+    /// <returns></returns>
     IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType);
-
+    /// <summary>
+    /// Dispose a previously allocated <see cref="IKafkaTable"/>
+    /// </summary>
     void Dispose(IKafkaTable table);
 }

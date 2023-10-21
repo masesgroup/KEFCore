@@ -28,21 +28,40 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaCluster : IDisposable
 {
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
+    /// </summary>
     bool EnsureDeleted(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseCreated"/>
+    /// </summary>
     bool EnsureCreated(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseConnected"/>
+    /// </summary>
     bool EnsureConnected(IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-
+    /// <summary>
+    /// Creates a table for <see cref="IEntityType"/> on Apache Kafka cluster
+    /// </summary>
     string CreateTable(IEntityType entityType);
-
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/>
+    /// </summary>
     IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
-
+    /// <summary>
+    /// Gets the <see cref="KafkaIntegerValueGenerator{TValue}"/>
+    /// </summary>
     KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property);
-
+    /// <summary>
+    /// Executes a transaction
+    /// </summary>
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-
+    /// <summary>
+    /// The Apche Kafka cluster identifier
+    /// </summary>
     string ClusterId { get; }
-
+    /// <summary>
+    /// The <see cref="KafkaOptionsExtension"/>
+    /// </summary>
     KafkaOptionsExtension Options { get; }
 }

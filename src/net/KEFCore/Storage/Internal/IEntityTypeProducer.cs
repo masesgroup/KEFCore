@@ -30,9 +30,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IEntityTypeProducer : IDisposable
 {
+    /// <summary>
+    /// Associated <see cref="IEntityType"/>
+    /// </summary>
     IEntityType EntityType { get; }
-
+    /// <summary>
+    /// Stores an <see cref="IEnumerable{IKafkaRowBag}"/>
+    /// </summary>
+    /// <param name="records">The <see cref="IEnumerable{IKafkaRowBag}"/> to be stored</param>
+    /// <returns></returns>
     IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
-
+    /// <summary>
+    /// The current <see cref="ValueBuffer"/>s
+    /// </summary>
     IEnumerable<ValueBuffer> ValueBuffers { get; }
 }

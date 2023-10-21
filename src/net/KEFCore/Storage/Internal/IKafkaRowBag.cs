@@ -27,7 +27,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaRowBag
 {
+    /// <summary>
+    /// The <see cref="IUpdateEntry"/> with changes
+    /// </summary>
     IUpdateEntry UpdateEntry { get; }
-
+    /// <summary>
+    /// The topic data will be stored
+    /// </summary>
     string AssociatedTopicName { get; }
 }

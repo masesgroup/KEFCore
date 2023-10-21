@@ -30,7 +30,9 @@ public class KafkaDatabase : Database, IKafkaDatabase
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
     private readonly IDesignTimeModel _designTimeModel;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaDatabase(
         DatabaseDependencies dependencies,
         IKafkaClusterCache clusterCache,
@@ -46,29 +48,29 @@ public class KafkaDatabase : Database, IKafkaDatabase
         _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
     }
-
+    /// <inheritdoc/>
     public void Dispose()
     {
         _clusterCache.Dispose(_cluster);
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaCluster Cluster => _cluster;
-
+    /// <inheritdoc/>
     public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(entries, _updateLogger);
-
+    /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
         CancellationToken cancellationToken = default)
         => cancellationToken.IsCancellationRequested
             ? Task.FromCanceled<int>(cancellationToken)
             : Task.FromResult(_cluster.ExecuteTransaction(entries, _updateLogger));
-
+    /// <inheritdoc/>
     public virtual bool EnsureDatabaseDeleted()
         => _cluster.EnsureDeleted(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
-
+    /// <inheritdoc/>
     public virtual bool EnsureDatabaseCreated()
         => _cluster.EnsureCreated(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
-
+    /// <inheritdoc/>
     public virtual bool EnsureDatabaseConnected()
         => _cluster.EnsureConnected(_designTimeModel.Model, _updateLogger);
 }

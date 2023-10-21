@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright 2023 MASES s.r.l.
 *
@@ -90,34 +87,46 @@ public static class KafkaEntityTypeExtensions
         => entityType.FindAnnotation(CoreAnnotationNames.DefiningQuery)?.GetConfigurationSource();
 #pragma warning restore CS0612 // Il tipo o il membro è obsoleto
 #pragma warning restore EF1001 // Internal EF Core API usage.
-
+    /// <summary>
+    /// Creates the topic name
+    /// </summary>
     public static string TopicName(this IEntityType entityType, KafkaOptionsExtension options)
     {
         return $"{options.DatabaseName}.{entityType.Name}";
     }
-
+    /// <summary>
+    /// Creates the storage id
+    /// </summary>
     public static string StorageIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
     {
         return $"Table_{entityType.TopicName(options)}";
     }
-
+    /// <summary>
+    /// Creates the application id
+    /// </summary>
     public static string ApplicationIdForTable(this IEntityType entityType, KafkaOptionsExtension options)
     {
         return $"{options.ApplicationId}_{entityType.Name}";
     }
-
+    /// <summary>
+    /// Gets replication factor
+    /// </summary>
     public static short ReplicationFactor(this IEntityType entityType, KafkaOptionsExtension options)
     {
         var replicationFactor = options.DefaultReplicationFactor;
         return replicationFactor;
     }
-
+    /// <summary>
+    /// Gets number of partitions
+    /// </summary>
     public static int NumPartitions(this IEntityType entityType, KafkaOptionsExtension options)
     {
         var numPartitions = options.DefaultNumPartitions;
         return numPartitions;
     }
-
+    /// <summary>
+    /// Gets consumer instances
+    /// </summary>
     public static int? ConsumerInstances(this IEntityType entityType, KafkaOptionsExtension options)
     {
         var consumerInstances = options.DefaultConsumerInstances;

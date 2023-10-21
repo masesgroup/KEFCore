@@ -25,6 +25,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaTypeMapping : CoreTypeMapping
 {
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTypeMapping(
         Type clrType,
         ValueComparer? comparer = null,
@@ -42,7 +45,7 @@ public class KafkaTypeMapping : CoreTypeMapping
         : base(parameters)
     {
     }
-
+    /// <inheritdoc/>
     public override CoreTypeMapping Clone(ValueConverter? converter)
         => new KafkaTypeMapping(Parameters.WithComposedConverter(converter));
 }

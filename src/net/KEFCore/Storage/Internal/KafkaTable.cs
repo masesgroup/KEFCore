@@ -48,7 +48,9 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
     private Dictionary<int, IKafkaIntegerValueGenerator>? _integerGenerators;
     readonly IEntityTypeProducer _producer;
     private readonly string _tableAssociatedTopicName;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaTable(
         IKafkaCluster cluster,
         IEntityType entityType,
@@ -84,7 +86,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
             }
         }
     }
-
+    /// <inheritdoc/>
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
@@ -92,11 +94,11 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
 #endif
         EntityTypeProducers.Dispose(_producer!);
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaCluster Cluster { get; }
-
+    /// <inheritdoc/>
     public virtual IEntityType EntityType { get; }
-
+    /// <inheritdoc/>
     public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property,
         IReadOnlyList<IKafkaTable> tables)
@@ -120,13 +122,13 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
 
         return (KafkaIntegerValueGenerator<TProperty>)generator;
     }
-
+    /// <inheritdoc/>
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
-
+    /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
-
+    /// <inheritdoc/>
     public virtual IEnumerable<object?[]> Rows => RowsInTable();
-
+    /// <inheritdoc/>
     public virtual IReadOnlyList<object?[]> SnapshotRows()
     {
         var rows = Rows.ToList();
@@ -164,7 +166,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
     private IEnumerable<object?[]> RowsInTable() => _rows.Values;
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => properties.Select(p => p.GetKeyValueComparer()).ToList();
-
+    /// <inheritdoc/>
     public virtual IKafkaRowBag Create(IUpdateEntry entry)
     {
         var properties = entry.EntityType.GetProperties().ToArray();
@@ -191,7 +193,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
 
         return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, row);
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaRowBag Delete(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
@@ -251,7 +253,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
 
         return false;
     }
-
+    /// <inheritdoc/>
     public virtual IKafkaRowBag Update(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
@@ -302,7 +304,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
         }
     }
-
+    /// <inheritdoc/>
     public virtual void BumpValueGenerators(object?[] row)
     {
         if (_integerGenerators != null)
@@ -314,7 +316,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
         }
     }
 
-    private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry);
+    private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry)!;
 
     private static object? SnapshotValue(IProperty property, ValueComparer? comparer, IUpdateEntry entry)
     {

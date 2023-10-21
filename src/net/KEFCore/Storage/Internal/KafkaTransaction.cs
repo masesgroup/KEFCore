@@ -25,26 +25,27 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaTransaction : IDbContextTransaction
 {
+    /// <inheritdoc/>
     public virtual Guid TransactionId { get; } = Guid.NewGuid();
-
+    /// <inheritdoc/>
     public virtual void Commit()
     {
     }
-
+    /// <inheritdoc/>
     public virtual Task CommitAsync(CancellationToken cancellationToken = default)
         => Task.CompletedTask;
-
+    /// <inheritdoc/>
     public virtual void Rollback()
     {
     }
-
+    /// <inheritdoc/>
     public virtual Task RollbackAsync(CancellationToken cancellationToken = default)
         => Task.CompletedTask;
-
+    /// <inheritdoc/>
     public virtual void Dispose()
     {
     }
-
+    /// <inheritdoc/>
     public virtual ValueTask DisposeAsync()
         => default;
 }

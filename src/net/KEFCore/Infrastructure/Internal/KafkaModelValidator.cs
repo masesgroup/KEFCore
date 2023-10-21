@@ -25,11 +25,14 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KafkaModelValidator : ModelValidator
 {
+    /// <summary>
+    /// Initializer
+    /// </summary>
     public KafkaModelValidator(ModelValidatorDependencies dependencies)
         : base(dependencies)
     {
     }
-
+    /// <inheritdoc/>
     public override void Validate(IModel model, IDiagnosticsLogger<DbLoggerCategory.Model.Validation> logger)
     {
         base.Validate(model, logger);
