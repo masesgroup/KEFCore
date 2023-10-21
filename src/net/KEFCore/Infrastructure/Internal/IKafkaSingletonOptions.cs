@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -67,5 +68,5 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     TopicConfigBuilder? TopicConfig { get; }
     /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    Action<IEntityType, bool, object>? OnChangeEvent { get; }
+    Action<EntityTypeChanged>? OnChangeEvent { get; }
 }

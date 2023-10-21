@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -227,7 +228,7 @@ const bool perf = false;
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
     /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/></remarks>
-    public virtual Action<IEntityType, bool, object>? OnChangeEvent { get; set; } = null;
+    public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

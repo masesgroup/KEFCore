@@ -25,8 +25,10 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +40,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 {
     partial class Program
     {
+        static BloggingContext context = null;
         internal static ProgramConfig config = new();
 
         static void ReportString(string message)
@@ -54,7 +57,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void Main(string[] args)
         {
-            BloggingContext context = null;
+
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
 
@@ -86,6 +89,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ApplicationId = config.ApplicationId,
                     DatabaseName = databaseName,
                     StreamsConfig = streamConfig,
+                    OnChangeEvent = config.WithEvents ? OnEvent : null,
                 };
 
                 if (config.UseAvro)
@@ -215,10 +219,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                 }
 
+                var postion = config.NumberOfElements + config.NumberOfExtraElements - 1;
                 watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == 1009);
+                post = context.Posts.Single(b => b.BlogId == postion);
                 watch.Stop();
-                ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1009) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {postion}) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
@@ -233,6 +238,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
+        }
+
+        static void OnEvent(EntityTypeChanged change)
+        {
+            object value = null;
+            try
+            {
+                value = context.Find(change.EntityType.ClrType, change.Key);
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException ) { }
+
+            ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 
