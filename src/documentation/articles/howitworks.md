@@ -105,5 +105,3 @@ Any application can use this feature to:
 - attach to the topics involved from the application based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and receive change events upon something was produced 
 
 The ready-made helping classes upon a record is received, deserialize it and returns back the filled Entity.
-
-

@@ -37,6 +37,8 @@ Sharing it between multiple applications and allocating the `CachingContext` in 
 Continuing from the previous use case, using the events reported from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) it is possible to write a reactive application.
 When a change event is triggered the application can react to it and take an action.
 
+![Alt text](../images/triggeredcache.gif "Triggered distributed cache")
+
 ### SignalR
 
 The triggered distributed cache can be used side-by-side with [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr): combining [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) and [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr) in an application, subscribing to the change events, it is possible to feed the connected applications to [SignalR](https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr). 
