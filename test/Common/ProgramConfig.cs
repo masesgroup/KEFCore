@@ -43,5 +43,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public int NumberOfElements { get; set; } = 1000;
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
+        public bool WithEvents { get; set; } = false;
     }
 }

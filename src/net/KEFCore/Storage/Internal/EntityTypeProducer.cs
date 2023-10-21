@@ -298,11 +298,19 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
 
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        _onChangeEvent?.Invoke(_entityType, false, arg2.Key);
+        try
+        {
+            _onChangeEvent?.Invoke(_entityType, false, arg2.Key);
+        }
+        catch { }
     }
 
     private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        _onChangeEvent?.Invoke(_entityType, true, arg2.Key);
+        try
+        {
+            _onChangeEvent?.Invoke(_entityType, true, arg2.Key);
+        }
+        catch { }
     }
 }
