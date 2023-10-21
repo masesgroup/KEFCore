@@ -1,8 +1,9 @@
 # KEFCore: how it works
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can be used in some operative conditions.
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can be used in some [operative conditions](usecases.md).
 
-However it is important to start with a simple description on how it works.
+It is important to start with a simple description on how it works.
+In the following chapters sometime it is used the term back-end and sometime Apache Kafka cluster: they shall be considered the same thing int the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) context.
 
 ## Basic concepts
 
@@ -42,7 +43,8 @@ All CRUD operations are helped, behind the scene, from [`KNetCompactedReplicator
 
 ### First-level cache
 
-[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) act as first-level cache of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/): **data coming from the Apache Kafka cluster updates their content while the system is running without a specific request**.
+[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or [Apache Kafka Streams](https://kafka.apache.org/documentation/streams/) act as first-level cache of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/): **data coming from the Apache Kafka cluster updates their content while the system is running**.
+The behavior is intrinsic and does not need any extra call to the back-end.
 
 ### Data storage
 
@@ -52,16 +54,17 @@ The conversion is done using serializers that converts the Entities (data in the
 ## [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) compared to other providers
 
 In the previous chapter was described how [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) permits to reproduce the CRUD operations.
-Starting from the model defined in the code, the data will be stored in the topics and each topic can be seen as a table of a database filled in with the same data.
+Starting from the model defined in the code, the data are stored in the topics and each topic can be seen as a table of a database filled in with the same data.
 From the point of view of an application, the use of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) is similar to the use of the InMemory provider.
 
 ### A note on [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations)
 
-The current version of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations).
+The current version of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly.
 
 ## [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) features not available in other providers
 
 Here a list of features [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) gives to its user and useful in some use cases.
+The features below are strictly correlated with the consumers receiving back the record from Apache Kafka cluster described above.
 
 ### Distributed cache
 
@@ -73,6 +76,8 @@ This implies that, virtually, there is a distributed cache between the applicati
 - Applications use latest cache version (local state) received from Apache Kafka back-end
 
 If an application restarts it will be able to retrieve latest data (latest cache) and aligns to the shared state.
+
+![Alt text](../images/cache.gif "Distributed cache")
 
 ### Events
 
@@ -87,6 +92,8 @@ Then the application can use the reported events in many modes:
 - execute a REST call
 - and so on
 
+![Alt text](../images/events.gif "Distributed cache")
+
 > **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
 
 ### Applications not based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/)
@@ -98,3 +105,5 @@ Any application can use this feature to:
 - attach to the topics involved from the application based on [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and receive change events upon something was produced 
 
 The ready-made helping classes upon a record is received, deserialize it and returns back the filled Entity.
+
+
