@@ -23,6 +23,7 @@ using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Common.Config;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Kstream;
 using System.ComponentModel;
@@ -344,7 +345,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     }
 
     /// <summary>
-    ///      Set properties of <see cref="KafkaDbContext.TopicConfig"/>.
+    ///      Set properties of <see cref="TopicConfig"/>.
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and

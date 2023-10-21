@@ -25,7 +25,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
-using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
 using System.Globalization;
 
@@ -104,11 +103,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual Type ValueSerializationType => _valueSerializationType;
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType => _valueContainerType;
-    /// <summary>
-    /// Use name instead of type for matching
-    /// </summary>
+    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
     public virtual bool UseNameMatching => _useNameMatching;
-    /// <inheritdoc cref="KafkaDbContext.DbName"/>
+    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
     public virtual string DatabaseName => _databaseName!;
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     public virtual string ApplicationId => _applicationId!;

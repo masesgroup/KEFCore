@@ -86,7 +86,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 {
                     BootstrapServers = config.BootstrapServers,
                     ApplicationId = config.ApplicationId,
-                    DbName = databaseName,
+                    DatabaseName = databaseName,
                     StreamsConfig = streamConfig,
                 })
                 {
@@ -147,7 +147,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     {
                         BootstrapServers = config.BootstrapServers,
                         ApplicationId = config.ApplicationId,
-                        DbName = databaseName,
+                        DatabaseName = databaseName,
                         StreamsConfig = streamConfig,
                     })
                     {

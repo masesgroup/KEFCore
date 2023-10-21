@@ -38,9 +38,9 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     Type? ValueSerializationType { get; }
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     Type? ValueContainerType { get; }
-    /// <inheritdoc cref="KafkaOptionsExtension.WithUseNameMatching(bool)"/>
+    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
     bool UseNameMatching { get; }
-    /// <inheritdoc cref="KafkaDbContext.DbName"/>
+    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
     string? DatabaseName { get; }
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     string? ApplicationId { get; }
