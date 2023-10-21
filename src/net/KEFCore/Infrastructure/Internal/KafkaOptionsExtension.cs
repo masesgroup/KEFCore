@@ -175,7 +175,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-    /// <inheritdoc cref="KafkaDbContext.DbName"/>
+    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
     public virtual KafkaOptionsExtension WithDatabaseName(string databaseName)
     {
         var clone = Clone();

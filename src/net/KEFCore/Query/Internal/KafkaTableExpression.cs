@@ -42,7 +42,7 @@ public class KafkaTableExpression : Expression, IPrintableExpression
     /// <see cref="IEntityType"/> associated to the <see cref="Expression"/>
     /// </summary>
     public virtual IEntityType EntityType { get; }
-
+    /// <inheritdoc/>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
     /// <inheritdoc/>

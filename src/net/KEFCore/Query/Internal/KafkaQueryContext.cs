@@ -29,12 +29,18 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaQueryContext : QueryContext
 {
     private readonly IKafkaCluster _cluster;
-
+    /// <summary>
+    /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/>
+    /// </summary>
+    /// <param name="entityType"></param>
+    /// <returns></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
         return _cluster.GetValueBuffers(entityType);
     }
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaQueryContext(QueryContextDependencies dependencies, IKafkaCluster cluster)
         : base(dependencies)
     {

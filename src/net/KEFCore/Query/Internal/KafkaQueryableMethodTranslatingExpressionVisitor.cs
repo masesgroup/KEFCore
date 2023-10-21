@@ -32,7 +32,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     private readonly SharedTypeEntityExpandingExpressionVisitor _weakEntityExpandingExpressionVisitor;
     private readonly KafkaProjectionBindingExpressionVisitor _projectionBindingExpressionVisitor;
     private readonly IModel _model;
-
+    /// <inheritdoc/>
     public KafkaQueryableMethodTranslatingExpressionVisitor(
         QueryableMethodTranslatingExpressionVisitorDependencies dependencies,
         QueryCompilationContext queryCompilationContext)
@@ -43,7 +43,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         _projectionBindingExpressionVisitor = new KafkaProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = queryCompilationContext.Model;
     }
-
+    /// <inheritdoc/>
     protected KafkaQueryableMethodTranslatingExpressionVisitor(
         KafkaQueryableMethodTranslatingExpressionVisitor parentVisitor)
         : base(parentVisitor.Dependencies, parentVisitor.QueryCompilationContext, subquery: true)
@@ -53,10 +53,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         _projectionBindingExpressionVisitor = new KafkaProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = parentVisitor._model;
     }
-
+    /// <inheritdoc/>
     protected override QueryableMethodTranslatingExpressionVisitor CreateSubqueryVisitor()
         => new KafkaQueryableMethodTranslatingExpressionVisitor(this);
-
+    /// <inheritdoc/>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
         switch (extensionExpression)
@@ -75,7 +75,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 return base.VisitExtension(extensionExpression);
         }
     }
-
+    /// <inheritdoc/>
     protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
     {
         if (methodCallExpression.Method.IsGenericMethod
@@ -90,11 +90,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         return base.VisitMethodCall(methodCallExpression);
     }
 #if NET6_0
+    /// <inheritdoc/>
     protected override ShapedQueryExpression CreateShapedQueryExpression(Type elementType)
     {
         throw new NotImplementedException();
     }
 #endif
+    /// <inheritdoc/>
     protected override ShapedQueryExpression CreateShapedQueryExpression(IEntityType entityType)
         => CreateShapedQueryExpressionStatic(entityType);
 
@@ -112,7 +114,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     typeof(ValueBuffer)),
                 false));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateAll(ShapedQueryExpression source, LambdaExpression predicate)
     {
         predicate = Expression.Lambda(Expression.Not(predicate.Body), predicate.Parameters);
@@ -139,7 +141,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateAny(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -167,21 +169,21 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateAverage(
         ShapedQueryExpression source,
         LambdaExpression? selector,
         Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Average), resultType);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateCast(ShapedQueryExpression source, Type resultType)
         => source.ShaperExpression.Type != resultType
             ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, resultType))
             : source;
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateConcat(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Concat, source1, source2);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateContains(ShapedQueryExpression source, Expression item)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -207,7 +209,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateCount(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -235,7 +237,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(int)));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateDefaultIfEmpty(ShapedQueryExpression source, Expression? defaultValue)
     {
         if (defaultValue == null)
@@ -246,23 +248,23 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return null;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateDistinct(ShapedQueryExpression source)
     {
         ((KafkaQueryExpression)source.QueryExpression).ApplyDistinct();
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateElementAtOrDefault(
         ShapedQueryExpression source,
         Expression index,
         bool returnDefault)
         => null;
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateExcept(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Except, source1, source2);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateFirstOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -276,7 +278,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 ? EnumerableMethods.FirstOrDefaultWithoutPredicate
                 : EnumerableMethods.FirstWithoutPredicate);
 
- 
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateGroupBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -376,7 +378,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     : Expression.Convert(translation, expression.Type);
         }
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateGroupJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -384,10 +386,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         LambdaExpression innerKeySelector,
         LambdaExpression resultSelector)
         => null;
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateIntersect(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Intersect, source1, source2);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -523,7 +525,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 && !inner.Type.IsNullableType()
                 && outer.Type.UnwrapNullableType() == inner.Type;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateLastOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -536,7 +538,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             returnDefault
                 ? EnumerableMethods.LastOrDefaultWithoutPredicate
                 : EnumerableMethods.LastWithoutPredicate);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateLeftJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -565,7 +567,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return TranslateTwoParameterSelector(outer, resultSelector);
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateLongCount(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -594,16 +596,16 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(long)));
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateMax(
         ShapedQueryExpression source,
         LambdaExpression? selector,
         Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Max), resultType);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateMin(ShapedQueryExpression source, LambdaExpression? selector, Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Min), resultType);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateOfType(ShapedQueryExpression source, Type resultType)
     {
         if (source.ShaperExpression is EntityShaperExpression entityShaperExpression)
@@ -651,7 +653,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return null;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateOrderBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -676,7 +678,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateReverse(ShapedQueryExpression source)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -688,7 +690,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression TranslateSelect(ShapedQueryExpression source, LambdaExpression selector)
     {
         if (selector.Body == selector.Parameters[0])
@@ -702,7 +704,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(newShaper);
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSelectMany(
         ShapedQueryExpression source,
         LambdaExpression collectionSelector,
@@ -748,7 +750,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             return base.VisitMethodCall(methodCallExpression);
         }
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSelectMany(ShapedQueryExpression source, LambdaExpression selector)
     {
         var innerParameter = Expression.Parameter(selector.ReturnType.GetSequenceType(), "i");
@@ -757,7 +759,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return TranslateSelectMany(source, selector, resultSelector);
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSingleOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -770,7 +772,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             returnDefault
                 ? EnumerableMethods.SingleOrDefaultWithoutPredicate
                 : EnumerableMethods.SingleWithoutPredicate);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSkip(ShapedQueryExpression source, Expression count)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -790,13 +792,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSkipWhile(ShapedQueryExpression source, LambdaExpression predicate)
         => null;
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateSum(ShapedQueryExpression source, LambdaExpression? selector, Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Sum), resultType);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateTake(ShapedQueryExpression source, Expression count)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -816,10 +818,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateTakeWhile(ShapedQueryExpression source, LambdaExpression predicate)
         => null;
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateThenBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -843,10 +845,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateUnion(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Union, source1, source2);
-
+    /// <inheritdoc/>
     protected override ShapedQueryExpression? TranslateWhere(ShapedQueryExpression source, LambdaExpression predicate)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;

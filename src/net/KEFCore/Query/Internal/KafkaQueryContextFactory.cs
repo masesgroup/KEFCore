@@ -28,7 +28,9 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaQueryContextFactory : IQueryContextFactory
 {
     private readonly IKafkaCluster _cluster;
-
+    /// <summary>
+    /// Default initializer
+    /// </summary>
     public KafkaQueryContextFactory(
         QueryContextDependencies dependencies,
         IKafkaClusterCache clusterCache,

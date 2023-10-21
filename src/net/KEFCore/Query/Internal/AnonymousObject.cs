@@ -45,11 +45,11 @@ public readonly struct AnonymousObject
 
     public static bool operator !=(AnonymousObject x, AnonymousObject y)
         => !x.Equals(y);
-
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
         => obj is not null && (obj is AnonymousObject anonymousObject
             && _values.SequenceEqual(anonymousObject._values));
-
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         var hash = new HashCode();
