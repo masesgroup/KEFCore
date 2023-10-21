@@ -935,15 +935,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithKeySerializationType
   nameWithType: KafkaOptionsExtension.WithKeySerializationType
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action{IEntityType,System.Boolean,System.Object})
-  name: WithOnChangeEvent(Action<IEntityType, Boolean, Object>)
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithOnChangeEvent_Action_IEntityType_System_Boolean_System_Object__
-  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action{IEntityType,System.Boolean,System.Object})
-  name.vb: WithOnChangeEvent(Action(Of IEntityType, Boolean, Object))
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action<IEntityType, System.Boolean, System.Object>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action(Of IEntityType, System.Boolean, System.Object))
-  nameWithType: KafkaOptionsExtension.WithOnChangeEvent(Action<IEntityType, Boolean, Object>)
-  nameWithType.vb: KafkaOptionsExtension.WithOnChangeEvent(Action(Of IEntityType, Boolean, Object))
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action{MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged})
+  name: WithOnChangeEvent(Action<EntityTypeChanged>)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithOnChangeEvent_Action_MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action{MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged})
+  name.vb: WithOnChangeEvent(Action(Of EntityTypeChanged))
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action<MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent(Action(Of MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged))
+  nameWithType: KafkaOptionsExtension.WithOnChangeEvent(Action<EntityTypeChanged>)
+  nameWithType.vb: KafkaOptionsExtension.WithOnChangeEvent(Action(Of EntityTypeChanged))
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.WithOnChangeEvent*
   name: WithOnChangeEvent
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_WithOnChangeEvent_
@@ -1794,15 +1794,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerializationType
   nameWithType: KafkaDbContextOptionsBuilder.WithKeySerializationType
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action{IEntityType,System.Boolean,System.Object})
-  name: WithOnChangeEvent(Action<IEntityType, Boolean, Object>)
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithOnChangeEvent_Action_IEntityType_System_Boolean_System_Object__
-  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action{IEntityType,System.Boolean,System.Object})
-  name.vb: WithOnChangeEvent(Action(Of IEntityType, Boolean, Object))
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action<IEntityType, System.Boolean, System.Object>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action(Of IEntityType, System.Boolean, System.Object))
-  nameWithType: KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action<IEntityType, Boolean, Object>)
-  nameWithType.vb: KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action(Of IEntityType, Boolean, Object))
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action{MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged})
+  name: WithOnChangeEvent(Action<EntityTypeChanged>)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithOnChangeEvent_Action_MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action{MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged})
+  name.vb: WithOnChangeEvent(Action(Of EntityTypeChanged))
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action<MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action(Of MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged))
+  nameWithType: KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action<EntityTypeChanged>)
+  nameWithType.vb: KafkaDbContextOptionsBuilder.WithOnChangeEvent(Action(Of EntityTypeChanged))
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent*
   name: WithOnChangeEvent
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithOnChangeEvent_
@@ -5971,6 +5971,139 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.Value
   nameWithType: PropertyData.Value
+- uid: MASES.EntityFrameworkCore.KNet.Storage
+  name: MASES.EntityFrameworkCore.KNet.Storage
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.html
+  commentId: N:MASES.EntityFrameworkCore.KNet.Storage
+  fullName: MASES.EntityFrameworkCore.KNet.Storage
+  nameWithType: MASES.EntityFrameworkCore.KNet.Storage
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged
+  name: EntityTypeChanged
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged
+  nameWithType: EntityTypeChanged
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind
+  name: ChangeKind
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind
+  nameWithType: EntityTypeChanged.ChangeKind
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind*
+  name: ChangeKind
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind
+  nameWithType: EntityTypeChanged.ChangeKind
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType
+  name: EntityTypeChanged.ChangeKindType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType
+  nameWithType: EntityTypeChanged.ChangeKindType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Added
+  name: Added
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Added
+  commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Added
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Added
+  nameWithType: EntityTypeChanged.ChangeKindType.Added
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Removed
+  name: Removed
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Removed
+  commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Removed
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Removed
+  nameWithType: EntityTypeChanged.ChangeKindType.Removed
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Updated
+  name: Updated
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Updated
+  commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Updated
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Updated
+  nameWithType: EntityTypeChanged.ChangeKindType.Updated
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  name: Upserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Upserted
+  commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  nameWithType: EntityTypeChanged.ChangeKindType.Upserted
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
+  nameWithType: EntityTypeChanged.EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType*
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
+  nameWithType: EntityTypeChanged.EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key
+  name: Key
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key
+  nameWithType: EntityTypeChanged.Key
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key*
+  name: Key
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key
+  nameWithType: EntityTypeChanged.Key
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded
+  name: KeyAdded
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded
+  nameWithType: EntityTypeChanged.KeyAdded
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded*
+  name: KeyAdded
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded
+  nameWithType: EntityTypeChanged.KeyAdded
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved
+  name: KeyRemoved
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved
+  nameWithType: EntityTypeChanged.KeyRemoved
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved*
+  name: KeyRemoved
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved
+  nameWithType: EntityTypeChanged.KeyRemoved
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
+  name: KeyUpdated
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
+  nameWithType: EntityTypeChanged.KeyUpdated
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated*
+  name: KeyUpdated
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
+  nameWithType: EntityTypeChanged.KeyUpdated
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  name: KeyUpserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  nameWithType: EntityTypeChanged.KeyUpserted
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted*
+  name: KeyUpserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  nameWithType: EntityTypeChanged.KeyUpserted
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal
   name: MASES.EntityFrameworkCore.KNet.Storage.Internal
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.html

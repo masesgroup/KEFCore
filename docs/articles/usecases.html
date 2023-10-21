@@ -95,6 +95,7 @@ public class Item
 <h2 id="apache-kafka-as-a-triggered-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka</a> as a triggered distributed cache</h2>
 <p>Continuing from the previous use case, using the events reported from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> it is possible to write a reactive application.
 When a change event is triggered the application can react to it and take an action.</p>
+<p><img src="../images/triggeredcache.gif" alt="Alt text" title="Triggered distributed cache"></p>
 <h3 id="signalr">SignalR</h3>
 <p>The triggered distributed cache can be used side-by-side with <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>: combining <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> and <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a> in an application, subscribing to the change events, it is possible to feed the connected applications to <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>.</p>
 <h3 id="redis">Redis</h3>

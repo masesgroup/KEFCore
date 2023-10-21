@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html",
-          "hash": "jgq0a91ER1xUDHorAbLhon3I+bG7WB98F9LQUPpH9mE="
+          "hash": "I+Cmi9Dh5x8wPTy4qCYzGdc0uUgDV5HsQMk63OuqJEE="
         }
       },
       "is_incremental": false,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html",
-          "hash": "CH1E23bDqBjDA//5MPmLPNHEMeI3ho0ylzOwi0SsjRE="
+          "hash": "9ObLJXpwI89qfQTe+mLRxALBos8MXYhnuMHztvF43KY="
         }
       },
       "is_incremental": false,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html",
-          "hash": "80mjvjMIA+JhC53z+8Pp+VNYvTPGeahdY8TgDXVRcJY="
+          "hash": "ZUkyCSp4ZeOsyDzwaMwnMtitAvTvdZ5bt0p6svtrnXw="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html",
-          "hash": "A3Bx0Vvkvin7n0fKgwLAsqc6TyuBfhq28C44WiOfwOk="
+          "hash": "yAMkx0SM7BDSPtxqcdoWQxhh90HSVk2nORWWCmyPKn8="
         }
       },
       "is_incremental": false,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html",
-          "hash": "LjujV7IWb8nKwcuZH8DbBDORUNH4GSnIwHKJZ0hONNc="
+          "hash": "ySJaoGCEwQ11moN7o3CDrtS/kXuYzbebeBk3s4fn+GQ="
         }
       },
       "is_incremental": false,
@@ -345,7 +345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject.html",
-          "hash": "z2qnOQSS+gc6AFN0ApcC5wZ+GGdUgjcbpK5HVUlQsLk="
+          "hash": "H1GhTvURdbwyOwS6XoyN4NUTt7PR1QP2E7e/xsv7eE0="
         }
       },
       "is_incremental": false,
@@ -845,6 +845,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html",
+          "hash": "9KARtoM2d5Lxgk0+JKpBMotBdyj0AT6iWu/GT1WkaZI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html",
+          "hash": "LnXhyhiXUWqy6hXVtodk8GQFaRrZuprnXseJsQttxfs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.yml",
       "output": {
         ".html": {
@@ -1101,7 +1125,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransactionManager.html",
-          "hash": "IyumUEIsdF5w0etgCX8xqP586iqBmb3c13siVLNTpYs="
+          "hash": "ZxoO5eP5VQ51lvQpvsLeRBIdU7kk2Kk0QzsTDb1QJ9s="
         }
       },
       "is_incremental": false,
@@ -1145,11 +1169,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.html",
+          "hash": "44kNXRKgNZDbLyhzUBkjAJRG13z0phphqML7ukeX3VU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Blog.yml",
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Blog.html",
-          "hash": "X+RLX7HPvjGbjqpiAvo8ZDxGRyIYYkG6rD4gWgyGcb4="
+          "hash": "AUba56sLmm4Fybp7LRI1OVBnOQIB2cQK/gdROv5LqbY="
         }
       },
       "is_incremental": false,
@@ -1161,7 +1197,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.BloggingContext.html",
-          "hash": "zMxoxB+5xpFDURjxbkG2ccHW4eKO3KC9CijWyWjMqUQ="
+          "hash": "am7O4TA3pbuKBfbWZPIyYC2wia/WRYYxF6PytD02el0="
         }
       },
       "is_incremental": false,
@@ -1173,7 +1209,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Post.html",
-          "hash": "qxP9cPqygCW5L7/70r6NkYo773Y9e/hsU4g9/4YmJ9Y="
+          "hash": "WVpdBSRWUmf2tR6UovvXZ7PFO1QeM32JkkW1Rv79FOw="
         }
       },
       "is_incremental": false,
@@ -1293,7 +1329,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "Rem5fvxD+3oNnCeGfpIrO3M9cgT877X7MzVxgmS8Ll4="
+          "hash": "23hy6vphE7lmo4EiCqD+A7e3kQV0e6tx3rs0/+PPZr0="
         }
       },
       "is_incremental": false,
@@ -1341,7 +1377,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/howitworks.html",
-          "hash": "MG+kjZubpZAh552y3fPCBF7kgAFOTLQ8tOfmZj7/vaQ="
+          "hash": "NE7uDzIiKY7ZPk3Ps5vMciwEh7OHfLQGbObBE+ZhCpU="
         }
       },
       "is_incremental": false,
@@ -1440,7 +1476,29 @@
       "output": {
         ".html": {
           "relative_path": "articles/usecases.html",
-          "hash": "3BGxp/ncjF8mhI5FJRqWq9MNpgwz0TVmLnZMEU3R/ms="
+          "hash": "/W7fGSSCPZ3bNm3bFU3dbkG83NY/sea/Onv0Eqi6Ksw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/cache.gif",
+      "output": {
+        "resource": {
+          "relative_path": "images/cache.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/events.gif",
+      "output": {
+        "resource": {
+          "relative_path": "images/events.gif"
         }
       },
       "is_incremental": false,
@@ -1452,6 +1510,17 @@
       "output": {
         "resource": {
           "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/triggeredcache.gif",
+      "output": {
+        "resource": {
+          "relative_path": "images/triggeredcache.gif"
         }
       },
       "is_incremental": false,
@@ -1505,7 +1574,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 106,
+          "total_file_count": 109,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
