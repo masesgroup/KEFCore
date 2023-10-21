@@ -106,7 +106,9 @@ Using the <a href="https://kafka.apache.org/documentation/#compaction">topic com
 <li>Update: a producer storing a new record with a previously stored unique key will discard the old records</li>
 <li>Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key</li>
 </ul>
-<p>All CRUD operations are helped, behind the scene, from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a>.</p>
+<p>All CRUD operations are helped, behind the scene, from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a>.</p>
+<h3 id="first-level-cache">First-level cache</h3>
+<p><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka Streams</a> act as first-level cache of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>: <strong>data coming from the Apache Kafka cluster updates their content while the system is running without a specific request</strong>.</p>
 <h3 id="data-storage">Data storage</h3>
 <p>Apache Kafka stores the information using records. It is important to convert entities in something usable from Apache Kafka.
 The conversion is done using serializers that converts the Entities (data in the model) into Apache Kafka records and viceversa: see <a href="serialization.html">serialization chapter</a> for more info.</p>

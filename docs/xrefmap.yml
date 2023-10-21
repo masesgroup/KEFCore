@@ -1385,19 +1385,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.ConsumerConfig
   nameWithType: KafkaDbContext.ConsumerConfig
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
-  name: DbName
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName
-  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
-  nameWithType: KafkaDbContext.DbName
-- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName*
-  name: DbName
-  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DbName_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName
+  name: DatabaseName
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DatabaseName
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName
+  nameWithType: KafkaDbContext.DatabaseName
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName*
+  name: DatabaseName
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DatabaseName_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DbName
-  nameWithType: KafkaDbContext.DbName
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DatabaseName
+  nameWithType: KafkaDbContext.DatabaseName
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.DefaultConsumerConfig
   name: DefaultConsumerConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerConfig
@@ -1612,6 +1612,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseDeletePolicyForTopic
   nameWithType: KafkaDbContext.UseDeletePolicyForTopic
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching
+  name: UseNameMatching
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseNameMatching
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching
+  nameWithType: KafkaDbContext.UseNameMatching
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching*
+  name: UseNameMatching
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseNameMatching_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UseNameMatching
+  nameWithType: KafkaDbContext.UseNameMatching
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.UsePersistentStorage
   name: UsePersistentStorage
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage
@@ -6469,19 +6482,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Delete
   nameWithType: IKafkaTable.Delete
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType
-  name: EntityType
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_EntityType
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType
-  nameWithType: IKafkaTable.EntityType
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType*
-  name: EntityType
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_EntityType_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.EntityType
-  nameWithType: IKafkaTable.EntityType
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.GetIntegerValueGenerator*
   name: GetIntegerValueGenerator
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_GetIntegerValueGenerator_
@@ -7550,54 +7550,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.Dispose
   nameWithType: KafkaTableFactory.Dispose
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot
-  name: KafkaTableSnapshot
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot
-  nameWithType: KafkaTableSnapshot
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.#ctor(IEntityType,IReadOnlyList{System.Object[]})
-  name: KafkaTableSnapshot(IEntityType, IReadOnlyList<Object[]>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot__ctor_IEntityType_IReadOnlyList_System_Object____
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.#ctor(IEntityType,IReadOnlyList{System.Object[]})
-  name.vb: KafkaTableSnapshot(IEntityType, IReadOnlyList(Of Object()))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.KafkaTableSnapshot(IEntityType, IReadOnlyList<System.Object[]>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.KafkaTableSnapshot(IEntityType, IReadOnlyList(Of System.Object()))
-  nameWithType: KafkaTableSnapshot.KafkaTableSnapshot(IEntityType, IReadOnlyList<Object[]>)
-  nameWithType.vb: KafkaTableSnapshot.KafkaTableSnapshot(IEntityType, IReadOnlyList(Of Object()))
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.#ctor*
-  name: KafkaTableSnapshot
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot__ctor_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.#ctor
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.KafkaTableSnapshot
-  nameWithType: KafkaTableSnapshot.KafkaTableSnapshot
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType
-  name: EntityType
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot_EntityType
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType
-  nameWithType: KafkaTableSnapshot.EntityType
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType*
-  name: EntityType
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot_EntityType_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.EntityType
-  nameWithType: KafkaTableSnapshot.EntityType
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot_Rows
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows
-  nameWithType: KafkaTableSnapshot.Rows
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows*
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTableSnapshot_Rows_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableSnapshot.Rows
-  nameWithType: KafkaTableSnapshot.Rows
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction
   name: KafkaTransaction
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction.html

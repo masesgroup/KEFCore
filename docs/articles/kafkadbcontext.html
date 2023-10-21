@@ -77,9 +77,10 @@
 <li><strong>KeySerializationType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record key</li>
 <li><strong>ValueSerializationType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record value</li>
 <li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka record value</li>
+<li><strong>UseNameMatching</strong>: set to <strong>false</strong> to avoid Entity matching based on Name</li>
 <li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka</li>
 <li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
-<li><strong>DbName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>
+<li><strong>DatabaseName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>
 <li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</li>
 <li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka</li>
 <li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
