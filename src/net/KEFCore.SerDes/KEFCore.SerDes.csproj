@@ -8,7 +8,7 @@
 		<Description>EntityFrameworkCore KNet - Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Serialization</Product>
 		<OutputPath>..\..\..\bin\</OutputPath>
-		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;orm;json;sql kafka apache-kafka dotnet clr netcore net6 kafka connect streams producer consumer providers streamprovider confluent</PackageTags>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization</PackageId>
 		<PackageReadmeFile>serialization.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
