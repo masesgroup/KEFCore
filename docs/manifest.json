@@ -849,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html",
-          "hash": "9KARtoM2d5Lxgk0+JKpBMotBdyj0AT6iWu/GT1WkaZI="
+          "hash": "hQJlGkVdxDZzof/wmdxRsDiTQmBuGynvSE9Dsm1NEww="
         }
       },
       "is_incremental": false,
@@ -861,7 +861,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html",
-          "hash": "LnXhyhiXUWqy6hXVtodk8GQFaRrZuprnXseJsQttxfs="
+          "hash": "ofEKH3ZYDhYCCXuDHnuY3Qyv/WxbGmm2QqlOBFSuixs="
         }
       },
       "is_incremental": false,
@@ -1125,7 +1125,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransactionManager.html",
-          "hash": "ZxoO5eP5VQ51lvQpvsLeRBIdU7kk2Kk0QzsTDb1QJ9s="
+          "hash": "IyumUEIsdF5w0etgCX8xqP586iqBmb3c13siVLNTpYs="
         }
       },
       "is_incremental": false,
@@ -1185,7 +1185,7 @@
       "output": {
         ".html": {
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Blog.html",
-          "hash": "AUba56sLmm4Fybp7LRI1OVBnOQIB2cQK/gdROv5LqbY="
+          "hash": "EPXTDK0++4jBrg+ir0uIwB59HUAMvRGqr9ODc7IR1y8="
         }
       },
       "is_incremental": false,
