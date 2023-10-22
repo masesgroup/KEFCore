@@ -42,6 +42,10 @@ public readonly struct EntityTypeChanged
         /// The <see cref="Key"/> was removed
         /// </summary>
         Removed = 4,
+        /// <summary>
+        /// The <see cref="Key"/> was added or updated
+        /// </summary>
+        Upserted = Added | Updated,
     }
 
     internal EntityTypeChanged(IEntityType entityType, ChangeKindType changeKind, object key)
@@ -74,4 +78,8 @@ public readonly struct EntityTypeChanged
     /// Helper to understand if the <see cref="Key"/> was removed
     /// </summary>
     public bool KeyRemoved => ChangeKind.HasFlag(ChangeKindType.Removed);
+    /// <summary>
+    /// Helper to understand if the <see cref="Key"/> was added or updated
+    /// </summary>
+    public bool KeyUpserted => ChangeKind.HasFlag(ChangeKindType.Added) | ChangeKind.HasFlag(ChangeKindType.Updated);
 }
