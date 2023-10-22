@@ -290,27 +290,25 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     {
         get
         {
+            if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _kafkaCompactedReplicator);
             if (_streamData != null) return _streamData;
-            if (_kafkaCompactedReplicator == null) throw new InvalidOperationException("Missing _kafkaCompactedReplicator");
-            return new KNetCompactedReplicatorEnumerable(_entityType, _kafkaCompactedReplicator);
+            throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
         }
     }
 
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        try
+        Task.Factory.StartNew(() =>
         {
             _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Upserted, arg2.Key));
-        }
-        catch { }
+        });
     }
 
     private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        try
+        Task.Factory.StartNew(() =>
         {
             _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Removed, arg2.Key));
-        }
-        catch { }
+        });
     }
 }
