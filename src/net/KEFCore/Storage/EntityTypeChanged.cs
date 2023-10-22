@@ -42,10 +42,6 @@ public readonly struct EntityTypeChanged
         /// The <see cref="Key"/> was removed
         /// </summary>
         Removed = 4,
-        /// <summary>
-        /// The <see cref="Key"/> was added or updated
-        /// </summary>
-        Upserted = Added | Updated,
     }
 
     internal EntityTypeChanged(IEntityType entityType, ChangeKindType changeKind, object key)
