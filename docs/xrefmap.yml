@@ -6020,6 +6020,12 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Updated
   fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Updated
   nameWithType: EntityTypeChanged.ChangeKindType.Updated
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  name: Upserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Upserted
+  commentId: F:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.Upserted
+  nameWithType: EntityTypeChanged.ChangeKindType.Upserted
 - uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType
   name: EntityType
   href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType
@@ -6085,6 +6091,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated
   nameWithType: EntityTypeChanged.KeyUpdated
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  name: KeyUpserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  nameWithType: EntityTypeChanged.KeyUpserted
+- uid: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted*
+  name: KeyUpserted
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted
+  nameWithType: EntityTypeChanged.KeyUpserted
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal
   name: MASES.EntityFrameworkCore.KNet.Storage.Internal
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.html
