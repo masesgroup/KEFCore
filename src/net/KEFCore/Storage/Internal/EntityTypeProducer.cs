@@ -300,7 +300,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     {
         Task.Factory.StartNew(() =>
         {
-            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, arg1.ContainsKey(arg2.Key) ? EntityTypeChanged.ChangeKindType.Updated : EntityTypeChanged.ChangeKindType.Added, arg2.Key));
+            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Upserted, arg2.Key));
         });
     }
 
