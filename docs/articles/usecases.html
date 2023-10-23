@@ -73,16 +73,39 @@
 Here a possible, non exhaustive list, of use cases.</p>
 <p>Before read following chapters it is important to understand <a href="howitworks.html">how it works</a>.</p>
 <h2 id="apache-kafka-as-database"><a href="https://kafka.apache.org/">Apache Kafka</a> as Database</h2>
-<p>The first use cases can be coupled to a standard usage of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, the same when it is used with database providers.
+<p>The first use case can be coupled to a standard usage of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, the same when it is used with database providers.
 In <a href="gettingstarted.html">getting started</a> is proposed a simple example following the online documentation.
 In the example the data within the model are stored in multiple Apache Kafka topics, each topic is correlated to the <code>DbSet</code> described from the <code>DbContext</code>.</p>
-<p>The constraint are managed using <code>OnModelCreating</code> of <code>DbContext</code>.</p>
+<p>The constraints are managed using <code>OnModelCreating</code> of <code>DbContext</code>.</p>
+<h2 id="a-different-way-to-define-data-within-apache-kafka-topics">A different way to define data within <a href="https://kafka.apache.org/">Apache Kafka</a> topics</h2>
+<p>Changing the mind about model, another use case can be coupled on how an <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> model can be used.
+Starting from the model proposed in <a href="gettingstarted.html">getting started</a>, the data within the model are stored in multiple Apache Kafka topics.
+If the model is written in a way it describes the data to be stored within the topics it is possible to define an uncorrelated model containing the data of interest:</p>
+<pre><code class="lang-cs">public class ModelContext : KafkaDbContext
+{
+    public DbSet&lt;FirstData&gt; FirstDatas { get; set; }
+    public DbSet&lt;SecondData&gt; SecondDatas { get; set; }
+}
+
+public class FirstData
+{
+    public int ItemId { get; set; }
+    public string Data { get; set; }
+}
+
+public class SecondData
+{
+    public int ItemId { get; set; }
+    public string Data { get; set; }
+}
+</code></pre>
+<p>Then using standard APIs of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, an user interacting with <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> can stores, or retrieves, data without any, or limited, knowledge of Apache Kafka.</p>
 <h2 id="apache-kafka-as-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka</a> as distributed cache</h2>
-<p>Changing the mind a model is written it is possible to define a set of classes which acts as storage for data we want to use as a cache.
+<p>Changing the mind a model is written for, it is possible to define a set of classes which acts as storage for data we want to use as a cache.
 It is possible to build a new model like:</p>
 <pre><code class="lang-cs">public class CachingContext : KafkaDbContext
 {
-    public DbSet&lt;SingleItem&gt; Items { get; set; }
+    public DbSet&lt;Item&gt; Items { get; set; }
 }
 
 public class Item
