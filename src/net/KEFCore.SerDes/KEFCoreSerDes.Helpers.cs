@@ -189,6 +189,7 @@ public class EntityExtractor
     /// <param name="valueContainer">Expected ValueContainer <see cref="Type"/></param>
     /// <param name="keySerializer">Key serializer to be used</param>
     /// <param name="valueContainerSerializer">ValueContainer serializer to be used</param>
+    /// <param name="topic">The Apache Kafka topic the data is coming from</param>
     /// <param name="recordValue">The Apache Kafka record value containing the information</param>
     /// <param name="recordKey">The Apache Kafka record key containing the information</param>
     /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
