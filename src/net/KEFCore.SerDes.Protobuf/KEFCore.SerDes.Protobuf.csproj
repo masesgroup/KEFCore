@@ -58,7 +58,19 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<PropertyGroup>
+		<MachineProcessorArchitecture>$(registry:HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment@PROCESSOR_ARCHITECTURE)</MachineProcessorArchitecture>
+		<Is32Bit>False</Is32Bit>
+		<Is32Bit Condition="'$(MachineProcessorArchitecture)' == 'x86'">True</Is32Bit>
+		<Is64Bit>False</Is64Bit>
+		<Is64Bit Condition="'$(MachineProcessorArchitecture)' == 'AMD64'">True</Is64Bit>
+	</PropertyGroup>
+
+
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" />
+		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition=" '$(OS)' == 'Windows_NT' AND (Is32Bit) == True "/>
+		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition=" '$(OS)' == 'Windows_NT' AND (Is64Bit) == True "/>
+		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition=" '$(OS)' != 'Windows_NT' AND (Is32Bit) == True "/>
+		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition=" '$(OS)' != 'Windows_NT' AND (Is64Bit) == True "/>
 	</Target>
 </Project>

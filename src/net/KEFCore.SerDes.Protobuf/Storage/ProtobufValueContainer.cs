@@ -18,8 +18,6 @@
 
 // #define DEBUG_PERFORMANCE
 
-#nullable enable
-
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 
