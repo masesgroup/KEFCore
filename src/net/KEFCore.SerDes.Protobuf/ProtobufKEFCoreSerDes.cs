@@ -32,130 +32,154 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 public static class ProtobufKEFCoreSerDes
 {
     /// <summary>
-    /// Avro Key Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Key<T> : KNetSerDes<T>
+    public static readonly Type DefaultKeySerialization = typeof(Key.Binary<>);
+    /// <summary>
+    /// Returns the default serializer <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.Binary<>);
+    /// <summary>
+    /// Returns the default <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainer = typeof(ProtobufValueContainer<>);
+    /// <summary>
+    /// Base class to define key extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// </summary>
+    public static class Key
     {
-        readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-        readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(Key<>).ToAssemblyQualified());
-        readonly IKNetSerDes<T> _defaultSerDes = default!;
-        /// <inheritdoc/>
-        public override bool UseHeaders => true;
         /// <summary>
-        /// Default initializer
+        /// Protobuf Key Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
-        public Key()
+        /// <typeparam name="T"></typeparam>
+        public class Binary<T> : KNetSerDes<T>
         {
-            if (KNetSerialization.IsInternalManaged<T>())
+            readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
+            readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(Binary<>).ToAssemblyQualified());
+            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
+            /// <summary>
+            /// Default initializer
+            /// </summary>
+            public Binary()
             {
-                _defaultSerDes = new KNetSerDes<T>();
+                if (KNetSerialization.IsInternalManaged<T>())
+                {
+                    _defaultSerDes = new KNetSerDes<T>();
+                }
+                else if (!typeof(T).IsArray)
+                {
+                    throw new InvalidOperationException($"{typeof(Binary<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                }
             }
-            else if (!typeof(T).IsArray)
+
+            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            public override byte[] Serialize(string topic, T data)
             {
-                throw new InvalidOperationException($"{typeof(Key<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                return SerializeWithHeaders(topic, null!, data);
             }
-        }
-
-        /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
-        public override byte[] Serialize(string topic, T data)
-        {
-            return SerializeWithHeaders(topic, null!, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
-        public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
-        {
-            headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
-            headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
-
-            if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
-            KeyContainer keyContainer = null!;
-            if (data is object[] dataArray)
+            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
-                keyContainer = new KeyContainer(dataArray);
+                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
+
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                KeyContainer keyContainer = null!;
+                if (data is object[] dataArray)
+                {
+                    keyContainer = new KeyContainer(dataArray);
+                }
+
+                using MemoryStream stream = new();
+                keyContainer.WriteTo(stream);
+                return stream.ToArray();
             }
-            
-            using MemoryStream stream = new();
-            keyContainer.WriteTo(stream);
-            return stream.ToArray();
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
-        public override T Deserialize(string topic, byte[] data)
-        {
-            return DeserializeWithHeaders(topic, null!, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
-        public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
-        {
-            if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            public override T Deserialize(string topic, byte[] data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
+            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            {
+                if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
-            if (data == null) return default!;
+                if (data == null) return default!;
 
-            KeyContainer container = KeyContainer.Parser.ParseFrom(data);
+                KeyContainer container = KeyContainer.Parser.ParseFrom(data);
 
-            return (T)container.GetContent();
+                return (T)container.GetContent();
+            }
         }
     }
 
     /// <summary>
-    /// Avro ValueContainer Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ValueContainer<T> : KNetSerDes<T> where T : class, IMessage<T>
+    public static class ValueContainer
     {
-        readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(ValueContainer<>).ToAssemblyQualified());
-        readonly byte[] valueContainerName = null!;
-        /// <inheritdoc/>
-        public override bool UseHeaders => true;
         /// <summary>
-        /// Default initializer
+        /// Protobuf ValueContainer Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
-        public ValueContainer()
+        /// <typeparam name="T"></typeparam>
+        public class Binary<T> : KNetSerDes<T> where T : class, IMessage<T>
         {
-            var tt = typeof(T);
-            if (tt.IsGenericType)
+            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Binary<>).ToAssemblyQualified());
+            readonly byte[] valueContainerName = null!;
+            /// <inheritdoc/>
+            public override bool UseHeaders => true;
+            /// <summary>
+            /// Default initializer
+            /// </summary>
+            public Binary()
             {
-                var keyT = tt.GetGenericArguments();
-                if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
-                var t = tt.GetGenericTypeDefinition();
-                if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
+                var tt = typeof(T);
+                if (tt.IsGenericType)
                 {
-                    valueContainerName = Encoding.UTF8.GetBytes(t.ToAssemblyQualified());
-                    return;
+                    var keyT = tt.GetGenericArguments();
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
+                    var t = tt.GetGenericTypeDefinition();
+                    if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
+                    {
+                        valueContainerName = Encoding.UTF8.GetBytes(t.ToAssemblyQualified());
+                        return;
+                    }
+                    else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
                 }
-                else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
+                throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
-            throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
-        }
 
-        /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
-        public override byte[] Serialize(string topic, T data)
-        {
-            return SerializeWithHeaders(topic, null!, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
-        public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
-        {
-            headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
-            headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
-
-            using (MemoryStream stream = new())
+            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            public override byte[] Serialize(string topic, T data)
             {
-                data.WriteTo(stream);
-                return stream.ToArray();
+                return SerializeWithHeaders(topic, null!, data);
             }
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
-        public override T Deserialize(string topic, byte[] data)
-        {
-            return DeserializeWithHeaders(topic, null!, data);
-        }
-        /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
-        public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
-        {
-            if (data == null) return default!;
-            var container = ValueContainer.Parser.ParseFrom(data);
-            return (Activator.CreateInstance(typeof(T), container) as T)!;
+            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+            {
+                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
+
+                using (MemoryStream stream = new())
+                {
+                    data.WriteTo(stream);
+                    return stream.ToArray();
+                }
+            }
+            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            public override T Deserialize(string topic, byte[] data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
+            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            {
+                if (data == null) return default!;
+                var container = Storage.ValueContainer.Parser.ParseFrom(data);
+                return (Activator.CreateInstance(typeof(T), container) as T)!;
+            }
         }
     }
 }
