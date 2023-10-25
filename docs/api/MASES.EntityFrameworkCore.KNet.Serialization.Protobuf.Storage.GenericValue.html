@@ -1,0 +1,2011 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GenericValue
+   | Kafka Bridge website </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GenericValue
+   | Kafka Bridge website ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue">
+  
+  
+  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue" class="text-break">Class GenericValue
+  </h1>
+  <div class="markdown level0 summary"><p>[START messages]
+Our address book file is just one of these.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level1"><span class="xref">GenericValue</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">Google.Protobuf.IMessage</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a>&gt;</div>
+    <div><span class="xref">Google.Protobuf.IDeepCloneable</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a>&gt;</div>
+    <div><span class="xref">Google.Protobuf.IBufferMessage</span></div>
+    <div><span class="xref">Google.Protobuf.IMessage</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage</a></h6>
+  <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.dll</h6>
+  <h5 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class GenericValue : IMessage&lt;GenericValue&gt;, IEquatable&lt;GenericValue&gt;, IDeepCloneable&lt;GenericValue&gt;, IBufferMessage, IMessage</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L78">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor">GenericValue()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.%23ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L86">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)">GenericValue(GenericValue)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericValue(GenericValue other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_System_Object_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.%23ctor(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufGenericValue.cs/#L31">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor(System.Object)">GenericValue(Object)</h4>
+  <div class="markdown level1 summary"><p>Initializer for <code data-dev-comment-type="paramref" class="paramref">input</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericValue(object input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">input</span></td>
+        <td><p>The value to insert</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_BoolValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.BoolValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L167">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_BoolValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.BoolValueFieldNumber">BoolValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;bool_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int BoolValueFieldNumber = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ByteValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ByteValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L196">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ByteValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ByteValueFieldNumber">ByteValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;byte_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ByteValueFieldNumber = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeoffsetValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L443">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeoffsetValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValueFieldNumber">DatetimeoffsetValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;datetimeoffset_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DatetimeoffsetValueFieldNumber = 12</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L428">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeValueFieldNumber">DatetimeValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;datetime_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DatetimeValueFieldNumber = 11</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DoubleValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DoubleValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L341">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DoubleValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DoubleValueFieldNumber">DoubleValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;double_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DoubleValueFieldNumber = 8</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_FloatValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.FloatValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L312">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_FloatValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.FloatValueFieldNumber">FloatValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;float_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int FloatValueFieldNumber = 7</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GuidValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GuidValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L399">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GuidValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GuidValueFieldNumber">GuidValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;guid_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int GuidValueFieldNumber = 10</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L254">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValueFieldNumber">IntValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;int_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int IntValueFieldNumber = 5</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L283">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValueFieldNumber">LongValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;long_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int LongValueFieldNumber = 6</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_NullValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.NullValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L138">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_NullValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.NullValueFieldNumber">NullValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;null_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int NullValueFieldNumber = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L225">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValueFieldNumber">ShortValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;short_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ShortValueFieldNumber = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_StringValueFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValueFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L370">View Source</a>
+  </span>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_StringValueFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValueFieldNumber">StringValueFieldNumber</h4>
+  <div class="markdown level1 summary"><p>Field number for the &quot;string_value&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int StringValueFieldNumber = 9</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_BoolValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.BoolValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L171">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_BoolValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.BoolValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_BoolValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.BoolValue">BoolValue</h4>
+  <div class="markdown level1 summary"><p>Represents a boolean value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool BoolValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ByteValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ByteValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L200">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ByteValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ByteValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ByteValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ByteValue">ByteValue</h4>
+  <div class="markdown level1 summary"><p>Represents a int value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ByteValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeoffsetValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L447">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeoffsetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeoffsetValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValue">DatetimeoffsetValue</h4>
+  <div class="markdown level1 summary"><p>Represents a Timestamp value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Timestamp DatetimeoffsetValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.WellKnownTypes.Timestamp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L432">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DatetimeValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeValue">DatetimeValue</h4>
+  <div class="markdown level1 summary"><p>Represents a Timestamp value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Timestamp DatetimeValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.WellKnownTypes.Timestamp</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Descriptor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Descriptor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L66">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Descriptor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Descriptor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Descriptor">Descriptor</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MessageDescriptor Descriptor { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.Reflection.MessageDescriptor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DoubleValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DoubleValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L345">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DoubleValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DoubleValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DoubleValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DoubleValue">DoubleValue</h4>
+  <div class="markdown level1 summary"><p>Represents a double value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double DoubleValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">Double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_FloatValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.FloatValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L316">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_FloatValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.FloatValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_FloatValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.FloatValue">FloatValue</h4>
+  <div class="markdown level1 summary"><p>Represents a float value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float FloatValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">Single</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GuidValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GuidValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L403">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GuidValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GuidValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GuidValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GuidValue">GuidValue</h4>
+  <div class="markdown level1 summary"><p>Represents a Guid value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ByteString GuidValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.ByteString</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasBoolValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasBoolValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L181">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasBoolValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasBoolValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasBoolValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasBoolValue">HasBoolValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;bool_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasBoolValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasByteValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasByteValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L210">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasByteValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasByteValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasByteValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasByteValue">HasByteValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;byte_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasByteValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDoubleValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDoubleValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L355">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDoubleValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDoubleValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDoubleValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDoubleValue">HasDoubleValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;double_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasDoubleValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasFloatValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasFloatValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L326">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasFloatValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasFloatValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasFloatValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasFloatValue">HasFloatValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;float_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasFloatValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasGuidValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasGuidValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L413">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasGuidValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasGuidValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasGuidValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasGuidValue">HasGuidValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;guid_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasGuidValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasIntValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasIntValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L268">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasIntValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasIntValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasIntValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasIntValue">HasIntValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;int_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasIntValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasLongValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasLongValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L297">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasLongValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasLongValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasLongValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasLongValue">HasLongValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;long_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasLongValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasNullValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasNullValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L152">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasNullValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasNullValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasNullValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasNullValue">HasNullValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;null_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasNullValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasShortValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasShortValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L239">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasShortValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasShortValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasShortValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasShortValue">HasShortValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;short_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasShortValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasStringValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasStringValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L384">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasStringValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasStringValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasStringValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasStringValue">HasStringValue</h4>
+  <div class="markdown level1 summary"><p>Gets whether the &quot;string_value&quot; field is set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasStringValue { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L258">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValue">IntValue</h4>
+  <div class="markdown level1 summary"><p>Represents a int value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int IntValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindCase.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindCase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L475">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindCase_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindCase*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindCase" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindCase">KindCase</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericValue.KindOneofCase KindCase { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html">GenericValue.KindOneofCase</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L287">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValue">LongValue</h4>
+  <div class="markdown level1 summary"><p>Represents a long value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long LongValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">Int64</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_NullValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.NullValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L142">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_NullValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.NullValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_NullValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.NullValue">NullValue</h4>
+  <div class="markdown level1 summary"><p>Represents a null value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NullValue NullValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.WellKnownTypes.NullValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Parser.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L62">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Parser_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Parser" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser">Parser</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MessageParser&lt;GenericValue&gt; Parser { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.MessageParser</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L229">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValue">ShortValue</h4>
+  <div class="markdown level1 summary"><p>Represents a int value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ShortValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_StringValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L374">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_StringValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_StringValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValue">StringValue</h4>
+  <div class="markdown level1 summary"><p>Represents a string value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string StringValue { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CalculateSize.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CalculateSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L666">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CalculateSize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CalculateSize*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CalculateSize" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CalculateSize">CalculateSize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CalculateSize()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearBoolValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearBoolValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L187">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearBoolValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearBoolValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearBoolValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearBoolValue">ClearBoolValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;bool_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearBoolValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearByteValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearByteValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L216">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearByteValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearByteValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearByteValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearByteValue">ClearByteValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;byte_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearByteValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDoubleValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDoubleValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L361">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDoubleValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDoubleValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDoubleValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDoubleValue">ClearDoubleValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;double_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearDoubleValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearFloatValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearFloatValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L332">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearFloatValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearFloatValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearFloatValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearFloatValue">ClearFloatValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;float_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearFloatValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearGuidValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearGuidValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L419">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearGuidValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearGuidValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearGuidValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearGuidValue">ClearGuidValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;guid_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearGuidValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearIntValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearIntValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L274">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearIntValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearIntValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearIntValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearIntValue">ClearIntValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;int_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearIntValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearKind.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearKind%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L481">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearKind_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearKind*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearKind" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearKind">ClearKind()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearKind()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearLongValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearLongValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L303">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearLongValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearLongValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearLongValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearLongValue">ClearLongValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;long_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearLongValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearNullValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearNullValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L158">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearNullValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearNullValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearNullValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearNullValue">ClearNullValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;null_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearNullValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearShortValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearShortValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L245">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearShortValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearShortValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearShortValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearShortValue">ClearShortValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;short_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearShortValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearStringValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearStringValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L390">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearStringValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearStringValue*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearStringValue" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearStringValue">ClearStringValue()</h4>
+  <div class="markdown level1 summary"><p>Clears the value of the oneof if it's currently set to &quot;string_value&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearStringValue()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Clone.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L131">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Clone_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Clone*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Clone" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericValue Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L494">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)">Equals(GenericValue)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(GenericValue other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_System_Object_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L488">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Equals_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetContent.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetContent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufGenericValue.cs/#L86">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetContent_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetContent*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetContent" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetContent">GetContent()</h4>
+  <div class="markdown level1 summary"><p>Returns the content of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object GetContent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetHashCode.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L519">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetHashCode_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetHashCode*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_GetHashCode" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_Google_Protobuf_CodedInputStream_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom(Google.Protobuf.CodedInputStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L766">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_Google_Protobuf_CodedInputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom(Google.Protobuf.CodedInputStream)">MergeFrom(CodedInputStream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MergeFrom(CodedInputStream input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.CodedInputStream</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L712">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue)">MergeFrom(GenericValue)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MergeFrom(GenericValue other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html">GenericValue</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ToString.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L542">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ToString_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ToString*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ToString" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_WriteTo_Google_Protobuf_CodedOutputStream_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.WriteTo(Google.Protobuf.CodedOutputStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L548">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_WriteTo_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.WriteTo*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_WriteTo_Google_Protobuf_CodedOutputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.WriteTo(Google.Protobuf.CodedOutputStream)">WriteTo(CodedOutputStream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteTo(CodedOutputStream output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.CodedOutputStream</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalMergeFrom_Google_Protobuf_ParseContext__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google%23Protobuf%23IBufferMessage%23InternalMergeFrom(Google.Protobuf.ParseContext%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L843">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalMergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IBufferMessage#InternalMergeFrom*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalMergeFrom_Google_Protobuf_ParseContext__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IBufferMessage#InternalMergeFrom(Google.Protobuf.ParseContext@)">IBufferMessage.InternalMergeFrom(ref ParseContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IBufferMessage.InternalMergeFrom(ref ParseContext input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.ParseContext</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalWriteTo_Google_Protobuf_WriteContext__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google%23Protobuf%23IBufferMessage%23InternalWriteTo(Google.Protobuf.WriteContext%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L609">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalWriteTo_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IBufferMessage#InternalWriteTo*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IBufferMessage_InternalWriteTo_Google_Protobuf_WriteContext__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IBufferMessage#InternalWriteTo(Google.Protobuf.WriteContext@)">IBufferMessage.InternalWriteTo(ref WriteContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IBufferMessage.InternalWriteTo(ref WriteContext output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.WriteContext</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IMessage_Descriptor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google%23Protobuf%23IMessage%23Descriptor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/GenericValue.cs/#L72">View Source</a>
+  </span>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IMessage_Descriptor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IMessage#Descriptor*"></a>
+  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Google_Protobuf_IMessage_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Google#Protobuf#IMessage#Descriptor">IMessage.Descriptor</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">MessageDescriptor IMessage.Descriptor { get; }</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Google.Protobuf.Reflection.MessageDescriptor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">Google.Protobuf.IMessage&lt;T&gt;</span>
+  </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">System.IEquatable&lt;T&gt;</a>
+  </div>
+  <div>
+      <span class="xref">Google.Protobuf.IDeepCloneable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">Google.Protobuf.IBufferMessage</span>
+  </div>
+  <div>
+      <span class="xref">Google.Protobuf.IMessage</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufGenericValue.cs/#L24" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
