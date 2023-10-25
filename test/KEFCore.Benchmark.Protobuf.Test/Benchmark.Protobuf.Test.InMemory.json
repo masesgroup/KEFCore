@@ -1,0 +1,5 @@
+{
+  "DatabaseName": "TestDBBenchmarkProtobuf",
+  "UseInMemoryProvider": true,
+  "NumberOfExecutions": 10
+}

@@ -358,3 +358,159 @@ using (context = new BloggingContext()
 	// execute stuff here
 }
 ```
+
+## **Protobuf** serialization
+
+With package [MASES.EntityFrameworkCore.KNet.Serialization.Protobuf](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf/) an user can choose the Protobuf serializer.
+
+### Protobuf schema
+
+The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:
+
+- Common multitype value:
+  ```protobuf
+  // [START declaration]
+  syntax = "proto3";
+  package storage;
+  
+  import "google/protobuf/struct.proto";
+  import "google/protobuf/timestamp.proto";
+  // [END declaration]
+  
+  // [START java_declaration]
+  option java_multiple_files = true;
+  option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
+  option java_outer_classname = "GenericValue";
+  // [END java_declaration]
+  
+  // [START csharp_declaration]
+  option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage";
+  // [END csharp_declaration]
+  
+  // [START messages]
+  // Our address book file is just one of these.
+  message GenericValue {
+    // The kind of value.
+    oneof kind {
+      // Represents a null value.
+      google.protobuf.NullValue null_value = 1;
+      // Represents a boolean value.
+      bool bool_value = 2;
+      // Represents a int value.
+      int32 byte_value = 3;
+      // Represents a int value.
+      int32 short_value = 4;
+      // Represents a int value.
+      int32 int_value = 5;
+      // Represents a long value.
+      int64 long_value = 6;
+      // Represents a float value.
+      float float_value = 7;
+      // Represents a double value.
+      double double_value = 8;
+      // Represents a string value.
+      string string_value = 9;
+      // Represents a Guid value.
+      bytes guid_value = 10;
+      // Represents a Timestamp value.
+      google.protobuf.Timestamp datetime_value = 11;
+      // Represents a Timestamp value.
+      google.protobuf.Timestamp datetimeoffset_value = 12;
+    }
+  }
+  // [END messages]
+  ```
+
+- Complex Primary Key schema:
+  ```protobuf
+  // [START declaration]
+  syntax = "proto3";
+  package storage;
+  
+  import "GenericValue.proto";
+  // [END declaration]
+  
+  // [START java_declaration]
+  option java_multiple_files = true;
+  option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
+  option java_outer_classname = "KeyContainer";
+  // [END java_declaration]
+  
+  // [START csharp_declaration]
+  option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage";
+  // [END csharp_declaration]
+  
+  // [START messages]
+  message PrimaryKeyType {
+    repeated GenericValue values = 1; 
+  }
+  
+  // Our address book file is just one of these.
+  message KeyContainer {
+    PrimaryKeyType PrimaryKey = 1;
+  }
+  // [END messages]
+  ```
+
+
+- ValueContainer schema:
+  ```protobuf
+  // [START declaration]
+  syntax = "proto3";
+  package storage;
+  
+  import "GenericValue.proto";
+  // [END declaration]
+  
+  // [START java_declaration]
+  option java_multiple_files = true;
+  option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
+  option java_outer_classname = "ValueContainer";
+  // [END java_declaration]
+  
+  // [START csharp_declaration]
+  option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage";
+  // [END csharp_declaration]
+  
+  // [START messages]
+  message PropertyDataRecord {
+    int32 PropertyIndex = 1;
+    string PropertyName = 2; 
+    string ClrType = 3;
+    GenericValue Value = 4;
+  }
+  
+  // Our address book file is just one of these.
+  message ValueContainer {
+    string EntityName = 1;
+    string ClrType = 2;
+    repeated PropertyDataRecord Data = 3;
+  }
+  // [END messages]
+  ```
+
+The extension converted this schema into code to speedup the exection of serialization/deserialization operations.
+
+### How to use Protobuf 
+
+`KafkaDbContext` contains three properties can be used to override the default types:
+- **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes.Key<>`, the type automatically manages simple or complex Primary Key
+- **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer<>`
+- **ValueContainerType**: set this value to `ProtobufValueContainer<>`
+
+An example is:
+
+```C#
+using (context = new BloggingContext()
+{
+    BootstrapServers = "KAFKA-SERVER:9092",
+    ApplicationId = "MyAppid",
+    DbName = "MyDBName",
+    KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key<>),
+    ValueContainerType = typeof(ProtobufValueContainer<>),
+    ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer<>),
+})
+{
+	// execute stuff here
+}
+```

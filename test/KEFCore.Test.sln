@@ -33,6 +33,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kefcoreAppWithEvents", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "templatepack", "..\src\net\templates\templatepack.csproj", "{B18081C0-E85F-4228-8150-E7EDD4794BEB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Protobuf", "..\src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj", "{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.Benchmark.Protobuf.Test", "KEFCore.Benchmark.Protobuf.Test\KEFCore.Benchmark.Protobuf.Test.csproj", "{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{B18081C0-E85F-4228-8150-E7EDD4794BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B18081C0-E85F-4228-8150-E7EDD4794BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B18081C0-E85F-4228-8150-E7EDD4794BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +116,8 @@ Global
 		{ECB20F1B-A86D-4CB1-953B-B7C42E9FC1CD} = {68A75218-B566-4DF6-8BFF-586B7C3E7ED6}
 		{EEF483DF-8DDB-474D-8135-2762014F9438} = {68A75218-B566-4DF6-8BFF-586B7C3E7ED6}
 		{B18081C0-E85F-4228-8150-E7EDD4794BEB} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
+		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
+		{6ED46BF0-B004-41BF-9BED-1752A2D6DEC5} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36C294ED-9ECE-42AA-8273-31E008749AF3}

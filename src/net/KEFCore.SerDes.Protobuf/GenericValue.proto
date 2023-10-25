@@ -1,0 +1,58 @@
+// See README.md for information and build instructions.
+//
+// Note: START and END tags are used in comments to define sections used in
+// tutorials.  They are not part of the syntax for Protocol Buffers.
+//
+// To get an in-depth walkthrough of this file and the related examples, see:
+// https://developers.google.com/protocol-buffers/docs/tutorials
+
+// [START declaration]
+syntax = "proto3";
+package storage;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+// [END declaration]
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
+option java_outer_classname = "GenericValue";
+// [END java_declaration]
+
+// [START csharp_declaration]
+option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage";
+// [END csharp_declaration]
+
+// [START messages]
+// Our address book file is just one of these.
+message GenericValue {
+  // The kind of value.
+  oneof kind {
+    // Represents a null value.
+    google.protobuf.NullValue null_value = 1;
+    // Represents a boolean value.
+    bool bool_value = 2;
+    // Represents a int value.
+    int32 byte_value = 3;
+    // Represents a int value.
+    int32 short_value = 4;
+    // Represents a int value.
+    int32 int_value = 5;
+    // Represents a long value.
+    int64 long_value = 6;
+    // Represents a float value.
+    float float_value = 7;
+    // Represents a double value.
+    double double_value = 8;
+    // Represents a string value.
+    string string_value = 9;
+    // Represents a Guid value.
+    bytes guid_value = 10;
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetime_value = 11;
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetimeoffset_value = 12;
+  }
+}
+// [END messages]

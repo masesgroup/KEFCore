@@ -8,7 +8,7 @@
 		<Description>EntityFrameworkCore KNet - Avro Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Serialization.Avro</Product>
 		<OutputPath>..\..\..\bin\</OutputPath>
-		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<PackageTags>Avro;Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization.Avro</PackageId>
 		<PackageReadmeFile>serialization.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
