@@ -59,9 +59,9 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
-		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
-		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
-		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Storage *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
+		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
+		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
+		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
+		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
 	</Target>
 </Project>

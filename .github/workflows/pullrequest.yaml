@@ -57,6 +57,11 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
+        # the compilation of files made during prebuild event are not considered from project build, the task will fail but creates the files
+      - name: Prebuild to create local files
+        continue-on-error: true 
+        run: dotnet build src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj
+
       - name: Compile
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
