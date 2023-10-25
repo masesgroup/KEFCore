@@ -60,6 +60,10 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
+        # the compilation of files made during prebuild event are not considered from project build
+      - name: Prebuild to create local files 
+        run: dotnet build src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj
+
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
