@@ -82,9 +82,9 @@ The code is based on three elements shall be available to [Entity Framework Core
 ### Default types
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) comes with some default values:
-- **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
-- **Key SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.Key.Json<T>`, the type automatically manages simple or complex Primary Key
-- **ValueContainer SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.ValueContainer.Json<>`
+- **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainer`) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
+- **Key SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.Key.Json<T>` (i.e. `DefaultKEFCoreSerDes.DefaultKeySerialization`), the type automatically manages simple or complex Primary Key
+- **ValueContainer SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.ValueContainer.Json<>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainerSerialization`)
 
 ### User override
 
@@ -338,9 +338,9 @@ The extension converted this schema into code to speedup the exection of seriali
 ### How to use Avro 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
-- **KeySerializationType**: set this value to `AvroKEFCoreSerDes.Key.Binary<>` or `AvroKEFCoreSerDes.Key.Json<>`, both types automatically manages simple or complex Primary Key
-- **ValueSerializationType**: set this value to `AvroKEFCoreSerDes.ValueContainer.Binary<>` or `AvroKEFCoreSerDes.ValueContainer.Json<>`
-- **ValueContainerType**: set this value to `AvroValueContainer<>`
+- **KeySerializationType**: set this value to `AvroKEFCoreSerDes.Key.Binary<>` or `AvroKEFCoreSerDes.Key.Json<>` or use `AvroKEFCoreSerDes.DefaultKeySerialization` (defaults to `AvroKEFCoreSerDes.Key.Binary<>`), both types automatically manages simple or complex Primary Key
+- **ValueSerializationType**: set this value to `AvroKEFCoreSerDes.ValueContainer.Binary<>` or `AvroKEFCoreSerDes.ValueContainer.Json<>` or use `AvroKEFCoreSerDes.DefaultValueContainerSerialization` (defaults to `AvroKEFCoreSerDes.ValueContainer.Binary<>`)
+- **ValueContainerType**: set this value to `AvroValueContainer<>` or use `AvroKEFCoreSerDes.DefaultValueContainer`
 
 An example is:
 
@@ -494,9 +494,9 @@ The extension converted this schema into code to speedup the exection of seriali
 ### How to use Protobuf 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
-- **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes.Key<>`, the type automatically manages simple or complex Primary Key
-- **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer<>`
-- **ValueContainerType**: set this value to `ProtobufValueContainer<>`
+- **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes..Key.Binary<>` or use `ProtobufKEFCoreSerDes.DefaultKeySerialization`, the type automatically manages simple or complex Primary Key
+- **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer.Binary<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainerSerialization`
+- **ValueContainerType**: set this value to `ProtobufValueContainer<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainer`
 
 An example is:
 
