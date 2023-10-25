@@ -23,6 +23,10 @@
  */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -58,6 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
             if (args.Length > 0)
             {
+                if (!File.Exists(args[0])) ReportString($"{args[0]} is not a configuration file.");
                 config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
             }
 
@@ -80,7 +85,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
                 }
 
-
                 using (context = new BloggingContext()
                 {
                     BootstrapServers = config.BootstrapServers,
@@ -89,6 +93,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     StreamsConfig = streamConfig,
                 })
                 {
+                    if (config.UseProtobuf)
+                    {
+                        context.KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key.Binary<>);
+                        context.ValueContainerType = typeof(ProtobufValueContainer<>);
+                        context.ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer.Binary<>);
+                    }
+                    else if (config.UseAvro)
+                    {
+                        context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                        context.ValueContainerType = typeof(AvroValueContainer<>);
+                        context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+                    }
 
                     if (config.DeleteApplicationData)
                     {
@@ -144,6 +160,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         StreamsConfig = streamConfig,
                     })
                     {
+                        if (config.UseProtobuf)
+                        {
+                            context.KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key.Binary<>);
+                            context.ValueContainerType = typeof(ProtobufValueContainer<>);
+                            context.ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer.Binary<>);
+                        }
+                        else if (config.UseAvro)
+                        {
+                            context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                            context.ValueContainerType = typeof(AvroValueContainer<>);
+                            context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+                        }
+
                         Stopwatch watch = new Stopwatch();
                         watch.Restart();
                         var post = context.Posts.Single(b => b.BlogId == 2);
