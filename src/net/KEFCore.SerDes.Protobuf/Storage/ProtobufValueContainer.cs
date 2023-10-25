@@ -22,7 +22,6 @@
 
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
-using Google.Protobuf.WellKnownTypes;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 
@@ -142,5 +141,15 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             props.Add(_innerMessage.Data[i].PropertyIndex, _innerMessage.Data[i].PropertyName);
         }
         return props;
+    }
+    /// <inheritdoc/>
+    public override bool Equals(object obj)
+    {
+        return _innerMessage.Equals((obj as ProtobufValueContainer<TKey>)?._innerMessage);
+    }
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return _innerMessage.GetHashCode();
     }
 }

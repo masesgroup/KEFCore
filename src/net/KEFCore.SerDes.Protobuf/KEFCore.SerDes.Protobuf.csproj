@@ -48,7 +48,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\KEFCore.SerDes\KEFCore.SerDes.csproj" />
 		<PackageReference Include="Google.Protobuf" Version="3.24.4" />
-		<PackageReference Include="Google.Protobuf.Tools" Version="3.24.4" />
+		<PackageReference Include="Google.Protobuf.Tools" Version="3.24.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
