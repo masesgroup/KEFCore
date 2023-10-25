@@ -33,8 +33,8 @@ class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializ
     where TKeySerializer : class, new()
     where TValueSerializer : class, new()
 {
-    private readonly IKNetSerDes<TKey> _keySerdes;
-    private readonly IKNetSerDes<TValueContainer> _valueSerdes;
+    private readonly IKNetSerDes<TKey>? _keySerdes;
+    private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
 
     public LocalEntityExtractor()
     {

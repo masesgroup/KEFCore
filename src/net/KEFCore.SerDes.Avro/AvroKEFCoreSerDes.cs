@@ -81,7 +81,11 @@ public static class AvroKEFCoreSerDes
                 using MemoryStream memStream = new();
                 BinaryEncoder encoder = new(memStream);
                 var container = new AvroKeyContainer();
-                container.PrimaryKey = new List<object>(data as object[]);
+                if (data is object[] dataArray)
+                {
+                    container.PrimaryKey = new List<object>(dataArray);
+                }
+                else throw new InvalidDataException($"Cannot manage inputs different from object[], input is {data?.GetType()}");
                 SpecificWriter.Write(container, encoder);
                 return memStream.ToArray();
             }
