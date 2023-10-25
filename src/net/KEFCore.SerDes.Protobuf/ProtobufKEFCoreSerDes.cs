@@ -74,7 +74,7 @@ public static class ProtobufKEFCoreSerDes
             {
                 keyContainer = new KeyContainer(dataArray);
             }
-
+            
             using MemoryStream stream = new();
             keyContainer.WriteTo(stream);
             return stream.ToArray();

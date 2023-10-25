@@ -60,9 +60,6 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
-      - name: Restore nuget packages
-        run: dotnet restore src\net\KEFCore.sln -v diag
-
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
