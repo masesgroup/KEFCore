@@ -30,21 +30,21 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 /// The default ValueContainer used from KEFCore
 /// </summary>
 /// <typeparam name="TKey">It is the key <see cref="Type"/> passed from Entity Framework associated to the Entity data will be stored in the <see cref="ProtobufValueContainer{TKey}"/></typeparam>
-public partial class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey>>, IValueContainer<TKey>
+public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey>>, IValueContainer<TKey>
     where TKey : notnull
 {
-    readonly ProtobufValueContainer _innerMessage;
+    readonly ValueContainer _innerMessage;
 
     /// <summary>
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
     /// <remarks>It is mainly used from the JSON serializer</remarks>
-    public ProtobufValueContainer() { _innerMessage = new ProtobufValueContainer(); _innerMessage.EntityName = _innerMessage.ClrType = null!; }
+    public ProtobufValueContainer() { _innerMessage = new ValueContainer(); _innerMessage.EntityName = _innerMessage.ClrType = null!; }
     /// <summary>
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
     /// <remarks>It is mainly used from the JSON serializer</remarks>
-    public ProtobufValueContainer(ProtobufValueContainer clone) { _innerMessage = clone; }
+    public ProtobufValueContainer(ValueContainer clone) { _innerMessage = clone.Clone(); }
     /// <summary>
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
@@ -58,7 +58,7 @@ public partial class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContai
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="ProtobufValueContainer{TKey}"/></remarks>
     public ProtobufValueContainer(IEntityType tName, object[] rData)
     {
-        _innerMessage = new ProtobufValueContainer
+        _innerMessage = new ValueContainer
         {
             EntityName = tName.Name,
             ClrType = tName.ClrType.FullName!
@@ -86,7 +86,7 @@ public partial class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContai
     /// <inheritdoc/>
     public int CalculateSize() => _innerMessage.CalculateSize();
     /// <inheritdoc/>
-    public ProtobufValueContainer<TKey> Clone() => new ProtobufValueContainer<TKey>(this);
+    public ProtobufValueContainer<TKey> Clone() => new(this);
     /// <inheritdoc/>
     public bool Equals(ProtobufValueContainer<TKey>? other) => _innerMessage.Equals(other);
     /// <inheritdoc/>

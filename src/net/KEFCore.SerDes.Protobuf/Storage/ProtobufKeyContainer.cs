@@ -45,17 +45,17 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         }
     }
 
-    public sealed partial class ProtobufKeyContainer
+    public sealed partial class KeyContainer
     {
         /// <summary>
         /// Initializer
         /// </summary>
-        public ProtobufKeyContainer(params object[] input)
+        public KeyContainer(params object[] input)
         {
             PrimaryKey = new PrimaryKeyType(input);
         }
         /// <summary>
-        /// Returns the content of <see cref="ProtobufKeyContainer"/>
+        /// Returns the content of <see cref="KeyContainer"/>
         /// </summary>
         public object GetContent()
         {

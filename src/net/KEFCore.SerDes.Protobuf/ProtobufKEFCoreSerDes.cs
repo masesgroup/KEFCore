@@ -69,17 +69,15 @@ public static class ProtobufKEFCoreSerDes
             headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
 
             if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
-            ProtobufKeyContainer keyContainer = null!;
+            KeyContainer keyContainer = null!;
             if (data is object[] dataArray)
             {
-                keyContainer = new ProtobufKeyContainer(dataArray);
+                keyContainer = new KeyContainer(dataArray);
             }
 
-            using (MemoryStream stream = new())
-            {
-                keyContainer.WriteTo(stream);
-                return stream.ToArray();
-            }
+            using MemoryStream stream = new();
+            keyContainer.WriteTo(stream);
+            return stream.ToArray();
         }
         /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
         public override T Deserialize(string topic, byte[] data)
@@ -93,7 +91,7 @@ public static class ProtobufKEFCoreSerDes
 
             if (data == null) return default!;
 
-            ProtobufKeyContainer container = ProtobufKeyContainer.Parser.ParseFrom(data);
+            KeyContainer container = KeyContainer.Parser.ParseFrom(data);
 
             return (T)container.GetContent();
         }
@@ -156,7 +154,7 @@ public static class ProtobufKEFCoreSerDes
         public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
         {
             if (data == null) return default!;
-            var container = ProtobufValueContainer.Parser.ParseFrom(data);
+            var container = ValueContainer.Parser.ParseFrom(data);
             return (Activator.CreateInstance(typeof(T), container) as T)!;
         }
     }

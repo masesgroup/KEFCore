@@ -16,7 +16,7 @@ import "GenericValue.proto";
 // [START java_declaration]
 option java_multiple_files = true;
 option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
-option java_outer_classname = "ProtobufValueContainer";
+option java_outer_classname = "ValueContainer";
 // [END java_declaration]
 
 // [START csharp_declaration]
@@ -32,7 +32,7 @@ message PropertyDataRecord {
 }
 
 // Our address book file is just one of these.
-message ProtobufValueContainer {
+message ValueContainer {
   string EntityName = 1;
   string ClrType = 2;
   repeated PropertyDataRecord Data = 3;

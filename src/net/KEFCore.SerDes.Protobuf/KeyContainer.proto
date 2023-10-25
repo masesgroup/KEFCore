@@ -16,7 +16,7 @@ import "GenericValue.proto";
 // [START java_declaration]
 option java_multiple_files = true;
 option java_package = "mases.entityframeworkcore.knet.serialization.protobuf";
-option java_outer_classname = "ProtobufKeyContainer";
+option java_outer_classname = "KeyContainer";
 // [END java_declaration]
 
 // [START csharp_declaration]
@@ -29,7 +29,7 @@ message PrimaryKeyType {
 }
 
 // Our address book file is just one of these.
-message ProtobufKeyContainer {
+message KeyContainer {
   PrimaryKeyType PrimaryKey = 1;
 }
 // [END messages]
