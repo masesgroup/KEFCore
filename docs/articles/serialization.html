@@ -149,9 +149,9 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <h3 id="default-types">Default types</h3>
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
 <ul>
-<li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
-<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code>, the type automatically manages simple or complex Primary Key</li>
-<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
+<li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainer</code>) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
+<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultKeySerialization</code>), the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainerSerialization</code>)</li>
 </ul>
 <h3 id="user-override">User override</h3>
 <p>The default serialization can be overridden with user defined <strong>ValueContainer</strong> class, <strong>Key SerDes</strong> or <strong>ValueContainer SerDes</strong>.</p>
@@ -393,9 +393,9 @@ The engine comes with two different encoders</p>
 <h3 id="how-to-use-avro">How to use Avro</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code>, both types automatically manages simple or complex Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
-<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultKeySerialization</code> (defaults to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code>), both types automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code>)</li>
+<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
@@ -539,9 +539,9 @@ message ValueContainer {
 <h3 id="how-to-use-protobuf">How to use Protobuf</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.Key&lt;&gt;</code>, the type automatically manages simple or complex Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer&lt;&gt;</code></li>
-<li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainer&lt;&gt;</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes..Key.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultKeySerialization</code>, the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
+<li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainer&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()

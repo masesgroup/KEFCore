@@ -4527,6 +4527,24 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes
   nameWithType: AvroKEFCoreSerDes
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultKeySerialization
+  name: DefaultKeySerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_AvroKEFCoreSerDes_DefaultKeySerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultKeySerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultKeySerialization
+  nameWithType: AvroKEFCoreSerDes.DefaultKeySerialization
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainer
+  name: DefaultValueContainer
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_AvroKEFCoreSerDes_DefaultValueContainer
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainer
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainer
+  nameWithType: AvroKEFCoreSerDes.DefaultValueContainer
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainerSerialization
+  name: DefaultValueContainerSerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_AvroKEFCoreSerDes_DefaultValueContainerSerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainerSerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.DefaultValueContainerSerialization
+  nameWithType: AvroKEFCoreSerDes.DefaultValueContainerSerialization
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key
   name: AvroKEFCoreSerDes.Key
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.html
@@ -5529,6 +5547,24 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes
   nameWithType: DefaultKEFCoreSerDes
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultKeySerialization
+  name: DefaultKeySerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_DefaultKEFCoreSerDes_DefaultKeySerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultKeySerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultKeySerialization
+  nameWithType: DefaultKEFCoreSerDes.DefaultKeySerialization
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainer
+  name: DefaultValueContainer
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_DefaultKEFCoreSerDes_DefaultValueContainer
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainer
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainer
+  nameWithType: DefaultKEFCoreSerDes.DefaultValueContainer
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainerSerialization
+  name: DefaultValueContainerSerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_DefaultKEFCoreSerDes_DefaultValueContainerSerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainerSerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.DefaultValueContainerSerialization
+  nameWithType: DefaultKEFCoreSerDes.DefaultValueContainerSerialization
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key
   name: DefaultKEFCoreSerDes.Key
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key.html
@@ -5983,232 +6019,262 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes
   nameWithType: ProtobufKEFCoreSerDes
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1
-  name: ProtobufKEFCoreSerDes.Key<T>
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1
-  name.vb: ProtobufKEFCoreSerDes.Key(Of T)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T)
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.#ctor
-  name: Key()
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1__ctor
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.#ctor
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Key()
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Key()
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Key()
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Key()
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.#ctor*
-  name: Key
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1__ctor_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.#ctor
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultKeySerialization
+  name: DefaultKeySerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_DefaultKeySerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultKeySerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultKeySerialization
+  nameWithType: ProtobufKEFCoreSerDes.DefaultKeySerialization
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainer
+  name: DefaultValueContainer
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_DefaultValueContainer
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainer
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainer
+  nameWithType: ProtobufKEFCoreSerDes.DefaultValueContainer
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainerSerialization
+  name: DefaultValueContainerSerialization
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_DefaultValueContainerSerialization
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainerSerialization
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.DefaultValueContainerSerialization
+  nameWithType: ProtobufKEFCoreSerDes.DefaultValueContainerSerialization
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key
+  name: ProtobufKEFCoreSerDes.Key
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key
+  nameWithType: ProtobufKEFCoreSerDes.Key
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1
+  name: ProtobufKEFCoreSerDes.Key.Binary<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1
+  name.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T)
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.#ctor
+  name: Binary()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1__ctor
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.#ctor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Binary()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Binary()
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Binary()
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Binary()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.#ctor*
+  name: Binary
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.#ctor
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Key
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Key
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Key
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Key
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Deserialize(System.String,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Binary
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Binary
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Binary
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Binary
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Deserialize(System.String,System.Byte[])
   name: Deserialize(String, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_Deserialize_System_String_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Deserialize(System.String,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Deserialize(System.String,System.Byte[])
   name.vb: Deserialize(String, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Deserialize(System.String, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Deserialize(System.String, System.Byte())
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Deserialize(String, Byte[])
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Deserialize(String, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Deserialize*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Deserialize(String, Byte[])
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Deserialize*
   name: Deserialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_Deserialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Deserialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Deserialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Deserialize
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Deserialize
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Deserialize
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Deserialize
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name: DeserializeWithHeaders(String, Headers, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name.vb: DeserializeWithHeaders(String, Headers, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.DeserializeWithHeaders(String, Headers, Byte[])
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).DeserializeWithHeaders(String, Headers, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.DeserializeWithHeaders*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.DeserializeWithHeaders*
   name: DeserializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_DeserializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.DeserializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.DeserializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).DeserializeWithHeaders
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.DeserializeWithHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).DeserializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).DeserializeWithHeaders
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.DeserializeWithHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Serialize(System.String,`0)
   name: Serialize(String, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_Serialize_System_String__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Serialize(System.String,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Serialize(System.String, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Serialize(System.String, T)
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Serialize(String, T)
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Serialize(String, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Serialize*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Serialize(System.String, T)
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Serialize(String, T)
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Serialize*
   name: Serialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_Serialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.Serialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.Serialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).Serialize
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.Serialize
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).Serialize
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.Serialize
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
   name: SerializeWithHeaders(String, Headers, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.SerializeWithHeaders(String, Headers, T)
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).SerializeWithHeaders(String, Headers, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.SerializeWithHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.SerializeWithHeaders*
   name: SerializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_SerializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.SerializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.SerializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).SerializeWithHeaders
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.SerializeWithHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).SerializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.UseHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).SerializeWithHeaders
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.SerializeWithHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).SerializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.UseHeaders
   name: UseHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_UseHeaders
-  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.UseHeaders
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.UseHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).UseHeaders
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.UseHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).UseHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.UseHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_UseHeaders
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.UseHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.UseHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).UseHeaders
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.UseHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).UseHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.UseHeaders*
   name: UseHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_1_UseHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key`1.UseHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_Key_Binary_1_UseHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary`1.UseHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>.UseHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key(Of T).UseHeaders
-  nameWithType: ProtobufKEFCoreSerDes.Key<T>.UseHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.Key(Of T).UseHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1
-  name: ProtobufKEFCoreSerDes.ValueContainer<T>
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1
-  name.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T)
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.#ctor
-  name: ValueContainer()
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1__ctor
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.#ctor
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.ValueContainer()
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).ValueContainer()
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.ValueContainer()
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).ValueContainer()
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.#ctor*
-  name: ValueContainer
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1__ctor_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.#ctor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary<T>.UseHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key.Binary(Of T).UseHeaders
+  nameWithType: ProtobufKEFCoreSerDes.Key.Binary<T>.UseHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.Key.Binary(Of T).UseHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer
+  name: ProtobufKEFCoreSerDes.ValueContainer
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1
+  name: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1
+  name.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T)
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.#ctor
+  name: Binary()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1__ctor
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.#ctor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Binary()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Binary()
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Binary()
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Binary()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.#ctor*
+  name: Binary
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.#ctor
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.ValueContainer
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).ValueContainer
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.ValueContainer
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).ValueContainer
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Deserialize(System.String,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Binary
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Binary
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Binary
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Binary
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Deserialize(System.String,System.Byte[])
   name: Deserialize(String, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_Deserialize_System_String_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Deserialize(System.String,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_Deserialize_System_String_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Deserialize(System.String,System.Byte[])
   name.vb: Deserialize(String, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.Deserialize(System.String, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).Deserialize(System.String, System.Byte())
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.Deserialize(String, Byte[])
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).Deserialize(String, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Deserialize*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Deserialize(System.String, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Deserialize(System.String, System.Byte())
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Deserialize(String, Byte[])
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Deserialize(String, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Deserialize*
   name: Deserialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_Deserialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Deserialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_Deserialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Deserialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.Deserialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).Deserialize
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.Deserialize
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).Deserialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Deserialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Deserialize
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Deserialize
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Deserialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name: DeserializeWithHeaders(String, Headers, Byte[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_DeserializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers_System_Byte___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.DeserializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,System.Byte[])
   name.vb: DeserializeWithHeaders(String, Headers, Byte())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.DeserializeWithHeaders(String, Headers, Byte[])
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).DeserializeWithHeaders(String, Headers, Byte())
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.DeserializeWithHeaders*
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).DeserializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, System.Byte())
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.DeserializeWithHeaders(String, Headers, Byte[])
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).DeserializeWithHeaders(String, Headers, Byte())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.DeserializeWithHeaders*
   name: DeserializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_DeserializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.DeserializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_DeserializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.DeserializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.DeserializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).DeserializeWithHeaders
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.DeserializeWithHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).DeserializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.DeserializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).DeserializeWithHeaders
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.DeserializeWithHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).DeserializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Serialize(System.String,`0)
   name: Serialize(String, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_Serialize_System_String__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Serialize(System.String,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.Serialize(System.String, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).Serialize(System.String, T)
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.Serialize(String, T)
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).Serialize(String, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Serialize*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_Serialize_System_String__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Serialize(System.String,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Serialize(System.String, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Serialize(System.String, T)
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Serialize(String, T)
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Serialize(String, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Serialize*
   name: Serialize
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_Serialize_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.Serialize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_Serialize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.Serialize
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.Serialize
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).Serialize
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.Serialize
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).Serialize
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Serialize
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Serialize
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.Serialize
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).Serialize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
   name: SerializeWithHeaders(String, Headers, T)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.SerializeWithHeaders(String, Headers, T)
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).SerializeWithHeaders(String, Headers, T)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.SerializeWithHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_SerializeWithHeaders_System_String_Org_Apache_Kafka_Common_Header_Headers__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.SerializeWithHeaders(System.String,Org.Apache.Kafka.Common.Header.Headers,`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).SerializeWithHeaders(System.String, Org.Apache.Kafka.Common.Header.Headers, T)
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.SerializeWithHeaders(String, Headers, T)
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).SerializeWithHeaders(String, Headers, T)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.SerializeWithHeaders*
   name: SerializeWithHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_SerializeWithHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.SerializeWithHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_SerializeWithHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.SerializeWithHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.SerializeWithHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).SerializeWithHeaders
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.SerializeWithHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).SerializeWithHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.UseHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.SerializeWithHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).SerializeWithHeaders
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.SerializeWithHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).SerializeWithHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.UseHeaders
   name: UseHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_UseHeaders
-  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.UseHeaders
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.UseHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).UseHeaders
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.UseHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).UseHeaders
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.UseHeaders*
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_UseHeaders
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.UseHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.UseHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).UseHeaders
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.UseHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).UseHeaders
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.UseHeaders*
   name: UseHeaders
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_1_UseHeaders_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer`1.UseHeaders
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_ProtobufKEFCoreSerDes_ValueContainer_Binary_1_UseHeaders_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary`1.UseHeaders
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>.UseHeaders
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer(Of T).UseHeaders
-  nameWithType: ProtobufKEFCoreSerDes.ValueContainer<T>.UseHeaders
-  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer(Of T).UseHeaders
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.UseHeaders
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).UseHeaders
+  nameWithType: ProtobufKEFCoreSerDes.ValueContainer.Binary<T>.UseHeaders
+  nameWithType.vb: ProtobufKEFCoreSerDes.ValueContainer.Binary(Of T).UseHeaders
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
   name: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html
