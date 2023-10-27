@@ -28,7 +28,7 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
-      - uses: nuget/setup-nuget@v1.1.1
+      - uses: nuget/setup-nuget@v1.2.0
         with:
           nuget-version: '5.x'
 
