@@ -69,7 +69,7 @@ jobs:
           path: .\bin\*nupkg
 
       - name: Clear documentation folder 
-        run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml
+        run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml,CNAME
 
       - name: Build documentation
         run: |
