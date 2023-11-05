@@ -1,822 +1,746 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class KeyContainer
-   | Kafka Bridge website </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class KeyContainer
-   | Kafka Bridge website ">
-    <meta name="generator" content="docfx 2.59.4.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>Class KeyContainer
+ | MASES Group website - Entity Framework Core provider for Apache Kafka </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class KeyContainer
+ | MASES Group website - Entity Framework Core provider for Apache Kafka ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-        </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer">
-  
-  
-  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer" class="text-break">Class KeyContainer
-  </h1>
-  <div class="markdown level0 summary"><p>Our address book file is just one of these.</p>
-</div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">KeyContainer</span></div>
-  </div>
-  <div class="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">Google.Protobuf.IMessage</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
-    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
-    <div><span class="xref">Google.Protobuf.IDeepCloneable</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
-    <div><span class="xref">Google.Protobuf.IBufferMessage</span></div>
-    <div><span class="xref">Google.Protobuf.IMessage</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone#system-object-memberwiseclone">Object.MemberwiseClone()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage</a></h6>
-  <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.dll</h6>
-  <h5 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class KeyContainer : IMessage&lt;KeyContainer&gt;, IEquatable&lt;KeyContainer&gt;, IDeepCloneable&lt;KeyContainer&gt;, IBufferMessage, IMessage</code></pre>
-  </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L252">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor">KeyContainer()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KeyContainer()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.%23ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L260">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">KeyContainer(KeyContainer)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KeyContainer(KeyContainer other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></td>
-        <td><span class="parametername">other</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_System_Object___.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.%23ctor(System.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufKeyContainer.cs/#L53">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor(System.Object[])">KeyContainer(Object[])</h4>
-  <div class="markdown level1 summary"><p>Initializer</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KeyContainer(params object[] input)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a>[]</td>
-        <td><span class="parametername">input</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="fields">Fields
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKeyFieldNumber.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKeyFieldNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L274">View Source</a>
-  </span>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKeyFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKeyFieldNumber">PrimaryKeyFieldNumber</h4>
-  <div class="markdown level1 summary"><p>Field number for the &quot;PrimaryKey&quot; field.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const int PrimaryKeyFieldNumber = 1</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Descriptor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Descriptor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L240">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Descriptor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Descriptor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Descriptor">Descriptor</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MessageDescriptor Descriptor { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.Reflection.MessageDescriptor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Parser.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Parser%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L236">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Parser_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Parser*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Parser" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Parser">Parser</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static MessageParser&lt;KeyContainer&gt; Parser { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.MessageParser</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKey.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKey%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L276">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKey_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKey*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKey" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKey">PrimaryKey</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PrimaryKeyType PrimaryKey { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PrimaryKeyType.html">PrimaryKeyType</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_CalculateSize.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.CalculateSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L351">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_CalculateSize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.CalculateSize*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_CalculateSize" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.CalculateSize">CalculateSize()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int CalculateSize()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Clone.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L267">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Clone_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Clone*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Clone" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Clone">Clone()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KeyContainer Clone()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L291">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">Equals(KeyContainer)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Equals(KeyContainer other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></td>
-        <td><span class="parametername">other</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_System_Object_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L285">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(System.Object)">Equals(Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Equals(object other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
-        <td><span class="parametername">other</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Object.Equals(Object)</a></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetContent.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetContent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufKeyContainer.cs/#L60">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetContent_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetContent*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetContent" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetContent">GetContent()</h4>
-  <div class="markdown level1 summary"><p>Returns the content of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public object GetContent()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetHashCode.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L304">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetHashCode_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetHashCode*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetHashCode" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetHashCode">GetHashCode()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode#system-object-gethashcode">Object.GetHashCode()</a></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_Google_Protobuf_CodedInputStream_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(Google.Protobuf.CodedInputStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L379">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_Google_Protobuf_CodedInputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(Google.Protobuf.CodedInputStream)">MergeFrom(CodedInputStream)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void MergeFrom(CodedInputStream input)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.CodedInputStream</span></td>
-        <td><span class="parametername">input</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L364">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">MergeFrom(KeyContainer)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void MergeFrom(KeyContainer other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></td>
-        <td><span class="parametername">other</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_ToString.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L315">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_ToString_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.ToString*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_ToString" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.ToString">ToString()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring#system-object-tostring">Object.ToString()</a></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_WriteTo_Google_Protobuf_CodedOutputStream_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.WriteTo(Google.Protobuf.CodedOutputStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L321">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_WriteTo_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.WriteTo*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_WriteTo_Google_Protobuf_CodedOutputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.WriteTo(Google.Protobuf.CodedOutputStream)">WriteTo(CodedOutputStream)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void WriteTo(CodedOutputStream output)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.CodedOutputStream</span></td>
-        <td><span class="parametername">output</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="eii">Explicit Interface Implementations
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalMergeFrom_Google_Protobuf_ParseContext__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google%23Protobuf%23IBufferMessage%23InternalMergeFrom(Google.Protobuf.ParseContext%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L404">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalMergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IBufferMessage#InternalMergeFrom*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalMergeFrom_Google_Protobuf_ParseContext__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IBufferMessage#InternalMergeFrom(Google.Protobuf.ParseContext@)">IBufferMessage.InternalMergeFrom(ref ParseContext)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void IBufferMessage.InternalMergeFrom(ref ParseContext input)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.ParseContext</span></td>
-        <td><span class="parametername">input</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalWriteTo_Google_Protobuf_WriteContext__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google%23Protobuf%23IBufferMessage%23InternalWriteTo(Google.Protobuf.WriteContext%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L338">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalWriteTo_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IBufferMessage#InternalWriteTo*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IBufferMessage_InternalWriteTo_Google_Protobuf_WriteContext__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IBufferMessage#InternalWriteTo(Google.Protobuf.WriteContext@)">IBufferMessage.InternalWriteTo(ref WriteContext)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void IBufferMessage.InternalWriteTo(ref WriteContext output)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.WriteContext</span></td>
-        <td><span class="parametername">output</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IMessage_Descriptor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google%23Protobuf%23IMessage%23Descriptor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Generated/KeyContainer.cs/#L246">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IMessage_Descriptor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IMessage#Descriptor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Google_Protobuf_IMessage_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Google#Protobuf#IMessage#Descriptor">IMessage.Descriptor</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">MessageDescriptor IMessage.Descriptor { get; }</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Google.Protobuf.Reflection.MessageDescriptor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">Google.Protobuf.IMessage&lt;T&gt;</span>
-  </div>
-  <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">System.IEquatable&lt;T&gt;</a>
-  </div>
-  <div>
-      <span class="xref">Google.Protobuf.IDeepCloneable&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">Google.Protobuf.IBufferMessage</span>
-  </div>
-  <div>
-      <span class="xref">Google.Protobuf.IMessage</span>
-  </div>
-</article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufKeyContainer.cs/#L48" class="contribution-link">View Source</a>
-                  </li>
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
-            
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-      </footer>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer" class="text-break">
+    Class KeyContainer
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Storage\ProtobufKeyContainer.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.html">Serialization</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.html">Protobuf</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html">Storage</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Our address book file is just one of these.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class KeyContainer : IMessage&lt;KeyContainer&gt;, IEquatable&lt;KeyContainer&gt;, IDeepCloneable&lt;KeyContainer&gt;, IBufferMessage, IMessage</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">KeyContainer</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><span class="xref">IMessage</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
+      <div><span class="xref">IDeepCloneable</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</div>
+      <div><span class="xref">IBufferMessage</span></div>
+      <div><span class="xref">IMessage</span></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor">
+  KeyContainer()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L252"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyContainer()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">
+  KeyContainer(KeyContainer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L260"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyContainer(KeyContainer other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__ctor_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.#ctor(System.Object[])">
+  KeyContainer(params object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Storage\ProtobufKeyContainer.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializer</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyContainer(params object[] input)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>input</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKeyFieldNumber" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKeyFieldNumber">
+  PrimaryKeyFieldNumber
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L274"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Field number for the &quot;PrimaryKey&quot; field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int PrimaryKeyFieldNumber = 1</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Descriptor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Descriptor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Descriptor">
+  Descriptor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L240"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MessageDescriptor Descriptor { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">MessageDescriptor</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Parser_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Parser*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Parser" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Parser">
+  Parser
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L236"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MessageParser&lt;KeyContainer&gt; Parser { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">MessageParser</span>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKey_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKey*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_PrimaryKey" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.PrimaryKey">
+  PrimaryKey
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L276"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PrimaryKeyType PrimaryKey { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PrimaryKeyType.html">PrimaryKeyType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_CalculateSize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.CalculateSize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_CalculateSize" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.CalculateSize">
+  CalculateSize()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L351"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calculates the size of this message in Protocol Buffer wire format, in bytes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CalculateSize()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The number of bytes required to write this message
+to a coded output stream.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Clone_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Clone*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Clone" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Clone">
+  Clone()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L267"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a deep clone of this object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyContainer Clone()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></dt>
+    <dd><p>A deep clone of this object.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">
+  Equals(KeyContainer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L291"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Equals(KeyContainer other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></dt>
+    <dd><p>An object to compare with this object.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the current object is equal to the <code class="paramref">other</code> parameter; otherwise, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_Equals_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.Equals(System.Object)">
+  Equals(object)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L285"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Determines whether the specified object is equal to the current object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the specified object  is equal to the current object; otherwise, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetContent_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetContent*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetContent" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetContent">
+  GetContent()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Storage\ProtobufKeyContainer.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the content of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object GetContent()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetHashCode_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetHashCode*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_GetHashCode" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.GetHashCode">
+  GetHashCode()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L304"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Serves as the default hash function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>A hash code for the current object.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_Google_Protobuf_CodedInputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(Google.Protobuf.CodedInputStream)">
+  MergeFrom(CodedInputStream)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L379"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Merges the data from the specified coded input stream with the current message.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MergeFrom(CodedInputStream input)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>input</code> <span class="xref">CodedInputStream</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_Google_Protobuf_CodedInputStream__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See the user guide for precise merge semantics.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer)">
+  MergeFrom(KeyContainer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L364"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Merges the given message into this one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MergeFrom(KeyContainer other)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>other</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html">KeyContainer</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See the user guide for precise merge semantics.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_ToString_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.ToString*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_ToString" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.ToString">
+  ToString()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L315"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns a string that represents the current object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>A string that represents the current object.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_WriteTo_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.WriteTo*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_KeyContainer_WriteTo_Google_Protobuf_CodedOutputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.WriteTo(Google.Protobuf.CodedOutputStream)">
+  WriteTo(CodedOutputStream)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Generated\KeyContainer.cs/#L321"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Writes the data to the given coded output stream.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteTo(CodedOutputStream output)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>output</code> <span class="xref">CodedOutputStream</span></dt>
+    <dd><p>Coded output stream to write the data to. Must not be null.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore.SerDes.Protobuf\Storage\ProtobufKeyContainer.cs/#L48" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Copyright © 2023 MASES s.r.l.. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</span>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

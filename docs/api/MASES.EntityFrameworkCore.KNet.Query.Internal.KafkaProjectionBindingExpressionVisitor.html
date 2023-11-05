@@ -1,792 +1,794 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class KafkaProjectionBindingExpressionVisitor
-   | Kafka Bridge website </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class KafkaProjectionBindingExpressionVisitor
-   | Kafka Bridge website ">
-    <meta name="generator" content="docfx 2.59.4.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>Class KafkaProjectionBindingExpressionVisitor
+ | MASES Group website - Entity Framework Core provider for Apache Kafka </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class KafkaProjectionBindingExpressionVisitor
+ | MASES Group website - Entity Framework Core provider for Apache Kafka ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor">
-  
-  
-  <h1 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor" class="text-break">Class KafkaProjectionBindingExpressionVisitor
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor" class="text-break">
+    Class KafkaProjectionBindingExpressionVisitor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h1>
-  <div class="markdown level0 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.html">Query</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">Internal</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
 any release. You should only use it directly in your code with extreme caution and knowing that
 doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">KafkaProjectionBindingExpressionVisitor</span></div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">MASES.EntityFrameworkCore.KNet.Query.Internal</a></h6>
-  <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
-  <h5 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_syntax">Syntax</h5>
+  <div class="markdown conceptual"></div>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor__ctor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaExpressionTranslatingExpressionVisitor_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.%23ctor(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor%2CMASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L45">View Source</a>
-  </span>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor">ExpressionVisitor</a></div>
+      <div><span class="xref">KafkaProjectionBindingExpressionVisitor</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visit#system-linq-expressions-expressionvisitor-visit(system-collections-objectmodel-readonlycollection((system-linq-expressions-expression)))">ExpressionVisitor.Visit(ReadOnlyCollection&lt;Expression&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitandconvert#system-linq-expressions-expressionvisitor-visitandconvert-1(system-collections-objectmodel-readonlycollection((-0))-system-string)">ExpressionVisitor.VisitAndConvert&lt;T&gt;(ReadOnlyCollection&lt;T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitandconvert#system-linq-expressions-expressionvisitor-visitandconvert-1(-0-system-string)">ExpressionVisitor.VisitAndConvert&lt;T&gt;(T, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitblock">ExpressionVisitor.VisitBlock(BlockExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitcatchblock">ExpressionVisitor.VisitCatchBlock(CatchBlock)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitconstant">ExpressionVisitor.VisitConstant(ConstantExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitdebuginfo">ExpressionVisitor.VisitDebugInfo(DebugInfoExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitdefault">ExpressionVisitor.VisitDefault(DefaultExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitdynamic">ExpressionVisitor.VisitDynamic(DynamicExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitgoto">ExpressionVisitor.VisitGoto(GotoExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitindex">ExpressionVisitor.VisitIndex(IndexExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitinvocation">ExpressionVisitor.VisitInvocation(InvocationExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitlabel">ExpressionVisitor.VisitLabel(LabelExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitlabeltarget">ExpressionVisitor.VisitLabelTarget(LabelTarget)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitlambda">ExpressionVisitor.VisitLambda&lt;T&gt;(Expression&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitlistinit">ExpressionVisitor.VisitListInit(ListInitExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitloop">ExpressionVisitor.VisitLoop(LoopExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitmemberbinding">ExpressionVisitor.VisitMemberBinding(MemberBinding)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitmemberlistbinding">ExpressionVisitor.VisitMemberListBinding(MemberListBinding)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitmembermemberbinding">ExpressionVisitor.VisitMemberMemberBinding(MemberMemberBinding)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitparameter">ExpressionVisitor.VisitParameter(ParameterExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitruntimevariables">ExpressionVisitor.VisitRuntimeVariables(RuntimeVariablesExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitswitch">ExpressionVisitor.VisitSwitch(SwitchExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitswitchcase">ExpressionVisitor.VisitSwitchCase(SwitchCase)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visittry">ExpressionVisitor.VisitTry(TryExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visittypebinary">ExpressionVisitor.VisitTypeBinary(TypeBinaryExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visit#system-linq-expressions-expressionvisitor-visit-1(system-collections-objectmodel-readonlycollection((-0))-system-func((-0-0)))">ExpressionVisitor.Visit&lt;T&gt;(ReadOnlyCollection&lt;T&gt;, Func&lt;T, T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.#ctor*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor__ctor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaExpressionTranslatingExpressionVisitor_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.#ctor(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor,MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor)">KafkaProjectionBindingExpressionVisitor(KafkaQueryableMethodTranslatingExpressionVisitor, KafkaExpressionTranslatingExpressionVisitor)</h4>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor__ctor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaExpressionTranslatingExpressionVisitor_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.#ctor(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor,MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor)">
+  KafkaProjectionBindingExpressionVisitor(KafkaQueryableMethodTranslatingExpressionVisitor, KafkaExpressionTranslatingExpressionVisitor)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public KafkaProjectionBindingExpressionVisitor(KafkaQueryableMethodTranslatingExpressionVisitor queryableMethodTranslatingExpressionVisitor, KafkaExpressionTranslatingExpressionVisitor expressionTranslatingExpressionVisitor)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html">KafkaQueryableMethodTranslatingExpressionVisitor</a></td>
-        <td><span class="parametername">queryableMethodTranslatingExpressionVisitor</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.html">KafkaExpressionTranslatingExpressionVisitor</a></td>
-        <td><span class="parametername">expressionTranslatingExpressionVisitor</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Translate_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryExpression_Expression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Translate(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression%2CExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L54">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryableMethodTranslatingExpressionVisitor</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html">KafkaQueryableMethodTranslatingExpressionVisitor</a></dt>
+    <dd></dd>
+    <dt><code>expressionTranslatingExpressionVisitor</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.html">KafkaExpressionTranslatingExpressionVisitor</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Translate_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Translate*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Translate_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryExpression_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Translate(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression,Expression)">Translate(KafkaQueryExpression, Expression)</h4>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Translate_MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryExpression_System_Linq_Expressions_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Translate(MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression,System.Linq.Expressions.Expression)">
+  Translate(KafkaQueryExpression, Expression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual Expression Translate(KafkaQueryExpression queryExpression, Expression expression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.html">KafkaQueryExpression</a></td>
-        <td><span class="parametername">queryExpression</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td><span class="parametername">expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Visit_System_Nullable_Expression__.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Visit(System.Nullable%7BExpression%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L87">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>queryExpression</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.html">KafkaQueryExpression</a></dt>
+    <dd></dd>
+    <dt><code>expression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Visit_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Visit*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Visit_System_Nullable_Expression__" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Visit(System.Nullable{Expression})">Visit(Nullable&lt;Expression&gt;)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_Visit_System_Linq_Expressions_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.Visit(System.Linq.Expressions.Expression)">
+  Visit(Expression?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Dispatches the expression to one of the more specialized visit methods in this class.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override Expression? Visit(Expression? expression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<span class="xref">Expression</span>&gt;</td>
-        <td><span class="parametername">expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<span class="xref">Expression</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitBinary_BinaryExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitBinary(BinaryExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L210">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>expression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitBinary_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitBinary*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitBinary_BinaryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitBinary(BinaryExpression)">VisitBinary(BinaryExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitBinary_System_Linq_Expressions_BinaryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitBinary(System.Linq.Expressions.BinaryExpression)">
+  VisitBinary(BinaryExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L210"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.binaryexpression">BinaryExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitBinary(BinaryExpression binaryExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">BinaryExpression</span></td>
-        <td><span class="parametername">binaryExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitConditional_ConditionalExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitConditional(ConditionalExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L218">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>binaryExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.binaryexpression">BinaryExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitConditional_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitConditional*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitConditional_ConditionalExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitConditional(ConditionalExpression)">VisitConditional(ConditionalExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitConditional_System_Linq_Expressions_ConditionalExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitConditional(System.Linq.Expressions.ConditionalExpression)">
+  VisitConditional(ConditionalExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L218"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.conditionalexpression">ConditionalExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitConditional(ConditionalExpression conditionalExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">ConditionalExpression</span></td>
-        <td><span class="parametername">conditionalExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitElementInit_ElementInit_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitElementInit(ElementInit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L278">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>conditionalExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.conditionalexpression">ConditionalExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitElementInit_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitElementInit*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitElementInit_ElementInit_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitElementInit(ElementInit)">VisitElementInit(ElementInit)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitElementInit_System_Linq_Expressions_ElementInit_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitElementInit(System.Linq.Expressions.ElementInit)">
+  VisitElementInit(ElementInit)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L278"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.elementinit">ElementInit</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override ElementInit VisitElementInit(ElementInit elementInit)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">ElementInit</span></td>
-        <td><span class="parametername">elementInit</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">ElementInit</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitExtension_Expression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitExtension(Expression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L235">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>elementInit</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.elementinit">ElementInit</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.elementinit">ElementInit</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitExtension*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitExtension_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitExtension(Expression)">VisitExtension(Expression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitExtension_System_Linq_Expressions_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitExtension(System.Linq.Expressions.Expression)">
+  VisitExtension(Expression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L235"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the extension expression.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitExtension(Expression extensionExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td><span class="parametername">extensionExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMember_MemberExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMember(MemberExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L281">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>extensionExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMember_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMember*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMember_MemberExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMember(MemberExpression)">VisitMember(MemberExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMember_System_Linq_Expressions_MemberExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMember(System.Linq.Expressions.MemberExpression)">
+  VisitMember(MemberExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L281"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberexpression">MemberExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitMember(MemberExpression memberExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MemberExpression</span></td>
-        <td><span class="parametername">memberExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberAssignment_MemberAssignment_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberAssignment(MemberAssignment)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L304">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>memberExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberexpression">MemberExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberAssignment_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberAssignment*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberAssignment_MemberAssignment_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberAssignment(MemberAssignment)">VisitMemberAssignment(MemberAssignment)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberAssignment_System_Linq_Expressions_MemberAssignment_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberAssignment(System.Linq.Expressions.MemberAssignment)">
+  VisitMemberAssignment(MemberAssignment)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L304"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberassignment">MemberAssignment</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override MemberAssignment VisitMemberAssignment(MemberAssignment memberAssignment)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MemberAssignment</span></td>
-        <td><span class="parametername">memberAssignment</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MemberAssignment</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberInit_MemberInitExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberInit(MemberInitExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L331">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>memberAssignment</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberassignment">MemberAssignment</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberassignment">MemberAssignment</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberInit_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberInit*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberInit_MemberInitExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberInit(MemberInitExpression)">VisitMemberInit(MemberInitExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMemberInit_System_Linq_Expressions_MemberInitExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMemberInit(System.Linq.Expressions.MemberInitExpression)">
+  VisitMemberInit(MemberInitExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L331"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberinitexpression">MemberInitExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitMemberInit(MemberInitExpression memberInitExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MemberInitExpression</span></td>
-        <td><span class="parametername">memberInitExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMethodCall_MethodCallExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMethodCall(MethodCallExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L359">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>memberInitExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.memberinitexpression">MemberInitExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMethodCall_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMethodCall*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMethodCall_MethodCallExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMethodCall(MethodCallExpression)">VisitMethodCall(MethodCallExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitMethodCall_System_Linq_Expressions_MethodCallExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">
+  VisitMethodCall(MethodCallExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L359"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.methodcallexpression">MethodCallExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MethodCallExpression</span></td>
-        <td><span class="parametername">methodCallExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNew_NewExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNew(NewExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L391">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>methodCallExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.methodcallexpression">MethodCallExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNew_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNew*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNew_NewExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNew(NewExpression)">VisitNew(NewExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNew_System_Linq_Expressions_NewExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNew(System.Linq.Expressions.NewExpression)">
+  VisitNew(NewExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L391"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.newexpression">NewExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitNew(NewExpression newExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">NewExpression</span></td>
-        <td><span class="parametername">newExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNewArray_NewArrayExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNewArray(NewArrayExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L432">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.newexpression">NewExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNewArray_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNewArray*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNewArray_NewArrayExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNewArray(NewArrayExpression)">VisitNewArray(NewArrayExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitNewArray_System_Linq_Expressions_NewArrayExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitNewArray(System.Linq.Expressions.NewArrayExpression)">
+  VisitNewArray(NewArrayExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L432"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.newarrayexpression">NewArrayExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitNewArray(NewArrayExpression newArrayExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">NewArrayExpression</span></td>
-        <td><span class="parametername">newArrayExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitUnary_UnaryExpression_.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitUnary(UnaryExpression)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L435">View Source</a>
-  </span>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newArrayExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.newarrayexpression">NewArrayExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitUnary_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitUnary*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitUnary_UnaryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitUnary(UnaryExpression)">VisitUnary(UnaryExpression)</h4>
-  <div class="markdown level1 summary"></div>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor_VisitUnary_System_Linq_Expressions_UnaryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.VisitUnary(System.Linq.Expressions.UnaryExpression)">
+  VisitUnary(UnaryExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L435"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Visits the children of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.unaryexpression">UnaryExpression</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override Expression VisitUnary(UnaryExpression unaryExpression)</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">UnaryExpression</span></td>
-        <td><span class="parametername">unaryExpression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Expression</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>unaryExpression</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.unaryexpression">UnaryExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression">Expression</a></dt>
+    <dd><p>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaProjectionBindingExpressionVisitor.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KafkaProjectionBindingExpressionVisitor.cs/#L31" class="contribution-link">View Source</a>
-                  </li>
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Query\Internal\KafkaProjectionBindingExpressionVisitor.cs/#L31" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Copyright © 2023 MASES s.r.l.. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</span>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
-            
-          </div>
-        </div>
-      </footer>
-    </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    </footer>
   </body>
 </html>
