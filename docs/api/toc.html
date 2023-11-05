@@ -5,18 +5,21 @@
       <form class="toc-filter">
         <span class="glyphicon glyphicon-filter filter-icon"></span>
         <span class="glyphicon glyphicon-remove clear-icon" id="toc_filter_clear"></span>
-        <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+        <input type="text" id="toc_filter_input" placeholder="Filter by title" onkeypress="if(event.keyCode==13) {return false;}">
       </form>
     </div>
     <div class="sidetoc">
       <div class="toc" id="toc">
-          
+
           <ul class="nav level1">
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.html" name="" title="MASES.EntityFrameworkCore.KNet">MASES.EntityFrameworkCore.KNet</a>
-                    
+
                     <ul class="nav level2">
+                          <li>
+                              <a href="MASES.EntityFrameworkCore.KNet.KEFCore.html" name="" title="KEFCore">KEFCore</a>
+                          </li>
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.html" name="" title="KafkaDatabaseFacadeExtensions">KafkaDatabaseFacadeExtensions</a>
                           </li>
@@ -29,15 +32,12 @@
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.KafkaEntityTypeExtensions.html" name="" title="KafkaEntityTypeExtensions">KafkaEntityTypeExtensions</a>
                           </li>
-                          <li>
-                              <a href="MASES.EntityFrameworkCore.KNet.KEFCore.html" name="" title="KEFCore">KEFCore</a>
-                          </li>
                     </ul>
                 </li>
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Design.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Design.Internal">MASES.EntityFrameworkCore.KNet.Design.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.html" name="" title="KafkaCSharpRuntimeAnnotationCodeGenerator">KafkaCSharpRuntimeAnnotationCodeGenerator</a>
@@ -50,7 +50,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Diagnostics.html" name="" title="MASES.EntityFrameworkCore.KNet.Diagnostics">MASES.EntityFrameworkCore.KNet.Diagnostics</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Diagnostics.KafkaEventId.html" name="" title="KafkaEventId">KafkaEventId</a>
@@ -60,7 +60,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Diagnostics.Internal">MASES.EntityFrameworkCore.KNet.Diagnostics.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggerExtensions.html" name="" title="KafkaLoggerExtensions">KafkaLoggerExtensions</a>
@@ -73,7 +73,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Infrastructure.html" name="" title="MASES.EntityFrameworkCore.KNet.Infrastructure">MASES.EntityFrameworkCore.KNet.Infrastructure</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.html" name="" title="IKafkaDbContextOptionsBuilderInfrastructure">IKafkaDbContextOptionsBuilderInfrastructure</a>
@@ -89,7 +89,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal">MASES.EntityFrameworkCore.KNet.Infrastructure.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html" name="" title="IKafkaSingletonOptions">IKafkaSingletonOptions</a>
@@ -108,7 +108,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Internal">MASES.EntityFrameworkCore.KNet.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Internal.KafkaResources.html" name="" title="KafkaResources">KafkaResources</a>
@@ -121,7 +121,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.html" name="" title="MASES.EntityFrameworkCore.KNet.Metadata.Conventions">MASES.EntityFrameworkCore.KNet.Metadata.Conventions</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.html" name="" title="DefiningQueryRewritingConvention">DefiningQueryRewritingConvention</a>
@@ -134,7 +134,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Query.Internal">MASES.EntityFrameworkCore.KNet.Query.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject.html" name="" title="AnonymousObject">AnonymousObject</a>
@@ -152,12 +152,6 @@
                               <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.html" name="" title="KafkaProjectionBindingExpressionVisitor">KafkaProjectionBindingExpressionVisitor</a>
                           </li>
                           <li>
-                              <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html" name="" title="KafkaQueryableMethodTranslatingExpressionVisitor">KafkaQueryableMethodTranslatingExpressionVisitor</a>
-                          </li>
-                          <li>
-                              <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.html" name="" title="KafkaQueryableMethodTranslatingExpressionVisitorFactory">KafkaQueryableMethodTranslatingExpressionVisitorFactory</a>
-                          </li>
-                          <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.html" name="" title="KafkaQueryContext">KafkaQueryContext</a>
                           </li>
                           <li>
@@ -165,6 +159,12 @@
                           </li>
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.html" name="" title="KafkaQueryExpression">KafkaQueryExpression</a>
+                          </li>
+                          <li>
+                              <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html" name="" title="KafkaQueryableMethodTranslatingExpressionVisitor">KafkaQueryableMethodTranslatingExpressionVisitor</a>
+                          </li>
+                          <li>
+                              <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.html" name="" title="KafkaQueryableMethodTranslatingExpressionVisitorFactory">KafkaQueryableMethodTranslatingExpressionVisitorFactory</a>
                           </li>
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor.html" name="" title="KafkaShapedQueryCompilingExpressionVisitor">KafkaShapedQueryCompilingExpressionVisitor</a>
@@ -183,7 +183,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization">MASES.EntityFrameworkCore.KNet.Serialization</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html" name="" title="EntityExtractor">EntityExtractor</a>
@@ -196,7 +196,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Avro">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html" name="" title="AvroKEFCoreSerDes">AvroKEFCoreSerDes</a>
@@ -224,7 +224,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler">MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.AvroSerializationHelper.html" name="" title="AvroSerializationHelper">AvroSerializationHelper</a>
@@ -234,7 +234,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage">MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html" name="" title="AvroKeyContainer">AvroKeyContainer</a>
@@ -253,7 +253,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Json.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Json">MASES.EntityFrameworkCore.KNet.Serialization.Json</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html" name="" title="DefaultKEFCoreSerDes">DefaultKEFCoreSerDes</a>
@@ -275,7 +275,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage">MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html" name="" title="DefaultValueContainer&lt;TKey&gt;">DefaultValueContainer&lt;TKey&gt;</a>
@@ -288,7 +288,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.html" name="" title="ProtobufKEFCoreSerDes">ProtobufKEFCoreSerDes</a>
@@ -310,7 +310,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html" name="" title="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html" name="" title="GenericValue">GenericValue</a>
@@ -347,7 +347,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Storage.html" name="" title="MASES.EntityFrameworkCore.KNet.Storage">MASES.EntityFrameworkCore.KNet.Storage</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html" name="" title="EntityTypeChanged">EntityTypeChanged</a>
@@ -360,7 +360,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.Storage.Internal">MASES.EntityFrameworkCore.KNet.Storage.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html" name="" title="EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;">EntityTypeProducer&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;</a>
@@ -417,10 +417,10 @@
                               <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-2.html" name="" title="KafkaStreamsTableRetriever&lt;TKey, TValueContainer&gt;">KafkaStreamsTableRetriever&lt;TKey, TValueContainer&gt;</a>
                           </li>
                           <li>
-                              <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html" name="" title="KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;">KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;</a>
+                              <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.html" name="" title="KafkaTableFactory">KafkaTableFactory</a>
                           </li>
                           <li>
-                              <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.html" name="" title="KafkaTableFactory">KafkaTableFactory</a>
+                              <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html" name="" title="KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;">KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;</a>
                           </li>
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction.html" name="" title="KafkaTransaction">KafkaTransaction</a>
@@ -439,7 +439,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.Templates.html" name="" title="MASES.EntityFrameworkCore.KNet.Templates">MASES.EntityFrameworkCore.KNet.Templates</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.Templates.Blog.html" name="" title="Blog">Blog</a>
@@ -455,7 +455,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.html" name="" title="MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal">MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.IKafkaIntegerValueGenerator.html" name="" title="IKafkaIntegerValueGenerator">IKafkaIntegerValueGenerator</a>
@@ -471,7 +471,7 @@
                 <li>
                     <span class="expand-stub"></span>
                     <a href="Microsoft.Extensions.DependencyInjection.html" name="" title="Microsoft.Extensions.DependencyInjection">Microsoft.Extensions.DependencyInjection</a>
-                    
+
                     <ul class="nav level2">
                           <li>
                               <a href="Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions.html" name="" title="KafkaServiceCollectionExtensions">KafkaServiceCollectionExtensions</a>
