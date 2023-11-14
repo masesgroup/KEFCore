@@ -28,7 +28,7 @@ public static class AvroSerializationHelper
 {
     public static void BuildDefaultSchema(string outputFolder)
     {
-       AvroSerDes.CompilerSupport.BuildSchemaClassesFromFiles(outputFolder, "AvroValueContainer.avsc");
+        AvroSerDes.CompilerSupport.BuildSchemaClassesFromFiles(outputFolder, "AvroValueContainer.avsc");
         AvroSerDes.CompilerSupport.BuildSchemaClassesFromFiles(outputFolder, "AvroKeyContainer.avsc");
     }
 }

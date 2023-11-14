@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: get_changed_files
-        uses: masesgroup/retrieve-changed-files@v2
+        uses: masesgroup/retrieve-changed-files@v3
         with:
           format: 'csv'
       - id: check_files
@@ -55,7 +55,7 @@ jobs:
         run: git config --system core.longpaths true
     
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: '1'
           submodules: 'true'
@@ -63,30 +63,44 @@ jobs:
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
-      - name: Clear documentation folder 
-        run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml
-
-      - name: Build documentation
-        run: |
-          choco install docfx
-          cd src\documentation
-          docfx
-
       - uses: actions/upload-artifact@v3
         with:
           name: KEFCore
           path: .\bin\*nupkg
+
+      - name: Clear documentation folder 
+        run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml,CNAME
+
+      - run: dotnet tool update -g docfx
+
+      - name: Build documentation
+        run: |
+          cd src\documentation
+          docfx
 
       - name: Extract commit SHA
         run: |
           echo "GITHUB_COMMIT_MESSAGE=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
         shell: bash
 
-      - name: Commit changes
+      - name: Request a PR to commit changes
         if: ${{ github.repository_owner == 'masesgroup'}} #do not push any changes outside main repo
-        uses: EndBug/add-and-commit@v9
+        uses: peter-evans/create-pull-request@v5
         with:
-          author_name: github-actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          add: '.\docs\*.*'
-          message: Update documentation after commit ${{ env.GITHUB_COMMIT_MESSAGE }}
+          branch-suffix: short-commit-hash
+          add-paths: docs/*.*
+          commit-message: Update documentation after commit ${{ env.GITHUB_COMMIT_MESSAGE }}
+          title: Changes by GitHub action
+          body: Automated changes by GitHub action
+          reviewers: masesdevelopers
+          assignees: masesdevelopers
+          labels: documentation, enhancement 
+
+     # - name: Commit changes
+     #   if: ${{ github.repository_owner == 'masesgroup'}} #do not push any changes outside main repo
+     #   uses: EndBug/add-and-commit@v9
+     #   with:
+     #     author_name: github-actions
+     #     author_email: 41898282+github-actions[bot]@users.noreply.github.com
+     #     add: '.\docs\*.*'
+     #     message: Update documentation after commit ${{ env.GITHUB_COMMIT_MESSAGE }}

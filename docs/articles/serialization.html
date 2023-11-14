@@ -1,72 +1,85 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>KEFCore: serialization | Kafka Bridge website </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="KEFCore: serialization | Kafka Bridge website ">
-    <meta name="generator" content="docfx 2.59.4.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>KEFCore: serialization | MASES Group website - Entity Framework Core provider for Apache Kafka </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="KEFCore: serialization | MASES Group website - Entity Framework Core provider for Apache Kafka ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src\documentation\articles\serialization.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
           </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
-          </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="">
+
+        <article data-uid="">
 <h1 id="kefcore-serialization">KEFCore: serialization</h1>
 
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities used within the model in something viable from the backend.
@@ -149,9 +162,9 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <h3 id="default-types">Default types</h3>
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
 <ul>
-<li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
-<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code>, the type automatically manages simple or complex Primary Key</li>
-<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
+<li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainer</code>) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
+<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultKeySerialization</code>), the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainerSerialization</code>)</li>
 </ul>
 <h3 id="user-override">User override</h3>
 <p>The default serialization can be overridden with user defined <strong>ValueContainer</strong> class, <strong>Key SerDes</strong> or <strong>ValueContainer SerDes</strong>.</p>
@@ -393,9 +406,9 @@ The engine comes with two different encoders</p>
 <h3 id="how-to-use-avro">How to use Avro</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code>, both types automatically manages simple or complex Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code></li>
-<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultKeySerialization</code> (defaults to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code>), both types automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code>)</li>
+<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
@@ -411,43 +424,175 @@ The engine comes with two different encoders</p>
 	// execute stuff here
 }
 </code></pre>
+<h2 id="protobuf-serialization"><strong>Protobuf</strong> serialization</h2>
+<p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf/">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</a> an user can choose the Protobuf serializer.</p>
+<h3 id="protobuf-schema">Protobuf schema</h3>
+<p>The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:</p>
+<ul>
+<li><p>Common multitype value:</p>
+<pre><code class="lang-protobuf">// [START declaration]
+syntax = &quot;proto3&quot;;
+package storage;
+
+import &quot;google/protobuf/struct.proto&quot;;
+import &quot;google/protobuf/timestamp.proto&quot;;
+// [END declaration]
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = &quot;mases.entityframeworkcore.knet.serialization.protobuf&quot;;
+option java_outer_classname = &quot;GenericValue&quot;;
+// [END java_declaration]
+
+// [START csharp_declaration]
+option csharp_namespace = &quot;MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage&quot;;
+// [END csharp_declaration]
+
+// [START messages]
+// Our address book file is just one of these.
+message GenericValue {
+  // The kind of value.
+  oneof kind {
+    // Represents a null value.
+    google.protobuf.NullValue null_value = 1;
+    // Represents a boolean value.
+    bool bool_value = 2;
+    // Represents a int value.
+    int32 byte_value = 3;
+    // Represents a int value.
+    int32 short_value = 4;
+    // Represents a int value.
+    int32 int_value = 5;
+    // Represents a long value.
+    int64 long_value = 6;
+    // Represents a float value.
+    float float_value = 7;
+    // Represents a double value.
+    double double_value = 8;
+    // Represents a string value.
+    string string_value = 9;
+    // Represents a Guid value.
+    bytes guid_value = 10;
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetime_value = 11;
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetimeoffset_value = 12;
+  }
+}
+// [END messages]
+</code></pre>
+</li>
+<li><p>Complex Primary Key schema:</p>
+<pre><code class="lang-protobuf">// [START declaration]
+syntax = &quot;proto3&quot;;
+package storage;
+
+import &quot;GenericValue.proto&quot;;
+// [END declaration]
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = &quot;mases.entityframeworkcore.knet.serialization.protobuf&quot;;
+option java_outer_classname = &quot;KeyContainer&quot;;
+// [END java_declaration]
+
+// [START csharp_declaration]
+option csharp_namespace = &quot;MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage&quot;;
+// [END csharp_declaration]
+
+// [START messages]
+message PrimaryKeyType {
+  repeated GenericValue values = 1; 
+}
+
+// Our address book file is just one of these.
+message KeyContainer {
+  PrimaryKeyType PrimaryKey = 1;
+}
+// [END messages]
+</code></pre>
+</li>
+<li><p>ValueContainer schema:</p>
+<pre><code class="lang-protobuf">// [START declaration]
+syntax = &quot;proto3&quot;;
+package storage;
+
+import &quot;GenericValue.proto&quot;;
+// [END declaration]
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = &quot;mases.entityframeworkcore.knet.serialization.protobuf&quot;;
+option java_outer_classname = &quot;ValueContainer&quot;;
+// [END java_declaration]
+
+// [START csharp_declaration]
+option csharp_namespace = &quot;MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage&quot;;
+// [END csharp_declaration]
+
+// [START messages]
+message PropertyDataRecord {
+  int32 PropertyIndex = 1;
+  string PropertyName = 2; 
+  string ClrType = 3;
+  GenericValue Value = 4;
+}
+
+// Our address book file is just one of these.
+message ValueContainer {
+  string EntityName = 1;
+  string ClrType = 2;
+  repeated PropertyDataRecord Data = 3;
+}
+// [END messages]
+</code></pre>
+</li>
+</ul>
+<p>The extension converted this schema into code to speedup the exection of serialization/deserialization operations.</p>
+<h3 id="how-to-use-protobuf">How to use Protobuf</h3>
+<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<ul>
+<li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes..Key.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultKeySerialization</code>, the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
+<li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainer&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainer</code></li>
+</ul>
+<p>An example is:</p>
+<pre><code class="lang-C#">using (context = new BloggingContext()
+{
+    BootstrapServers = &quot;KAFKA-SERVER:9092&quot;,
+    ApplicationId = &quot;MyAppid&quot;,
+    DbName = &quot;MyDBName&quot;,
+    KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key&lt;&gt;),
+    ValueContainerType = typeof(ProtobufValueContainer&lt;&gt;),
+    ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer&lt;&gt;),
+})
+{
+	// execute stuff here
+}
+</code></pre>
+
 </article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/serialization.md/#L1" class="contribution-link">Improve this Doc</a>
-                  </li>
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
-          </div>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src\documentation\articles\serialization.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div style="text-align: center;">Copyright © 2023 MASES s.r.l.. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
-            
-          </div>
-        </div>
-      </footer>
-    </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    </footer>
   </body>
 </html>

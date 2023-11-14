@@ -12,12 +12,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.23" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'"/>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.23" Condition="'$(TargetFramework)' == 'net6.0'"/>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'"/>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" Condition="'$(TargetFramework)' == 'net7.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.24" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.24" Condition="'$(TargetFramework)' == 'net6.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.13" Condition="'$(TargetFramework)' == 'net7.0'"/>
 		<ProjectReference Include="..\..\src\net\KEFCore\KEFCore.csproj" />
 		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj" />
+		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj" />		
 
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>

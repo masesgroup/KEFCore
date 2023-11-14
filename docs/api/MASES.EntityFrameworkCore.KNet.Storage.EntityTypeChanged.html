@@ -1,367 +1,392 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Struct EntityTypeChanged
-   | Kafka Bridge website </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Struct EntityTypeChanged
-   | Kafka Bridge website ">
-    <meta name="generator" content="docfx 2.59.4.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>Struct EntityTypeChanged
+ | MASES Group website - Entity Framework Core provider for Apache Kafka </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct EntityTypeChanged
+ | MASES Group website - Entity Framework Core provider for Apache Kafka ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../images/logo.png" alt="">
-              </a>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-        </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged">
-  
-  
-  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged" class="text-break">Struct EntityTypeChanged
-  </h1>
-  <div class="markdown level0 summary"><p>The event data informing about changes on an <see cref="!:IEntityType"></see> using the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent">OnChangeEvent</a> event handler</p>
-</div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals#system-valuetype-equals(system-object)">ValueType.Equals(Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode#system-valuetype-gethashcode">ValueType.GetHashCode()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring#system-valuetype-tostring">ValueType.ToString()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">Object.Equals(Object, Object)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype#system-object-gettype">Object.GetType()</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals#system-object-referenceequals(system-object-system-object)">Object.ReferenceEquals(Object, Object)</a>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.html">MASES.EntityFrameworkCore.KNet.Storage</a></h6>
-  <h6><strong>Assembly</strong>: MASES.EntityFrameworkCore.KNet.dll</h6>
-  <h5 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly struct EntityTypeChanged</code></pre>
-  </div>
-  <h3 id="properties">Properties
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L64">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind">ChangeKind</h4>
-  <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Removed">Removed</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was deleted, otherwise <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added or updated</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly EntityTypeChanged.ChangeKindType ChangeKind { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html">EntityTypeChanged.ChangeKindType</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L60">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType">EntityType</h4>
-  <div class="markdown level1 summary"><p>The <see cref="!:IEntityType"></see> with changes</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly IEntityType EntityType { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">IEntityType</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L68">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key">Key</h4>
-  <div class="markdown level1 summary"><p>The key removed if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind">ChangeKind</a> is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Removed">Removed</a>, otherwise it was added or updated</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly object Key { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L72">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded">KeyAdded</h4>
-  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly bool KeyAdded { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L80">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved">KeyRemoved</h4>
-  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was removed</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly bool KeyRemoved { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L76">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated">KeyUpdated</h4>
-  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was updated</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly bool KeyUpdated { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L84">View Source</a>
-  </span>
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted*"></a>
-  <h4 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted">KeyUpserted</h4>
-  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added or updated</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly bool KeyUpserted { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/EntityTypeChanged.cs/#L25" class="contribution-link">View Source</a>
-                  </li>
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <span>Copyright © 2023 MASES s.r.l..<br>Generated by <strong>DocFX</strong></span>
-            
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-      </footer>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged" class="text-break">
+    Struct EntityTypeChanged
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.html">Storage</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The event data informing about changes on an <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> using the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent">OnChangeEvent</a> event handler</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly struct EntityTypeChanged</code></pre>
+  </div>
+
+
+
+
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode">ValueType.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring">ValueType.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKind">
+  ChangeKind
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Removed">Removed</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was deleted, otherwise <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added or updated</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityTypeChanged.ChangeKindType ChangeKind { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html">EntityTypeChanged</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html">ChangeKindType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_EntityType" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.EntityType">
+  EntityType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> with changes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEntityType EntityType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.Key">
+  Key
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The key removed if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKind">ChangeKind</a> is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_ChangeKindType_Removed">Removed</a>, otherwise it was added or updated</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object? Key { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyAdded" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyAdded">
+  KeyAdded
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool KeyAdded { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyRemoved" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyRemoved">
+  KeyRemoved
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was removed</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool KeyRemoved { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpdated" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpdated">
+  KeyUpdated
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was updated</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool KeyUpdated { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_KeyUpserted" data-uid="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.KeyUpserted">
+  KeyUpserted
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Helper to understand if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html#MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged_Key">Key</a> was added or updated</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool KeyUpserted { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src\net\KEFCore\Storage\EntityTypeChanged.cs/#L25" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div style="text-align: center;">Copyright © 2023 MASES s.r.l.. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<ImplicitUsings>true</ImplicitUsings>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</RootNamespace>
+		<Title>EntityFrameworkCore KNet - Protobuf Serialization support for EntityFrameworkCore provider for Apache Kafka</Title>
+		<Description>EntityFrameworkCore KNet - Protobuf Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</Product>
+		<OutputPath>..\..\..\bin\</OutputPath>
+		<PackageTags>Protobuf;Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</PackageId>
+		<PackageReadmeFile>serialization.md</PackageReadmeFile>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="System.Diagnostics" />
+		<Using Include="System.Linq.Expressions" />
+		<Using Include="System.Reflection" />
+		<Using Include="Microsoft.EntityFrameworkCore" />
+		<Using Include="Microsoft.EntityFrameworkCore.ChangeTracking" />
+		<Using Include="Microsoft.EntityFrameworkCore.Diagnostics" />
+		<Using Include="Microsoft.EntityFrameworkCore.Design" />
+		<Using Include="Microsoft.EntityFrameworkCore.Infrastructure" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Conventions" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure" />
+		<Using Include="Microsoft.EntityFrameworkCore.Query" />
+		<Using Include="Microsoft.EntityFrameworkCore.Storage" />
+		<Using Include="Microsoft.EntityFrameworkCore.Storage.ValueConversion" />
+		<Using Include="Microsoft.EntityFrameworkCore.Update" />
+		<Using Include="Microsoft.EntityFrameworkCore.ValueGeneration" />
+		<Using Include="Microsoft.EntityFrameworkCore.Utilities" />
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="Microsoft.Extensions.DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\KEFCore.SerDes\KEFCore.SerDes.csproj" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.0" />
+		<PackageReference Include="Google.Protobuf.Tools" Version="3.25.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
+		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
+		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
+		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
+	</Target>
+</Project>

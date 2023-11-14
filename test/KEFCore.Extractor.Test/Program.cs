@@ -59,6 +59,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             {
                 if (args.Length > 0)
                 {
+                    if (!File.Exists(args[0])) { ReportString($"{args[0]} is not a configuration file."); return; }
                     config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
                 }
 

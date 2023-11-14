@@ -33,6 +33,18 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 public static class AvroKEFCoreSerDes
 {
     /// <summary>
+    /// Returns the default serializer <see cref="Type"/> for keys
+    /// </summary>
+    public static readonly Type DefaultKeySerialization = typeof(Key.Binary<>);
+    /// <summary>
+    /// Returns the default serializer <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.Binary<>);
+    /// <summary>
+    /// Returns the default <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainer = typeof(AvroValueContainer<>);
+    /// <summary>
     /// Base class to define key extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class Key
@@ -81,7 +93,11 @@ public static class AvroKEFCoreSerDes
                 using MemoryStream memStream = new();
                 BinaryEncoder encoder = new(memStream);
                 var container = new AvroKeyContainer();
-                container.PrimaryKey = new List<object>(data as object[]);
+                if (data is object[] dataArray)
+                {
+                    container.PrimaryKey = new List<object>(dataArray);
+                }
+                else throw new InvalidDataException($"Cannot manage inputs different from object[], input is {data?.GetType()}");
                 SpecificWriter.Write(container, encoder);
                 return memStream.ToArray();
             }

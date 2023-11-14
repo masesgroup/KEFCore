@@ -30,6 +30,18 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 public static class DefaultKEFCoreSerDes
 {
     /// <summary>
+    /// Returns the default serializer <see cref="Type"/> for keys
+    /// </summary>
+    public static readonly Type DefaultKeySerialization = typeof(Key.Json<>);
+    /// <summary>
+    /// Returns the default serializer <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.Json<>);
+    /// <summary>
+    /// Returns the default <see cref="Type"/> for value containers
+    /// </summary>
+    public static readonly Type DefaultValueContainer = typeof(DefaultValueContainer<>);
+    /// <summary>
     /// Base class to define key extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class Key

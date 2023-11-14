@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: get_changed_files
-        uses: masesgroup/retrieve-changed-files@v2
+        uses: masesgroup/retrieve-changed-files@v3
         with:
           format: 'csv'
       - id: check_files
@@ -65,7 +65,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

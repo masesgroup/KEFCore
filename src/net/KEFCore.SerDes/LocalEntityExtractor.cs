@@ -33,8 +33,8 @@ class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializ
     where TKeySerializer : class, new()
     where TValueSerializer : class, new()
 {
-    private readonly IKNetSerDes<TKey> _keySerdes;
-    private readonly IKNetSerDes<TValueContainer> _valueSerdes;
+    private readonly IKNetSerDes<TKey>? _keySerdes;
+    private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
 
     public LocalEntityExtractor()
     {
@@ -46,7 +46,7 @@ class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializ
     {
         if (recordValue == null) throw new ArgumentNullException(nameof(recordValue), "Record value shall be available");
 
-        TValueContainer valueContainer = _valueSerdes.DeserializeWithHeaders(topic, null, recordValue);
+        TValueContainer valueContainer = _valueSerdes?.DeserializeWithHeaders(topic, null, recordValue)!;
         var entityType = Type.GetType(valueContainer.ClrType, true);
         if (entityType != null)
         {
