@@ -1,3 +1,8 @@
+---
+title: Usage of KEFCore
+_description: Describes how to use Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore usage
 
 Read [Getting started](gettingstarted.md) to find out info and tips.

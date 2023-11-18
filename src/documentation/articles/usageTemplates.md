@@ -1,3 +1,8 @@
+---
+title: Templates usage of KEFCore
+_description: Describes how to use templates of Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: Template Usage Guide
 
 For more information related to .NET templates look at https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new-sdk-templates.

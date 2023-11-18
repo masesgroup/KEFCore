@@ -1,3 +1,8 @@
+---
+title: Roadmap of KEFCore
+_description: Describes current roadmap of Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: roadmap
 
 The roadmap can be synthetized in the following points:
