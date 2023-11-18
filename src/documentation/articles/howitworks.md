@@ -1,3 +1,8 @@
+---
+title: How KEFCore works
+_description: Describes how works Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: how it works
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can be used in some [operative conditions](usecases.md).

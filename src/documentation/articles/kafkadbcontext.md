@@ -1,3 +1,8 @@
+---
+title: KafkaDbContext
+_description: Describe what is and how use KafkaDbContext class from Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: KafkaDbContext
 
 `KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/):

@@ -1,3 +1,8 @@
+---
+title: Serialization in KEFCore
+_description: Describes how works the serialization in Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: serialization
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.

@@ -1,3 +1,8 @@
+---
+title: External applications of KEFCore
+_description: Describes how to use data managed by Entity Framework Core provider for Apache Kafka from external applications
+---
+
 # KEFCore: external application
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
