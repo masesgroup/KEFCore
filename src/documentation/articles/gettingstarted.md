@@ -1,3 +1,8 @@
+---
+title: Getting started with KEFCore
+_description: Describes how to start to use Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: Getting started
 
 To use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) you must have at least:

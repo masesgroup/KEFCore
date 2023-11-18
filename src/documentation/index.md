@@ -1,3 +1,8 @@
+---
+title: Entity Framework Core provider for Apache Kafka
+_description: Main page of Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/)
 
 KEFCore is the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).

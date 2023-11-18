@@ -1,3 +1,8 @@
+---
+title: Use cases of KEFCore
+_description: Describes some use cases of Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: use cases
 
 [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) can be used in some operative conditions.

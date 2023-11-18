@@ -1,3 +1,8 @@
+---
+title: Current development state of KEFCore
+_description: Describes the current development state of Entity Framework Core provider for Apache Kafka
+---
+
 # KEFCore: development state
 
 The latest release implementes these features:
