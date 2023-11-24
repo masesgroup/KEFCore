@@ -17,7 +17,8 @@
 		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.25" Condition="'$(TargetFramework)' == 'net6.0'"/>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.14" Condition="'$(TargetFramework)' == 'net7.0'"/>
-
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'"/>
+		
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
