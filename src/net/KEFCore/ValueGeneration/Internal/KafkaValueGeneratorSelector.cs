@@ -38,6 +38,7 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
     {
         _kafkaCluster = kafkaDatabase.Cluster;
     }
+#if !NET8_0
     /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, IEntityType entityType)
         => property.GetValueGeneratorFactory() == null
@@ -45,7 +46,7 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
             && property.ClrType.UnwrapNullableType() != typeof(char)
                 ? GetOrCreate(property)
                 : base.Select(property, entityType);
-
+#endif
     private ValueGenerator GetOrCreate(IProperty property)
     {
         var type = property.ClrType.UnwrapNullableType().UnwrapEnumType();

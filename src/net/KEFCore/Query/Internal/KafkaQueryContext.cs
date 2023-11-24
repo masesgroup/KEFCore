@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
-using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// <summary>

@@ -62,6 +62,9 @@ public static class KafkaServiceCollectionExtensions
             .TryAdd<ITypeMappingSource, KafkaTypeMappingSource>()
             .TryAdd<IShapedQueryCompilingExpressionVisitorFactory, KafkaShapedQueryCompilingExpressionVisitorFactory>()
             .TryAdd<IQueryableMethodTranslatingExpressionVisitorFactory, KafkaQueryableMethodTranslatingExpressionVisitorFactory>()
+#if NET8_0       
+            .TryAdd<IQueryTranslationPreprocessorFactory, KafkaQueryTranslationPreprocessorFactory>()
+#endif
             .TryAdd<ISingletonOptions, IKafkaSingletonOptions>(p => p.GetRequiredService<IKafkaSingletonOptions>())
             .TryAddProviderSpecificServices(
                 b => b
