@@ -52,6 +52,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   /// [START messages]
   /// Our address book file is just one of these.
   /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GenericValue : pb::IMessage<GenericValue>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage

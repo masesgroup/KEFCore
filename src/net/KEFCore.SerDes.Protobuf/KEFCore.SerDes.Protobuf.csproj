@@ -42,21 +42,21 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\KEFCore.SerDes\KEFCore.SerDes.csproj" />
-		<PackageReference Include="Google.Protobuf" Version="3.25.0" />
-		<PackageReference Include="Google.Protobuf.Tools" Version="3.25.0">
+		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
+		<PackageReference Include="Google.Protobuf.Tools" Version="3.25.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
-		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
-		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'"/>
-		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'"/>
+		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
+		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" />
+		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
+		<Exec Command="$(protoc_linux64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" />
 	</Target>
 </Project>
