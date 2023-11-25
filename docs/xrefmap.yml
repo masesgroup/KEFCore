@@ -2080,6 +2080,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NoQueryStrings
   nameWithType: KafkaStrings.NoQueryStrings
+- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported
+  name: NonComposedGroupByNotSupported
+  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_NonComposedGroupByNotSupported
+  commentId: P:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported
+  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported
+  nameWithType: KafkaStrings.NonComposedGroupByNotSupported
+- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported*
+  name: NonComposedGroupByNotSupported
+  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_NonComposedGroupByNotSupported_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NonComposedGroupByNotSupported
+  nameWithType: KafkaStrings.NonComposedGroupByNotSupported
 - uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.NullabilityErrorException(System.Object,System.Object)
   name: NullabilityErrorException(object?, object?)
   href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_NullabilityErrorException_System_Object_System_Object_
