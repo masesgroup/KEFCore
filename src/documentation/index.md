@@ -43,7 +43,7 @@ Do you want to help us?
 - open [issues](https://github.com/masesgroup/KEFCore/issues) to request features or report bugs :bug:
 - improves the project with Pull Requests
 
-This project adheres to the Contributor [Covenant code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
+This project adheres to the Contributor [Covenant code of conduct](https://github.com/masesgroup/KEFCore/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
 
 ---
 ## Summary
