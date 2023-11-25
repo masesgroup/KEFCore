@@ -91,6 +91,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     }
 #if NET6_0
     /// <inheritdoc/>
+    [Obsolete]
     protected override ShapedQueryExpression CreateShapedQueryExpression(Type elementType)
     {
         throw new NotImplementedException();

@@ -98,9 +98,14 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
         {
             return _kafkaCluster.GetIntegerValueGenerator<sbyte>(property);
         }
-
+#if !NET8_0
         throw new ArgumentException(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringEntityType.DisplayName()));
+#else
+        throw new ArgumentException(
+            CoreStrings.InvalidValueGeneratorFactoryProperty(
+                "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
+#endif
     }
 }
