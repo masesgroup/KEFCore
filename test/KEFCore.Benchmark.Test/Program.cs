@@ -130,13 +130,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                             {
                                 Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                                 Posts = new List<Post>()
-                            {
-                                new Post()
                                 {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            },
+                                    new Post()
+                                    {
+                                        Title = "title",
+                                        Content = i.ToString()
+                                    }
+                                },
                                 Rating = i,
                             });
                         }

@@ -1,4 +1,4 @@
 {
-  "BootstrapServers": "192.168.1.103:9092",
+  "BootstrapServers": "192.168.1.105:9092",
   "TopicToSubscribe": "TestDBBenchmarkAvro.MASES.EntityFrameworkCore.KNet.Test.Blog"
 }
