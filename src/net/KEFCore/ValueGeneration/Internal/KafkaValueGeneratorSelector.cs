@@ -38,6 +38,7 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
     {
         _kafkaCluster = kafkaDatabase.Cluster;
     }
+#if !NET8_0
     /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, IEntityType entityType)
         => property.GetValueGeneratorFactory() == null
@@ -45,7 +46,15 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
             && property.ClrType.UnwrapNullableType() != typeof(char)
                 ? GetOrCreate(property)
                 : base.Select(property, entityType);
-
+#else
+    /// <inheritdoc/>
+    public override ValueGenerator Select(IProperty property, ITypeBase typeBase)
+    => property.GetValueGeneratorFactory() == null
+            && property.ClrType.IsInteger()
+            && property.ClrType.UnwrapNullableType() != typeof(char)
+                ? GetOrCreate(property)
+                : base.Select(property, typeBase);
+#endif
     private ValueGenerator GetOrCreate(IProperty property)
     {
         var type = property.ClrType.UnwrapNullableType().UnwrapEnumType();
@@ -89,9 +98,14 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
         {
             return _kafkaCluster.GetIntegerValueGenerator<sbyte>(property);
         }
-
+#if !NET8_0
         throw new ArgumentException(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringEntityType.DisplayName()));
+#else
+        throw new ArgumentException(
+            CoreStrings.InvalidValueGeneratorFactoryProperty(
+                "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
+#endif
     }
 }

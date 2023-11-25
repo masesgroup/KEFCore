@@ -220,6 +220,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             };
             if (_onChangeEvent != null)
             {
+                _kafkaCompactedReplicator.OnRemoteAdd += KafkaCompactedReplicator_OnRemoteAdd;
                 _kafkaCompactedReplicator.OnRemoteUpdate += KafkaCompactedReplicator_OnRemoteUpdate;
                 _kafkaCompactedReplicator.OnRemoteRemove += KafkaCompactedReplicator_OnRemoteRemove;
             }
@@ -238,6 +239,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             _streamData = new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
         }
     }
+
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
     /// <inheritdoc/>
@@ -296,11 +298,19 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         }
     }
 
+    private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    {
+        Task.Factory.StartNew(() =>
+        {
+            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Added, arg2.Key));
+        });
+    }
+
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         Task.Factory.StartNew(() =>
         {
-            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Upserted, arg2.Key));
+            _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Updated, arg2.Key));
         });
     }
 

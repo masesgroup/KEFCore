@@ -2,6 +2,6 @@
   "UseProtobuf": true,
   "DatabaseName": "TestDBBenchmarkProtobuf",
   "UseCompactedReplicator": false,
-  "BootstrapServers": "192.168.1.103:9092",
+  "BootstrapServers": "192.168.1.105:9092",
   "NumberOfExecutions": 10
 }

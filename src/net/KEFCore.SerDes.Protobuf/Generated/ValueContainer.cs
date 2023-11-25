@@ -48,6 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   /// <summary>
   /// [START messages]
   /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class PropertyDataRecord : pb::IMessage<PropertyDataRecord>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -360,6 +361,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   /// <summary>
   /// Our address book file is just one of these.
   /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class ValueContainer : pb::IMessage<ValueContainer>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
