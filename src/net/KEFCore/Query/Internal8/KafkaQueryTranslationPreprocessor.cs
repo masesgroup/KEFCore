@@ -40,9 +40,8 @@ public class KafkaQueryTranslationPreprocessor : QueryTranslationPreprocessor
             && (methodCallExpression.Method.GetGenericMethodDefinition() == QueryableMethods.GroupByWithKeySelector
                 || methodCallExpression.Method.GetGenericMethodDefinition() == QueryableMethods.GroupByWithKeyElementSelector))
         {
-#warning "to be replaced when T4 will work again"
             throw new InvalidOperationException(
-                CoreStrings.TranslationFailedWithDetails(methodCallExpression.Print(), "NonComposedGroupByNotSupported"));// KafkaStrings.NonComposedGroupByNotSupported));
+                CoreStrings.TranslationFailedWithDetails(methodCallExpression.Print(), KafkaStrings.NonComposedGroupByNotSupported));
         }
 
         return result;
