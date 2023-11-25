@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<ImplicitUsings>true</ImplicitUsings>
@@ -41,8 +41,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />		
 		<PackageReference Include="MASES.KNet" Version="2.3.0">
 			<IncludeAssets>All</IncludeAssets>
