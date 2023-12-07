@@ -53,10 +53,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
 
     #region KNetCompactedReplicatorEnumerable
-    class KNetCompactedReplicatorEnumerable : IEnumerable<ValueBuffer>
+    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
     {
-        readonly IEntityType _entityType;
-        readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
+        readonly IEntityType _entityType = entityType;
+        readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator = kafkaCompactedReplicator;
 
         #region KNetCompactedReplicatorEnumerator
         class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
@@ -130,8 +130,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
                 if (_enumerator != null && _enumerator.MoveNext())
                 {
 #if DEBUG_PERFORMANCE
-                        _cycles++;
-                        _valueBufferSw.Start();
+                    _cycles++;
+                    _valueBufferSw.Start();
 #endif
                     object[] array = null!;
                     _enumerator.Current.Value.GetData(_entityType, ref array);
@@ -161,13 +161,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
                 _enumerator?.Reset();
             }
         }
-        #endregion
 
-        public KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator)
-        {
-            _entityType = entityType;
-            _kafkaCompactedReplicator = kafkaCompactedReplicator;
-        }
+        #endregion
 
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
@@ -247,7 +242,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     {
         if (_useCompactedReplicator)
         {
-            foreach (KafkaRowBag<TKey, TValueContainer> record in records)
+            foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
                 var value = record.Value(TValueContainerConstructor);
                 if (_kafkaCompactedReplicator != null) _kafkaCompactedReplicator[record.Key] = value!;
@@ -258,7 +253,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         else
         {
             List<Future<RecordMetadata>> futures = new();
-            foreach (KafkaRowBag<TKey, TValueContainer> record in records)
+            foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
                 var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, TValueContainer>(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!));
                 futures.Add(future!);
@@ -276,6 +271,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         {
             if (_onChangeEvent != null)
             {
+                _kafkaCompactedReplicator.OnRemoteAdd -= KafkaCompactedReplicator_OnRemoteAdd;
                 _kafkaCompactedReplicator.OnRemoteUpdate -= KafkaCompactedReplicator_OnRemoteUpdate;
                 _kafkaCompactedReplicator.OnRemoteRemove -= KafkaCompactedReplicator_OnRemoteRemove;
             }

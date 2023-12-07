@@ -49,11 +49,11 @@ public class KafkaValueGeneratorSelector : ValueGeneratorSelector
 #else
     /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, ITypeBase typeBase)
-    => property.GetValueGeneratorFactory() == null
-            && property.ClrType.IsInteger()
-            && property.ClrType.UnwrapNullableType() != typeof(char)
-                ? GetOrCreate(property)
-                : base.Select(property, typeBase);
+        => property.GetValueGeneratorFactory() == null
+                && property.ClrType.IsInteger()
+                && property.ClrType.UnwrapNullableType() != typeof(char)
+                    ? GetOrCreate(property)
+                    : base.Select(property, typeBase);
 #endif
     private ValueGenerator GetOrCreate(IProperty property)
     {

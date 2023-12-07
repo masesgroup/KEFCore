@@ -27,28 +27,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topicName, TKey key, object?[]? row) : IKafkaRowBag
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaRowBag(IUpdateEntry entry, string topicName, TKey key, object?[]? row)
-    {
-        UpdateEntry = entry;
-        AssociatedTopicName = topicName;
-        Key = key;
-        ValueBuffer = row;
-    }
     /// <inheritdoc/>
-    public IUpdateEntry UpdateEntry { get; private set; }
+    public IUpdateEntry UpdateEntry { get; } = entry;
     /// <inheritdoc/>
-    public string AssociatedTopicName { get; private set; }
+    public string AssociatedTopicName { get; } = topicName;
     /// <summary>
     /// The Key
     /// </summary>
-    public TKey Key { get; private set; }
+    public TKey Key { get; } = key;
     /// <summary>
     /// The Value
     /// </summary>
@@ -56,5 +49,5 @@ public class KafkaRowBag<TKey, TValueContainer> : IKafkaRowBag
     /// <summary>
     /// The <see cref="ValueBuffer"/> content
     /// </summary>
-    public object?[]? ValueBuffer { get; private set; }
+    public object?[]? ValueBuffer { get; } = row;
 }
