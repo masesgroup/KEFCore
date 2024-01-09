@@ -20,18 +20,19 @@
 */
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
-/// <summary>
-///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-///     any release. You should only use it directly in your code with extreme caution and knowing that
-///     doing so can result in application failures when updating to a new Entity Framework Core release.
-/// </summary>
+
+using static Expression;
+
 public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCompilingExpressionVisitor
 {
     private readonly Type _contextType;
     private readonly bool _threadSafetyChecksEnabled;
+
     /// <summary>
-    /// Default initilizer
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     public KafkaShapedQueryCompilingExpressionVisitor(
         ShapedQueryCompilingExpressionVisitorDependencies dependencies,
@@ -41,21 +42,33 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
         _contextType = queryCompilationContext.ContextType;
         _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
         switch (extensionExpression)
         {
             case KafkaTableExpression kafkaTableExpression:
-                return Expression.Call(
+                return Call(
                     TableMethodInfo,
                     QueryCompilationContext.QueryContextParameter,
-                    Expression.Constant(kafkaTableExpression.EntityType));
+                    Constant(kafkaTableExpression.EntityType));
         }
 
         return base.VisitExtension(extensionExpression);
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitShapedQuery(ShapedQueryExpression shapedQueryExpression)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)shapedQueryExpression.QueryExpression;
@@ -66,15 +79,15 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
             .ProcessShaper(shapedQueryExpression.ShaperExpression);
         var innerEnumerable = Visit(kafkaQueryExpression.ServerQueryExpression);
 
-        return Expression.New(
+        return New(
             typeof(QueryingEnumerable<>).MakeGenericType(shaperExpression.ReturnType).GetConstructors()[0],
             QueryCompilationContext.QueryContextParameter,
             innerEnumerable,
-            Expression.Constant(shaperExpression.Compile()),
-            Expression.Constant(_contextType),
-            Expression.Constant(
+            Constant(shaperExpression.Compile()),
+            Constant(_contextType),
+            Constant(
                 QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.NoTrackingWithIdentityResolution),
-            Expression.Constant(_threadSafetyChecksEnabled));
+            Constant(_threadSafetyChecksEnabled));
     }
 
     private static readonly MethodInfo TableMethodInfo

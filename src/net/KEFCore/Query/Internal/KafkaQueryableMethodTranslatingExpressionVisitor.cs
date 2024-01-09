@@ -19,7 +19,11 @@
 *  Refer to LICENSE for more information.
 */
 
+using Microsoft.EntityFrameworkCore.Query;
+using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
+
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -32,7 +36,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     private readonly SharedTypeEntityExpandingExpressionVisitor _weakEntityExpandingExpressionVisitor;
     private readonly KafkaProjectionBindingExpressionVisitor _projectionBindingExpressionVisitor;
     private readonly IModel _model;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public KafkaQueryableMethodTranslatingExpressionVisitor(
         QueryableMethodTranslatingExpressionVisitorDependencies dependencies,
         QueryCompilationContext queryCompilationContext)
@@ -43,7 +53,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         _projectionBindingExpressionVisitor = new KafkaProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = queryCompilationContext.Model;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected KafkaQueryableMethodTranslatingExpressionVisitor(
         KafkaQueryableMethodTranslatingExpressionVisitor parentVisitor)
         : base(parentVisitor.Dependencies, parentVisitor.QueryCompilationContext, subquery: true)
@@ -53,10 +69,22 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         _projectionBindingExpressionVisitor = new KafkaProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = parentVisitor._model;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override QueryableMethodTranslatingExpressionVisitor CreateSubqueryVisitor()
         => new KafkaQueryableMethodTranslatingExpressionVisitor(this);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
         switch (extensionExpression)
@@ -75,7 +103,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 return base.VisitExtension(extensionExpression);
         }
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
     {
         if (methodCallExpression.Method.IsGenericMethod
@@ -97,7 +131,12 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         throw new NotImplementedException();
     }
 #endif
-    /// <inheritdoc/>
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression CreateShapedQueryExpression(IEntityType entityType)
         => CreateShapedQueryExpressionStatic(entityType);
 
@@ -107,7 +146,11 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return new ShapedQueryExpression(
             queryExpression,
+#if NET8_0_OR_GREATER
+            new StructuralTypeShaperExpression(
+#else
             new EntityShaperExpression(
+#endif
                 entityType,
                 new ProjectionBindingExpression(
                     queryExpression,
@@ -115,7 +158,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     typeof(ValueBuffer)),
                 false));
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateAll(ShapedQueryExpression source, LambdaExpression predicate)
     {
         predicate = Expression.Lambda(Expression.Not(predicate.Body), predicate.Parameters);
@@ -142,7 +191,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateAny(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -170,23 +225,55 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateAverage(
         ShapedQueryExpression source,
         LambdaExpression? selector,
         Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Average), resultType);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateCast(ShapedQueryExpression source, Type resultType)
         => source.ShaperExpression.Type != resultType
             ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, resultType))
             : source;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateConcat(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Concat, source1, source2);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateContains(ShapedQueryExpression source, Expression item)
     {
+#if NET7_0_OR_GREATER
+        var anyLambdaParameter = Expression.Parameter(item.Type, "p");
+        var anyLambda = Expression.Lambda(
+            ExpressionExtensions.CreateEqualsExpression(anyLambdaParameter, item),
+            anyLambdaParameter);
+
+        return TranslateAny(source, anyLambda);
+#else
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
         var newItem = TranslateExpression(item, preserveType: true);
         if (newItem == null)
@@ -209,8 +296,15 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 item));
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
+#endif
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateCount(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -238,7 +332,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(int)));
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateDefaultIfEmpty(ShapedQueryExpression source, Expression? defaultValue)
     {
         if (defaultValue == null)
@@ -249,23 +349,47 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return null;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateDistinct(ShapedQueryExpression source)
     {
         ((KafkaQueryExpression)source.QueryExpression).ApplyDistinct();
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateElementAtOrDefault(
         ShapedQueryExpression source,
         Expression index,
         bool returnDefault)
         => null;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateExcept(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Except, source1, source2);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateFirstOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -279,7 +403,12 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 ? EnumerableMethods.FirstOrDefaultWithoutPredicate
                 : EnumerableMethods.FirstWithoutPredicate);
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateGroupBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -366,7 +495,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 }
 
                 return memberInitExpression.Update(updatedNewExpression, newBindings);
-
+#if NET8_0_OR_GREATER
+            case StructuralTypeShaperExpression { ValueBufferExpression: ProjectionBindingExpression } shaper:
+                return shaper;
+#endif
             default:
                 var translation = TranslateExpression(expression);
                 if (translation == null)
@@ -379,7 +511,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     : Expression.Convert(translation, expression.Type);
         }
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateGroupJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -387,10 +525,22 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         LambdaExpression innerKeySelector,
         LambdaExpression resultSelector)
         => null;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateIntersect(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Intersect, source1, source2);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -428,9 +578,11 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     {
         var left = RemapLambdaBody(outer, outerKeySelector);
         var right = RemapLambdaBody(inner, innerKeySelector);
-
+#if NET7_0_OR_GREATER
+        var joinCondition = TranslateExpression(ExpressionExtensions.CreateEqualsExpression(left, right));
+#else
         var joinCondition = TranslateExpression(Expression.Equal(left, right));
-
+#endif
         var (outerKeyBody, innerKeyBody) = DecomposeJoinCondition(joinCondition);
 
         if (outerKeyBody == null
@@ -487,11 +639,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             }
         }
 
-        if (joinCondition is MethodCallExpression methodCallExpression
-            && methodCallExpression.Method.IsStatic
-            && methodCallExpression.Method.DeclaringType == typeof(object)
-            && methodCallExpression.Method.Name == nameof(object.Equals)
-            && methodCallExpression.Arguments.Count == 2)
+        if (joinCondition is MethodCallExpression { Method.Name: nameof(object.Equals), Arguments.Count: 2 } methodCallExpression
+            && ((methodCallExpression.Method.IsStatic
+                    && methodCallExpression.Method.DeclaringType == typeof(object))
+                || typeof(ValueComparer).IsAssignableFrom(methodCallExpression.Method.DeclaringType)))
         {
             leftExpressions.Add(methodCallExpression.Arguments[0]);
             rightExpressions.Add(methodCallExpression.Arguments[1]);
@@ -526,7 +677,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 && !inner.Type.IsNullableType()
                 && outer.Type.UnwrapNullableType() == inner.Type;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateLastOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -539,7 +696,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             returnDefault
                 ? EnumerableMethods.LastOrDefaultWithoutPredicate
                 : EnumerableMethods.LastWithoutPredicate);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateLeftJoin(
         ShapedQueryExpression outer,
         ShapedQueryExpression inner,
@@ -568,7 +731,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return TranslateTwoParameterSelector(outer, resultSelector);
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateLongCount(ShapedQueryExpression source, LambdaExpression? predicate)
     {
         if (predicate != null)
@@ -597,27 +766,50 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(long)));
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateMax(
         ShapedQueryExpression source,
         LambdaExpression? selector,
         Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Max), resultType);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateMin(ShapedQueryExpression source, LambdaExpression? selector, Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Min), resultType);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateOfType(ShapedQueryExpression source, Type resultType)
     {
-        if (source.ShaperExpression is EntityShaperExpression entityShaperExpression)
+#if NET8_0_OR_GREATER
+        if (source.ShaperExpression is StructuralTypeShaperExpression { StructuralType: IEntityType entityType } shaper)
         {
-            var entityType = entityShaperExpression.EntityType;
+#else
+        if (source.ShaperExpression is EntityShaperExpression shaper)
+        {
+            var entityType = shaper.EntityType;
+#endif
             if (entityType.ClrType == resultType)
             {
                 return source;
             }
 
-            var parameterExpression = Expression.Parameter(entityShaperExpression.Type);
+            var parameterExpression = Expression.Parameter(shaper.Type);
             var predicate = Expression.Lambda(Expression.TypeIs(parameterExpression, resultType), parameterExpression);
             var newSource = TranslateWhere(source, predicate);
             if (newSource == null)
@@ -631,13 +823,17 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             var baseType = entityType.GetAllBaseTypes().SingleOrDefault(et => et.ClrType == resultType);
             if (baseType != null)
             {
-                return source.UpdateShaperExpression(entityShaperExpression.WithEntityType(baseType));
+#if NET8_0_OR_GREATER
+                return source.UpdateShaperExpression(shaper.WithType(baseType));
+#else
+                return source.UpdateShaperExpression(shaper.WithEntityType(baseType));
+#endif
             }
 
             var derivedType = entityType.GetDerivedTypes().Single(et => et.ClrType == resultType);
             var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
 
-            var projectionBindingExpression = (ProjectionBindingExpression)entityShaperExpression.ValueBufferExpression;
+            var projectionBindingExpression = (ProjectionBindingExpression)shaper.ValueBufferExpression;
             var projectionMember = projectionBindingExpression.ProjectionMember;
             Check.DebugAssert(new ProjectionMember().Equals(projectionMember), "Invalid ProjectionMember when processing OfType");
 
@@ -648,13 +844,22 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 {
                     { projectionMember, entityProjectionExpression.UpdateEntityType(derivedType) }
                 });
-
-            return source.UpdateShaperExpression(entityShaperExpression.WithEntityType(derivedType));
+#if NET8_0_OR_GREATER
+            return source.UpdateShaperExpression(shaper.WithType(derivedType));
+#else
+            return source.UpdateShaperExpression(shaper.WithEntityType(derivedType));
+#endif
         }
 
         return null;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateOrderBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -679,7 +884,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateReverse(ShapedQueryExpression source)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -691,7 +902,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression TranslateSelect(ShapedQueryExpression source, LambdaExpression selector)
     {
         if (selector.Body == selector.Parameters[0])
@@ -705,7 +922,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source.UpdateShaperExpression(newShaper);
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSelectMany(
         ShapedQueryExpression source,
         LambdaExpression collectionSelector,
@@ -751,7 +974,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             return base.VisitMethodCall(methodCallExpression);
         }
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSelectMany(ShapedQueryExpression source, LambdaExpression selector)
     {
         var innerParameter = Expression.Parameter(selector.ReturnType.GetSequenceType(), "i");
@@ -760,7 +989,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return TranslateSelectMany(source, selector, resultSelector);
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSingleOrDefault(
         ShapedQueryExpression source,
         LambdaExpression? predicate,
@@ -773,7 +1008,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             returnDefault
                 ? EnumerableMethods.SingleOrDefaultWithoutPredicate
                 : EnumerableMethods.SingleWithoutPredicate);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSkip(ShapedQueryExpression source, Expression count)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -793,13 +1034,31 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSkipWhile(ShapedQueryExpression source, LambdaExpression predicate)
         => null;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateSum(ShapedQueryExpression source, LambdaExpression? selector, Type resultType)
         => TranslateScalarAggregate(source, selector, nameof(Enumerable.Sum), resultType);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateTake(ShapedQueryExpression source, Expression count)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -819,10 +1078,22 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateTakeWhile(ShapedQueryExpression source, LambdaExpression predicate)
         => null;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateThenBy(
         ShapedQueryExpression source,
         LambdaExpression keySelector,
@@ -846,10 +1117,22 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateUnion(ShapedQueryExpression source1, ShapedQueryExpression source2)
         => TranslateSetOperation(EnumerableMethods.Union, source1, source2);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ShapedQueryExpression? TranslateWhere(ShapedQueryExpression source, LambdaExpression predicate)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
@@ -918,8 +1201,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
     private sealed class SharedTypeEntityExpandingExpressionVisitor : ExpressionVisitor
     {
+#if NET6_0
         private static readonly MethodInfo ObjectEqualsMethodInfo
             = typeof(object).GetRuntimeMethod(nameof(object.Equals), new[] { typeof(object), typeof(object) })!;
+#endif
 
         private readonly KafkaExpressionTranslatingExpressionVisitor _expressionTranslator;
 
@@ -963,20 +1248,35 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         }
 
         protected override Expression VisitExtension(Expression extensionExpression)
-            => extensionExpression is EntityShaperExpression
-                || extensionExpression is ShapedQueryExpression
-                    ? extensionExpression
-                    : base.VisitExtension(extensionExpression);
+#if NET8_0_OR_GREATER
+            => extensionExpression is StructuralTypeShaperExpression or ShapedQueryExpression or GroupByShaperExpression
+#else
+            => extensionExpression is EntityShaperExpression || extensionExpression is ShapedQueryExpression
+#endif
+                ? extensionExpression
+                : base.VisitExtension(extensionExpression);
 
         private Expression? TryExpand(Expression? source, MemberIdentity member)
         {
             source = source.UnwrapTypeConversion(out var convertedType);
-            if (source is not EntityShaperExpression entityShaperExpression)
+#if NET8_0_OR_GREATER
+            if (source is not StructuralTypeShaperExpression shaper)
+#else
+            if (source is not EntityShaperExpression shaper)
+#endif
+            {
+                return null;
+            }
+#if NET8_0_OR_GREATER
+            if (shaper.StructuralType is not IEntityType)
             {
                 return null;
             }
 
-            var entityType = entityShaperExpression.EntityType;
+            var entityType = (IEntityType)shaper.StructuralType;
+#else
+            var entityType = shaper.EntityType;
+#endif
             if (convertedType != null)
             {
                 entityType = entityType.GetRootType().GetDerivedTypesInclusive()
@@ -1015,7 +1315,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     .Select(p => p.ClrType)
                     .Any(t => t.IsNullableType());
 
-                var outerKey = entityShaperExpression.CreateKeyValuesExpression(
+                var outerKey = shaper.CreateKeyValuesExpression(
                     navigation.IsOnDependent
                         ? foreignKey.Properties
                         : foreignKey.PrincipalKey.Properties,
@@ -1025,10 +1325,11 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                         ? foreignKey.PrincipalKey.Properties
                         : foreignKey.Properties,
                     makeNullable);
-
-                var keyComparison = Expression.Call(
-                    ObjectEqualsMethodInfo, AddConvertToObject(outerKey), AddConvertToObject(innerKey));
-
+#if NET7_0_OR_GREATER
+                var keyComparison = ExpressionExtensions.CreateEqualsExpression(outerKey, innerKey);
+#else
+                var keyComparison = (Expression)Expression.Call(ObjectEqualsMethodInfo, AddConvertToObject(outerKey), AddConvertToObject(innerKey));
+#endif
                 var predicate = makeNullable
                     ? Expression.AndAlso(
                         outerKey is NewArrayExpression newArrayExpression
@@ -1043,7 +1344,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                                 .Aggregate((l, r) => Expression.AndAlso(l, r))
                             : Expression.NotEqual(outerKey, Expression.Constant(null, outerKey.Type)),
                         keyComparison)
-                    : (Expression)keyComparison;
+                    : keyComparison;
 
                 var correlationPredicate = _expressionTranslator.Translate(predicate)!;
                 innerQueryExpression.UpdateServerQueryExpression(
@@ -1056,9 +1357,9 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             }
 
             var entityProjectionExpression =
-                entityShaperExpression.ValueBufferExpression is ProjectionBindingExpression projectionBindingExpression
+                shaper.ValueBufferExpression is ProjectionBindingExpression projectionBindingExpression
                     ? (EntityProjectionExpression)_queryExpression.GetProjection(projectionBindingExpression)
-                    : (EntityProjectionExpression)entityShaperExpression.ValueBufferExpression;
+                    : (EntityProjectionExpression)shaper.ValueBufferExpression;
             var innerShaper = entityProjectionExpression.BindNavigation(navigation);
             if (innerShaper == null)
             {
@@ -1070,7 +1371,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     .Select(p => p.ClrType)
                     .Any(t => t.IsNullableType());
 
-                var outerKey = entityShaperExpression.CreateKeyValuesExpression(
+                var outerKey = shaper.CreateKeyValuesExpression(
                     navigation.IsOnDependent
                         ? foreignKey.Properties
                         : foreignKey.PrincipalKey.Properties,
@@ -1097,11 +1398,12 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
             return innerShaper;
         }
-
+#if NET6_0
         private static Expression AddConvertToObject(Expression expression)
             => expression.Type.IsValueType
                 ? Expression.Convert(expression, typeof(object))
                 : expression;
+#endif
     }
 
     private ShapedQueryExpression TranslateTwoParameterSelector(ShapedQueryExpression source, LambdaExpression resultSelector)
@@ -1224,8 +1526,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     {
         switch (shaper1)
         {
+#if NET8_0_OR_GREATER
+            case StructuralTypeShaperExpression entityShaperExpression1
+                when shaper2 is StructuralTypeShaperExpression entityShaperExpression2:
+#else
             case EntityShaperExpression entityShaperExpression1
                 when shaper2 is EntityShaperExpression entityShaperExpression2:
+#endif
                 return entityShaperExpression1.IsNullable != entityShaperExpression2.IsNullable
                     ? entityShaperExpression1.MakeNullable(makeNullable)
                     : entityShaperExpression1;

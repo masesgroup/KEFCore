@@ -19,10 +19,11 @@
 *  Refer to LICENSE for more information.
 */
 
-using System.Collections;
 using MASES.EntityFrameworkCore.KNet.Internal;
+using System.Collections;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -80,7 +81,9 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
             private readonly bool _standAloneStateManager;
             private readonly CancellationToken _cancellationToken;
             private readonly IConcurrencyDetector? _concurrencyDetector;
-
+#if NET7_0_OR_GREATER
+            private readonly IExceptionDetector _exceptionDetector;
+#endif
             private IEnumerator<ValueBuffer>? _enumerator;
 
             public Enumerator(QueryingEnumerable<T> queryingEnumerable, CancellationToken cancellationToken = default)
@@ -92,6 +95,9 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                 _queryLogger = queryingEnumerable._queryLogger;
                 _standAloneStateManager = queryingEnumerable._standAloneStateManager;
                 _cancellationToken = cancellationToken;
+#if NET7_0_OR_GREATER
+                _exceptionDetector = _queryContext.ExceptionDetector;
+#endif
                 Current = default!;
 
                 _concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
@@ -121,7 +127,18 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                 }
                 catch (Exception exception)
                 {
+#if NET7_0_OR_GREATER
+                    if (_exceptionDetector.IsCancellation(exception))
+                    {
+                        _queryLogger.QueryCanceled(_contextType);
+                    }
+                    else
+                    {
+                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                    }
+#else
                     _queryLogger.QueryIterationFailed(_contextType, exception);
+#endif
 
                     throw;
                 }
@@ -137,7 +154,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                     {
                         _cancellationToken.ThrowIfCancellationRequested();
 
-                        return new ValueTask<bool>(MoveNextHelper());
+                        return ValueTask.FromResult(MoveNextHelper());
                     }
                     finally
                     {
@@ -146,8 +163,18 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                 }
                 catch (Exception exception)
                 {
+#if NET7_0_OR_GREATER
+                    if (_exceptionDetector.IsCancellation(exception, _cancellationToken))
+                    {
+                        _queryLogger.QueryCanceled(_contextType);
+                    }
+                    else
+                    {
+                        _queryLogger.QueryIterationFailed(_contextType, exception);
+                    }
+#else
                     _queryLogger.QueryIterationFailed(_contextType, exception);
-
+#endif
                     throw;
                 }
             }

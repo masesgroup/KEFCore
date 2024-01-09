@@ -23,9 +23,11 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -80,6 +82,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     private static readonly MethodInfo KafkaLikeMethodInfo =
         typeof(KafkaExpressionTranslatingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(KafkaLike))!;
 
+    private static readonly MethodInfo GetTypeMethodInfo = typeof(object).GetTypeInfo().GetDeclaredMethod(nameof(GetType))!;
+
     // Regex special chars defined here:
     // https://msdn.microsoft.com/en-us/library/4edbef7e(v=vs.110).aspx
     private static readonly char[] RegexSpecialChars
@@ -97,6 +101,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     private readonly EntityReferenceFindingExpressionVisitor _entityReferenceFindingExpressionVisitor;
     private readonly IModel _model;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public KafkaExpressionTranslatingExpressionVisitor(
         QueryCompilationContext queryCompilationContext,
         QueryableMethodTranslatingExpressionVisitor queryableMethodTranslatingExpressionVisitor)
@@ -107,8 +117,20 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         _model = queryCompilationContext.Model;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual string? TranslationErrorDetails { get; private set; }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected virtual void AddTranslationErrorDetails(string details)
     {
         if (TranslationErrorDetails == null)
@@ -121,6 +143,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression? Translate(Expression expression)
     {
         TranslationErrorDetails = null;
@@ -138,16 +166,21 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 : result;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitBinary(BinaryExpression binaryExpression)
     {
         if (binaryExpression.Left.Type == typeof(object[])
-            && binaryExpression.Left is NewArrayExpression
-            && binaryExpression.NodeType == ExpressionType.Equal)
+            && binaryExpression is { Left: NewArrayExpression, NodeType: ExpressionType.Equal })
         {
             return Visit(ConvertObjectArrayEqualityComparison(binaryExpression.Left, binaryExpression.Right));
         }
 
-        if ((binaryExpression.NodeType == ExpressionType.Equal || binaryExpression.NodeType == ExpressionType.NotEqual)
+        if (binaryExpression.NodeType is ExpressionType.Equal or ExpressionType.NotEqual
             && (binaryExpression.Left.IsNullConstantExpression() || binaryExpression.Right.IsNullConstantExpression()))
         {
             var nonNullExpression = binaryExpression.Left.IsNullConstantExpression() ? binaryExpression.Right : binaryExpression.Left;
@@ -170,7 +203,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 {
                     var projection = translatedSubquery.ShaperExpression;
                     if (projection is NewExpression
-                        || RemoveConvert(projection) is EntityShaperExpression { IsNullable: false })
+#if NET8_0_OR_GREATER
+                        || RemoveConvert(projection) is StructuralTypeShaperExpression { IsNullable: false }
+#else
+                        || RemoveConvert(projection) is EntityShaperExpression { IsNullable: false }
+#endif
+                        || RemoveConvert(projection) is CollectionResultShaperExpression)
                     {
                         var anySubquery = Expression.Call(
                             QueryableMethods.AnyWithoutPredicate.MakeGenericMethod(translatedSubquery.Type.GetSequenceType()),
@@ -190,6 +228,23 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
         }
 
+        if (binaryExpression.NodeType == ExpressionType.Equal
+            || binaryExpression.NodeType == ExpressionType.NotEqual
+            && binaryExpression.Left.Type == typeof(Type))
+        {
+            if (IsGetTypeMethodCall(binaryExpression.Left, out var entityReference1)
+                && IsTypeConstant(binaryExpression.Right, out var type1))
+            {
+                return ProcessGetType(entityReference1!, type1!, binaryExpression.NodeType == ExpressionType.Equal);
+            }
+
+            if (IsGetTypeMethodCall(binaryExpression.Right, out var entityReference2)
+                && IsTypeConstant(binaryExpression.Left, out var type2))
+            {
+                return ProcessGetType(entityReference2!, type2!, binaryExpression.NodeType == ExpressionType.Equal);
+            }
+        }
+
         var newLeft = Visit(binaryExpression.Left);
         var newRight = Visit(binaryExpression.Right);
 
@@ -199,8 +254,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return QueryCompilationContext.NotTranslatedExpression;
         }
 
-        if ((binaryExpression.NodeType == ExpressionType.Equal
-                || binaryExpression.NodeType == ExpressionType.NotEqual)
+        if (binaryExpression.NodeType is ExpressionType.Equal or ExpressionType.NotEqual
             // Visited expression could be null, We need to pass MemberInitExpression
             && TryRewriteEntityEquality(
                 binaryExpression.NodeType,
@@ -219,26 +273,15 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             newRight = ConvertToNullable(newRight);
         }
 
-        if (binaryExpression.NodeType == ExpressionType.Equal
-            || binaryExpression.NodeType == ExpressionType.NotEqual)
+        if (binaryExpression.NodeType is ExpressionType.Equal or ExpressionType.NotEqual
+            && TryUseComparer(newLeft, newRight, out var updatedExpression))
         {
-            var property = FindProperty(newLeft) ?? FindProperty(newRight);
-            var comparer = property?.GetValueComparer();
-
-            if (comparer != null
-                && comparer.Type.IsAssignableFrom(newLeft.Type)
-                && comparer.Type.IsAssignableFrom(newRight.Type))
+            if (binaryExpression.NodeType == ExpressionType.NotEqual)
             {
-                if (binaryExpression.NodeType == ExpressionType.Equal)
-                {
-                    return comparer.ExtractEqualsBody(newLeft, newRight);
-                }
-
-                if (binaryExpression.NodeType == ExpressionType.NotEqual)
-                {
-                    return Expression.IsFalse(comparer.ExtractEqualsBody(newLeft, newRight));
-                }
+                updatedExpression = Expression.IsFalse(updatedExpression!);
             }
+
+            return updatedExpression!;
         }
 
         return Expression.MakeBinary(
@@ -248,8 +291,183 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             binaryExpression.IsLiftedToNull,
             binaryExpression.Method,
             binaryExpression.Conversion);
+
+        Expression ProcessGetType(StructuralTypeReferenceExpression typeReference, Type comparisonType, bool match)
+        {
+            if (typeReference.StructuralType is not IEntityType entityType
+                || (entityType.BaseType == null
+                    && !entityType.GetDirectlyDerivedTypes().Any()))
+            {
+                // No hierarchy
+                return Expression.Constant((typeReference.StructuralType.ClrType == comparisonType) == match);
+            }
+
+            if (entityType.GetAllBaseTypes().Any(e => e.ClrType == comparisonType))
+            {
+                // EntitySet will never contain a type of base type
+                return Expression.Constant(!match);
+            }
+
+            var derivedType = entityType.GetDerivedTypesInclusive().SingleOrDefault(et => et.ClrType == comparisonType);
+            // If no derived type matches then fail the translation
+            if (derivedType != null)
+            {
+                // If the derived type is abstract type then predicate will always be false
+                if (derivedType.IsAbstract())
+                {
+                    return Expression.Constant(!match);
+                }
+
+                // Or add predicate for matching that particular type discriminator value
+                // All hierarchies have discriminator property
+                var discriminatorProperty = entityType.FindDiscriminatorProperty()!;
+                var boundProperty = BindProperty(typeReference, discriminatorProperty, discriminatorProperty.ClrType);
+                // KeyValueComparer is not null at runtime
+                var valueComparer = discriminatorProperty.GetKeyValueComparer();
+
+                var result = valueComparer.ExtractEqualsBody(
+                    boundProperty!,
+                    Expression.Constant(derivedType.GetDiscriminatorValue(), discriminatorProperty.ClrType));
+
+                return match ? result : Expression.Not(result);
+            }
+
+            return QueryCompilationContext.NotTranslatedExpression;
+        }
+
+        bool IsGetTypeMethodCall(Expression expression, out StructuralTypeReferenceExpression? typeReference)
+        {
+            typeReference = null;
+            if (expression is not MethodCallExpression methodCallExpression
+                || methodCallExpression.Method != GetTypeMethodInfo)
+            {
+                return false;
+            }
+
+            typeReference = Visit(methodCallExpression.Object) as StructuralTypeReferenceExpression;
+            return typeReference != null;
+        }
+
+        static bool IsTypeConstant(Expression expression, out Type? type)
+        {
+            type = null;
+            if (expression is not UnaryExpression
+                {
+                    NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked,
+                    Operand: ConstantExpression constantExpression
+                })
+            {
+                return false;
+            }
+
+            type = constantExpression.Value as Type;
+            return type != null;
+        }
     }
 
+    private static bool TryUseComparer(
+        Expression? newLeft,
+        Expression? newRight,
+        out Expression? updatedExpression)
+    {
+        updatedExpression = null;
+
+        if (newLeft == null
+            || newRight == null)
+        {
+            return false;
+        }
+
+        var property = FindProperty(newLeft) ?? FindProperty(newRight);
+        var comparer = property?.GetValueComparer();
+
+        if (comparer == null)
+        {
+            return false;
+        }
+
+        MethodInfo? objectEquals = null;
+        MethodInfo? exactMatch = null;
+
+        var converter = property?.GetValueConverter();
+        foreach (var candidate in comparer
+                     .GetType()
+                     .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                     .Where(
+                         m => m.Name == "Equals" && m.GetParameters().Length == 2)
+                     .ToList())
+        {
+            var parameters = candidate.GetParameters();
+            var leftType = parameters[0].ParameterType;
+            var rightType = parameters[1].ParameterType;
+
+            if (leftType == typeof(object)
+                && rightType == typeof(object))
+            {
+                objectEquals = candidate;
+                continue;
+            }
+
+            var matchingLeft = leftType.IsAssignableFrom(newLeft.Type)
+                ? newLeft
+                : converter != null
+                && leftType.IsAssignableFrom(converter.ModelClrType)
+                && converter.ProviderClrType.IsAssignableFrom(newLeft.Type)
+                    ? ReplacingExpressionVisitor.Replace(
+                        converter.ConvertFromProviderExpression.Parameters.Single(),
+                        newLeft,
+                        converter.ConvertFromProviderExpression.Body)
+                    : null;
+
+            var matchingRight = rightType.IsAssignableFrom(newRight.Type)
+                ? newRight
+                : converter != null
+                && rightType.IsAssignableFrom(converter.ModelClrType)
+                && converter.ProviderClrType.IsAssignableFrom(newRight.Type)
+                    ? ReplacingExpressionVisitor.Replace(
+                        converter.ConvertFromProviderExpression.Parameters.Single(),
+                        newRight,
+                        converter.ConvertFromProviderExpression.Body)
+                    : null;
+
+            if (matchingLeft != null && matchingRight != null)
+            {
+                exactMatch = candidate;
+                newLeft = matchingLeft;
+                newRight = matchingRight;
+                break;
+            }
+        }
+
+        if (exactMatch == null
+            && (!property!.ClrType.IsAssignableFrom(newLeft.Type))
+            || !property!.ClrType.IsAssignableFrom(newRight.Type))
+        {
+            return false;
+        }
+
+        updatedExpression =
+            exactMatch != null
+                ? Expression.Call(
+                    Expression.Constant(comparer, comparer.GetType()),
+                    exactMatch,
+                    newLeft,
+                    newRight)
+                : Expression.Call(
+                    Expression.Constant(comparer, comparer.GetType()),
+                    objectEquals!,
+                    Expression.Convert(newLeft, typeof(object)),
+                    Expression.Convert(newRight, typeof(object)));
+
+        return true;
+    }
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitConditional(ConditionalExpression conditionalExpression)
     {
         var test = Visit(conditionalExpression.Test);
@@ -278,17 +496,27 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return Expression.Condition(test, ifTrue, ifFalse);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
         switch (extensionExpression)
         {
             case EntityProjectionExpression:
-            case EntityReferenceExpression:
+
+            case StructuralTypeReferenceExpression:
                 return extensionExpression;
-
+#if NET8_0_OR_GREATER
+            case StructuralTypeShaperExpression shaper:
+                return new StructuralTypeReferenceExpression(shaper);
+#else
             case EntityShaperExpression entityShaperExpression:
-                return new EntityReferenceExpression(entityShaperExpression);
-
+                return new StructuralTypeReferenceExpression(entityShaperExpression);
+#endif
             case ProjectionBindingExpression projectionBindingExpression:
                 return ((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
                     .GetProjection(projectionBindingExpression);
@@ -298,15 +526,39 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitInvocation(InvocationExpression invocationExpression)
         => QueryCompilationContext.NotTranslatedExpression;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitLambda<T>(Expression<T> lambdaExpression)
         => throw new InvalidOperationException(CoreStrings.TranslationFailed(lambdaExpression.Print()));
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitListInit(ListInitExpression listInitExpression)
         => QueryCompilationContext.NotTranslatedExpression;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMember(MemberExpression memberExpression)
     {
         var innerExpression = Visit(memberExpression.Expression);
@@ -341,6 +593,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             updatedMemberExpression = ConvertToNullable(updatedMemberExpression);
 
             return Expression.Condition(
+                // Since inner is nullable type this is fine.
                 Expression.Equal(innerExpression, Expression.Default(innerExpression.Type)),
                 Expression.Default(updatedMemberExpression.Type),
                 updatedMemberExpression);
@@ -351,9 +604,15 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         static bool ShouldApplyNullProtectionForMemberAccess(Type callerType, string memberName)
             => !(callerType.IsGenericType
                 && callerType.GetGenericTypeDefinition() == typeof(Nullable<>)
-                && (memberName == nameof(Nullable<int>.Value) || memberName == nameof(Nullable<int>.HasValue)));
+                && memberName is nameof(Nullable<int>.Value) or nameof(Nullable<int>.HasValue));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override MemberAssignment VisitMemberAssignment(MemberAssignment memberAssignment)
     {
         var expression = Visit(memberAssignment.Expression);
@@ -370,6 +629,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return memberAssignment.Update(expression);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMemberInit(MemberInitExpression memberInitExpression)
     {
         var newExpression = Visit(memberInitExpression.NewExpression);
@@ -387,8 +652,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             newBindings[i] = VisitMemberBinding(memberInitExpression.Bindings[i]);
-            if (((MemberAssignment)newBindings[i]).Expression is UnaryExpression unaryExpression
-                && unaryExpression.NodeType == ExpressionType.Convert
+            if (((MemberAssignment)newBindings[i]).Expression is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression
                 && unaryExpression.Operand == QueryCompilationContext.NotTranslatedExpression)
             {
                 return QueryCompilationContext.NotTranslatedExpression;
@@ -398,6 +662,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return memberInitExpression.Update((NewExpression)newExpression, newBindings);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
     {
         if (methodCallExpression.Method.IsGenericMethod
@@ -433,18 +703,22 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             var shaperExpression = subqueryTranslation.ShaperExpression;
             var innerExpression = shaperExpression;
             Type? convertedType = null;
-            if (shaperExpression is UnaryExpression unaryExpression
-                && unaryExpression.NodeType == ExpressionType.Convert)
+            if (shaperExpression is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression)
             {
                 convertedType = unaryExpression.Type;
                 innerExpression = unaryExpression.Operand;
             }
-
+#if NET8_0_OR_GREATER
+            if (innerExpression is StructuralTypeShaperExpression shaper
+                && (convertedType == null
+                    || convertedType.IsAssignableFrom(shaper.Type)))
+#else
             if (innerExpression is EntityShaperExpression entityShaperExpression
                 && (convertedType == null
                     || convertedType.IsAssignableFrom(entityShaperExpression.Type)))
+#endif
             {
-                return new EntityReferenceExpression(subqueryTranslation.UpdateShaperExpression(innerExpression));
+                return new StructuralTypeReferenceExpression(subqueryTranslation.UpdateShaperExpression(innerExpression));
             }
 
             if (!(innerExpression is ProjectionBindingExpression projectionBindingExpression
@@ -497,8 +771,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         var method = methodCallExpression.Method;
 
         if (method.Name == nameof(object.Equals)
-            && methodCallExpression.Object != null
-            && methodCallExpression.Arguments.Count == 1)
+            && methodCallExpression is { Object: not null, Arguments.Count: 1 })
         {
             var left = Visit(methodCallExpression.Object);
             var right = Visit(methodCallExpression.Arguments[0]);
@@ -536,6 +809,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
             var left = Visit(methodCallExpression.Arguments[0]);
             var right = Visit(methodCallExpression.Arguments[1]);
+
+            if (TryUseComparer(left, right, out var updatedExpression))
+            {
+                return updatedExpression!;
+            }
 
             if (TryRewriteEntityEquality(
                     ExpressionType.Equal,
@@ -677,6 +955,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return methodCallExpression.Update(@object, arguments);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitNew(NewExpression newExpression)
     {
         var newArguments = new List<Expression>();
@@ -699,6 +983,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return newExpression.Update(newArguments);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitNewArray(NewArrayExpression newArrayExpression)
     {
         var newExpressions = new List<Expression>();
@@ -721,6 +1011,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return newArrayExpression.Update(newExpressions);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitParameter(ParameterExpression parameterExpression)
     {
         if (parameterExpression.Name?.StartsWith(QueryCompilationContext.QueryParameterPrefix, StringComparison.Ordinal) == true)
@@ -734,12 +1030,21 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         throw new InvalidOperationException(CoreStrings.TranslationFailed(parameterExpression.Print()));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitTypeBinary(TypeBinaryExpression typeBinaryExpression)
     {
         if (typeBinaryExpression.NodeType == ExpressionType.TypeIs
-            && Visit(typeBinaryExpression.Expression) is EntityReferenceExpression entityReferenceExpression)
+            && Visit(typeBinaryExpression.Expression) is StructuralTypeReferenceExpression typeReference)
         {
-            var entityType = entityReferenceExpression.EntityType;
+            if (typeReference.StructuralType is not IEntityType entityType)
+            {
+                return Expression.Constant(typeReference.StructuralType.ClrType == typeBinaryExpression.TypeOperand);
+            }
 
             if (entityType.GetAllBaseTypesInclusive().Any(et => et.ClrType == typeBinaryExpression.TypeOperand))
             {
@@ -751,7 +1056,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             {
                 // All hierarchies have discriminator property
                 var discriminatorProperty = entityType.FindDiscriminatorProperty()!;
-                var boundProperty = BindProperty(entityReferenceExpression, discriminatorProperty, discriminatorProperty.ClrType);
+                var boundProperty = BindProperty(typeReference, discriminatorProperty, discriminatorProperty.ClrType);
                 // KeyValueComparer is not null at runtime
                 var valueComparer = discriminatorProperty.GetKeyValueComparer();
 
@@ -775,6 +1080,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return QueryCompilationContext.NotTranslatedExpression;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitUnary(UnaryExpression unaryExpression)
     {
         var newOperand = Visit(unaryExpression.Operand);
@@ -783,12 +1094,10 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return QueryCompilationContext.NotTranslatedExpression;
         }
 
-        if (newOperand is EntityReferenceExpression entityReferenceExpression
-            && (unaryExpression.NodeType == ExpressionType.Convert
-                || unaryExpression.NodeType == ExpressionType.ConvertChecked
-                || unaryExpression.NodeType == ExpressionType.TypeAs))
+        if (newOperand is StructuralTypeReferenceExpression typeReference
+            && unaryExpression.NodeType is ExpressionType.Convert or ExpressionType.ConvertChecked or ExpressionType.TypeAs)
         {
-            return entityReferenceExpression.Convert(unaryExpression.Type);
+            return typeReference.Convert(unaryExpression.Type);
         }
 
         if (unaryExpression.NodeType == ExpressionType.Convert
@@ -804,10 +1113,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
 
         var result = (Expression)Expression.MakeUnary(unaryExpression.NodeType, newOperand, unaryExpression.Type);
-        if (result is UnaryExpression outerUnary
-            && outerUnary.NodeType == ExpressionType.Convert
-            && outerUnary.Operand is UnaryExpression innerUnary
-            && innerUnary.NodeType == ExpressionType.Convert)
+        if (result is UnaryExpression
+            {
+                NodeType: ExpressionType.Convert,
+                Operand: UnaryExpression { NodeType: ExpressionType.Convert } innerUnary
+            } outerUnary)
         {
             var innerMostType = innerUnary.Operand.Type;
             var intermediateType = innerUnary.Type;
@@ -830,12 +1140,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     private Expression? TryBindMember(Expression? source, MemberIdentity member, Type type)
     {
-        if (!(source is EntityReferenceExpression entityReferenceExpression))
+        if (source is not StructuralTypeReferenceExpression typeReference)
         {
             return null;
         }
 
-        var entityType = entityReferenceExpression.EntityType;
+        var entityType = typeReference.StructuralType;
 
         var property = member.MemberInfo != null
             ? entityType.FindProperty(member.MemberInfo)
@@ -843,22 +1153,22 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
         if (property != null)
         {
-            return BindProperty(entityReferenceExpression, property, type);
+            return BindProperty(typeReference, property, type);
         }
 
         AddTranslationErrorDetails(
             CoreStrings.QueryUnableToTranslateMember(
                 member.Name,
-                entityReferenceExpression.EntityType.DisplayName()));
+                typeReference.StructuralType.DisplayName()));
 
         return null;
     }
 
-    private Expression? BindProperty(EntityReferenceExpression entityReferenceExpression, IProperty property, Type type)
+    private Expression? BindProperty(StructuralTypeReferenceExpression typeReference, IProperty property, Type type)
     {
-        if (entityReferenceExpression.ParameterEntity != null)
+        if (typeReference.Parameter != null)
         {
-            var valueBufferExpression = Visit(entityReferenceExpression.ParameterEntity.ValueBufferExpression);
+            var valueBufferExpression = Visit(typeReference.Parameter.ValueBufferExpression);
             if (valueBufferExpression == QueryCompilationContext.NotTranslatedExpression)
             {
                 return null;
@@ -876,10 +1186,14 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                     : result;
         }
 
-        if (entityReferenceExpression.SubqueryEntity != null)
+        if (typeReference.Subquery != null)
         {
-            var entityShaper = (EntityShaperExpression)entityReferenceExpression.SubqueryEntity.ShaperExpression;
-            var kafkaQueryExpression = (KafkaQueryExpression)entityReferenceExpression.SubqueryEntity.QueryExpression;
+#if NET8_0_OR_GREATER
+            var entityShaper = (StructuralTypeShaperExpression)typeReference.Subquery.ShaperExpression;
+#else
+            var entityShaper = (EntityShaperExpression)typeReference.Subquery.ShaperExpression;
+#endif
+            var kafkaQueryExpression = (KafkaQueryExpression)typeReference.Subquery.QueryExpression;
 
             var projectionBindingExpression = (ProjectionBindingExpression)entityShaper.ValueBufferExpression;
             var entityProjectionExpression = (EntityProjectionExpression)kafkaQueryExpression.GetProjection(
@@ -912,8 +1226,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
         var serverQuery = kafkaQueryExpression.ServerQueryExpression;
         serverQuery = ((LambdaExpression)((NewExpression)serverQuery).Arguments[0]).Body;
-        if (serverQuery is UnaryExpression unaryExpression
-            && unaryExpression.NodeType == ExpressionType.Convert
+        if (serverQuery is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression
             && unaryExpression.Type == typeof(object))
         {
             serverQuery = unaryExpression.Operand;
@@ -930,6 +1243,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 readExpression));
     }
 
+    [UsedImplicitly]
     private static T GetParameterValue<T>(QueryContext queryContext, string parameterName)
         => (T)queryContext.ParameterValues[parameterName]!;
 
@@ -948,18 +1262,24 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             ? Expression.Convert(expression, expression.Type.UnwrapNullableType())
             : expression;
 
-    private static IProperty? FindProperty(Expression expression)
+    private static IProperty? FindProperty(Expression? expression)
     {
-        if (expression.NodeType == ExpressionType.Convert
+        if (expression?.NodeType == ExpressionType.Convert
+            && expression.Type == typeof(object))
+        {
+            expression = ((UnaryExpression)expression).Operand;
+        }
+
+        if (expression?.NodeType == ExpressionType.Convert
             && expression.Type.IsNullableType()
             && expression is UnaryExpression unaryExpression
-            && expression.Type.UnwrapNullableType() == unaryExpression.Type)
+            && (expression.Type.UnwrapNullableType() == unaryExpression.Type
+                || expression.Type == unaryExpression.Type))
         {
             expression = unaryExpression.Operand;
         }
 
-        if (expression is MethodCallExpression readValueMethodCall
-            && readValueMethodCall.Method.IsGenericMethod
+        if (expression is MethodCallExpression { Method.IsGenericMethod: true } readValueMethodCall
             && readValueMethodCall.Method.GetGenericMethodDefinition() == ExpressionExtensions.ValueBufferTryReadValueMethod)
         {
             return readValueMethodCall.Arguments[2].GetConstantValue<IProperty>();
@@ -972,12 +1292,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     {
         result = null;
 
-        if (!(item is EntityReferenceExpression itemEntityReference))
+        if (item is not StructuralTypeReferenceExpression { StructuralType: IEntityType entityType })
         {
             return false;
         }
 
-        var entityType = itemEntityReference.EntityType;
         var primaryKeyProperties = entityType.FindPrimaryKey()?.Properties;
         if (primaryKeyProperties == null)
         {
@@ -1010,9 +1329,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 rewrittenSource = Expression.Constant(propertyValueList);
                 break;
 
-            case MethodCallExpression methodCallExpression
-                when methodCallExpression.Method.IsGenericMethod
-                && methodCallExpression.Method.GetGenericMethodDefinition() == GetParameterValueMethodInfo:
+            case MethodCallExpression { Method.IsGenericMethod: true } methodCallExpression
+                when methodCallExpression.Method.GetGenericMethodDefinition() == GetParameterValueMethodInfo:
                 var parameterName = methodCallExpression.Arguments[1].GetConstantValue<string>();
                 var lambda = Expression.Lambda(
                     Expression.Call(
@@ -1050,8 +1368,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         bool equalsMethod,
         [NotNullWhen(true)] out Expression? result)
     {
-        var leftEntityReference = left as EntityReferenceExpression;
-        var rightEntityReference = right as EntityReferenceExpression;
+        var leftEntityReference = left is StructuralTypeReferenceExpression { StructuralType: IEntityType } l ? l : null;
+        var rightEntityReference = right is StructuralTypeReferenceExpression { StructuralType: IEntityType } r ? r : null;
 
         if (leftEntityReference == null
             && rightEntityReference == null)
@@ -1064,7 +1382,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             || IsNullConstantExpression(right))
         {
             var nonNullEntityReference = (IsNullConstantExpression(left) ? rightEntityReference : leftEntityReference)!;
-            var entityType1 = nonNullEntityReference.EntityType;
+            var entityType1 = (IEntityType)nonNullEntityReference.StructuralType;
             var primaryKeyProperties1 = entityType1.FindPrimaryKey()?.Properties;
             if (primaryKeyProperties1 == null)
             {
@@ -1089,8 +1407,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return true;
         }
 
-        var leftEntityType = leftEntityReference?.EntityType;
-        var rightEntityType = rightEntityReference?.EntityType;
+        var leftEntityType = (IEntityType?)leftEntityReference?.StructuralType;
+        var rightEntityType = (IEntityType?)rightEntityReference?.StructuralType;
         var entityType = leftEntityType ?? rightEntityType;
 
         Check.DebugAssert(entityType != null, "At least either side should be entityReference so entityType should be non-null.");
@@ -1117,8 +1435,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
 
         if (primaryKeyProperties.Count > 1
-            && (leftEntityReference?.SubqueryEntity != null
-                || rightEntityReference?.SubqueryEntity != null))
+            && (leftEntityReference?.Subquery != null
+                || rightEntityReference?.Subquery != null))
         {
             throw new InvalidOperationException(
                 CoreStrings.EntityEqualityOnCompositeKeyEntitySubqueryNotSupported(
@@ -1156,9 +1474,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                         : property.GetGetter().GetClrValue(constantExpression.Value),
                     property.ClrType.MakeNullable());
 
-            case MethodCallExpression methodCallExpression
-                when methodCallExpression.Method.IsGenericMethod
-                && methodCallExpression.Method.GetGenericMethodDefinition() == GetParameterValueMethodInfo:
+            case MethodCallExpression { Method.IsGenericMethod: true } methodCallExpression
+                when methodCallExpression.Method.GetGenericMethodDefinition() == GetParameterValueMethodInfo:
                 var parameterName = methodCallExpression.Arguments[1].GetConstantValue<string>();
                 var lambda = Expression.Lambda(
                     Expression.Call(
@@ -1216,18 +1533,22 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     private static ConstantExpression GetValue(Expression expression)
         => Expression.Constant(
-            Expression.Lambda<Func<object>>(Expression.Convert(expression, typeof(object))).Compile().Invoke(),
+            Expression.Lambda<Func<object>>(Expression.Convert(expression, typeof(object)))
+                .Compile(preferInterpretation: true)
+                .Invoke(),
             expression.Type);
 
     private static bool CanEvaluate(Expression expression)
     {
+#pragma warning disable IDE0066 // Convert switch statement to expression
         switch (expression)
+#pragma warning restore IDE0066 // Convert switch statement to expression
         {
             case ConstantExpression:
                 return true;
 
             case NewExpression newExpression:
-                return newExpression.Arguments.All(e => CanEvaluate(e));
+                return newExpression.Arguments.All(CanEvaluate);
 
             case MemberInitExpression memberInitExpression:
                 return CanEvaluate(memberInitExpression.NewExpression)
@@ -1258,8 +1579,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                     {
                         l = l.Type.IsNullableType() ? l : Expression.Convert(l, r.Type);
                     }
-
+#if NET7_0_OR_GREATER
+                    return ExpressionExtensions.CreateEqualsExpression(l, r);
+#else
                     return Expression.Equal(l, r);
+#endif
                 })
             .Aggregate((a, b) => Expression.AndAlso(a, b));
 
@@ -1272,12 +1596,12 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     }
 
     private static bool IsNullConstantExpression(Expression expression)
-        => expression is ConstantExpression constantExpression && constantExpression.Value == null;
+        => expression is ConstantExpression { Value: null };
 
     [DebuggerStepThrough]
     private static bool TranslationFailed(Expression? original, Expression? translation)
         => original != null
-            && (translation == QueryCompilationContext.NotTranslatedExpression || translation is EntityReferenceExpression);
+            && (translation == QueryCompilationContext.NotTranslatedExpression || translation is StructuralTypeReferenceExpression);
 
     private static bool KafkaLike(string matchExpression, string pattern, string escapeCharacter)
     {
@@ -1381,7 +1705,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 return expression;
             }
 
-            if (expression is EntityReferenceExpression)
+            if (expression is StructuralTypeReferenceExpression)
             {
                 _found = true;
                 return expression;
@@ -1390,34 +1714,34 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return base.Visit(expression);
         }
     }
-
-    private sealed class EntityReferenceExpression : Expression
+#if NET8_0_OR_GREATER
+    private sealed class StructuralTypeReferenceExpression : Expression
     {
-        public EntityReferenceExpression(EntityShaperExpression parameter)
+        public StructuralTypeReferenceExpression(StructuralTypeShaperExpression parameter)
         {
-            ParameterEntity = parameter;
-            EntityType = parameter.EntityType;
+            Parameter = parameter;
+            StructuralType = parameter.StructuralType;
         }
 
-        public EntityReferenceExpression(ShapedQueryExpression subquery)
+        public StructuralTypeReferenceExpression(ShapedQueryExpression subquery)
         {
-            SubqueryEntity = subquery;
-            EntityType = ((EntityShaperExpression)subquery.ShaperExpression).EntityType;
+            Subquery = subquery;
+            StructuralType = ((StructuralTypeShaperExpression)subquery.ShaperExpression).StructuralType;
         }
 
-        private EntityReferenceExpression(EntityReferenceExpression entityReferenceExpression, IEntityType entityType)
+        private StructuralTypeReferenceExpression(StructuralTypeReferenceExpression typeReference, IEntityType type)
         {
-            ParameterEntity = entityReferenceExpression.ParameterEntity;
-            SubqueryEntity = entityReferenceExpression.SubqueryEntity;
-            EntityType = entityType;
+            Parameter = typeReference.Parameter;
+            Subquery = typeReference.Subquery;
+            StructuralType = type;
         }
 
-        public EntityShaperExpression? ParameterEntity { get; }
-        public ShapedQueryExpression? SubqueryEntity { get; }
-        public IEntityType EntityType { get; }
+        public new StructuralTypeShaperExpression? Parameter { get; }
+        public ShapedQueryExpression? Subquery { get; }
+        public ITypeBase StructuralType { get; }
 
         public override Type Type
-            => EntityType.ClrType;
+            => StructuralType.ClrType;
 
         public override ExpressionType NodeType
             => ExpressionType.Extension;
@@ -1430,11 +1754,58 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 return this;
             }
 
-            var derivedEntityType = EntityType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type);
+            return StructuralType is IEntityType entityType
+                && entityType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type) is IEntityType derivedEntityType
+                    ? new StructuralTypeReferenceExpression(this, derivedEntityType)
+                    : QueryCompilationContext.NotTranslatedExpression;
+        }
+    }
+#else
+    private sealed class StructuralTypeReferenceExpression : Expression
+    {
+        public StructuralTypeReferenceExpression(EntityShaperExpression parameter)
+        {
+            Parameter = parameter;
+            StructuralType = parameter.EntityType;
+        }
+
+        public StructuralTypeReferenceExpression(ShapedQueryExpression subquery)
+        {
+            Subquery = subquery;
+            StructuralType = ((EntityShaperExpression)subquery.ShaperExpression).EntityType;
+        }
+
+        private StructuralTypeReferenceExpression(StructuralTypeReferenceExpression entityReferenceExpression, IEntityType entityType)
+        {
+            Parameter = entityReferenceExpression.Parameter;
+            Subquery = entityReferenceExpression.Subquery;
+            StructuralType = entityType;
+        }
+
+        public new EntityShaperExpression? Parameter { get; }
+        public ShapedQueryExpression? Subquery { get; }
+        public IEntityType StructuralType { get; }
+
+        public override Type Type
+            => StructuralType.ClrType;
+
+        public override ExpressionType NodeType
+            => ExpressionType.Extension;
+
+        public Expression Convert(Type type)
+        {
+            if (type == typeof(object) // Ignore object conversion
+                || type.IsAssignableFrom(Type)) // Ignore casting to base type/interface
+            {
+                return this;
+            }
+
+            var derivedEntityType = StructuralType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type);
 
             return derivedEntityType == null
                 ? QueryCompilationContext.NotTranslatedExpression
-                : new EntityReferenceExpression(this, derivedEntityType);
+                : new StructuralTypeReferenceExpression(this, derivedEntityType);
         }
     }
+#endif
 }

@@ -19,19 +19,11 @@
 *  Refer to LICENSE for more information.
 */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
-/// <summary>
-///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-///     any release. You should only use it directly in your code with extreme caution and knowing that
-///     doing so can result in application failures when updating to a new Entity Framework Core release.
-/// </summary>
+
 public partial class KafkaQueryExpression
 {
     private sealed class ResultEnumerable : IEnumerable<ValueBuffer>
@@ -190,8 +182,12 @@ public partial class KafkaQueryExpression
     private sealed class EntityShaperNullableMarkingExpressionVisitor : ExpressionVisitor
     {
         protected override Expression VisitExtension(Expression extensionExpression)
-            => extensionExpression is EntityShaperExpression entityShaper
-                ? entityShaper.MakeNullable()
+#if NET8_0_OR_GREATER
+            => extensionExpression is StructuralTypeShaperExpression shaper
+#else
+            => extensionExpression is EntityShaperExpression shaper
+#endif
+                ? shaper.MakeNullable()
                 : base.VisitExtension(extensionExpression);
     }
 

@@ -20,6 +20,7 @@
 */
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -29,26 +30,57 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaTableExpression : Expression, IPrintableExpression
 {
     /// <summary>
-    /// Default initializer
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     public KafkaTableExpression(IEntityType entityType)
     {
         EntityType = entityType;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public override Type Type
         => typeof(IEnumerable<ValueBuffer>);
+
     /// <summary>
-    /// <see cref="IEntityType"/> associated to the <see cref="Expression"/>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     public virtual IEntityType EntityType { get; }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitChildren(ExpressionVisitor visitor)
         => this;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)
         => expressionPrinter.Append(nameof(KafkaTableExpression) + ": Entity: " + EntityType.DisplayName());
 }

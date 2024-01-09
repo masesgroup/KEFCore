@@ -20,12 +20,10 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -41,7 +39,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         = typeof(ValueBuffer).GetTypeInfo().GetProperty(nameof(ValueBuffer.Count))!;
 
     private static readonly MethodInfo LeftJoinMethodInfo = typeof(KafkaQueryExpression).GetTypeInfo()
-        .GetDeclaredMethods(nameof(LeftJoin)).Single(mi => mi.GetParameters().Length == 6);
+        .GetDeclaredMethods(nameof(LeftJoin)).Single(mi => mi.GetParameters().Length == 7);
 
     private static readonly ConstructorInfo ResultEnumerableConstructor
         = typeof(ResultEnumerable).GetConstructors().Single();
@@ -65,6 +63,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         _valueBufferParameter = valueBufferParameter;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public KafkaQueryExpression(IEntityType entityType)
     {
         _valueBufferParameter = Parameter(typeof(ValueBuffer), "valueBuffer");
@@ -131,11 +135,29 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         _projectionMapping[new ProjectionMember()] = entityProjection;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression ServerQueryExpression { get; private set; }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual ParameterExpression CurrentParameter
         => _groupingParameter ?? _valueBufferParameter;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ReplaceProjection(IReadOnlyList<Expression> clientProjections)
     {
         _projectionMapping.Clear();
@@ -144,6 +166,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         _clientProjections.AddRange(clientProjections);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ReplaceProjection(IReadOnlyDictionary<ProjectionMember, Expression> projectionMapping)
     {
         _projectionMapping.Clear();
@@ -220,11 +248,23 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         }
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression GetProjection(ProjectionBindingExpression projectionBindingExpression)
         => projectionBindingExpression.ProjectionMember != null
             ? _projectionMapping[projectionBindingExpression.ProjectionMember]
             : _clientProjections[projectionBindingExpression.Index!.Value];
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ApplyProjection()
     {
         if (_scalarServerQuery)
@@ -331,9 +371,21 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         }
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void UpdateServerQueryExpression(Expression serverQueryExpression)
         => ServerQueryExpression = serverQueryExpression;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ApplySetOperation(MethodInfo setOperationMethodInfo, KafkaQueryExpression source2)
     {
         Check.DebugAssert(_groupingParameter == null, "Cannot apply set operation after GroupBy without flattening.");
@@ -417,6 +469,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             setOperationMethodInfo.MakeGenericMethod(typeof(ValueBuffer)), ServerQueryExpression, source2.ServerQueryExpression);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ApplyDefaultIfEmpty()
     {
         if (_clientProjections.Count != 0)
@@ -444,6 +502,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             Constant(new ValueBuffer(Enumerable.Repeat((object?)null, _projectionMappingExpressions.Count).ToArray())));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ApplyDistinct()
     {
         Check.DebugAssert(!_scalarServerQuery && _singleResultMethodInfo == null, "Cannot apply distinct on single result query");
@@ -499,6 +563,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 selectorLambda));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual GroupByShaperExpression ApplyGrouping(
         Expression groupingKey,
         Expression shaperExpression,
@@ -553,6 +623,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 new QueryExpressionReplacingExpressionVisitor(this, clonedKafkaQueryExpression).Visit(shaperExpression)));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression AddInnerJoin(
         KafkaQueryExpression innerQueryExpression,
         LambdaExpression outerKeySelector,
@@ -563,6 +639,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             innerQueryExpression, outerKeySelector, innerKeySelector, outerShaperExpression, innerShaperExpression,
             innerNullable: false);
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression AddLeftJoin(
         KafkaQueryExpression innerQueryExpression,
         LambdaExpression outerKeySelector,
@@ -573,6 +655,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             innerQueryExpression, outerKeySelector, innerKeySelector, outerShaperExpression, innerShaperExpression,
             innerNullable: true);
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression AddSelectMany(
         KafkaQueryExpression innerQueryExpression,
         Expression outerShaperExpression,
@@ -580,7 +668,17 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         bool innerNullable)
         => AddJoin(innerQueryExpression, null, null, outerShaperExpression, innerShaperExpression, innerNullable);
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
+#if NET8_0_OR_GREATER
+    public virtual StructuralTypeShaperExpression AddNavigationToWeakEntityType(
+#else
     public virtual EntityShaperExpression AddNavigationToWeakEntityType(
+#endif
         EntityProjectionExpression entityProjectionExpression,
         INavigation navigation,
         KafkaQueryExpression innerQueryExpression,
@@ -630,16 +728,24 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             outerKeySelector,
             innerKeySelector,
             resultSelector,
-            Constant(
-                new ValueBuffer(
-                    Enumerable.Repeat((object?)null, selectorExpressions.Count - outerIndex).ToArray())));
-
+            Constant(new ValueBuffer(Enumerable.Repeat((object?)null, selectorExpressions.Count - outerIndex).ToArray())),
+            Constant(null, typeof(IEqualityComparer<>).MakeGenericType(outerKeySelector.ReturnType)));
+#if NET8_0_OR_GREATER
+        var entityShaper = new StructuralTypeShaperExpression(innerEntityProjection.EntityType, innerEntityProjection, nullable: true);
+#else
         var entityShaper = new EntityShaperExpression(innerEntityProjection.EntityType, innerEntityProjection, nullable: true);
+#endif
         entityProjectionExpression.AddNavigationBinding(navigation, entityShaper);
 
         return entityShaper;
     }
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual ShapedQueryExpression Clone(Expression shaperExpression)
     {
         var clonedKafkaQueryExpression = Clone();
@@ -649,6 +755,12 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             new QueryExpressionReplacingExpressionVisitor(this, clonedKafkaQueryExpression).Visit(shaperExpression));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression GetSingleScalarProjection()
     {
         var expression = CreateReadValueExpression(ServerQueryExpression.Type, 0, null);
@@ -665,15 +777,39 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         return new ProjectionBindingExpression(this, new ProjectionMember(), expression.Type.MakeNullable());
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual void ConvertToSingleResult(MethodInfo methodInfo)
         => _singleResultMethodInfo = methodInfo;
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public override Type Type
         => typeof(IEnumerable<ValueBuffer>);
-    /// <inheritdoc/>
+
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public sealed override ExpressionType NodeType
         => ExpressionType.Extension;
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)
     {
         expressionPrinter.AppendLine(nameof(KafkaQueryExpression) + ": ");
@@ -738,7 +874,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 return newExpression.Update(arguments);
 
             case MemberInitExpression memberInitExpression:
-                if (memberInitExpression.Bindings.Any(mb => !(mb is MemberAssignment)))
+                if (memberInitExpression.Bindings.Any(mb => mb is not MemberAssignment))
                 {
                     goto default;
                 }
@@ -757,7 +893,23 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 }
 
                 return memberInitExpression.Update(updatedNewExpression, memberBindings);
+#if NET8_0_OR_GREATER
+            case StructuralTypeShaperExpression { ValueBufferExpression: ProjectionBindingExpression projectionBindingExpression } shaper:
+                var entityProjectionExpression =
+                    (EntityProjectionExpression)((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
+                    .GetProjection(projectionBindingExpression);
+                var readExpressions = new Dictionary<IProperty, MethodCallExpression>();
+                foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+                {
+                    readExpressions[property] = (MethodCallExpression)GetGroupingKey(
+                        entityProjectionExpression.BindProperty(property),
+                        groupingExpressions,
+                        groupingKeyAccessExpression);
+                }
 
+                return shaper.Update(
+                    new EntityProjectionExpression(entityProjectionExpression.EntityType, readExpressions));
+#endif
             default:
                 var index = groupingExpressions.Count;
                 groupingExpressions.Add(key);
@@ -926,6 +1078,15 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         if (outerKeySelector != null
             && innerKeySelector != null)
         {
+            var comparer = ((InferPropertyFromInner(outerKeySelector.Body)
+                    ?? InferPropertyFromInner(outerKeySelector.Body))
+                as IProperty)?.GetValueComparer();
+
+            if (comparer?.Type != outerKeySelector.ReturnType)
+            {
+                comparer = null;
+            }
+
             if (innerNullable)
             {
                 ServerQueryExpression = Call(
@@ -936,20 +1097,29 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                     outerKeySelector,
                     innerKeySelector,
                     resultSelector,
-                    Constant(
-                        new ValueBuffer(
-                            Enumerable.Repeat((object?)null, resultSelectorExpressions.Count - outerIndex).ToArray())));
+                    Constant(new ValueBuffer(Enumerable.Repeat((object?)null, resultSelectorExpressions.Count - outerIndex).ToArray())),
+                    Constant(comparer, typeof(IEqualityComparer<>).MakeGenericType(outerKeySelector.ReturnType)));
             }
             else
             {
-                ServerQueryExpression = Call(
-                    EnumerableMethods.Join.MakeGenericMethod(
-                        typeof(ValueBuffer), typeof(ValueBuffer), outerKeySelector.ReturnType, typeof(ValueBuffer)),
-                    ServerQueryExpression,
-                    innerQueryExpression.ServerQueryExpression,
-                    outerKeySelector,
-                    innerKeySelector,
-                    resultSelector);
+                ServerQueryExpression = comparer == null
+                    ? Call(
+                        EnumerableMethods.Join.MakeGenericMethod(
+                            typeof(ValueBuffer), typeof(ValueBuffer), outerKeySelector.ReturnType, typeof(ValueBuffer)),
+                        ServerQueryExpression,
+                        innerQueryExpression.ServerQueryExpression,
+                        outerKeySelector,
+                        innerKeySelector,
+                        resultSelector)
+                    : Call(
+                        EnumerableMethods.JoinWithComparer.MakeGenericMethod(
+                            typeof(ValueBuffer), typeof(ValueBuffer), outerKeySelector.ReturnType, typeof(ValueBuffer)),
+                        ServerQueryExpression,
+                        innerQueryExpression.ServerQueryExpression,
+                        outerKeySelector,
+                        innerKeySelector,
+                        resultSelector,
+                        Constant(comparer, typeof(IEqualityComparer<>).MakeGenericType(outerKeySelector.ReturnType)));
             }
         }
         else
@@ -1016,8 +1186,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             .SelectMany(t => t.GetDeclaredProperties());
 
     private static IPropertyBase? InferPropertyFromInner(Expression expression)
-        => expression is MethodCallExpression methodCallExpression
-            && methodCallExpression.Method.IsGenericMethod
+        => expression is MethodCallExpression { Method.IsGenericMethod: true } methodCallExpression
             && methodCallExpression.Method.GetGenericMethodDefinition() == ExpressionExtensions.ValueBufferTryReadValueMethod
                 ? methodCallExpression.Arguments[2].GetConstantValue<IPropertyBase>()
                 : null;
@@ -1107,8 +1276,11 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         Func<TOuter, TKey> outerKeySelector,
         Func<TInner, TKey> innerKeySelector,
         Func<TOuter, TInner, TResult> resultSelector,
-        TInner defaultValue)
-        => outer.GroupJoin(inner, outerKeySelector, innerKeySelector, (oe, ies) => new { oe, ies })
+        TInner defaultValue,
+        IEqualityComparer<TKey>? comparer)
+        => (comparer == null
+                ? outer.GroupJoin(inner, outerKeySelector, innerKeySelector, (oe, ies) => new { oe, ies })
+                : outer.GroupJoin(inner, outerKeySelector, innerKeySelector, (oe, ies) => new { oe, ies }, comparer))
             .SelectMany(t => t.ies.DefaultIfEmpty(defaultValue), (t, i) => resultSelector(t.oe, i));
 
     private static MethodCallExpression MakeReadValueNullable(Expression expression)
