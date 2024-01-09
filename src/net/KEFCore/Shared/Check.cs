@@ -1,15 +1,10 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
 #nullable enable
+
+using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace Microsoft.EntityFrameworkCore.Utilities;
 
@@ -117,7 +112,17 @@ internal static class Check
     {
         if (!condition)
         {
+#if NET7_0_OR_GREATER
+            throw new UnreachableException($"Check.DebugAssert failed: {message}");
+#else
             throw new Exception($"Check.DebugAssert failed: {message}");
+#endif
         }
     }
+#if NET7_0_OR_GREATER
+    [Conditional("DEBUG")]
+    [DoesNotReturn]
+    public static void DebugFail(string message)
+        => throw new UnreachableException($"Check.DebugFail failed: {message}");
+#endif
 }

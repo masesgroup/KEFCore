@@ -1,10 +1,9 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-
 #nullable enable
+
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace System.Linq.Expressions;
@@ -13,8 +12,7 @@ namespace System.Linq.Expressions;
 internal static class ExpressionExtensions
 {
     public static bool IsNullConstantExpression(this Expression expression)
-        => RemoveConvert(expression) is ConstantExpression constantExpression
-            && constantExpression.Value == null;
+        => RemoveConvert(expression) is ConstantExpression { Value: null };
 
     public static LambdaExpression UnwrapLambdaFromQuote(this Expression expression)
         => (LambdaExpression)(expression is UnaryExpression unary && expression.NodeType == ExpressionType.Quote
@@ -25,10 +23,10 @@ internal static class ExpressionExtensions
     public static Expression? UnwrapTypeConversion(this Expression? expression, out Type? convertedType)
     {
         convertedType = null;
-        while (expression is UnaryExpression unaryExpression
-               && (unaryExpression.NodeType == ExpressionType.Convert
-                   || unaryExpression.NodeType == ExpressionType.ConvertChecked
-                   || unaryExpression.NodeType == ExpressionType.TypeAs))
+        while (expression is UnaryExpression
+               {
+                   NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked or ExpressionType.TypeAs
+               } unaryExpression)
         {
             expression = unaryExpression.Operand;
             if (unaryExpression.Type != typeof(object) // Ignore object conversion
@@ -42,16 +40,9 @@ internal static class ExpressionExtensions
     }
 
     private static Expression RemoveConvert(Expression expression)
-    {
-        if (expression is UnaryExpression unaryExpression
-            && (expression.NodeType == ExpressionType.Convert
-                || expression.NodeType == ExpressionType.ConvertChecked))
-        {
-            return RemoveConvert(unaryExpression.Operand);
-        }
-
-        return expression;
-    }
+        => expression is UnaryExpression { NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked } unaryExpression
+            ? RemoveConvert(unaryExpression.Operand)
+            : expression;
 
     public static T GetConstantValue<T>(this Expression expression)
         => expression is ConstantExpression constantExpression
