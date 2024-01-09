@@ -182,9 +182,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__System_String_Org_Apache_Kafka_Streams_StreamsBuilder_Org_Apache_Kafka_Streams_Kstream_KStream__2__3__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},System.String,Org.Apache.Kafka.Streams.StreamsBuilder,Org.Apache.Kafka.Streams.Kstream.KStream{`2,`3})">
-  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValue&gt;, string, StreamsBuilder, KStream&lt;K, V&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValue&gt;, StreamsBuilder)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -192,7 +192,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValue&gt; valueSerdes, string storageId, StreamsBuilder builder, KStream&lt;K, V&gt; root)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValue&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -205,11 +205,7 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>valueSerdes</code> <span class="xref">IKNetSerDes</span>&lt;TValue&gt;</dt>
     <dd></dd>
-    <dt><code>storageId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
     <dt><code>builder</code> <span class="xref">StreamsBuilder</span></dt>
-    <dd></dd>
-    <dt><code>root</code> <span class="xref">KStream</span>&lt;K, V&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -232,7 +228,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L185"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L191"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -259,7 +255,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator">
   GetEnumerator()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L171"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L177"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
