@@ -16,21 +16,12 @@
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 	</PropertyGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<Compile Remove="Query\Internal\**" />
-		<EmbeddedResource Remove="Query\Internal\**" />
-		<None Remove="Query\Internal\**" />
-		<Compile Remove="Shared\**" />
-		<EmbeddedResource Remove="Shared\**" />
-		<None Remove="Shared\**" />
-	</ItemGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' != 'net8.0'">
-		<Compile Remove="Query\Internal8\**" />
-		<EmbeddedResource Remove="Query\Internal8\**" />
-		<None Remove="Query\Internal8\**" />
-		<Compile Remove="Shared8\**" />
-		<EmbeddedResource Remove="Shared8\**" />
-		<None Remove="Shared8\**" />
+		<Compile Remove="Shared\ExpressionVisitorExtensions.cs" />
+		<Compile Remove="Shared\OrderedDictionary.cs" />
+		<Compile Remove="Shared\OrderedDictionary.KeyCollection.cs" />
+		<Compile Remove="Shared\OrderedDictionary.ValueCollection.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

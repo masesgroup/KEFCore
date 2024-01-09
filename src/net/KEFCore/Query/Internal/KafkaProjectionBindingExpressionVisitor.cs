@@ -22,6 +22,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -42,6 +43,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
     private List<Expression>? _clientProjections;
     private readonly Stack<ProjectionMember> _projectionMembers = new();
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public KafkaProjectionBindingExpressionVisitor(
         KafkaQueryableMethodTranslatingExpressionVisitor queryableMethodTranslatingExpressionVisitor,
         KafkaExpressionTranslatingExpressionVisitor expressionTranslatingExpressionVisitor)
@@ -51,6 +58,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         _queryExpression = null!;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     public virtual Expression Translate(KafkaQueryExpression queryExpression, Expression expression)
     {
         _queryExpression = queryExpression;
@@ -84,6 +97,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return result;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     [return: NotNullIfNotNull("expression")]
     public override Expression? Visit(Expression? expression)
     {
@@ -91,11 +110,11 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         {
             return null;
         }
-
-        if (!(expression is NewExpression
-                || expression is MemberInitExpression
-                || expression is EntityShaperExpression
-                || expression is IncludeExpression))
+#if NET8_0_OR_GREATER
+        if (expression is not (NewExpression or MemberInitExpression or StructuralTypeShaperExpression or IncludeExpression))
+#else
+        if (expression is not (NewExpression or MemberInitExpression or EntityShaperExpression or IncludeExpression))
+#endif
         {
             if (_indexBasedBinding)
             {
@@ -207,6 +226,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return base.Visit(expression);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitBinary(BinaryExpression binaryExpression)
     {
         var left = MatchTypes(Visit(binaryExpression.Left), binaryExpression.Left.Type);
@@ -215,6 +240,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return binaryExpression.Update(left, VisitAndConvert(binaryExpression.Conversion, "VisitBinary"), right);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitConditional(ConditionalExpression conditionalExpression)
     {
         var test = Visit(conditionalExpression.Test);
@@ -232,12 +263,22 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return conditionalExpression.Update(test, ifTrue, ifFalse);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
-        if (extensionExpression is EntityShaperExpression entityShaperExpression)
+#if NET8_0_OR_GREATER
+        if (extensionExpression is StructuralTypeShaperExpression shaper)
+#else
+        if (extensionExpression is EntityShaperExpression shaper)
+#endif
         {
             EntityProjectionExpression entityProjectionExpression;
-            if (entityShaperExpression.ValueBufferExpression is ProjectionBindingExpression projectionBindingExpression)
+            if (shaper.ValueBufferExpression is ProjectionBindingExpression projectionBindingExpression)
             {
                 entityProjectionExpression =
                     (EntityProjectionExpression)((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
@@ -245,7 +286,7 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
             }
             else
             {
-                entityProjectionExpression = (EntityProjectionExpression)entityShaperExpression.ValueBufferExpression;
+                entityProjectionExpression = (EntityProjectionExpression)shaper.ValueBufferExpression;
             }
 
             if (_indexBasedBinding)
@@ -256,12 +297,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
                     _entityProjectionCache[entityProjectionExpression] = entityProjectionBinding;
                 }
 
-                return entityShaperExpression.Update(entityProjectionBinding);
+                return shaper.Update(entityProjectionBinding);
             }
 
             _projectionMapping[_projectionMembers.Peek()] = entityProjectionExpression;
 
-            return entityShaperExpression.Update(
+            return shaper.Update(
                 new ProjectionBindingExpression(_queryExpression, _projectionMembers.Peek(), typeof(ValueBuffer)));
         }
 
@@ -275,9 +316,21 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         throw new InvalidOperationException(CoreStrings.TranslationFailed(extensionExpression.Print()));
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override ElementInit VisitElementInit(ElementInit elementInit)
         => elementInit.Update(elementInit.Arguments.Select(e => MatchTypes(Visit(e), e.Type)));
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMember(MemberExpression memberExpression)
     {
         var expression = Visit(memberExpression.Expression);
@@ -301,6 +354,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return updatedMemberExpression;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override MemberAssignment VisitMemberAssignment(MemberAssignment memberAssignment)
     {
         var expression = memberAssignment.Expression;
@@ -328,6 +387,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return memberAssignment.Update(visitedExpression);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMemberInit(MemberInitExpression memberInitExpression)
     {
         var newExpression = Visit(memberInitExpression.NewExpression);
@@ -345,8 +410,7 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
             }
 
             newBindings[i] = VisitMemberBinding(memberInitExpression.Bindings[i]);
-            if (((MemberAssignment)newBindings[i]).Expression is UnaryExpression unaryExpression
-                && unaryExpression.NodeType == ExpressionType.Convert
+            if (((MemberAssignment)newBindings[i]).Expression is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression
                 && unaryExpression.Operand == QueryCompilationContext.NotTranslatedExpression)
             {
                 return QueryCompilationContext.NotTranslatedExpression;
@@ -356,6 +420,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return memberInitExpression.Update((NewExpression)newExpression, newBindings);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
     {
         var @object = Visit(methodCallExpression.Object);
@@ -388,6 +458,12 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return updatedMethodCallExpression;
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitNew(NewExpression newExpression)
     {
         if (newExpression.Arguments.Count == 0)
@@ -429,15 +505,26 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         return newExpression.Update(newArguments);
     }
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitNewArray(NewArrayExpression newArrayExpression)
         => newArrayExpression.Update(newArrayExpression.Expressions.Select(e => MatchTypes(Visit(e), e.Type)));
 
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
     protected override Expression VisitUnary(UnaryExpression unaryExpression)
     {
         var operand = Visit(unaryExpression.Operand);
 
-        return (unaryExpression.NodeType == ExpressionType.Convert
-                || unaryExpression.NodeType == ExpressionType.ConvertChecked)
+        return unaryExpression.NodeType is ExpressionType.Convert or ExpressionType.ConvertChecked
             && unaryExpression.Type == operand.Type
                 ? operand
                 : unaryExpression.Update(MatchTypes(operand, unaryExpression.Operand.Type));

@@ -1,14 +1,11 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Linq;
-
 #nullable enable
 
 namespace System.Reflection;
 
 internal static class EntityFrameworkMemberInfoExtensions
-
 {
     public static Type GetMemberType(this MemberInfo memberInfo)
         => (memberInfo as PropertyInfo)?.PropertyType ?? ((FieldInfo)memberInfo).FieldType;
@@ -28,7 +25,7 @@ internal static class EntityFrameworkMemberInfoExtensions
                             || otherPropertyInfo.DeclaringType.GetTypeInfo().ImplementedInterfaces
                                 .Contains(propertyInfo.DeclaringType)))));
 
-    public static bool IsOverridenBy(this MemberInfo? propertyInfo, MemberInfo? otherPropertyInfo)
+    public static bool IsOverriddenBy(this MemberInfo? propertyInfo, MemberInfo? otherPropertyInfo)
         => propertyInfo == null
             ? otherPropertyInfo == null
             : (otherPropertyInfo != null
@@ -49,5 +46,5 @@ internal static class EntityFrameworkMemberInfoExtensions
     }
 
     public static bool IsReallyVirtual(this MethodInfo method)
-        => method.IsVirtual && !method.IsFinal;
+        => method is { IsVirtual: true, IsFinal: false };
 }
