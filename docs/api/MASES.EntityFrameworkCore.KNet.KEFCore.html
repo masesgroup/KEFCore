@@ -8,6 +8,7 @@
       <meta name="title" content="Class KEFCore
  | MASES Group - Entity Framework Core provider for Apache Kafka ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="This is the primary class shall be used to initialize the environment to use Entity Framework Core for Apache Kafka">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -453,6 +454,45 @@ To insert values in the code an user can create a custom class like the followin
 {
     public override string JVMPath =&gt; "MySpecialPath";
 }</code></pre>
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts_" data-uid="MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts" data-uid="MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts">
+  PreserveStreamsAcrossContexts
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/KEFCore.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Set to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> to disable Apache Kafka Streams caching, default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool PreserveStreamsAcrossContexts { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd>This is the primary class shall be used to initialize the environment to use Entity Framework Core for Apache Kafka</dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This value is read only once when application starts: if the backend uses Apache Kafka Streams (i.e. <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>), the value is read to understand how to manage Streams instances lifetime</p>
+</div>
 
 
 

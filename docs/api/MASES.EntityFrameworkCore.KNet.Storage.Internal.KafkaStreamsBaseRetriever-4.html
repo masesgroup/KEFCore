@@ -8,6 +8,7 @@
       <meta name="title" content="Class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt;
  | MASES Group - Entity Framework Core provider for Apache Kafka ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -87,7 +88,7 @@
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4" class="text-break">
     Class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt;
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -103,7 +104,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt; : IKafkaStreamsBaseRetriever, IEnumerable&lt;ValueBuffer&gt;, IEnumerable, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt; : IKafkaStreamsBaseRetriever, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
 
@@ -111,13 +112,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>TKey</code></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>TValue</code></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>K</code></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>V</code></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
   </dl>
 
   <dl class="typelist inheritance">
@@ -132,8 +133,6 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt>Implements</dt>
     <dd>
       <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.html">IKafkaStreamsBaseRetriever</a></div>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>&gt;</div>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
     </dd>
   </dl>
@@ -182,9 +181,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__System_String_Org_Apache_Kafka_Streams_StreamsBuilder_Org_Apache_Kafka_Streams_Kstream_KStream__2__3__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},System.String,Org.Apache.Kafka.Streams.StreamsBuilder,Org.Apache.Kafka.Streams.Kstream.KStream{`2,`3})">
-  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValue&gt;, string, StreamsBuilder, KStream&lt;K, V&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValue&gt;, StreamsBuilder)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -192,25 +191,21 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValue&gt; valueSerdes, string storageId, StreamsBuilder builder, KStream&lt;K, V&gt; root)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValue&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>kafkaCluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html">IKafkaCluster</a></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>keySerdes</code> <span class="xref">IKNetSerDes</span>&lt;TKey&gt;</dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>valueSerdes</code> <span class="xref">IKNetSerDes</span>&lt;TValue&gt;</dt>
-    <dd></dd>
-    <dt><code>storageId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
     <dt><code>builder</code> <span class="xref">StreamsBuilder</span></dt>
-    <dd></dd>
-    <dt><code>root</code> <span class="xref">KStream</span>&lt;K, V&gt;</dt>
-    <dd></dd>
+    <dd>This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.</dd>
   </dl>
 
 
@@ -232,7 +227,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L185"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L236"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -255,26 +250,26 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator">
-  GetEnumerator()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L171"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers">
+  GetValueBuffers()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L257"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
+  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.html">IKafkaStreamsBaseRetriever</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerator&lt;ValueBuffer&gt; GetEnumerator()</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffers()</code></pre>
   </div>
 
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>&gt;</dt>
-    <dd><p>An enumerator that can be used to iterate through the collection.</p>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>&gt;</dt>
+    <dd><p>An <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a></p>
 </dd>
   </dl>
 
@@ -292,7 +287,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L49" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L55" class="edit-link">Edit this page</a>
         </div>
 
 

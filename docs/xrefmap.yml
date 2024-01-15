@@ -2205,6 +2205,19 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.KEFCore
   fullName: MASES.EntityFrameworkCore.KNet.KEFCore
   nameWithType: KEFCore
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  name: PreserveStreamsAcrossContexts
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts
+  commentId: P:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  nameWithType: KEFCore.PreserveStreamsAcrossContexts
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts*
+  name: PreserveStreamsAcrossContexts
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  nameWithType: KEFCore.PreserveStreamsAcrossContexts
 - uid: MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions
   name: KafkaDatabaseFacadeExtensions
   href: api/MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.html
@@ -3799,6 +3812,95 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.UpdateServerQueryExpression
   nameWithType: KafkaQueryExpression.UpdateServerQueryExpression
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor
+  name: KafkaQueryTranslationPreprocessor
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor
+  nameWithType: KafkaQueryTranslationPreprocessor
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.#ctor(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies,Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  name: KafkaQueryTranslationPreprocessor(QueryTranslationPreprocessorDependencies, QueryCompilationContext)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessor__ctor_Microsoft_EntityFrameworkCore_Query_QueryTranslationPreprocessorDependencies_Microsoft_EntityFrameworkCore_Query_QueryCompilationContext_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.#ctor(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies,Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  name.vb: New(QueryTranslationPreprocessorDependencies, QueryCompilationContext)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.KafkaQueryTranslationPreprocessor(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies, Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.New(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies, Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  nameWithType: KafkaQueryTranslationPreprocessor.KafkaQueryTranslationPreprocessor(QueryTranslationPreprocessorDependencies, QueryCompilationContext)
+  nameWithType.vb: KafkaQueryTranslationPreprocessor.New(QueryTranslationPreprocessorDependencies, QueryCompilationContext)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.#ctor*
+  name: KafkaQueryTranslationPreprocessor
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessor__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.KafkaQueryTranslationPreprocessor
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.New
+  nameWithType: KafkaQueryTranslationPreprocessor.KafkaQueryTranslationPreprocessor
+  nameWithType.vb: KafkaQueryTranslationPreprocessor.New
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process(System.Linq.Expressions.Expression)
+  name: Process(Expression)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessor_Process_System_Linq_Expressions_Expression_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process(System.Linq.Expressions.Expression)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process(System.Linq.Expressions.Expression)
+  nameWithType: KafkaQueryTranslationPreprocessor.Process(Expression)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process*
+  name: Process
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessor_Process_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.Process
+  nameWithType: KafkaQueryTranslationPreprocessor.Process
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory
+  name: KafkaQueryTranslationPreprocessorFactory
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory
+  nameWithType: KafkaQueryTranslationPreprocessorFactory
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.#ctor(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies)
+  name: KafkaQueryTranslationPreprocessorFactory(QueryTranslationPreprocessorDependencies)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory__ctor_Microsoft_EntityFrameworkCore_Query_QueryTranslationPreprocessorDependencies_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.#ctor(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies)
+  name.vb: New(QueryTranslationPreprocessorDependencies)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.KafkaQueryTranslationPreprocessorFactory(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.New(Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessorDependencies)
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.KafkaQueryTranslationPreprocessorFactory(QueryTranslationPreprocessorDependencies)
+  nameWithType.vb: KafkaQueryTranslationPreprocessorFactory.New(QueryTranslationPreprocessorDependencies)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.#ctor*
+  name: KafkaQueryTranslationPreprocessorFactory
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.KafkaQueryTranslationPreprocessorFactory
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.New
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.KafkaQueryTranslationPreprocessorFactory
+  nameWithType.vb: KafkaQueryTranslationPreprocessorFactory.New
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create(Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  name: Create(QueryCompilationContext)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory_Create_Microsoft_EntityFrameworkCore_Query_QueryCompilationContext_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create(Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create(Microsoft.EntityFrameworkCore.Query.QueryCompilationContext)
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.Create(QueryCompilationContext)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create*
+  name: Create
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory_Create_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Create
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.Create
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies
+  name: Dependencies
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory_Dependencies
+  commentId: P:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.Dependencies
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies*
+  name: Dependencies
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryTranslationPreprocessorFactory_Dependencies_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.Dependencies
+  nameWithType: KafkaQueryTranslationPreprocessorFactory.Dependencies
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor
   name: KafkaQueryableMethodTranslatingExpressionVisitor
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html
@@ -9137,6 +9239,19 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever
   nameWithType: IKafkaStreamsBaseRetriever
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers
+  name: GetValueBuffers()
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsBaseRetriever_GetValueBuffers
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers()
+  nameWithType: IKafkaStreamsBaseRetriever.GetValueBuffers()
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers*
+  name: GetValueBuffers
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsBaseRetriever_GetValueBuffers_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsBaseRetriever.GetValueBuffers
+  nameWithType: IKafkaStreamsBaseRetriever.GetValueBuffers
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable
   name: IKafkaTable
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html
@@ -9885,15 +10000,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V)
   nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>
   nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},System.String,Org.Apache.Kafka.Streams.StreamsBuilder,Org.Apache.Kafka.Streams.Kstream.KStream{`2,`3})
-  name: KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes<TKey>, IKNetSerDes<TValue>, string, StreamsBuilder, KStream<K, V>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__System_String_Org_Apache_Kafka_Streams_StreamsBuilder_Org_Apache_Kafka_Streams_Kstream_KStream__2__3__
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},System.String,Org.Apache.Kafka.Streams.StreamsBuilder,Org.Apache.Kafka.Streams.Kstream.KStream{`2,`3})
-  name.vb: New(IKafkaCluster, IEntityType, IKNetSerDes(Of TKey), IKNetSerDes(Of TValue), String, StreamsBuilder, KStream(Of K, V))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.IKNetSerDes<TKey>, MASES.KNet.Serialization.IKNetSerDes<TValue>, string, Org.Apache.Kafka.Streams.StreamsBuilder, Org.Apache.Kafka.Streams.Kstream.KStream<K, V>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.IKNetSerDes(Of TKey), MASES.KNet.Serialization.IKNetSerDes(Of TValue), String, Org.Apache.Kafka.Streams.StreamsBuilder, Org.Apache.Kafka.Streams.Kstream.KStream(Of K, V))
-  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes<TKey>, IKNetSerDes<TValue>, string, StreamsBuilder, KStream<K, V>)
-  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(IKafkaCluster, IEntityType, IKNetSerDes(Of TKey), IKNetSerDes(Of TValue), String, StreamsBuilder, KStream(Of K, V))
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name: KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes<TKey>, IKNetSerDes<TValue>, StreamsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name.vb: New(IKafkaCluster, IEntityType, IKNetSerDes(Of TKey), IKNetSerDes(Of TValue), StreamsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.IKNetSerDes<TKey>, MASES.KNet.Serialization.IKNetSerDes<TValue>, Org.Apache.Kafka.Streams.StreamsBuilder)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.IKNetSerDes(Of TKey), MASES.KNet.Serialization.IKNetSerDes(Of TValue), Org.Apache.Kafka.Streams.StreamsBuilder)
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes<TKey>, IKNetSerDes<TValue>, StreamsBuilder)
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(IKafkaCluster, IEntityType, IKNetSerDes(Of TKey), IKNetSerDes(Of TValue), StreamsBuilder)
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*
   name: KafkaStreamsBaseRetriever
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_
@@ -9921,23 +10036,23 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Dispose
   nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Dispose
   nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Dispose
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator
-  name: GetEnumerator()
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetEnumerator()
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetEnumerator()
-  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetEnumerator()
-  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetEnumerator()
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator*
-  name: GetEnumerator
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetEnumerator_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetEnumerator
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers
+  name: GetValueBuffers()
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetValueBuffers()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers()
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetValueBuffers()
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers()
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers*
+  name: GetValueBuffers
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetEnumerator
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetEnumerator
-  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetEnumerator
-  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetEnumerator
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetValueBuffers
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetValueBuffers
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2
   name: KafkaStreamsTableRetriever<TKey, TValueContainer>
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-2.html
