@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Stream</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Stream</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test Stream</Title>
+		<Description>EntityFrameworkCore KNet Test Stream</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Stream</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\Common\Model.cs" Link="Model.cs" />
+	  <Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="StreamTest.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="StreamTest.KafkaStreamsModelBuilder.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="StreamTest.KafkaStreamsNoLoad.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="StreamTest.KafkaStreamsPersisted.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicatorNoLoad.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

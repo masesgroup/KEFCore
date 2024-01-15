@@ -22,19 +22,15 @@
  *  SOFTWARE.
  */
 
-using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.JCOBridge.C2JBridge;
-using MASES.KNet.Consumer;
-using Org.Apache.Kafka.Clients.Consumer;
-using Org.Apache.Kafka.Common.Serialization;
+using MASES.EntityFrameworkCore.KNet.Test.Common;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Extractor
 {
     partial class Program
     {

@@ -22,7 +22,7 @@
  *  SOFTWARE.
  */
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {

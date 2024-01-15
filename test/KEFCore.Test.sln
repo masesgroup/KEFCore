@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "templatepack", "..\src\net\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Protobuf", "..\src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj", "{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.StreamTest", "KEFCore.StreamTest\KEFCore.StreamTest.csproj", "{BD4EC954-4C0A-40C4-8629-C5562582ED6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD4EC954-4C0A-40C4-8629-C5562582ED6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD4EC954-4C0A-40C4-8629-C5562582ED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD4EC954-4C0A-40C4-8629-C5562582ED6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD4EC954-4C0A-40C4-8629-C5562582ED6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{EEF483DF-8DDB-474D-8135-2762014F9438} = {68A75218-B566-4DF6-8BFF-586B7C3E7ED6}
 		{B18081C0-E85F-4228-8150-E7EDD4794BEB} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
 		{1EA5DAE7-67D1-4E2B-ACAF-F107BB86EB66} = {B35B16BB-890F-4385-AB20-7AA4DD6E9C01}
+		{BD4EC954-4C0A-40C4-8629-C5562582ED6A} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36C294ED-9ECE-42AA-8273-31E008749AF3}
