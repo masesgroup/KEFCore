@@ -289,7 +289,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         get
         {
             if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _kafkaCompactedReplicator);
-            if (_streamData != null) return _streamData;
+            if (_streamData != null) return _streamData.GetValueBuffers();
             throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
         }
     }

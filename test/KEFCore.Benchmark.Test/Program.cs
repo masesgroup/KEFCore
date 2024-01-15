@@ -27,6 +27,8 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
+using MASES.EntityFrameworkCore.KNet.Test.Common;
+using MASES.EntityFrameworkCore.KNet.Test.Model;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,7 +38,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 {
     partial class Program
     {

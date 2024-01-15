@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Model
 {
     public class Blog
     {

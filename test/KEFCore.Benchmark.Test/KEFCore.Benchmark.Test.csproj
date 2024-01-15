@@ -2,11 +2,11 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Benchmark.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Benchmark.Test</RootNamespace>
-		<Title>EntityFrameworkCore KNet Benchmark Test</Title>
-		<Description>EntityFrameworkCore KNet Benchmark.Test</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Benchmark.Test</Product>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Benchmark</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Benchmark</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test Benchmark</Title>
+		<Description>EntityFrameworkCore KNet Test Benchmark</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Benchmark</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
@@ -42,12 +42,5 @@
 	  <None Update="Benchmark.Protobuf.KNetReplicator.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
 	</ItemGroup>
 </Project>

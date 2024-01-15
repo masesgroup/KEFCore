@@ -2,11 +2,11 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Extractor.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Extractor.Test</RootNamespace>
-		<Title>EntityFrameworkCore KNet Extractor Test</Title>
-		<Description>EntityFrameworkCore KNet.Extractor Test</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Extractor.Test</Product>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Extractor</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Extractor</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test Extractor</Title>
+		<Description>EntityFrameworkCore KNet Test Extractor</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Extractor</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
@@ -21,12 +21,5 @@
 		<None Update="Extractor.Test.Blog.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
 	</ItemGroup>
 </Project>

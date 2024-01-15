@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
@@ -37,8 +38,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaStreamsBaseRetriever : IEnumerable<ValueBuffer>, IDisposable
+public interface IKafkaStreamsBaseRetriever : IDisposable
 {
+    /// <summary>
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKafkaStreamsBaseRetriever"/> instance
+    /// </summary>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffers();
 }
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -50,30 +56,42 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
+    struct StreamsAssociatedData(KeyValueBytesStoreSupplier storeSupplier, Materialized<K, V, KeyValueStore<Bytes, byte[]>> materialized, GlobalKTable<K, V> globalTable)
+    {
+        public KeyValueBytesStoreSupplier StoreSupplier = storeSupplier;
+        public Materialized<K, V, KeyValueStore<Bytes, byte[]>> Materialized = materialized;
+        public GlobalKTable<K, V> GlobalTable = globalTable;
+    }
+
+    private static bool _preserveStreamsAcrossContext = KEFCore.PreserveStreamsAcrossContexts;
+    // this dictionary controls the entities
+    private static readonly System.Collections.Generic.Dictionary<IEntityType, IEntityType> _managedEntities = new(EntityTypeFullNameComparer.Instance);
+    // while this one is used to retain the allocated object to avoid thier finalization before the streams is completly finalized
+    private static readonly System.Collections.Generic.Dictionary<IEntityType, StreamsAssociatedData> _storagesForEntities = new(EntityTypeFullNameComparer.Instance);
+
+    private static StreamsBuilder? _builder = null;
+    private static Topology? _topology = null;
+    private static Properties? _properties = null;
+    private static KafkaStreams? _streams = null;
+
+    private static AutoResetEvent? _dataReceived;
+    private static AutoResetEvent? _resetEvent;
+    private static AutoResetEvent? _stateChanged;
+    private static AutoResetEvent? _exceptionSet;
+    private static StreamsUncaughtExceptionHandler? _errorHandler;
+    private static KafkaStreams.StateListener? _stateListener;
+    private static Exception? _resultException = null;
+    private static KafkaStreams.State _currentState = KafkaStreams.State.NOT_RUNNING;
+
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
     private readonly IKNetSerDes<TKey> _keySerdes;
     private readonly IKNetSerDes<TValue> _valueSerdes;
-    private readonly StreamsBuilder _builder;
-    private readonly GlobalKTable<K, V> _globalTable;
-    private readonly KeyValueBytesStoreSupplier _storeSupplier;
-    private readonly Materialized<K, V, KeyValueStore<Bytes, byte[]>> _materialized;
-
-    private readonly AutoResetEvent _dataReceived = new(false);
-    private readonly AutoResetEvent _resetEvent = new(false);
-    private readonly AutoResetEvent _stateChanged = new(false);
-    private readonly AutoResetEvent _exceptionSet = new(false);
-
-    private KafkaStreams? _streams = null;
-    private StreamsUncaughtExceptionHandler? _errorHandler;
-    private KafkaStreams.StateListener? _stateListener;
 
     private readonly bool _usePersistentStorage;
     private readonly string _topicName;
     private readonly string _storageId;
-    private Exception? _resultException = null;
-    private KafkaStreams.State _currentState = KafkaStreams.State.NOT_RUNNING;
-    private ReadOnlyKeyValueStore<K, V>? keyValueStore;
+
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -83,24 +101,43 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
         _entityType = entityType;
         _keySerdes = keySerdes;
         _valueSerdes = valueSerdes;
+        _builder ??= builder;
         _topicName = _entityType.TopicName(kafkaCluster.Options);
         _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
-        string storageId = entityType.StorageIdForTable(_kafkaCluster.Options);
+        _properties ??= _kafkaCluster.Options.StreamsOptions(_kafkaCluster.Options.ApplicationId);
+
+        string storageId = _entityType.StorageIdForTable(_kafkaCluster.Options);
         _storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
-        _builder = builder;
-        _storeSupplier = _usePersistentStorage ? Stores.PersistentKeyValueStore(_storageId) : Stores.InMemoryKeyValueStore(_storageId);
-        _materialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(_storeSupplier);
-        _globalTable = _builder.GlobalTable(_entityType.TopicName(_kafkaCluster.Options), _materialized);
-
-        StartTopology();
+        lock (_managedEntities)
+        {
+            if (!_managedEntities.ContainsKey(_entityType))
+            {
+                var storeSupplier = _usePersistentStorage ? Stores.PersistentKeyValueStore(_storageId) : Stores.InMemoryKeyValueStore(_storageId);
+                var materialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(storeSupplier);
+                var globalTable = _builder.GlobalTable(_topicName, materialized);
+                _managedEntities.Add(_entityType, _entityType);
+                _storagesForEntities.Add(_entityType, new StreamsAssociatedData(storeSupplier, materialized, globalTable));
+                
+                if (_streams != null)
+                {
+                    StopTopology();
+                }
+                _topology = _builder.Build();
+                _streams = new(_topology, _properties);
+                StartTopology(_streams);
+            }
+        }
     }
 
-    private void StartTopology()
+    private static void StartTopology(KafkaStreams streams)
     {
-        _streams = new(_builder.Build(), _kafkaCluster.Options.StreamsOptions(_entityType));
+        _dataReceived = new(false);
+        _resetEvent = new(false);
+        _stateChanged = new(false);
+        _exceptionSet = new(false);
 
-        _errorHandler = new()
+        _errorHandler ??= new()
         {
             OnHandle = (exception) =>
             {
@@ -110,7 +147,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
             }
         };
 
-        _stateListener = new()
+        _stateListener ??= new()
         {
             OnOnChange = (newState, oldState) =>
             {
@@ -122,8 +159,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
             }
         };
 
-        _streams.SetUncaughtExceptionHandler(_errorHandler);
-        _streams.SetStateListener(_stateListener);
+        streams.SetUncaughtExceptionHandler(_errorHandler);
+        streams.SetStateListener(_stateListener);
 
         ThreadPool.QueueUserWorkItem((o) =>
         {
@@ -164,43 +201,86 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
             }
         });
         _resetEvent.WaitOne();
-        _streams.Start();
+        streams.Start();
 #if DEBUG_PERFORMANCE
         Infrastructure.KafkaDbContext.ReportString($"KafkaStreamsBaseRetriever on {_entityType.Name} started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
         _resetEvent.WaitOne(); // wait running state
         if (_resultException != null) throw _resultException;
-
-        keyValueStore ??= _streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-    }
-    /// <inheritdoc/>
-    public IEnumerator<ValueBuffer> GetEnumerator()
-    {
-        if (_resultException != null) throw _resultException;
-#if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"Requested KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
-        return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, keyValueStore);
     }
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-    /// <inheritdoc/>
-    public void Dispose()
+    private static void StopTopology()
     {
         _streams?.Close();
+
         _dataReceived?.Dispose();
         _resetEvent?.Dispose();
         _exceptionSet?.Dispose();
-        _errorHandler?.Dispose();
-        _stateListener?.Dispose();
         _stateChanged?.Dispose();
 
         _streams = null;
+    }
+
+    private static void FinalCleanup()
+    {
+        _errorHandler?.Dispose();
+        _stateListener?.Dispose();
         _errorHandler = null;
         _stateListener = null;
+        _builder = null;
+        _topology = null;
+        _properties = null;
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        lock (_managedEntities)
+        {
+            if (!_preserveStreamsAcrossContext)
+            {
+                if (_managedEntities.ContainsKey(_entityType))
+                {
+                    _managedEntities.Remove(_entityType);
+                }
+                if (_managedEntities.Count == 0)
+                {
+                    StopTopology();
+                    _storagesForEntities.Clear();
+                    FinalCleanup();
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffers()
+    {
+        return new KafkaEnumberable(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, _storageId);
+    }
+
+    class KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValue> valueSerdes, string storageId) : IEnumerable<ValueBuffer>
+    {
+        private readonly IKafkaCluster _kafkaCluster = kafkaCluster;
+        private readonly IEntityType _entityType = entityType;
+        private readonly IKNetSerDes<TKey> _keySerdes = keySerdes;
+        private readonly IKNetSerDes<TValue> _valueSerdes = valueSerdes;
+        private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore = _streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+
+        /// <inheritdoc/>
+        public IEnumerator<ValueBuffer> GetEnumerator()
+        {
+            if (_resultException != null) throw _resultException;
+#if DEBUG_PERFORMANCE
+            Infrastructure.KafkaDbContext.ReportString($"Requested KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, _keyValueStore);
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     class KafkaEnumerator : IEnumerator<ValueBuffer>
@@ -222,12 +302,11 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
 
         public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValue> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore)
         {
-            if (keyValueStore == null) throw new ArgumentNullException(nameof(keyValueStore));
             _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
             _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
-            _keyValueStore = keyValueStore;
+            _keyValueStore = keyValueStore ?? throw new ArgumentNullException(nameof(keyValueStore));
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
@@ -284,13 +363,17 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsBaseRe
                 _cycles++;
                 _valueBufferSw.Start();
 #endif
-                bool startedGCRegion = GC.TryStartNoGCRegion(1024 * 1024);
+#if NET8_0
+                bool startedGCRegion = GC.TryStartNoGCRegion(1024 * 1024 * 1024);
+#endif
                 byte[]? data;
                 using (KeyValue<K, V> kv = keyValueEnumerator.Current)
                 {
                     data = kv.value as byte[];
                 }
+#if NET8_0
                 if (startedGCRegion) GC.EndNoGCRegion();
+#endif
 #if DEBUG_PERFORMANCE
                 _valueSerdesSw.Start();
 #endif

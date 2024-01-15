@@ -39,11 +39,10 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Stream
 {
     partial class Program
     {
-        static BloggingContext context = null;
         internal static ProgramConfig config = new();
 
         static void ReportString(string message)
@@ -86,13 +85,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
                 }
 
-                context = new BloggingContext()
+                using var context = new BloggingContext()
                 {
                     BootstrapServers = config.BootstrapServers,
                     ApplicationId = config.ApplicationId,
                     DatabaseName = databaseName,
                     StreamsConfig = streamConfig,
-                    OnChangeEvent = config.WithEvents ? OnEvent : null,
                 };
 
                 if (config.UseProtobuf)
@@ -142,6 +140,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Stop();
                     ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                 }
+
+                // ended data load 
+
+
+
+
+
+
 
                 if (config.UseModelBuilder)
                 {
@@ -242,25 +248,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             }
             finally
             {
-                context?.Dispose();
                 testWatcher.Stop();
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
         }
 
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException ) { }
-
-            ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
-        }
     }
 
     public class BloggingContext : KafkaDbContext
