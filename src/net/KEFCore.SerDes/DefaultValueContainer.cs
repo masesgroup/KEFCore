@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -27,9 +28,86 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 /// <summary>
 /// This is a supporting class used from <see cref="DefaultValueContainer{TKey}"/>
 /// </summary>
-[JsonSerializable(typeof(PropertyData))]
 public class PropertyData : IJsonOnDeserialized
 {
+    static readonly ConcurrentDictionary<Type, ManagedTypes> dict = new();
+    static readonly ConcurrentDictionary<ManagedTypes, Type> reverseDict = new();
+    readonly static Type StringType = typeof(string);
+    readonly static Type GuidType = typeof(Guid);
+    readonly static Type DateTimeType = typeof(DateTime);
+    readonly static Type DateTimeOffsetType = typeof(DateTimeOffset);
+    readonly static Type ByteType = typeof(byte);
+    readonly static Type ShortType = typeof(short);
+    readonly static Type IntType = typeof(int);
+    readonly static Type LongType = typeof(long);
+    readonly static Type DoubleType = typeof(double);
+    readonly static Type FloatType = typeof(float);
+
+    /// <summary>
+    /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
+    /// </summary>
+    public enum ManagedTypes
+    {
+        /// <summary>
+        /// Not defined or not found
+        /// </summary>
+        Undefined,
+        /// <summary>
+        /// <see cref="string"/>
+        /// </summary>
+        String,
+        /// <summary>
+        /// <see cref="Guid"/>
+        /// </summary>
+        Guid,
+        /// <summary>
+        /// <see cref="DateTime"/>
+        /// </summary>
+        DateTime,
+        /// <summary>
+        /// <see cref="DateTimeOffset"/>
+        /// </summary>
+        DateTimeOffset,
+        /// <summary>
+        /// <see cref="byte"/>
+        /// </summary>
+        Byte,
+        /// <summary>
+        /// <see cref="short"/>
+        /// </summary>
+        Short,
+        /// <summary>
+        /// <see cref="int"/>
+        /// </summary>
+        Int,
+        /// <summary>
+        /// <see cref="long"/>
+        /// </summary>
+        Long,
+        /// <summary>
+        /// <see cref="double"/>
+        /// </summary>
+        Double,
+        /// <summary>
+        /// <see cref="float"/>
+        /// </summary>
+        Float
+    }
+
+    static PropertyData()
+    {
+        dict.TryAdd(StringType, ManagedTypes.String);reverseDict.TryAdd(ManagedTypes.String, StringType);
+        dict.TryAdd(GuidType, ManagedTypes.Guid); reverseDict.TryAdd(ManagedTypes.Guid, GuidType);
+        dict.TryAdd(DateTimeType, ManagedTypes.DateTime); reverseDict.TryAdd(ManagedTypes.DateTime, DateTimeType);
+        dict.TryAdd(DateTimeOffsetType, ManagedTypes.DateTimeOffset); reverseDict.TryAdd(ManagedTypes.DateTimeOffset, DateTimeOffsetType);
+        dict.TryAdd(ByteType, ManagedTypes.Byte); reverseDict.TryAdd(ManagedTypes.Byte, ByteType);
+        dict.TryAdd(ShortType, ManagedTypes.Short); reverseDict.TryAdd(ManagedTypes.Short, ShortType);
+        dict.TryAdd(IntType, ManagedTypes.Int); reverseDict.TryAdd(ManagedTypes.Int, IntType);
+        dict.TryAdd(LongType, ManagedTypes.Long); reverseDict.TryAdd(ManagedTypes.Long, LongType);
+        dict.TryAdd(DoubleType, ManagedTypes.Double); reverseDict.TryAdd(ManagedTypes.Double, DoubleType);
+        dict.TryAdd(FloatType, ManagedTypes.Float); reverseDict.TryAdd(ManagedTypes.Float, FloatType);
+    }
+
     /// <summary>
     /// Initialize a new instance of <see cref="PropertyData"/>
     /// </summary>
@@ -46,6 +124,8 @@ public class PropertyData : IJsonOnDeserialized
     /// <remarks>This constructor is mandatory and it is used from <see cref="DefaultValueContainer{TKey}"/></remarks>
     public PropertyData(IProperty property, object value)
     {
+        if (!dict.TryGetValue(property.ClrType, out ManagedTypes _type)) _type = ManagedTypes.Undefined;
+        ManagedType = _type;
         ClrType = property.ClrType?.FullName;
         PropertyName = property.Name;
         Value = value;
@@ -55,56 +135,114 @@ public class PropertyData : IJsonOnDeserialized
     {
         if (Value is JsonElement elem)
         {
-            switch (elem.ValueKind)
+            if (ManagedType == null || ManagedType == ManagedTypes.Undefined)
             {
-                case JsonValueKind.String:
-                    Value = elem.GetString()!;
-                    if (ClrType != typeof(string).FullName)
-                    {
-                        try
+                switch (elem.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        Value = elem.GetString()!;
+                        if (ClrType != typeof(string).FullName)
                         {
-                            Value = Convert.ChangeType(Value, Type.GetType(ClrType!)!);
+                            try
+                            {
+                                Value = Convert.ChangeType(Value, Type.GetType(ClrType!)!);
+                            }
+                            catch (InvalidCastException)
+                            {
+                                // failed conversion, try with other methods for known types
+                                if (ClrType == typeof(Guid).FullName)
+                                {
+                                    Value = elem.GetGuid();
+                                }
+                                else if (ClrType == typeof(DateTime).FullName)
+                                {
+                                    Value = elem.GetDateTime();
+                                }
+                                else if (ClrType == typeof(DateTimeOffset).FullName)
+                                {
+                                    Value = elem.GetDateTimeOffset();
+                                }
+                                else
+                                {
+                                    Value = elem.GetString()!;
+                                }
+                            }
                         }
-                        catch (InvalidCastException)
+                        break;
+                    case JsonValueKind.Number:
+                        var tmp = elem.GetInt64();
+                        Value = Convert.ChangeType(tmp, Type.GetType(ClrType!)!);
+                        break;
+                    case JsonValueKind.True:
+                        Value = true;
+                        break;
+                    case JsonValueKind.False:
+                        Value = false;
+                        break;
+                    case JsonValueKind.Null:
+                        Value = null;
+                        break;
+                    case JsonValueKind.Object:
+                    case JsonValueKind.Array:
+                    case JsonValueKind.Undefined:
+                    default:
+                        throw new InvalidOperationException($"Failed to deserialize {PropertyName}, ValueKind is {elem.ValueKind}");
+                }
+            }
+            else
+            {
+                switch (elem.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        Value = elem.GetString()!;
+                        if (ManagedType != ManagedTypes.String)
                         {
-                            // failed conversion, try with other methods for known types
-                            if (ClrType == typeof(Guid).FullName)
+                            try
                             {
-                                Value = elem.GetGuid();
+                                
+                                Value = Convert.ChangeType(Value, reverseDict[ManagedType.Value]);
                             }
-                            else if (ClrType == typeof(DateTime).FullName)
+                            catch (InvalidCastException)
                             {
-                                Value = elem.GetDateTime();
-                            }
-                            else if (ClrType == typeof(DateTimeOffset).FullName)
-                            {
-                                Value = elem.GetDateTimeOffset();
-                            }
-                            else
-                            {
-                                Value = elem.GetString()!;
+                                // failed conversion, try with other methods for known types
+                                if (ManagedType == ManagedTypes.Guid)
+                                {
+                                    Value = elem.GetGuid();
+                                }
+                                else if (ManagedType == ManagedTypes.DateTime)
+                                {
+                                    Value = elem.GetDateTime();
+                                }
+                                else if (ManagedType == ManagedTypes.DateTimeOffset)
+                                {
+                                    Value = elem.GetDateTimeOffset();
+                                }
+                                else
+                                {
+                                    Value = elem.GetString()!;
+                                }
                             }
                         }
-                    }
-                    break;
-                case JsonValueKind.Number:
-                    var tmp = elem.GetInt64();
-                    Value = Convert.ChangeType(tmp, Type.GetType(ClrType!)!);
-                    break;
-                case JsonValueKind.True:
-                    Value = true;
-                    break;
-                case JsonValueKind.False:
-                    Value = false;
-                    break;
-                case JsonValueKind.Null:
-                    Value = null;
-                    break;
-                case JsonValueKind.Object:
-                case JsonValueKind.Array:
-                case JsonValueKind.Undefined:
-                default:
-                    throw new InvalidOperationException($"Failed to deserialize {PropertyName}, ValueKind is {elem.ValueKind}");
+                        break;
+                    case JsonValueKind.Number:
+                        var tmp = elem.GetInt64();
+                        Value = Convert.ChangeType(tmp, reverseDict[ManagedType.Value]);
+                        break;
+                    case JsonValueKind.True:
+                        Value = true;
+                        break;
+                    case JsonValueKind.False:
+                        Value = false;
+                        break;
+                    case JsonValueKind.Null:
+                        Value = null;
+                        break;
+                    case JsonValueKind.Object:
+                    case JsonValueKind.Array:
+                    case JsonValueKind.Undefined:
+                    default:
+                        throw new InvalidOperationException($"Failed to deserialize {PropertyName}, ValueKind is {elem.ValueKind}");
+                }
             }
         }
         else
@@ -116,6 +254,10 @@ public class PropertyData : IJsonOnDeserialized
     /// The name of the <see cref="IProperty"/>
     /// </summary>
     public string? PropertyName { get; set; }
+    /// <summary>
+    /// The <see cref="ManagedTypes"/> value of the <see cref="ClrType"/>
+    /// </summary>
+    public ManagedTypes? ManagedType { get; set; }
     /// <summary>
     /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>
     /// </summary>
@@ -129,7 +271,6 @@ public class PropertyData : IJsonOnDeserialized
 /// The default ValueContainer used from KEFCore
 /// </summary>
 /// <typeparam name="TKey">It is the key <see cref="Type"/> passed from Entity Framework associated to the Entity data will be stored in the <see cref="DefaultValueContainer{TKey}"/></typeparam>
-[JsonSerializable(typeof(DefaultValueContainer<>))]
 public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : notnull
 {
     /// <summary>

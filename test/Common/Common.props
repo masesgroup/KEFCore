@@ -4,6 +4,7 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AssemblyOriginatorKeyFile>..\..\src\net\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>..\..\bin\</OutputPath>
+		<DefineConstants>$(DefineConstants);DEBUG_PERFORMANCE</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />

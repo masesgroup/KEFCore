@@ -1,8 +1,6 @@
 {
-  "UseProtobuf": true,
-  "DatabaseName": "TestDBBenchmarkProtobuf",
+  "DatabaseName": "TestDBBenchmark",
   "UseCompactedReplicator": false,
-  "UseKNetStreams": false,
   "BootstrapServers": "192.168.1.108:9092",
   "NumberOfExecutions": 10
 }

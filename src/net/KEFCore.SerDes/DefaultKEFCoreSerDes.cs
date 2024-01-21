@@ -22,6 +22,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
 using System.Text;
+using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
@@ -55,6 +56,7 @@ public static class DefaultKEFCoreSerDes
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(Json<>).ToAssemblyQualified());
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
             readonly IKNetSerDes<T> _defaultSerDes = default!;
+            readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -70,6 +72,13 @@ public static class DefaultKEFCoreSerDes
                 {
                     throw new InvalidOperationException($"{typeof(Json<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
                 }
+                else
+                {
+                    _options = new JsonSerializerOptions()
+                    {
+                        WriteIndented = false,
+                    };
+                }
             }
 
             /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
@@ -84,7 +93,6 @@ public static class DefaultKEFCoreSerDes
                 headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
-
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
@@ -99,7 +107,7 @@ public static class DefaultKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
+                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
             }
         }
     }
@@ -117,6 +125,7 @@ public static class DefaultKEFCoreSerDes
         {
             readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Json<>).ToAssemblyQualified());
             readonly byte[] valueContainerName = null!;
+            readonly System.Text.Json.JsonSerializerOptions _options;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -133,6 +142,10 @@ public static class DefaultKEFCoreSerDes
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
                         valueContainerName = Encoding.UTF8.GetBytes(t.ToAssemblyQualified());
+                        _options = new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.General)
+                        {
+                            WriteIndented = false,
+                        };
                         return;
                     }
                     else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -151,7 +164,7 @@ public static class DefaultKEFCoreSerDes
                 headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
 
-                var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
+                var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data, _options);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
             /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
@@ -163,7 +176,7 @@ public static class DefaultKEFCoreSerDes
             public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
+                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
             }
         }
     }

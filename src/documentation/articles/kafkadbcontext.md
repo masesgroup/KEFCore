@@ -21,6 +21,8 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **UsePersistentStorage**: set to **true** to use a persistent storage between multiple application startup
   - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy)
   - **UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka Streams to manage data to or from topics
+  - **UseKNetStreams**: Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams, used if **UseCompactedReplicator** is **false**
+  - **UseEnumeratorWithPrefetch**: Setting this property to **true** the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution, used if **UseKNetStreams** is **true** and **UseCompactedReplicator** is **false**
   - **ConsumerConfig**: parameters to use for Producer
   - **ProducerConfig**: parameters to use for Producer
   - **StreamsConfig**: parameters to use for Apche Kafka Streams application

@@ -47,7 +47,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     private readonly IEntityType _entityType;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
     private readonly IKNetProducer<TKey, TValueContainer>? _kafkaProducer;
-    private readonly IKafkaStreamsBaseRetriever? _streamData;
+    private readonly IKafkaStreamsRetriever? _streamData;
     private readonly IKNetSerDes<TKey>? _keySerdes;
     private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
@@ -231,7 +231,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         else
         {
             _kafkaProducer = new KNetProducer<TKey, TValueContainer>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
-            _streamData = new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
+            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer>(cluster, entityType)
+                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -282,6 +283,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             _kafkaProducer?.Dispose();
             _streamData?.Dispose();
         }
+        _keySerdes?.Dispose();
+        _valueSerdes?.Dispose();
     }
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> ValueBuffers

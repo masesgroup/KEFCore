@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+// #define DEBUG_PERFORMANCE
+
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
@@ -70,7 +72,7 @@ public class KafkaDbContext : DbContext
 #if DEBUG_PERFORMANCE
     const bool perf = true;
     /// <summary>
-    /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeDataStorage{TKey}"/>
+    /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer{TKey, TValueContainer, TKeySerializer, TValueSerializer}"/>
     /// </summary>
     public static bool TraceEntityTypeDataStorageGetData = false;
 
@@ -94,7 +96,11 @@ const bool perf = false;
     /// Reports if the library was compiled to reports performance information
     /// </summary>
     public const bool IsPerformanceVersion = perf;
+#if DEBUG_PERFORMANCE
+    static bool _enableKEFCoreTracing = true;
+#else
     static bool _enableKEFCoreTracing = false;
+#endif
     /// <summary>
     /// Set to <see langword="true"/> to enable tracing of KEFCore
     /// </summary>
@@ -209,6 +215,15 @@ const bool perf = false;
     /// </summary>
     public virtual bool UseCompactedReplicator { get; set; } = true;
     /// <summary>
+    /// Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams
+    /// </summary>
+    public virtual bool UseKNetStreams { get; set; } = true;
+    /// <summary>
+    /// Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
+    /// </summary>
+    /// <remarks>Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6.</remarks>
+    public virtual bool UseEnumeratorWithPrefetch { get; set; } = false;
+    /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
     public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
@@ -244,8 +259,10 @@ const bool perf = false;
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
+            o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
             o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
+            o.WithUseKNetStreams(UseKNetStreams);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             if (KeySerializationType != null) o.WithKeySerializationType(KeySerializationType);
             if (ValueSerializationType != null) o.WithValueSerializationType(ValueSerializationType);
