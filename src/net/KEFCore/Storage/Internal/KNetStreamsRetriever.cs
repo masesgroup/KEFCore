@@ -407,7 +407,7 @@ public class KNetStreamsRetriever<TKey, TValue> : IKafkaStreamsRetriever
 
         public void Reset()
         {
-            throw new InvalidOperationException($"Cannot apply {nameof(IEnumerator<ValueBuffer>.Reset)} operation over {typeof(KNetKeyValueIterator<TKey, TValue>)}");
+            throw new NotSupportedException(CoreStrings.EnumerableResetNotSupported);
         }
     }
 }

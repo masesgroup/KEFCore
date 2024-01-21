@@ -125,7 +125,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage => _usePersistentStorage;
     /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
-    public virtual bool UseEnumeratorWithPrefetch => _usePersistentStorage;
+    public virtual bool UseEnumeratorWithPrefetch => _useEnumeratorWithPrefetch;
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     public virtual int DefaultNumPartitions => _defaultNumPartitions;
     /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>

@@ -398,7 +398,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
         public void Reset()
         {
-            throw new InvalidOperationException($"Cannot apply {nameof(IEnumerator<ValueBuffer>.Reset)} operation over {typeof(KNetKeyValueIterator<TKey, TValue>)}");
+            throw new NotSupportedException(CoreStrings.EnumerableResetNotSupported);
         }
     }
 }
