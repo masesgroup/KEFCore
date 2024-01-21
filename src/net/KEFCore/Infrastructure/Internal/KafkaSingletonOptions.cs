@@ -47,7 +47,9 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             BootstrapServers = kafkaOptions.BootstrapServers;
             UseDeletePolicyForTopic = kafkaOptions.UseDeletePolicyForTopic;
             UseCompactedReplicator = kafkaOptions.UseCompactedReplicator;
+            UseKNetStreams = kafkaOptions.UseKNetStreams;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
+            UseEnumeratorWithPrefetch = kafkaOptions.UseEnumeratorWithPrefetch;
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
             DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
@@ -91,7 +93,11 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseCompactedReplicator { get; private set; }
     /// <inheritdoc/>
+    public virtual bool UseKNetStreams { get; private set; }
+    /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
+    /// <inheritdoc/>
+    public virtual bool UseEnumeratorWithPrefetch { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>

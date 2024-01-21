@@ -51,8 +51,12 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     bool UseDeletePolicyForTopic { get; }
     /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
     bool UseCompactedReplicator { get; }
+    /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
+    bool UseKNetStreams { get; }
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     bool UsePersistentStorage { get; }
+    /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
+    bool UseEnumeratorWithPrefetch { get; }
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     int DefaultNumPartitions { get; }
     /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>

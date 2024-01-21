@@ -47,7 +47,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private string? _bootstrapServers;
     private bool _useDeletePolicyForTopic = false;
     private bool _useCompactedReplicator = true;
+    private bool _useKNetStreams = true;
     private bool _usePersistentStorage = false;
+    private bool _useEnumeratorWithPrefetch = true;
     private int _defaultNumPartitions = 1;
     private int? _defaultConsumerInstances = null;
     private short _defaultReplicationFactor = 1;
@@ -58,8 +60,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private Action<EntityTypeChanged>? _onChangeEvent = null;
     private DbContextOptionsExtensionInfo? _info;
 
-    static Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
-    static Java.Lang.ClassLoader SystemClassLoader => _loader;
+    static readonly Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
+    internal static Java.Lang.ClassLoader SystemClassLoader => _loader;
     /// <summary>
     /// Initializer
     /// </summary>
@@ -80,7 +82,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _bootstrapServers = copyFrom._bootstrapServers;
         _useDeletePolicyForTopic = copyFrom._useDeletePolicyForTopic;
         _useCompactedReplicator = copyFrom._useCompactedReplicator;
+        _useKNetStreams = copyFrom._useKNetStreams;
         _usePersistentStorage = copyFrom._usePersistentStorage;
+        _useEnumeratorWithPrefetch = copyFrom._useEnumeratorWithPrefetch;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
         _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
         _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
@@ -116,8 +120,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual bool UseDeletePolicyForTopic => _useDeletePolicyForTopic;
     /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
+    /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
+    public virtual bool UseKNetStreams => _useKNetStreams;
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage => _usePersistentStorage;
+    /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
+    public virtual bool UseEnumeratorWithPrefetch => _usePersistentStorage;
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     public virtual int DefaultNumPartitions => _defaultNumPartitions;
     /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>
@@ -221,12 +229,30 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
+    /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
+    public virtual KafkaOptionsExtension WithUseKNetStreams(bool useKNetStreams = true)
+    {
+        var clone = Clone();
+
+        clone._useKNetStreams = useKNetStreams;
+
+        return clone;
+    }
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = false)
     {
         var clone = Clone();
 
         clone._usePersistentStorage = usePersistentStorage;
+
+        return clone;
+    }
+    /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
+    public virtual KafkaOptionsExtension WithUseEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)
+    {
+        var clone = Clone();
+
+        clone._useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
 
         return clone;
     }
@@ -309,6 +335,53 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     {
         return StreamsOptions(entityType.ApplicationIdForTable(this));
     }
+
+    /// <summary>
+    /// Build <see cref="StreamsConfigBuilder"/> from options
+    /// </summary>
+    public virtual StreamsConfigBuilder StreamsOptions()
+    {
+        _streamsConfigBuilder ??= new();
+        StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(_streamsConfigBuilder);
+        Properties props = builder;
+
+        builder.KNetKeySerDes = KeySerializationType;
+        builder.KNetValueSerDes = ValueSerializationType;
+
+        builder.ApplicationId = ApplicationId;
+        builder.BootstrapServers = BootstrapServers;
+        builder.DefaultKeySerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
+        builder.DefaultValueSerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
+
+        //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
+        //{
+        //    props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG);
+        //}
+        //props.Put(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG, ApplicationId);
+        //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG))
+        //{
+        //    props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG);
+        //}
+        //props.Put(Org.Apache.Kafka.Streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BootstrapServers);
+        //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG))
+        //{
+        //    props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
+        //}
+        //props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
+        //{
+        //    props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
+        //}
+        //props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        //if (props.ContainsKey(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
+        //{
+        //    props.Remove(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
+        //}
+        //props.Put(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        return builder;
+    }
+
     /// <summary>
     /// Build <see cref="Properties"/> for applicationId
     /// </summary>
