@@ -22,15 +22,18 @@
  *  SOFTWARE.
  */
 
+using Java.Sql;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Model;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using Org.Apache.Kafka.Common.Metrics.Stats;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,6 +46,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
     partial class Program
     {
         internal static ProgramConfig config = new();
+
+        struct ExecutionData
+        {
+            public ExecutionData(int executionIndex, int maxTests)
+            {
+                ExecutionIndex = executionIndex;
+                QueryTimes = new TimeSpan[maxTests];
+            }
+            public int ExecutionIndex;
+            public TimeSpan[] QueryTimes;
+        }
 
         static void ReportString(string message)
         {
@@ -58,6 +72,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
         static void Main(string[] args)
         {
+            const int maxTests = 10;
+            Dictionary<int, ExecutionData> _tests = new();
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
@@ -68,11 +84,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                 config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
             }
 
-            KafkaDbContext.EnableKEFCoreTracing = config.EnableKEFCoreTracing;
+            if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = config.EnableKEFCoreTracing;
 
             if (!config.UseInMemoryProvider)
             {
                 KEFCore.CreateGlobalInstance();
+                KEFCore.PreserveInformationAcrossContexts = config.PreserveInformationAcrossContexts;
             }
 
             var databaseName = config.UseModelBuilder ? config.DatabaseNameWithModel : config.DatabaseName;
@@ -153,7 +170,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                 for (int execution = 0; execution < config.NumberOfExecutions; execution++)
                 {
+                    _tests.Add(execution, new ExecutionData(execution, maxTests));
                     ReportString($"Starting cycle number {execution}");
+                    Stopwatch singleTestWatch = Stopwatch.StartNew();
                     using (context = new BloggingContext()
                     {
                         BootstrapServers = config.BootstrapServers,
@@ -175,36 +194,44 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
                         }
 
-                        Stopwatch watch = new Stopwatch();
+                        Stopwatch watch = new();
                         watch.Restart();
                         var post = context.Posts.Single(b => b.BlogId == 2);
                         watch.Stop();
+                        _tests[execution].QueryTimes[0] = watch.Elapsed;
                         ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
 
                         watch.Restart();
                         post = context.Posts.Single(b => b.BlogId == 2);
                         watch.Stop();
+                        _tests[execution].QueryTimes[1] = watch.Elapsed;
                         ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
 
                         watch.Restart();
                         post = context.Posts.Single(b => b.BlogId == config.NumberOfElements - 1);
                         watch.Stop();
+                        _tests[execution].QueryTimes[2] = watch.Elapsed;
                         ReportString($"Execution of context.Posts.Single(b => b.BlogId == {config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}");
 
                         watch.Restart();
                         var all = context.Posts.All((o) => true);
                         watch.Stop();
+                        _tests[execution].QueryTimes[3] = watch.Elapsed;
                         ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
 
                         Blog blog = null;
                         watch.Restart();
-                        blog = context.Blogs!.Single(b => b.BlogId == 1);
+                        blog = context.Blogs.Single(b => b.BlogId == 1);
                         watch.Stop();
-                        ReportString($"First execution of context.Blogs!.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+                        _tests[execution].QueryTimes[4] = watch.Elapsed;
+
+                        ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
                         watch.Restart();
-                        blog = context.Blogs!.Single(b => b.BlogId == 1);
+                        blog = context.Blogs.Single(b => b.BlogId == 1);
+
                         watch.Stop();
-                        ReportString($"Second execution of context.Blogs!.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+                        _tests[execution].QueryTimes[5] = watch.Elapsed;
+                        ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
 
                         watch.Restart();
                         var selector = (from op in context.Blogs
@@ -212,17 +239,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                                         where pg.BlogId == op.BlogId
                                         select new { pg, op });
                         watch.Stop();
+                        _tests[execution].QueryTimes[6] = watch.Elapsed;
                         var result = selector.ToList();
                         ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
 
                         watch.Restart();
                         var selector2 = (from op in context.Blogs
-                                        join pg in context.Posts on op.BlogId equals pg.BlogId
-                                        where op.Rating >= 100
-                                        select new { pg, op });
+                                         join pg in context.Posts on op.BlogId equals pg.BlogId
+                                         where op.Rating >= 100
+                                         select new { pg, op });
                         watch.Stop();
+                        _tests[execution].QueryTimes[7] = watch.Elapsed;
                         var result2 = selector.ToList();
                         ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
+                        singleTestWatch.Stop();
+                        _tests[execution].QueryTimes[8] = singleTestWatch.Elapsed;
+                        ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
                     }
                 }
             }
@@ -232,10 +264,34 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             }
             finally
             {
-                context?.Dispose();
                 testWatcher.Stop();
                 globalWatcher.Stop();
+                context?.Dispose();
+                ReportString(string.Empty);
                 ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
+
+                TimeSpan[] max = new TimeSpan[maxTests];
+                for (int i = 0; i < max.Length; i++) { max[i] = TimeSpan.Zero; }
+                TimeSpan[] min = new TimeSpan[maxTests];
+                for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
+                TimeSpan[] total = new TimeSpan[maxTests];
+                for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
+                for (int i = 0; i < config.NumberOfExecutions; i++)
+                {
+                    var item = _tests[i].QueryTimes;
+
+                    for (int testId = 0; testId < maxTests; testId++)
+                    {
+                        max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
+                        min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
+                        total[testId] += item[testId];
+                    }
+                }
+
+                for (int testId = 0; testId < maxTests; testId++)
+                {
+                    ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / config.NumberOfExecutions}");
+                }
             }
         }
     }
@@ -244,6 +300,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
     {
         public override bool UsePersistentStorage { get; set; } = Program.config.UsePersistentStorage;
         public override bool UseCompactedReplicator { get; set; } = Program.config.UseCompactedReplicator;
+        public override bool UseKNetStreams { get; set; } = Program.config.UseKNetStreams;
+        public override bool UseEnumeratorWithPrefetch { get; set; } = Program.config.UseEnumeratorWithPrefetch;
 
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }

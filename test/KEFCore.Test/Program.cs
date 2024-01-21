@@ -267,6 +267,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
     {
         public override bool UsePersistentStorage { get; set; } = Program.config.UsePersistentStorage;
         public override bool UseCompactedReplicator { get; set; } = Program.config.UseCompactedReplicator;
+        public override bool UseKNetStreams { get; set; } = Program.config.UseKNetStreams;
 
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }

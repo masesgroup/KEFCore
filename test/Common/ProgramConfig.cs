@@ -33,6 +33,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
         public bool UseCompactedReplicator { get; set; } = true;
+        public bool UseKNetStreams { get; set; } = true;
+        public bool UseEnumeratorWithPrefetch { get; set; } = true;
+        public bool PreserveInformationAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string DatabaseName { get; set; } = "TestDB";
         public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
