@@ -283,6 +283,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             _kafkaProducer?.Dispose();
             _streamData?.Dispose();
         }
+        _keySerdes?.Dispose();
+        _valueSerdes?.Dispose();
     }
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> ValueBuffers
