@@ -1,5 +1,5 @@
 /*
-*  Copyright 2023 MASES s.r.l.
+*  Copyright 2024 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -259,7 +259,7 @@ const bool perf = false;
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
-            o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
+        o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
             o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
