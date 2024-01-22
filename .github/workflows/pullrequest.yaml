@@ -57,15 +57,8 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
-      - name: Compile
+      - name: Precompile tests
+        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\KEFCore.Test.sln
+
+      - name: Compile code
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
-
-      - name: Clear documentation folder 
-        run: Remove-Item .\docs\* -Recurse -Force -Exclude _config.yml,CNAME
-
-      - run: dotnet tool update -g docfx
-
-      - name: Build documentation
-        run: |
-          cd src\documentation
-          docfx
