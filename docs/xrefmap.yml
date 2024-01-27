@@ -726,6 +726,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptions
   nameWithType: KafkaOptionsExtension.ProducerOptions
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder
+  name: ProducerOptionsBuilder()
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerOptionsBuilder
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder()
+  nameWithType: KafkaOptionsExtension.ProducerOptionsBuilder()
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder*
+  name: ProducerOptionsBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_ProducerOptionsBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.ProducerOptionsBuilder
+  nameWithType: KafkaOptionsExtension.ProducerOptionsBuilder
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.StreamsConfig
   name: StreamsConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaOptionsExtension_StreamsConfig
