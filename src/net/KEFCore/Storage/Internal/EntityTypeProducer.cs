@@ -230,7 +230,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         }
         else
         {
-            _kafkaProducer = new KNetProducer<TKey, TValueContainer>(_cluster.Options.ProducerOptions(), _keySerdes, _valueSerdes);
+            _kafkaProducer = new KNetProducer<TKey, TValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer>(cluster, entityType)
                                                           : new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
         }

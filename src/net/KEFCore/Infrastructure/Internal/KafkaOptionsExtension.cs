@@ -417,6 +417,18 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         return props;
     }
     /// <summary>
+    /// Build <see cref="ProducerConfigBuilder"/> for producers
+    /// </summary>
+    public virtual ProducerConfigBuilder ProducerOptionsBuilder()
+    {
+        ProducerConfigBuilder props = _producerConfigBuilder ?? new();
+        props.BootstrapServers = BootstrapServers;
+        props.Acks = ProducerConfigBuilder.AcksTypes.All;
+        props.Retries = 0;
+        props.LingerMs = 1;
+        return props;
+    }
+    /// <summary>
     /// Build <see cref="Properties"/> for producers
     /// </summary>
     public virtual Properties ProducerOptions()
