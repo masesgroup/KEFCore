@@ -46,10 +46,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
-    private readonly IKNetProducer<TKey, TValueContainer>? _kafkaProducer;
+    private readonly MASES.KNet.Producer.IProducer<TKey, TValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsRetriever? _streamData;
-    private readonly IKNetSerDes<TKey>? _keySerdes;
-    private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
+    private readonly ISerDes<TKey>? _keySerdes;
+    private readonly ISerDes<TValueContainer>? _valueSerdes;
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
 
     #region KNetCompactedReplicatorEnumerable
@@ -191,11 +191,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         var tTValueContainer = typeof(TValueContainer);
         TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
 
-        _keySerdes = new TKeySerializer() as IKNetSerDes<TKey>;
-        _valueSerdes = new TValueSerializer() as IKNetSerDes<TValueContainer>;
+        _keySerdes = new TKeySerializer() as ISerDes<TKey>;
+        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer>;
 
-        if (_keySerdes == null) throw new InvalidOperationException($"{typeof(TKeySerializer)} is not a {typeof(IKNetSerDes<TKey>)}");
-        if (_valueSerdes == null) throw new InvalidOperationException($"{typeof(TValueSerializer)} is not a {typeof(IKNetSerDes<TValueSerializer>)}");
+        if (_keySerdes == null) throw new InvalidOperationException($"{typeof(TKeySerializer)} is not a {typeof(ISerDes<TKey>)}");
+        if (_valueSerdes == null) throw new InvalidOperationException($"{typeof(TValueSerializer)} is not a {typeof(ISerDes<TValueSerializer>)}");
 
         if (_useCompactedReplicator)
         {
@@ -256,7 +256,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             List<Future<RecordMetadata>> futures = new();
             foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
-                var future = _kafkaProducer?.Send(new KNetProducerRecord<TKey, TValueContainer>(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!));
+                var future = _kafkaProducer?.Send(new MASES.KNet.Producer.ProducerRecord<TKey, TValueContainer>(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!));
                 futures.Add(future!);
             }
 

@@ -94,7 +94,7 @@ public class EntityExtractor
                                                                          .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
 
             KafkaConsumer<byte[], byte[]> kafkaConsumer = new KafkaConsumer<byte[], byte[]>(consumerBuilder);
-            using var collection = Collections.Singleton(topicName);
+            using var collection = Collections.Singleton((Java.Lang.String)topicName);
             kafkaConsumer.Subscribe(collection);
 
             while (!token.IsCancellationRequested)
@@ -126,7 +126,7 @@ public class EntityExtractor
     /// <param name="record">The Apache Kafka record containing the information</param>
     /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
     /// <returns>The extracted entity</returns>
-    public static TEntity FromRecord<TEntity>(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
+    public static TEntity FromRecord<TEntity>(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
         where TEntity : class
     {
         return (TEntity)FromRecord(record, throwUnmatch);
@@ -138,7 +138,7 @@ public class EntityExtractor
     /// <param name="record">The Apache Kafka record containing the information</param>
     /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
     /// <returns>The extracted entity</returns>
-    public static object FromRecord(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
+    public static object FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
     {
         Type? keySerializerType = null;
         Type? valueSerializerType = null;

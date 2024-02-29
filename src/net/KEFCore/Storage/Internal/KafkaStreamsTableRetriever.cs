@@ -33,7 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer>(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValueContainer> valueSerdes, StreamsBuilder builder) 
+public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer>(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey> keySerdes, ISerDes<TValueContainer> valueSerdes, StreamsBuilder builder) 
     : KafkaStreamsBaseRetriever<TKey, TValueContainer, byte[], byte[]>(kafkaCluster, entityType, keySerdes, valueSerdes, builder)
     where TKey :notnull
     where TValueContainer : IValueContainer<TKey>
@@ -43,7 +43,7 @@ public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer>(IKafkaClus
     /// <summary>
     /// Initializer
     /// </summary>
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes<TKey> keySerdes, IKNetSerDes<TValueContainer> valueSerdes)
+    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey> keySerdes, ISerDes<TValueContainer> valueSerdes)
         : this(kafkaCluster, entityType, keySerdes, valueSerdes, new StreamsBuilder())
     {
     }

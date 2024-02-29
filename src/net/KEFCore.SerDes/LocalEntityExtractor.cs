@@ -33,13 +33,13 @@ class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializ
     where TKeySerializer : class, new()
     where TValueSerializer : class, new()
 {
-    private readonly IKNetSerDes<TKey>? _keySerdes;
-    private readonly IKNetSerDes<TValueContainer>? _valueSerdes;
+    private readonly ISerDes<TKey>? _keySerdes;
+    private readonly ISerDes<TValueContainer>? _valueSerdes;
 
     public LocalEntityExtractor()
     {
-        _keySerdes = new TKeySerializer() as IKNetSerDes<TKey>;
-        _valueSerdes = new TValueSerializer() as IKNetSerDes<TValueContainer>;
+        _keySerdes = new TKeySerializer() as ISerDes<TKey>;
+        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer>;
     }
 
     public object GetEntity(string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch)
