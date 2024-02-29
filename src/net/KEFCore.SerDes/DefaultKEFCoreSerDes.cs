@@ -26,7 +26,7 @@ using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
-/// Default base class to define extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Default base class to define extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
 public static class DefaultKEFCoreSerDes
 {
@@ -43,19 +43,19 @@ public static class DefaultKEFCoreSerDes
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(DefaultValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class Key
     {
         /// <summary>
-        /// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class Json<T> : KNetSerDes<T>
+        public class Json<T> : SerDes<T>
         {
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(Json<>).ToAssemblyQualified());
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            readonly ISerDes<T> _defaultSerDes = default!;
             readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
@@ -66,7 +66,7 @@ public static class DefaultKEFCoreSerDes
             {
                 if (KNetSerialization.IsInternalManaged<T>())
                 {
-                    _defaultSerDes = new KNetSerDes<T>();
+                    _defaultSerDes = new SerDes<T>();
                 }
                 else if (!typeof(T).IsArray)
                 {
@@ -81,12 +81,12 @@ public static class DefaultKEFCoreSerDes
                 }
             }
 
-            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
             public override byte[] Serialize(string topic, T data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
                 headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
@@ -96,12 +96,12 @@ public static class DefaultKEFCoreSerDes
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, byte[])"/>
             public override T Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
             public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
@@ -113,15 +113,15 @@ public static class DefaultKEFCoreSerDes
     }
 
     /// <summary>
-    /// Base class to define ValueContainer extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class ValueContainer
     {
         /// <summary>
-        /// Json extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class Json<T> : KNetSerDes<T>
+        public class Json<T> : SerDes<T>
         {
             readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Json<>).ToAssemblyQualified());
             readonly byte[] valueContainerName = null!;
@@ -153,12 +153,12 @@ public static class DefaultKEFCoreSerDes
                 throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
 
-            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
             public override byte[] Serialize(string topic, T data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
@@ -167,12 +167,12 @@ public static class DefaultKEFCoreSerDes
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data, _options);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, byte[])"/>
             public override T Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
             public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (data == null) return default!;

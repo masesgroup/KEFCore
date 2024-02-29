@@ -245,7 +245,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     ///     Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
     /// </summary>
     /// <remarks>
-    ///     Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6
+    ///     Used only if <see cref="KafkaDbContext.UseCompactedReplicator"/> is <see langword="false"/> and <see cref="KafkaDbContext.UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>

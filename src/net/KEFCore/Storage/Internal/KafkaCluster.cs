@@ -102,7 +102,7 @@ public class KafkaCluster : IKafkaCluster
     {
         lock (_lock)
         {
-            var coll = new ArrayList<string>();
+            var coll = new ArrayList<Java.Lang.String>();
             foreach (var entityType in designModel.GetEntityTypes())
             {
                 var topic = entityType.TopicName(Options);

@@ -27,7 +27,7 @@ using System.Text;
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 
 /// <summary>
-/// Protobuf base class to define extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Protobuf base class to define extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
 public static class ProtobufKEFCoreSerDes
 {
@@ -44,19 +44,19 @@ public static class ProtobufKEFCoreSerDes
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(ProtobufValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class Key
     {
         /// <summary>
-        /// Protobuf Key Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Protobuf Key Binary encoder extension of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public class Binary<T> : KNetSerDes<T>
+        public class Binary<T> : SerDes<T>
         {
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(Binary<>).ToAssemblyQualified());
-            readonly IKNetSerDes<T> _defaultSerDes = default!;
+            readonly ISerDes<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -66,7 +66,7 @@ public static class ProtobufKEFCoreSerDes
             {
                 if (KNetSerialization.IsInternalManaged<T>())
                 {
-                    _defaultSerDes = new KNetSerDes<T>();
+                    _defaultSerDes = new SerDes<T>();
                 }
                 else if (!typeof(T).IsArray)
                 {
@@ -74,12 +74,12 @@ public static class ProtobufKEFCoreSerDes
                 }
             }
 
-            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
             public override byte[] Serialize(string topic, T data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
                 headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
@@ -96,12 +96,12 @@ public static class ProtobufKEFCoreSerDes
                 keyContainer.WriteTo(stream);
                 return stream.ToArray();
             }
-            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, byte[])"/>
             public override T Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
             public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
@@ -116,15 +116,15 @@ public static class ProtobufKEFCoreSerDes
     }
 
     /// <summary>
-    /// Base class to define ValueContainer extensions of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
     public static class ValueContainer
     {
         /// <summary>
-        /// Protobuf ValueContainer Binary encoder extension of <see cref="KNetSerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Protobuf ValueContainer Binary encoder extension of <see cref="SerDes{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public class Binary<T> : KNetSerDes<T> where T : class, IMessage<T>
+        public class Binary<T> : SerDes<T> where T : class, IMessage<T>
         {
             readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Binary<>).ToAssemblyQualified());
             readonly byte[] valueContainerName = null!;
@@ -151,12 +151,12 @@ public static class ProtobufKEFCoreSerDes
                 throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
 
-            /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
             public override byte[] Serialize(string topic, T data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
@@ -168,12 +168,12 @@ public static class ProtobufKEFCoreSerDes
                     return stream.ToArray();
                 }
             }
-            /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, byte[])"/>
             public override T Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
             public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (data == null) return default!;
