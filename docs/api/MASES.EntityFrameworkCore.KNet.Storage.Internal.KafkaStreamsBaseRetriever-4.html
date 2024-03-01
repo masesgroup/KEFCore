@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4" class="text-break">
-Class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L42"><i class="bi bi-code-slash"></i></a>
+Class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L41"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -178,9 +178,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
-  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValue&gt;, StreamsBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__MASES_KNet_Serialization_ISerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0},MASES.KNet.Serialization.ISerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey&gt;, ISerDes&lt;TValue&gt;, StreamsBuilder)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -188,7 +188,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValue&gt; valueSerdes, StreamsBuilder builder)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey&gt; keySerdes, ISerDes&lt;TValue&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -197,9 +197,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
-    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TKey&gt;</dt>
+    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TKey&gt;</dt>
     <dd></dd>
-    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TValue&gt;</dt>
+    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TValue&gt;</dt>
     <dd></dd>
     <dt><code>builder</code> <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.StreamsBuilder.html">StreamsBuilder</a></dt>
     <dd></dd>
@@ -224,7 +224,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L223"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L222"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -251,7 +251,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers">
   GetValueBuffers()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L241"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L240"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html">IKafkaStreamsRetriever</a> instance</p>
@@ -284,7 +284,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L42" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L41" class="edit-link">Edit this page</a>
         </div>
 
 
