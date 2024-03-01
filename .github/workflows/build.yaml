@@ -31,7 +31,12 @@ jobs:
                 echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
               fi
-              if [[ $added_modified_file == "src/"* ]]; then
+              if [[ $added_modified_file == "src/net/"* ]]; then
+                echo "$added_modified_file file is under the directory 'src/'."
+                echo "run_build_windows=true" >> $GITHUB_OUTPUT
+                break
+              fi
+              if [[ $added_modified_file == "test/"* ]]; then
                 echo "$added_modified_file file is under the directory 'src/'."
                 echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
