@@ -175,8 +175,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1})">
-  KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValueContainer&gt;)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__MASES_KNet_Serialization_ISerDes__1__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0},MASES.KNet.Serialization.ISerDes{`1})">
+  KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey&gt;, ISerDes&lt;TValueContainer&gt;)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -185,7 +185,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValueContainer&gt; valueSerdes)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey&gt; keySerdes, ISerDes&lt;TValueContainer&gt; valueSerdes)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -194,9 +194,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
-    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TKey&gt;</dt>
+    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TKey&gt;</dt>
     <dd></dd>
-    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TValueContainer&gt;</dt>
+    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TValueContainer&gt;</dt>
     <dd></dd>
   </dl>
 
@@ -213,8 +213,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.IKNetSerDes{`0},MASES.KNet.Serialization.IKNetSerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
-  KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IKNetSerDes&lt;TKey&gt;, IKNetSerDes&lt;TValueContainer&gt;, StreamsBuilder)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__MASES_KNet_Serialization_ISerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`2.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0},MASES.KNet.Serialization.ISerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey&gt;, ISerDes&lt;TValueContainer&gt;, StreamsBuilder)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsTableRetriever.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -226,7 +226,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKNetSerDes&lt;TKey&gt; keySerdes, IKNetSerDes&lt;TValueContainer&gt; valueSerdes, StreamsBuilder builder)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey&gt; keySerdes, ISerDes&lt;TValueContainer&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -235,9 +235,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
-    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TKey&gt;</dt>
+    <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TKey&gt;</dt>
     <dd></dd>
-    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IKNetSerDes-1.html">IKNetSerDes</a>&lt;TValueContainer&gt;</dt>
+    <dt><code>valueSerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TValueContainer&gt;</dt>
     <dd></dd>
     <dt><code>builder</code> <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.StreamsBuilder.html">StreamsBuilder</a></dt>
     <dd></dd>
@@ -250,7 +250,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_IKNetSerDes__0__MASES_KNet_Serialization_IKNetSerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__MASES_KNet_Serialization_ISerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>Default initializer</p>
 </div>
 
