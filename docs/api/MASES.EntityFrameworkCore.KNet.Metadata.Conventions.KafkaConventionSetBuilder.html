@@ -29,15 +29,15 @@
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
       <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
   </head>
-
-  <script type="module" src="./../public/docfx.min.js"></script>
-
-  <script>
-    const theme = localStorage.getItem('theme') || 'auto'
-    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
-  </script>
-
 
   <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
     <header class="bg-body border-bottom">
@@ -158,16 +158,16 @@ Class KafkaConventionSetBuilder  <a class="header-action link-secondary" title="
 
   <h2 id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KafkaConventionSetBuilder_remarks">Remarks</h2>
   <div class="markdown level0 remarks"><p>
-    The service lifetime is <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.servicelifetime#microsoft-extensions-dependencyinjection-servicelifetime-scoped">Scoped</a> and multiple registrations
-    are allowed. This means that each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext">DbContext</a> instance will use its own
-    set of instances of this service.
-    The implementations may depend on other services registered with any lifetime.
-    The implementations do not need to be thread-safe.
-</p>
+        The service lifetime is <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.servicelifetime#microsoft-extensions-dependencyinjection-servicelifetime-scoped">Scoped</a> and multiple registrations
+        are allowed. This means that each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext">DbContext</a> instance will use its own
+        set of instances of this service.
+        The implementations may depend on other services registered with any lifetime.
+        The implementations do not need to be thread-safe.
+    </p>
 <p>
-    See <a href="https://aka.ms/efcore-docs-conventions">Model building conventions</a>, and
-    <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.
-</p>
+        See <a href="https://aka.ms/efcore-docs-conventions">Model building conventions</a>, and
+        <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.
+    </p>
 </div>
 
 
