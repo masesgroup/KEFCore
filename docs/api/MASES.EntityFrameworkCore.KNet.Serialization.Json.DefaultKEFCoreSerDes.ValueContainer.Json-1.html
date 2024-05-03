@@ -29,15 +29,15 @@
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
       <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
   </head>
-
-  <script type="module" src="./../public/docfx.min.js"></script>
-
-  <script>
-    const theme = localStorage.getItem('theme') || 'auto'
-    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
-  </script>
-
 
   <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
     <header class="bg-body border-bottom">
@@ -93,7 +93,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.Serialization.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Json extension of <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-1.html">SerDes&lt;T&gt;</a>, for example <a href="https://masesgroup.github.io/KNet/articles/usageSerDes.html">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>
+  <div class="markdown summary"><p>Json extension of <a class="xref" href="api/MASES.KNet.Serialization.SerDes-1.html">SerDes&lt;T&gt;</a>, for example <a href="https://masesgroup.github.io/KNet/articles/usageSerDes.html">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -114,8 +114,8 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html">SerDes</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-1.html">SerDes</a>&lt;T&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html">SerDes</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.SerDes-1.html">SerDes</a>&lt;T&gt;</div>
       <div><span class="xref">DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;</span></div>
     </dd>
   </dl>
@@ -123,12 +123,12 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;T&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-2.html">ISerDes</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerializer-1.html">ISerializer</a>&lt;T&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerializer-2.html">ISerializer</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IDeserializer-1.html">IDeserializer</a>&lt;T&gt;</div>
-      <div><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.IDeserializer-2.html">IDeserializer</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;T&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.ISerDes-2.html">ISerDes</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.ISerializer-1.html">ISerializer</a>&lt;T&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.ISerializer-2.html">ISerializer</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.IDeserializer-1.html">IDeserializer</a>&lt;T&gt;</div>
+      <div><a class="xref" href="api/MASES.KNet.Serialization.IDeserializer-2.html">IDeserializer</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
     </dd>
   </dl>
@@ -138,7 +138,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
     <dt>Inherited Members</dt>
     <dd>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_Dispose">SerDes&lt;T, byte[]&gt;.Dispose()</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_Dispose">SerDes&lt;T, byte[]&gt;.Dispose()</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">SerDes&lt;T, byte[]&gt;.Serialize(string, T)</a>
@@ -153,28 +153,31 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">SerDes&lt;T, byte[]&gt;.DeserializeWithHeaders(string, Headers, byte[])</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnSerialize">SerDes&lt;T, byte[]&gt;.OnSerialize</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnSerialize">SerDes&lt;T, byte[]&gt;.OnSerialize</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnSerializeWithHeaders">SerDes&lt;T, byte[]&gt;.OnSerializeWithHeaders</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnSerializeWithHeaders">SerDes&lt;T, byte[]&gt;.OnSerializeWithHeaders</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnDeserialize">SerDes&lt;T, byte[]&gt;.OnDeserialize</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnDeserialize">SerDes&lt;T, byte[]&gt;.OnDeserialize</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnDeserializeWithHeaders">SerDes&lt;T, byte[]&gt;.OnDeserializeWithHeaders</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_OnDeserializeWithHeaders">SerDes&lt;T, byte[]&gt;.OnDeserializeWithHeaders</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaSerde">SerDes&lt;T, byte[]&gt;.KafkaSerde</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaSerde">SerDes&lt;T, byte[]&gt;.KafkaSerde</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaSerializer">SerDes&lt;T, byte[]&gt;.KafkaSerializer</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaSerializer">SerDes&lt;T, byte[]&gt;.KafkaSerializer</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaDeserializer">SerDes&lt;T, byte[]&gt;.KafkaDeserializer</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_KafkaDeserializer">SerDes&lt;T, byte[]&gt;.KafkaDeserializer</a>
     </div>
     <div>
-      <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_UseHeaders">SerDes&lt;T, byte[]&gt;.UseHeaders</a>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_UseHeaders">SerDes&lt;T, byte[]&gt;.UseHeaders</a>
+    </div>
+    <div>
+      <a class="xref" href="api/MASES.KNet.Serialization.SerDes-2.html#MASES_KNet_Serialization_SerDes_2_UseKafkaClassForSupportedTypes">SerDes&lt;T, byte[]&gt;.UseKafkaClassForSupportedTypes</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
@@ -246,7 +249,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultKEFCoreSerDes.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a>are used</p>
+  <div class="markdown level1 summary"><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <a class="xref" href="api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a> are used</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -282,8 +285,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultKEFCoreSerDes.cs/#L171"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Executes the Deserializer action in the CLR</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -293,18 +295,15 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>topic associated with the data</p>
-</dd>
+    <dd></dd>
     <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
-    <dd><p>serialized bytes; may be null; implementations are recommended to handle null by returning a value or null rather than throwing an exception</p>
-</dd>
+    <dd></dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><span class="xref">T</span></dt>
-    <dd><p>The deserialized T</p>
-</dd>
+    <dd></dd>
   </dl>
 
 
@@ -324,8 +323,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultKEFCoreSerDes.cs/#L176"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Executes the Deserializer action in the CLR</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -335,21 +333,17 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>topic associated with the data</p>
-</dd>
-    <dt><code>headers</code> <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a></dt>
-    <dd><p><a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a> associated with the record; may be empty.</p>
-</dd>
+    <dd></dd>
+    <dt><code>headers</code> <a class="xref" href="api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a></dt>
+    <dd></dd>
     <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
-    <dd><p>serialized bytes; may be null; implementations are recommended to handle null by returning a value or null rather than throwing an exception</p>
-</dd>
+    <dd></dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><span class="xref">T</span></dt>
-    <dd><p>The deserialized T</p>
-</dd>
+    <dd></dd>
   </dl>
 
 
@@ -383,7 +377,7 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
     <dd><p>topic associated with the data</p>
 </dd>
     <dt><code>data</code> <span class="xref">T</span></dt>
-    <dd><p>T data</p>
+    <dd><p><code class="typeparamref">T</code> data</p>
 </dd>
   </dl>
 
@@ -424,11 +418,11 @@ Class DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;  <a class="header-action
     <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>topic associated with the data</p>
 </dd>
-    <dt><code>headers</code> <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a></dt>
-    <dd><p><a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a> associated with the record; may be empty.</p>
+    <dt><code>headers</code> <a class="xref" href="api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a></dt>
+    <dd><p><a class="xref" href="api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a> associated with the record; may be empty.</p>
 </dd>
     <dt><code>data</code> <span class="xref">T</span></dt>
-    <dd><p>T data</p>
+    <dd><p><code class="typeparamref">T</code> data</p>
 </dd>
   </dl>
 
