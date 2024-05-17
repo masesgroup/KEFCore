@@ -34,13 +34,13 @@ public class EntityTypeProducers
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>
     /// </summary>
-    public static IEntityTypeProducer Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
+    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
         where TKeySerializer : class, new()
         where TValueSerializer : class, new()
     {
-        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster));
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster));
     }
     /// <summary>
     /// Dispose a previously allocated <see cref="IEntityTypeProducer"/>
@@ -54,10 +54,10 @@ public class EntityTypeProducers
         producer.Dispose();
     }
 
-    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
+    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
         where TKeySerializer : class, new()
         where TValueSerializer : class, new()
-        => new EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster);
+        => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(entityType, cluster);
 }

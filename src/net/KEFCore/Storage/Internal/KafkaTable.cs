@@ -33,7 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
+public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
     where TKeySerializer : class, new()
@@ -62,7 +62,7 @@ public class KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTable(entityType);
-        _producer = EntityTypeProducers.Create<TKey, TValueContainer, TKeySerializer, TValueSerializer>(entityType, Cluster);
+        _producer = EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
         _rows = new Dictionary<TKey, object?[]>(_keyValueFactory.EqualityComparer);

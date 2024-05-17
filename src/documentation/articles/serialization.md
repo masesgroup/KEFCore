@@ -146,17 +146,17 @@ A custom **Key SerDes** class shall follow the following rules:
 An example snippet is the follow based on JSON serializer:
 
 ```C#
-public class CustomKeySerDes<T> : KNetSerDes<T>
+public class CustomKeySerDes<T> : SerDesRaw<T>
 {
     readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
     readonly byte[] customSerDesName = Encoding.UTF8.GetBytes(typeof(CustomKeySerDes<>).FullName!);
 
-    /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)
     {
         return SerializeWithHeaders(topic, null, data);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
         headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
@@ -165,12 +165,12 @@ public class CustomKeySerDes<T> : KNetSerDes<T>
         var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.Deserialize(string, byte[])"/>
     public override T Deserialize(string topic, byte[] data)
     {
         return DeserializeWithHeaders(topic, null, data);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
         if (data == null) return default;
@@ -180,7 +180,7 @@ public class CustomKeySerDes<T> : KNetSerDes<T>
 ```
 
 ```C#
-public class CustomValueContainerSerDes<T> : KNetSerDes<T>
+public class CustomValueContainerSerDes<T> : SerDesRaw<T>
 {
     readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(CustomValueContainerSerDes<>).FullName!);
     readonly byte[] valueContainerName = null!;
@@ -205,12 +205,12 @@ public class CustomValueContainerSerDes<T> : KNetSerDes<T>
         throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
     }
 
-    /// <inheritdoc cref="KNetSerDes{T}.Serialize(string, T)"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.Serialize(string, T)"/>
     public override byte[] Serialize(string topic, T data)
     {
         return SerializeWithHeaders(topic, null, data);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
         headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
@@ -219,12 +219,12 @@ public class CustomValueContainerSerDes<T> : KNetSerDes<T>
         var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.Deserialize(string, byte[])"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.Deserialize(string, byte[])"/>
     public override T Deserialize(string topic, byte[] data)
     {
         return DeserializeWithHeaders(topic, null, data);
     }
-    /// <inheritdoc cref="KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])"/>
+    /// <inheritdoc cref="KNetSerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, byte[])"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
         if (data == null) return default;
