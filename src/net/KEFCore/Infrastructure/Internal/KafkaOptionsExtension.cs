@@ -27,6 +27,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Streams;
 using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
@@ -352,6 +353,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         builder.BootstrapServers = BootstrapServers;
         builder.DefaultKeySerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
         builder.DefaultValueSerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
+        builder.DefaultDSLStore = UsePersistentStorage ? Org.Apache.Kafka.Streams.StreamsConfig.ROCKS_DB : Org.Apache.Kafka.Streams.StreamsConfig.IN_MEMORY;
 
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         //{
