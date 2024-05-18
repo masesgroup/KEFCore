@@ -49,7 +49,7 @@ public static class DefaultKEFCoreSerDes
     public static class Key
     {
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class JsonRaw<T> : SerDesRaw<T>
@@ -113,7 +113,7 @@ public static class DefaultKEFCoreSerDes
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class JsonBuffered<T> : SerDesBuffered<T>
@@ -185,7 +185,7 @@ public static class DefaultKEFCoreSerDes
     public static class ValueContainer
     {
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class JsonRaw<T> : SerDesRaw<T>
@@ -248,7 +248,7 @@ public static class DefaultKEFCoreSerDes
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         public class JsonBuffered<T> : SerDesBuffered<T>

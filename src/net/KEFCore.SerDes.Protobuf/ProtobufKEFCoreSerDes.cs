@@ -45,7 +45,7 @@ public static class ProtobufKEFCoreSerDes
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(ProtobufValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
     /// </summary>
     public static class Key
     {
@@ -116,7 +116,7 @@ public static class ProtobufKEFCoreSerDes
         }
 
         /// <summary>
-        /// Protobuf Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Protobuf Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryBuffered<T> : SerDesBuffered<T>
@@ -188,7 +188,7 @@ public static class ProtobufKEFCoreSerDes
     public static class ValueContainer
     {
         /// <summary>
-        /// Protobuf ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Protobuf ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryRaw<T> : SerDesRaw<T> where T : class, IMessage<T>
@@ -250,7 +250,7 @@ public static class ProtobufKEFCoreSerDes
         }
 
         /// <summary>
-        /// Protobuf ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Protobuf ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryBuffered<T> : SerDesBuffered<T> where T : class, IMessage<T>

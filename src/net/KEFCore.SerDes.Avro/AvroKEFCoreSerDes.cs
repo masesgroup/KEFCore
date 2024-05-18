@@ -51,7 +51,7 @@ public static class AvroKEFCoreSerDes
     public static class Key
     {
         /// <summary>
-        /// Avro Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryRaw<T> : SerDesRaw<T>
@@ -121,7 +121,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro Key Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryBuffered<T> : SerDesBuffered<T>
@@ -190,7 +190,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro Key Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro Key Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class JsonRaw<T> : SerDesRaw<T>
@@ -255,7 +255,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro Key Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro Key Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class JsonBuffered<T> : SerDesBuffered<T>
@@ -325,7 +325,7 @@ public static class AvroKEFCoreSerDes
     public static class ValueContainer
     {
         /// <summary>
-        /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryRaw<T> : SerDesRaw<T>
@@ -390,7 +390,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class BinaryBuffered<T> : SerDesBuffered<T>
@@ -454,7 +454,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro ValueContainer Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro ValueContainer Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class JsonRaw<T> : SerDesRaw<T>
@@ -520,7 +520,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Avro ValueContainer Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Avro ValueContainer Json encoder extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public class JsonBuffered<T> : SerDesBuffered<T>
