@@ -22,27 +22,27 @@ using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 
-interface ILocalEntityExtractor
+interface ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
 {
-    object GetEntity(string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch);
+    object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch);
 }
 
-class LocalEntityExtractor<TKey, TValueContainer, TKeySerializer, TValueSerializer> : ILocalEntityExtractor
+class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer> : ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
     where TKeySerializer : class, new()
     where TValueSerializer : class, new()
 {
-    private readonly ISerDes<TKey>? _keySerdes;
-    private readonly ISerDes<TValueContainer>? _valueSerdes;
+    private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
+    private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
     public LocalEntityExtractor()
     {
-        _keySerdes = new TKeySerializer() as ISerDes<TKey>;
-        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer>;
+        _keySerdes = new TKeySerializer() as ISerDes<TKey, TJVMKey>;
+        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer, TJVMValueContainer>;
     }
 
-    public object GetEntity(string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch)
+    public object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch)
     {
         if (recordValue == null) throw new ArgumentNullException(nameof(recordValue), "Record value shall be available");
 

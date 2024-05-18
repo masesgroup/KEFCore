@@ -35,7 +35,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSerializer> : IEntityTypeProducer
+public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer> : IEntityTypeProducer
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
     where TKeySerializer : class, new()
@@ -45,18 +45,18 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
-    private readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
-    private readonly MASES.KNet.Producer.IProducer<TKey, TValueContainer>? _kafkaProducer;
+    private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
+    private readonly MASES.KNet.Producer.IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsRetriever? _streamData;
-    private readonly ISerDes<TKey>? _keySerdes;
-    private readonly ISerDes<TValueContainer>? _valueSerdes;
+    private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
+    private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
 
     #region KNetCompactedReplicatorEnumerable
-    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
+    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
     {
         readonly IEntityType _entityType = entityType;
-        readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator = kafkaCompactedReplicator;
+        readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator = kafkaCompactedReplicator;
 
         #region KNetCompactedReplicatorEnumerator
         class KNetCompactedReplicatorEnumerator : IEnumerator<ValueBuffer>
@@ -67,9 +67,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             Stopwatch _valueBufferSw = new Stopwatch();
 #endif
             readonly IEntityType _entityType;
-            readonly IKNetCompactedReplicator<TKey, TValueContainer>? _kafkaCompactedReplicator;
+            readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
             readonly IEnumerator<KeyValuePair<TKey, TValueContainer>>? _enumerator;
-            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer>? kafkaCompactedReplicator)
+            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
                 _kafkaCompactedReplicator = kafkaCompactedReplicator;
@@ -191,15 +191,15 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         var tTValueContainer = typeof(TValueContainer);
         TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
 
-        _keySerdes = new TKeySerializer() as ISerDes<TKey>;
-        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer>;
+        _keySerdes = new TKeySerializer() as ISerDes<TKey, TJVMKey>;
+        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer, TJVMValueContainer>;
 
-        if (_keySerdes == null) throw new InvalidOperationException($"{typeof(TKeySerializer)} is not a {typeof(ISerDes<TKey>)}");
-        if (_valueSerdes == null) throw new InvalidOperationException($"{typeof(TValueSerializer)} is not a {typeof(ISerDes<TValueSerializer>)}");
+        if (_keySerdes == null) throw new InvalidOperationException($"{typeof(TKeySerializer)} is not a {typeof(ISerDes<TKey, TJVMKey>)}");
+        if (_valueSerdes == null) throw new InvalidOperationException($"{typeof(TValueSerializer)} is not a {typeof(ISerDes<TValueSerializer, TJVMValueContainer>)}");
 
         if (_useCompactedReplicator)
         {
-            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, TValueContainer>()
+            _kafkaCompactedReplicator = new KNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>()
             {
                 UpdateMode = UpdateModeTypes.OnConsume,
                 BootstrapServers = _cluster.Options.BootstrapServers,
@@ -230,9 +230,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         }
         else
         {
-            _kafkaProducer = new KNetProducer<TKey, TValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
-            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer>(cluster, entityType)
-                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
+            _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
+            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType)
+                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -256,7 +256,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
             List<Future<RecordMetadata>> futures = new();
             foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
-                var future = _kafkaProducer?.Send(new MASES.KNet.Producer.ProducerRecord<TKey, TValueContainer>(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!));
+                var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
+                var future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
             }
 
@@ -297,7 +298,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         }
     }
 
-    private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         Task.Factory.StartNew(() =>
         {
@@ -305,7 +306,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         });
     }
 
-    private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         Task.Factory.StartNew(() =>
         {
@@ -313,7 +314,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TKeySerializer, TValueSer
         });
     }
 
-    private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         Task.Factory.StartNew(() =>
         {

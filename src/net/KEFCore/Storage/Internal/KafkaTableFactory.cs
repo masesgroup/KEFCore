@@ -56,12 +56,14 @@ public class KafkaTableFactory : IKafkaTableFactory
         => (Func<IKafkaTable>)typeof(KafkaTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
             .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(), 
-                               _options.ValueContainerType(entityType), 
+                               _options.ValueContainerType(entityType),
+                               _options.JVMKeyType(entityType),
+                               _options.JVMValueContainerType(entityType),
                                _options.SerializerTypeForKey(entityType), 
                                _options.SerializerTypeForValue(entityType))
             .Invoke(null, new object?[] { cluster, entityType, _sensitiveLoggingEnabled })!;
 
-    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TKeySerializer, TValueSerializer>(
+    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(
         IKafkaCluster cluster,
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
@@ -69,5 +71,5 @@ public class KafkaTableFactory : IKafkaTableFactory
         where TValueContainer : class, IValueContainer<TKey>
         where TKeySerializer : class, new()
         where TValueSerializer : class, new()
-        => () => new KafkaTable<TKey, TValueContainer, TKeySerializer, TValueSerializer>(cluster, entityType, sensitiveLoggingEnabled);
+        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(cluster, entityType, sensitiveLoggingEnabled);
 }

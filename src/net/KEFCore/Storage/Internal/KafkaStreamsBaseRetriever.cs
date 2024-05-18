@@ -71,8 +71,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
-    private readonly ISerDes<TKey> _keySerdes;
-    private readonly ISerDes<TValue> _valueSerdes;
+    private readonly ISerDes<TKey, K> _keySerdes;
+    private readonly ISerDes<TValue, V> _valueSerdes;
 
     private readonly bool _usePersistentStorage;
     private readonly string _topicName;
@@ -81,7 +81,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey> keySerdes, ISerDes<TValue> valueSerdes, StreamsBuilder builder)
+    public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, StreamsBuilder builder)
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
@@ -246,11 +246,11 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
-        private readonly ISerDes<TKey> _keySerdes;
-        private readonly ISerDes<TValue> _valueSerdes;
+        private readonly ISerDes<TKey, K> _keySerdes;
+        private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
 
-        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey> keySerdes, ISerDes<TValue> valueSerdes, string storageId)
+        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
@@ -282,8 +282,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
-        private readonly ISerDes<TKey> _keySerdes;
-        private readonly ISerDes<TValue> _valueSerdes;
+        private readonly ISerDes<TKey, K> _keySerdes;
+        private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
 
         Stopwatch _valueGet = new Stopwatch();
@@ -296,7 +296,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         Stopwatch _valueBufferSw = new Stopwatch();
 #endif
 
-        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey> keySerdes, ISerDes<TValue> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
+        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
         {
             _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
@@ -357,16 +357,16 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 _cycles++;
                 _valueGetSw.Start();
 #endif
-                byte[]? data;
+                V? data;
                 using (KeyValue<K, V> kv = _keyValueIterator.Next)
                 {
-                    data = kv.value as byte[];
+                    data = kv.value != null ? (V)(object)kv.value! : default;
                 }
 #if DEBUG_PERFORMANCE
                 _valueGetSw.Stop();
                 _valueSerdesSw.Start();
 #endif
-                TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data);
+                TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
 #if DEBUG_PERFORMANCE
                 _valueSerdesSw.Stop();
                 _valueBufferSw.Start();

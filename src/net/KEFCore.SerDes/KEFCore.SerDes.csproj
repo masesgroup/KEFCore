@@ -41,10 +41,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.29" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.18" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />		
-		<PackageReference Include="MASES.KNet" Version="2.6.1">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.30" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net6.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.19" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net7.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />		
+		<PackageReference Include="MASES.KNet" Version="2.7.1">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
