@@ -35,11 +35,11 @@ public static class ProtobufKEFCoreSerDes
     /// <summary>
     /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
-    public static readonly Type DefaultKeySerialization = typeof(Key.Binary<>);
+    public static readonly Type DefaultKeySerialization = typeof(Key.BinaryRaw<>);
     /// <summary>
     /// Returns the default serializer <see cref="Type"/> for value containers
     /// </summary>
-    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.Binary<>);
+    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.BinaryRaw<>);
     /// <summary>
     /// Returns the default <see cref="Type"/> for value containers
     /// </summary>
@@ -57,7 +57,7 @@ public static class ProtobufKEFCoreSerDes
         {
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(BinaryRaw<>).ToAssemblyQualified());
-            readonly ISerDes<T, byte[]> _defaultSerDes = default!;
+            readonly ISerDesRaw<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -123,7 +123,7 @@ public static class ProtobufKEFCoreSerDes
         {
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(BinaryBuffered<>).ToAssemblyQualified());
-            readonly ISerDes<T, ByteBuffer> _defaultSerDes = default!;
+            readonly ISerDesBuffered<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -193,7 +193,7 @@ public static class ProtobufKEFCoreSerDes
         /// <typeparam name="T"></typeparam>
         public class BinaryRaw<T> : SerDesRaw<T> where T : class, IMessage<T>
         {
-            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(Binary<>).ToAssemblyQualified());
+            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(BinaryRaw<>).ToAssemblyQualified());
             readonly byte[] valueContainerName = null!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;

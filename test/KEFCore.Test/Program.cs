@@ -97,15 +97,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                 if (config.UseProtobuf)
                 {
-                    context.KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key.Binary<>);
+                    context.KeySerializationType = typeof(ProtobufKEFCoreSerDes.Key.BinaryRaw<>);
                     context.ValueContainerType = typeof(ProtobufValueContainer<>);
-                    context.ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer.Binary<>);
+                    context.ValueSerializationType = typeof(ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>);
                 }
                 else if (config.UseAvro)
                 {
-                    context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>) : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                    context.KeySerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.BinaryRaw<>) : typeof(AvroKEFCoreSerDes.Key.JsonRaw<>);
                     context.ValueContainerType = typeof(AvroValueContainer<>);
-                    context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>) : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+                    context.ValueSerializationType = config.UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>) : typeof(AvroKEFCoreSerDes.ValueContainer.JsonRaw<>);
                 }
 
                 if (config.DeleteApplicationData)

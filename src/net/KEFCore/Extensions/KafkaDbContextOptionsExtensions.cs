@@ -146,4 +146,18 @@ public static class KafkaDbContextOptionsExtensions
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
         return options.ValueContainerType?.MakeGenericType(primaryKey)!;
     }
+    /// <summary>
+    /// Create the ValueContainer <see cref="Type"/>
+    /// </summary>
+    public static Type JVMKeyType(this IKafkaSingletonOptions options, IEntityType entityType)
+    {
+        return typeof(byte[]);
+    }
+    /// <summary>
+    /// Create the ValueContainer <see cref="Type"/>
+    /// </summary>
+    public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
+    {
+        return typeof(byte[]);
+    }
 }

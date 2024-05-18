@@ -21,13 +21,12 @@
 using Java.Lang;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
-using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
-using Org.Apache.Kafka.Streams;
+using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
@@ -351,9 +350,11 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         builder.ApplicationId = ApplicationId;
         builder.BootstrapServers = BootstrapServers;
-        builder.DefaultKeySerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
-        builder.DefaultValueSerdeClass = Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader);
-        builder.DefaultDSLStore = UsePersistentStorage ? Org.Apache.Kafka.Streams.StreamsConfig.ROCKS_DB : Org.Apache.Kafka.Streams.StreamsConfig.IN_MEMORY;
+        string baSerdesName = Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.Serdes.ByteArraySerde>();
+        builder.DefaultKeySerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
+        builder.DefaultValueSerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
+        builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, SystemClassLoader)
+                                                              : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, SystemClassLoader);
 
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         //{

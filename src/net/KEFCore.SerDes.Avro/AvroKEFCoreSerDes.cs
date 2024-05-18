@@ -60,7 +60,7 @@ public static class AvroKEFCoreSerDes
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(BinaryRaw<>).ToAssemblyQualified());
             readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
             readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly ISerDes<T, byte[]> _defaultSerDes = default!;
+            readonly ISerDesRaw<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -130,7 +130,7 @@ public static class AvroKEFCoreSerDes
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(BinaryBuffered<>).ToAssemblyQualified());
             readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
             readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly ISerDes<T, ByteBuffer> _defaultSerDes = default!;
+            readonly ISerDesBuffered<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -199,7 +199,7 @@ public static class AvroKEFCoreSerDes
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonRaw<>).ToAssemblyQualified());
             readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
             readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly ISerDes<T, byte[]> _defaultSerDes = default!;
+            readonly ISerDesRaw<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -213,7 +213,7 @@ public static class AvroKEFCoreSerDes
                 }
                 else if (!typeof(T).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(Json<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
                 }
             }
 
@@ -264,7 +264,7 @@ public static class AvroKEFCoreSerDes
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonBuffered<>).ToAssemblyQualified());
             readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
             readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
-            readonly ISerDes<T, ByteBuffer> _defaultSerDes = default!;
+            readonly ISerDesBuffered<T> _defaultSerDes = default!;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>

@@ -56,7 +56,7 @@ public static class DefaultKEFCoreSerDes
         {
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonRaw<>).ToAssemblyQualified());
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-            readonly ISerDes<T, byte[]> _defaultSerDes = default!;
+            readonly ISerDesRaw<T> _defaultSerDes = default!;
             readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
@@ -120,7 +120,7 @@ public static class DefaultKEFCoreSerDes
         {
             readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonBuffered<>).ToAssemblyQualified());
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-            readonly ISerDes<T, ByteBuffer> _defaultSerDes = default!;
+            readonly ISerDesBuffered<T> _defaultSerDes = default!;
             readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;

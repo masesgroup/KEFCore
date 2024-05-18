@@ -197,13 +197,33 @@ public class EntityExtractor
     public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializer, Type valueContainerSerializer, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)
     {
         var fullKeySerializer = keySerializer.MakeGenericType(keyType);
+        Type jvmKeyType = null!;
+        foreach (var interfaceType in fullKeySerializer.GetInterfaces())
+        {
+            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
+            {
+                jvmKeyType = interfaceType.GetGenericArguments()[1];
+            }
+        }
+        if (jvmKeyType == null) throw new InvalidOperationException($"Cannot identity JVM type from {keySerializer}");
+
         var fullValueContainer = valueContainer.MakeGenericType(keyType);
         var fullValueContainerSerializer = valueContainerSerializer.MakeGenericType(fullValueContainer);
+        Type jvmKValueContainerType = null!;
+        foreach (var interfaceType in fullValueContainerSerializer.GetInterfaces())
+        {
+            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
+            {
+                jvmKValueContainerType = interfaceType.GetGenericArguments()[1];
+            }
+        }
 
-        var ccType = typeof(LocalEntityExtractor<,,,>);
-        var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, fullKeySerializer, fullValueContainerSerializer);
-        var extractor = Activator.CreateInstance(extractorType) as ILocalEntityExtractor;
+        if (jvmKValueContainerType == null) throw new InvalidOperationException($"Cannot identity JVM type from {fullValueContainerSerializer}");
 
-        return extractor!.GetEntity(topic, recordValue, recordKey, throwUnmatch);
+        var ccType = typeof(LocalEntityExtractor<,,,,,>);
+        var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, jvmKeyType, jvmKValueContainerType, fullKeySerializer, fullValueContainerSerializer);
+        var methodInfo = extractorType.GetMethod("GetEntity");
+        var extractor = Activator.CreateInstance(extractorType);
+        return methodInfo?.Invoke(extractor, new object[] { topic, recordValue, recordKey, throwUnmatch })!;
     }
 }
