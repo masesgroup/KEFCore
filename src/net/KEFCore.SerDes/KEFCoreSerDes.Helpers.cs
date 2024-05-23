@@ -197,28 +197,13 @@ public class EntityExtractor
     public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializer, Type valueContainerSerializer, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)
     {
         var fullKeySerializer = keySerializer.MakeGenericType(keyType);
-        Type jvmKeyType = null!;
-        foreach (var interfaceType in fullKeySerializer.GetInterfaces())
-        {
-            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
-            {
-                jvmKeyType = interfaceType.GetGenericArguments()[1];
-            }
-        }
-        if (jvmKeyType == null) throw new InvalidOperationException($"Cannot identity JVM type from {keySerializer}");
+        ISerDes keySerDes = Activator.CreateInstance(fullKeySerializer) as ISerDes;
+        Type jvmKeyType = (keySerDes?.JVMType) ?? throw new InvalidOperationException($"Cannot identity JVM type from {keySerializer}");
 
         var fullValueContainer = valueContainer.MakeGenericType(keyType);
         var fullValueContainerSerializer = valueContainerSerializer.MakeGenericType(fullValueContainer);
-        Type jvmKValueContainerType = null!;
-        foreach (var interfaceType in fullValueContainerSerializer.GetInterfaces())
-        {
-            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
-            {
-                jvmKValueContainerType = interfaceType.GetGenericArguments()[1];
-            }
-        }
-
-        if (jvmKValueContainerType == null) throw new InvalidOperationException($"Cannot identity JVM type from {fullValueContainerSerializer}");
+        ISerDes valueContainerSerDes = Activator.CreateInstance(fullValueContainerSerializer) as ISerDes;
+        Type jvmKValueContainerType = (valueContainerSerDes?.JVMType) ?? throw new InvalidOperationException($"Cannot identity JVM type from {fullValueContainerSerializer}");
 
         var ccType = typeof(LocalEntityExtractor<,,,,,>);
         var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, jvmKeyType, jvmKValueContainerType, fullKeySerializer, fullValueContainerSerializer);
