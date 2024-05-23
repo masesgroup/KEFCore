@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
@@ -36,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaOptionsExtension : IDbContextOptionsExtension
+public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingletonOptions
 {
     private Type _keySerializationType = DefaultKEFCoreSerDes.DefaultKeySerialization;
     private Type _valueSerializationType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
@@ -142,6 +143,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     public virtual Action<EntityTypeChanged> OnChangeEvent => _onChangeEvent!;
+
+    int IKafkaSingletonOptions.DefaultReplicationFactor => throw new NotImplementedException();
+
     /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
     public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
     {
@@ -328,18 +332,11 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-    /// <summary>
-    /// Build <see cref="Properties"/> for <see cref="IEntityType"/>
-    /// </summary>
-    public virtual Properties StreamsOptions(IEntityType entityType)
-    {
-        return StreamsOptions(entityType.ApplicationIdForTable(this));
-    }
 
     /// <summary>
     /// Build <see cref="StreamsConfigBuilder"/> from options
     /// </summary>
-    public virtual StreamsConfigBuilder StreamsOptions()
+    public virtual StreamsConfigBuilder StreamsOptions(IEntityType entityType)
     {
         _streamsConfigBuilder ??= new();
         StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(_streamsConfigBuilder);
@@ -351,8 +348,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         builder.ApplicationId = ApplicationId;
         builder.BootstrapServers = BootstrapServers;
         string baSerdesName = Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.Serdes.ByteArraySerde>();
-        builder.DefaultKeySerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
-        builder.DefaultValueSerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
+        string bbSerdesName = Class.ClassNameOf<MASES.KNet.Serialization.Serdes.ByteBufferSerde>();
+
+        builder.DefaultKeySerdeClass = this.JVMKeyType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
+                                                                                     : Class.ForName(bbSerdesName, true, SystemClassLoader);
+        builder.DefaultValueSerdeClass = this.JVMValueContainerType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
+                                                                                                  : Class.ForName(bbSerdesName, true, SystemClassLoader);
         builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, SystemClassLoader)
                                                               : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, SystemClassLoader);
 
@@ -479,6 +480,11 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         if (string.IsNullOrEmpty(kafkaOptions.DatabaseName)) throw new ArgumentException("It is manadatory", "DatabaseName");
         if (string.IsNullOrEmpty(kafkaOptions.ApplicationId)) throw new ArgumentException("It is manadatory", "ApplicationId");
         if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
+    }
+
+    public void Initialize(IDbContextOptions options)
+    {
+        throw new NotImplementedException();
     }
 
     private sealed class ExtensionInfo : DbContextOptionsExtensionInfo

@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
@@ -151,13 +152,19 @@ public static class KafkaDbContextOptionsExtensions
     /// </summary>
     public static Type JVMKeyType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        return typeof(byte[]);
+        var keySerDesType = SerializerTypeForKey(options, entityType);
+        ISerDes serDes = Activator.CreateInstance(keySerDesType) as ISerDes;
+        if (serDes == null) throw new InvalidOperationException($"{keySerDesType} is not a valid {nameof(ISerDes)}");
+        return serDes.JVMType;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
     /// </summary>
     public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        return typeof(byte[]);
+        var valueSerDesType = SerializerTypeForValue(options, entityType);
+        ISerDes serDes = Activator.CreateInstance(valueSerDesType) as ISerDes;
+        if (serDes == null) throw new InvalidOperationException($"{valueSerDesType} is not a valid {nameof(ISerDes)}");
+        return serDes.JVMType;
     }
 }

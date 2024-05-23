@@ -98,7 +98,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
-        _streamsConfig ??= _kafkaCluster.Options.StreamsOptions();
+        _streamsConfig ??= _kafkaCluster.Options.StreamsOptions(_entityType);
         _builder ??= new StreamsBuilder(_streamsConfig);
         _topicName = _entityType.TopicName(kafkaCluster.Options);
         _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;

@@ -22,13 +22,27 @@
  *  SOFTWARE.
  */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
+using MASES.KNet.Streams;
+using System.Diagnostics;
+using System;
+using System.IO;
+using System.Text.Json;
+
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
-        public bool UseAvroBinary { get; set; } = true;
+        public bool UseAvroBinary { get; set; } = false;
+        public bool UseKeyRawByteArraySerDes { get; set; } = true;
+        public bool UseValueContainerRawByteArraySerDes { get; set; } = false;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
@@ -48,5 +62,75 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
         public bool WithEvents { get; set; } = false;
+
+        public void ApplyOnContext(KafkaDbContext context)
+        {
+            var databaseName = UseModelBuilder ? DatabaseNameWithModel : DatabaseName;
+
+            StreamsConfigBuilder streamConfig = null;
+            if (!UseInMemoryProvider)
+            {
+                streamConfig = StreamsConfigBuilder.Create();
+                streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+            }
+
+            context.DatabaseName = databaseName;
+            context.StreamsConfig = streamConfig;
+            context.BootstrapServers = BootstrapServers;
+            context.ApplicationId = ApplicationId;
+
+            if (UseProtobuf)
+            {
+                context.KeySerializationType = UseKeyRawByteArraySerDes ? typeof(ProtobufKEFCoreSerDes.Key.BinaryRaw<>)
+                                                                        : typeof(ProtobufKEFCoreSerDes.Key.BinaryBuffered<>);
+                context.ValueContainerType = typeof(ProtobufValueContainer<>);
+                context.ValueSerializationType = UseValueContainerRawByteArraySerDes ? typeof(ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>)
+                                                                                     : typeof(ProtobufKEFCoreSerDes.ValueContainer.BinaryBuffered<>);
+            }
+            else if (UseAvro)
+            {
+                context.KeySerializationType = UseAvroBinary ? UseKeyRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.Key.BinaryRaw<>)
+                                                                                        : typeof(AvroKEFCoreSerDes.Key.BinaryBuffered<>)
+                                                             : UseKeyRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.Key.JsonRaw<>)
+                                                                                        : typeof(AvroKEFCoreSerDes.Key.JsonBuffered<>);
+                context.ValueContainerType = typeof(AvroValueContainer<>);
+                context.ValueSerializationType = UseAvroBinary ? UseValueContainerRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>)
+                                                                                                     : typeof(AvroKEFCoreSerDes.ValueContainer.BinaryBuffered<>)
+                                                               : UseValueContainerRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.ValueContainer.JsonRaw<>)
+                                                                                                     : typeof(AvroKEFCoreSerDes.ValueContainer.JsonBuffered<>);
+            }
+            else
+            {
+                if (!UseKeyRawByteArraySerDes) context.KeySerializationType = typeof(DefaultKEFCoreSerDes.Key.JsonBuffered<>);
+                if (!UseValueContainerRawByteArraySerDes) context.ValueSerializationType = typeof(DefaultKEFCoreSerDes.ValueContainer.JsonBuffered<>);
+            }
+        }
+
+        public static ProgramConfig Config { get; private set; }
+
+        public static void LoadConfig(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                if (!File.Exists(args[0])) { throw new FileNotFoundException($"{args[0]} is not a configuration file.", args[0]); }
+                Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
+            }
+            else Config = new();
+            ReportString(JsonSerializer.Serialize<ProgramConfig>(Config, new JsonSerializerOptions() { WriteIndented = true }));
+
+            if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
+        }
+
+        public static void ReportString(string message)
+        {
+            if (Debugger.IsAttached)
+            {
+                Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+            }
+            else
+            {
+                Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+            }
+        }
     }
 }
