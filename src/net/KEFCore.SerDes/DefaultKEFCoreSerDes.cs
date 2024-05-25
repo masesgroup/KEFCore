@@ -27,51 +27,87 @@ using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
-/// Default base class to define extensions of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Default base class to define extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
 /// </summary>
 public static class DefaultKEFCoreSerDes
 {
     /// <summary>
     /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
-    public static readonly Type DefaultKeySerialization = typeof(Key.JsonRaw<>);
+    public static readonly Type DefaultKeySerialization = typeof(Key<>);
     /// <summary>
     /// Returns the default serializer <see cref="Type"/> for value containers
     /// </summary>
-    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer.JsonRaw<>);
+    public static readonly Type DefaultValueContainerSerialization = typeof(ValueContainer<>);
     /// <summary>
     /// Returns the default <see cref="Type"/> for value containers
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(DefaultValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
-    public static class Key
+    public class Key<T> : ISerDesSelector<T>
     {
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// Returns a new instance of <see cref="Key{T}"/>
         /// </summary>
-        /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class JsonRaw<T> : SerDesRaw<T>
+        /// <returns>The <see cref="ISerDesSelector{T}"/> of <see cref="Key{T}"/></returns>
+        public static ISerDesSelector<T> NewInstance() => new Key<T>();
+        /// <inheritdoc cref="ISerDesSelector.SelectorTypeName"/>
+        public static string SelectorTypeName => typeof(Key<>).ToAssemblyQualified();
+        /// <inheritdoc cref="ISerDesSelector.ByteArraySerDes"/>
+        public static Type ByteArraySerDes => typeof(JsonRaw<T>);
+        /// <inheritdoc cref="ISerDesSelector.ByteBufferSerDes"/>
+        public static Type ByteBufferSerDes => typeof(JsonBuffered<T>);
+        /// <inheritdoc cref="ISerDesSelector{T}.NewSerDes{TJVM}"/>
+        public static ISerDes<T, TJVM> NewSerDes<TJVM>()
         {
-            readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonRaw<>).ToAssemblyQualified());
-            readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-            readonly ISerDesRaw<T> _defaultSerDes = default!;
+            if (typeof(TJVM) == typeof(Java.Nio.ByteBuffer)) return (ISerDes<T, TJVM>)NewByteBufferSerDes();
+            return (ISerDes<T, TJVM>)NewByteArraySerDes();
+        }
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteArraySerDes"/>
+        public static ISerDesRaw<T> NewByteArraySerDes() { return new JsonRaw<T>(SelectorTypeName); }
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteBufferSerDes"/>
+        public static ISerDesBuffered<T> NewByteBufferSerDes() { return new JsonBuffered<T>(SelectorTypeName); }
+
+        /// <inheritdoc cref="ISerDesSelector.SelectorTypeName"/>
+        string ISerDesSelector.SelectorTypeName => SelectorTypeName;
+        /// <inheritdoc cref="ISerDesSelector.ByteArraySerDes"/>
+        Type ISerDesSelector.ByteArraySerDes => ByteArraySerDes;
+        /// <inheritdoc cref="ISerDesSelector.ByteBufferSerDes"/>
+        Type ISerDesSelector.ByteBufferSerDes => ByteBufferSerDes;
+        /// <inheritdoc cref="ISerDesSelector{T}.NewSerDes{TJVM}"/>
+        ISerDes<T, TJVM> ISerDesSelector<T>.NewSerDes<TJVM>() => NewSerDes<TJVM>();
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteArraySerDes"/>
+        ISerDesRaw<T> ISerDesSelector<T>.NewByteArraySerDes() => NewByteArraySerDes();
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteBufferSerDes"/>
+        ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
+
+        /// <summary>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// </summary>
+        /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
+        sealed class JsonRaw<TData> : SerDesRaw<TData>
+        {
+            readonly byte[] keySerDesName;
+            readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(TData).FullName!);
+            readonly ISerDesRaw<TData> _defaultSerDes = default!;
             readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
-            public JsonRaw()
+            public JsonRaw(string selectorName)
             {
-                if (KNetSerialization.IsInternalManaged<T>())
+                keySerDesName = Encoding.UTF8.GetBytes(selectorName);
+                if (KNetSerialization.IsInternalManaged<TData>())
                 {
-                    _defaultSerDes = new SerDesRaw<T>();
+                    _defaultSerDes = new SerDesRaw<TData>();
                 }
-                else if (!typeof(T).IsArray)
+                else if (!typeof(TData).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
                 }
                 else
                 {
@@ -82,60 +118,61 @@ public static class DefaultKEFCoreSerDes
                 }
             }
 
-            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
-            public override byte[] Serialize(string topic, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(string, TData)"/>
+            public override byte[] Serialize(string topic, TData data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
-            public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
+            public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
-                var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
+                var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, TJVM)"/>
-            public override T Deserialize(string topic, byte[] data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
+            public override TData Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
-            public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
-        /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class JsonBuffered<T> : SerDesBuffered<T>
+        /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
+        sealed class JsonBuffered<TData> : SerDesBuffered<TData>
         {
-            readonly byte[] keySerDesName = Encoding.UTF8.GetBytes(typeof(JsonBuffered<>).ToAssemblyQualified());
-            readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
-            readonly ISerDesBuffered<T> _defaultSerDes = default!;
+            readonly byte[] keySerDesName;
+            readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(TData).FullName!);
+            readonly ISerDesBuffered<TData> _defaultSerDes = default!;
             readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
             /// Default initializer
             /// </summary>
-            public JsonBuffered()
+            public JsonBuffered(string selectorName)
             {
-                if (KNetSerialization.IsInternalManaged<T>())
+                keySerDesName = Encoding.UTF8.GetBytes(selectorName);
+                if (KNetSerialization.IsInternalManaged<TData>())
                 {
-                    _defaultSerDes = new SerDesBuffered<T>();
+                    _defaultSerDes = new SerDesBuffered<TData>();
                 }
-                else if (!typeof(T).IsArray)
+                else if (!typeof(TData).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(T).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
                 }
                 else
                 {
@@ -146,13 +183,13 @@ public static class DefaultKEFCoreSerDes
                 }
             }
 
-            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
-            public override ByteBuffer Serialize(string topic, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(string, TData)"/>
+            public override ByteBuffer Serialize(string topic, TData data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
-            public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
+            public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
@@ -160,37 +197,72 @@ public static class DefaultKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
                 var ms = new MemoryStream();
-                System.Text.Json.JsonSerializer.Serialize<T>(ms, data, _options);
+                System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);
                 return ByteBuffer.From(ms);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, TJVM)"/>
-            public override T Deserialize(string topic, ByteBuffer data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
+            public override TData Deserialize(string topic, ByteBuffer data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
-            public override T DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }
-    }
+    } 
 
     /// <summary>
-    /// Base class to define ValueContainer extensions of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
-    public static class ValueContainer
+    public class ValueContainer<T> : ISerDesSelector<T>
     {
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// Returns a new instance of <see cref="ValueContainer{T}"/>
         /// </summary>
-        /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class JsonRaw<T> : SerDesRaw<T>
+        /// <returns>The <see cref="ISerDesSelector{T}"/> of <see cref="ValueContainer{T}"/></returns>
+        public static ISerDesSelector<T> NewInstance() => new ValueContainer<T>();
+        /// <inheritdoc cref="ISerDesSelector.SelectorTypeName"/>
+        public static string SelectorTypeName => typeof(ValueContainer<>).ToAssemblyQualified();
+        /// <inheritdoc cref="ISerDesSelector.ByteArraySerDes"/>
+        public static Type ByteArraySerDes => typeof(JsonRaw<T>);
+        /// <inheritdoc cref="ISerDesSelector{T}.NewSerDes{TJVM}"/>
+        public static ISerDes<T, TJVM> NewSerDes<TJVM>()
         {
-            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(JsonRaw<>).ToAssemblyQualified());
+            if (typeof(TJVM) == typeof(Java.Nio.ByteBuffer)) return (ISerDes<T, TJVM>)NewByteBufferSerDes();
+            return (ISerDes<T, TJVM>)NewByteArraySerDes();
+        }
+        /// <inheritdoc cref="ISerDesSelector.ByteBufferSerDes"/>
+        public static Type ByteBufferSerDes => typeof(JsonBuffered<T>);
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteArraySerDes"/>
+        public static ISerDesRaw<T> NewByteArraySerDes() { return new JsonRaw<T>(SelectorTypeName); }
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteBufferSerDes"/>
+        public static ISerDesBuffered<T> NewByteBufferSerDes() { return new JsonBuffered<T>(SelectorTypeName); }
+
+        /// <inheritdoc cref="ISerDesSelector.SelectorTypeName"/>
+        string ISerDesSelector.SelectorTypeName => SelectorTypeName;
+        /// <inheritdoc cref="ISerDesSelector.ByteArraySerDes"/>
+        Type ISerDesSelector.ByteArraySerDes => ByteArraySerDes;
+        /// <inheritdoc cref="ISerDesSelector.ByteBufferSerDes"/>
+        Type ISerDesSelector.ByteBufferSerDes => ByteBufferSerDes;
+        /// <inheritdoc cref="ISerDesSelector{T}.NewSerDes{TJVM}"/>
+        ISerDes<T, TJVM> ISerDesSelector<T>.NewSerDes<TJVM>() => NewSerDes<TJVM>();
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteArraySerDes"/>
+        ISerDesRaw<T> ISerDesSelector<T>.NewByteArraySerDes() => NewByteArraySerDes();
+        /// <inheritdoc cref="ISerDesSelector{T}.NewByteBufferSerDes"/>
+        ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
+    
+        /// <summary>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// </summary>
+        /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
+        sealed class JsonRaw<TData> : SerDesRaw<TData>
+        {
+            readonly byte[] valueContainerSerDesName;
             readonly byte[] valueContainerName = null!;
             readonly System.Text.Json.JsonSerializerOptions _options;
             /// <inheritdoc/>
@@ -198,13 +270,14 @@ public static class DefaultKEFCoreSerDes
             /// <summary>
             /// Default initializer
             /// </summary>
-            public JsonRaw()
+            public JsonRaw(string selectorName)
             {
-                var tt = typeof(T);
+                valueContainerSerDesName = Encoding.UTF8.GetBytes(selectorName);
+                var tt = typeof(TData);
                 if (tt.IsGenericType)
                 {
                     var keyT = tt.GetGenericArguments();
-                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(TData).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
                     var t = tt.GetGenericTypeDefinition();
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
@@ -215,45 +288,45 @@ public static class DefaultKEFCoreSerDes
                         };
                         return;
                     }
-                    else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
+                    else throw new ArgumentException($"{typeof(TData).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
                 }
-                throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
+                throw new ArgumentException($"{typeof(TData).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
 
-            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
-            public override byte[] Serialize(string topic, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(string, TData)"/>
+            public override byte[] Serialize(string topic, TData data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
-            public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
+            public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
 
-                var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data, _options);
+                var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data, _options);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, TJVM)"/>
-            public override T Deserialize(string topic, byte[] data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
+            public override TData Deserialize(string topic, byte[] data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
-            public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{T, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
-        /// <typeparam name="T">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
-        public class JsonBuffered<T> : SerDesBuffered<T>
+        /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
+        sealed class JsonBuffered<TData> : SerDesBuffered<TData>
         {
-            readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(JsonBuffered<>).ToAssemblyQualified());
+            readonly byte[] valueContainerSerDesName;
             readonly byte[] valueContainerName = null!;
             readonly System.Text.Json.JsonSerializerOptions _options;
             /// <inheritdoc/>
@@ -261,13 +334,14 @@ public static class DefaultKEFCoreSerDes
             /// <summary>
             /// Default initializer
             /// </summary>
-            public JsonBuffered()
+            public JsonBuffered(string selectorName)
             {
-                var tt = typeof(T);
+                valueContainerSerDesName = Encoding.UTF8.GetBytes(selectorName);
+                var tt = typeof(TData);
                 if (tt.IsGenericType)
                 {
                     var keyT = tt.GetGenericArguments();
-                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(T).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
+                    if (keyT.Length != 1) { throw new ArgumentException($"{typeof(TData).Name} does not contains a single generic argument and cannot be used because it is not a valid ValueContainer type"); }
                     var t = tt.GetGenericTypeDefinition();
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
@@ -278,36 +352,36 @@ public static class DefaultKEFCoreSerDes
                         };
                         return;
                     }
-                    else throw new ArgumentException($"{typeof(T).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
+                    else throw new ArgumentException($"{typeof(TData).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
                 }
-                throw new ArgumentException($"{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type");
+                throw new ArgumentException($"{typeof(TData).Name} is not a generic type and cannot be used as a valid ValueContainer type");
             }
 
-            /// <inheritdoc cref="SerDes{T, TJVM}.Serialize(string, T)"/>
-            public override ByteBuffer Serialize(string topic, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(string, TData)"/>
+            public override ByteBuffer Serialize(string topic, TData data)
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)"/>
-            public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, T data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
+            public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
 
                 var ms = new MemoryStream();
-                System.Text.Json.JsonSerializer.Serialize<T>(ms, data, _options);
+                System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);
                 return ByteBuffer.From(ms);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.Deserialize(string, TJVM)"/>
-            public override T Deserialize(string topic, ByteBuffer data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
+            public override TData Deserialize(string topic, ByteBuffer data)
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
-            /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
-            public override T DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<T>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }
     }

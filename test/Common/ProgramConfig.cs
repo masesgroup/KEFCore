@@ -41,14 +41,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
         public bool UseAvroBinary { get; set; } = false;
-        public bool UseKeyRawByteArraySerDes { get; set; } = true;
-        public bool UseValueContainerRawByteArraySerDes { get; set; } = false;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
         public bool UseCompactedReplicator { get; set; } = true;
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
+        public bool UseByteBufferDataTransfer { get; set; } = true;
         public bool PreserveInformationAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string DatabaseName { get; set; } = "TestDB";
@@ -78,31 +77,25 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.StreamsConfig = streamConfig;
             context.BootstrapServers = BootstrapServers;
             context.ApplicationId = ApplicationId;
+            context.UsePersistentStorage = UsePersistentStorage;
+            context.UseCompactedReplicator = UseCompactedReplicator;
+            context.UseKNetStreams = UseKNetStreams;
+            context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
+            context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
 
             if (UseProtobuf)
             {
-                context.KeySerializationType = UseKeyRawByteArraySerDes ? typeof(ProtobufKEFCoreSerDes.Key.BinaryRaw<>)
-                                                                        : typeof(ProtobufKEFCoreSerDes.Key.BinaryBuffered<>);
+                context.KeySerDesSelectorType = typeof(ProtobufKEFCoreSerDes.Key<>);
                 context.ValueContainerType = typeof(ProtobufValueContainer<>);
-                context.ValueSerializationType = UseValueContainerRawByteArraySerDes ? typeof(ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>)
-                                                                                     : typeof(ProtobufKEFCoreSerDes.ValueContainer.BinaryBuffered<>);
+                context.ValueSerDesSelectorType = typeof(ProtobufKEFCoreSerDes.ValueContainer<>);
             }
             else if (UseAvro)
             {
-                context.KeySerializationType = UseAvroBinary ? UseKeyRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.Key.BinaryRaw<>)
-                                                                                        : typeof(AvroKEFCoreSerDes.Key.BinaryBuffered<>)
-                                                             : UseKeyRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.Key.JsonRaw<>)
-                                                                                        : typeof(AvroKEFCoreSerDes.Key.JsonBuffered<>);
+                context.KeySerDesSelectorType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>)
+                                                              : typeof(AvroKEFCoreSerDes.Key.Json<>);
                 context.ValueContainerType = typeof(AvroValueContainer<>);
-                context.ValueSerializationType = UseAvroBinary ? UseValueContainerRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>)
-                                                                                                     : typeof(AvroKEFCoreSerDes.ValueContainer.BinaryBuffered<>)
-                                                               : UseValueContainerRawByteArraySerDes ? typeof(AvroKEFCoreSerDes.ValueContainer.JsonRaw<>)
-                                                                                                     : typeof(AvroKEFCoreSerDes.ValueContainer.JsonBuffered<>);
-            }
-            else
-            {
-                if (!UseKeyRawByteArraySerDes) context.KeySerializationType = typeof(DefaultKEFCoreSerDes.Key.JsonBuffered<>);
-                if (!UseValueContainerRawByteArraySerDes) context.ValueSerializationType = typeof(DefaultKEFCoreSerDes.ValueContainer.JsonBuffered<>);
+                context.ValueSerDesSelectorType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>)
+                                                                : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
             }
         }
 

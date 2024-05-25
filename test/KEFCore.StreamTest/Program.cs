@@ -199,10 +199,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
 
     public class BloggingContext : KafkaDbContext
     {
-        public override bool UsePersistentStorage { get; set; } = ProgramConfig.Config.UsePersistentStorage;
-        public override bool UseCompactedReplicator { get; set; } = ProgramConfig.Config.UseCompactedReplicator;
-        public override bool UseKNetStreams { get; set; } = ProgramConfig.Config.UseKNetStreams;
-
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 

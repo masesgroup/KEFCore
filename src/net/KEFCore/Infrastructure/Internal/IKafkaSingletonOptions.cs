@@ -33,10 +33,10 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public interface IKafkaSingletonOptions : ISingletonOptions
 {
-    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
-    Type? KeySerializationType { get; }
-    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
-    Type? ValueSerializationType { get; }
+    /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
+    Type? KeySerDesSelectorType { get; }
+    /// <inheritdoc cref="KafkaDbContext.ValueSerDesSelectorType"/>
+    Type? ValueSerDesSelectorType { get; }
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     Type? ValueContainerType { get; }
     /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
@@ -57,6 +57,8 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     bool UsePersistentStorage { get; }
     /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
     bool UseEnumeratorWithPrefetch { get; }
+    /// <inheritdoc cref="KafkaDbContext.UseByteBufferDataTransfer"/>
+    bool UseByteBufferDataTransfer { get; }
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     int DefaultNumPartitions { get; }
     /// <inheritdoc cref="KafkaDbContext.DefaultConsumerInstances"/>

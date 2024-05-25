@@ -154,19 +154,19 @@ const bool perf = false;
 
     }
     /// <summary>
-    /// The optional <see cref="Type"/> to use for key serialization
+    /// The optional <see cref="Type"/> to use for key serialization selection
     /// <para>
-    /// Default value is <see cref="DefaultKEFCoreSerDes.Key.JsonRaw{T}"/>, any custom <see cref="Type"/> shall implement <see cref="ISerDes{T, TJVM}"/>
+    /// Default value is <see cref="DefaultKEFCoreSerDes.Key{T}"/>, any custom <see cref="Type"/> shall implement <see cref="ISerDesSelector{T}"/>
     /// </para>
     /// </summary>
-    public virtual Type? KeySerializationType { get; set; } = null;
+    public virtual Type? KeySerDesSelectorType { get; set; } = null;
     /// <summary>
-    /// The optional <see cref="Type"/> to use for value serialization
+    /// The optional <see cref="Type"/> to use for value serialization selection
     /// <para>
-    /// Default value is <see cref="DefaultKEFCoreSerDes.ValueContainer.JsonRaw{T}"/>, any custom <see cref="Type"/> shall implement <see cref="ISerDes{T, TJVM}"/>
+    /// Default value is <see cref="DefaultKEFCoreSerDes.ValueContainer{T}"/>, any custom <see cref="Type"/> shall implement <see cref="ISerDesSelector{T}"/>
     /// </para>
     /// </summary>
-    public virtual Type? ValueSerializationType { get; set; } = null;
+    public virtual Type? ValueSerDesSelectorType { get; set; } = null;
     /// <summary>
     /// The optional <see cref="Type"/> to use as value container
     /// <para>
@@ -207,6 +207,15 @@ const bool perf = false;
     /// </summary>
     public virtual bool UsePersistentStorage { get; set; } = false;
     /// <summary>
+    /// Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
+    /// </summary>
+    /// <remarks>Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6.</remarks>
+    public virtual bool UseEnumeratorWithPrefetch { get; set; } = false;
+    /// <summary>
+    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    /// </summary>
+    public virtual bool UseByteBufferDataTransfer { get; set; } = false;
+    /// <summary>
     /// Use <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when a topic is created
     /// </summary>
     public bool UseDeletePolicyForTopic { get; set; } = false;
@@ -218,11 +227,7 @@ const bool perf = false;
     /// Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams
     /// </summary>
     public virtual bool UseKNetStreams { get; set; } = true;
-    /// <summary>
-    /// Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
-    /// </summary>
-    /// <remarks>Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6.</remarks>
-    public virtual bool UseEnumeratorWithPrefetch { get; set; } = false;
+
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
@@ -264,8 +269,8 @@ const bool perf = false;
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
-            if (KeySerializationType != null) o.WithKeySerializationType(KeySerializationType);
-            if (ValueSerializationType != null) o.WithValueSerializationType(ValueSerializationType);
+            if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
+            if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
             if (OnChangeEvent != null) o.WithOnChangeEvent(OnChangeEvent);
         });

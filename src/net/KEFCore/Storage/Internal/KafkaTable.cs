@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Producer;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -33,11 +34,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer> : IKafkaTable
+public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType> : IKafkaTable
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
-    where TKeySerializer : class, new()
-    where TValueSerializer : class, new()
+    where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
+    where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
 {
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly bool _sensitiveLoggingEnabled;
@@ -62,7 +63,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKey
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTable(entityType);
-        _producer = EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(entityType, Cluster);
+        _producer = EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
         _rows = new Dictionary<TKey, object?[]>(_keyValueFactory.EqualityComparer);
