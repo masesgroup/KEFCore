@@ -205,6 +205,6 @@ public class EntityExtractor
         var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, typeof(byte[]), typeof(byte[]), fullKeySerializer, fullValueContainerSerializer);
         var methodInfo = extractorType.GetMethod("GetEntity");
         var extractor = Activator.CreateInstance(extractorType);
-        return methodInfo?.Invoke(extractor, new object[] { topic, recordValue, recordKey, throwUnmatch })!;
+        return methodInfo?.Invoke(extractor, new object[] { topic, recordKey, recordValue, throwUnmatch })!;
     }
 }
