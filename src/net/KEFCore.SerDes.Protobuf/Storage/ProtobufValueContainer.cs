@@ -20,6 +20,7 @@
 
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 
@@ -58,7 +59,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         _innerMessage = new ValueContainer
         {
             EntityName = tName.Name,
-            ClrType = tName.ClrType.FullName!
+            ClrType = tName.ClrType?.ToAssemblyQualified()!
         };
         _innerMessage.Data.Clear();
         foreach (var item in tName.GetProperties())
@@ -68,7 +69,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             {
                 PropertyIndex = index,
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.FullName,
+                ClrType = item.ClrType?.ToAssemblyQualified(),
                 Value = new GenericValue(rData[index])
             };
             _innerMessage.Data.Add(pRecord);

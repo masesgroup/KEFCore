@@ -19,6 +19,7 @@
 using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -59,17 +60,17 @@ public class KafkaTableFactory : IKafkaTableFactory
                                _options.ValueContainerType(entityType),
                                _options.JVMKeyType(entityType),
                                _options.JVMValueContainerType(entityType),
-                               _options.SerializerTypeForKey(entityType), 
-                               _options.SerializerTypeForValue(entityType))
+                               _options.SerDesSelectorTypeForKey(entityType), 
+                               _options.SerDesSelectorTypeForValue(entityType))
             .Invoke(null, new object?[] { cluster, entityType, _sensitiveLoggingEnabled })!;
 
-    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(
+    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(
         IKafkaCluster cluster,
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerializer : class, new()
-        where TValueSerializer : class, new()
-        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer>(cluster, entityType, sensitiveLoggingEnabled);
+        where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
+        where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
+        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(cluster, entityType, sensitiveLoggingEnabled);
 }

@@ -10,8 +10,7 @@
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Include="..\Common\Model.cs" Link="Model.cs" />
-	  <Compile Include="..\Common\ProgramConfig.cs" Link="ProgramConfig.cs" />
+	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

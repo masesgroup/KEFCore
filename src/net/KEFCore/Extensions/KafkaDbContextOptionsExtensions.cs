@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
@@ -125,26 +126,17 @@ public static class KafkaDbContextOptionsExtensions
     /// <summary>
     /// Creates a serializer <see cref="Type"/> for keys
     /// </summary>
-    public static Type SerializerTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
+    public static Type KeyType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.KeySerializationType?.MakeGenericType(primaryKey)!;
-    }
-    /// <summary>
-    /// Creates a serialzier <see cref="Type"/> for values
-    /// </summary>
-    public static Type SerializerTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)
-    {
-        var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.ValueSerializationType?.MakeGenericType(ValueContainerType(options, entityType))!;
+        return primaryKey;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
     /// </summary>
     public static Type ValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        var primaryKey = entityType.FindPrimaryKey()!.GetKeyType();
-        return options.ValueContainerType?.MakeGenericType(primaryKey)!;
+        return options.ValueContainerType?.MakeGenericType(KeyType(options, entityType))!;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
@@ -152,12 +144,38 @@ public static class KafkaDbContextOptionsExtensions
     public static Type JVMKeyType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         return typeof(byte[]);
+
+        var keySerDesType = SerDesSelectorTypeForKey(options, entityType);
+        ISerDes serDes = Activator.CreateInstance(keySerDesType) as ISerDes;
+        if (serDes == null) throw new InvalidOperationException($"{keySerDesType} is not a valid {nameof(ISerDes)}");
+        return serDes.JVMType;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
     /// </summary>
     public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
+        if (options.UseByteBufferDataTransfer) return typeof(Java.Nio.ByteBuffer);
         return typeof(byte[]);
+
+
+        var valueSerDesType = SerDesSelectorTypeForValue(options, entityType);
+        ISerDes serDes = Activator.CreateInstance(valueSerDesType) as ISerDes;
+        if (serDes == null) throw new InvalidOperationException($"{valueSerDesType} is not a valid {nameof(ISerDes)}");
+        return serDes.JVMType;
+    }
+    /// <summary>
+    /// Creates a serializer <see cref="Type"/> for keys
+    /// </summary>
+    public static Type SerDesSelectorTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
+    {
+        return options.KeySerDesSelectorType?.MakeGenericType(KeyType(options, entityType))!;
+    }
+    /// <summary>
+    /// Creates a serialzier <see cref="Type"/> for values
+    /// </summary>
+    public static Type SerDesSelectorTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)
+    {
+        return options.ValueSerDesSelectorType?.MakeGenericType(ValueContainerType(options, entityType))!;
     }
 }

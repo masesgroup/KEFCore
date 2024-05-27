@@ -75,14 +75,14 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithKeySerializationType(Type serializationType)
+    public virtual KafkaDbContextOptionsBuilder WithKeySerDesSelectorType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
 
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithKeySerializationType(serializationType);
+        extension = extension.WithKeySerDesSelectorType(serializationType);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -98,14 +98,14 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     /// </remarks>
     /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithValueSerializationType(Type serializationType)
+    public virtual KafkaDbContextOptionsBuilder WithValueSerDesSelectorType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
 
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithValueSerializationType(serializationType);
+        extension = extension.WithValueSerDesSelectorType(serializationType);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -249,7 +249,7 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="useEnumeratorWithPrefetch">If <see langword="true" />, persistent storage will be used.</param>
+    /// <param name="useEnumeratorWithPrefetch">If <see langword="true" />, prefetch in enumeration will be used.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
     public virtual KafkaDbContextOptionsBuilder WithUseEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)
     {
@@ -257,6 +257,27 @@ public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrast
             ?? new KafkaOptionsExtension();
 
         extension = extension.WithUseEnumeratorWithPrefetch(useEnumeratorWithPrefetch);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithUseByteBufferDataTransfer(useByteBufferDataTransfer);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

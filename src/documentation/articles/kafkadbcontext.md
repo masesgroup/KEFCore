@@ -8,8 +8,8 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
 `KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/):
 - `KafkaDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
 - `KafkaDbContext` defines the following properties:
-  - **KeySerializationType**: the .NET type to be used to allocate an external serializer for Apache Kafka record key
-  - **ValueSerializationType**: the .NET type to be used to allocate an external serializer for Apache Kafka record value
+  - **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka record key
+  - **ValueSerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka record value
   - **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka record value
   - **UseNameMatching**: set to **false** to avoid Entity matching based on Name
   - **BootstrapServers**: the server hosting the broker of Apache Kafka
@@ -19,10 +19,11 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **DefaultReplicationFactor**: the replication factor to use when data are stored in Apache Kafka
   - **DefaultConsumerInstances**: the consumer instances to be allocated when UseCompactedReplicator is **true**
   - **UsePersistentStorage**: set to **true** to use a persistent storage between multiple application startup
+  - **UseEnumeratorWithPrefetch**: set to **true** to prefer enumerator instances able to do a prefetch on data speeding up execution, used if **UseKNetStreams** is **true** and **UseCompactedReplicator** is **false**
+  - **UseByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
   - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy)
   - **UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka Streams to manage data to or from topics
   - **UseKNetStreams**: Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams, used if **UseCompactedReplicator** is **false**
-  - **UseEnumeratorWithPrefetch**: Setting this property to **true** the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution, used if **UseKNetStreams** is **true** and **UseCompactedReplicator** is **false**
   - **ConsumerConfig**: parameters to use for Producer
   - **ProducerConfig**: parameters to use for Producer
   - **StreamsConfig**: parameters to use for Apche Kafka Streams application

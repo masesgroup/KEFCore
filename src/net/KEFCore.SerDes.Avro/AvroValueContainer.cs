@@ -21,6 +21,7 @@
 #nullable enable
 
 using Avro;
+using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 
@@ -44,7 +45,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     public AvroValueContainer(IEntityType tName, object[] rData)
     {
         EntityName = tName.Name;
-        ClrType = tName.ClrType.FullName!;
+        ClrType = tName.ClrType?.ToAssemblyQualified()!;
         Data = new List<PropertyDataRecord>();
         foreach (var item in tName.GetProperties())
         {
@@ -53,7 +54,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             {
                 PropertyIndex = index,
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.FullName,
+                ClrType = item.ClrType?.ToAssemblyQualified(),
                 Value = rData[index]
             };
             Data.Add(pRecord);

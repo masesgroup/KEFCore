@@ -140,8 +140,8 @@ public class EntityExtractor
     /// <returns>The extracted entity</returns>
     public static object FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
     {
-        Type? keySerializerType = null;
-        Type? valueSerializerType = null;
+        Type? keySerializerSelectorType = null;
+        Type? valueSerializerSelectorType = null;
         Type? keyType = null;
         Type? valueType = null;
 
@@ -159,7 +159,7 @@ public class EntityExtractor
                 if (key == KNetSerialization.KeySerializerIdentifier)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
-                    keySerializerType = Type.GetType(strType, true)!;
+                    keySerializerSelectorType = Type.GetType(strType, true)!;
                 }
                 if (key == KNetSerialization.ValueTypeIdentifier)
                 {
@@ -169,17 +169,17 @@ public class EntityExtractor
                 if (key == KNetSerialization.ValueSerializerIdentifier)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
-                    valueSerializerType = Type.GetType(strType, true)!;
+                    valueSerializerSelectorType = Type.GetType(strType, true)!;
                 }
             }
         }
 
-        if (keyType == null || keySerializerType == null || valueType == null || valueSerializerType == null)
+        if (keyType == null || keySerializerSelectorType == null || valueType == null || valueSerializerSelectorType == null)
         {
-            throw new InvalidOperationException($"Missing one, or more, mandatory information in record: keyType: {keyType} - keySerializerType: {keySerializerType} - valueType: {valueType} - valueSerializerType: {valueSerializerType}");
+            throw new InvalidOperationException($"Missing one, or more, mandatory information in record: keyType: {keyType} - keySerializerType: {keySerializerSelectorType} - valueType: {valueType} - valueSerializerType: {valueSerializerSelectorType}");
         }
 
-        return FromRawValueData(keyType!, valueType!, keySerializerType!, valueSerializerType!, record.Topic(), record.Value(), record.Key(), throwUnmatch);
+        return FromRawValueData(keyType!, valueType!, keySerializerSelectorType!, valueSerializerSelectorType!, record.Topic(), record.Value(), record.Key(), throwUnmatch);
     }
 
     /// <summary>
@@ -187,43 +187,24 @@ public class EntityExtractor
     /// </summary>
     /// <param name="keyType">Expected key <see cref="Type"/></param>
     /// <param name="valueContainer">Expected ValueContainer <see cref="Type"/></param>
-    /// <param name="keySerializer">Key serializer to be used</param>
-    /// <param name="valueContainerSerializer">ValueContainer serializer to be used</param>
+    /// <param name="keySerializerSelectorType">Key serializer to be used</param>
+    /// <param name="valueSerializerSelectorType">ValueContainer serializer to be used</param>
     /// <param name="topic">The Apache Kafka topic the data is coming from</param>
     /// <param name="recordValue">The Apache Kafka record value containing the information</param>
     /// <param name="recordKey">The Apache Kafka record key containing the information</param>
     /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
     /// <returns>The extracted entity</returns>
-    public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializer, Type valueContainerSerializer, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)
+    public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializerSelectorType, Type valueSerializerSelectorType, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)
     {
-        var fullKeySerializer = keySerializer.MakeGenericType(keyType);
-        Type jvmKeyType = null!;
-        foreach (var interfaceType in fullKeySerializer.GetInterfaces())
-        {
-            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
-            {
-                jvmKeyType = interfaceType.GetGenericArguments()[1];
-            }
-        }
-        if (jvmKeyType == null) throw new InvalidOperationException($"Cannot identity JVM type from {keySerializer}");
+        var fullKeySerializer = keySerializerSelectorType.MakeGenericType(keyType);
 
         var fullValueContainer = valueContainer.MakeGenericType(keyType);
-        var fullValueContainerSerializer = valueContainerSerializer.MakeGenericType(fullValueContainer);
-        Type jvmKValueContainerType = null!;
-        foreach (var interfaceType in fullValueContainerSerializer.GetInterfaces())
-        {
-            if (interfaceType.IsGenericType && interfaceType.Name.StartsWith(typeof(ISerDes<,>).Name))
-            {
-                jvmKValueContainerType = interfaceType.GetGenericArguments()[1];
-            }
-        }
-
-        if (jvmKValueContainerType == null) throw new InvalidOperationException($"Cannot identity JVM type from {fullValueContainerSerializer}");
+        var fullValueContainerSerializer = valueSerializerSelectorType.MakeGenericType(fullValueContainer);
 
         var ccType = typeof(LocalEntityExtractor<,,,,,>);
-        var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, jvmKeyType, jvmKValueContainerType, fullKeySerializer, fullValueContainerSerializer);
+        var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, typeof(byte[]), typeof(byte[]), fullKeySerializer, fullValueContainerSerializer);
         var methodInfo = extractorType.GetMethod("GetEntity");
         var extractor = Activator.CreateInstance(extractorType);
-        return methodInfo?.Invoke(extractor, new object[] { topic, recordValue, recordKey, throwUnmatch })!;
+        return methodInfo?.Invoke(extractor, new object[] { topic, recordKey, recordValue, throwUnmatch })!;
     }
 }

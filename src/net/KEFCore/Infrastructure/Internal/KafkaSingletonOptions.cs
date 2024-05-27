@@ -38,8 +38,8 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
 
         if (kafkaOptions != null)
         {
-            KeySerializationType = kafkaOptions.KeySerializationType;
-            ValueSerializationType = kafkaOptions.ValueSerializationType;
+            KeySerDesSelectorType = kafkaOptions.KeySerDesSelectorType;
+            ValueSerDesSelectorType = kafkaOptions.ValueSerDesSelectorType;
             ValueContainerType = kafkaOptions.ValueContainerType;
             UseNameMatching = kafkaOptions.UseNameMatching;
             DatabaseName = kafkaOptions.DatabaseName;
@@ -50,6 +50,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             UseKNetStreams = kafkaOptions.UseKNetStreams;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
             UseEnumeratorWithPrefetch = kafkaOptions.UseEnumeratorWithPrefetch;
+            UseByteBufferDataTransfer = kafkaOptions.UseByteBufferDataTransfer;
             DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
             DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
@@ -75,9 +76,9 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
         }
     }
     /// <inheritdoc/>
-    public virtual Type? KeySerializationType { get; private set; }
+    public virtual Type? KeySerDesSelectorType { get; private set; }
     /// <inheritdoc/>
-    public virtual Type? ValueSerializationType { get; private set; }
+    public virtual Type? ValueSerDesSelectorType { get; private set; }
     /// <inheritdoc/>
     public virtual Type? ValueContainerType { get; private set; }
     /// <inheritdoc/>
@@ -98,6 +99,8 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual bool UsePersistentStorage { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseEnumeratorWithPrefetch { get; private set; }
+    /// <inheritdoc/>
+    public virtual bool UseByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>

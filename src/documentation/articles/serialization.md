@@ -510,7 +510,7 @@ The extension converted this schema into code to speedup the exection of seriali
 ### How to use Protobuf 
 
 `KafkaDbContext` contains three properties can be used to override the default types:
-- **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes..Key.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultKeySerialization`, the type automatically manages simple or complex Primary Key
+- **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes.Key.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultKeySerialization`, the type automatically manages simple or complex Primary Key
 - **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainerSerialization`
 - **ValueContainerType**: set this value to `ProtobufValueContainerRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainer`
 

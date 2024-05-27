@@ -22,19 +22,32 @@
  *  SOFTWARE.
  */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
+using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
+using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
+using MASES.KNet.Streams;
+using System.Diagnostics;
+using System;
+using System.IO;
+using System.Text.Json;
+
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
-        public bool UseAvroBinary { get; set; } = true;
+        public bool UseAvroBinary { get; set; } = false;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
         public bool UseCompactedReplicator { get; set; } = true;
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
+        public bool UseByteBufferDataTransfer { get; set; } = true;
         public bool PreserveInformationAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string DatabaseName { get; set; } = "TestDB";
@@ -48,5 +61,69 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
         public bool WithEvents { get; set; } = false;
+
+        public void ApplyOnContext(KafkaDbContext context)
+        {
+            var databaseName = UseModelBuilder ? DatabaseNameWithModel : DatabaseName;
+
+            StreamsConfigBuilder streamConfig = null;
+            if (!UseInMemoryProvider)
+            {
+                streamConfig = StreamsConfigBuilder.Create();
+                streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+            }
+
+            context.DatabaseName = databaseName;
+            context.StreamsConfig = streamConfig;
+            context.BootstrapServers = BootstrapServers;
+            context.ApplicationId = ApplicationId;
+            context.UsePersistentStorage = UsePersistentStorage;
+            context.UseCompactedReplicator = UseCompactedReplicator;
+            context.UseKNetStreams = UseKNetStreams;
+            context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
+            context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
+
+            if (UseProtobuf)
+            {
+                context.KeySerDesSelectorType = typeof(ProtobufKEFCoreSerDes.Key<>);
+                context.ValueContainerType = typeof(ProtobufValueContainer<>);
+                context.ValueSerDesSelectorType = typeof(ProtobufKEFCoreSerDes.ValueContainer<>);
+            }
+            else if (UseAvro)
+            {
+                context.KeySerDesSelectorType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary<>)
+                                                              : typeof(AvroKEFCoreSerDes.Key.Json<>);
+                context.ValueContainerType = typeof(AvroValueContainer<>);
+                context.ValueSerDesSelectorType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>)
+                                                                : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+            }
+        }
+
+        public static ProgramConfig Config { get; private set; }
+
+        public static void LoadConfig(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                if (!File.Exists(args[0])) { throw new FileNotFoundException($"{args[0]} is not a configuration file.", args[0]); }
+                Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
+            }
+            else Config = new();
+            ReportString(JsonSerializer.Serialize<ProgramConfig>(Config, new JsonSerializerOptions() { WriteIndented = true }));
+
+            if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
+        }
+
+        public static void ReportString(string message)
+        {
+            if (Debugger.IsAttached)
+            {
+                Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+            }
+            else
+            {
+                Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+            }
+        }
     }
 }

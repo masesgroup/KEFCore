@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using MASES.KNet.Serialization;
 using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -126,7 +127,7 @@ public class PropertyData : IJsonOnDeserialized
     {
         if (!dict.TryGetValue(property.ClrType, out ManagedTypes _type)) _type = ManagedTypes.Undefined;
         ManagedType = _type;
-        ClrType = property.ClrType?.FullName;
+        ClrType = property.ClrType?.ToAssemblyQualified();
         PropertyName = property.Name;
         Value = value;
     }
@@ -141,7 +142,7 @@ public class PropertyData : IJsonOnDeserialized
                 {
                     case JsonValueKind.String:
                         Value = elem.GetString()!;
-                        if (ClrType != typeof(string).FullName)
+                        if (ClrType != typeof(string).ToAssemblyQualified())
                         {
                             try
                             {
@@ -150,15 +151,15 @@ public class PropertyData : IJsonOnDeserialized
                             catch (InvalidCastException)
                             {
                                 // failed conversion, try with other methods for known types
-                                if (ClrType == typeof(Guid).FullName)
+                                if (ClrType == typeof(Guid).ToAssemblyQualified())
                                 {
                                     Value = elem.GetGuid();
                                 }
-                                else if (ClrType == typeof(DateTime).FullName)
+                                else if (ClrType == typeof(DateTime).ToAssemblyQualified())
                                 {
                                     Value = elem.GetDateTime();
                                 }
-                                else if (ClrType == typeof(DateTimeOffset).FullName)
+                                else if (ClrType == typeof(DateTimeOffset).ToAssemblyQualified())
                                 {
                                     Value = elem.GetDateTimeOffset();
                                 }
@@ -287,7 +288,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     public DefaultValueContainer(IEntityType tName, object[] rData)
     {
         EntityName = tName.Name;
-        ClrType = tName.ClrType.FullName!;
+        ClrType = tName.ClrType?.ToAssemblyQualified()!;
         Data = new Dictionary<int, PropertyData>();
         foreach (var item in tName.GetProperties())
         {

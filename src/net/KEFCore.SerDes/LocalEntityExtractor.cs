@@ -19,6 +19,7 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 
@@ -27,19 +28,23 @@ interface ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
     object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch);
 }
 
-class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerializer, TValueSerializer> : ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
+class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>
+    : ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
-    where TKeySerializer : class, new()
-    where TValueSerializer : class, new()
+    where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
+    where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
 {
+    static ConcurrentDictionary<(Type, Type), ISerDes<TKey, TJVMKey>> _keySerdeses = new();
+    static ConcurrentDictionary<(Type, Type), ISerDes<TValueContainer, TJVMValueContainer>> _valueSerdeses = new();
+
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
     public LocalEntityExtractor()
     {
-        _keySerdes = new TKeySerializer() as ISerDes<TKey, TJVMKey>;
-        _valueSerdes = new TValueSerializer() as ISerDes<TValueContainer, TJVMValueContainer>;
+        _keySerdes = _keySerdeses.GetOrAdd((typeof(TKeySerDesSelectorType), typeof(TJVMKey)), (o) => { return new TKeySerDesSelectorType().NewSerDes<TJVMKey>(); });
+        _valueSerdes = _valueSerdeses.GetOrAdd((typeof(TValueContainerSerDesSelectorType), typeof(TValueContainer)), (o) => { return new TValueContainerSerDesSelectorType().NewSerDes<TJVMValueContainer>(); });
     }
 
     public object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch)

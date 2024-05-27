@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
@@ -36,10 +37,10 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaOptionsExtension : IDbContextOptionsExtension
+public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingletonOptions
 {
-    private Type _keySerializationType = DefaultKEFCoreSerDes.DefaultKeySerialization;
-    private Type _valueSerializationType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
+    private Type _keySerDesSelectorType = DefaultKEFCoreSerDes.DefaultKeySerialization;
+    private Type _valueSerDesSelectorType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     private Type _valueContainerType = DefaultKEFCoreSerDes.DefaultValueContainer;
     private bool _useNameMatching = true;
     private string? _databaseName;
@@ -50,6 +51,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     private bool _useKNetStreams = true;
     private bool _usePersistentStorage = false;
     private bool _useEnumeratorWithPrefetch = true;
+    private bool _useByteBufferDataTransfer = false;
     private int _defaultNumPartitions = 1;
     private int? _defaultConsumerInstances = null;
     private short _defaultReplicationFactor = 1;
@@ -73,8 +75,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     /// </summary>
     protected KafkaOptionsExtension(KafkaOptionsExtension copyFrom)
     {
-        _keySerializationType = copyFrom._keySerializationType;
-        _valueSerializationType = copyFrom._valueSerializationType;
+        _keySerDesSelectorType = copyFrom._keySerDesSelectorType;
+        _valueSerDesSelectorType = copyFrom._valueSerDesSelectorType;
         _valueContainerType = copyFrom._valueContainerType;
         _useNameMatching = copyFrom._useNameMatching;
         _databaseName = copyFrom._databaseName;
@@ -85,6 +87,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         _useKNetStreams = copyFrom._useKNetStreams;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _useEnumeratorWithPrefetch = copyFrom._useEnumeratorWithPrefetch;
+        _useByteBufferDataTransfer = copyFrom._useByteBufferDataTransfer;
         _defaultNumPartitions = copyFrom._defaultNumPartitions;
         _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
         _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
@@ -102,10 +105,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     /// Internal property
     /// </summary>
     public virtual string ClusterId => _bootstrapServers!;
-    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
-    public virtual Type KeySerializationType => _keySerializationType;
-    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
-    public virtual Type ValueSerializationType => _valueSerializationType;
+    /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
+    public virtual Type KeySerDesSelectorType => _keySerDesSelectorType;
+    /// <inheritdoc cref="KafkaDbContext.ValueSerDesSelectorType"/>
+    public virtual Type ValueSerDesSelectorType => _valueSerDesSelectorType;
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType => _valueContainerType;
     /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
@@ -124,6 +127,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual bool UseKNetStreams => _useKNetStreams;
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage => _usePersistentStorage;
+    /// <inheritdoc cref="KafkaDbContext.UseByteBufferDataTransfer"/>
+    public virtual bool UseByteBufferDataTransfer => _useByteBufferDataTransfer;
     /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
     public virtual bool UseEnumeratorWithPrefetch => _useEnumeratorWithPrefetch;
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
@@ -142,25 +147,28 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
     public virtual Action<EntityTypeChanged> OnChangeEvent => _onChangeEvent!;
-    /// <inheritdoc cref="KafkaDbContext.KeySerializationType"/>
-    public virtual KafkaOptionsExtension WithKeySerializationType(Type serializationType)
+
+    int IKafkaSingletonOptions.DefaultReplicationFactor => throw new NotImplementedException();
+
+    /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
+    public virtual KafkaOptionsExtension WithKeySerDesSelectorType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
 
         var clone = Clone();
 
-        clone._keySerializationType = serializationType;
+        clone._keySerDesSelectorType = serializationType;
 
         return clone;
     }
-    /// <inheritdoc cref="KafkaDbContext.ValueSerializationType"/>
-    public virtual KafkaOptionsExtension WithValueSerializationType(Type serializationType)
+    /// <inheritdoc cref="KafkaDbContext.ValueSerDesSelectorType"/>
+    public virtual KafkaOptionsExtension WithValueSerDesSelectorType(Type serializationType)
     {
         if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
 
         var clone = Clone();
 
-        clone._valueSerializationType = serializationType;
+        clone._valueSerDesSelectorType = serializationType;
 
         return clone;
     }
@@ -256,6 +264,15 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
+    /// <inheritdoc cref="KafkaDbContext.UseByteBufferDataTransfer"/>
+    public virtual KafkaOptionsExtension WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = false)
+    {
+        var clone = Clone();
+
+        clone._useByteBufferDataTransfer = useByteBufferDataTransfer;
+
+        return clone;
+    }
     /// <inheritdoc cref="KafkaDbContext.DefaultNumPartitions"/>
     public virtual KafkaOptionsExtension WithDefaultNumPartitions(int defaultNumPartitions = 1)
     {
@@ -328,31 +345,28 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
 
         return clone;
     }
-    /// <summary>
-    /// Build <see cref="Properties"/> for <see cref="IEntityType"/>
-    /// </summary>
-    public virtual Properties StreamsOptions(IEntityType entityType)
-    {
-        return StreamsOptions(entityType.ApplicationIdForTable(this));
-    }
 
     /// <summary>
     /// Build <see cref="StreamsConfigBuilder"/> from options
     /// </summary>
-    public virtual StreamsConfigBuilder StreamsOptions()
+    public virtual StreamsConfigBuilder StreamsOptions(IEntityType entityType)
     {
         _streamsConfigBuilder ??= new();
         StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(_streamsConfigBuilder);
         Properties props = builder;
 
-        builder.KNetKeySerDes = KeySerializationType;
-        builder.KNetValueSerDes = ValueSerializationType;
+        builder.KeySerDesSelector = KeySerDesSelectorType;
+        builder.ValueSerDesSelector = ValueSerDesSelectorType;
 
         builder.ApplicationId = ApplicationId;
         builder.BootstrapServers = BootstrapServers;
         string baSerdesName = Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.Serdes.ByteArraySerde>();
-        builder.DefaultKeySerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
-        builder.DefaultValueSerdeClass = Class.ForName(baSerdesName, true, SystemClassLoader);
+        string bbSerdesName = Class.ClassNameOf<MASES.KNet.Serialization.Serdes.ByteBufferSerde>();
+
+        builder.DefaultKeySerdeClass = this.JVMKeyType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
+                                                                                     : Class.ForName(bbSerdesName, true, SystemClassLoader);
+        builder.DefaultValueSerdeClass = this.JVMValueContainerType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
+                                                                                                  : Class.ForName(bbSerdesName, true, SystemClassLoader);
         builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, SystemClassLoader)
                                                               : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, SystemClassLoader);
 
@@ -479,6 +493,11 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension
         if (string.IsNullOrEmpty(kafkaOptions.DatabaseName)) throw new ArgumentException("It is manadatory", "DatabaseName");
         if (string.IsNullOrEmpty(kafkaOptions.ApplicationId)) throw new ArgumentException("It is manadatory", "ApplicationId");
         if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
+    }
+
+    public void Initialize(IDbContextOptions options)
+    {
+        throw new NotImplementedException();
     }
 
     private sealed class ExtensionInfo : DbContextOptionsExtensionInfo

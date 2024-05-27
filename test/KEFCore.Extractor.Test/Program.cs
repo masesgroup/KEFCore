@@ -25,9 +25,6 @@
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text.Json;
 using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Extractor
@@ -35,36 +32,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Extractor
     partial class Program
     {
         internal static CancellationTokenSource runApplication = new CancellationTokenSource();
-        internal static ProgramConfig config = new();
-
-        static void ReportString(string message)
-        {
-            if (Debugger.IsAttached)
-            {
-                Trace.WriteLine(message);
-            }
-            else
-            {
-                Console.WriteLine(message);
-            }
-        }
 
         static void Main(string[] args)
         {
             try
             {
-                if (args.Length > 0)
-                {
-                    if (!File.Exists(args[0])) { ReportString($"{args[0]} is not a configuration file."); return; }
-                    config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
-                }
+                ProgramConfig.LoadConfig(args);
 
-                if (string.IsNullOrWhiteSpace(config.BootstrapServers)) throw new ArgumentException("BootstrapServers must be set");
-                if (string.IsNullOrWhiteSpace(config.TopicToSubscribe)) throw new ArgumentException("TopicToSubscribe must be set");
+                if (string.IsNullOrWhiteSpace(ProgramConfig.Config.BootstrapServers)) throw new ArgumentException("BootstrapServers must be set");
+                if (string.IsNullOrWhiteSpace(ProgramConfig.Config.TopicToSubscribe)) throw new ArgumentException("TopicToSubscribe must be set");
 
                 KEFCore.CreateGlobalInstance();
                 Console.CancelKeyPress += Console_CancelKeyPress;
-                EntityExtractor.FromTopic(config.BootstrapServers, config.TopicToSubscribe, ReportData, runApplication.Token);
+                EntityExtractor.FromTopic(ProgramConfig.Config.BootstrapServers, ProgramConfig.Config.TopicToSubscribe, ReportData, runApplication.Token);
             }
             catch (Exception ex)
             {
