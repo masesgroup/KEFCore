@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="Common.props" />
+	<PropertyGroup>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Common</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Common</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test</Title>
+		<Description>EntityFrameworkCore KNet Test.Common</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Common</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+</Project>
