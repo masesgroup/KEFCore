@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers" class="text-break">
-Class EntityTypeProducers  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L31"><i class="bi bi-code-slash"></i></a>
+Class EntityTypeProducers  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -155,8 +155,8 @@ doing so can result in application failures when updating to a new Entity Framew
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Create__4_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Create``4(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster)">
-  Create&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;(IEntityType, IKafkaCluster)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  Create&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;(IEntityType, IKafkaCluster)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Allocates a new <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a></p>
@@ -164,7 +164,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEntityTypeProducer Create&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class, new() where TValueSerializer : class, new()</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEntityTypeProducer Create&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;(IEntityType entityType, IKafkaCluster cluster) where TKey : notnull where TValueContainer : class, IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -187,9 +187,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>TValueContainer</code></dt>
     <dd></dd>
-    <dt><code>TKeySerializer</code></dt>
+    <dt><code>TJVMKey</code></dt>
     <dd></dd>
-    <dt><code>TValueSerializer</code></dt>
+    <dt><code>TJVMValueContainer</code></dt>
     <dd></dd>
   </dl>
 
@@ -206,7 +206,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducers_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer)">
   Dispose(IEntityTypeProducer)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L47"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Dispose a previously allocated <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a></p>
@@ -238,7 +238,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L31" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/EntityTypeProducers.cs/#L32" class="edit-link">Edit this page</a>
         </div>
 
 

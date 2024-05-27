@@ -137,7 +137,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-2.html">KafkaStreamsTableRetriever&lt;TKey, TValueContainer&gt;</a></div>
+      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html">KafkaStreamsTableRetriever&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;</a></div>
     </dd>
   </dl>
 
@@ -178,8 +178,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__MASES_KNet_Serialization_ISerDes__1__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0},MASES.KNet.Serialization.ISerDes{`1},Org.Apache.Kafka.Streams.StreamsBuilder)">
-  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey&gt;, ISerDes&lt;TValue&gt;, StreamsBuilder)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey, K&gt;, ISerDes&lt;TValue, V&gt;, StreamsBuilder)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -188,7 +188,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey&gt; keySerdes, ISerDes&lt;TValue&gt; valueSerdes, StreamsBuilder builder)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey, K&gt; keySerdes, ISerDes&lt;TValue, V&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -197,9 +197,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
-    <dt><code>keySerdes</code> <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TKey&gt;</dt>
+    <dt><code>keySerdes</code> <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-2.html">ISerDes</a>&lt;TKey, K&gt;</dt>
     <dd></dd>
-    <dt><code>valueSerdes</code> <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes</a>&lt;TValue&gt;</dt>
+    <dt><code>valueSerdes</code> <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-2.html">ISerDes</a>&lt;TValue, V&gt;</dt>
     <dd></dd>
     <dt><code>builder</code> <a class="xref" href="api/Org.Apache.Kafka.Streams.StreamsBuilder.html">StreamsBuilder</a></dt>
     <dd></dd>

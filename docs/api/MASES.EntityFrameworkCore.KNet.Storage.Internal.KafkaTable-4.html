@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-      <title>Class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka </title>
+      <title>Class KafkaTable&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka ">
+      <meta name="title" content="Class KafkaTable&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
       <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
       <link rel="icon" href="../images/favicon.ico">
@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4" class="text-break">
-Class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L36"><i class="bi bi-code-slash"></i></a>
+Class KafkaTable&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,7 +101,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt; : IKafkaTable, IEntityTypeProducer, IDisposable where TKey : notnull where TValueContainer : class, IValueContainer&lt;TKey&gt; where TKeySerializer : class, new() where TValueSerializer : class, new()</code></pre>
+    <pre><code class="lang-csharp hljs">public class KafkaTable&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt; : IKafkaTable, IEntityTypeProducer, IDisposable where TKey : notnull where TValueContainer : class, IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
 
@@ -112,9 +112,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>TValueContainer</code></dt>
     <dd></dd>
-    <dt><code>TKeySerializer</code></dt>
+    <dt><code>TJVMKey</code></dt>
     <dd></dd>
-    <dt><code>TValueSerializer</code></dt>
+    <dt><code>TJVMValueContainer</code></dt>
     <dd></dd>
   </dl>
 
@@ -122,7 +122,7 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-      <div><span class="xref">KafkaTable&lt;TKey, TValueContainer, TKeySerializer, TValueSerializer&gt;</span></div>
+      <div><span class="xref">KafkaTable&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;</span></div>
     </dd>
   </dl>
 
@@ -175,7 +175,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Boolean)">
   KafkaTable(IKafkaCluster, IEntityType, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -215,7 +215,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Cluster" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Cluster">
   Cluster
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The referring <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html">IKafkaCluster</a></p>
@@ -247,7 +247,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_EntityType" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.EntityType">
   EntityType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L99"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Associated <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
@@ -279,7 +279,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Rows" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Rows">
   Rows
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L130"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L129"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Current rows</p>
@@ -311,7 +311,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_ValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.ValueBuffers">
   ValueBuffers
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L127"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The current <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>s</p>
@@ -347,7 +347,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_BumpValueGenerators_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.BumpValueGenerators(System.Object[])">
   BumpValueGenerators(object?[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L308"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L307"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Bumps values</p>
@@ -379,7 +379,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Commit_System_Collections_Generic_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Commit(System.Collections.Generic.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag})">
   Commit(IEnumerable&lt;IKafkaRowBag&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L126"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L125"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Stores an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a></p>
@@ -417,7 +417,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Create_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Create(Microsoft.EntityFrameworkCore.Update.IUpdateEntry)">
   Create(IUpdateEntry)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L170"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L169"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a new row</p>
@@ -454,7 +454,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Delete_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Delete(Microsoft.EntityFrameworkCore.Update.IUpdateEntry)">
   Delete(IUpdateEntry)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L197"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L196"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Deletes a row</p>
@@ -491,7 +491,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -518,7 +518,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_GetIntegerValueGenerator__1_Microsoft_EntityFrameworkCore_Metadata_IProperty_System_Collections_Generic_IReadOnlyList_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.GetIntegerValueGenerator``1(Microsoft.EntityFrameworkCore.Metadata.IProperty,System.Collections.Generic.IReadOnlyList{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable})">
   GetIntegerValueGenerator&lt;TProperty&gt;(IProperty, IReadOnlyList&lt;IKafkaTable&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Get an <a class="xref" href="MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaIntegerValueGenerator-1.html">KafkaIntegerValueGenerator&lt;TValue&gt;</a></p>
@@ -562,7 +562,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_SnapshotRows" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.SnapshotRows">
   SnapshotRows()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L132"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L131"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Create snapshot</p>
@@ -594,7 +594,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_ThrowUpdateConcurrencyException_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_System_Collections_Generic_Dictionary_Microsoft_EntityFrameworkCore_Metadata_IProperty_System_Object__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.ThrowUpdateConcurrencyException(Microsoft.EntityFrameworkCore.Update.IUpdateEntry,System.Collections.Generic.Dictionary{Microsoft.EntityFrameworkCore.Metadata.IProperty,System.Object})">
   ThrowUpdateConcurrencyException(IUpdateEntry, Dictionary&lt;IProperty, object?&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L380"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L379"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Throws an exception indicating that concurrency conflicts were detected.</p>
@@ -630,7 +630,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Update_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Update(Microsoft.EntityFrameworkCore.Update.IUpdateEntry)">
   Update(IUpdateEntry)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L257"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L256"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Updates a row</p>
@@ -667,7 +667,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L36" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTable.cs/#L37" class="edit-link">Edit this page</a>
         </div>
 
 
