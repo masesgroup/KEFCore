@@ -20,6 +20,7 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Serialization;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
@@ -144,38 +145,42 @@ public static class KafkaDbContextOptionsExtensions
     public static Type JVMKeyType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         return typeof(byte[]);
-
-        var keySerDesType = SerDesSelectorTypeForKey(options, entityType);
-        ISerDes serDes = Activator.CreateInstance(keySerDesType) as ISerDes;
-        if (serDes == null) throw new InvalidOperationException($"{keySerDesType} is not a valid {nameof(ISerDes)}");
-        return serDes.JVMType;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
     /// </summary>
     public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        if (options.UseByteBufferDataTransfer) return typeof(Java.Nio.ByteBuffer);
+        var selector = SerDesSelectorForValue(options, entityType); 
+        if (options.UseByteBufferDataTransfer && selector!= null && selector.ByteBufferSerDes != null) return typeof(Java.Nio.ByteBuffer);
         return typeof(byte[]);
-
-
-        var valueSerDesType = SerDesSelectorTypeForValue(options, entityType);
-        ISerDes serDes = Activator.CreateInstance(valueSerDesType) as ISerDes;
-        if (serDes == null) throw new InvalidOperationException($"{valueSerDesType} is not a valid {nameof(ISerDes)}");
-        return serDes.JVMType;
     }
+
+    static ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector> _keySerDesSelctors = new();
+
     /// <summary>
     /// Creates a serializer <see cref="Type"/> for keys
     /// </summary>
-    public static Type SerDesSelectorTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)
+    public static ISerDesSelector SerDesSelectorForKey(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        return options.KeySerDesSelectorType?.MakeGenericType(KeyType(options, entityType))!;
+        return _keySerDesSelctors.GetOrAdd((options.KeySerDesSelectorType, entityType), (o) =>
+        {
+            var selector = o.Item1?.MakeGenericType(KeyType(options, o.Item2))!;
+            return (ISerDesSelector)Activator.CreateInstance(selector);
+        });
     }
+
+    static ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector> _valueContainerSerDesSelctors = new();
+
     /// <summary>
     /// Creates a serialzier <see cref="Type"/> for values
     /// </summary>
-    public static Type SerDesSelectorTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)
+    public static ISerDesSelector SerDesSelectorForValue(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        return options.ValueSerDesSelectorType?.MakeGenericType(ValueContainerType(options, entityType))!;
+        return _valueContainerSerDesSelctors.GetOrAdd((options.ValueSerDesSelectorType, entityType), (o) =>
+        {
+            var selector = o.Item1?.MakeGenericType(ValueContainerType(options, o.Item2))!;
+            return (ISerDesSelector)Activator.CreateInstance(selector);
+        });
     }
 }

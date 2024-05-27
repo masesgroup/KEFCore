@@ -59,18 +59,14 @@ public class KafkaTableFactory : IKafkaTableFactory
             .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(), 
                                _options.ValueContainerType(entityType),
                                _options.JVMKeyType(entityType),
-                               _options.JVMValueContainerType(entityType),
-                               _options.SerDesSelectorTypeForKey(entityType), 
-                               _options.SerDesSelectorTypeForValue(entityType))
+                               _options.JVMValueContainerType(entityType))
             .Invoke(null, new object?[] { cluster, entityType, _sensitiveLoggingEnabled })!;
 
-    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(
+    private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(
         IKafkaCluster cluster,
         IEntityType entityType,
         bool sensitiveLoggingEnabled)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
-        where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
-        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(cluster, entityType, sensitiveLoggingEnabled);
+        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, sensitiveLoggingEnabled);
 }

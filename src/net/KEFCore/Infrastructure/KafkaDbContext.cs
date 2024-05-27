@@ -227,7 +227,6 @@ const bool perf = false;
     /// Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams
     /// </summary>
     public virtual bool UseKNetStreams { get; set; } = true;
-
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
@@ -264,7 +263,8 @@ const bool perf = false;
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithUsePersistentStorage(UsePersistentStorage);
-        o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
+            o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
+            o.WithUseByteBufferDataTransfer(UseByteBufferDataTransfer);
             o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);

@@ -35,11 +35,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType> : IEntityTypeProducer
+public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IEntityTypeProducer
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
-    where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
-    where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
 {
     private readonly ConstructorInfo TValueContainerConstructor;
     private readonly bool _useCompactedReplicator;
@@ -191,11 +189,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         var tTValueContainer = typeof(TValueContainer);
         TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
 
-        _keySerdes = new TKeySerDesSelectorType().NewSerDes<TJVMKey>();
-        _valueSerdes = new TValueContainerSerDesSelectorType().NewSerDes<TJVMValueContainer>();
+        var keySelector = _cluster.Options.SerDesSelectorForKey(_entityType) as ISerDesSelector<TKey>;
+        var valueSelector = _cluster.Options.SerDesSelectorForValue(_entityType) as ISerDesSelector<TValueContainer>;
 
-        if (_keySerdes == null) throw new InvalidOperationException($"{typeof(TKeySerDesSelectorType)} does not returned a {typeof(ISerDes<TKey, TJVMKey>)}");
-        if (_valueSerdes == null) throw new InvalidOperationException($"{typeof(TValueContainerSerDesSelectorType)} does not returned a {typeof(ISerDes<TValueContainer, TJVMValueContainer>)}");
+        _keySerdes = keySelector?.NewSerDes<TJVMKey>();
+        _valueSerdes = valueSelector?.NewSerDes<TJVMValueContainer>();
+
+        if (_keySerdes == null) throw new InvalidOperationException($"SerDsSelector for key does not returned a {typeof(ISerDes<TKey, TJVMKey>)}");
+        if (_valueSerdes == null) throw new InvalidOperationException($"SerDsSelector for value does not returned a {typeof(ISerDes<TValueContainer, TJVMValueContainer>)}");
 
         if (_useCompactedReplicator)
         {

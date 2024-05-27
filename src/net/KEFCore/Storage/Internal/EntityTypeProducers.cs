@@ -35,13 +35,11 @@ public class EntityTypeProducers
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>
     /// </summary>
-    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(IEntityType entityType, IKafkaCluster cluster)
+    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
-        where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
     {
-        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(entityType, cluster));
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster));
     }
     /// <summary>
     /// Dispose a previously allocated <see cref="IEntityTypeProducer"/>
@@ -55,10 +53,8 @@ public class EntityTypeProducers
         producer.Dispose();
     }
 
-    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(IEntityType entityType, IKafkaCluster cluster)
+    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKafkaCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
-        where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
-        => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>(entityType, cluster);
+        => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
 }
