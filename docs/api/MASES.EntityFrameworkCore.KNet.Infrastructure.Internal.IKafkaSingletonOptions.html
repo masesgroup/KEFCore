@@ -125,10 +125,19 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt>Extension Methods</dt>
     <dd>
   <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForKey_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.SerializerTypeForKey(IKafkaSingletonOptions, IEntityType)</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMKeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.JVMKeyType(IKafkaSingletonOptions, IEntityType)</a>
   </div>
   <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForValue_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.SerializerTypeForValue(IKafkaSingletonOptions, IEntityType)</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.JVMValueContainerType(IKafkaSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_KeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.KeyType(IKafkaSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForKey_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.SerDesSelectorForKey(IKafkaSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForValue_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.SerDesSelectorForValue(IKafkaSingletonOptions, IEntityType)</a>
   </div>
   <div>
       <a class="xref" href="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_ValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KafkaDbContextOptionsExtensions.ValueContainerType(IKafkaSingletonOptions, IEntityType)</a>
@@ -211,7 +220,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ConsumerConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ConsumerConfig">
   ConsumerConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L69"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a> used when <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a></p>
@@ -275,7 +284,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_DefaultConsumerInstances" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.DefaultConsumerInstances">
   DefaultConsumerInstances
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default consumr instances used in conjunction with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a></p>
@@ -307,7 +316,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_DefaultNumPartitions" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.DefaultNumPartitions">
   DefaultNumPartitions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default number of partitions associated to each topic</p>
@@ -339,7 +348,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_DefaultReplicationFactor" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.DefaultReplicationFactor">
   DefaultReplicationFactor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default replication factor associated to each topic</p>
@@ -367,21 +376,21 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_KeySerializationType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.KeySerializationType*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_KeySerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.KeySerDesSelectorType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_KeySerializationType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.KeySerializationType">
-  KeySerializationType
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_KeySerDesSelectorType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.KeySerDesSelectorType">
+  KeySerDesSelectorType
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for key serialization</p>
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for key serialization selection</p>
 <p>
-Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key.Json-1.html">DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes&lt;T&gt;</a></p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.html">DefaultKEFCoreSerDes.Key&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Type? KeySerializationType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">Type? KeySerDesSelectorType { get; }</code></pre>
   </div>
 
 
@@ -405,7 +414,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_OnChangeEvent" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.OnChangeEvent">
   OnChangeEvent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The optional handler to be used to receive notification when the back-end triggers a data change.</p>
@@ -440,7 +449,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ProducerConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ProducerConfig">
   ProducerConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L71"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a></p>
@@ -472,7 +481,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_StreamsConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.StreamsConfig">
   StreamsConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfig">StreamsConfig</a> used when <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
@@ -504,7 +513,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_TopicConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.TopicConfig">
   TopicConfig
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L75"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="api/MASES.KNet.Common.TopicConfigBuilder.html">TopicConfigBuilder</a> used when topics shall be created</p>
@@ -532,6 +541,38 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseByteBufferDataTransfer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseByteBufferDataTransfer" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseByteBufferDataTransfer">
+  UseByteBufferDataTransfer
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool UseByteBufferDataTransfer { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseCompactedReplicator_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseCompactedReplicator*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_UseCompactedReplicator" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.UseCompactedReplicator">
@@ -539,7 +580,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;TKey, TValue&gt;</a> instead of Apache Kafka Streams</p>
+  <div class="markdown level1 summary"><p>Use <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -761,21 +802,21 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ValueSerializationType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ValueSerializationType*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ValueSerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ValueSerDesSelectorType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ValueSerializationType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ValueSerializationType">
-  ValueSerializationType
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_ValueSerDesSelectorType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.ValueSerDesSelectorType">
+  ValueSerDesSelectorType
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/IKafkaSingletonOptions.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for value serialization</p>
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for value serialization selection</p>
 <p>
-Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer.Json-1.html">DefaultKEFCoreSerDes.ValueContainer.Json&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="api/MASES.KNet.Serialization.ISerDes-1.html">ISerDes&lt;T&gt;</a></p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.html">DefaultKEFCoreSerDes.ValueContainer&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Type? ValueSerializationType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">Type? ValueSerDesSelectorType { get; }</code></pre>
   </div>
 
 

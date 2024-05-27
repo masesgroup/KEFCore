@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-      <title>Class KNetStreamsRetriever&lt;TKey, TValue&gt; | MASES Group - Entity Framework Core provider for Apache Kafka </title>
+      <title>Class KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt; | MASES Group - Entity Framework Core provider for Apache Kafka </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Class KNetStreamsRetriever&lt;TKey, TValue&gt; | MASES Group - Entity Framework Core provider for Apache Kafka ">
+      <meta name="title" content="Class KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt; | MASES Group - Entity Framework Core provider for Apache Kafka ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
       <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
       <link rel="icon" href="../images/favicon.ico">
@@ -16,7 +16,7 @@
       
       
       
-      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever%602%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever%604%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -80,12 +80,12 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2">
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4">
 
 
 
-  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2" class="text-break">
-Class KNetStreamsRetriever&lt;TKey, TValue&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KNetStreamsRetriever.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4" class="text-break">
+Class KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KNetStreamsRetriever.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,7 +101,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KNetStreamsRetriever&lt;TKey, TValue&gt; : IKafkaStreamsRetriever, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt; : IKafkaStreamsRetriever, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
 
@@ -112,13 +112,17 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>TValue</code></dt>
     <dd></dd>
+    <dt><code>TJVMKey</code></dt>
+    <dd></dd>
+    <dt><code>TJVMValue</code></dt>
+    <dd></dd>
   </dl>
 
   <dl class="typelist inheritance">
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-      <div><span class="xref">KNetStreamsRetriever&lt;TKey, TValue&gt;</span></div>
+      <div><span class="xref">KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt;</span></div>
     </dd>
   </dl>
 
@@ -166,9 +170,9 @@ doing so can result in application failures when updating to a new Entity Framew
 </h2>
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.#ctor*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   KNetStreamsRetriever(IKafkaCluster, IEntityType)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KNetStreamsRetriever.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
@@ -204,9 +208,9 @@ doing so can result in application failures when updating to a new Entity Framew
 </h2>
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.Dispose*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Dispose*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.Dispose">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Dispose">
   Dispose()
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KNetStreamsRetriever.cs/#L243"><i class="bi bi-code-slash"></i></a>
   </h3>
@@ -231,9 +235,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.GetValueBuffers*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.GetValueBuffers*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_2_GetValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`2.GetValueBuffers">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_GetValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.GetValueBuffers">
   GetValueBuffers()
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KNetStreamsRetriever.cs/#L261"><i class="bi bi-code-slash"></i></a>
   </h3>

@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions" class="text-break">
-Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L28"><i class="bi bi-code-slash"></i></a>
+Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -149,11 +149,89 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
 </h2>
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForKey_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerializerTypeForKey*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMKeyType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.JVMKeyType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForKey_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerializerTypeForKey(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  SerializerTypeForKey(IKafkaSingletonOptions, IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMKeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.JVMKeyType(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  JVMKeyType(IKafkaSingletonOptions, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L145"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create the ValueContainer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Type JVMKeyType(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html">IKafkaSingletonOptions</a></dt>
+    <dd></dd>
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMValueContainerType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.JVMValueContainerType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_JVMValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.JVMValueContainerType(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  JVMValueContainerType(IKafkaSingletonOptions, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create the ValueContainer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html">IKafkaSingletonOptions</a></dt>
+    <dd></dd>
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_KeyType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.KeyType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_KeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.KeyType(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  KeyType(IKafkaSingletonOptions, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a serializer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> for keys</p>
@@ -161,7 +239,7 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Type SerializerTypeForKey(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Type KeyType(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -188,11 +266,50 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForValue_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerializerTypeForValue*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForKey_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerDesSelectorForKey*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerializerTypeForValue_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerializerTypeForValue(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  SerializerTypeForValue(IKafkaSingletonOptions, IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForKey_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerDesSelectorForKey(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  SerDesSelectorForKey(IKafkaSingletonOptions, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L164"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a serializer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> for keys</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ISerDesSelector SerDesSelectorForKey(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html">IKafkaSingletonOptions</a></dt>
+    <dd></dd>
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="api/MASES.KNet.Serialization.ISerDesSelector.html">ISerDesSelector</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForValue_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerDesSelectorForValue*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_SerDesSelectorForValue_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.SerDesSelectorForValue(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  SerDesSelectorForValue(IKafkaSingletonOptions, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L178"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a serialzier <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> for values</p>
@@ -200,7 +317,7 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Type SerializerTypeForValue(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ISerDesSelector SerDesSelectorForValue(this IKafkaSingletonOptions options, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -213,7 +330,7 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dt><a class="xref" href="api/MASES.KNet.Serialization.ISerDesSelector.html">ISerDesSelector</a></dt>
     <dd></dd>
   </dl>
 
@@ -231,7 +348,7 @@ Class KafkaDbContextOptionsExtensions  <a class="header-action link-secondary" t
 
   <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaCluster_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_System_String_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder__" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder,System.String,System.String,System.String,System.Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder})">
   UseKafkaCluster(DbContextOptionsBuilder, string, string, string, Action&lt;KafkaDbContextOptionsBuilder&gt;?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Configures the context to connect to a named Apache Kafka cluster.
@@ -290,7 +407,7 @@ independently of the context. The Apache Kafka cluster is shared anywhere the sa
 
   <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_UseKafkaCluster__1_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder___0__System_String_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder__" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.UseKafkaCluster``1(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder{``0},System.String,System.String,System.String,System.Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder})">
   UseKafkaCluster&lt;TContext&gt;(DbContextOptionsBuilder&lt;TContext&gt;, string, string, string, Action&lt;KafkaDbContextOptionsBuilder&gt;?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Configures the context to connect to an Apache Kafka cluster.
@@ -355,7 +472,7 @@ independently of the context. The Apache Kafka cluster is shared anywhere the sa
 
   <h3 id="MASES_EntityFrameworkCore_KNet_KafkaDbContextOptionsExtensions_ValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKafkaSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.ValueContainerType(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   ValueContainerType(IKafkaSingletonOptions, IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L144"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Create the ValueContainer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></p>
@@ -394,7 +511,7 @@ independently of the context. The Apache Kafka cluster is shared anywhere the sa
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KafkaDbContextOptionsExtensions.cs/#L30" class="edit-link">Edit this page</a>
         </div>
 
 

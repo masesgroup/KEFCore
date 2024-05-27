@@ -161,7 +161,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializer, Type valueContainerSerializer, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializerSelectorType, Type valueSerializerSelectorType, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -172,10 +172,10 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
     <dt><code>valueContainer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
     <dd><p>Expected ValueContainer <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></p>
 </dd>
-    <dt><code>keySerializer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dt><code>keySerializerSelectorType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
     <dd><p>Key serializer to be used</p>
 </dd>
-    <dt><code>valueContainerSerializer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dt><code>valueSerializerSelectorType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
     <dd><p>ValueContainer serializer to be used</p>
 </dd>
     <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>

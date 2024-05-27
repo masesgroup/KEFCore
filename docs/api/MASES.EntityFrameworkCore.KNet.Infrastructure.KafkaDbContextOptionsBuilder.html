@@ -247,7 +247,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L189"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Enables use of <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;TKey, TValue&gt;</a></p>
+  <div class="markdown level1 summary"><p>Enables use of <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -258,7 +258,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>useCompactedReplicator</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;TKey, TValue&gt;</a> will be used instead of Apache Kafka Streams.</p>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> will be used instead of Apache Kafka Streams.</p>
 </dd>
   </dl>
 
@@ -287,10 +287,10 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithConsumerConfig_MASES_KNet_Consumer_ConsumerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)">
   WithConsumerConfig(ConsumerConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L338"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L359"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;TKey, TValue&gt;</a>.</p>
+  <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -330,7 +330,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithDefaultConsumerInstances_System_Nullable_System_Int32__" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultConsumerInstances(System.Nullable{System.Int32})">
   WithDefaultConsumerInstances(int?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L296"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L317"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Defines the default number of consumer instances to be used in conjunction with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithCompactedReplicator_System_Boolean_">WithCompactedReplicator(bool)</a></p>
@@ -373,7 +373,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithDefaultNumPartitions_System_Int32_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultNumPartitions(System.Int32)">
   WithDefaultNumPartitions(int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L275"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L296"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Defines the default number of partitions to use when a new topic is created</p>
@@ -416,7 +416,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithDefaultReplicationFactor_System_Int16_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithDefaultReplicationFactor(System.Int16)">
   WithDefaultReplicationFactor(short)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L317"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L338"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Defines the default replication factor to use when a new topic is created</p>
@@ -455,10 +455,10 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerializationType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerializationType*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerDesSelectorType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerializationType_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerializationType(System.Type)">
-  WithKeySerializationType(Type)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerDesSelectorType_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithKeySerDesSelectorType(System.Type)">
+  WithKeySerDesSelectorType(Type)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -467,7 +467,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithKeySerializationType(Type serializationType)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithKeySerDesSelectorType(Type serializationType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -490,7 +490,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerializationType_System_Type__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithKeySerDesSelectorType_System_Type__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>
@@ -502,7 +502,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithOnChangeEvent_System_Action_MASES_EntityFrameworkCore_KNet_Storage_EntityTypeChanged__" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithOnChangeEvent(System.Action{MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged})">
   WithOnChangeEvent(Action&lt;EntityTypeChanged&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L422"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L443"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set the optional handler to be used to receive notification when the back-end triggers a data change. Works if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithCompactedReplicator_System_Boolean_">WithCompactedReplicator(bool)</a> is invoked with <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a></p>
@@ -545,7 +545,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithProducerConfig_MASES_KNet_Producer_ProducerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithProducerConfig(MASES.KNet.Producer.ProducerConfigBuilder)">
   WithProducerConfig(ProducerConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L359"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L380"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="api/Org.Apache.Kafka.Clients.Producer.KafkaProducer.html">KafkaProducer</a>.</p>
@@ -588,7 +588,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithStreamsConfig_MASES_KNet_Streams_StreamsConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithStreamsConfig(MASES.KNet.Streams.StreamsConfigBuilder)">
   WithStreamsConfig(StreamsConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L380"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L401"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="api/Org.Apache.Kafka.Streams.KafkaStreams.html">KafkaStreams</a>.</p>
@@ -631,7 +631,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithTopicConfig_MASES_KNet_Common_TopicConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithTopicConfig(MASES.KNet.Common.TopicConfigBuilder)">
   WithTopicConfig(TopicConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L401"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L422"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="api/Org.Apache.Kafka.Common.Config.TopicConfig.html">TopicConfig</a>.</p>
@@ -663,6 +663,49 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithTopicConfig_MASES_KNet_Common_TopicConfigBuilder__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseByteBufferDataTransfer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseByteBufferDataTransfer_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithUseByteBufferDataTransfer(System.Boolean)">
+  WithUseByteBufferDataTransfer(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L275"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useByteBufferDataTransfer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, <a class="xref" href="api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange will be preferred.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html">KafkaDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithUseByteBufferDataTransfer_System_Boolean__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>
@@ -731,7 +774,7 @@ Class KafkaDbContextOptionsBuilder  <a class="header-action link-secondary" titl
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>useEnumeratorWithPrefetch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, persistent storage will be used.</p>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, prefetch in enumeration will be used.</p>
 </dd>
   </dl>
 
@@ -930,10 +973,10 @@ See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOption
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerializationType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithValueSerializationType*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithValueSerDesSelectorType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerializationType_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithValueSerializationType(System.Type)">
-  WithValueSerializationType(Type)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerDesSelectorType_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.WithValueSerDesSelectorType(System.Type)">
+  WithValueSerDesSelectorType(Type)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KafkaDbContextOptionsBuilder.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -942,7 +985,7 @@ See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOption
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithValueSerializationType(Type serializationType)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual KafkaDbContextOptionsBuilder WithValueSerDesSelectorType(Type serializationType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -965,7 +1008,7 @@ See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOption
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerializationType_System_Type__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContextOptionsBuilder_WithValueSerDesSelectorType_System_Type__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>

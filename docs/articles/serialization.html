@@ -164,8 +164,13 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
 <ul>
 <li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainer</code>) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
-<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.Json&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultKeySerialization</code>), the type automatically manages simple or complex Primary Key</li>
-<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainerSerialization</code>)</li>
+<li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.JsonRaw&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultKeySerialization</code>), the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueContainer SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.ValueContainer.JsonRaw&lt;&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainerSerialization</code>)</li>
+</ul>
+<p>Both Key and ValueContainer SerDes come with two kind of data transfer mechanisms:</p>
+<ul>
+<li>Raw: it uses <code>byte</code> arrays for data transfer</li>
+<li>Buffered: they use <code>ByteBuffer</code> for data transfer</li>
 </ul>
 <h3 id="user-override">User override</h3>
 <p>The default serialization can be overridden with user defined <strong>ValueContainer</strong> class, <strong>Key SerDes</strong> or <strong>ValueContainer SerDes</strong>.</p>
@@ -209,23 +214,23 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <h4 id="key-serdes-and-valuecontainer-serdes-class"><strong>Key SerDes</strong> and <strong>ValueContainer SerDes</strong> class</h4>
 <p>A custom <strong>Key SerDes</strong> class shall follow the following rules:</p>
 <ul>
-<li>must implements the <code>IKNetSerDes&lt;T&gt;</code> interface or extend <code>KNetSerDes&lt;T&gt;</code></li>
+<li>must implements the <code>ISerDes&lt;T&gt;</code> interface or extend <code>SerDes&lt;T&gt;</code></li>
 <li>must be a generic type</li>
 <li>must have a parameterless constructor</li>
 <li>can store serialization information using Headers of Apache Kafka record (this information will be used from <code>EntityExtractor</code>)</li>
 </ul>
 <p>An example snippet is the follow based on JSON serializer:</p>
-<pre><code class="lang-C#">public class CustomKeySerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
+<pre><code class="lang-C#">public class CustomKeySerDes&lt;T&gt; : SerDesRaw&lt;T&gt;
 {
     readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(T).FullName!);
     readonly byte[] customSerDesName = Encoding.UTF8.GetBytes(typeof(CustomKeySerDes&lt;&gt;).FullName!);
 
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Serialize(string, T)&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.Serialize(string, T)&quot;/&gt;
     public override byte[] Serialize(string topic, T data)
     {
         return SerializeWithHeaders(topic, null, data);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
         headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
@@ -234,12 +239,12 @@ The schema of the Apache Kafka record value follows the code definition in <code
         var jsonStr = System.Text.Json.JsonSerializer.Serialize&lt;T&gt;(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Deserialize(string, byte[])&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.Deserialize(string, TJVM)&quot;/&gt;
     public override T Deserialize(string topic, byte[] data)
     {
         return DeserializeWithHeaders(topic, null, data);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)&quot;/&gt;
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
         if (data == null) return default;
@@ -247,7 +252,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
     }
 }
 </code></pre>
-<pre><code class="lang-C#">public class CustomValueContainerSerDes&lt;T&gt; : KNetSerDes&lt;T&gt;
+<pre><code class="lang-C#">public class CustomValueContainerSerDes&lt;T&gt; : SerDesRaw&lt;T&gt;
 {
     readonly byte[] valueContainerSerDesName = Encoding.UTF8.GetBytes(typeof(CustomValueContainerSerDes&lt;&gt;).FullName!);
     readonly byte[] valueContainerName = null!;
@@ -272,12 +277,12 @@ The schema of the Apache Kafka record value follows the code definition in <code
         throw new ArgumentException($&quot;{typeof(T).Name} is not a generic type and cannot be used as a valid ValueContainer type&quot;);
     }
 
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Serialize(string, T)&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.Serialize(string, T)&quot;/&gt;
     public override byte[] Serialize(string topic, T data)
     {
         return SerializeWithHeaders(topic, null, data);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.SerializeWithHeaders(string, Headers, T)&quot;/&gt;
     public override byte[] SerializeWithHeaders(string topic, Headers headers, T data)
     {
         headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
@@ -286,12 +291,12 @@ The schema of the Apache Kafka record value follows the code definition in <code
         var jsonStr = System.Text.Json.JsonSerializer.Serialize&lt;T&gt;(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.Deserialize(string, byte[])&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.Deserialize(string, TJVM)&quot;/&gt;
     public override T Deserialize(string topic, byte[] data)
     {
         return DeserializeWithHeaders(topic, null, data);
     }
-    /// &lt;inheritdoc cref=&quot;KNetSerDes{T}.DeserializeWithHeaders(string, Headers, byte[])&quot;/&gt;
+    /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)&quot;/&gt;
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
         if (data == null) return default;
@@ -315,6 +320,11 @@ The engine comes with two different encoders</p>
 <ul>
 <li>Binary</li>
 <li>Json</li>
+</ul>
+<p>Both Key and ValueContainer SerDes, Binary or Json, come with two kind of data transfer mechanisms:</p>
+<ul>
+<li>Raw: it uses <code>byte</code> arrays for data transfer</li>
+<li>Buffered: they use <code>ByteBuffer</code> for data transfer</li>
 </ul>
 <h3 id="avro-schema">Avro schema</h3>
 <p>The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:</p>
@@ -407,9 +417,9 @@ The engine comes with two different encoders</p>
 <h3 id="how-to-use-avro">How to use Avro</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultKeySerialization</code> (defaults to <code>AvroKEFCoreSerDes.Key.Binary&lt;&gt;</code>), both types automatically manages simple or complex Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code>)</li>
-<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainer&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainer</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.JsonRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultKeySerialization</code> (defaults to <code>AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code>), both types automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.JsonRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code>)</li>
+<li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainerRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
@@ -417,9 +427,9 @@ The engine comes with two different encoders</p>
     BootstrapServers = &quot;KAFKA-SERVER:9092&quot;,
     ApplicationId = &quot;MyAppid&quot;,
     DbName = &quot;MyDBName&quot;,
-    KeySerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.Binary&lt;&gt;) : typeof(AvroKEFCoreSerDes.Key.Json&lt;&gt;),
+    KeySerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;) : typeof(AvroKEFCoreSerDes.Key.JsonRaw&lt;&gt;),
     ValueContainerType = typeof(AvroValueContainer&lt;&gt;),
-    ValueSerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary&lt;&gt;) : typeof(AvroKEFCoreSerDes.ValueContainer.Json&lt;&gt;),
+    ValueSerializationType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;) : typeof(AvroKEFCoreSerDes.ValueContainer.JsonRaw&lt;&gt;),
 })
 {
 	// execute stuff here
@@ -427,6 +437,11 @@ The engine comes with two different encoders</p>
 </code></pre>
 <h2 id="protobuf-serialization"><strong>Protobuf</strong> serialization</h2>
 <p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf/">MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</a> an user can choose the Protobuf serializer.</p>
+<p>Both Key and ValueContainer SerDes come with two kind of data transfer mechanisms:</p>
+<ul>
+<li>Raw: it uses <code>byte</code> arrays for data transfer</li>
+<li>Buffered: they use <code>ByteBuffer</code> for data transfer</li>
+</ul>
 <h3 id="protobuf-schema">Protobuf schema</h3>
 <p>The following schema is the default used from the engine and can be registered in Apache Schema registry so other applications can use it to extract the data stored in the topics:</p>
 <ul>
@@ -553,9 +568,9 @@ message ValueContainer {
 <h3 id="how-to-use-protobuf">How to use Protobuf</h3>
 <p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
-<li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes..Key.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultKeySerialization</code>, the type automatically manages simple or complex Primary Key</li>
-<li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.Binary&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
-<li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainer&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainer</code></li>
+<li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultKeySerialization</code>, the type automatically manages simple or complex Primary Key</li>
+<li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
+<li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainerRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
