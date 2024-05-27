@@ -62,8 +62,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private Action<EntityTypeChanged>? _onChangeEvent = null;
     private DbContextOptionsExtensionInfo? _info;
 
-    static readonly Java.Lang.ClassLoader _loader = Java.Lang.ClassLoader.SystemClassLoader;
-    internal static Java.Lang.ClassLoader SystemClassLoader => _loader;
     /// <summary>
     /// Initializer
     /// </summary>
@@ -360,15 +358,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
 
         builder.ApplicationId = ApplicationId;
         builder.BootstrapServers = BootstrapServers;
+
         string baSerdesName = Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.Serdes.ByteArraySerde>();
         string bbSerdesName = Class.ClassNameOf<MASES.KNet.Serialization.Serdes.ByteBufferSerde>();
 
-        builder.DefaultKeySerdeClass = this.JVMKeyType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
-                                                                                     : Class.ForName(bbSerdesName, true, SystemClassLoader);
-        builder.DefaultValueSerdeClass = this.JVMValueContainerType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, SystemClassLoader)
-                                                                                                  : Class.ForName(bbSerdesName, true, SystemClassLoader);
-        builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, SystemClassLoader)
-                                                              : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, SystemClassLoader);
+        builder.DefaultKeySerdeClass = this.JVMKeyType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
+                                                                                     : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
+        builder.DefaultValueSerdeClass = this.JVMValueContainerType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
+                                                                                                  : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
+        builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader)
+                                                              : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
 
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         //{
@@ -419,12 +418,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         {
             props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG);
         }
-        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, Class.SystemClassLoader));
         if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG))
         {
             props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG);
         }
-        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, SystemClassLoader));
+        props.Put(Org.Apache.Kafka.Streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Class.ForName("org.apache.kafka.common.serialization.Serdes$ByteArraySerde", true, Class.SystemClassLoader));
         if (props.ContainsKey(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
         {
             props.Remove(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
