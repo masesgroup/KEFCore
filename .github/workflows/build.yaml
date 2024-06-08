@@ -127,20 +127,20 @@ jobs:
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
  
-      - name: Executing KEFCore.Benchmark.Test on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet ./bin/${{ matrix.framework }}/KEFCore.Benchmark.Test.dll ./bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
+        run: dotnet ./bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ./bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
         
-      - name: Executing KEFCore.Benchmark.Test on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         if: ${{ matrix.os == 'windows-latest' && matrix.framework != 'net462' }}
-        run: dotnet .\bin\${{ matrix.framework }}\KEFCore.Benchmark.Test.dll .\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
+        run: dotnet .\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll .\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
           
-      - name: Executing KEFCore.Benchmark.Test on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         if: ${{ matrix.os == 'windows-latest' && matrix.framework == 'net462' }}
-        run: .\bin\${{ matrix.framework }}\KEFCore.Benchmark.Test.exe .\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
+        run: .\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.exe .\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
