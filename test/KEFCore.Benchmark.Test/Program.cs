@@ -191,34 +191,38 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             }
             finally
             {
-                testWatcher.Stop();
-                globalWatcher.Stop();
-                context?.Dispose();
-                ProgramConfig.ReportString(string.Empty);
-                ProgramConfig.ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
-
-                TimeSpan[] max = new TimeSpan[maxTests];
-                for (int i = 0; i < max.Length; i++) { max[i] = TimeSpan.Zero; }
-                TimeSpan[] min = new TimeSpan[maxTests];
-                for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
-                TimeSpan[] total = new TimeSpan[maxTests];
-                for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
-                for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
+                try
                 {
-                    var item = _tests[i].QueryTimes;
+                    testWatcher.Stop();
+                    globalWatcher.Stop();
+                    context?.Dispose();
+                    ProgramConfig.ReportString(string.Empty);
+                    ProgramConfig.ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
+
+                    TimeSpan[] max = new TimeSpan[maxTests];
+                    for (int i = 0; i < max.Length; i++) { max[i] = TimeSpan.Zero; }
+                    TimeSpan[] min = new TimeSpan[maxTests];
+                    for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
+                    TimeSpan[] total = new TimeSpan[maxTests];
+                    for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
+                    for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
+                    {
+                        var item = _tests[i].QueryTimes;
+
+                        for (int testId = 0; testId < maxTests; testId++)
+                        {
+                            max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
+                            min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
+                            total[testId] += item[testId];
+                        }
+                    }
 
                     for (int testId = 0; testId < maxTests; testId++)
                     {
-                        max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
-                        min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
-                        total[testId] += item[testId];
+                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
                     }
                 }
-
-                for (int testId = 0; testId < maxTests; testId++)
-                {
-                    ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
-                }
+                catch { ProgramConfig.ReportString($"Failed to report test execution"); }
             }
         }
     }

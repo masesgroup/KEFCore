@@ -109,6 +109,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
             }
             else Config = new();
+
+            if (args.Length > 1)
+            {
+                Config.BootstrapServers = args[1];
+            }
+
             ReportString(JsonSerializer.Serialize<ProgramConfig>(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
