@@ -88,7 +88,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knettest:master # to be changed with official version when willbe available
+        image: ghcr.io/masesgroup/knet:master # to be changed with official version when willbe available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -136,7 +136,7 @@ jobs:
           java-version: ${{ matrix.jdk_version }}
  
       - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        if: matrix.os == 'ubuntu-latest'
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
         run: dotnet ./bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ./bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
