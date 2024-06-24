@@ -162,15 +162,18 @@ jobs:
         with: # running setup-java again overwrites the settings.xml
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
-          
+
+      - name: Authenticate to GitHub
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
+        
       - name: Download latest published version of KNetCLI
-        run: dotnet tool update -g MASES.KNetCLI --add-source https://nuget.pkg.github.com/masesgroup/index.json
+        run: dotnet tool update -g MASES.KNetCLI
 
       - name: Start ZooKeeper and Apache Kafka
         shell: bash
         run: |
-          knet zookeeperstart -Log4JConfiguration .github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/zookeeper.properties &
-          knet kafkastart -Log4JConfiguration .github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/server.properties &
+          knet zookeeperstart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/zookeeper.properties &
+          knet kafkastart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/server.properties &
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
           
