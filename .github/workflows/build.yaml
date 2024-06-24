@@ -169,22 +169,31 @@ jobs:
       - name: Download latest published version of KNetCLI
         run: dotnet tool update -g MASES.KNetCLI
 
-      - name: Start ZooKeeper and Apache Kafka
-        shell: bash
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        shell: pwsh
         run: |
-          knet zookeeperstart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/zookeeper.properties &
-          knet kafkastart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/server.properties &
+          Start-Process -FilePath knet -ArgumentList ( 'zookeeperstart', '${{ github.workspace }}/.github/wotkflows/log4j.properties', '${{ github.workspace }}/.github/wotkflows/zookeeper.properties' )
+          Start-Process -FilePath knet -ArgumentList ( 'kafkastart', '${{ github.workspace }}/.github/wotkflows/log4j.properties', '${{ github.workspace }}/.github/wotkflows/server.properties' )
+          dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+
+      #- name: Start ZooKeeper and Apache Kafka
+      #  shell: pwsh
+      #  run: |
+      #    knet zookeeperstart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/zookeeper.properties &
+      #    knet kafkastart -Log4JConfiguration ${{ github.workspace }}/.github/wotkflows/log4j.properties ${{ github.workspace }}/.github/wotkflows/server.properties &
+      #  env:
+      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
           
-      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
-        env:
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
-        
-      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
-        env:
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+      #- name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      #  if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
+      #  run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
+      #  env:
+      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+      #  
+      #- name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      #  if: ${{ matrix.os == 'windows-latest' }}
+      #  run: dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
+      #  env:
+      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
