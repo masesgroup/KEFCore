@@ -83,12 +83,12 @@ jobs:
           path: ./bin/
           key: KEFCore_bin_${{ github.sha }}
           
-  execute_tests:
+  execute_tests_linux:
     needs: build_windows
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:master # to be changed with official version when willbe available
+        image: ghcr.io/masesgroup/knet:latest # to be changed with official version when willbe available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -101,13 +101,45 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ 'ubuntu-latest' ] #, 'macos-latest', 'macos-13' , 'windows-latest' ]
+        framework: [ 'net6.0', 'net8.0' ]
+        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
+        jdk_version: [ '11', '17', '21' ] # only LTS versions
+        exclude:
+          - jdk_vendor: oracle
+            jdk_version: 11
+        
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Restore KEFCore bin from cache
+        uses: actions/cache/restore@v4
+        with:
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+          path: ./bin/
+          key: KEFCore_bin_${{ github.sha }}
+ 
+      - name: Set up JDK distribution
+        uses: actions/setup-java@v4
+        with: # running setup-java again overwrites the settings.xml
+          distribution: ${{ matrix.jdk_vendor }}
+          java-version: ${{ matrix.jdk_version }}
+ 
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
+        run: dotnet ./bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ./bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
+        env:
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+          
+  execute_tests:
+    needs: build_windows
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ 'macos-latest', 'macos-13' , 'windows-latest' ]
         framework: [ 'net462', 'net6.0', 'net8.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '11', '17', '21' ] # only LTS versions
         exclude:
-          - os: ubuntu-latest
-            framework: net462
           - os: macos-latest
             framework: net462
           - os: macos-latest
@@ -134,9 +166,20 @@ jobs:
         with: # running setup-java again overwrites the settings.xml
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
- 
+          
+      - name: Download latest published version of KNetCLI
+        run: dotnet tool update -g MASES.KNetCLI
+
+      - name: Start ZooKeeper and Apache Kafka
+        shell: bash
+        run: |
+          knet zookeeperstart .github/wotkflows/zookeeper.properties &
+          knet kafkastart .github/wotkflows/server.properties &
+        env:
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+          
       - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
+        if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
         run: dotnet ./bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ./bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
