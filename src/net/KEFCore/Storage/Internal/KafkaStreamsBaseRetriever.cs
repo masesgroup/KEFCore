@@ -351,14 +351,14 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 {
                     _moveNextSw.Start();
 #endif
-            if (_keyValueIterator != null && _keyValueIterator.HasNext)
+            if (_keyValueIterator != null && _keyValueIterator.HasNext())
             {
 #if DEBUG_PERFORMANCE
                 _cycles++;
                 _valueGetSw.Start();
 #endif
                 V? data;
-                using (KeyValue<K, V> kv = _keyValueIterator.Next)
+                using (KeyValue<K, V> kv = _keyValueIterator.Next())
                 {
                     data = kv.value != null ? (V)(object)kv.value! : default;
                 }
