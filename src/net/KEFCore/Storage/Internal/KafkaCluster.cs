@@ -28,6 +28,7 @@ using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
+using MASES.JCOBridge.C2JBridge;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -227,7 +228,14 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (TopicExistsException ex)
         {
-            if (ex.Message.Contains("deletion"))
+            string message;
+            if (ex.BridgeInstance == null && ex is JVMBridgeException ex2)
+            {
+                message = ex2.Message;
+            }
+            else message = ex.Message;
+
+            if (message.Contains("deletion"))
             {
                 Thread.Sleep(1000); // wait a while to complete topic deletion and try again
                 return CreateTable(entityType, cycle++);

@@ -205,7 +205,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
                     TimeSpan[] total = new TimeSpan[maxTests];
                     for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
+                    for (int i = 0; i < _tests.Count; i++)
                     {
                         var item = _tests[i].QueryTimes;
 
