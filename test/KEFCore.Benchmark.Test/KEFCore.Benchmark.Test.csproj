@@ -14,10 +14,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Benchmark.KNetStreams.Buffered.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Benchmark.Protobuf.KNetStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Benchmark.KNetStreams.json">
+	  <None Update="Benchmark.KNetStreams.Raw.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Benchmark.Avro.KNetStreams.json">
