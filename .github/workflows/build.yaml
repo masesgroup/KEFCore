@@ -76,6 +76,11 @@ jobs:
       - name: Compile tests
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\KEFCore.Test.sln
 
+      - name: Prepare configuration files
+        run: |
+          Copy-Item .github\workflows\zookeeper.properties -Destination bin\zookeeper.properties -Force
+          Copy-Item .github\workflows\server.properties -Destination bin\server.properties -Force
+
       - name: Save KEFCore bin in cache
         uses: actions/cache/save@v4
         with:
@@ -172,9 +177,15 @@ jobs:
       - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         shell: pwsh
         run: |
-          Start-Process -FilePath knet -ArgumentList ( 'zookeeperstart', '${{ github.workspace }}/.github/wotkflows/zookeeper.properties' )
-          Start-Process -FilePath knet -ArgumentList ( 'kafkastart', '${{ github.workspace }}/.github/wotkflows/server.properties' )
+          Start-Process -FilePath knet -ArgumentList ( 'zookeeperstart', '${{ github.workspace }}/bin/zookeeper.properties' )
+          Start-Process -FilePath knet -ArgumentList ( 'kafkastart', '${{ github.workspace }}/bin/server.properties' )
           dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
+        env:
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+
+      - name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        shell: pwsh
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
