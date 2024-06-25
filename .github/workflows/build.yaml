@@ -100,7 +100,7 @@ jobs:
         ports:
           - 9092:9092
         env:
-          KNET_RUNNING_MODE: server
+          KNET_DOCKER_RUNNING_MODE: server
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
           
     strategy:
@@ -178,7 +178,6 @@ jobs:
         run: |
           Start-Process -FilePath knet -ArgumentList ( 'zookeeperstart', '${{ github.workspace }}/bin/zookeeper.properties' )
           Start-Process -FilePath knet -ArgumentList ( 'kafkastart', '${{ github.workspace }}/bin/server.properties' )
-          dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
