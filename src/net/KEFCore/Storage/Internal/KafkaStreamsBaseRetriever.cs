@@ -308,7 +308,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #endif
         }
 
-        ValueBuffer? _current = null;
+        ValueBuffer _current = ValueBuffer.Empty;
 
         public ValueBuffer Current
         {
@@ -319,7 +319,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                     {
                         _currentSw.Start();
 #endif
-                return _current ?? default;
+                return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -380,7 +380,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
                 return true;
             }
-            _current = null;
+            _current = ValueBuffer.Empty;
             return false;
 #if DEBUG_PERFORMANCE
                 }

@@ -82,7 +82,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 _enumerator = _kafkaCompactedReplicator?.GetEnumerator();
             }
 
-            ValueBuffer? _current = null;
+            ValueBuffer _current = ValueBuffer.Empty;
 
             public ValueBuffer Current
             {
@@ -93,7 +93,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         _currentSw.Start();
 #endif
-                    return _current ?? default;
+                    return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -139,7 +139,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     _current = new ValueBuffer(array);
                     return true;
                 }
-                _current = null;
+                _current = ValueBuffer.Empty;
                 return false;
 #if DEBUG_PERFORMANCE
                 }

@@ -344,7 +344,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
         }
 
-        ValueBuffer? _current = null;
+        ValueBuffer _current = ValueBuffer.Empty;
 
         public ValueBuffer Current
         {
@@ -355,7 +355,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     {
                         _currentSw.Start();
 #endif
-                return _current ?? default;
+                return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -421,7 +421,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
                 return true;
             }
-            _current = null;
+            _current = ValueBuffer.Empty;
             return false;
 #if DEBUG_PERFORMANCE
                 }
@@ -471,7 +471,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
                 return ValueTask.FromResult(true);
             }
-            _current = null;
+            _current = ValueBuffer.Empty;
             return ValueTask.FromResult(false);
 #if DEBUG_PERFORMANCE
                 }
