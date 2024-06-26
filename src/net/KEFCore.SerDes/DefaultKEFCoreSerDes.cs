@@ -143,7 +143,7 @@ public static class DefaultKEFCoreSerDes
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
-                if (data == null) return default!;
+                if (data == null || data.Length == 0) return default!;
                 return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }
@@ -315,7 +315,7 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
-                if (data == null) return default!;
+                if (data == null || data.Length == 0) return default!;
                 return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
             }
         }

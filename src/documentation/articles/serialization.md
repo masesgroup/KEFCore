@@ -176,7 +176,7 @@ public class CustomKeySerDes<T> : SerDesRaw<T>
     /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
-        if (data == null) return default;
+        if (data == null || data.Length == 0) return default;
         return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
     }
 }
@@ -230,7 +230,7 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
     /// <inheritdoc cref="SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
-        if (data == null) return default;
+        if (data == null || data.Length == 0) return default;
         return System.Text.Json.JsonSerializer.Deserialize<T>(data)!;
     }
 }
