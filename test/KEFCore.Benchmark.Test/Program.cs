@@ -188,6 +188,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             catch (Exception ex)
             {
                 ProgramConfig.ReportString(ex.ToString());
+                Environment.ExitCode = 1;
             }
             finally
             {
