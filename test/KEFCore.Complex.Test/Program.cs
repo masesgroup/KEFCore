@@ -183,7 +183,8 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                ProgramConfig.ReportString(ex.ToString());
+                Environment.ExitCode = 1;
             }
             finally
             {
