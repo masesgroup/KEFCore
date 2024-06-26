@@ -142,7 +142,7 @@ public static class ProtobufKEFCoreSerDes
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
-                if (data == null) return default!;
+                if (data == null || data.Length == 0) return default!;
 
                 KeyContainer container = KeyContainer.Parser.ParseFrom(data);
 
@@ -315,7 +315,7 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
-                if (data == null) return default!;
+                if (data == null || data.Length == 0) return default!;
                 var container = Storage.ValueContainer.Parser.ParseFrom(data);
                 return (Activator.CreateInstance(typeof(TData), container) as TData)!;
             }

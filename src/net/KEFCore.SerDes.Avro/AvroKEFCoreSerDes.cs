@@ -152,6 +152,7 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+                    if (data == null || data.Length == 0) return default!;
 
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
@@ -329,6 +330,7 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+                    if (data == null || data.Length == 0) return default!;
 
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, memStream);
@@ -508,6 +510,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
                 {
+                    if (data == null || data.Length == 0) return default!;
+
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
                     TData t = (TData)Activator.CreateInstance(typeof(TData))!;
@@ -681,6 +685,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
                 {
+                    if (data == null || data.Length == 0) return default!;
+
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroValueContainer._SCHEMA, memStream);
                     TData t = (TData)Activator.CreateInstance(typeof(TData))!;
