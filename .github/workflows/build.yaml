@@ -90,14 +90,14 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: ./bin/net6.0/
-          key: KEFCore_net6.0_bin_${{ github.sha }}
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net6.0_bin_${{ github.sha }}
  
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v4
         with:
           enableCrossOsArchive: true
           path: ./bin/net8.0/
-          key: KEFCore_net8.0_bin_${{ github.sha }}
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net8.0_bin_${{ github.sha }}
  
   execute_tests_linux:
     needs: build_windows
@@ -132,7 +132,7 @@ jobs:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
           path: ./bin/${{ matrix.framework }}/
-          key: KEFCore_${{ matrix.framework }}_bin_${{ github.sha }}
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_${{ matrix.framework }}_bin_${{ github.sha }}
  
       - name: Set up JDK distribution
         uses: actions/setup-java@v4
@@ -180,7 +180,7 @@ jobs:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
           path: ./bin/${{ matrix.framework }}/
-          key: KEFCore_${{ matrix.framework }}_bin_${{ github.sha }}
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_${{ matrix.framework }}_bin_${{ github.sha }}
  
       - name: Set up JDK distribution
         uses: actions/setup-java@v4
@@ -257,7 +257,7 @@ jobs:
         run: |
           gh extension install actions/gh-actions-cache
           echo "Fetching list of cache key"
-          cacheKeysForPR=$(gh actions-cache list --key KEFCore )
+          cacheKeysForPR=$(gh actions-cache list --key KEFCore_${{ github.run_number }}_${{ github.run_attempt }} )
           ## Setting this to not fail the workflow while deleting cache keys.
           set +e
           echo "Deleting caches..."
