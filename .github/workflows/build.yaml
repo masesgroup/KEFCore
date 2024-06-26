@@ -80,8 +80,10 @@ jobs:
         run: |
           Copy-Item .github\workflows\zookeeper.properties -Destination bin\net6.0\zookeeper.properties -Force
           Copy-Item .github\workflows\server.properties -Destination bin\net6.0\server.properties -Force
+          Copy-Item .github\workflows\log4j.properties -Destination bin\net6.0\log4j.properties -Force
           Copy-Item .github\workflows\zookeeper.properties -Destination bin\net8.0\zookeeper.properties -Force
           Copy-Item .github\workflows\server.properties -Destination bin\net8.0\server.properties -Force
+          Copy-Item .github\workflows\log4j.properties -Destination bin\net8.0\log4j.properties -Force
 
       - name: Save KEFCore net6.0 bin in cache
         uses: actions/cache/save@v4
@@ -193,50 +195,53 @@ jobs:
         run: dotnet tool update -g MASES.KNetCLI
 
       - name: Start Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        if: ${{ matrix.os != 'windows-latest' }}
         shell: pwsh
         run: |
-          Start-Process -FilePath knet -ArgumentList ( 'zookeeperstart', '${{ github.workspace }}/bin/${{ matrix.framework }}/zookeeper.properties' )
-          Start-Process -FilePath knet -ArgumentList ( 'kafkastart', '${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties' )
+          New-Item -Path "${{ github.workspace }}/" -Name "logfiles" -ItemType Directory
+          Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_zookeeper_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j.properties', '${{ github.workspace }}/bin/${{ matrix.framework }}/zookeeper.properties' )
+          Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_kafka_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j.properties', '${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties' )
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
       - name: Executing KNetReplicator Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
       - name: Executing KNetStreams Raw Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        shell: pwsh
+        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
           
       - name: Executing KNetStreams Buffered Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        shell: pwsh
+        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
-      #- name: Start ZooKeeper and Apache Kafka
-      #  shell: pwsh
-      #  run: |
-      #    knet zookeeperstart ${{ github.workspace }}/.github/wotkflows/zookeeper.properties &
-      #    knet kafkastart ${{ github.workspace }}/.github/wotkflows/server.properties &
-      #  env:
-      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
-          
-      #- name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-      #  if: ${{ matrix.os == 'macos-latest' || matrix.os == 'macos-13' }}
-      #  run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.json localhost:9092
-      #  env:
-      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
-      #  
-      #- name: Executing MASES.EntityFrameworkCore.KNet.Test.Benchmark on Windows with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-      #  if: ${{ matrix.os == 'windows-latest' }}
-      #  run: dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.json localhost:9092
-      #  env:
-      #    JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
-      
+      - name: Start Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: cmd
+        run: |
+          New-Item -Path "${{ github.workspace }}/" -Name "logfiles" -ItemType Directory
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json localhost:9092
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json localhost:9092
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json localhost:9092
+        env:
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: KEFCore_Server_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
   final_cleanup:
     needs: [ execute_tests_linux, execute_tests_other ]
     if: "always()"
@@ -252,7 +257,7 @@ jobs:
         run: |
           gh extension install actions/gh-actions-cache
           echo "Fetching list of cache key"
-          cacheKeysForPR=$(gh actions-cache list --key KEFCore_ )
+          cacheKeysForPR=$(gh actions-cache list --key KEFCore )
           ## Setting this to not fail the workflow while deleting cache keys.
           set +e
           echo "Deleting caches..."
