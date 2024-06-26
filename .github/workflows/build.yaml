@@ -245,6 +245,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Clear caches
-        run: gh actions-cache delete KEFCore_bin_${{ github.sha }}
+        run: gh actions-cache delete KEFCore_bin_${{ github.sha }} --confirm
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
