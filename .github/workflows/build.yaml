@@ -200,7 +200,7 @@ jobs:
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
 
-      - name: Executing KNetReplicator Benchmark on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Executing KNetReplicator Benchmark on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json localhost:9092
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ONLINE }}
