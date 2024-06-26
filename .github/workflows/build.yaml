@@ -81,13 +81,20 @@ jobs:
           Copy-Item .github\workflows\zookeeper.properties -Destination bin\zookeeper.properties -Force
           Copy-Item .github\workflows\server.properties -Destination bin\server.properties -Force
 
-      - name: Save KEFCore bin in cache
+      - name: Save KEFCore net6.0 bin in cache
         uses: actions/cache/save@v4
         with:
           enableCrossOsArchive: true
-          path: ./bin/
-          key: KEFCore_bin_${{ github.sha }}
-          
+          path: ./bin/net6.0/
+          key: KEFCore_net6.0_bin_${{ github.sha }}
+ 
+      - name: Save KEFCore net8.0 bin in cache
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: ./bin/net8.0/
+          key: KEFCore_net8.0_bin_${{ github.sha }}
+ 
   execute_tests_linux:
     needs: build_windows
     services:
@@ -115,13 +122,13 @@ jobs:
         
     runs-on: 'ubuntu-latest'
     steps:
-      - name: Restore KEFCore bin from cache
+      - name: Restore KEFCore ${{ matrix.framework }} bin from cache
         uses: actions/cache/restore@v4
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-          path: ./bin/
-          key: KEFCore_bin_${{ github.sha }}
+          path: ./bin/${{ matrix.framework }}/
+          key: KEFCore_${{ matrix.framework }}_bin_${{ github.sha }}
  
       - name: Set up JDK distribution
         uses: actions/setup-java@v4
@@ -163,13 +170,13 @@ jobs:
         
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Restore KEFCore bin from cache
+      - name: Restore KEFCore ${{ matrix.framework }} bin from cache
         uses: actions/cache/restore@v4
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
-          path: ./bin/
-          key: KEFCore_bin_${{ github.sha }}
+          path: ./bin/${{ matrix.framework }}/
+          key: KEFCore_${{ matrix.framework }}_bin_${{ github.sha }}
  
       - name: Set up JDK distribution
         uses: actions/setup-java@v4
@@ -245,6 +252,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Clear caches
-        run: gh actions-cache delete KEFCore_bin_${{ github.sha }} --confirm
+        run: |
+          gh actions-cache delete KEFCore_net6.0_bin_${{ github.sha }} --confirm
+          gh actions-cache delete KEFCore_net8.0_bin_${{ github.sha }} --confirm
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
