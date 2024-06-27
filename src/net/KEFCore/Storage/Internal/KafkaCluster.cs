@@ -228,14 +228,7 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (TopicExistsException ex)
         {
-            string message;
-            if (ex.BridgeInstance == null && ex is JVMBridgeException ex2)
-            {
-                message = ex2.Message;
-            }
-            else message = ex.Message;
-
-            if (message.Contains("deletion"))
+            if (ex.Message.Contains("deletion"))
             {
                 Thread.Sleep(1000); // wait a while to complete topic deletion and try again
                 return CreateTable(entityType, cycle++);
