@@ -247,7 +247,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
     /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)&quot;/&gt;
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
-        if (data == null) return default;
+        if (data == null || data.Length == 0) return default;
         return System.Text.Json.JsonSerializer.Deserialize&lt;T&gt;(data)!;
     }
 }
@@ -299,7 +299,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
     /// &lt;inheritdoc cref=&quot;SerDes{T, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)&quot;/&gt;
     public override T DeserializeWithHeaders(string topic, Headers headers, byte[] data)
     {
-        if (data == null) return default;
+        if (data == null || data.Length == 0) return default;
         return System.Text.Json.JsonSerializer.Deserialize&lt;T&gt;(data)!;
     }
 }
