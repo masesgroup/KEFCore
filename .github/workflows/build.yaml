@@ -68,6 +68,10 @@ jobs:
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
+      - name: List NuGet packages to avoid download of artifact
+        shell: cmd
+        run: dir .\bin\*nupkg
+
       - uses: actions/upload-artifact@v4
         with:
           name: KEFCore
