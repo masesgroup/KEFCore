@@ -123,22 +123,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                         Stopwatch watch = new();
                         watch.Restart();
-                        var post = context.Posts.Single(b => b.BlogId == 2);
+                        var post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
                         _tests[execution].QueryTimes[0] = watch.Elapsed;
-                        ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
+                        ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
-                        post = context.Posts.Single(b => b.BlogId == 2);
+                        post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
                         _tests[execution].QueryTimes[1] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}");
+                        ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
-                        post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
+                        post = context.Posts.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
                         watch.Stop();
                         _tests[execution].QueryTimes[2] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}");
+                        ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         var all = context.Posts.All((o) => true);
@@ -148,17 +148,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                         Blog blog = null;
                         watch.Restart();
-                        blog = context.Blogs.Single(b => b.BlogId == 1);
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == 1);
                         watch.Stop();
                         _tests[execution].QueryTimes[4] = watch.Elapsed;
 
-                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
                         watch.Restart();
-                        blog = context.Blogs.Single(b => b.BlogId == 1);
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == 1);
 
                         watch.Stop();
                         _tests[execution].QueryTimes[5] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}");
+                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
                         var selector = (from op in context.Blogs

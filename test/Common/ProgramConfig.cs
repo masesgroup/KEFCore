@@ -120,15 +120,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
         }
 
-        public static void ReportString(string message)
+        public static void ReportString(string message, bool noDataReturned = false)
         {
+            var msg = $"{DateTime.Now:HH::mm::ss:ffff} - {(noDataReturned ? "No data returned for " : " ")}{message}";
+
             if (Debugger.IsAttached)
             {
-                Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+                if (noDataReturned) Trace.TraceError(msg);
+                else Trace.WriteLine(msg);
             }
             else
             {
-                Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
+                if (noDataReturned) Console.Error.WriteLine(msg);
+                else Console.WriteLine(msg);
             }
         }
     }
