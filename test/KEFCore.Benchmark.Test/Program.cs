@@ -22,6 +22,7 @@
  *  SOFTWARE.
  */
 
+using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Model;
@@ -183,6 +184,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         _tests[execution].QueryTimes[8] = singleTestWatch.Elapsed;
                         ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
                     }
+                }
+            }
+            catch (ExecutionException ee)
+            {
+                if (ee.InnerException is Org.Apache.Kafka.Common.Errors.TimeoutException)
+                {
+                    ProgramConfig.ReportString(ee.ToString(), true);
+                }
+                else
+                {
+                    ProgramConfig.ReportString(ee.ToString());
+                    Environment.ExitCode = 1;
                 }
             }
             catch (Exception ex)
