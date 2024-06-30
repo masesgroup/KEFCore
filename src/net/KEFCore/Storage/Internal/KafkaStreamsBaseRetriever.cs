@@ -90,7 +90,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         _builder ??= builder;
         _topicName = _entityType.TopicName(kafkaCluster.Options);
         _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
-        _properties ??= _kafkaCluster.Options.StreamsOptions(_kafkaCluster.Options.ApplicationId);
+        _properties ??= _kafkaCluster.Options.StreamsOptions(_entityType);
 
         string storageId = _entityType.StorageIdForTable(_kafkaCluster.Options);
         _storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
