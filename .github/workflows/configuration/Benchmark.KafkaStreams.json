@@ -1,7 +1,7 @@
 {
   "DatabaseName": "TestDBBenchmark",
   "UseCompactedReplicator": false,
+  "UseKNetStreams": false,
   "BootstrapServers": "localhost:9092",
-  "NumberOfExecutions": 10,
-  "UseEnumeratorWithPrefetch": false
+  "NumberOfExecutions": 10
 }
