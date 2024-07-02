@@ -291,7 +291,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All, _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -306,7 +306,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting async KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All, _useEnumeratorWithPrefetch, true);
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
         }
 #endif
     }
@@ -382,7 +382,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-            return _asyncEnumerator.DisposeAsync();
+            return _asyncEnumerator != null ? _asyncEnumerator.DisposeAsync() : new ValueTask();
         }
 #endif
 
@@ -396,18 +396,18 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     _moveNextSw.Start();
 #endif
-            if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext)
+            if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
             {
 #if DEBUG_PERFORMANCE
                 _cycles++;
                 _valueGetSw.Start();
 #endif
-                KeyValue<TKey, TValue, TJVMKey, TJVMValue> kv = _useEnumeratorWithPrefetch ? _enumerator.Current : _keyValueIterator.Next;
+                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
 #if DEBUG_PERFORMANCE
                 _valueGetSw.Stop();
                 _valueGet2Sw.Start();
 #endif
-                TValue value = kv.Value;
+                TValue value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                 _valueGet2Sw.Stop();
                 _valueBufferSw.Start();
