@@ -444,7 +444,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     _moveNextSw.Start();
 #endif
-            ValueTask<bool> hasNext = _asyncEnumerator.MoveNextAsync();
+            ValueTask<bool> hasNext = _asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync();
             hasNext.AsTask().Wait();
             if (hasNext.Result)
             {
@@ -452,12 +452,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _cycles++;
                 _valueGetSw.Start();
 #endif
-                KeyValue<TKey, TValue, TJVMKey, TJVMValue> kv =  _asyncEnumerator.Current;
+                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv =  _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                 _valueGetSw.Stop();
                 _valueGet2Sw.Start();
 #endif
-                TValue value = kv.Value;
+                TValue value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                 _valueGet2Sw.Stop();
                 _valueBufferSw.Start();
