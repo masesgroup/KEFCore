@@ -185,8 +185,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
             }
             catch (Exception ex)
             {
-                ProgramConfig.ReportString(ex.ToString());
-                Environment.ExitCode = 1;
+                Environment.ExitCode = ProgramConfig.ManageException(ex);
             }
             finally
             {

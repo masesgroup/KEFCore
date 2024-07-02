@@ -25,7 +25,6 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
-using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
@@ -33,6 +32,8 @@ using System.Diagnostics;
 using System;
 using System.IO;
 using System.Text.Json;
+using Java.Lang;
+using Java.Util.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
@@ -134,6 +135,35 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 if (noDataReturned) Console.Error.WriteLine(msg);
                 else Console.WriteLine(msg);
             }
+        }
+
+        public static int ManageException(System.Exception e)
+        {
+            int retCode = 0;
+            if (e is ExecutionException ee)
+            {
+                return ManageException(ee.InnerException);
+            }
+            else if (e is ClassNotFoundException cnfe)
+            {
+                ReportString($"Failed with {cnfe}, current ClassPath is {KEFCore.GlobalInstance.ClassPath}");
+                retCode = 1;
+            }
+            else if (e is NoClassDefFoundError ncdfe)
+            {
+                ReportString($"Failed with {ncdfe}, current ClassPath is {KEFCore.GlobalInstance.ClassPath}");
+                retCode = 1;
+            }
+            else if (e is Org.Apache.Kafka.Common.Errors.TimeoutException toe)
+            {
+                ReportString(toe.ToString(), true);
+            }
+            else
+            {
+                ReportString($"Failed with {e}");
+                retCode = 1;
+            }
+            return retCode;
         }
     }
 }
