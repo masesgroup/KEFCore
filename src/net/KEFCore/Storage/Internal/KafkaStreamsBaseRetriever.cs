@@ -360,7 +360,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 V? data;
                 using (KeyValue<K, V> kv = _keyValueIterator.Next())
                 {
-                    data = kv.value != null ? (V)(object)kv.value! : default;
+                    var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv.BridgeInstance);
+                    data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
                 }
 #if DEBUG_PERFORMANCE
                 _valueGetSw.Stop();
@@ -372,7 +373,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 _valueBufferSw.Start();
 #endif
                 object[] array = null!;
-                entityTypeData.GetData(_entityType, ref array);
+                entityTypeData?.GetData(_entityType, ref array);
 #if DEBUG_PERFORMANCE
                 _valueBufferSw.Stop();
 #endif
