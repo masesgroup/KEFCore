@@ -126,8 +126,8 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data);
@@ -191,8 +191,8 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
@@ -301,8 +301,8 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data, _options);
                 return Encoding.UTF8.GetBytes(jsonStr);
@@ -365,8 +365,8 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                 var ms = new MemoryStream();
                 System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);

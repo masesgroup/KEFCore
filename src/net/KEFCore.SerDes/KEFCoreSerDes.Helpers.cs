@@ -151,22 +151,22 @@ public class EntityExtractor
             foreach (var header in headers.ToArray())
             {
                 var key = header.Key();
-                if (key == KNetSerialization.KeyTypeIdentifier)
+                if (key == KNetSerialization.KeyTypeIdentifierJVM)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
                     keyType = Type.GetType(strType, true)!;
                 }
-                if (key == KNetSerialization.KeySerializerIdentifier)
+                if (key == KNetSerialization.KeySerializerIdentifierJVM)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
                     keySerializerSelectorType = Type.GetType(strType, true)!;
                 }
-                if (key == KNetSerialization.ValueTypeIdentifier)
+                if (key == KNetSerialization.ValueTypeIdentifierJVM)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
                     valueType = Type.GetType(strType, true)!;
                 }
-                if (key == KNetSerialization.ValueSerializerIdentifier)
+                if (key == KNetSerialization.ValueSerializerIdentifierJVM)
                 {
                     var strType = Encoding.UTF8.GetString(header.Value());
                     valueSerializerSelectorType = Type.GetType(strType, true)!;

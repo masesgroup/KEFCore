@@ -118,8 +118,8 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
                 KeyContainer keyContainer = null!;
@@ -185,8 +185,8 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.KeyTypeIdentifier, keyTypeName);
-                headers?.Add(KNetSerialization.KeySerializerIdentifier, keySerDesName);
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
                 KeyContainer keyContainer = null!;
@@ -298,8 +298,8 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                 using (MemoryStream stream = new())
                 {
@@ -361,8 +361,8 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
-                headers?.Add(KNetSerialization.ValueSerializerIdentifier, valueContainerSerDesName);
-                headers?.Add(KNetSerialization.ValueTypeIdentifier, valueContainerName);
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                 MemoryStream stream = new();
                 data.WriteTo(stream);
