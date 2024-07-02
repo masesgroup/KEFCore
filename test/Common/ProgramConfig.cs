@@ -119,6 +119,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             ReportString(JsonSerializer.Serialize<ProgramConfig>(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
+
+            if (!Config.UseInMemoryProvider)
+            {
+                KEFCore.CreateGlobalInstance();
+                KEFCore.PreserveInformationAcrossContexts = Config.PreserveInformationAcrossContexts;
+            }
         }
 
         public static void ReportString(string message, bool noDataReturned = false)

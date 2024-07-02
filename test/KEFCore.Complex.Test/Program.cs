@@ -37,16 +37,15 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
     {
         static void Main(string[] args)
         {
+            ProgramConfig.LoadConfig(args);
+            ExecuteTests();
+        }
+
+        static void ExecuteTests()
+        {
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
-            ProgramConfig.LoadConfig(args);
-
-            if (!ProgramConfig.Config.UseInMemoryProvider)
-            {
-                KEFCore.CreateGlobalInstance();
-            }
 
             try
             {

@@ -49,19 +49,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
         static void Main(string[] args)
         {
+            ProgramConfig.LoadConfig(args);
+            ExecuteTests();
+        }
+
+        static void ExecuteTests()
+        {
             const int maxTests = 10;
             Dictionary<int, ExecutionData> _tests = new();
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
-            ProgramConfig.LoadConfig(args);
-
-            if (!ProgramConfig.Config.UseInMemoryProvider)
-            {
-                KEFCore.CreateGlobalInstance();
-                KEFCore.PreserveInformationAcrossContexts = ProgramConfig.Config.PreserveInformationAcrossContexts;
-            }
 
             try
             {
@@ -227,6 +225,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             }
         }
     }
+
 
     public class BloggingContext : KafkaDbContext
     {

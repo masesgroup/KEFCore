@@ -40,15 +40,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void Main(string[] args)
         {
+            ProgramConfig.LoadConfig(args);
+            ExecuteTests();
+        }
+
+        static void ExecuteTests()
+        {
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
-            ProgramConfig.LoadConfig(args);
-
-            if (!ProgramConfig.Config.UseInMemoryProvider)
-            {
-                KEFCore.CreateGlobalInstance();
-            }
 
             try
             {
@@ -59,7 +58,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 };
 
                 ProgramConfig.Config.ApplyOnContext(context);
-                
+
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
                     context.Database.EnsureDeleted();
