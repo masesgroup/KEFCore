@@ -37,16 +37,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
     {
         static void Main(string[] args)
         {
+            ProgramConfig.LoadConfig(args);
+            ExecuteTests();
+        }
+
+        static void ExecuteTests()
+        {
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
-            ProgramConfig.LoadConfig(args);
-
-            if (!ProgramConfig.Config.UseInMemoryProvider)
-            {
-                KEFCore.CreateGlobalInstance();
-            }
-
             try
             {
                 globalWatcher.Start();
@@ -185,8 +183,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
             }
             catch (Exception ex)
             {
-                ProgramConfig.ReportString(ex.ToString());
-                Environment.ExitCode = 1;
+                Environment.ExitCode = ProgramConfig.ManageException(ex);
             }
             finally
             {
@@ -195,7 +192,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
         }
-
     }
 
     public class BloggingContext : KafkaDbContext
