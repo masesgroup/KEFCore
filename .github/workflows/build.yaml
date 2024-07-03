@@ -109,6 +109,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List KNetNuGet packages downloaded
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
         continue-on-error: true
         shell: cmd
         run: dir .\KNetNuGet\*nupkg
