@@ -8,7 +8,19 @@ on:
   push:
     # only trigger on branches, not on tags
     branches: '**'
-    
+  workflow_dispatch:
+    inputs:
+      UseLastRepositoryBuildJNet:
+        description: 'Use latest NuGet packages from JNet'
+        required: true
+        default: false
+        type: boolean
+      UseLastRepositoryBuildKNet:
+        description: 'Use latest NuGet packages from KNet'
+        required: true
+        default: false
+        type: boolean
+
 # This workflow contains two jobs called "check_changes", "build_windows"
 jobs:
   # Verify if a build is needed
@@ -65,6 +77,46 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
+      - name: Get last workflow run of JNet
+        if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
+        shell: bash
+        run: echo "JNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/JNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+
+      - name: Download artifact
+        if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
+        run: gh run download ${{ env.JNET_LAST_RUN }} --name JNetNuGet --repo masesgroup/JNet --dir JNetNuGet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List NuGet packages downloaded
+        continue-on-error: true
+        shell: cmd
+        run: dir .\JNetNuGet\*nupkg
+
+      - name: Add local repo
+        if: ${{ success() && inputs.UseLastRepositoryBuildJNet == true }}
+        run: dotnet nuget add source --name localJNetNuGet "${{ github.workspace }}\JNetNuGet\"
+
+      - name: Get last workflow run of KNet
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        shell: bash
+        run: echo "KNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/KNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+
+      - name: Download KNetNuGet artifact
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        run: gh run download ${{ env.KNET_LAST_RUN }} --name KNetNuGet --repo masesgroup/KNet --dir KNetNuGet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List KNetNuGet packages downloaded
+        continue-on-error: true
+        shell: cmd
+        run: dir .\KNetNuGet\*nupkg
+
+      - name: Add local repo
+        if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
+        run: dotnet nuget add source --name localKNetNuGet "${{ github.workspace }}\KNetNuGet\"
+
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
@@ -74,7 +126,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: KEFCore
+          name: KEFCoreNuGet
           path: .\bin\*nupkg
 
       - name: Compile tests
