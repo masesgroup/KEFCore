@@ -27,10 +27,11 @@ jobs:
   check_changes:
     name: Check changed files
     outputs:
-      run_build_windows: ${{ steps.check_files.outputs.run_build_windows }}
+      run_build_windows: ${{ steps.check_files.outputs.run_build_windows || steps.force_execute.outputs.run_build_windows }}
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ github.event_name != 'push' }}
+      - id: force_execute
+        if: ${{ github.event_name != 'push' }}
         run: echo "run_build_windows=true" >> $GITHUB_OUTPUT
       - id: get_changed_files
         if: ${{ github.event_name == 'push' }}
@@ -59,7 +60,7 @@ jobs:
               fi
           done
       - name: Get run_build_windows
-        run: echo "The selected run_build_windows is ${{ steps.check_files.outputs.run_build_windows }}"
+        run: echo "The selected run_build_windows is ${{ steps.check_files.outputs.run_build_windows || steps.force_execute.outputs.run_build_windows }}"
 
   # Now run "build_windows"
   build_windows:
