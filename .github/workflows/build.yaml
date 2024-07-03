@@ -30,15 +30,18 @@ jobs:
       run_build_windows: ${{ steps.check_files.outputs.run_build_windows || steps.force_execute.outputs.run_build_windows }}
     runs-on: ubuntu-latest
     steps:
-      - id: force_execute
+      - name: Force check on true
+        id: force_execute
         if: ${{ github.event_name != 'push' }}
         run: echo "run_build_windows=true" >> $GITHUB_OUTPUT
-      - id: get_changed_files
+      - name: Create modified file list
+        id: get_changed_files
         if: ${{ github.event_name == 'push' }}
         uses: masesgroup/retrieve-changed-files@v3
         with:
           format: 'csv'
-      - id: check_files
+      - name: Check modified file list
+        id: check_files
         if: ${{ github.event_name == 'push' }}
         run: |
           mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.get_changed_files.outputs.added_modified }}')
@@ -94,6 +97,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List NuGet packages downloaded
+        if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
         continue-on-error: true
         shell: cmd
         run: dir .\JNetNuGet\*nupkg
