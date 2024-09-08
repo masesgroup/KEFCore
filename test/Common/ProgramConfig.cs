@@ -34,6 +34,8 @@ using System.IO;
 using System.Text.Json;
 using Java.Lang;
 using Java.Util.Concurrent;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
@@ -104,19 +106,46 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
         public static void LoadConfig(string[] args)
         {
-            if (args.Length > 0)
+            const string FileFormat = "/f:";
+            const string PropertyFormat = "/p:";
+
+            Dictionary<PropertyInfo, string> properties = new Dictionary<PropertyInfo, string>();
+            var props = typeof(ProgramConfig).GetProperties();
+            string file = null;
+            foreach (var arg in args)
             {
-                if (!File.Exists(args[0])) { throw new FileNotFoundException($"{args[0]} is not a configuration file.", args[0]); }
-                Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(args[0]));
+                if (arg.StartsWith(FileFormat))
+                {
+                    file = arg[FileFormat.Length..];
+                    if (!File.Exists(file)) { throw new FileNotFoundException($"{file} is not a configuration file.", file); }
+                }
+                else if (arg.StartsWith(PropertyFormat))
+                {
+                    var argVal = arg[FileFormat.Length..];
+                    var values = argVal.Split('=');
+                    foreach (var prop in props)
+                    {
+                        if (prop.Name == values[0])
+                        {
+                            properties.Add(prop, values[1]);
+                        }
+                    }
+                }
+                else if (File.Exists(arg)) file = arg;
+            }
+
+            if (!string.IsNullOrWhiteSpace(file))
+            {
+                Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(file));
             }
             else Config = new();
 
-            if (args.Length > 1)
+            foreach (var property in properties)
             {
-                Config.BootstrapServers = args[1];
+                property.Key.SetValue(Config, property.Value);
             }
 
-            ReportString(JsonSerializer.Serialize<ProgramConfig>(Config, new JsonSerializerOptions() { WriteIndented = true }));
+            ReportString(JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
 
