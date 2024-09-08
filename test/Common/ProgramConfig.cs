@@ -41,9 +41,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
+        public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
-        public bool UseAvroBinary { get; set; } = false;
+        public bool UseAvroBinary { get; set; } = true;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
@@ -86,7 +87,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
 
-            if (UseProtobuf)
+            if (UseJson)
+            { // default
+            }
+            else if (UseProtobuf)
             {
                 context.KeySerDesSelectorType = typeof(ProtobufKEFCoreSerDes.Key<>);
                 context.ValueContainerType = typeof(ProtobufValueContainer<>);
