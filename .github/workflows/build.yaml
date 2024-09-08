@@ -181,6 +181,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        serialization: [ 'UseJson', 'UseProtobuf', 'UseAvro' ]
         framework: [ 'net6.0', 'net8.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '11', '17', '21' ] # only LTS versions
@@ -205,45 +206,45 @@ jobs:
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
 
-      - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json
+      - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KafkaStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json
+      - name: Execute Benchmark.KafkaStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KafkaStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json
+      - name: Execute Benchmark.KafkaStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json
+      - name: Execute Benchmark.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
           
-      - name: Execute Benchmark.KNetStreams.Raw.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json
+      - name: Execute Benchmark.KNetStreams.Raw.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json
+      - name: Execute Benchmark.KNetStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json
+      - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: KEFCore_Client_Crash_ubuntu-latest_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          name: KEFCore_Client_Crash_ubuntu-latest_${{ matrix.serialization }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/**/hs_err_*
           retention-days: 7
          
@@ -252,6 +253,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        serialization: [ 'UseJson', 'UseProtobuf', 'UseAvro' ]
         os: [ 'macos-latest', 'macos-13' , 'windows-latest' ]
         framework: [ 'net6.0', 'net8.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
@@ -297,60 +299,60 @@ jobs:
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os != 'windows-latest' }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
           New-Item -Path "${{ github.workspace }}/" -Name "logfiles" -ItemType Directory
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -360,11 +362,11 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Raw.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -374,11 +376,11 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Buffered.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -388,11 +390,11 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -402,11 +404,11 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.Prefetch.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -416,11 +418,11 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -430,21 +432,21 @@ jobs:
           Remove-Item D:\tmp\kafka-logs\* -Recurse -Force
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json /p:${{ matrix.serialization }}=true
         env:
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_17 }}
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() || cancelled() }}
         with:
-          name: KEFCore_Server_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          name: KEFCore_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: KEFCore_Client_Crash_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          name: KEFCore_Client_Crash_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/**/hs_err_*
           retention-days: 7
 
