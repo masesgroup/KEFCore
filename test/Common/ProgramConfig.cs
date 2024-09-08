@@ -109,7 +109,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             const string FileFormat = "/f:";
             const string PropertyFormat = "/p:";
 
-            Dictionary<PropertyInfo, string> properties = new Dictionary<PropertyInfo, string>();
+            Dictionary<PropertyInfo, object> properties = new Dictionary<PropertyInfo, object>();
             var props = typeof(ProgramConfig).GetProperties();
             string file = null;
             foreach (var arg in args)
@@ -127,7 +127,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                     {
                         if (prop.Name == values[0])
                         {
-                            properties.Add(prop, values[1]);
+                            properties.Add(prop, Convert.ChangeType(values[1], prop.PropertyType));
                         }
                     }
                 }
