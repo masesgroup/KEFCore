@@ -1,12 +1,12 @@
 ---
-title: Entity Framework Core provider for Apache Kafka
-_description: Main page of Entity Framework Core provider for Apache Kafka
+title: Entity Framework Core provider for Apache Kafka™
+_description: Main page of Entity Framework Core provider for Apache Kafka™
 ---
 
-# KEFCore: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/)
+# KEFCore: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/)
 
-KEFCore is the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).
-Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka](https://kafka.apache.org/) as a distributed database and more.
+KEFCore is the [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/).
+Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka™](https://kafka.apache.org/) as a distributed database and more.
 
 ### Libraries and Tools
 
@@ -24,13 +24,13 @@ Its primary scope is to support other, public or internal, MASES Group projects:
 
 The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.
 
-Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka](https://kafka.apache.org/) applications.
+Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) applications.
 
 ---
 
 ## Scope of the project
 
-This project aims to create a provider to access the information stored within an Apache Kafka cluster using the paradigm behind Entity Framework.
+This project aims to create a provider to access the information stored within an Apache Kafka™ cluster using the paradigm behind Entity Framework.
 The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider.
 
 ### Community and Contribution
@@ -67,9 +67,9 @@ KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](
   * [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine) and [CLR, or CoreCLR,](https://en.wikipedia.org/wiki/Common_Language_Runtime) runs in the same process, but are insulated from each other;
   * JCOBridge does not make any code injection into JVM;
   * JCOBridge does not use any other communication mechanism than JNI;
-  * .NET (CLR) inherently inherits the cyber-security levels of running JVM and Apache Kafka; 
+  * .NET (CLR) inherently inherits the cyber-security levels of running JVM and Apache Kafka™; 
 * **Direct access the JVM from any .NET application**: 
-  * Any Java/Scala class behind Apache Kafka can be directly managed: Consumer, Producer, Administration, Streams, Server-side, and so on;
+  * Any Java/Scala class behind Apache Kafka™ can be directly managed: Consumer, Producer, Administration, Streams, Server-side, and so on;
   * No need to learn new APIs: we try to expose the same APIs in C# style;
   * No extra validation cycle on protocol and functionality: bug fix, improvements, new features are immediately available;
   * Documentation is shared;
