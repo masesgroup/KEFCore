@@ -5,7 +5,7 @@
       <title>KafkaDbContext | MASES Group - Entity Framework Core provider for Apache Kafka </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="KafkaDbContext | MASES Group - Entity Framework Core provider for Apache Kafka ">
-      <meta name="description" content="Describe what is and how use KafkaDbContext class from Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="Describe what is and how use KafkaDbContext class from Entity Framework Core provider for Apache Kafka™">
       
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
@@ -83,30 +83,30 @@
         <article data-uid="">
 <h1 id="kefcore-kafkadbcontext">KEFCore: KafkaDbContext</h1>
 
-<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a>:</p>
+<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>:</p>
 <ul>
 <li><code>KafkaDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
 <li><code>KafkaDbContext</code> defines the following properties:
 <ul>
-<li><strong>KeySerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record key</li>
-<li><strong>ValueSerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka record value</li>
-<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka record value</li>
+<li><strong>KeySerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key</li>
+<li><strong>ValueSerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value</li>
+<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka™ record value</li>
 <li><strong>UseNameMatching</strong>: set to <strong>false</strong> to avoid Entity matching based on Name</li>
-<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka</li>
+<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka™</li>
 <li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
 <li><strong>DatabaseName</strong>: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database</li>
 <li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</li>
-<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka</li>
+<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka™</li>
 <li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
 <li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persistent storage between multiple application startup</li>
 <li><strong>UseEnumeratorWithPrefetch</strong>: set to <strong>true</strong> to prefer enumerator instances able to do a prefetch on data speeding up execution, used if <strong>UseKNetStreams</strong> is <strong>true</strong> and <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
 <li><strong>UseByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <see cref="Java.Nio.ByteBuffer"></see> data exchange in serializer instances</li>
 <li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a></li>
-<li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka Streams to manage data to or from topics</li>
-<li><strong>UseKNetStreams</strong>: Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams, used if <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
+<li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka™ Streams to manage data to or from topics</li>
+<li><strong>UseKNetStreams</strong>: Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams, used if <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
 <li><strong>ConsumerConfig</strong>: parameters to use for Producer</li>
 <li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
-<li><strong>StreamsConfig</strong>: parameters to use for Apche Kafka Streams application</li>
+<li><strong>StreamsConfig</strong>: parameters to use for Apche Kafka™ Streams application</li>
 <li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity</li>
 <li><strong>OnChangeEvent</strong>: handler to receive change events from back-end</li>
 </ul>
@@ -116,7 +116,7 @@
 <p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KafkaDbContext</code> automatically manages <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
 <ul>
 <li><code>KafkaDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
-<li><code>KafkaDbContext</code> setup the options needed to use an Apache Kafka cluster:
+<li><code>KafkaDbContext</code> setup the options needed to use an Apache Kafka™ cluster:
 <ul>
 <li>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KafkaDbContext</code></li>
 <li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property of <code>KafkaDbContext</code></li>
@@ -126,18 +126,18 @@
 </li>
 </ul>
 <h3 id="default-consumerconfig">Default <strong>ConsumerConfig</strong></h3>
-<p>Over the <a href="https://kafka.apache.org/documentation/#consumerconfigs">Apache Kafka defaults</a> it applies:</p>
+<p>Over the <a href="https://kafka.apache.org/documentation/#consumerconfigs">Apache Kafka™ defaults</a> it applies:</p>
 <ul>
 <li>EnableAutoCommit is <strong>true</strong></li>
 <li>AutoOffsetReset set to <strong>EARLIEST</strong></li>
 <li>AllowAutoCreateTopics set to <strong>false</strong></li>
 </ul>
 <h3 id="default-producerconfig">Default <strong>ProducerConfig</strong></h3>
-<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#producerconfigs">Apache Kafka defaults</a></p>
+<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#producerconfigs">Apache Kafka™ defaults</a></p>
 <h3 id="default-streamsconfig">Default <strong>StreamsConfig</strong></h3>
-<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#streamsconfigs">Apache Kafka defaults</a></p>
+<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#streamsconfigs">Apache Kafka™ defaults</a></p>
 <h3 id="default-topicconfig">Default <strong>TopicConfig</strong></h3>
-<p>Over the <a href="https://kafka.apache.org/documentation/#topicconfigs">Apache Kafka defaults</a> it applies:</p>
+<p>Over the <a href="https://kafka.apache.org/documentation/#topicconfigs">Apache Kafka™ defaults</a> it applies:</p>
 <ul>
 <li>DeleteRetentionMs set to 100 ms</li>
 <li>MinCleanableDirtyRatio set to 0.01</li>
