@@ -47,7 +47,7 @@ public static class ProtobufKEFCoreSerDes
     /// <summary>
     /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
     /// </summary>
-    public class Key<T> : ISerDesSelector<T> where T : class, IMessage<T>
+    public class Key<T> : ISerDesSelector<T>
     {
         /// <summary>
         /// Returns a new instance of <see cref="Key{T}"/>
