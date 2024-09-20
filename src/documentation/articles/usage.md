@@ -1,6 +1,6 @@
 ---
 title: Usage of KEFCore
-_description: Describes how to use Entity Framework Core provider for Apache Kafka
+_description: Describes how to use Entity Framework Core provider for Apache Kafka™
 ---
 
 # KEFCore usage
@@ -9,7 +9,7 @@ Read [Getting started](gettingstarted.md) to find out info and tips.
 
 ## Basic example
 
-The following code demonstrates basic usage of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/).. 
+The following code demonstrates basic usage of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/).. 
 For a full tutorial configuring the `KafkaDbContext`, defining the model, and creating the database, see [KafkaDbContext](kafkadbcontext.md) in the docs.
 
 ```cs
@@ -71,4 +71,4 @@ public class Post
 
 ## Possible usages
 
-For possible usages of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), and this feature, see [use cases](usecases.md)
+For possible usages of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), and this feature, see [use cases](usecases.md)

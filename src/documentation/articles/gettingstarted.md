@@ -1,13 +1,13 @@
 ---
 title: Getting started with KEFCore
-_description: Describes how to start to use Entity Framework Core provider for Apache Kafka
+_description: Describes how to start to use Entity Framework Core provider for Apache Kafka™
 ---
 
 # KEFCore: Getting started
 
-To use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) you must have at least:
+To use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) you must have at least:
 - an installed JRE/JDK (11+)
-- an accessible Apache Kafka broker (a full cluster or a local Dockerized version)
+- an accessible Apache Kafka™ broker (a full cluster or a local Dockerized version)
 
 > IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.
 
@@ -19,7 +19,7 @@ To use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provi
 dotnet new console
 ```
 
-- Entity Framework Core provider for Apache Kafka is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet). Execute the following command to add the package to the newly created project:
+- Entity Framework Core provider for Apache Kafka™ is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet). Execute the following command to add the package to the newly created project:
 
 ```pwsh
 dotnet add package MASES.EntityFrameworkCore.KNet

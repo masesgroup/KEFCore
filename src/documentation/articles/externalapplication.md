@@ -1,19 +1,19 @@
 ---
 title: External applications of KEFCore
-_description: Describes how to use data managed by Entity Framework Core provider for Apache Kafka from external applications
+_description: Describes how to use data managed by Entity Framework Core provider for Apache Kafka™ from external applications
 ---
 
 # KEFCore: external application
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
-Continuing from the concepts introduced in [serialization](serialization.md), an external application can use the data stored in the topics in a way it decides: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) gives some helpers to get back the CLR Entity objects stored in the topics.
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
+Continuing from the concepts introduced in [serialization](serialization.md), an external application can use the data stored in the topics in a way it decides: [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) gives some helpers to get back the CLR Entity objects stored in the topics.
 
 > IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.
 
 ## Basic concepts
 
 An external application may want to be informed about data changes in the topics and want to analyze the Entity was previously managed from the EFCore application.
-Within the core packages there is the `EntityExtractor` class which contains, till now, few methods and one accepts a raw `ConsumerRecord<byte[], byte[]>` from Apache Kafka.
+Within the core packages there is the `EntityExtractor` class which contains, till now, few methods and one accepts a raw `ConsumerRecord<byte[], byte[]>` from Apache Kafka™.
 The method reads the info stored in the `ConsumerRecord<byte[], byte[]>` and returns the Entity object with the filled properties.
 
 It is possible to build a new application which subscribe to a topic created from the EFCore application.
@@ -45,4 +45,4 @@ To work properly it needs, to be loaded in memory, at least:
 
 ## Possible usages
 
-For possible usages of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), and this feature, see [use cases](usecases.md)
+For possible usages of [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), and this feature, see [use cases](usecases.md)

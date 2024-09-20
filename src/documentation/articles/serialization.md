@@ -1,26 +1,26 @@
 ---
 title: Serialization in KEFCore
-_description: Describes how works the serialization in Entity Framework Core provider for Apache Kafka
+_description: Describes how works the serialization in Entity Framework Core provider for Apache Kafka™
 ---
 
 # KEFCore: serialization
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
 Each backend has its own schema to convert entities into something else; database providers converts entities into database schema or blob in Cosmos.
 
 > IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.
 
 ## Basic concepts
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) shall convert the entities into record will be stored in the topics of Apache Kafka cluster.
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities into record will be stored in the topics of Apache Kafka™ cluster.
 The way the entities are converted shall follows a schema.
 The current schema follows a JSON pattern and reports the information of each entity as:
 - Primary Key:
-  - Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka default serializer for that type
+  - Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka™ default serializer for that type
   - Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using a JSON serializer
 
-- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/), as an array of objects associated to properties of the Entity. 
-  The schema of the Apache Kafka record value follows the code definition in `DefaultValueContainer<T>`. Below two examples:
+- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), as an array of objects associated to properties of the Entity. 
+  The schema of the Apache Kafka™ record value follows the code definition in `DefaultValueContainer<T>`. Below two examples:
   ```json
   {
     "EntityName": "MASES.EntityFrameworkCore.KNet.Test.Blog",
@@ -78,14 +78,14 @@ The equivalent JSON schema is not available till now.
 
 ## Code and user override
 
-The code is based on three elements shall be available to [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) in order to work:
+The code is based on three elements shall be available to [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) in order to work:
 - **ValueContainer type**: a type which encapsulate the Entity and stores needed information
 - **Key SerDes**: the serializer of the Primary Key
 - **ValueContainer SerDes**: the serializer of the ValueContainer
 
 ### Default types
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) comes with some default values:
+[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) comes with some default values:
 - **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainer`) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
 - **Key SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.Key.JsonRaw<T>` (i.e. `DefaultKEFCoreSerDes.DefaultKeySerialization`), the type automatically manages simple or complex Primary Key
 - **ValueContainer SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.ValueContainer.JsonRaw<>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainerSerialization`)
@@ -144,7 +144,7 @@ A custom **Key SerDes** class shall follow the following rules:
 - must implements the `ISerDes<T>` interface or extend `SerDes<T>`
 - must be a generic type
 - must have a parameterless constructor
-- can store serialization information using Headers of Apache Kafka record (this information will be used from `EntityExtractor`)
+- can store serialization information using Headers of Apache Kafka™ record (this information will be used from `EntityExtractor`)
 
 An example snippet is the follow based on JSON serializer:
 
@@ -243,7 +243,7 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
 - **ValueSerializationType**: set the value of the **ValueContainer SerDes** type in the form `CustomSerDes<>`
 - **ValueContainerType**: set the value of the **ValueContainer** type in the form `CustomValueContainer<>`
 
-> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka](https://kafka.apache.org/) will apply the right generic type when needed.
+> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
 
 ## **Avro** serialization
 
