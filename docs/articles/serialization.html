@@ -5,7 +5,7 @@
       <title>Serialization in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Serialization in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka ">
-      <meta name="description" content="Describes how works the serialization in Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="Describes how works the serialization in Entity Framework Core provider for Apache Kafka™">
       
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
@@ -83,24 +83,24 @@
         <article data-uid="">
 <h1 id="kefcore-serialization">KEFCore: serialization</h1>
 
-<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities used within the model in something viable from the backend.
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> shall convert the entities used within the model in something viable from the backend.
 Each backend has its own schema to convert entities into something else; database providers converts entities into database schema or blob in Cosmos.</p>
 <blockquote>
 <p>IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.</p>
 </blockquote>
 <h2 id="basic-concepts">Basic concepts</h2>
-<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> shall convert the entities into record will be stored in the topics of Apache Kafka cluster.
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> shall convert the entities into record will be stored in the topics of Apache Kafka™ cluster.
 The way the entities are converted shall follows a schema.
 The current schema follows a JSON pattern and reports the information of each entity as:</p>
 <ul>
 <li><p>Primary Key:</p>
 <ul>
-<li>Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka default serializer for that type</li>
+<li>Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka™ default serializer for that type</li>
 <li>Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using a JSON serializer</li>
 </ul>
 </li>
-<li><p>Entity data: the Entity is managed, from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a>, as an array of objects associated to properties of the Entity.
-The schema of the Apache Kafka record value follows the code definition in <code>DefaultValueContainer&lt;T&gt;</code>. Below two examples:</p>
+<li><p>Entity data: the Entity is managed, from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, as an array of objects associated to properties of the Entity.
+The schema of the Apache Kafka™ record value follows the code definition in <code>DefaultValueContainer&lt;T&gt;</code>. Below two examples:</p>
 <pre><code class="lang-json">{
   &quot;EntityName&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Blog&quot;,
   &quot;ClrType&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Blog&quot;,
@@ -154,14 +154,14 @@ The schema of the Apache Kafka record value follows the code definition in <code
 </ul>
 <p>The equivalent JSON schema is not available till now.</p>
 <h2 id="code-and-user-override">Code and user override</h2>
-<p>The code is based on three elements shall be available to <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> in order to work:</p>
+<p>The code is based on three elements shall be available to <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> in order to work:</p>
 <ul>
 <li><strong>ValueContainer type</strong>: a type which encapsulate the Entity and stores needed information</li>
 <li><strong>Key SerDes</strong>: the serializer of the Primary Key</li>
 <li><strong>ValueContainer SerDes</strong>: the serializer of the ValueContainer</li>
 </ul>
 <h3 id="default-types">Default types</h3>
-<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> comes with some default values:</p>
+<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> comes with some default values:</p>
 <ul>
 <li><strong>ValueContainer</strong> class: KEFCore uses <code>DefaultValueContainer&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultValueContainer</code>) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the <strong>ValueContainer SerDes</strong>;</li>
 <li><strong>Key SerDes</strong> class: KEFCore uses <code>DefaultKEFCoreSerDes.Key.JsonRaw&lt;T&gt;</code> (i.e. <code>DefaultKEFCoreSerDes.DefaultKeySerialization</code>), the type automatically manages simple or complex Primary Key</li>
@@ -217,7 +217,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <li>must implements the <code>ISerDes&lt;T&gt;</code> interface or extend <code>SerDes&lt;T&gt;</code></li>
 <li>must be a generic type</li>
 <li>must have a parameterless constructor</li>
-<li>can store serialization information using Headers of Apache Kafka record (this information will be used from <code>EntityExtractor</code>)</li>
+<li>can store serialization information using Headers of Apache Kafka™ record (this information will be used from <code>EntityExtractor</code>)</li>
 </ul>
 <p>An example snippet is the follow based on JSON serializer:</p>
 <pre><code class="lang-C#">public class CustomKeySerDes&lt;T&gt; : SerDesRaw&lt;T&gt;
@@ -312,7 +312,7 @@ The schema of the Apache Kafka record value follows the code definition in <code
 <li><strong>ValueContainerType</strong>: set the value of the <strong>ValueContainer</strong> type in the form <code>CustomValueContainer&lt;&gt;</code></li>
 </ul>
 <blockquote>
-<p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KafkaDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka</a> will apply the right generic type when needed.</p>
+<p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KafkaDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> will apply the right generic type when needed.</p>
 </blockquote>
 <h2 id="avro-serialization"><strong>Avro</strong> serialization</h2>
 <p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a> an user can choose two different Avro serializers:
