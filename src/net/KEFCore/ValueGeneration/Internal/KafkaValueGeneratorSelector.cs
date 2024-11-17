@@ -25,19 +25,14 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaValueGeneratorSelector : ValueGeneratorSelector
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaValueGeneratorSelector(
+    ValueGeneratorSelectorDependencies dependencies,
+    IKafkaDatabase kafkaDatabase) : ValueGeneratorSelector(dependencies)
 {
-    private readonly IKafkaCluster _kafkaCluster;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaValueGeneratorSelector(
-        ValueGeneratorSelectorDependencies dependencies,
-        IKafkaDatabase kafkaDatabase)
-        : base(dependencies)
-    {
-        _kafkaCluster = kafkaDatabase.Cluster;
-    }
+    private readonly IKafkaCluster _kafkaCluster = kafkaDatabase.Cluster;
 #if NET9_0
     /// <inheritdoc/>
     public override bool TryCreate(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)

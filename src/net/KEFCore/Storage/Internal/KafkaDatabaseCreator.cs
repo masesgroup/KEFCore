@@ -23,17 +23,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaDatabaseCreator : IDatabaseCreator
+/// <remarks>
+/// Default initializer
+/// </remarks>
+/// <param name="database"></param>
+public class KafkaDatabaseCreator(IDatabase database) : IDatabaseCreator
 {
-    private readonly IDatabase _database;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    /// <param name="database"></param>
-    public KafkaDatabaseCreator(IDatabase database)
-    {
-        _database = database;
-    }
+    private readonly IDatabase _database = database;
+
     /// <summary>
     /// The <see cref="IKafkaDatabase"/>
     /// </summary>

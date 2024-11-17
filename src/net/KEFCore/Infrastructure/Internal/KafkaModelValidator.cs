@@ -23,15 +23,11 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaModelValidator : ModelValidator
+/// <remarks>
+/// Initializer
+/// </remarks>
+public class KafkaModelValidator(ModelValidatorDependencies dependencies) : ModelValidator(dependencies)
 {
-    /// <summary>
-    /// Initializer
-    /// </summary>
-    public KafkaModelValidator(ModelValidatorDependencies dependencies)
-        : base(dependencies)
-    {
-    }
     /// <inheritdoc/>
     public override void Validate(IModel model, IDiagnosticsLogger<DbLoggerCategory.Model.Validation> logger)
     {
