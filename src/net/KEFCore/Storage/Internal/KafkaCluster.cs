@@ -80,18 +80,24 @@ public class KafkaCluster : IKafkaCluster
     {
         lock (_lock)
         {
-#if !NET8_0
-            var entityType = property.DeclaringEntityType;
-
-            return EnsureTable(entityType).GetIntegerValueGenerator<TProperty>(
-                property,
-                entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
-#else
+#if NET9_0
             var entityType = property.DeclaringType;
 
             return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
                 property,
                 entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
+#elif NET8_0
+            var entityType = property.DeclaringType;
+
+            return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
+                property,
+                entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
+#else
+            var entityType = property.DeclaringEntityType;
+
+            return EnsureTable(entityType).GetIntegerValueGenerator<TProperty>(
+                property,
+                entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
 #endif
         }
     }
