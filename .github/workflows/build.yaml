@@ -152,6 +152,7 @@ jobs:
         run: |
           Copy-Item .github\workflows\configuration\* -Destination bin\net6.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net8.0\ -Force
+          Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
 
       - name: Save KEFCore net6.0 bin in cache
         uses: actions/cache/save@v4
@@ -166,6 +167,13 @@ jobs:
           enableCrossOsArchive: true
           path: ./bin/net8.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net8.0_bin_${{ github.sha }}
+          
+      - name: Save KEFCore net9.0 bin in cache
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: ./bin/net9.0/
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net9.0_bin_${{ github.sha }}
  
   execute_tests_linux:
     needs: build_windows
@@ -186,7 +194,7 @@ jobs:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        framework: [ 'net6.0', 'net8.0' ]
+        framework: [ 'net6.0', 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '11', '17', '21' ] # only LTS versions
         exclude:
@@ -308,7 +316,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         os: [ 'macos-latest', 'macos-13' , 'windows-latest' ]
-        framework: [ 'net6.0', 'net8.0' ]
+        framework: [ 'net6.0', 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '11', '17', '21' ] # only LTS versions
         exclude:
