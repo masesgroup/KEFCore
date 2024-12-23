@@ -123,14 +123,6 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return base.VisitMethodCall(methodCallExpression);
     }
-#if NET6_0
-    /// <inheritdoc/>
-    [Obsolete]
-    protected override ShapedQueryExpression CreateShapedQueryExpression(Type elementType)
-    {
-        throw new NotImplementedException();
-    }
-#endif
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -146,11 +138,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return new ShapedQueryExpression(
             queryExpression,
-#if NET8_0_OR_GREATER
             new StructuralTypeShaperExpression(
-#else
-            new EntityShaperExpression(
-#endif
                 entityType,
                 new ProjectionBindingExpression(
                     queryExpression,
@@ -495,10 +483,10 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 }
 
                 return memberInitExpression.Update(updatedNewExpression, newBindings);
-#if NET8_0_OR_GREATER
+
             case StructuralTypeShaperExpression { ValueBufferExpression: ProjectionBindingExpression } shaper:
                 return shaper;
-#endif
+
             default:
                 var translation = TranslateExpression(expression);
                 if (translation == null)
@@ -796,14 +784,8 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     /// </summary>
     protected override ShapedQueryExpression? TranslateOfType(ShapedQueryExpression source, Type resultType)
     {
-#if NET8_0_OR_GREATER
         if (source.ShaperExpression is StructuralTypeShaperExpression { StructuralType: IEntityType entityType } shaper)
         {
-#else
-        if (source.ShaperExpression is EntityShaperExpression shaper)
-        {
-            var entityType = shaper.EntityType;
-#endif
             if (entityType.ClrType == resultType)
             {
                 return source;
@@ -823,11 +805,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             var baseType = entityType.GetAllBaseTypes().SingleOrDefault(et => et.ClrType == resultType);
             if (baseType != null)
             {
-#if NET8_0_OR_GREATER
                 return source.UpdateShaperExpression(shaper.WithType(baseType));
-#else
-                return source.UpdateShaperExpression(shaper.WithEntityType(baseType));
-#endif
             }
 
             var derivedType = entityType.GetDerivedTypes().Single(et => et.ClrType == resultType);
@@ -844,11 +822,8 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 {
                     { projectionMember, entityProjectionExpression.UpdateEntityType(derivedType) }
                 });
-#if NET8_0_OR_GREATER
+
             return source.UpdateShaperExpression(shaper.WithType(derivedType));
-#else
-            return source.UpdateShaperExpression(shaper.WithEntityType(derivedType));
-#endif
         }
 
         return null;
@@ -1201,11 +1176,6 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
     private sealed class SharedTypeEntityExpandingExpressionVisitor : ExpressionVisitor
     {
-#if NET6_0
-        private static readonly MethodInfo ObjectEqualsMethodInfo
-            = typeof(object).GetRuntimeMethod(nameof(object.Equals), new[] { typeof(object), typeof(object) })!;
-#endif
-
         private readonly KafkaExpressionTranslatingExpressionVisitor _expressionTranslator;
 
         private KafkaQueryExpression _queryExpression;
@@ -1248,35 +1218,26 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         }
 
         protected override Expression VisitExtension(Expression extensionExpression)
-#if NET8_0_OR_GREATER
             => extensionExpression is StructuralTypeShaperExpression or ShapedQueryExpression or GroupByShaperExpression
-#else
-            => extensionExpression is EntityShaperExpression || extensionExpression is ShapedQueryExpression
-#endif
                 ? extensionExpression
                 : base.VisitExtension(extensionExpression);
 
         private Expression? TryExpand(Expression? source, MemberIdentity member)
         {
             source = source.UnwrapTypeConversion(out var convertedType);
-#if NET8_0_OR_GREATER
+
             if (source is not StructuralTypeShaperExpression shaper)
-#else
-            if (source is not EntityShaperExpression shaper)
-#endif
             {
                 return null;
             }
-#if NET8_0_OR_GREATER
+
             if (shaper.StructuralType is not IEntityType)
             {
                 return null;
             }
 
             var entityType = (IEntityType)shaper.StructuralType;
-#else
-            var entityType = shaper.EntityType;
-#endif
+
             if (convertedType != null)
             {
                 entityType = entityType.GetRootType().GetDerivedTypesInclusive()
@@ -1398,12 +1359,6 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
             return innerShaper;
         }
-#if NET6_0
-        private static Expression AddConvertToObject(Expression expression)
-            => expression.Type.IsValueType
-                ? Expression.Convert(expression, typeof(object))
-                : expression;
-#endif
     }
 
     private ShapedQueryExpression TranslateTwoParameterSelector(ShapedQueryExpression source, LambdaExpression resultSelector)
@@ -1526,13 +1481,8 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     {
         switch (shaper1)
         {
-#if NET8_0_OR_GREATER
             case StructuralTypeShaperExpression entityShaperExpression1
                 when shaper2 is StructuralTypeShaperExpression entityShaperExpression2:
-#else
-            case EntityShaperExpression entityShaperExpression1
-                when shaper2 is EntityShaperExpression entityShaperExpression2:
-#endif
                 return entityShaperExpression1.IsNullable != entityShaperExpression2.IsNullable
                     ? entityShaperExpression1.MakeNullable(makeNullable)
                     : entityShaperExpression1;

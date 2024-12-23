@@ -203,11 +203,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 {
                     var projection = translatedSubquery.ShaperExpression;
                     if (projection is NewExpression
-#if NET8_0_OR_GREATER
                         || RemoveConvert(projection) is StructuralTypeShaperExpression { IsNullable: false }
-#else
-                        || RemoveConvert(projection) is EntityShaperExpression { IsNullable: false }
-#endif
                         || RemoveConvert(projection) is CollectionResultShaperExpression)
                     {
                         var anySubquery = Expression.Call(
@@ -510,13 +506,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
             case StructuralTypeReferenceExpression:
                 return extensionExpression;
-#if NET8_0_OR_GREATER
             case StructuralTypeShaperExpression shaper:
                 return new StructuralTypeReferenceExpression(shaper);
-#else
-            case EntityShaperExpression entityShaperExpression:
-                return new StructuralTypeReferenceExpression(entityShaperExpression);
-#endif
             case ProjectionBindingExpression projectionBindingExpression:
                 return ((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
                     .GetProjection(projectionBindingExpression);
@@ -708,15 +699,10 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 convertedType = unaryExpression.Type;
                 innerExpression = unaryExpression.Operand;
             }
-#if NET8_0_OR_GREATER
+
             if (innerExpression is StructuralTypeShaperExpression shaper
                 && (convertedType == null
                     || convertedType.IsAssignableFrom(shaper.Type)))
-#else
-            if (innerExpression is EntityShaperExpression entityShaperExpression
-                && (convertedType == null
-                    || convertedType.IsAssignableFrom(entityShaperExpression.Type)))
-#endif
             {
                 return new StructuralTypeReferenceExpression(subqueryTranslation.UpdateShaperExpression(innerExpression));
             }
@@ -1188,13 +1174,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
         if (typeReference.Subquery != null)
         {
-#if NET8_0_OR_GREATER
             var entityShaper = (StructuralTypeShaperExpression)typeReference.Subquery.ShaperExpression;
-#else
-            var entityShaper = (EntityShaperExpression)typeReference.Subquery.ShaperExpression;
-#endif
             var kafkaQueryExpression = (KafkaQueryExpression)typeReference.Subquery.QueryExpression;
-
             var projectionBindingExpression = (ProjectionBindingExpression)entityShaper.ValueBufferExpression;
             var entityProjectionExpression = (EntityProjectionExpression)kafkaQueryExpression.GetProjection(
                 projectionBindingExpression);
@@ -1714,7 +1695,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return base.Visit(expression);
         }
     }
-#if NET8_0_OR_GREATER
+
     private sealed class StructuralTypeReferenceExpression : Expression
     {
         public StructuralTypeReferenceExpression(StructuralTypeShaperExpression parameter)
@@ -1760,52 +1741,4 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                     : QueryCompilationContext.NotTranslatedExpression;
         }
     }
-#else
-    private sealed class StructuralTypeReferenceExpression : Expression
-    {
-        public StructuralTypeReferenceExpression(EntityShaperExpression parameter)
-        {
-            Parameter = parameter;
-            StructuralType = parameter.EntityType;
-        }
-
-        public StructuralTypeReferenceExpression(ShapedQueryExpression subquery)
-        {
-            Subquery = subquery;
-            StructuralType = ((EntityShaperExpression)subquery.ShaperExpression).EntityType;
-        }
-
-        private StructuralTypeReferenceExpression(StructuralTypeReferenceExpression entityReferenceExpression, IEntityType entityType)
-        {
-            Parameter = entityReferenceExpression.Parameter;
-            Subquery = entityReferenceExpression.Subquery;
-            StructuralType = entityType;
-        }
-
-        public new EntityShaperExpression? Parameter { get; }
-        public ShapedQueryExpression? Subquery { get; }
-        public IEntityType StructuralType { get; }
-
-        public override Type Type
-            => StructuralType.ClrType;
-
-        public override ExpressionType NodeType
-            => ExpressionType.Extension;
-
-        public Expression Convert(Type type)
-        {
-            if (type == typeof(object) // Ignore object conversion
-                || type.IsAssignableFrom(Type)) // Ignore casting to base type/interface
-            {
-                return this;
-            }
-
-            var derivedEntityType = StructuralType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type);
-
-            return derivedEntityType == null
-                ? QueryCompilationContext.NotTranslatedExpression
-                : new StructuralTypeReferenceExpression(this, derivedEntityType);
-        }
-    }
-#endif
 }

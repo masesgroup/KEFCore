@@ -16,7 +16,6 @@
 		<ProjectReference Include="..\..\src\net\KEFCore\KEFCore.csproj" />
 		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj" />
 		<ProjectReference Include="..\..\src\net\KEFCore.SerDes.Protobuf\KEFCore.SerDes.Protobuf.csproj" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.36" Condition="'$(TargetFramework)' == 'net6.0'"/>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" Condition="'$(TargetFramework)' == 'net8.0'"/>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" Condition="'$(TargetFramework)' == 'net9.0'"/>
 	</ItemGroup>

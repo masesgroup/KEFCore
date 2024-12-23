@@ -32,11 +32,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class EntityProjectionExpression : Expression, IPrintableExpression
 {
     private readonly IReadOnlyDictionary<IProperty, MethodCallExpression> _readExpressionMap;
-#if NET8_0_OR_GREATER
     private readonly Dictionary<INavigation, StructuralTypeShaperExpression> _navigationExpressionsCache = new();
-#else
-    private readonly Dictionary<INavigation, EntityShaperExpression> _navigationExpressionsCache = new();
-#endif
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -96,13 +92,8 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
         var readExpressionMap = new Dictionary<IProperty, MethodCallExpression>();
         foreach (var (property, methodCallExpression) in _readExpressionMap)
         {
-#if NET8_0_OR_GREATER
             if (derivedType.IsAssignableFrom(property.DeclaringType)
                 || property.DeclaringType.IsAssignableFrom(derivedType))
-#else
-            if (derivedType.IsAssignableFrom(property.DeclaringEntityType)
-                || property.DeclaringEntityType.IsAssignableFrom(derivedType))
-#endif
             {
                 readExpressionMap[property] = methodCallExpression;
             }
@@ -143,11 +134,7 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-#if NET8_0_OR_GREATER
     public virtual void AddNavigationBinding(INavigation navigation, StructuralTypeShaperExpression shaper)
-#else
-    public virtual void AddNavigationBinding(INavigation navigation, EntityShaperExpression shaper)
-#endif
     {
         if (!EntityType.IsAssignableFrom(navigation.DeclaringEntityType)
             && !navigation.DeclaringEntityType.IsAssignableFrom(EntityType))
@@ -165,11 +152,7 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-#if NET8_0_OR_GREATER
     public virtual StructuralTypeShaperExpression? BindNavigation(INavigation navigation)
-#else
-    public virtual EntityShaperExpression? BindNavigation(INavigation navigation)
-#endif
     {
         if (!EntityType.IsAssignableFrom(navigation.DeclaringEntityType)
             && !navigation.DeclaringEntityType.IsAssignableFrom(EntityType))
@@ -195,17 +178,10 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
         var entityProjectionExpression = new EntityProjectionExpression(EntityType, readExpressionMap);
         foreach (var (navigation, entityShaperExpression) in _navigationExpressionsCache)
         {
-#if NET8_0_OR_GREATER
             entityProjectionExpression._navigationExpressionsCache[navigation] = new StructuralTypeShaperExpression(
                 entityShaperExpression.StructuralType,
                 ((EntityProjectionExpression)entityShaperExpression.ValueBufferExpression).Clone(),
                 entityShaperExpression.IsNullable);
-#else
-            entityProjectionExpression._navigationExpressionsCache[navigation] = new EntityShaperExpression(
-                entityShaperExpression.EntityType,
-                ((EntityProjectionExpression)entityShaperExpression.ValueBufferExpression).Clone(),
-                entityShaperExpression.IsNullable);
-#endif
         }
 
         return entityProjectionExpression;
