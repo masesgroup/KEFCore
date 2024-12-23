@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator" class="text-break">
-Class KafkaModelValidator  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class KafkaModelValidator  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -134,13 +134,13 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatepropertymapping">ModelValidator.ValidatePropertyMapping(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.throwpropertynotmappedexception">ModelValidator.ThrowPropertyNotMappedException(string, IConventionTypeBase, IConventionProperty)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.isowned">ModelValidator.IsOwned(Type, IConventionModel)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validateignoredmembers">ModelValidator.ValidateIgnoredMembers(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatenoshadowentities">ModelValidator.ValidateNoShadowEntities(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatenoshadowkeys">ModelValidator.ValidateNoShadowKeys(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
@@ -158,13 +158,10 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validateclrinheritance">ModelValidator.ValidateClrInheritance(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatediscriminatorvalues#microsoft-entityframeworkcore-infrastructure-modelvalidator-validatediscriminatorvalues(microsoft-entityframeworkcore-metadata-imodel-microsoft-entityframeworkcore-diagnostics-idiagnosticslogger((microsoft-entityframeworkcore-dbloggercategory-model-validation)))">ModelValidator.ValidateDiscriminatorValues(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
-    </div>
-    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validateinheritancemapping">ModelValidator.ValidateInheritanceMapping(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatediscriminatorvalues#microsoft-entityframeworkcore-infrastructure-modelvalidator-validatediscriminatorvalues(microsoft-entityframeworkcore-metadata-ientitytype)">ModelValidator.ValidateDiscriminatorValues(IEntityType)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatediscriminatorvalues">ModelValidator.ValidateDiscriminatorValues(IEntityType)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatechangetrackingstrategy">ModelValidator.ValidateChangeTrackingStrategy(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
@@ -176,7 +173,7 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validateforeignkeys">ModelValidator.ValidateForeignKeys(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatedefiningnavigations">ModelValidator.ValidateDefiningNavigations(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.isredundant">ModelValidator.IsRedundant(IForeignKey)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatefieldmapping">ModelValidator.ValidateFieldMapping(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
@@ -185,10 +182,16 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatetypemappings">ModelValidator.ValidateTypeMappings(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validateprimitivecollections">ModelValidator.ValidatePrimitiveCollections(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatequeryfilters">ModelValidator.ValidateQueryFilters(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatedata">ModelValidator.ValidateData(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.validatetriggers">ModelValidator.ValidateTriggers(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.modelvalidator.logshadowproperties">ModelValidator.LogShadowProperties(IModel, IDiagnosticsLogger&lt;DbLoggerCategory.Model.Validation&gt;)</a>
@@ -222,6 +225,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h2 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Initializer</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -232,10 +238,13 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator__ctor_Microsoft_EntityFrameworkCore_Infrastructure_ModelValidatorDependencies_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator.#ctor(Microsoft.EntityFrameworkCore.Infrastructure.ModelValidatorDependencies)">
   KafkaModelValidator(ModelValidatorDependencies)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Initializer</p>
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -256,6 +265,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator__ctor_Microsoft_EntityFrameworkCore_Infrastructure_ModelValidatorDependencies__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Initializer</p>
+</div>
 
 
 
@@ -268,7 +280,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator_Validate_Microsoft_EntityFrameworkCore_Metadata_IModel_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Model_Validation__" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator.Validate(Microsoft.EntityFrameworkCore.Metadata.IModel,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Model.Validation})">
   Validate(IModel, IDiagnosticsLogger&lt;Validation&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Validates a model, throwing an exception if any errors are found.</p>
@@ -304,7 +316,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KafkaModelValidator_ValidateDefiningQuery_Microsoft_EntityFrameworkCore_Metadata_IModel_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Model_Validation__" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator.ValidateDefiningQuery(Microsoft.EntityFrameworkCore.Metadata.IModel,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Model.Validation})">
   ValidateDefiningQuery(IModel, IDiagnosticsLogger&lt;Validation&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Validates the configuration of defining queries in the model.</p>
@@ -340,7 +352,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KafkaModelValidator.cs/#L29" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource" class="text-break">
-Class KafkaTypeMappingSource  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class KafkaTypeMappingSource  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -129,19 +129,28 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt>Inherited Members</dt>
     <dd>
     <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findcollectionmapping">TypeMappingSource.FindCollectionMapping(TypeMappingInfo, Type, Type, CoreTypeMapping)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(microsoft-entityframeworkcore-metadata-iproperty)">TypeMappingSource.FindMapping(IProperty)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(microsoft-entityframeworkcore-metadata-ielementtype)">TypeMappingSource.FindMapping(IElementType)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(system-type)">TypeMappingSource.FindMapping(Type)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(system-type-microsoft-entityframeworkcore-metadata-imodel)">TypeMappingSource.FindMapping(Type, IModel)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(system-type-microsoft-entityframeworkcore-metadata-imodel-microsoft-entityframeworkcore-storage-coretypemapping)">TypeMappingSource.FindMapping(Type, IModel, CoreTypeMapping)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsource.findmapping#microsoft-entityframeworkcore-storage-typemappingsource-findmapping(system-reflection-memberinfo)">TypeMappingSource.FindMapping(MemberInfo)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsourcebase.validatemapping">TypeMappingSourceBase.ValidateMapping(CoreTypeMapping, IProperty)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsourcebase.tryfindjsoncollectionmapping">TypeMappingSourceBase.TryFindJsonCollectionMapping(TypeMappingInfo, Type, Type, ref CoreTypeMapping, out ValueComparer, out JsonValueReaderWriter)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.typemappingsourcebase.dependencies">TypeMappingSourceBase.Dependencies</a>
@@ -172,6 +181,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h2 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Default initializer</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -182,10 +194,13 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource__ctor_Microsoft_EntityFrameworkCore_Storage_TypeMappingSourceDependencies_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource.#ctor(Microsoft.EntityFrameworkCore.Storage.TypeMappingSourceDependencies)">
   KafkaTypeMappingSource(TypeMappingSourceDependencies)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Default initializer</p>
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -206,6 +221,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource__ctor_Microsoft_EntityFrameworkCore_Storage_TypeMappingSourceDependencies__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default initializer</p>
+</div>
 
 
 
@@ -218,17 +236,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource_FindMapping_Microsoft_EntityFrameworkCore_Storage_TypeMappingInfo__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource.FindMapping(Microsoft.EntityFrameworkCore.Storage.TypeMappingInfo@)">
   FindMapping(in TypeMappingInfo)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>
-                Overridden by database providers to find a type mapping for the given info.
-            </p>
-<p>
-                The mapping info is populated with as much information about the required type mapping as
-                is available. Use all the information necessary to create the best mapping. Return <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
-                if no mapping is available.
-            </p>
+  <div class="markdown level1 summary"><p>Overridden by database providers to find a type mapping for the given info.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -256,6 +267,11 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMappingSource_FindMapping_Microsoft_EntityFrameworkCore_Storage_TypeMappingInfo___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The mapping info is populated with as much information about the required type mapping as
+is available. Use all the information necessary to create the best mapping. Return <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+if no mapping is available.</p>
+</div>
 
 
 
@@ -264,7 +280,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMappingSource.cs/#L29" class="edit-link">Edit this page</a>
         </div>
 
 
