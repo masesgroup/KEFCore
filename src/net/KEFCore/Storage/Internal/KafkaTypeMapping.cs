@@ -15,9 +15,10 @@
 *
 *  Refer to LICENSE for more information.
 */
-#if NET8_0
+#if NET8_0 || NET9_0
 using Microsoft.EntityFrameworkCore.Storage.Json;
 #endif
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -47,16 +48,25 @@ public class KafkaTypeMapping : CoreTypeMapping
         : base(parameters)
     {
     }
-#if !NET8_0
+#if NET9_0
     /// <inheritdoc/>
-    public override CoreTypeMapping Clone(ValueConverter? converter)
-        => new KafkaTypeMapping(Parameters.WithComposedConverter(converter));
-#else
+    protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
+    {
+        return new KafkaTypeMapping(parameters);
+    }
+    /// <inheritdoc/>
+    public override CoreTypeMapping WithComposedConverter(ValueConverter? converter, ValueComparer? comparer = null, ValueComparer? keyComparer = null, CoreTypeMapping? elementMapping = null, JsonValueReaderWriter? jsonValueReaderWriter = null)
+        => new KafkaTypeMapping(Parameters.WithComposedConverter(converter, comparer, keyComparer, elementMapping, jsonValueReaderWriter));
+#elif NET8_0
     /// <inheritdoc/>
     protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
         => new KafkaTypeMapping(parameters);
     /// <inheritdoc/>
     public override CoreTypeMapping WithComposedConverter(ValueConverter? converter, ValueComparer? comparer = null, ValueComparer? keyComparer = null, CoreTypeMapping? elementMapping = null, JsonValueReaderWriter? jsonValueReaderWriter = null)
         => new KafkaTypeMapping(Parameters.WithComposedConverter(converter, comparer, keyComparer, elementMapping, jsonValueReaderWriter));
+#else
+    /// <inheritdoc/>
+    public override CoreTypeMapping Clone(ValueConverter? converter)
+        => new KafkaTypeMapping(Parameters.WithComposedConverter(converter));
 #endif
 }

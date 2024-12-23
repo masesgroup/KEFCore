@@ -182,11 +182,7 @@ public partial class KafkaQueryExpression
     private sealed class EntityShaperNullableMarkingExpressionVisitor : ExpressionVisitor
     {
         protected override Expression VisitExtension(Expression extensionExpression)
-#if NET8_0_OR_GREATER
             => extensionExpression is StructuralTypeShaperExpression shaper
-#else
-            => extensionExpression is EntityShaperExpression shaper
-#endif
                 ? shaper.MakeNullable()
                 : base.VisitExtension(extensionExpression);
     }

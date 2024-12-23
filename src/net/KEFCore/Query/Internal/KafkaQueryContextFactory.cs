@@ -25,25 +25,20 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaQueryContextFactory : IQueryContextFactory
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaQueryContextFactory(
+    QueryContextDependencies dependencies,
+    IKafkaClusterCache clusterCache,
+    IDbContextOptions contextOptions) : IQueryContextFactory
 {
-    private readonly IKafkaCluster _cluster;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaQueryContextFactory(
-        QueryContextDependencies dependencies,
-        IKafkaClusterCache clusterCache,
-        IDbContextOptions contextOptions)
-    {
-        _cluster = clusterCache.GetCluster(contextOptions);
-        Dependencies = dependencies;
-    }
+    private readonly IKafkaCluster _cluster = clusterCache.GetCluster(contextOptions);
 
     /// <summary>
     ///     Dependencies for this service.
     /// </summary>
-    protected virtual QueryContextDependencies Dependencies { get; }
+    protected virtual QueryContextDependencies Dependencies { get; } = dependencies;
     /// <inheritdoc/>
     public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, _cluster);
 }

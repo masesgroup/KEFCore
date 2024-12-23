@@ -264,9 +264,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>
-#if NET8_0_OR_GREATER
         , IAsyncEnumerable<ValueBuffer>
-#endif
     {
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IKafkaCluster _kafkaCluster;
@@ -299,7 +297,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             return GetEnumerator();
         }
 
-#if NET8_0_OR_GREATER
         public IAsyncEnumerator<ValueBuffer> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             if (_resultException != null) throw _resultException;
@@ -308,22 +305,18 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
             return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
         }
-#endif
     }
 
     class KafkaEnumerator : IEnumerator<ValueBuffer>
-#if NET8_0_OR_GREATER
         , IAsyncEnumerator<ValueBuffer>
-#endif
     {
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
         private readonly KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? _keyValueIterator = null;
         private readonly IEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _enumerator = null;
-#if NET8_0_OR_GREATER
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
-#endif
+
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -339,9 +332,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumerator;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
-#if NET8_0_OR_GREATER
             if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator();
-#endif
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -376,7 +367,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             _enumerator?.Dispose();
         }
 
-#if NET8_0_OR_GREATER
         public ValueTask DisposeAsync()
         {
 #if DEBUG_PERFORMANCE
@@ -384,7 +374,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
             return _asyncEnumerator != null ? _asyncEnumerator.DisposeAsync() : new ValueTask();
         }
-#endif
 
 #if DEBUG_PERFORMANCE
         int _cycles = 0;
@@ -436,7 +425,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
         }
 
-#if NET8_0_OR_GREATER
         public ValueTask<bool> MoveNextAsync()
         {
 #if DEBUG_PERFORMANCE
@@ -485,7 +473,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 }
 #endif
         }
-#endif
 
         public void Reset()
         {

@@ -86,20 +86,12 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
         {
             switch (extensionExpression)
             {
-#if NET8_0_OR_GREATER
                 case StructuralTypeShaperExpression shaper:
-#else
-                case EntityShaperExpression shaper:
-#endif
                 {
                     var key = shaper.ValueBufferExpression;
                     if (!_mapping.TryGetValue(key, out var variable))
                     {
-#if NET8_0_OR_GREATER
                         variable = Parameter(shaper.StructuralType.ClrType);
-#else
-                        variable = Parameter(shaper.EntityType.ClrType);
-#endif
                         _variables.Add(variable);
                         var innerShaper =
                             _kafkaShapedQueryCompilingExpressionVisitor.InjectEntityMaterializers(shaper);

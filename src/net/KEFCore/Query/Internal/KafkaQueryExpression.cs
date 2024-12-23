@@ -674,11 +674,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-#if NET8_0_OR_GREATER
     public virtual StructuralTypeShaperExpression AddNavigationToWeakEntityType(
-#else
-    public virtual EntityShaperExpression AddNavigationToWeakEntityType(
-#endif
         EntityProjectionExpression entityProjectionExpression,
         INavigation navigation,
         KafkaQueryExpression innerQueryExpression,
@@ -730,11 +726,8 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             resultSelector,
             Constant(new ValueBuffer(Enumerable.Repeat((object?)null, selectorExpressions.Count - outerIndex).ToArray())),
             Constant(null, typeof(IEqualityComparer<>).MakeGenericType(outerKeySelector.ReturnType)));
-#if NET8_0_OR_GREATER
+
         var entityShaper = new StructuralTypeShaperExpression(innerEntityProjection.EntityType, innerEntityProjection, nullable: true);
-#else
-        var entityShaper = new EntityShaperExpression(innerEntityProjection.EntityType, innerEntityProjection, nullable: true);
-#endif
         entityProjectionExpression.AddNavigationBinding(navigation, entityShaper);
 
         return entityShaper;
@@ -893,7 +886,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 }
 
                 return memberInitExpression.Update(updatedNewExpression, memberBindings);
-#if NET8_0_OR_GREATER
+
             case StructuralTypeShaperExpression { ValueBufferExpression: ProjectionBindingExpression projectionBindingExpression } shaper:
                 var entityProjectionExpression =
                     (EntityProjectionExpression)((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
@@ -909,7 +902,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
 
                 return shaper.Update(
                     new EntityProjectionExpression(entityProjectionExpression.EntityType, readExpressions));
-#endif
+
             default:
                 var index = groupingExpressions.Count;
                 groupingExpressions.Add(key);

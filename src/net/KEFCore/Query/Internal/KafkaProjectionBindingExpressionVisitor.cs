@@ -110,11 +110,8 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
         {
             return null;
         }
-#if NET8_0_OR_GREATER
+
         if (expression is not (NewExpression or MemberInitExpression or StructuralTypeShaperExpression or IncludeExpression))
-#else
-        if (expression is not (NewExpression or MemberInitExpression or EntityShaperExpression or IncludeExpression))
-#endif
         {
             if (_indexBasedBinding)
             {
@@ -271,11 +268,7 @@ public class KafkaProjectionBindingExpressionVisitor : ExpressionVisitor
     /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
-#if NET8_0_OR_GREATER
         if (extensionExpression is StructuralTypeShaperExpression shaper)
-#else
-        if (extensionExpression is EntityShaperExpression shaper)
-#endif
         {
             EntityProjectionExpression entityProjectionExpression;
             if (shaper.ValueBufferExpression is ProjectionBindingExpression projectionBindingExpression)
