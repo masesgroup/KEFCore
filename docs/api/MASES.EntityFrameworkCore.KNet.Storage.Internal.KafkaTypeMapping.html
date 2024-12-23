@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping" class="text-break">
-Class KafkaTypeMapping  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L28"><i class="bi bi-code-slash"></i></a>
+Class KafkaTypeMapping  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -122,6 +122,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt>Inherited Members</dt>
     <dd>
     <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.clone#microsoft-entityframeworkcore-storage-coretypemapping-clone(system-nullable((microsoft-entityframeworkcore-storage-typemappinginfo))@-system-type-microsoft-entityframeworkcore-storage-valueconversion-valueconverter-microsoft-entityframeworkcore-changetracking-valuecomparer-microsoft-entityframeworkcore-changetracking-valuecomparer-microsoft-entityframeworkcore-changetracking-valuecomparer-microsoft-entityframeworkcore-storage-coretypemapping-microsoft-entityframeworkcore-storage-json-jsonvaluereaderwriter)">CoreTypeMapping.Clone(in TypeMappingInfo?, Type, ValueConverter, ValueComparer, ValueComparer, ValueComparer, CoreTypeMapping, JsonValueReaderWriter)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.generatecodeliteral">CoreTypeMapping.GenerateCodeLiteral(object)</a>
     </div>
     <div>
@@ -143,7 +146,13 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.keycomparer">CoreTypeMapping.KeyComparer</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.structuralcomparer">CoreTypeMapping.StructuralComparer</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.providervaluecomparer">CoreTypeMapping.ProviderValueComparer</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.elementtypemapping">CoreTypeMapping.ElementTypeMapping</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.jsonvaluereaderwriter">CoreTypeMapping.JsonValueReaderWriter</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
@@ -181,7 +190,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping__ctor_System_Type_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.#ctor(System.Type,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer)">
   KafkaTypeMapping(Type, ValueComparer?, ValueComparer?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -219,9 +228,48 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_Microsoft_EntityFrameworkCore_Storage_ValueConversion_ValueConverter_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter)">
-  Clone(ValueConverter?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_Microsoft_EntityFrameworkCore_Storage_CoreTypeMapping_CoreTypeMappingParameters_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping.CoreTypeMappingParameters)">
+  Clone(CoreTypeMappingParameters)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a copy of this mapping.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override CoreTypeMapping Clone(CoreTypeMapping.CoreTypeMappingParameters parameters)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>parameters</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping">CoreTypeMapping</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping.coretypemappingparameters">CoreTypeMappingParameters</a></dt>
+    <dd><p>The parameters for this mapping.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping">CoreTypeMapping</a></dt>
+    <dd><p>The newly created mapping.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_WithComposedConverter_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_WithComposedConverter_Microsoft_EntityFrameworkCore_Storage_ValueConversion_ValueConverter_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_Microsoft_EntityFrameworkCore_Storage_CoreTypeMapping_Microsoft_EntityFrameworkCore_Storage_Json_JsonValueReaderWriter_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping,Microsoft.EntityFrameworkCore.Storage.Json.JsonValueReaderWriter)">
+  WithComposedConverter(ValueConverter?, ValueComparer?, ValueComparer?, CoreTypeMapping?, JsonValueReaderWriter?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns a new copy of this type mapping with the given <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valueconversion.valueconverter">ValueConverter</a>
@@ -230,13 +278,25 @@ added.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override CoreTypeMapping Clone(ValueConverter? converter)</code></pre>
+    <pre><code class="lang-csharp hljs">public override CoreTypeMapping WithComposedConverter(ValueConverter? converter, ValueComparer? comparer = null, ValueComparer? keyComparer = null, CoreTypeMapping? elementMapping = null, JsonValueReaderWriter? jsonValueReaderWriter = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>converter</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valueconversion.valueconverter">ValueConverter</a></dt>
     <dd><p>The converter to use.</p>
+</dd>
+    <dt><code>comparer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.changetracking.valuecomparer">ValueComparer</a></dt>
+    <dd><p>The comparer to use, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> for to keep the default.</p>
+</dd>
+    <dt><code>keyComparer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.changetracking.valuecomparer">ValueComparer</a></dt>
+    <dd><p>The comparer to use when the value is a key, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> for to keep the default.</p>
+</dd>
+    <dt><code>elementMapping</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.coretypemapping">CoreTypeMapping</a></dt>
+    <dd><p>The element mapping, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> for non-collection mappings.</p>
+</dd>
+    <dt><code>jsonValueReaderWriter</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.json.jsonvaluereaderwriter">JsonValueReaderWriter</a></dt>
+    <dd><p>The JSON reader/writer, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to leave unchanged.</p>
 </dd>
   </dl>
 
@@ -261,7 +321,7 @@ added.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaTypeMapping.cs/#L29" class="edit-link">Edit this page</a>
         </div>
 
 

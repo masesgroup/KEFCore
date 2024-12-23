@@ -3184,12 +3184,12 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.New
   nameWithType: EntityProjectionExpression.EntityProjectionExpression
   nameWithType.vb: EntityProjectionExpression.New
-- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation,Microsoft.EntityFrameworkCore.Query.EntityShaperExpression)
-  name: AddNavigationBinding(INavigation, EntityShaperExpression)
-  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_EntityProjectionExpression_AddNavigationBinding_Microsoft_EntityFrameworkCore_Metadata_INavigation_Microsoft_EntityFrameworkCore_Query_EntityShaperExpression_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation,Microsoft.EntityFrameworkCore.Query.EntityShaperExpression)
-  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation, Microsoft.EntityFrameworkCore.Query.EntityShaperExpression)
-  nameWithType: EntityProjectionExpression.AddNavigationBinding(INavigation, EntityShaperExpression)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation,Microsoft.EntityFrameworkCore.Query.StructuralTypeShaperExpression)
+  name: AddNavigationBinding(INavigation, StructuralTypeShaperExpression)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_EntityProjectionExpression_AddNavigationBinding_Microsoft_EntityFrameworkCore_Metadata_INavigation_Microsoft_EntityFrameworkCore_Query_StructuralTypeShaperExpression_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation,Microsoft.EntityFrameworkCore.Query.StructuralTypeShaperExpression)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding(Microsoft.EntityFrameworkCore.Metadata.INavigation, Microsoft.EntityFrameworkCore.Query.StructuralTypeShaperExpression)
+  nameWithType: EntityProjectionExpression.AddNavigationBinding(INavigation, StructuralTypeShaperExpression)
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.AddNavigationBinding*
   name: AddNavigationBinding
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_EntityProjectionExpression_AddNavigationBinding_
@@ -4258,12 +4258,6 @@ references:
   commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
   fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
   nameWithType: KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(IEntityType)
-- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(System.Type)
-  name: CreateShapedQueryExpression(Type)
-  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_CreateShapedQueryExpression_System_Type_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(System.Type)
-  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(System.Type)
-  nameWithType: KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression(Type)
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.CreateShapedQueryExpression*
   name: CreateShapedQueryExpression
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KafkaQueryableMethodTranslatingExpressionVisitor_CreateShapedQueryExpression_
@@ -11223,15 +11217,12 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.New
   nameWithType: KafkaTypeMapping.KafkaTypeMapping
   nameWithType.vb: KafkaTypeMapping.New
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter)
-  name: Clone(ValueConverter?)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_Microsoft_EntityFrameworkCore_Storage_ValueConversion_ValueConverter_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter)
-  name.vb: Clone(ValueConverter)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter?)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter)
-  nameWithType: KafkaTypeMapping.Clone(ValueConverter?)
-  nameWithType.vb: KafkaTypeMapping.Clone(ValueConverter)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping.CoreTypeMappingParameters)
+  name: Clone(CoreTypeMappingParameters)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_Microsoft_EntityFrameworkCore_Storage_CoreTypeMapping_CoreTypeMappingParameters_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping.CoreTypeMappingParameters)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone(Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping.CoreTypeMappingParameters)
+  nameWithType: KafkaTypeMapping.Clone(CoreTypeMapping.CoreTypeMappingParameters)
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone*
   name: Clone
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_Clone_
@@ -11239,6 +11230,22 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.Clone
   nameWithType: KafkaTypeMapping.Clone
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping,Microsoft.EntityFrameworkCore.Storage.Json.JsonValueReaderWriter)
+  name: WithComposedConverter(ValueConverter?, ValueComparer?, ValueComparer?, CoreTypeMapping?, JsonValueReaderWriter?)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_WithComposedConverter_Microsoft_EntityFrameworkCore_Storage_ValueConversion_ValueConverter_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_Microsoft_EntityFrameworkCore_ChangeTracking_ValueComparer_Microsoft_EntityFrameworkCore_Storage_CoreTypeMapping_Microsoft_EntityFrameworkCore_Storage_Json_JsonValueReaderWriter_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer,Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping,Microsoft.EntityFrameworkCore.Storage.Json.JsonValueReaderWriter)
+  name.vb: WithComposedConverter(ValueConverter, ValueComparer, ValueComparer, CoreTypeMapping, JsonValueReaderWriter)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter?, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer?, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer?, Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping?, Microsoft.EntityFrameworkCore.Storage.Json.JsonValueReaderWriter?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer, Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer, Microsoft.EntityFrameworkCore.Storage.CoreTypeMapping, Microsoft.EntityFrameworkCore.Storage.Json.JsonValueReaderWriter)
+  nameWithType: KafkaTypeMapping.WithComposedConverter(ValueConverter?, ValueComparer?, ValueComparer?, CoreTypeMapping?, JsonValueReaderWriter?)
+  nameWithType.vb: KafkaTypeMapping.WithComposedConverter(ValueConverter, ValueComparer, ValueComparer, CoreTypeMapping, JsonValueReaderWriter)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter*
+  name: WithComposedConverter
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTypeMapping_WithComposedConverter_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.WithComposedConverter
+  nameWithType: KafkaTypeMapping.WithComposedConverter
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource
   name: KafkaTypeMappingSource
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource.html
@@ -11606,12 +11613,12 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.New
   nameWithType: KafkaValueGeneratorSelector.KafkaValueGeneratorSelector
   nameWithType.vb: KafkaValueGeneratorSelector.New
-- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name: Select(IProperty, IEntityType)
-  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KafkaValueGeneratorSelector_Select_Microsoft_EntityFrameworkCore_Metadata_IProperty_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
-  commentId: M:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty, Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  nameWithType: KafkaValueGeneratorSelector.Select(IProperty, IEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
+  name: Select(IProperty, ITypeBase)
+  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KafkaValueGeneratorSelector_Select_Microsoft_EntityFrameworkCore_Metadata_IProperty_Microsoft_EntityFrameworkCore_Metadata_ITypeBase_
+  commentId: M:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
+  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty, Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
+  nameWithType: KafkaValueGeneratorSelector.Select(IProperty, ITypeBase)
 - uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.Select*
   name: Select
   href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KafkaValueGeneratorSelector_Select_

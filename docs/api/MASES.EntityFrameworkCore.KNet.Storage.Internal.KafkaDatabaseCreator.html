@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -85,7 +85,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator" class="text-break">
-Class KafkaDatabaseCreator  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L26"><i class="bi bi-code-slash"></i></a>
+Class KafkaDatabaseCreator  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -152,6 +152,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h2 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Default initializer</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -162,10 +165,13 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator__ctor_Microsoft_EntityFrameworkCore_Storage_IDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.#ctor(Microsoft.EntityFrameworkCore.Storage.IDatabase)">
   KafkaDatabaseCreator(IDatabase)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Default initializer</p>
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -186,6 +192,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator__ctor_Microsoft_EntityFrameworkCore_Storage_IDatabase__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default initializer</p>
+</div>
 
 
 
@@ -198,7 +207,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_Database" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.Database">
   Database
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L37"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaDatabase.html">IKafkaDatabase</a></p>
@@ -234,16 +243,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_CanConnect" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.CanConnect">
   CanConnect()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>
-                Determines whether or not the database is available and can be connected to.
-            </p>
-<p>
-                Note that being able to connect to the database does not mean that it is
-                up-to-date with regard to schema creation, etc.
-            </p>
+  <div class="markdown level1 summary"><p>Determines whether or not the database is available and can be connected to.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -265,6 +268,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_CanConnect_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Note that being able to connect to the database does not mean that it is
+up-to-date with regard to schema creation, etc.</p>
+</div>
 
 
 
@@ -273,16 +280,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_CanConnectAsync_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.CanConnectAsync(System.Threading.CancellationToken)">
   CanConnectAsync(CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>
-                Determines whether or not the database is available and can be connected to.
-            </p>
-<p>
-                Note that being able to connect to the database does not mean that it is
-                up-to-date with regard to schema creation, etc.
-            </p>
+  <div class="markdown level1 summary"><p>Determines whether or not the database is available and can be connected to.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -310,6 +311,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_CanConnectAsync_System_Threading_CancellationToken__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Note that being able to connect to the database does not mean that it is
+up-to-date with regard to schema creation, etc.</p>
+</div>
 
   <h4 class="section">Exceptions</h4>
   <dl class="parameters">
@@ -324,7 +329,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_EnsureCreated" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.EnsureCreated">
   EnsureCreated()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Ensures that the database for the context exists. If it exists, no action is taken. If it does not
@@ -359,7 +364,7 @@ to ensure it is compatible with the model for this context.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_EnsureCreatedAsync_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.EnsureCreatedAsync(System.Threading.CancellationToken)">
   EnsureCreatedAsync(CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Asynchronously ensures that the database for the context exists. If it exists, no action is taken. If it does not
@@ -407,7 +412,7 @@ to ensure it is compatible with the model for this context.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_EnsureDeleted" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.EnsureDeleted">
   EnsureDeleted()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>
@@ -447,7 +452,7 @@ to ensure it is compatible with the model for this context.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaDatabaseCreator_EnsureDeletedAsync_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.EnsureDeletedAsync(System.Threading.CancellationToken)">
   EnsureDeletedAsync(CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L43"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>
@@ -500,7 +505,7 @@ to ensure it is compatible with the model for this context.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L26" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaDatabaseCreator.cs/#L30" class="edit-link">Edit this page</a>
         </div>
 
 
