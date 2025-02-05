@@ -22,6 +22,11 @@ on:
         required: true
         default: false
         type: boolean
+      UploadServerLogs:
+        description: 'Upload server logs'
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -354,6 +359,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetReplicator_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -366,6 +372,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -378,6 +385,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -390,6 +398,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -402,6 +411,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -414,6 +424,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -426,6 +437,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -443,6 +455,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetReplicator_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -474,6 +487,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -505,6 +519,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -536,6 +551,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -567,6 +583,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -598,6 +615,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -629,6 +647,7 @@ jobs:
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
