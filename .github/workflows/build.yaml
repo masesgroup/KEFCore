@@ -317,6 +317,12 @@ jobs:
           dotnet-version: |
             9.x
 
+      - name: Disable CET for dotnet process
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\knet.exe" /v MitigationOptions /t REG_BINARY /d "0000000000000000000000000000002000" /f
+          Get-ProcessMitigation -Name "knet.exe"
+
       - name: Download Procdump and prepare
         if: ${{ matrix.os == 'windows-latest' }} # see https://gist.github.com/Sedeniono/e6d6504e3bf0645937852ee5681ef9ee and https://learn.microsoft.com/it-it/sysinternals/downloads/procdump
         continue-on-error: true
