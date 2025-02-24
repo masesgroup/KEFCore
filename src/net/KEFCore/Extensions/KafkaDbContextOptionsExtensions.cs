@@ -151,36 +151,36 @@ public static class KafkaDbContextOptionsExtensions
     /// </summary>
     public static Type JVMValueContainerType(this IKafkaSingletonOptions options, IEntityType entityType)
     {
-        var selector = SerDesSelectorForValue(options, entityType); 
-        if (options.UseByteBufferDataTransfer && selector!= null && selector.ByteBufferSerDes != null) return typeof(Java.Nio.ByteBuffer);
+        var selector = SerDesSelectorForValue(options, entityType);
+        if (options.UseByteBufferDataTransfer && selector != null && selector.ByteBufferSerDes != null) return typeof(Java.Nio.ByteBuffer);
         return typeof(byte[]);
     }
 
-    static ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector> _keySerDesSelctors = new();
+    private static readonly ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector?> _keySerDesSelctors = new();
 
     /// <summary>
     /// Creates a serializer <see cref="Type"/> for keys
     /// </summary>
-    public static ISerDesSelector SerDesSelectorForKey(this IKafkaSingletonOptions options, IEntityType entityType)
+    public static ISerDesSelector? SerDesSelectorForKey(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         return _keySerDesSelctors.GetOrAdd((options.KeySerDesSelectorType, entityType), (o) =>
         {
             var selector = o.Item1?.MakeGenericType(KeyType(options, o.Item2))!;
-            return (ISerDesSelector)Activator.CreateInstance(selector);
+            return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }
 
-    static ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector> _valueContainerSerDesSelctors = new();
+    private static readonly ConcurrentDictionary<(Type?, IEntityType), ISerDesSelector?> _valueContainerSerDesSelctors = new();
 
     /// <summary>
     /// Creates a serialzier <see cref="Type"/> for values
     /// </summary>
-    public static ISerDesSelector SerDesSelectorForValue(this IKafkaSingletonOptions options, IEntityType entityType)
+    public static ISerDesSelector? SerDesSelectorForValue(this IKafkaSingletonOptions options, IEntityType entityType)
     {
         return _valueContainerSerDesSelctors.GetOrAdd((options.ValueSerDesSelectorType, entityType), (o) =>
         {
             var selector = o.Item1?.MakeGenericType(ValueContainerType(options, o.Item2))!;
-            return (ISerDesSelector)Activator.CreateInstance(selector);
+            return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }
 }

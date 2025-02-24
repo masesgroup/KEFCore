@@ -396,7 +396,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _valueGetSw.Stop();
                 _valueGet2Sw.Start();
 #endif
-                TValue value = kv != null ? kv.Value : default;
+                TValue? value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                 _valueGet2Sw.Stop();
                 _valueBufferSw.Start();
@@ -445,7 +445,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _valueGetSw.Stop();
                 _valueGet2Sw.Start();
 #endif
-                TValue value = kv != null ? kv.Value : default;
+                TValue? value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                 _valueGet2Sw.Stop();
                 _valueBufferSw.Start();
