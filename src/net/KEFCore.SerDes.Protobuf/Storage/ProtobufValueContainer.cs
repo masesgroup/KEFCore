@@ -142,9 +142,14 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         return props;
     }
     /// <inheritdoc/>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return _innerMessage.Equals((obj as ProtobufValueContainer<TKey>)?._innerMessage);
+        if (obj is ProtobufValueContainer<TKey>)
+        {
+            return _innerMessage.Equals((obj as ProtobufValueContainer<TKey>)?._innerMessage);
+        }
+
+        return false;
     }
     /// <inheritdoc/>
     public override int GetHashCode()
