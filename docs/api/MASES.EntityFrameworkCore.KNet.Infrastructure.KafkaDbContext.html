@@ -307,36 +307,36 @@ instances of your entities. <a class="xref" href="MASES.EntityFrameworkCore.KNet
 
   <h2 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_remarks">Remarks</h2>
   <div class="markdown level0 remarks"><p>
-        Entity Framework Core does not support multiple parallel operations being run on the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> instance. This
-        includes both parallel execution of async queries and any explicit concurrent use from multiple threads.
-        Therefore, always await async calls immediately, or use separate DbContext instances for operations that execute
-        in parallel. See <a href="https://aka.ms/efcore-docs-threading">Avoiding DbContext threading issues</a> for more information
-        and examples.
-    </p>
+    Entity Framework Core does not support multiple parallel operations being run on the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> instance. This
+    includes both parallel execution of async queries and any explicit concurrent use from multiple threads.
+    Therefore, always await async calls immediately, or use separate DbContext instances for operations that execute
+    in parallel. See <a href="https://aka.ms/efcore-docs-threading">Avoiding DbContext threading issues</a> for more information
+    and examples.
+</p>
 <p>
-        Typically you create a class that derives from DbContext and contains <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a>
-        properties for each entity in the model. If the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a> properties have a public setter,
-        they are automatically initialized when the instance of the derived context is created.
-    </p>
+    Typically you create a class that derives from DbContext and contains <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a>
+    properties for each entity in the model. If the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a> properties have a public setter,
+    they are automatically initialized when the instance of the derived context is created.
+</p>
 <p>
-        Typically you don't need to override the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_">OnConfiguring(DbContextOptionsBuilder)</a> method to configure the database (and
-        other options) to be used for the context, just set the properties associated to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> class.
-        Alternatively, if you would rather perform configuration externally instead of inline in your context, you can use <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder-1">DbContextOptionsBuilder&lt;TContext&gt;</a>
-        (or <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder">DbContextOptionsBuilder</a>) to externally create an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions-1">DbContextOptions&lt;TContext&gt;</a>
-        (or <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions">DbContextOptions</a>) and pass it to a base constructor of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext">DbContext</a>.
-    </p>
+    Typically you don't need to override the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_">OnConfiguring(DbContextOptionsBuilder)</a> method to configure the database (and
+    other options) to be used for the context, just set the properties associated to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a> class.
+    Alternatively, if you would rather perform configuration externally instead of inline in your context, you can use <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder-1">DbContextOptionsBuilder&lt;TContext&gt;</a>
+    (or <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder">DbContextOptionsBuilder</a>) to externally create an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions-1">DbContextOptions&lt;TContext&gt;</a>
+    (or <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions">DbContextOptions</a>) and pass it to a base constructor of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext">DbContext</a>.
+</p>
 <p>
-        The model is discovered by running a set of conventions over the entity classes found in the
-        <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a> properties on the derived context. To further configure the model that
-        is discovered by convention, you can override the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onmodelcreating">OnModelCreating(ModelBuilder)</a> method.
-    </p>
+    The model is discovered by running a set of conventions over the entity classes found in the
+    <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a> properties on the derived context. To further configure the model that
+    is discovered by convention, you can override the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onmodelcreating">OnModelCreating(ModelBuilder)</a> method.
+</p>
 <p>
-        See <a href="https://masesgroup.github.io/KEFCore/articles/kafkadbcontext.html">KafkaDbContext configuration and initialization</a>,
-        <a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>,
-        <a href="https://aka.ms/efcore-docs-query">Querying data with EF Core</a>,
-        <a href="https://aka.ms/efcore-docs-change-tracking">Changing tracking</a>, and
-        <a href="https://aka.ms/efcore-docs-saving-data">Saving data with EF Core</a> for more information and examples.
-    </p>
+    See <a href="https://masesgroup.github.io/KEFCore/articles/kafkadbcontext.html">KafkaDbContext configuration and initialization</a>,
+    <a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>,
+    <a href="https://aka.ms/efcore-docs-query">Querying data with EF Core</a>,
+    <a href="https://aka.ms/efcore-docs-change-tracking">Changing tracking</a>, and
+    <a href="https://aka.ms/efcore-docs-saving-data">Saving data with EF Core</a> for more information and examples.
+</p>
 </div>
 
 
@@ -855,7 +855,8 @@ configuration of the options.</p>
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for key serialization selection</p>
 <p>
-Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.html">DefaultKEFCoreSerDes.Key&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a></p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.html">DefaultKEFCoreSerDes.Key&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a>
+</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1247,7 +1248,8 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use as value container</p>
 <p>
-Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html">DefaultValueContainer&lt;TKey&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a></p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html">DefaultValueContainer&lt;TKey&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a>
+</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1281,7 +1283,8 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
 
   <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for value serialization selection</p>
 <p>
-Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.html">DefaultKEFCoreSerDes.ValueContainer&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a></p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.html">DefaultKEFCoreSerDes.ValueContainer&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a>
+</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1344,15 +1347,15 @@ typically define extension methods on this object that allow you to configure th
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>
-                In situations where an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions">DbContextOptions</a> may or may not have been passed
-                to the constructor, you can use <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder.isconfigured">IsConfigured</a> to determine if
-                the options have already been set, and skip some or all of the logic in
-                <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onconfiguring">OnConfiguring(DbContextOptionsBuilder)</a>.
-            </p>
+    In situations where an instance of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions">DbContextOptions</a> may or may not have been passed
+    to the constructor, you can use <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptionsbuilder.isconfigured">IsConfigured</a> to determine if
+    the options have already been set, and skip some or all of the logic in
+    <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onconfiguring">OnConfiguring(DbContextOptionsBuilder)</a>.
+</p>
 <p>
-                See <a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>
-                for more information and examples.
-            </p>
+    See <a href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</a>
+    for more information and examples.
+</p>
 </div>
 
 

@@ -8768,13 +8768,13 @@ references:
   nameWithType: ProtobufValueContainer<TKey>.Equals(ProtobufValueContainer<TKey>?)
   nameWithType.vb: ProtobufValueContainer(Of TKey).Equals(ProtobufValueContainer(Of TKey))
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Equals(System.Object)
-  name: Equals(object)
+  name: Equals(object?)
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_Equals_System_Object_
   commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Equals(System.Object)
   name.vb: Equals(Object)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.Equals(object)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.Equals(object?)
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).Equals(Object)
-  nameWithType: ProtobufValueContainer<TKey>.Equals(object)
+  nameWithType: ProtobufValueContainer<TKey>.Equals(object?)
   nameWithType.vb: ProtobufValueContainer(Of TKey).Equals(Object)
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Equals*
   name: Equals

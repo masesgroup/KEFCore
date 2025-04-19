@@ -18,7 +18,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaCSharpRuntimeAnnotationCodeGenerator.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -28,7 +32,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaDesignTimeServices.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaDesignTimeServices",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaDesignTimeServices.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -38,7 +46,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Design.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Design.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -48,7 +60,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggerExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggerExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggerExtensions.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -58,7 +74,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggingDefinitions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggingDefinitions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.KafkaLoggingDefinitions.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -68,7 +88,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Diagnostics.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Diagnostics.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -78,7 +102,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Diagnostics.KafkaEventId.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Diagnostics.KafkaEventId",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Diagnostics.KafkaEventId.yml\" sourcestartlinenumber=\"1\">Event IDs for Kafka events that correspond to messages logged to an <xref href=\"Microsoft.Extensions.Logging.ILogger\" data-throw-if-not-resolved=\"false\"></xref>\nand events sent to a <xref href=\"System.Diagnostics.DiagnosticSource\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -88,7 +116,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Diagnostics.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Diagnostics",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -98,7 +130,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.IKafkaDbContextOptionsBuilderInfrastructure.yml\" sourcestartlinenumber=\"1\">Explicitly implemented by <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder\" data-throw-if-not-resolved=\"false\"></xref> to hide\nmethods that are used by database provider extension methods but not intended to be called by application\ndevelopers.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -108,7 +144,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKafkaSingletonOptions.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -118,7 +158,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaModelValidator.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -128,7 +172,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaOptionsExtension.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -138,7 +186,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KafkaSingletonOptions.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -148,7 +200,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -158,7 +214,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.yml\" sourcestartlinenumber=\"1\">A <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext\" data-throw-if-not-resolved=\"false\"></xref> instance represents a session with the Apache Kafka cluster and can be used to query and save\ninstances of your entities. <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext\" data-throw-if-not-resolved=\"false\"></xref> extends <xref href=\"Microsoft.EntityFrameworkCore.DbContext\" data-throw-if-not-resolved=\"false\"></xref> and it is a combination of the Unit Of Work and Repository patterns.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -168,7 +228,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContextOptionsBuilder.yml\" sourcestartlinenumber=\"1\">Allows Kafka specific configuration to be performed on <xref href=\"Microsoft.EntityFrameworkCore.DbContextOptions\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -178,7 +242,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -188,7 +256,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Internal.KafkaResources.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Internal.KafkaResources",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Internal.KafkaResources.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -198,7 +270,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -208,7 +284,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -218,7 +298,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCore.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.KEFCore",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KEFCore.yml\" sourcestartlinenumber=\"1\">This is the primary class shall be used to initialize the environment to use Entity Framework Core for Apache Kafka</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -228,7 +312,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.yml\" sourcestartlinenumber=\"1\">Kafka specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContext.Database\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -238,7 +326,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KafkaDbContextOptionsExtensions.yml\" sourcestartlinenumber=\"1\">Kafka specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -248,7 +340,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaEntityTypeBuilderExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.KafkaEntityTypeBuilderExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KafkaEntityTypeBuilderExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -258,7 +354,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.KafkaEntityTypeExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.KafkaEntityTypeExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KafkaEntityTypeExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -268,7 +368,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.yml\" sourcestartlinenumber=\"1\">Convention that converts accesses of <xref href=\"Microsoft.EntityFrameworkCore.DbSet%601\" data-throw-if-not-resolved=\"false\"></xref> inside query filters and defining queries into\n<xref href=\"Microsoft.EntityFrameworkCore.Query.QueryRootExpression\" data-throw-if-not-resolved=\"false\"></xref>.\nThis makes them consistent with how DbSet accesses in the actual queries are represented, which allows for easier processing in the\nquery pipeline.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -278,7 +382,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaConventionSetBuilder.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaConventionSetBuilder",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaConventionSetBuilder.yml\" sourcestartlinenumber=\"1\">A builder for building conventions for th Kafka provider.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -288,7 +396,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -298,7 +410,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -308,7 +424,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.CollectionResultShaperExpression.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.CollectionResultShaperExpression",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.CollectionResultShaperExpression.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -318,7 +438,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.EntityProjectionExpression.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -328,7 +452,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaExpressionTranslatingExpressionVisitor.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -338,7 +466,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaProjectionBindingExpressionVisitor.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -348,7 +480,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContext.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -358,7 +494,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContextFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContextFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryContextFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -368,7 +508,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryExpression.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -378,7 +522,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessor.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -388,7 +536,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryTranslationPreprocessorFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -398,7 +550,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitor.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -408,7 +564,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaQueryableMethodTranslatingExpressionVisitorFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -418,7 +578,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitor.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -428,7 +592,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitorFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitorFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaShapedQueryCompilingExpressionVisitorFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -438,7 +606,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaTableExpression.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaTableExpression",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.KafkaTableExpression.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -448,7 +620,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.SingleResultShaperExpression.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal.SingleResultShaperExpression",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Query.Internal.SingleResultShaperExpression.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -458,7 +634,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Query.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -468,7 +648,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -478,7 +662,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -488,7 +676,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -498,7 +690,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -508,7 +704,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -518,7 +718,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -528,7 +732,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Avro base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -538,7 +746,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.AvroSerializationHelper.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.AvroSerializationHelper",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -548,7 +760,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -558,7 +774,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroKeyContainer.yml\" sourcestartlinenumber=\"1\">Represents the storage container type to be used from KEFCore for keys</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -568,7 +788,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer<TKey>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.yml\" sourcestartlinenumber=\"1\">The default ValueContainer used from KEFCore</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -578,7 +802,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.yml\" sourcestartlinenumber=\"1\">Represents the storage container type to be used from KEFCore</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -588,7 +816,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.yml\" sourcestartlinenumber=\"1\">Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -598,7 +830,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -608,7 +844,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -618,7 +858,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.yml\" sourcestartlinenumber=\"1\">This is an helper class to extract data information from Kafka Records stored in topics</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -628,7 +872,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.yml\" sourcestartlinenumber=\"1\">This is the main interface a class must implement to be a ValueContainer. More info <a href=\"https://masesgroup.github.io/KEFCore/articles/serialization.html\">here</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -638,7 +886,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -648,7 +900,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -658,7 +914,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Default base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -668,7 +928,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.yml\" sourcestartlinenumber=\"1\">The default ValueContainer used from KEFCore</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -678,7 +942,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.yml\" sourcestartlinenumber=\"1\">List of <xref href=\"System.Type\" data-throw-if-not-resolved=\"false\"></xref> managed from <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -688,7 +956,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.yml\" sourcestartlinenumber=\"1\">This is a supporting class used from <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer%601\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -698,7 +970,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -708,7 +984,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -718,7 +998,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -728,7 +1012,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -738,7 +1026,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Protobuf base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -748,7 +1040,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.yml\" sourcestartlinenumber=\"1\">Enum of possible cases for the &quot;kind&quot; oneof.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -758,7 +1054,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.yml\" sourcestartlinenumber=\"1\">[START messages]\nOur address book file is just one of these.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -768,7 +1068,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.yml\" sourcestartlinenumber=\"1\">Holder for reflection information generated from GenericValue.proto</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -778,7 +1082,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainer.yml\" sourcestartlinenumber=\"1\">Our address book file is just one of these.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -788,7 +1096,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainerReflection.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainerReflection",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.KeyContainerReflection.yml\" sourcestartlinenumber=\"1\">Holder for reflection information generated from KeyContainer.proto</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -798,7 +1110,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PrimaryKeyType.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PrimaryKeyType",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PrimaryKeyType.yml\" sourcestartlinenumber=\"1\">[START messages]</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -808,7 +1124,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.yml\" sourcestartlinenumber=\"1\">[START messages]</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -818,7 +1138,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.yml\" sourcestartlinenumber=\"1\">The default ValueContainer used from KEFCore</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -828,7 +1152,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer.yml\" sourcestartlinenumber=\"1\">Our address book file is just one of these.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -838,7 +1166,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainerReflection.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainerReflection",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainerReflection.yml\" sourcestartlinenumber=\"1\">Holder for reflection information generated from ValueContainer.proto</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -848,7 +1180,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -858,7 +1194,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -868,7 +1208,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -878,7 +1222,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.ChangeKindType.yml\" sourcestartlinenumber=\"1\">The change occurred</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -888,7 +1236,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.EntityTypeChanged.yml\" sourcestartlinenumber=\"1\">The event data informing about changes on an <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref> using the <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.OnChangeEvent\" data-throw-if-not-resolved=\"false\"></xref> event handler</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -898,7 +1250,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -908,7 +1264,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -918,7 +1278,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -928,7 +1292,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -938,7 +1306,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaClusterCache.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -948,7 +1320,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaDatabase.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaDatabase",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaDatabase.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -958,7 +1334,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -968,7 +1348,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -978,7 +1362,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -988,7 +1376,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTableFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -998,7 +1390,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1008,7 +1404,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1018,7 +1418,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCache.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1028,7 +1432,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCacheExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCacheExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaClusterCacheExtensions.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1038,7 +1446,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabase.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabase",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabase.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1048,7 +1460,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaDatabaseCreator.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1058,7 +1474,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1068,7 +1488,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1078,7 +1502,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1088,7 +1516,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1098,7 +1530,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTableFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1108,7 +1544,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransaction.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1118,7 +1558,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransactionManager.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransactionManager",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTransactionManager.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1128,7 +1572,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMapping.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1138,7 +1586,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTypeMappingSource.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1148,7 +1600,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1158,7 +1614,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1168,7 +1628,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Blog.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Templates.Blog",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1178,7 +1642,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.BloggingContext.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Templates.BloggingContext",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1188,7 +1656,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.Post.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Templates.Post",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1198,7 +1670,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.Templates.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Templates",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1208,7 +1684,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.IKafkaIntegerValueGenerator.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.IKafkaIntegerValueGenerator",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.IKafkaIntegerValueGenerator.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1218,7 +1698,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaIntegerValueGenerator-1.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaIntegerValueGenerator<TValue>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaIntegerValueGenerator-1.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1228,7 +1712,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KafkaValueGeneratorSelector.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1238,7 +1726,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1248,7 +1740,11 @@
           "relative_path": "api/MASES.EntityFrameworkCore.KNet.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1258,7 +1754,11 @@
           "relative_path": "api/Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions",
+      "Summary": "<p sourcefile=\"api/Microsoft.Extensions.DependencyInjection.KafkaServiceCollectionExtensions.yml\" sourcestartlinenumber=\"1\">Kafka specific extension methods for <xref href=\"Microsoft.Extensions.DependencyInjection.IServiceCollection\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1268,7 +1768,11 @@
           "relative_path": "api/Microsoft.Extensions.DependencyInjection.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Microsoft.Extensions.DependencyInjection",
+      "Summary": null
     },
     {
       "type": "Conceptual",
