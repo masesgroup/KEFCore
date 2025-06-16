@@ -42,7 +42,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net9.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net9.0'" />
 		<PackageReference Include="MASES.KNet" Version="2.9.1">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
