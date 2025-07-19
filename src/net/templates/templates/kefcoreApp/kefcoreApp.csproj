@@ -9,6 +9,6 @@
 	</ItemGroup>
 	<ItemGroup Condition="!Exists('..\..\..\KEFCore\KEFCore.csproj')">
 		<!--Outside GitHub repo-->
-		<PackageReference Include="MASES.EntityFrameworkCore.KNet" Version="2.5.2" IncludeAssets="All" PrivateAssets="None" />
+		<PackageReference Include="MASES.EntityFrameworkCore.KNet" Version="2.6.0" IncludeAssets="All" PrivateAssets="None" />
 	</ItemGroup>
 </Project>
