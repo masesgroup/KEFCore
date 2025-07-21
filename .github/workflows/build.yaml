@@ -177,7 +177,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:latest # to be changed with official version when willbe available
+        image: ghcr.io/masesgroup/knet:latest # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -194,9 +194,6 @@ jobs:
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '17', '21' ] # only LTS versions
-        exclude:
-          - jdk_vendor: oracle
-            jdk_version: 11
         
     runs-on: 'ubuntu-latest'
     env:
@@ -282,13 +279,6 @@ jobs:
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
         jdk_version: [ '17', '21' ] # only LTS versions
-        exclude:
-          - os: macos-latest
-            framework: net6.0
-          - os: macos-13
-            framework: net6.0
-          - jdk_vendor: oracle
-            jdk_version: 11
         
     runs-on: ${{ matrix.os }}
     env:
