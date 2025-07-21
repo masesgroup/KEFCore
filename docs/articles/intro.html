@@ -125,6 +125,34 @@ Based on <a href="https://github.com/masesgroup/KNet">KNet</a> it allows to use 
 <h2 id="scope-of-the-project">Scope of the project</h2>
 <p>This project aims to create a provider to access the information stored within an Apache Kafka™ cluster using the paradigm behind Entity Framework.
 The project is based on available information within the official <a href="https://github.com/dotnet/efcore">EntityFrameworkCore repository</a>, many classes was copied from there as reported in the official documentation within the Microsoft website at <a href="https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider">https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider</a>.</p>
+<p>Currently the project tries to support, at our best, the <a href="https://kafka.apache.org/downloads">supported Apache Kafka™ binary distribution</a>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">KEFCore</th>
+<th style="text-align: center;">State</th>
+<th style="text-align: center;">Apache Kafka™</th>
+<th style="text-align: center;">.NET</th>
+<th style="text-align: center;">JVM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">2.6.*</td>
+<td style="text-align: center;">Active</td>
+<td style="text-align: center;">4.0.*</td>
+<td style="text-align: center;">8+</td>
+<td style="text-align: center;">17+</td>
+</tr>
+<tr>
+<td style="text-align: center;">2.5.*</td>
+<td style="text-align: center;">Active</td>
+<td style="text-align: center;">3.9.*</td>
+<td style="text-align: center;">8+</td>
+<td style="text-align: center;">11+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="community-and-contribution">Community and Contribution</h3>
 <p>Do you like the project?</p>
 <ul>
