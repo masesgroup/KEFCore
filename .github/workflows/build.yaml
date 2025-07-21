@@ -193,7 +193,7 @@ jobs:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
-        jdk_version: [ '11', '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21' ] # only LTS versions
         exclude:
           - jdk_vendor: oracle
             jdk_version: 11
@@ -281,7 +281,7 @@ jobs:
         os: [ 'macos-latest', 'windows-latest' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
-        jdk_version: [ '11', '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21' ] # only LTS versions
         exclude:
           - os: macos-latest
             framework: net6.0
