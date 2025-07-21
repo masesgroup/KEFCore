@@ -33,6 +33,13 @@ Looking for the help of [Entity Framework Core](https://learn.microsoft.com/it-i
 This project aims to create a provider to access the information stored within an Apache Kafka™ cluster using the paradigm behind Entity Framework.
 The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider.
 
+Currently the project tries to support, at our best, the [supported Apache Kafka™ binary distribution](https://kafka.apache.org/downloads):
+
+| KEFCore | State | Apache Kafka™ | .NET | JVM |
+|:---:	|:---:	|:---:	|:---:	|:---:	|
+| 2.6.* | Active | 4.0.* | 8+ | 17+ |
+| 2.5.* | Active | 3.9.* | 8+ | 11+ |
+
 ### Community and Contribution
 
 Do you like the project? 
