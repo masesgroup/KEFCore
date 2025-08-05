@@ -192,7 +192,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         framework: [ 'net8.0', 'net9.0' ]
-        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
+        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
     runs-on: 'ubuntu-latest'
@@ -277,7 +277,7 @@ jobs:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         os: [ 'macos-latest', 'windows-latest' ]
         framework: [ 'net8.0', 'net9.0' ]
-        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle']
+        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
