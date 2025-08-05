@@ -177,7 +177,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:3.0.1 # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.0.1.0 # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
