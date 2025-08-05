@@ -17,6 +17,13 @@
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<Copy SourceFiles="@(kefcorefiles_config)" DestinationFolder="$(OutDir)\config\%(RecursiveDir)" />
+	</Target>
+	<Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
+		<Copy SourceFiles="@(kefcorefiles_config)" DestinationFolder="$(OutDir)\config\%(RecursiveDir)" />
+	</Target>
+	
 	<ItemGroup Condition="'$(TargetFramework)' != 'net8.0'">
 		<Compile Remove="Shared\ExpressionVisitorExtensions.cs" />
 		<Compile Remove="Shared\OrderedDictionary.cs" />

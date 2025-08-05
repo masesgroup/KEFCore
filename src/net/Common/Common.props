@@ -22,6 +22,9 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+	<ItemGroup Condition="True">
+		<kefcorefiles_config Include="$(ProjectDir)\..\..\config\**\*.*" />
+	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\..\LICENSE" Pack="true" PackagePath="" />
 		<None Include="..\Common\JCOB128x128.png" Pack="true" PackagePath="" />
