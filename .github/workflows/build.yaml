@@ -22,6 +22,11 @@ on:
         required: true
         default: false
         type: boolean
+      ForceContinueOnError:
+        description: 'Force continue-on-error'
+        required: false
+        default: true
+        type: boolean
       UploadServerLogs:
         description: 'Upload server logs'
         required: false
@@ -109,7 +114,6 @@ jobs:
 
       - name: List NuGet packages downloaded
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
-        continue-on-error: true
         shell: cmd
         run: dir .\JNetNuGet\*nupkg
 
@@ -130,7 +134,6 @@ jobs:
 
       - name: List KNetNuGet packages downloaded
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        continue-on-error: true
         shell: cmd
         run: dir .\KNetNuGet\*nupkg
 
@@ -228,31 +231,31 @@ jobs:
             9.x
 
       - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KafkaStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KafkaStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetStreams.Raw.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
@@ -344,7 +347,7 @@ jobs:
           Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_kafka_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j.properties', '${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties' )
 
       - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
@@ -357,7 +360,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
@@ -370,7 +373,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
@@ -383,7 +386,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
@@ -396,7 +399,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
@@ -409,7 +412,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
@@ -422,7 +425,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
@@ -435,7 +438,7 @@ jobs:
           retention-days: 7
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -468,7 +471,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -500,7 +503,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -532,7 +535,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -564,7 +567,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -596,7 +599,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
@@ -628,7 +631,7 @@ jobs:
           rm -rf D:\tmp\kafka-logs\*
 
       - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         if: ${{ matrix.os == 'windows-latest' }}
         shell: pwsh
         run: |
