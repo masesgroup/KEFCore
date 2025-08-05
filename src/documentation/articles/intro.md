@@ -40,7 +40,7 @@ The project is based on available information within the official [EntityFramewo
 
 Currently the project tries to support, at our best, the [supported Apache Kafka™ binary distribution](https://kafka.apache.org/downloads):
 
-| KEFCore | State | Apache Kafka™ | .NET | JVM |
+| KEFCore | State | Apache Kafka™ | .NET | JVM™ |
 |:---:	|:---:	|:---:	|:---:	|:---:	|
 | 2.6.* | Active | 4.0.* | 8+ | 17+ |
 | 2.5.* | Active | 3.9.* | 8+ | 11+ |
