@@ -184,7 +184,7 @@ jobs:
         ports:
           - 9092:9092
         env:
-          KNET_DOCKER_RUNNING_MODE: server
+          KNET_DOCKER_RUNNING_MODE: server-standalone
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_21 }}
           
     strategy:
