@@ -45,6 +45,12 @@ namespace MASES.EntityFrameworkCore.KNet
         /// <inheritdoc/>
         public override bool LogClassPath => true;
 #endif
+        /// <inheritdoc/>
+        protected override string DefaultLog4JConfiguration()
+        {
+            return Path.Combine(MASES.KNet.Const.DefaultConfigurationPath, "kefcore-log4j2.yaml");
+        }
+
         /// <summary>
         /// Set to <see langword="false"/> to disable Apache Kafka Streams caching, default is <see langword="true"/>
         /// </summary>
