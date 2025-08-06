@@ -177,14 +177,14 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:latest # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.0.1.0 # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
         ports:
           - 9092:9092
         env:
-          KNET_DOCKER_RUNNING_MODE: server
+          KNET_DOCKER_RUNNING_MODE: server-standalone
           JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_5_21 }}
           
     strategy:
@@ -333,7 +333,7 @@ jobs:
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
         
       - name: Download latest published version of KNetCLI
-        run: dotnet tool update -g MASES.KNetCLI
+        run: dotnet tool update -g MASES.KNetCLI --version 3.0.1
 
       - name: Start Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         if: ${{ matrix.os != 'windows-latest' }}
