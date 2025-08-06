@@ -194,11 +194,12 @@ jobs:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
+        os: [ 'ubuntu-latest' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
-    runs-on: 'ubuntu-latest'
+    runs-on: ${{ matrix.os }}
     env:
       DOTNET_DbgEnableMiniDump: 1
       DOTNET_DbgMiniDumpType: 3
@@ -261,24 +262,288 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: ignore
-          name: coredumps_${{ matrix.serialization }}_ubuntu-latest_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          name: coredumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/coredump.*
           retention-days: 7
 
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: ignore
-          name: hs_err_${{ matrix.serialization }}_ubuntu-latest_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/**/hs_err_*
           retention-days: 7
          
-  execute_tests_other:
+  execute_tests_windows:
     needs: build_windows
     strategy:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'macos-latest', 'windows-latest' ]
+        os: [ 'windows-latest' ]
+        framework: [ 'net8.0', 'net9.0' ]
+        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
+        jdk_version: [ '17', '21' ] # only LTS versions
+        
+    runs-on: ${{ matrix.os }}
+    env:
+      DOTNET_DbgEnableMiniDump: 1
+      DOTNET_DbgMiniDumpType: 3
+      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
+      DOTNET_CreateDumpDiagnostics: 1
+      DOTNET_CreateDumpVerboseDiagnostics: 1
+      DOTNET_EnableCrashReport: 1
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_1 }}
+      
+    steps:
+      - name: Restore KEFCore ${{ matrix.framework }} bin from cache
+        uses: actions/cache/restore@v4
+        with:
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+          path: ./bin/${{ matrix.framework }}/
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_${{ matrix.framework }}_bin_${{ github.sha }}
+ 
+      - name: Set up JDK distribution
+        uses: actions/setup-java@v4
+        with: # running setup-java again overwrites the settings.xml
+          distribution: ${{ matrix.jdk_vendor }}
+          java-version: ${{ matrix.jdk_version }}
+          check-latest: true
+
+      - name: Disable CET for dotnet process
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\knet.exe" /v MitigationOptions /t REG_BINARY /d "0000000000000000000000000000002000" /f
+          Get-ProcessMitigation -Name "knet.exe"
+
+      - name: Download Procdump and prepare # see https://gist.github.com/Sedeniono/e6d6504e3bf0645937852ee5681ef9ee and https://learn.microsoft.com/it-it/sysinternals/downloads/procdump
+        continue-on-error: true
+        run: |
+          C:\msys64\usr\bin\wget.exe https://download.sysinternals.com/files/Procdump.zip
+          Expand-Archive -LiteralPath '${{ github.workspace }}\Procdump.zip' -DestinationPath ${{ github.workspace }}\Procdump -Force
+          dir .\Procdump
+          ${{ github.workspace }}\Procdump\procdump.exe -accepteula
+          mkdir CrashDumpsDir
+          ${{ github.workspace }}\Procdump\procdump.exe -ma -i ${{ github.workspace }}\CrashDumpsDir
+
+      - name: Authenticate to GitHub
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
+        
+      - name: Download latest published version of KNetCLI
+        run: dotnet tool update -g MASES.KNetCLI --version 3.0.2
+
+      - name: Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          New-Item -Path "${{ github.workspace }}" -Name "logfiles" -ItemType Directory
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KNetReplicator_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KafkaStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KafkaStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KNetStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KNetStreams.Raw.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KNetStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: pwsh
+        run: Start-Sleep -Seconds 20
+
+      - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf ${{ github.workspace }}\logfiles\*
+          rm -rf D:\tmp\kafka-logs\*
+
+      - name: Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        shell: pwsh
+        run: |
+          knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
+          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.UploadServerLogs == true }}
+        with:
+          if-no-files-found: ignore
+          name: Benchmark.KNetStreams.Buffered.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/logfiles/
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: ignore
+          name: CrashDumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: .\CrashDumpsDir\*
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: ignore
+          name: Coredumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/coredump.*
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: ignore
+          name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/**/hs_err_*
+          retention-days: 7
+
+  execute_tests_mac:
+    needs: build_windows
+    strategy:
+      fail-fast: false
+      matrix:
+        serialization: [ 'Json', 'Protobuf', 'Avro' ]
+        os: [ 'macos-latest' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
@@ -315,44 +580,27 @@ jobs:
           dotnet-version: |
             9.x
 
-      - name: Disable CET for dotnet process
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\knet.exe" /v MitigationOptions /t REG_BINARY /d "0000000000000000000000000000002000" /f
-          Get-ProcessMitigation -Name "knet.exe"
-
-      - name: Download Procdump and prepare
-        if: ${{ matrix.os == 'windows-latest' }} # see https://gist.github.com/Sedeniono/e6d6504e3bf0645937852ee5681ef9ee and https://learn.microsoft.com/it-it/sysinternals/downloads/procdump
-        continue-on-error: true
-        run: |
-          C:\msys64\usr\bin\wget.exe https://download.sysinternals.com/files/Procdump.zip
-          Expand-Archive -LiteralPath '${{ github.workspace }}\Procdump.zip' -DestinationPath ${{ github.workspace }}\Procdump -Force
-          dir .\Procdump
-          ${{ github.workspace }}\Procdump\procdump.exe -accepteula
-          mkdir CrashDumpsDir
-          ${{ github.workspace }}\Procdump\procdump.exe -ma -i ${{ github.workspace }}\CrashDumpsDir
-
       - name: Authenticate to GitHub
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
         
       - name: Download latest published version of KNetCLI
         run: dotnet tool update -g MASES.KNetCLI --version 3.0.2
 
+      - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
+        run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties
+
       - name: Start Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
-        if: ${{ matrix.os != 'windows-latest' }}
         shell: pwsh
         run: |
-          New-Item -Path "${{ github.workspace }}/" -Name "logfiles" -ItemType Directory
-          Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_zookeeper_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j.properties', '${{ github.workspace }}/bin/${{ matrix.framework }}/zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_kafka_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j.properties', '${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties' )
+          New-Item -Path "${{ github.workspace }}" -Name "logfiles" -ItemType Directory
+          Start-Process -RSE ${{ github.workspace }}/logfiles/PWSH_kafka_err.log -RSO ${{ github.workspace }}/logfiles/PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}/logfiles/', '-Log4JConfiguration', '${{ github.workspace }}/bin/${{ matrix.framework }}/log4j2.yaml', '${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties' )
 
       - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetReplicator_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -361,11 +609,10 @@ jobs:
 
       - name: Execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -374,11 +621,10 @@ jobs:
 
       - name: Execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KafkaStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -387,11 +633,10 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -400,11 +645,10 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Raw.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -413,11 +657,10 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -426,233 +669,14 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os != 'windows-latest' }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os != 'windows-latest' }}
+        if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
           name: Benchmark.KNetStreams.Buffered.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          New-Item -Path "${{ github.workspace }}/" -Name "logfiles" -ItemType Directory
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KNetReplicator_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Raw.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KafkaStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KafkaStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KafkaStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KNetStreams.Raw_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Raw.Prefetch.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KNetStreams.Raw.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KNetStreams.Buffered_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - name: WINDOWS ONLY - Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: Start-Sleep -Seconds 20
-
-      - name: WINDOWS ONLY - Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: bash
-        run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\zookeeper\*
-          rm -rf D:\tmp\kafka-logs\*
-
-      - name: WINDOWS ONLY - Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        if: ${{ matrix.os == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_zookeeper_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_zookeeper_out.log -FilePath knet -ArgumentList ( 'zookeeperstart', '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\zookeeper.properties' )
-          Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j.properties', '${{ github.workspace }}\bin\${{ matrix.framework }}\server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.UploadServerLogs == true && matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: Benchmark.KNetStreams.Buffered.Prefetch_Server_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/logfiles/
-          retention-days: 7
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ matrix.os == 'windows-latest' }}
-        with:
-          if-no-files-found: ignore
-          name: CrashDumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: .\CrashDumpsDir\*
           retention-days: 7
 
       - uses: actions/upload-artifact@v4
@@ -670,7 +694,7 @@ jobs:
           retention-days: 7
 
   final_cleanup:
-    needs: [ execute_tests_linux, execute_tests_other ]
+    needs: [ execute_tests_linux, execute_tests_windows, execute_tests_mac ]
     if: "always()"
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
