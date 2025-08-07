@@ -363,12 +363,11 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          ls -las ${{ github.workspace }}
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          dir ${{ github.workspace }}
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -392,11 +391,10 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -420,11 +418,10 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -448,11 +445,10 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -476,11 +472,10 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -504,11 +499,10 @@ jobs:
         run: Start-Sleep -Seconds 20
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
-        continue-on-error: true
-        shell: bash
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf ${{ github.workspace }}\kraft-combined-logs\*
+          Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
+          Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
