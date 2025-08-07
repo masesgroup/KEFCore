@@ -86,12 +86,12 @@ KEFCore shall initialize the environment before any operation can be done. The i
 KEFCore.CreateGlobalInstance();
 ```
 
-The previous command identify the JVM and start it, loads the needed libraries and setup the environment. Browsing the [repository](https://github.com/masesgroup/KEFCore) within the test folder there are some examples.
+The previous command identify the JVM™ and start it, loads the needed libraries and setup the environment. Browsing the [repository](https://github.com/masesgroup/KEFCore) within the test folder there are some examples.
 KEFCore accepts many command-line switches to customize its behavior, the full list is available at [Command line switch](https://masesgroup.github.io/KNet/articles/commandlineswitch.html) of KNet.
 
-### JVM identification
+### JVM™ identification
 
-One of the most important command-line switch is **JVMPath** and it is available in [JCOBridge switches](https://www.jcobridge.com/net-examples/command-line-options/): it can be used to set-up the location of the JVM library if JCOBridge is not able to identify a suitable JRE/JDK installation.
+One of the most important command-line switch is **JVMPath** and it is available in [JCOBridge switches](https://www.jcobridge.com/net-examples/command-line-options/): it can be used to set-up the location of the JVM™ library if JCOBridge is not able to identify a suitable JRE/JDK installation.
 If a developer is using KEFCore within its own product it is possible to override the **JVMPath** property with a snippet like the following one:
 
 ```c#
