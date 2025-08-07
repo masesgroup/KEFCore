@@ -116,7 +116,7 @@ The project is based on available information within the official <a href="https
 <th style="text-align: center;">State</th>
 <th style="text-align: center;">Apache Kafka™</th>
 <th style="text-align: center;">.NET</th>
-<th style="text-align: center;">JVM</th>
+<th style="text-align: center;">JVM™</th>
 </tr>
 </thead>
 <tbody>
@@ -167,13 +167,13 @@ The project is based on available information within the official <a href="https
 <ul>
 <li><strong>Cyber-security</strong>:
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM</a> and <a href="https://en.wikipedia.org/wiki/Common_Language_Runtime">CLR, or CoreCLR,</a> runs in the same process, but are insulated from each other;</li>
-<li>JCOBridge does not make any code injection into JVM;</li>
+<li><a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM™</a> and <a href="https://en.wikipedia.org/wiki/Common_Language_Runtime">CLR, or CoreCLR,</a> runs in the same process, but are insulated from each other;</li>
+<li>JCOBridge does not make any code injection into JVM™;</li>
 <li>JCOBridge does not use any other communication mechanism than JNI;</li>
-<li>.NET (CLR) inherently inherits the cyber-security levels of running JVM and Apache Kafka™;</li>
+<li>.NET (CLR) inherently inherits the cyber-security levels of running JVM™ and Apache Kafka™;</li>
 </ul>
 </li>
-<li><strong>Direct access the JVM from any .NET application</strong>:
+<li><strong>Direct access the JVM™ from any .NET application</strong>:
 <ul>
 <li>Any Java/Scala class behind Apache Kafka™ can be directly managed: Consumer, Producer, Administration, Streams, Server-side, and so on;</li>
 <li>No need to learn new APIs: we try to expose the same APIs in C# style;</li>
@@ -182,14 +182,41 @@ The project is based on available information within the official <a href="https
 </ul>
 </li>
 </ul>
+<p><a href="https://www.jcobridge.com">JCOBridge 2.6.*</a> can be used for free without any obligations; you need to purchase a commercial license, or uninstall the software, if you have direct or indirect incomes from the product usage.</p>
 <h3 id="jcobridge-resources">JCOBridge resources</h3>
 <p>Have a look at the following JCOBridge resources:</p>
-<ul>
-<li><a href="https://www.jcobridge.com/release-notes/">Release notes</a></li>
-<li><a href="https://www.jcobridge.com/pricing-25/">Community Edition</a></li>
-<li><a href="https://www.jcobridge.com/pricing-25/">Commercial Edition</a></li>
-<li>Latest release: <a href="https://www.nuget.org/packages/MASES.JCOBridge"><img src="https://img.shields.io/nuget/v/MASES.JCOBridge" alt="JCOBridge nuget"></a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">JCOBridge</th>
+<th style="text-align: center;">2.5.* series</th>
+<th style="text-align: center;">2.6.* series</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">KEFCore</td>
+<td style="text-align: center;">&gt; 1.0.* series</td>
+<td style="text-align: center;">&gt; 2.6.1 series</td>
+</tr>
+<tr>
+<td style="text-align: center;">Release notes</td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/release-notes/">Link</a></td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/release-notes/">Link</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Community Edition</td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-25/">Conditions</a></td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-25/">Conditions</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Commercial Edition</td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-26/">Information</a></td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-26/">Information</a></td>
+</tr>
+</tbody>
+</table>
+<p>Latest release: <a href="https://www.nuget.org/packages/MASES.JCOBridge"><img src="https://img.shields.io/nuget/v/MASES.JCOBridge" alt="JCOBridge nuget"></a></p>
 <p>KAFKA is a registered trademark of The Apache Software Foundation. KEFCore has no affiliation with and is not endorsed by The Apache Software Foundation.
 Microsoft is a registered trademark of Microsoft Corporation.
 EntityFramework is a registered trademark of Microsoft Corporation.</p>

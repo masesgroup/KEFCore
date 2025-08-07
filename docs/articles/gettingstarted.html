@@ -160,10 +160,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 <p>KEFCore shall initialize the environment before any operation can be done. The initialization is done executing the following command at first stages of your application:</p>
 <pre><code class="lang-c#">KEFCore.CreateGlobalInstance();
 </code></pre>
-<p>The previous command identify the JVM and start it, loads the needed libraries and setup the environment. Browsing the <a href="https://github.com/masesgroup/KEFCore">repository</a> within the test folder there are some examples.
+<p>The previous command identify the JVM™ and start it, loads the needed libraries and setup the environment. Browsing the <a href="https://github.com/masesgroup/KEFCore">repository</a> within the test folder there are some examples.
 KEFCore accepts many command-line switches to customize its behavior, the full list is available at <a href="https://masesgroup.github.io/KNet/articles/commandlineswitch.html">Command line switch</a> of KNet.</p>
-<h3 id="jvm-identification">JVM identification</h3>
-<p>One of the most important command-line switch is <strong>JVMPath</strong> and it is available in <a href="https://www.jcobridge.com/net-examples/command-line-options/">JCOBridge switches</a>: it can be used to set-up the location of the JVM library if JCOBridge is not able to identify a suitable JRE/JDK installation.
+<h3 id="jvm-identification">JVM™ identification</h3>
+<p>One of the most important command-line switch is <strong>JVMPath</strong> and it is available in <a href="https://www.jcobridge.com/net-examples/command-line-options/">JCOBridge switches</a>: it can be used to set-up the location of the JVM™ library if JCOBridge is not able to identify a suitable JRE/JDK installation.
 If a developer is using KEFCore within its own product it is possible to override the <strong>JVMPath</strong> property with a snippet like the following one:</p>
 <pre><code class="lang-c#">    class MyKEFCore : KEFCore
     {

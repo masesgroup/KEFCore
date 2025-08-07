@@ -2483,6 +2483,19 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.KEFCore
   fullName: MASES.EntityFrameworkCore.KNet.KEFCore
   nameWithType: KEFCore
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration
+  name: DefaultLog4JConfiguration()
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_DefaultLog4JConfiguration
+  commentId: M:MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration()
+  nameWithType: KEFCore.DefaultLog4JConfiguration()
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration*
+  name: DefaultLog4JConfiguration
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_DefaultLog4JConfiguration_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration
+  nameWithType: KEFCore.DefaultLog4JConfiguration
 - uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
   name: PreserveInformationAcrossContexts
   href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveInformationAcrossContexts
