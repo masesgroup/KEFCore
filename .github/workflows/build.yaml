@@ -366,10 +366,8 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          ls -las .
-          ls -las D:\tmp\
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kraft-combined-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -397,7 +395,7 @@ jobs:
         shell: bash
         run: |
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kafka-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -425,7 +423,7 @@ jobs:
         shell: bash
         run: |
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kafka-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -453,7 +451,7 @@ jobs:
         shell: bash
         run: |
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kafka-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -481,7 +479,7 @@ jobs:
         shell: bash
         run: |
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kafka-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -509,7 +507,7 @@ jobs:
         shell: bash
         run: |
           rm -rf ${{ github.workspace }}\logfiles\*
-          rm -rf D:\tmp\kafka-logs\*
+          rm -rf .\kraft-combined-logs\*
 
       - name: Start Kafka and execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
