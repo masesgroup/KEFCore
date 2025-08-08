@@ -209,12 +209,12 @@ jobs:
         
     runs-on: ${{ matrix.os }}
     env:
-      DOTNET_DbgEnableMiniDump: 1
+      DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
       DOTNET_DbgMiniDumpType: 3
       DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
-      DOTNET_CreateDumpDiagnostics: 1
-      DOTNET_CreateDumpVerboseDiagnostics: 1
-      DOTNET_EnableCrashReport: 1
+      DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
+      DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableProcessDump }}
+      DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_1 }}
       
     steps:
