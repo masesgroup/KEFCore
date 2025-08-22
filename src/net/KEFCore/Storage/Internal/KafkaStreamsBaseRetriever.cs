@@ -197,7 +197,6 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
     private static void StopTopology()
     {
-        _streams?.SetUncaughtExceptionHandler(null);
         _streams?.SetStateListener(null);
         _streams?.Close();
 
