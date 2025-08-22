@@ -159,6 +159,10 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
+                if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
+                {
+                    FinalCleanup();
+                }
             }
         };
 
@@ -218,7 +222,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
     private static void StopTopology()
     {
-        _streams?.SetStateListener(null);
         _streams?.Close();
 
         _dataReceived?.Dispose();
@@ -252,7 +255,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     StopTopology();
                     _storagesForEntities.Clear();
-                    FinalCleanup();
                 }
             }
         }
