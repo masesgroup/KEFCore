@@ -218,6 +218,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
     private static void StopTopology()
     {
+        _streams?.SetUncaughtExceptionHandler(null);
+        _streams?.SetStateListener(null);
         _streams?.Close();
 
         _dataReceived?.Dispose();
