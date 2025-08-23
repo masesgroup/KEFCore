@@ -40,6 +40,16 @@ on:
         options:
           - "0"
           - "1"
+      ProcessDumpType:
+        description: '.NET process dump type'
+        required: false
+        default: '3'
+        type: choice
+        options:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -210,7 +220,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
-      DOTNET_DbgMiniDumpType: 3
+      DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
       DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableProcessDump }}
@@ -295,7 +305,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
-      DOTNET_DbgMiniDumpType: 3
+      DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
       DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableProcessDump }}
@@ -555,7 +565,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
-      DOTNET_DbgMiniDumpType: 3
+      DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
       DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableProcessDump }}

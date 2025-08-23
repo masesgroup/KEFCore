@@ -111,7 +111,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         {
             if (!_managedEntities.ContainsKey(_entityType))
             {
-                var storeSupplier = _usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(_storageId) 
+                var storeSupplier = _usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(_storageId)
                                                           : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(_storageId);
                 var materialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(storeSupplier);
                 var globalTable = _builder.GlobalTable(_topicName, materialized);
@@ -266,20 +266,19 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         return new KafkaEnumberable(_kafkaCluster, _entityType, _storageId, _useEnumeratorWithPrefetch);
     }
 
-    class KafkaEnumberable : IEnumerable<ValueBuffer>
-        , IAsyncEnumerable<ValueBuffer>
+    class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
         private readonly ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore = null;
 
-        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, string storageId, bool useEnumerator)
+        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, string storageId, bool useEnumeratorWithPrefetch)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
             _keyValueStore = _streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
-            _useEnumeratorWithPrefetch = useEnumerator;
+            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
 #endif
@@ -328,12 +327,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         Stopwatch _valueBufferSw = new Stopwatch();
 #endif
 
-        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumerator, bool isAsync)
+        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
         {
             _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
-            _useEnumeratorWithPrefetch = useEnumerator;
+            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
             if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator();
         }
@@ -443,7 +442,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _cycles++;
                 _valueGetSw.Start();
 #endif
-                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv =  _asyncEnumerator?.Current;
+                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                 _valueGetSw.Stop();
                 _valueGet2Sw.Start();
