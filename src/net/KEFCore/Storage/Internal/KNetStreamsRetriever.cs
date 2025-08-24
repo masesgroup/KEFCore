@@ -60,8 +60,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     private static AutoResetEvent? _resetEvent;
     private static AutoResetEvent? _stateChanged;
     private static AutoResetEvent? _exceptionSet;
-    private static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler? _errorHandler;
-    private static Org.Apache.Kafka.Streams.KafkaStreams.StateListener? _stateListener;
+    private static KEFCoreStreamsUncaughtExceptionHandler? _errorHandler;
+    private static KEFCoreStreamsStateListener? _stateListener;
     private static Exception? _resultException = null;
     private static Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
 
@@ -139,32 +139,26 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         _stateChanged = new(false);
         _exceptionSet = new(false);
 
-        _errorHandler ??= new()
+        _errorHandler ??= new((exception) =>
         {
-            OnHandle = (exception) =>
-            {
-                _resultException = exception;
-                _exceptionSet.Set();
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-            }
-        };
+            _resultException = exception;
+            _exceptionSet.Set();
+            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+        });
 
-        _stateListener ??= new()
+        _stateListener ??= new((newState, oldState) =>
         {
-            OnOnChange = (newState, oldState) =>
-            {
-                _currentState = newState;
-                if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
+            _currentState = newState;
+            if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
 #if DEBUG_PERFORMANCE
                 Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-                if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
-                if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
-                {
-                    FinalCleanup();
-                }
+            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
+            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
+            {
+                FinalCleanup();
             }
-        };
+        });
 
         streams.SetUncaughtExceptionHandler(_errorHandler);
         streams.SetStateListener(_stateListener);
