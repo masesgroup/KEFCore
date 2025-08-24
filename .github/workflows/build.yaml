@@ -14,18 +14,18 @@ on:
     inputs:
       UseLastRepositoryBuildJNet:
         description: 'Use latest NuGet packages from JNet'
-        required: true
+        required: false
         default: false
         type: boolean
       UseLastRepositoryBuildKNet:
         description: 'Use latest NuGet packages from KNet'
-        required: true
+        required: false
         default: false
         type: boolean
       ForceContinueOnError:
         description: 'Force continue-on-error'
         required: false
-        default: true
+        default: false
         type: boolean
       UploadServerLogs:
         description: 'Upload server logs'
