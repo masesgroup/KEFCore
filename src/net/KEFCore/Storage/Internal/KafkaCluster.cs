@@ -127,11 +127,12 @@ public class KafkaCluster : IKafkaCluster
                 coll.Add(topic);
             }
 
+            Admin? kafkaAdminClient = null;
+            Properties props = new();
+            props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, Options.BootstrapServers);
             try
             {
-                using Properties props = new();
-                props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, _options.BootstrapServers);
-                using var kafkaAdminClient = KafkaAdminClient.Create(props);
+                kafkaAdminClient = KafkaAdminClient.Create(props);
                 var result = kafkaAdminClient.DeleteTopics(coll);
                 result.All().Get();
             }
@@ -145,6 +146,7 @@ public class KafkaCluster : IKafkaCluster
                 }
                 else throw ex.InnerException;
             }
+            finally { kafkaAdminClient?.Dispose(); props?.Dispose(); }
         }
 
         if (_tables == null)
