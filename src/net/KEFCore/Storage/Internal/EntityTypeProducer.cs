@@ -260,7 +260,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 Future<RecordMetadata> future;
 #if OLD_WAY
                 var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
-                var future = _kafkaProducer?.Send(newRecord);
+                future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
 #else
                 Org.Apache.Kafka.Common.Header.Headers headers = null!;
@@ -269,7 +269,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                 }
 
-                _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+                future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
 #endif
             }
 
