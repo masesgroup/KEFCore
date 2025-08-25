@@ -70,7 +70,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                     if (ProgramConfig.Config.DeleteApplicationData)
                     {
+                        ProgramConfig.ReportString("Process EnsureDeleted");
                         context.Database.EnsureDeleted();
+                        ProgramConfig.ReportString("EnsureDeleted deleted database");
                         if (context.Database.EnsureCreated())
                         {
                             ProgramConfig.ReportString("EnsureCreated created database");

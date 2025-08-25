@@ -20,15 +20,15 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
-using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using Java.Util;
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
-using MASES.JCOBridge.C2JBridge;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -128,11 +128,10 @@ public class KafkaCluster : IKafkaCluster
             }
 
             Admin? kafkaAdminClient = null;
-            Properties props = new();
-            props.Put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, Options.BootstrapServers);
+            Properties props = AdminClientConfigBuilder.Create().WithBootstrapServers(Options.BootstrapServers).ToProperties();
             try
             {
-                kafkaAdminClient = KafkaAdminClient.Create(props);
+                kafkaAdminClient = Admin.Create(props);
                 var result = kafkaAdminClient.DeleteTopics(coll);
                 result.All().Get();
             }
