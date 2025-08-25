@@ -357,7 +357,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 V? data;
                 using (KeyValue<K, V> kv = _keyValueIterator.Next())
                 {
-                    var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv.BridgeInstance);
+                    var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
                     data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
                 }
 #if DEBUG_PERFORMANCE
