@@ -90,10 +90,35 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         _builder ??= builder;
         _topicName = _entityType.TopicName(kafkaCluster.Options);
         _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
-        _properties ??= _kafkaCluster.Options.StreamsOptions(_entityType);
+        _properties ??= _kafkaCluster.Options.StreamsOptions(_entityType).ToProperties();
 
         string storageId = _entityType.StorageIdForTable(_kafkaCluster.Options);
         _storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
+
+        _dataReceived = new(false);
+        _resetEvent = new(false);
+        _stateChanged = new(false);
+        _exceptionSet = new(false);
+
+        _errorHandler ??= new((exception) =>
+        {
+            _resultException = exception;
+            _exceptionSet.Set();
+            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+        });
+
+        _stateListener ??= new((newState, oldState) =>
+        {
+            _currentState = newState;
+#if DEBUG_PERFORMANCE
+            Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
+            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
+            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
+            {
+                FinalCleanup();
+            }
+        });
 
         lock (_managedEntities)
         {
@@ -118,30 +143,10 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
     private static void StartTopology(KafkaStreams streams)
     {
-        _dataReceived = new(false);
-        _resetEvent = new(false);
-        _stateChanged = new(false);
-        _exceptionSet = new(false);
-
-        _errorHandler ??= new((exception) =>
-        {
-            _resultException = exception;
-            _exceptionSet.Set();
-            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-        });
-
-        _stateListener ??= new((newState, oldState) =>
-        {
-            _currentState = newState;
-#if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
-            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
-            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
-            {
-                FinalCleanup();
-            }
-        });
+        _dataReceived?.Reset();
+        _resetEvent?.Reset();
+        _stateChanged?.Reset();
+        _exceptionSet?.Reset();
 
         streams.SetUncaughtExceptionHandler(_errorHandler);
         streams.SetStateListener(_stateListener);
@@ -152,12 +157,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             Stopwatch watcher = new();
             try
             {
-                _resetEvent.Set();
-                var index = WaitHandle.WaitAny([_stateChanged, _exceptionSet]);
+                _resetEvent?.Set();
+                var index = WaitHandle.WaitAny([_stateChanged!, _exceptionSet!]);
                 if (index == 1) return;
                 while (true)
                 {
-                    index = WaitHandle.WaitAny([_stateChanged, _dataReceived, _exceptionSet], waitingTime);
+                    index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
                     if (index == 2) return;
                     if (_currentState.Equals(KafkaStreams.State.CREATED) || _currentState.Equals(KafkaStreams.State.REBALANCING))
                     {
@@ -181,32 +186,31 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             }
             finally
             {
-                _resetEvent.Set();
+                _resetEvent?.Set();
             }
         });
-        _resetEvent.WaitOne();
+        _resetEvent?.WaitOne();
         streams.Start();
 #if DEBUG_PERFORMANCE
         Infrastructure.KafkaDbContext.ReportString($"KafkaStreamsBaseRetriever started on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-        _resetEvent.WaitOne(); // wait running state
+        _resetEvent?.WaitOne(); // wait running state
         if (_resultException != null) throw _resultException;
     }
 
     private static void StopTopology()
     {
         _streams?.Close();
-
-        _dataReceived?.Dispose();
-        _resetEvent?.Dispose();
-        _exceptionSet?.Dispose();
-        _stateChanged?.Dispose();
-
         _streams = null;
     }
 
     private static void FinalCleanup()
     {
+        _dataReceived?.Dispose();
+        _resetEvent?.Dispose();
+        _exceptionSet?.Dispose();
+        _stateChanged?.Dispose();
+
         _errorHandler?.Dispose();
         _stateListener?.Dispose();
         _errorHandler = null;
@@ -245,7 +249,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         private readonly IEntityType _entityType;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
-        private readonly Org.Apache.Kafka.Streams.State.ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
+        private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
 
         public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
         {

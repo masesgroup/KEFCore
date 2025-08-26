@@ -106,6 +106,31 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
         string storageId = _entityType.StorageIdForTable(_kafkaCluster.Options);
         _storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
+        _dataReceived = new(false);
+        _resetEvent = new(false);
+        _stateChanged = new(false);
+        _exceptionSet = new(false);
+
+        _errorHandler ??= new((exception) =>
+        {
+            _resultException = exception;
+            _exceptionSet.Set();
+            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+        });
+
+        _stateListener ??= new((newState, oldState) =>
+        {
+            _currentState = newState;
+            if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
+#if DEBUG_PERFORMANCE
+                Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+#endif
+            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
+            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
+            {
+                FinalCleanup();
+            }
+        });
 
         lock (_managedEntities)
         {
@@ -134,31 +159,10 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
         Stopwatch watch = Stopwatch.StartNew(); 
 #endif
-        _dataReceived = new(false);
-        _resetEvent = new(false);
-        _stateChanged = new(false);
-        _exceptionSet = new(false);
-
-        _errorHandler ??= new((exception) =>
-        {
-            _resultException = exception;
-            _exceptionSet.Set();
-            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-        });
-
-        _stateListener ??= new((newState, oldState) =>
-        {
-            _currentState = newState;
-            if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
-#if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
-            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
-            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
-            {
-                FinalCleanup();
-            }
-        });
+        _dataReceived?.Reset();
+        _resetEvent?.Reset();
+        _stateChanged?.Reset();
+        _exceptionSet?.Reset();
 
         streams.SetUncaughtExceptionHandler(_errorHandler);
         streams.SetStateListener(_stateListener);
@@ -169,12 +173,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             Stopwatch watcher = new();
             try
             {
-                _resetEvent.Set();
-                var index = WaitHandle.WaitAny([_stateChanged, _exceptionSet]);
+                _resetEvent?.Set();
+                var index = WaitHandle.WaitAny([_stateChanged!, _exceptionSet!]);
                 if (index == 1) return;
                 while (true)
                 {
-                    index = WaitHandle.WaitAny([_stateChanged, _dataReceived, _exceptionSet], waitingTime);
+                    index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
                     if (index == 2) return;
                     if (_currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED) || _currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING))
                     {
@@ -198,15 +202,15 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             }
             finally
             {
-                _resetEvent.Set();
+                _resetEvent?.Set();
             }
         });
-        _resetEvent.WaitOne();
+        _resetEvent?.WaitOne();
         streams.Start();
 #if DEBUG_PERFORMANCE
         Infrastructure.KafkaDbContext.ReportString($"KNetStreamsRetriever started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
 #endif
-        _resetEvent.WaitOne(); // wait running state
+        _resetEvent?.WaitOne(); // wait running state
         if (_resultException != null) throw _resultException;
 #if DEBUG_PERFORMANCE
         watch.Stop();
@@ -217,17 +221,16 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     private static void StopTopology()
     {
         _streams?.Close();
-
-        _dataReceived?.Dispose();
-        _resetEvent?.Dispose();
-        _exceptionSet?.Dispose();
-        _stateChanged?.Dispose();
-
         _streams = null;
     }
 
     private static void FinalCleanup()
     {
+        _dataReceived?.Dispose();
+        _resetEvent?.Dispose();
+        _exceptionSet?.Dispose();
+        _stateChanged?.Dispose();
+
         _errorHandler?.Dispose();
         _stateListener?.Dispose();
         _errorHandler = null;
