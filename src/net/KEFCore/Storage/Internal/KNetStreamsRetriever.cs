@@ -128,7 +128,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
             {
-                FinalCleanup();
+                //FinalCleanup();
             }
         });
 
