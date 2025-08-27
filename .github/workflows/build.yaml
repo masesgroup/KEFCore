@@ -383,10 +383,10 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -410,10 +410,10 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -437,10 +437,10 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -464,10 +464,10 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -491,10 +491,10 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -510,10 +510,10 @@ jobs:
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
-      - name: Wait a while on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: pwsh
-        run: Start-Sleep -Seconds 20
+        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
