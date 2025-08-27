@@ -236,7 +236,7 @@ jobs:
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
-      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.%p.diagnostic
+      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
       JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_2 }}
       
     steps:
@@ -322,7 +322,7 @@ jobs:
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
-      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.%p.diagnostic
+      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
       JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_2 }}
       
     steps:
@@ -583,7 +583,7 @@ jobs:
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
-      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.%p.diagnostic
+      DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
       JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_2 }}
       
     steps:
