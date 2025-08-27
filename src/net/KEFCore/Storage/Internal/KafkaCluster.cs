@@ -223,19 +223,21 @@ public class KafkaCluster : IKafkaCluster
         if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic>? coll = null;
+        Set<NewTopic>? coll = default;
         CreateTopicsResult? result = default;
         KafkaFuture<Java.Lang.Void>? future = default;
         try
         {
+            NewTopic? topic = default;
+            Map<Java.Lang.String, Java.Lang.String>? map = default;
             try
             {
-                using var topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
                 Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
                                                     ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
                                                     : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
                 Options.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
-                using var map = Options.TopicConfig.ToMap();
+                map = Options.TopicConfig.ToMap();
                 topic.Configs(map);
                 coll = Collections.Singleton(topic);
                 result = _kafkaAdminClient?.CreateTopics(coll);
@@ -246,6 +248,7 @@ public class KafkaCluster : IKafkaCluster
             {
                 throw ex.InnerException;
             }
+            finally { map?.Dispose(); topic?.Dispose(); }
         }
         catch (TopicExistsException ex)
         {
