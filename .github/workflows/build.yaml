@@ -309,7 +309,7 @@ jobs:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'windows-latest' ]
+        os: [ 'windows-2022' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
@@ -578,7 +578,7 @@ jobs:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'macos-latest' ]
+        os: [ 'macos-14' ]
         framework: [ 'net8.0', 'net9.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
