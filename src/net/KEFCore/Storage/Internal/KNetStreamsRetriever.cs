@@ -52,20 +52,20 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         _entityType = entityType;
         _streamsManager ??= new(_kafkaCluster, _entityType)
         {
-            CreateStreamBuilder = (streamsConfig) =>  new StreamsBuilder(streamsConfig),
-            CreateStoreSupplier = (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
+            CreateStreamBuilder = static (streamsConfig) =>  new StreamsBuilder(streamsConfig),
+            CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                             : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
-            CreateMaterialized = (storeSupplier) => Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(storeSupplier),
-            CreateGlobalKTable = (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
-            CreateTopology = (builder) => builder.Build(),
-            CreateStreams = (topology, streamsConfig) => new(topology, streamsConfig),
-            SetHandlers = (streams, errorHandler, stateListener) =>
+            CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
+            CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
+            CreateTopology = static (builder) => builder.Build(),
+            CreateStreams = static (topology, streamsConfig) => new(topology, streamsConfig),
+            SetHandlers = static (streams, errorHandler, stateListener) =>
             {
                 streams.SetUncaughtExceptionHandler(errorHandler);
                 streams.SetStateListener(stateListener);
             },
-            Start = (streams) => streams.Start(),
-            Close = (streams) => streams.Close()
+            Start = static (streams) => streams.Start(),
+            Close = static (streams) => streams.Close()
         };
 
         _storageId = _streamsManager.AddEntity(entityType);

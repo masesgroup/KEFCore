@@ -16,15 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
-using MASES.KNet.Streams.Kstream;
-using Org.Apache.Kafka.Streams.State;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
@@ -110,10 +102,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
-                if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
-                {
-                    //FinalCleanup();
-                }
             });
         }
 
@@ -123,7 +111,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public Func<StreamsConfigBuilder, TStreamBuilder>? CreateStreamBuilder;
         public Func<bool, string, TStoreSupplier>? CreateStoreSupplier;
         public Func<TStoreSupplier, TMaterialized>? CreateMaterialized;
-        public Func<TStreamBuilder, string, TMaterialized, TGlobalKTable>? CreateGlobalKTable;
+        public Func<TStreamBuilder, string, TMaterialized, TGlobalKTable>? CreateGlobalTable;
         public Func<TStreamBuilder, TTopology>? CreateTopology;
         public Func<TTopology, StreamsConfigBuilder, TStream>? CreateStreams;
         public Action<TStream, KEFCoreStreamsUncaughtExceptionHandler, KEFCoreStreamsStateListener>? SetHandlers;
@@ -135,9 +123,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (CreateStreamBuilder == null || 
                 CreateStoreSupplier == null ||
                 CreateMaterialized == null ||
-                CreateGlobalKTable == null ||
+                CreateGlobalTable == null ||
                 CreateTopology == null ||
-                CreateStreams == null)
+                CreateStreams == null ||
+                SetHandlers == null)
             {
                 throw new InvalidOperationException("All handlers shall be set");
             }
@@ -155,16 +144,23 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     var storeSupplier = CreateStoreSupplier(_usePersistentStorage, storageId);
                     var materialized = CreateMaterialized(storeSupplier);
-                    var globalTable = CreateGlobalKTable(_builder!, topicName, materialized);
+                    var globalTable = CreateGlobalTable(_builder!, topicName, materialized);
                     _managedEntities.Add(entityType, entityType);
                     _storagesForEntities.Add(entityType, new StreamsAssociatedData(storeSupplier, materialized, globalTable));
 
                     if (_streams != null)
                     {
-                        StopTopology();
+                        if (Close == null)
+                        {
+                            throw new InvalidOperationException("Close handler shall be set");
+                        }
+
+                        Close(_streams!);
+                        _streams = null;
                     }
                     _topology = CreateTopology(_builder!);
                     _streams = CreateStreams(_topology, _streamsConfig!);
+                    SetHandlers(_streams, _errorHandler!, _stateListener!);
                     StartTopology(_streams);
                 }
             }
@@ -190,9 +186,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private void StartTopology(TStream streams)
         {
-            if (SetHandlers == null || Start == null)
+            if (Start == null)
             {
-                throw new InvalidOperationException("SetHandlers and Start handlers shall be set");
+                throw new InvalidOperationException("Start handler shall be set");
             }
 
 #if DEBUG_PERFORMANCE
@@ -202,8 +198,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _resetEvent?.Reset();
             _stateChanged?.Reset();
             _exceptionSet?.Reset();
-
-            SetHandlers(streams, _errorHandler!, _stateListener!);
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
@@ -259,17 +253,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public void ThrowException()
         {
             if (_resultException != null) throw _resultException;
-        }
-
-        private void StopTopology()
-        {
-            if (Close == null)
-            {
-                throw new InvalidOperationException("Close handler shall be set");
-            }
-
-            Close(_streams!);
-            _streams = null;
         }
 
         private void FinalCleanup()
