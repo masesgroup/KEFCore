@@ -351,7 +351,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     {
         _streamsConfigBuilder ??= new();
         StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(_streamsConfigBuilder);
-        Properties props = builder;
 
         builder.KeySerDesSelector = KeySerDesSelectorType;
         builder.ValueSerDesSelector = ValueSerDesSelectorType;
@@ -369,6 +368,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader)
                                                               : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
 
+        //Properties props = builder.ToProperties();
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         //{
         //    props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG);

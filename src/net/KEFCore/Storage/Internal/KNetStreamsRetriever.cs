@@ -24,7 +24,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
 using MASES.KNet.Streams.State;
-using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -38,58 +37,11 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    struct StreamsAssociatedData(Org.Apache.Kafka.Streams.State.KeyValueBytesStoreSupplier storeSupplier, Materialized<TKey, TValue, TJVMKey, TJVMValue> materialized, GlobalKTable<TKey, TValue, TJVMKey, TJVMValue> globalTable)
-    {
-        public Org.Apache.Kafka.Streams.State.KeyValueBytesStoreSupplier StoreSupplier = storeSupplier;
-        public Materialized<TKey, TValue, TJVMKey, TJVMValue> Materialized = materialized;
-        public GlobalKTable<TKey, TValue, TJVMKey, TJVMValue> GlobalTable = globalTable;
-    }
-
-    private static bool _preserveStreamsAcrossContext = KEFCore.PreserveInformationAcrossContexts;
-    // this dictionary controls the entities
-    private static readonly System.Collections.Generic.Dictionary<IEntityType, IEntityType> _managedEntities = new(EntityTypeFullNameComparer.Instance);
-    // while this one is used to retain the allocated object to avoid thier finalization before the streams is completly finalized
-    private static readonly System.Collections.Generic.Dictionary<IEntityType, StreamsAssociatedData> _storagesForEntities = new(EntityTypeFullNameComparer.Instance);
-
-    private static StreamsConfigBuilder? _streamsConfig = null;
-    private static StreamsBuilder? _builder = null;
-    private static Topology? _topology = null;
-    private static KNetStreams? _streams = null;
-
-    private static AutoResetEvent? _dataReceived;
-    private static AutoResetEvent? _resetEvent;
-    private static AutoResetEvent? _stateChanged;
-    private static AutoResetEvent? _exceptionSet;
-    private static KEFCoreStreamsUncaughtExceptionHandler? _errorHandler;
-    private static KEFCoreStreamsStateListener? _stateListener;
-    private static Exception? _resultException = null;
-    private static Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
+    static StreamsManager<KNetStreams, StreamsBuilder, Topology, Org.Apache.Kafka.Streams.State.KeyValueBytesStoreSupplier, Materialized<TKey, TValue, TJVMKey, TJVMValue>, GlobalKTable<TKey, TValue, TJVMKey, TJVMValue>>? _streamsManager;
 
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
-
-    private readonly bool _useEnumeratorWithPrefetch;
-    private readonly bool _usePersistentStorage;
-    private readonly string _topicName;
     private readonly string _storageId;
-
-    static Java.Util.Properties PropertyUpdate(StreamsConfigBuilder builder)
-    {
-        Java.Util.Properties props = builder;
-        if (props.ContainsKey(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG))
-        {
-            props.Remove(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG);
-        }
-        props.Put(Org.Apache.Kafka.Clients.Consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-
-        return props;
-    }
-
-    static KNetStreamsRetriever()
-    {
-        KNetStreams.OverrideProperties = PropertyUpdate;
-        StreamsBuilder.OverrideProperties = PropertyUpdate;
-    }
 
     /// <summary>
     /// Default initializer
@@ -98,169 +50,37 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
-        _streamsConfig ??= _kafkaCluster.Options.StreamsOptions(_entityType);
-        _builder ??= new StreamsBuilder(_streamsConfig);
-        _topicName = _entityType.TopicName(kafkaCluster.Options);
-        _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
-        _useEnumeratorWithPrefetch = _kafkaCluster.Options.UseEnumeratorWithPrefetch;
-
-        string storageId = _entityType.StorageIdForTable(_kafkaCluster.Options);
-        _storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
-        _dataReceived = new(false);
-        _resetEvent = new(false);
-        _stateChanged = new(false);
-        _exceptionSet = new(false);
-
-        _errorHandler ??= new((exception) =>
+        _streamsManager ??= new(_kafkaCluster, _entityType)
         {
-            _resultException = exception;
-            _exceptionSet.Set();
-            return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
-        });
-
-        _stateListener ??= new((newState, oldState) =>
-        {
-            _currentState = newState;
-            if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
-#if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
-            if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
-            if (_streams == null && newState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING))
+            CreateStreamBuilder = (streamsConfig) =>  new StreamsBuilder(streamsConfig),
+            CreateStoreSupplier = (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
+                                                                                            : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
+            CreateMaterialized = (storeSupplier) => Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(storeSupplier),
+            CreateGlobalKTable = (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
+            CreateTopology = (builder) => builder.Build(),
+            CreateStreams = (topology, streamsConfig) => new(topology, streamsConfig),
+            SetHandlers = (streams, errorHandler, stateListener) =>
             {
-                //FinalCleanup();
-            }
-        });
+                streams.SetUncaughtExceptionHandler(errorHandler);
+                streams.SetStateListener(stateListener);
+            },
+            Start = (streams) => streams.Start(),
+            Close = (streams) => streams.Close()
+        };
 
-        lock (_managedEntities)
-        {
-            if (!_managedEntities.ContainsKey(_entityType))
-            {
-                var storeSupplier = _usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(_storageId)
-                                                          : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(_storageId);
-                var materialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(storeSupplier);
-                var globalTable = _builder.GlobalTable(_topicName, materialized);
-                _managedEntities.Add(_entityType, _entityType);
-                _storagesForEntities.Add(_entityType, new StreamsAssociatedData(storeSupplier, materialized, globalTable));
-
-                if (_streams != null)
-                {
-                    StopTopology();
-                }
-                _topology = _builder.Build();
-                _streams = new(_topology, _streamsConfig);
-                StartTopology(_streams);
-            }
-        }
-    }
-
-    private static void StartTopology(KNetStreams streams)
-    {
-#if DEBUG_PERFORMANCE
-        Stopwatch watch = Stopwatch.StartNew(); 
-#endif
-        _dataReceived?.Reset();
-        _resetEvent?.Reset();
-        _stateChanged?.Reset();
-        _exceptionSet?.Reset();
-
-        streams.SetUncaughtExceptionHandler(_errorHandler);
-        streams.SetStateListener(_stateListener);
-
-        ThreadPool.QueueUserWorkItem((o) =>
-        {
-            int waitingTime = Timeout.Infinite;
-            Stopwatch watcher = new();
-            try
-            {
-                _resetEvent?.Set();
-                var index = WaitHandle.WaitAny([_stateChanged!, _exceptionSet!]);
-                if (index == 1) return;
-                while (true)
-                {
-                    index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
-                    if (index == 2) return;
-                    if (_currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED) || _currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING))
-                    {
-                        if (index == WaitHandle.WaitTimeout)
-                        {
-#if DEBUG_PERFORMANCE
-                            Infrastructure.KafkaDbContext.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
-#endif
-                            continue;
-                        }
-                    }
-                    else // exit external wait thread 
-                    {
-                        return;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _resultException = e;
-            }
-            finally
-            {
-                _resetEvent?.Set();
-            }
-        });
-        _resetEvent?.WaitOne();
-        streams.Start();
-#if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"KNetStreamsRetriever started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
-#endif
-        _resetEvent?.WaitOne(); // wait running state
-        if (_resultException != null) throw _resultException;
-#if DEBUG_PERFORMANCE
-        watch.Stop();
-        Infrastructure.KafkaDbContext.ReportString($"KNetStreamsRetriever in running state started after {watch.Elapsed}");
-#endif
-    }
-
-    private static void StopTopology()
-    {
-        _streams?.Close();
-        _streams = null;
-    }
-
-    private static void FinalCleanup()
-    {
-        _dataReceived?.Dispose();
-        _resetEvent?.Dispose();
-        _exceptionSet?.Dispose();
-        _stateChanged?.Dispose();
-
-        _errorHandler?.Dispose();
-        _stateListener?.Dispose();
-        _errorHandler = null;
-        _stateListener = null;
-        _streamsConfig = null;
-        _builder = null;
-        _topology = null;
+        _storageId = _streamsManager.AddEntity(entityType);
     }
 
     /// <inheritdoc/>
     public void Dispose()
     {
-        lock (_managedEntities)
-        {
-            if (!_preserveStreamsAcrossContext)
-            {
-                _managedEntities.Remove(_entityType);
-                if (_managedEntities.Count == 0)
-                {
-                    StopTopology();
-                    _storagesForEntities.Clear();
-                }
-            }
-        }
+        _streamsManager!.Dispose(_entityType);
     }
 
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_kafkaCluster, _entityType, _storageId, _useEnumeratorWithPrefetch);
+        return new KafkaEnumberable(_kafkaCluster, _entityType, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
@@ -274,7 +94,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
-            _keyValueStore = _streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+            _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
@@ -284,7 +104,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         /// <inheritdoc/>
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
-            if (_resultException != null) throw _resultException;
+            _streamsManager!.ThrowException();
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
@@ -298,7 +118,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
         public IAsyncEnumerator<ValueBuffer> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
-            if (_resultException != null) throw _resultException;
+            _streamsManager!.ThrowException();
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting async KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
