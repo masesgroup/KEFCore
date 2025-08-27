@@ -51,8 +51,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private TTopology _topology;
         private TStream _streams;
 
-        private KEFCoreStreamsUncaughtExceptionHandler _errorHandler;
-        private KEFCoreStreamsStateListener _stateListener;
+        private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable> > _errorHandler;
+        private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable> > _stateListener;
         private Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
 
@@ -89,14 +89,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _stateChanged = new(false);
             _exceptionSet = new(false);
 
-            _errorHandler ??= new((exception) =>
+            _errorHandler ??= new(this, (_This, exception) =>
             {
                 _resultException = exception;
                 _exceptionSet.Set();
                 return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
-            _stateListener ??= new((newState, oldState) =>
+            _stateListener ??= new(this, (_This, newState, oldState) =>
             {
                 _currentState = newState;
                 if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
@@ -108,7 +108,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         }
 
         public bool UseEnumeratorWithPrefetch => _useEnumeratorWithPrefetch;
-        public TStream? Streams => _streams;
+        public TStream Streams => _streams;
 
         public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
         public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
@@ -116,7 +116,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public required Func<TStreamBuilder, string, TMaterialized, TGlobalKTable> CreateGlobalTable { get; set; }
         public required Func<TStreamBuilder, TTopology> CreateTopology { get; set; }
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
-        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler, KEFCoreStreamsStateListener> SetHandlers { get; set; }
+        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>>, KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>>> SetHandlers { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Close { get; set; }
 

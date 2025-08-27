@@ -20,13 +20,14 @@ using Org.Apache.Kafka.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal class KEFCoreStreamsStateListener(Action<KafkaStreams.State, KafkaStreams.State> onChange) : KafkaStreams.StateListener
+    internal class KEFCoreStreamsStateListener<TStreamContainer>(TStreamContainer container, Action<TStreamContainer, KafkaStreams.State, KafkaStreams.State> onChange) : KafkaStreams.StateListener
     {
-        readonly Action<KafkaStreams.State, KafkaStreams.State> _onChange = onChange;
+        readonly TStreamContainer _container = container;
+        readonly Action<TStreamContainer, KafkaStreams.State, KafkaStreams.State> _onChange = onChange;
 
         public override void OnChange(KafkaStreams.State arg0, KafkaStreams.State arg1)
         {
-            _onChange?.Invoke(arg0, arg1);
+            _onChange?.Invoke(_container, arg0, arg1);
         }
     }
 }
