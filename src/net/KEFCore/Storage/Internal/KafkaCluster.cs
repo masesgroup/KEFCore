@@ -27,6 +27,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
+using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
 
@@ -139,10 +140,13 @@ public class KafkaCluster : IKafkaCluster
                 coll.Add(topic);
             }
 
+            DeleteTopicsResult? result = default;
+            KafkaFuture<Java.Lang.Void>? future = default;
             try
             {
-                var result = _kafkaAdminClient?.DeleteTopics(coll);
-                result?.All().Get();
+                result = _kafkaAdminClient?.DeleteTopics(coll);
+                future = result?.All();
+                future?.Get();
             }
             catch (ExecutionException ex)
             {
@@ -154,6 +158,7 @@ public class KafkaCluster : IKafkaCluster
                 }
                 else throw ex.InnerException;
             }
+            finally { future?.Dispose(); result?.Dispose(); }
         }
 
         if (_tables == null)
@@ -218,7 +223,9 @@ public class KafkaCluster : IKafkaCluster
         if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic> coll = null;
+        Set<NewTopic>? coll = null;
+        CreateTopicsResult? result = default;
+        KafkaFuture<Java.Lang.Void>? future = default;
         try
         {
             try
@@ -231,8 +238,9 @@ public class KafkaCluster : IKafkaCluster
                 using var map = Options.TopicConfig.ToMap();
                 topic.Configs(map);
                 coll = Collections.Singleton(topic);
-                var result = _kafkaAdminClient?.CreateTopics(coll);
-                result?.All().Get();
+                result = _kafkaAdminClient?.CreateTopics(coll);
+                future = result?.All();
+                future?.Get();
             }
             catch (ExecutionException ex)
             {
@@ -247,7 +255,7 @@ public class KafkaCluster : IKafkaCluster
                 return CreateTable(entityType, cycle++);
             }
         }
-        finally { coll?.Dispose(); }
+        finally { future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
 
         return topicName;
     }
