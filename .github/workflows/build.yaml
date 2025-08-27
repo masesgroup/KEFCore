@@ -232,7 +232,7 @@ jobs:
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
       DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
-      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
+      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p.dmp
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
@@ -318,7 +318,7 @@ jobs:
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
       DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
-      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
+      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p.dmp
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
@@ -579,7 +579,7 @@ jobs:
     env:
       DOTNET_DbgEnableMiniDump: ${{ inputs.EnableProcessDump }}
       DOTNET_DbgMiniDumpType: ${{ inputs.ProcessDumpType }}
-      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p
+      DOTNET_DbgMiniDumpName: ${{ github.workspace }}/coredump.%p.dmp
       DOTNET_CreateDumpDiagnostics: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
