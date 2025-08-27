@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+#nullable disable
+
 using MASES.KNet.Streams;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
@@ -38,20 +40,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         // while this one is used to retain the allocated object to avoid thier finalization before the streams is completly finalized
         private readonly System.Collections.Generic.Dictionary<IEntityType, StreamsAssociatedData> _storagesForEntities = new(EntityTypeFullNameComparer.Instance);
 
-        private readonly AutoResetEvent? _dataReceived;
-        private readonly AutoResetEvent? _resetEvent;
-        private readonly AutoResetEvent? _stateChanged;
-        private readonly AutoResetEvent? _exceptionSet;
+        private readonly AutoResetEvent _dataReceived;
+        private readonly AutoResetEvent _resetEvent;
+        private readonly AutoResetEvent _stateChanged;
+        private readonly AutoResetEvent _exceptionSet;
 
         private readonly IKafkaCluster _kafkaCluster;
-        private StreamsConfigBuilder? _streamsConfig = null;
-        private TStreamBuilder? _builder = null;
-        private TTopology? _topology = null;
-        private TStream? _streams = null;
+        private StreamsConfigBuilder _streamsConfig;
+        private TStreamBuilder _builder;
+        private TTopology _topology;
+        private TStream _streams;
 
-        private KEFCoreStreamsUncaughtExceptionHandler? _errorHandler;
-        private KEFCoreStreamsStateListener? _stateListener;
-        private Exception? _resultException = null;
+        private KEFCoreStreamsUncaughtExceptionHandler _errorHandler;
+        private KEFCoreStreamsStateListener _stateListener;
+        private Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
 
         private readonly bool _useEnumeratorWithPrefetch;
@@ -108,30 +110,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public bool UseEnumeratorWithPrefetch => _useEnumeratorWithPrefetch;
         public TStream? Streams => _streams;
 
-        public Func<StreamsConfigBuilder, TStreamBuilder>? CreateStreamBuilder;
-        public Func<bool, string, TStoreSupplier>? CreateStoreSupplier;
-        public Func<TStoreSupplier, TMaterialized>? CreateMaterialized;
-        public Func<TStreamBuilder, string, TMaterialized, TGlobalKTable>? CreateGlobalTable;
-        public Func<TStreamBuilder, TTopology>? CreateTopology;
-        public Func<TTopology, StreamsConfigBuilder, TStream>? CreateStreams;
-        public Action<TStream, KEFCoreStreamsUncaughtExceptionHandler, KEFCoreStreamsStateListener>? SetHandlers;
-        public Action<TStream>? Start;
-        public Action<TStream>? Close;
+        public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
+        public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
+        public required Func<TStoreSupplier, TMaterialized> CreateMaterialized { get; set; }
+        public required Func<TStreamBuilder, string, TMaterialized, TGlobalKTable> CreateGlobalTable { get; set; }
+        public required Func<TStreamBuilder, TTopology> CreateTopology { get; set; }
+        public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
+        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler, KEFCoreStreamsStateListener> SetHandlers { get; set; }
+        public required Action<TStream> Start { get; set; }
+        public required Action<TStream> Close { get; set; }
 
         public string AddEntity(IEntityType entityType)
         {
-            if (CreateStreamBuilder == null || 
-                CreateStoreSupplier == null ||
-                CreateMaterialized == null ||
-                CreateGlobalTable == null ||
-                CreateTopology == null ||
-                CreateStreams == null ||
-                SetHandlers == null)
-            {
-                throw new InvalidOperationException("All handlers shall be set");
-            }
-
-            _builder ??= CreateStreamBuilder?.Invoke(_streamsConfig!);
+            _builder ??= CreateStreamBuilder(_streamsConfig!);
 
              var topicName = entityType.TopicName(_kafkaCluster.Options);
 
@@ -150,11 +141,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
                     if (_streams != null)
                     {
-                        if (Close == null)
-                        {
-                            throw new InvalidOperationException("Close handler shall be set");
-                        }
-
                         Close(_streams!);
                         _streams = null;
                     }
@@ -177,7 +163,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     _managedEntities.Remove(entityType);
                     if (_managedEntities.Count == 0)
                     {
-                        StopTopology();
+                        Close(_streams!);
+                        _streams = null;
                         _storagesForEntities.Clear();
                     }
                 }
@@ -186,11 +173,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private void StartTopology(TStream streams)
         {
-            if (Start == null)
-            {
-                throw new InvalidOperationException("Start handler shall be set");
-            }
-
 #if DEBUG_PERFORMANCE
             Stopwatch watch = Stopwatch.StartNew(); 
 #endif
@@ -240,13 +222,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _resetEvent?.WaitOne();
             Start(streams);
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
+            Infrastructure.KafkaDbContext.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
 #endif
             _resetEvent?.WaitOne(); // wait running state
             ThrowException();
 #if DEBUG_PERFORMANCE
-        watch.Stop();
-        Infrastructure.KafkaDbContext.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
+            watch.Stop();
+            Infrastructure.KafkaDbContext.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
 #endif
         }
 
