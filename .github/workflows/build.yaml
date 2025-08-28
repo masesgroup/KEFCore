@@ -610,12 +610,6 @@ jobs:
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
 
-      - uses: actions/setup-dotnet@v4
-        if: ${{ matrix.os == 'macos-latest' && matrix.framework == 'net9.0' }}
-        with:
-          dotnet-version: |
-            9.x
-
       - name: Authenticate to GitHub
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
         

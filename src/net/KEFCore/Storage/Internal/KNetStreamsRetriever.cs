@@ -52,7 +52,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         _entityType = entityType;
         _streamsManager ??= new(_kafkaCluster, _entityType)
         {
-            CreateStreamBuilder = static (streamsConfig) =>  new StreamsBuilder(streamsConfig),
+            CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                             : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
             CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
@@ -161,17 +161,17 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             get
             {
 #if DEBUG_PERFORMANCE
-                    try
-                    {
-                        _currentSw.Start();
+                try
+                {
+                    _currentSw.Start();
 #endif
-                return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
-                    }
-                    finally
-                    {
-                        _currentSw.Stop();
-                    }
+                }
+                finally
+                {
+                    _currentSw.Stop();
+                }
 #endif
             }
         }
@@ -200,96 +200,96 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         public bool MoveNext()
         {
 #if DEBUG_PERFORMANCE
-                try
-                {
-                    _moveNextSw.Start();
-#endif
-            if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
+            try
             {
-#if DEBUG_PERFORMANCE
-                _cycles++;
-                _valueGetSw.Start();
+                _moveNextSw.Start();
 #endif
-                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
-#if DEBUG_PERFORMANCE
-                _valueGetSw.Stop();
-                _valueGet2Sw.Start();
-#endif
-                TValue? value = kv != null ? kv.Value : default;
-#if DEBUG_PERFORMANCE
-                _valueGet2Sw.Stop();
-                _valueBufferSw.Start();
-#endif
-                object[] array = null!;
-                value?.GetData(_entityType, ref array);
-#if DEBUG_PERFORMANCE
-                _valueBufferSw.Stop();
-#endif
-                _current = new ValueBuffer(array);
-
-                return true;
-            }
-            _current = ValueBuffer.Empty;
-            return false;
-#if DEBUG_PERFORMANCE
-                }
-                finally
+                if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
                 {
-                    _moveNextSw.Stop();
-                    if (_cycles == 0)
-                    {
-                        throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
-                    }
+#if DEBUG_PERFORMANCE
+                    _cycles++;
+                    _valueGetSw.Start();
+#endif
+                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
+#if DEBUG_PERFORMANCE
+                    _valueGetSw.Stop();
+                    _valueGet2Sw.Start();
+#endif
+                    TValue? value = kv != null ? kv.Value : default;
+#if DEBUG_PERFORMANCE
+                    _valueGet2Sw.Stop();
+                    _valueBufferSw.Start();
+#endif
+                    object[] array = null!;
+                    value?.GetData(_entityType, ref array);
+#if DEBUG_PERFORMANCE
+                    _valueBufferSw.Stop();
+#endif
+                    _current = new ValueBuffer(array);
+
+                    return true;
                 }
+                _current = ValueBuffer.Empty;
+                return false;
+#if DEBUG_PERFORMANCE
+            }
+            finally
+            {
+                _moveNextSw.Stop();
+                if (_cycles == 0)
+                {
+                    throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                }
+            }
 #endif
         }
 
         public ValueTask<bool> MoveNextAsync()
         {
 #if DEBUG_PERFORMANCE
-                try
-                {
-                    _moveNextSw.Start();
-#endif
-            ValueTask<bool> hasNext = _asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync();
-            hasNext.AsTask().Wait();
-            if (hasNext.Result)
+            try
             {
-#if DEBUG_PERFORMANCE
-                _cycles++;
-                _valueGetSw.Start();
+                _moveNextSw.Start();
 #endif
-                KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
-#if DEBUG_PERFORMANCE
-                _valueGetSw.Stop();
-                _valueGet2Sw.Start();
-#endif
-                TValue? value = kv != null ? kv.Value : default;
-#if DEBUG_PERFORMANCE
-                _valueGet2Sw.Stop();
-                _valueBufferSw.Start();
-#endif
-                object[] array = null!;
-                value?.GetData(_entityType, ref array);
-#if DEBUG_PERFORMANCE
-                _valueBufferSw.Stop();
-#endif
-                _current = new ValueBuffer(array);
-
-                return ValueTask.FromResult(true);
-            }
-            _current = ValueBuffer.Empty;
-            return ValueTask.FromResult(false);
-#if DEBUG_PERFORMANCE
-                }
-                finally
+                ValueTask<bool> hasNext = _asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync();
+                hasNext.AsTask().Wait();
+                if (hasNext.Result)
                 {
-                    _moveNextSw.Stop();
-                    if (_cycles == 0)
-                    {
-                        throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
-                    }
+#if DEBUG_PERFORMANCE
+                    _cycles++;
+                    _valueGetSw.Start();
+#endif
+                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+#if DEBUG_PERFORMANCE
+                    _valueGetSw.Stop();
+                    _valueGet2Sw.Start();
+#endif
+                    TValue? value = kv != null ? kv.Value : default;
+#if DEBUG_PERFORMANCE
+                    _valueGet2Sw.Stop();
+                    _valueBufferSw.Start();
+#endif
+                    object[] array = null!;
+                    value?.GetData(_entityType, ref array);
+#if DEBUG_PERFORMANCE
+                    _valueBufferSw.Stop();
+#endif
+                    _current = new ValueBuffer(array);
+
+                    return ValueTask.FromResult(true);
                 }
+                _current = ValueBuffer.Empty;
+                return ValueTask.FromResult(false);
+#if DEBUG_PERFORMANCE
+            }
+            finally
+            {
+                _moveNextSw.Stop();
+                if (_cycles == 0)
+                {
+                    throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                }
+            }
 #endif
         }
 

@@ -25,10 +25,8 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
-using Org.Apache.Kafka.Streams.Errors;
 using Org.Apache.Kafka.Streams.Kstream;
 using Org.Apache.Kafka.Streams.State;
-using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -173,17 +171,17 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             get
             {
 #if DEBUG_PERFORMANCE
-                    try
-                    {
-                        _currentSw.Start();
+                try
+                {
+                    _currentSw.Start();
 #endif
-                return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
-                    }
-                    finally
-                    {
-                        _currentSw.Stop();
-                    }
+                }
+                finally
+                {
+                    _currentSw.Stop();
+                }
 #endif
             }
         }
@@ -205,52 +203,52 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         public bool MoveNext()
         {
 #if DEBUG_PERFORMANCE
-                try
-                {
-                    _moveNextSw.Start();
-#endif
-            if (_keyValueIterator != null && _keyValueIterator.HasNext())
+            try
             {
-#if DEBUG_PERFORMANCE
-                _cycles++;
-                _valueGetSw.Start();
+                _moveNextSw.Start();
 #endif
-                V? data;
-                using (KeyValue<K, V> kv = _keyValueIterator.Next())
+                if (_keyValueIterator != null && _keyValueIterator.HasNext())
                 {
-                    var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
-                    data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
-                }
 #if DEBUG_PERFORMANCE
-                _valueGetSw.Stop();
-                _valueSerdesSw.Start();
+                    _cycles++;
+                    _valueGetSw.Start();
 #endif
-                TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
-#if DEBUG_PERFORMANCE
-                _valueSerdesSw.Stop();
-                _valueBufferSw.Start();
-#endif
-                object[] array = null!;
-                entityTypeData?.GetData(_entityType, ref array);
-#if DEBUG_PERFORMANCE
-                _valueBufferSw.Stop();
-#endif
-                _current = new ValueBuffer(array);
-
-                return true;
-            }
-            _current = ValueBuffer.Empty;
-            return false;
-#if DEBUG_PERFORMANCE
-                }
-                finally
-                {
-                    _moveNextSw.Stop();
-                    if (_cycles == 0)
+                    V? data;
+                    using (KeyValue<K, V> kv = _keyValueIterator.Next())
                     {
-                        throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                        var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+                        data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
                     }
+#if DEBUG_PERFORMANCE
+                    _valueGetSw.Stop();
+                    _valueSerdesSw.Start();
+#endif
+                    TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
+#if DEBUG_PERFORMANCE
+                    _valueSerdesSw.Stop();
+                    _valueBufferSw.Start();
+#endif
+                    object[] array = null!;
+                    entityTypeData?.GetData(_entityType, ref array);
+#if DEBUG_PERFORMANCE
+                    _valueBufferSw.Stop();
+#endif
+                    _current = new ValueBuffer(array);
+
+                    return true;
                 }
+                _current = ValueBuffer.Empty;
+                return false;
+#if DEBUG_PERFORMANCE
+            }
+            finally
+            {
+                _moveNextSw.Stop();
+                if (_cycles == 0)
+                {
+                    throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                }
+            }
 #endif
         }
 
