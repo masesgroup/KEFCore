@@ -264,7 +264,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 futures.Add(future!);
 #else
                 Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                if (_keySerdes.UseHeaders || _valueSerdes.UseHeaders)
+                if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
                 {
                     headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                 }

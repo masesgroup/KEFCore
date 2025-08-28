@@ -41,6 +41,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem? "4G" : "2G";
+        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "4G" : "2G";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
@@ -161,6 +163,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             if (!Config.UseInMemoryProvider)
             {
+                KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
+                KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();
                 KEFCore.PreserveInformationAcrossContexts = Config.PreserveInformationAcrossContexts;
             }
