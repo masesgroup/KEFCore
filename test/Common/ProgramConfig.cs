@@ -149,6 +149,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 property.Key.SetValue(Config, property.Value);
             }
 
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
+                && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)
+            {
+                Config.NumberOfElements = 100; // try reduce number of elements to verify if MacOS goes out-of-memory in GitHub action runner
+            }
+
             ReportString(JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
