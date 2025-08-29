@@ -55,7 +55,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
         static void ExecuteTests()
         {
-            const int maxTests = 10;
+            int maxTests = ProgramConfig.Config.NumberOfExecutions;
             Dictionary<int, ExecutionData> _tests = new();
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
@@ -113,7 +113,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     }
                 }
 
-                for (int execution = 0; execution < ProgramConfig.Config.NumberOfExecutions; execution++)
+                for (int execution = 0; execution < maxTests; execution++)
                 {
                     _tests.Add(execution, new ExecutionData(execution, maxTests));
                     ProgramConfig.ReportString($"Starting cycle number {execution}");
@@ -220,7 +220,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                     for (int testId = 0; testId < maxTests; testId++)
                     {
-                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
+                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / maxTests}");
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
