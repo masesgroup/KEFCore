@@ -16,7 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
-// #define DEBUG_PERFORMANCE
+//#define DEBUG_PERFORMANCE
+#define VERIFY_WHERE_ENUMERATOR_STOPS
 
 #nullable enable
 
@@ -143,6 +144,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         Stopwatch _valueGet2Sw = new Stopwatch();
         Stopwatch _valueBufferSw = new Stopwatch();
 #endif
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
+        int _cycles = 0;
+#endif
 
         public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
         {
@@ -194,21 +198,22 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             return _asyncEnumerator != null ? _asyncEnumerator.DisposeAsync() : new ValueTask();
         }
 
-#if DEBUG_PERFORMANCE
-        int _cycles = 0;
-#endif
         public bool MoveNext()
         {
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
             try
+#endif
             {
+#if DEBUG_PERFORMANCE
                 _moveNextSw.Start();
 #endif
                 if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
                 {
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
                     _cycles++;
+#if DEBUG_PERFORMANCE
                     _valueGetSw.Start();
+#endif
 #endif
                     KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
 #if DEBUG_PERFORMANCE
@@ -231,8 +236,14 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 }
                 _current = ValueBuffer.Empty;
                 return false;
-#if DEBUG_PERFORMANCE
             }
+#if VERIFY_WHERE_ENUMERATOR_STOPS
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Enumerator stops at cycle {_cycles} with InnerException", ex);
+            }
+#endif
+#if DEBUG_PERFORMANCE
             finally
             {
                 _moveNextSw.Stop();
