@@ -44,7 +44,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
-    private readonly MASES.KNet.Producer.IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
+    private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsRetriever? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
