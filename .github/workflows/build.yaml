@@ -214,7 +214,7 @@ jobs:
           - 9092:9092
         env:
           KNET_DOCKER_RUNNING_MODE: server-standalone
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_3 }}
           
     strategy:
       fail-fast: false
