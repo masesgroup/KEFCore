@@ -127,9 +127,6 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
-      - name: Add local NuGet source
-        run: dotnet nuget add source ${{ github.workspace }}\JCOBridge\
-
       - name: Get last workflow run of JNet
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
         shell: bash
