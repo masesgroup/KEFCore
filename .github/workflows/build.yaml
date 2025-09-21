@@ -354,10 +354,27 @@ jobs:
           mkdir CrashDumpsDir
           ${{ github.workspace }}\Procdump\procdump.exe -ma -i ${{ github.workspace }}\CrashDumpsDir
 
+      - name: Get last workflow run of KNet
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        shell: bash
+        run: echo "KNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/KNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+
+      - name: Download KNetNuGet artifact
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        run: gh run download ${{ env.KNET_LAST_RUN }} --name KNetNuGet --repo masesgroup/KNet --dir KNetNuGet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add local repo
+        if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
+        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}\KNetNuGet\"
+
       - name: Authenticate to GitHub
+        if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
         
       - name: Download latest published version of KNetCLI
+        if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
         run: dotnet tool update -g MASES.KNetCLI --version 3.0.3
 
       - name: Prepare log files folder
@@ -607,10 +624,27 @@ jobs:
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
 
+      - name: Get last workflow run of KNet
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        shell: bash
+        run: echo "KNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/KNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+
+      - name: Download KNetNuGet artifact
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        run: gh run download ${{ env.KNET_LAST_RUN }} --name KNetNuGet --repo masesgroup/KNet --dir KNetNuGet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add local repo
+        if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
+        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}\KNetNuGet\"
+
       - name: Authenticate to GitHub
+        if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/masesgroup/index.json"
         
       - name: Download latest published version of KNetCLI
+        if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
         run: dotnet tool update -g MASES.KNetCLI --version 3.0.3
 
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
