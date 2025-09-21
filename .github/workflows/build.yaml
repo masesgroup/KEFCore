@@ -167,6 +167,14 @@ jobs:
         if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
         run: dotnet nuget add source --name localKNetNuGet "${{ github.workspace }}\KNetNuGet\"
 
+      - name: Save MASES.KNetCLI in cache
+        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: ./KNetNuGet/MASES.KNetCLI*
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_MASES.KNetCLI_${{ github.sha }}
+
       - name: Recompile to create nuget packages
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln
 
@@ -354,18 +362,16 @@ jobs:
           mkdir CrashDumpsDir
           ${{ github.workspace }}\Procdump\procdump.exe -ma -i ${{ github.workspace }}\CrashDumpsDir
 
-      - name: Get last workflow run of KNet
+      - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        shell: bash
-        run: echo "KNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/KNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+        uses: actions/cache/restore@v4
+        with:
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+          path: ./KNetNuGet/MASES.KNetCLI*
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_MASES.KNetCLI_${{ github.sha }}
 
-      - name: Download KNetNuGet artifact
-        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        run: gh run download ${{ env.KNET_LAST_RUN }} --name KNetNuGet --repo masesgroup/KNet --dir KNetNuGet
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add local repo
+      - name: Use latest local version of KNetCLI
         if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
         run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}\KNetNuGet\"
 
@@ -624,20 +630,18 @@ jobs:
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
 
-      - name: Get last workflow run of KNet
+      - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        shell: bash
-        run: echo "KNET_LAST_RUN=$(curl -sL https://api.github.com/repos/masesgroup/KNet/actions/workflows/build.yaml/runs | jq -r '.workflow_runs[0].id?')" >> $GITHUB_ENV
+        uses: actions/cache/restore@v4
+        with:
+          fail-on-cache-miss: true
+          enableCrossOsArchive: true
+          path: ./KNetNuGet/MASES.KNetCLI*
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_MASES.KNetCLI_${{ github.sha }}
 
-      - name: Download KNetNuGet artifact
-        if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        run: gh run download ${{ env.KNET_LAST_RUN }} --name KNetNuGet --repo masesgroup/KNet --dir KNetNuGet
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add local repo
+      - name: Use latest local version of KNetCLI
         if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
-        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}\KNetNuGet\"
+        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}/KNetNuGet/"
 
       - name: Authenticate to GitHub
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
