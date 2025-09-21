@@ -214,7 +214,7 @@ jobs:
           - 9092:9092
         env:
           KNET_DOCKER_RUNNING_MODE: server-standalone
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_3 }}
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
           
     strategy:
       fail-fast: false
@@ -234,7 +234,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_3 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -320,7 +320,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_3 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -606,7 +606,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_3 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
