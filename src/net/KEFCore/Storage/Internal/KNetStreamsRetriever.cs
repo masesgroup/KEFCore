@@ -17,7 +17,7 @@
 */
 
 //#define DEBUG_PERFORMANCE
-#define VERIFY_WHERE_ENUMERATOR_STOPS
+//#define VERIFY_WHERE_ENUMERATOR_STOPS
 
 #nullable enable
 

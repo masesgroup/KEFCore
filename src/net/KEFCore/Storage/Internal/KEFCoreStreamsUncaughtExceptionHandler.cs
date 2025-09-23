@@ -21,10 +21,10 @@ using Org.Apache.Kafka.Streams.Errors;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal class KEFCoreStreamsUncaughtExceptionHandler<TStreamContainer>(TStreamContainer container, Func<TStreamContainer,JVMBridgeException, StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse> onHandle) : StreamsUncaughtExceptionHandler
+    internal class KEFCoreStreamsUncaughtExceptionHandler<TStreamContainer>(TStreamContainer container, Func<TStreamContainer, JVMBridgeException, StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse> onHandle) : StreamsUncaughtExceptionHandler
     {
         readonly TStreamContainer _container = container;
-        readonly Func<TStreamContainer,JVMBridgeException, StreamThreadExceptionResponse> _onHandle = onHandle;
+        readonly Func<TStreamContainer, JVMBridgeException, StreamThreadExceptionResponse> _onHandle = onHandle;
 
         public override StreamThreadExceptionResponse Handle(JVMBridgeException arg0)
         {

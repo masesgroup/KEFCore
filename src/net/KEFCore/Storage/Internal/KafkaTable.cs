@@ -25,7 +25,6 @@ using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Java.Util.Concurrent;
 using Org.Apache.Kafka.Clients.Producer;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
