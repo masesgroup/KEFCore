@@ -44,7 +44,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
-    private readonly MASES.KNet.Producer.IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
+    private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsRetriever? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
@@ -257,9 +257,20 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             List<Future<RecordMetadata>> futures = new();
             foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
+                Future<RecordMetadata> future;
+#if OLD_WAY
                 var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
-                var future = _kafkaProducer?.Send(newRecord);
+                future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
+#else
+                Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                {
+                    headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                }
+
+                future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+#endif
             }
 
             _kafkaProducer?.Flush();
@@ -267,6 +278,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             return futures;
         }
     }
+
     /// <inheritdoc/>
     public void Dispose()
     {

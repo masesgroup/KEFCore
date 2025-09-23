@@ -41,6 +41,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem? "4G" : "2G";
+        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "512M" : "256M";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
@@ -149,12 +151,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 property.Key.SetValue(Config, property.Value);
             }
 
+            //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
+            //    && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)
+            //{
+            //    Config.NumberOfElements = 100; // try reduce number of elements to verify if MacOS goes out-of-memory in GitHub action runner
+            //}
+
             ReportString(JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
             if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
 
             if (!Config.UseInMemoryProvider)
             {
+                KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
+                KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();
                 KEFCore.PreserveInformationAcrossContexts = Config.PreserveInformationAcrossContexts;
             }
