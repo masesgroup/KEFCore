@@ -18,7 +18,6 @@
 
 using System.Transactions;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
-using MASES.EntityFrameworkCore.KNet.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>

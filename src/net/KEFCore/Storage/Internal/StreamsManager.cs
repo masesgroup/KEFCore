@@ -194,7 +194,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
                         if (index == 2) return;
-                        if (_currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED) || _currentState.Equals(Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING))
+                        if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED
+                            || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
