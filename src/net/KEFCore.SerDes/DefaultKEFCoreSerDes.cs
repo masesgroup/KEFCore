@@ -211,7 +211,7 @@ public static class DefaultKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data.ToStream(), _options)!;
             }
         }
     } 
@@ -381,7 +381,7 @@ public static class DefaultKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
+                return System.Text.Json.JsonSerializer.Deserialize<TData>(data.ToStream(), _options)!;
             }
         }
     }
