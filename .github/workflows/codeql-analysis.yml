@@ -98,7 +98,9 @@ jobs:
     - name: Setup .NET 9.0
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.x
+        dotnet-version: |
+          9.x
+          10.x
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
