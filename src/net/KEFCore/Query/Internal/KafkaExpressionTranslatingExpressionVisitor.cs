@@ -36,8 +36,11 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 {
+#if NET10_0
+    private const string RuntimeParameterPrefix = "entity_equality_";
+#else
     private const string RuntimeParameterPrefix = QueryCompilationContext.QueryParameterPrefix + "entity_equality_";
-
+#endif
     private static readonly List<MethodInfo> SingleResultMethodInfos = new()
     {
         QueryableMethods.FirstWithPredicate,
@@ -1005,6 +1008,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     /// </summary>
     protected override Expression VisitParameter(ParameterExpression parameterExpression)
     {
+#if !NET10_0
         if (parameterExpression.Name?.StartsWith(QueryCompilationContext.QueryParameterPrefix, StringComparison.Ordinal) == true)
         {
             return Expression.Call(
@@ -1012,7 +1016,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 QueryCompilationContext.QueryContextParameter,
                 Expression.Constant(parameterExpression.Name));
         }
-
+#endif
         throw new InvalidOperationException(CoreStrings.TranslationFailed(parameterExpression.Print()));
     }
 
@@ -1226,7 +1230,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     [UsedImplicitly]
     private static T GetParameterValue<T>(QueryContext queryContext, string parameterName)
+#if NET10_0
+        => (T)queryContext.Parameters[parameterName]!;
+#else
         => (T)queryContext.ParameterValues[parameterName]!;
+#endif
 
     private static bool IsConvertedToNullable(Expression result, Expression original)
         => result.Type.IsNullableType()
@@ -1321,11 +1329,13 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                         Expression.Constant(property, typeof(IProperty))),
                     QueryCompilationContext.QueryContextParameter
                 );
-
+#if NET10_0
+                var newParameterName = $"{RuntimeParameterPrefix}{parameterName}_{property.Name}";
+#else
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
                     + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
-
+#endif
                 rewrittenSource = _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
                 break;
 
@@ -1465,11 +1475,13 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                         Expression.Constant(parameterName, typeof(string)),
                         Expression.Constant(property, typeof(IProperty))),
                     QueryCompilationContext.QueryContextParameter);
-
+#if NET10_0
+                var newParameterName = $"{RuntimeParameterPrefix}{parameterName}_{property.Name}";
+#else
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
                     + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
-
+#endif
                 return _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
 
             case MemberInitExpression memberInitExpression
@@ -1494,7 +1506,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     private static T? ParameterValueExtractor<T>(QueryContext context, string baseParameterName, IProperty property)
     {
+#if NET10_0
+        var baseParameter = context.Parameters[baseParameterName];
+#else
         var baseParameter = context.ParameterValues[baseParameterName];
+#endif
         return baseParameter == null ? (T?)(object?)null : (T?)property.GetGetter().GetClrValue(baseParameter);
     }
 
@@ -1503,11 +1519,17 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         string baseParameterName,
         IProperty property)
     {
+#if NET10_0
+        if (context.Parameters[baseParameterName] is not IEnumerable<TEntity> baseListParameter)
+        {
+            return null;
+        }
+#else
         if (!(context.ParameterValues[baseParameterName] is IEnumerable<TEntity> baseListParameter))
         {
             return null;
         }
-
+#endif
         var getter = property.GetGetter();
         return baseListParameter.Select(e => e != null ? (TProperty?)getter.GetClrValue(e) : (TProperty?)(object?)null).ToList();
     }

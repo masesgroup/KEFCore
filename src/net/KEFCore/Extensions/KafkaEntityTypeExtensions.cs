@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet;
@@ -36,11 +37,7 @@ public static class KafkaEntityTypeExtensions
     /// <param name="entityType">The entity type to get the Kafka query for.</param>
     /// <returns>The LINQ query used as the default source.</returns>
     public static LambdaExpression? GetKafkaQuery(this IReadOnlyEntityType entityType)
-#pragma warning disable EF1001 // Internal EF Core API usage.
-#pragma warning disable CS0612 // Il tipo o il membro è obsoleto
-        => (LambdaExpression?)entityType[CoreAnnotationNames.DefiningQuery];
-#pragma warning restore CS0612 // Il tipo o il membro è obsoleto
-#pragma warning restore EF1001 // Internal EF Core API usage.
+        => (LambdaExpression?)entityType[KafkaAnnotationNames.DefiningQuery];
 
     /// <summary>
     ///     Sets the LINQ query used as the default source for queries of this type.
@@ -51,11 +48,7 @@ public static class KafkaEntityTypeExtensions
         this IMutableEntityType entityType,
         LambdaExpression? kafkaQuery)
         => entityType
-#pragma warning disable EF1001 // Internal EF Core API usage.
-#pragma warning disable CS0612 // Il tipo o il membro è obsoleto
-            .SetOrRemoveAnnotation(CoreAnnotationNames.DefiningQuery, kafkaQuery);
-#pragma warning restore CS0612 // Il tipo o il membro è obsoleto
-#pragma warning restore EF1001 // Internal EF Core API usage.
+            .SetOrRemoveAnnotation(KafkaAnnotationNames.DefiningQuery, kafkaQuery);
 
     /// <summary>
     ///     Sets the LINQ query used as the default source for queries of this type.
@@ -69,11 +62,7 @@ public static class KafkaEntityTypeExtensions
         LambdaExpression? kafkaQuery,
         bool fromDataAnnotation = false)
         => (LambdaExpression?)entityType
-#pragma warning disable EF1001 // Internal EF Core API usage.
-#pragma warning disable CS0612 // Il tipo o il membro è obsoleto
-            .SetOrRemoveAnnotation(CoreAnnotationNames.DefiningQuery, kafkaQuery, fromDataAnnotation)
-#pragma warning restore CS0612 // Il tipo o il membro è obsoleto
-#pragma warning restore EF1001 // Internal EF Core API usage.
+            .SetOrRemoveAnnotation(KafkaAnnotationNames.DefiningQuery, kafkaQuery, fromDataAnnotation)
             ?.Value;
 
     /// <summary>
@@ -82,11 +71,7 @@ public static class KafkaEntityTypeExtensions
     /// <param name="entityType">The entity type.</param>
     /// <returns>The configuration source for <see cref="GetKafkaQuery" />.</returns>
     public static ConfigurationSource? GetDefiningQueryConfigurationSource(this IConventionEntityType entityType)
-#pragma warning disable EF1001 // Internal EF Core API usage.
-#pragma warning disable CS0612 // Il tipo o il membro è obsoleto
-        => entityType.FindAnnotation(CoreAnnotationNames.DefiningQuery)?.GetConfigurationSource();
-#pragma warning restore CS0612 // Il tipo o il membro è obsoleto
-#pragma warning restore EF1001 // Internal EF Core API usage.
+        => entityType.FindAnnotation(KafkaAnnotationNames.DefiningQuery)?.GetConfigurationSource();
     /// <summary>
     /// Creates the topic name
     /// </summary>

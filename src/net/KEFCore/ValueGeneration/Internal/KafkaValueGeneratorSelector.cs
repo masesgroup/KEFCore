@@ -33,7 +33,7 @@ public class KafkaValueGeneratorSelector(
     IKafkaDatabase kafkaDatabase) : ValueGeneratorSelector(dependencies)
 {
     private readonly IKafkaCluster _kafkaCluster = kafkaDatabase.Cluster;
-#if NET9_0
+#if NET9_0 || NET10_0
     /// <inheritdoc/>
     public override bool TryCreate(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
     {
