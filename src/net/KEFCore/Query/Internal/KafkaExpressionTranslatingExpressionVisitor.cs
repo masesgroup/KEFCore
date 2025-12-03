@@ -37,8 +37,10 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 {
 #if NET10_0
+    private const string LocalParameterPrefix = "__";
     private const string RuntimeParameterPrefix = "entity_equality_";
 #else
+    private const string LocalParameterPrefix = QueryCompilationContext.QueryParameterPrefix;
     private const string RuntimeParameterPrefix = QueryCompilationContext.QueryParameterPrefix + "entity_equality_";
 #endif
     private static readonly List<MethodInfo> SingleResultMethodInfos = new()
@@ -1008,15 +1010,14 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     /// </summary>
     protected override Expression VisitParameter(ParameterExpression parameterExpression)
     {
-#if !NET10_0
-        if (parameterExpression.Name?.StartsWith(QueryCompilationContext.QueryParameterPrefix, StringComparison.Ordinal) == true)
+        if (parameterExpression.Name?.StartsWith(LocalParameterPrefix, StringComparison.Ordinal) == true)
         {
             return Expression.Call(
                 GetParameterValueMethodInfo.MakeGenericMethod(parameterExpression.Type),
                 QueryCompilationContext.QueryContextParameter,
                 Expression.Constant(parameterExpression.Name));
         }
-#endif
+
         throw new InvalidOperationException(CoreStrings.TranslationFailed(parameterExpression.Print()));
     }
 
@@ -1286,14 +1287,9 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return false;
         }
 
-        var primaryKeyProperties = entityType.FindPrimaryKey()?.Properties;
-        if (primaryKeyProperties == null)
-        {
-            throw new InvalidOperationException(
+        var primaryKeyProperties = (entityType.FindPrimaryKey()?.Properties) ?? throw new InvalidOperationException(
                 CoreStrings.EntityEqualityOnKeylessEntityNotSupported(
                     nameof(Queryable.Contains), entityType.DisplayName()));
-        }
-
         if (primaryKeyProperties.Count > 1)
         {
             throw new InvalidOperationException(
@@ -1329,13 +1325,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                         Expression.Constant(property, typeof(IProperty))),
                     QueryCompilationContext.QueryContextParameter
                 );
-#if NET10_0
-                var newParameterName = $"{RuntimeParameterPrefix}{parameterName}_{property.Name}";
-#else
+
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
-                    + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
-#endif
+                    + $"{parameterName[LocalParameterPrefix.Length..]}_{property.Name}";
+
                 rewrittenSource = _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
                 break;
 
@@ -1475,13 +1469,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                         Expression.Constant(parameterName, typeof(string)),
                         Expression.Constant(property, typeof(IProperty))),
                     QueryCompilationContext.QueryContextParameter);
-#if NET10_0
-                var newParameterName = $"{RuntimeParameterPrefix}{parameterName}_{property.Name}";
-#else
+
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
-                    + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
-#endif
+                    + $"{parameterName[LocalParameterPrefix.Length..]}_{property.Name}";
+
                 return _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
 
             case MemberInitExpression memberInitExpression
