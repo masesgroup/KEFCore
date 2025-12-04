@@ -31,16 +31,12 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///     See <see href="https://aka.ms/efcore-docs-conventions">Model building conventions</see>, and
 ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 /// </remarks>
-public class DefiningQueryRewritingConvention : QueryFilterRewritingConvention
+/// <remarks>
+///     Creates a new instance of <see cref="QueryFilterRewritingConvention" />.
+/// </remarks>
+/// <param name="dependencies">Parameter object containing dependencies for this convention.</param>
+public class DefiningQueryRewritingConvention(ProviderConventionSetBuilderDependencies dependencies) : QueryFilterRewritingConvention(dependencies)
 {
-    /// <summary>
-    ///     Creates a new instance of <see cref="QueryFilterRewritingConvention" />.
-    /// </summary>
-    /// <param name="dependencies">Parameter object containing dependencies for this convention.</param>
-    public DefiningQueryRewritingConvention(ProviderConventionSetBuilderDependencies dependencies)
-        : base(dependencies)
-    {
-    }
 
     /// <inheritdoc />
     public override void ProcessModelFinalizing(

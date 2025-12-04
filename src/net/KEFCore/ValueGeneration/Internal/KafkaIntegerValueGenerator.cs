@@ -25,17 +25,14 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaIntegerValueGenerator<TValue> : ValueGenerator<TValue>, IKafkaIntegerValueGenerator
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaIntegerValueGenerator<TValue>(int propertyIndex) : ValueGenerator<TValue>, IKafkaIntegerValueGenerator
 {
-    private readonly int _propertyIndex;
+    private readonly int _propertyIndex = propertyIndex;
     private long _current;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaIntegerValueGenerator(int propertyIndex)
-    {
-        _propertyIndex = propertyIndex;
-    }
+
     /// <inheritdoc/>
     public virtual void Bump(object?[] row)
     {
@@ -47,9 +44,7 @@ public class KafkaIntegerValueGenerator<TValue> : ValueGenerator<TValue>, IKafka
         }
     }
     /// <inheritdoc/>
-    public override TValue Next(EntityEntry entry)
-        => (TValue)Convert.ChangeType(Interlocked.Increment(ref _current), typeof(TValue), CultureInfo.InvariantCulture);
+    public override TValue Next(EntityEntry entry) => (TValue)Convert.ChangeType(Interlocked.Increment(ref _current), typeof(TValue), CultureInfo.InvariantCulture);
     /// <inheritdoc/>
-    public override bool GeneratesTemporaryValues
-        => false;
+    public override bool GeneratesTemporaryValues => false;
 }

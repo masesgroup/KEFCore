@@ -26,7 +26,6 @@ using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Config;
 using Org.Apache.Kafka.Streams;
-using Org.Apache.Kafka.Streams.Kstream;
 using System.ComponentModel;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
@@ -46,22 +45,17 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 ///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 ///     </para>
 /// </remarks>
-public class KafkaDbContextOptionsBuilder : IKafkaDbContextOptionsBuilderInfrastructure
+/// <remarks>
+///     Initializes a new instance of the <see cref="KafkaDbContextOptionsBuilder" /> class.
+/// </remarks>
+/// <param name="optionsBuilder">The options builder.</param>
+public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder) : IKafkaDbContextOptionsBuilderInfrastructure
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="KafkaDbContextOptionsBuilder" /> class.
-    /// </summary>
-    /// <param name="optionsBuilder">The options builder.</param>
-    public KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder)
-    {
-        OptionsBuilder = optionsBuilder;
-    }
-
     /// <summary>
     ///     Clones the configuration in this builder.
     /// </summary>
     /// <returns>The cloned configuration.</returns>
-    protected virtual DbContextOptionsBuilder OptionsBuilder { get; }
+    protected virtual DbContextOptionsBuilder OptionsBuilder { get; } = optionsBuilder;
 
     /// <inheritdoc />
     DbContextOptionsBuilder IKafkaDbContextOptionsBuilderInfrastructure.OptionsBuilder => OptionsBuilder;

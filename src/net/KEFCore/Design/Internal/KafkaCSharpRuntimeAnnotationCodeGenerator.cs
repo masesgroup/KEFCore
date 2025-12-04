@@ -27,16 +27,12 @@ namespace MASES.EntityFrameworkCore.KNet.Design.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaCSharpRuntimeAnnotationCodeGenerator : CSharpRuntimeAnnotationCodeGenerator
+/// <remarks>
+/// Default initializer
+/// </remarks>
+/// <param name="dependencies"><see cref="CSharpRuntimeAnnotationCodeGeneratorDependencies"/></param>
+public class KafkaCSharpRuntimeAnnotationCodeGenerator(CSharpRuntimeAnnotationCodeGeneratorDependencies dependencies) 
+    : CSharpRuntimeAnnotationCodeGenerator(dependencies)
 {
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    /// <param name="dependencies"><see cref="CSharpRuntimeAnnotationCodeGeneratorDependencies"/></param>
-    public KafkaCSharpRuntimeAnnotationCodeGenerator(
-        CSharpRuntimeAnnotationCodeGeneratorDependencies dependencies)
-        : base(dependencies)
-    {
-    }
 }
 #pragma warning restore EF1001 // Internal EF Core API usage.
