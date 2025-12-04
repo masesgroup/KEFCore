@@ -112,7 +112,7 @@ public class KafkaValueGeneratorSelector(
         {
             return _kafkaCluster.GetIntegerValueGenerator<sbyte>(property);
         }
-#if NET9_0
+#if NET9_0 || NET10_0
         throw new ArgumentException(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
