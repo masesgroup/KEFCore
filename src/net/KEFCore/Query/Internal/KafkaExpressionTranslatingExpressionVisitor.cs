@@ -1027,7 +1027,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     /// </summary>
     protected override Expression VisitParameter(ParameterExpression parameterExpression)
     {
-    	/*
+#if !NET10_0_OR_GREATER
         if (parameterExpression.Name?.StartsWith(LocalParameterPrefix, StringComparison.Ordinal) == true)
         {
             return Expression.Call(
@@ -1035,7 +1035,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 QueryCompilationContext.QueryContextParameter,
                 Expression.Constant(parameterExpression.Name));
         }
-*/
+#endif
         throw new InvalidOperationException(CoreStrings.TranslationFailed(parameterExpression.Print()));
     }
 

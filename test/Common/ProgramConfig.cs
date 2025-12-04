@@ -127,7 +127,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 }
                 else if (arg.StartsWith(PropertyFormat))
                 {
-                    var argVal = arg[FileFormat.Length..];
+                    var argVal = arg[PropertyFormat.Length..];
                     var values = argVal.Split('=');
                     foreach (var prop in props)
                     {
