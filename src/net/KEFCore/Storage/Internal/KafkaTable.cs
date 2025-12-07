@@ -59,7 +59,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 #endif
         Cluster = cluster;
         EntityType = entityType;
-        _tableAssociatedTopicName = Cluster.CreateTable(entityType);
+        _tableAssociatedTopicName = Cluster.CreateTopicForEntity(entityType);
         _producer = EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
         _sensitiveLoggingEnabled = sensitiveLoggingEnabled;

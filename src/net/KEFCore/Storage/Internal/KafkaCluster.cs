@@ -18,7 +18,7 @@
 
 // #define DEBUG_PERFORMANCE
 
-#nullable enable
+#nullable disable
 
 using Java.Util;
 using Java.Util.Concurrent;
@@ -46,9 +46,8 @@ public class KafkaCluster : IKafkaCluster
     private readonly Admin? _kafkaAdminClient = null;
     private readonly Properties _bootstrapProperties;
 
-    private readonly object _lock = new();
-
-    private System.Collections.Generic.Dictionary<object, IKafkaTable>? _tables;
+    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>? _tables;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string>? _topicForEntity = new();
     /// <summary>
     /// Dfault initializer
     /// </summary>
@@ -65,7 +64,8 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (ExecutionException ex)
         {
-            throw ex.InnerException;
+            if (ex.InnerException != null) throw ex.InnerException;
+            throw;
         }
     }
     /// <inheritdoc/>
@@ -91,9 +91,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
         IProperty property)
     {
-        lock (_lock)
-        {
-#if NET9_0
+#if NET9_0 || NET10_0
             var entityType = property.DeclaringType;
 
             return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
@@ -112,7 +110,6 @@ public class KafkaCluster : IKafkaCluster
                 property,
                 entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
 #endif
-        }
     }
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(
@@ -120,47 +117,53 @@ public class KafkaCluster : IKafkaCluster
         IModel designModel,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        lock (_lock)
+        var coll = new ArrayList<Java.Lang.String>();
+        foreach (var entityType in designModel.GetEntityTypes())
         {
-            var coll = new ArrayList<Java.Lang.String>();
-            foreach (var entityType in designModel.GetEntityTypes())
+            string topic = entityType.TopicName(Options);
+            if (!Options.UseCompactedReplicator)
             {
-                var topic = entityType.TopicName(Options);
-                if (!Options.UseCompactedReplicator)
+                try
                 {
-                    try
-                    {
-                        StreamsResetter.ResetApplicationForced(Options.BootstrapServers, entityType.ApplicationIdForTable(Options), topic);
-                    }
-                    catch (ExecutionException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    StreamsResetter.ResetApplicationForced(Options.BootstrapServers, entityType.ApplicationIdForTable(Options), topic);
                 }
-                coll.Add(topic);
-            }
-
-            DeleteTopicsResult? result = default;
-            KafkaFuture<Java.Lang.Void>? future = default;
-            try
-            {
-                result = _kafkaAdminClient?.DeleteTopics(coll);
-                future = result?.All();
-                future?.Get();
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException is UnknownTopicOrPartitionException)
+                catch (ExecutionException ex)
                 {
-#if DEBUG_PERFORMANCE
-                    Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); 
-#endif
+                    if (ex.InnerException != null) throw ex.InnerException;
+                    throw;
                 }
-                else throw ex.InnerException;
             }
-            finally { future?.Dispose(); result?.Dispose(); }
+            if (_topicForEntity.TryRemove(entityType, out string topicName))
+            {
+                if (topicName != topic)
+                {
+                    coll.Add(topicName);
+                }
+            }
+            coll.Add(topic);
         }
 
+        DeleteTopicsResult? result = default;
+        KafkaFuture<Java.Lang.Void>? future = default;
+        try
+        {
+            result = _kafkaAdminClient?.DeleteTopics(coll);
+            future = result?.All();
+            future?.Get();
+        }
+        catch (ExecutionException ex)
+        {
+            if (ex.InnerException is UnknownTopicOrPartitionException)
+            {
+#if DEBUG_PERFORMANCE
+                Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); 
+#endif
+            }
+            else if (ex.InnerException != null) throw ex.InnerException;
+            throw;
+        }
+        finally { future?.Dispose(); result?.Dispose(); }
+        
         if (_tables == null)
         {
             return false;
@@ -176,34 +179,31 @@ public class KafkaCluster : IKafkaCluster
         IModel designModel,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        lock (_lock)
+        var valuesSeeded = _tables == null;
+        if (valuesSeeded)
         {
-            var valuesSeeded = _tables == null;
-            if (valuesSeeded)
+            _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
+
+            var updateAdapter = updateAdapterFactory.CreateStandalone();
+            var entries = new System.Collections.Generic.List<IUpdateEntry>();
+            foreach (var entityType in designModel.GetEntityTypes())
             {
-                _tables = CreateTables();
+                EnsureTable(entityType);
 
-                var updateAdapter = updateAdapterFactory.CreateStandalone();
-                var entries = new System.Collections.Generic.List<IUpdateEntry>();
-                foreach (var entityType in designModel.GetEntityTypes())
+                IEntityType? targetEntityType = null;
+                foreach (var targetSeed in entityType.GetSeedData())
                 {
-                    EnsureTable(entityType);
-
-                    IEntityType? targetEntityType = null;
-                    foreach (var targetSeed in entityType.GetSeedData())
-                    {
-                        targetEntityType ??= updateAdapter.Model.FindEntityType(entityType.Name)!;
-                        var entry = updateAdapter.CreateEntry(targetSeed, targetEntityType);
-                        entry.EntityState = EntityState.Added;
-                        entries.Add(entry);
-                    }
+                    targetEntityType ??= updateAdapter.Model.FindEntityType(entityType.Name)!;
+                    var entry = updateAdapter.CreateEntry(targetSeed, targetEntityType);
+                    entry.EntityState = EntityState.Added;
+                    entries.Add(entry);
                 }
-
-                ExecuteTransaction(entries, updateLogger);
             }
 
-            return valuesSeeded;
+            ExecuteTransaction(entries, updateLogger);
         }
+
+        return valuesSeeded;
     }
     /// <inheritdoc/>
     public virtual bool EnsureConnected(
@@ -213,12 +213,15 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
     /// <inheritdoc/>
-    public virtual string CreateTable(IEntityType entityType)
+    public virtual string CreateTopicForEntity(IEntityType entityType)
     {
-        return CreateTable(entityType, 0);
+        return _topicForEntity.GetOrAdd(entityType, (et) =>
+        {
+            return CreateTopicForEntity(et, 0);
+        });
     }
 
-    private string CreateTable(IEntityType entityType, int cycle)
+    private string CreateTopicForEntity(IEntityType entityType, int cycle)
     {
         if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
 
@@ -256,7 +259,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.Message.Contains("deletion"))
             {
                 Thread.Sleep(1000); // wait a while to complete topic deletion and try again
-                return CreateTable(entityType, cycle++);
+                return CreateTopicForEntity(entityType, cycle++);
             }
         }
         finally { future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
@@ -264,22 +267,19 @@ public class KafkaCluster : IKafkaCluster
         return topicName;
     }
 
-    private static System.Collections.Generic.Dictionary<object, IKafkaTable> CreateTables() => new();
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
-        lock (_lock)
-        {
 #if DEBUG_PERFORMANCE
-            Stopwatch tableSw = new();
-            Stopwatch valueBufferSw = new();
-            try
-            {
-                tableSw.Start();
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
 #endif
             EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
-                valueBufferSw.Start();
+            valueBufferSw.Start();
 #endif
             var key = _useNameMatching ? (object)entityType.Name : entityType;
             if (_tables != null && _tables.TryGetValue(key, out var table))
@@ -288,14 +288,13 @@ public class KafkaCluster : IKafkaCluster
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
-            }
-            finally
-            {
-                valueBufferSw.Stop();
-                Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
-            }
-#endif
         }
+        finally
+        {
+            valueBufferSw.Stop();
+            Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
     }
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(
@@ -305,54 +304,50 @@ public class KafkaCluster : IKafkaCluster
         var rowsAffected = 0;
         System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = new();
 
-        lock (_lock)
+        for (var i = 0; i < entries.Count; i++)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < entries.Count; i++)
+            var entry = entries[i];
+            var entityType = entry.EntityType;
+
+            Check.DebugAssert(!entityType.IsAbstract(), "entityType is abstract");
+
+            var table = EnsureTable(entityType);
+
+            IKafkaRowBag record;
+
+            if (entry.SharedIdentityEntry != null)
             {
-                var entry = entries[i];
-                var entityType = entry.EntityType;
-
-                Check.DebugAssert(!entityType.IsAbstract(), "entityType is abstract");
-
-                var table = EnsureTable(entityType);
-
-                IKafkaRowBag record;
-
-                if (entry.SharedIdentityEntry != null)
+                if (entry.EntityState == EntityState.Deleted)
                 {
-                    if (entry.EntityState == EntityState.Deleted)
-                    {
-                        continue;
-                    }
-
-                    record = table.Delete(entry);
+                    continue;
                 }
 
-                switch (entry.EntityState)
-                {
-                    case EntityState.Added:
-                        record = table.Create(entry);
-                        break;
-                    case EntityState.Deleted:
-                        record = table.Delete(entry);
-                        break;
-                    case EntityState.Modified:
-                        record = table.Update(entry);
-                        break;
-                    default:
-                        continue;
-                }
-
-                if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag>? recordList))
-                {
-                    recordList = new System.Collections.Generic.List<IKafkaRowBag>();
-                    dataInTransaction[table] = recordList;
-                }
-                recordList?.Add(record);
-
-                rowsAffected++;
+                _ = table.Delete(entry);
             }
+
+            switch (entry.EntityState)
+            {
+                case EntityState.Added:
+                    record = table.Create(entry);
+                    break;
+                case EntityState.Deleted:
+                    record = table.Delete(entry);
+                    break;
+                case EntityState.Modified:
+                    record = table.Update(entry);
+                    break;
+                default:
+                    continue;
+            }
+
+            if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag>? recordList))
+            {
+                recordList = [];
+                dataInTransaction[table] = recordList;
+            }
+            recordList?.Add(record);
+
+            rowsAffected++;
         }
 
         updateLogger.ChangesSaved(entries, rowsAffected);
@@ -368,19 +363,19 @@ public class KafkaCluster : IKafkaCluster
     // Must be called from inside the lock
     private IKafkaTable EnsureTable(IEntityType entityType)
     {
-        _tables ??= CreateTables();
+        _tables ??= new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
 
         var entityTypes = entityType.GetAllBaseTypesInclusive();
         foreach (var currentEntityType in entityTypes)
         {
             var key = _useNameMatching ? (object)currentEntityType.Name : currentEntityType;
-            if (!_tables.TryGetValue(key, out _))
+            _ = _tables.GetOrAdd(key, (k) =>
             {
 #if DEBUG_PERFORMANCE
                 Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
 #endif
-                _tables.Add(key, _ = _tableFactory.Create(this, currentEntityType));
-            }
+                return _tableFactory.Create(this, currentEntityType);
+            });
         }
 
         return _tables[_useNameMatching ? entityType.Name : entityType];
