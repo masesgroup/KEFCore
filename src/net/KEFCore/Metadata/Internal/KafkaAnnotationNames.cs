@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -27,7 +27,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCompilingExpressionVisitorFactory
+public static class KafkaAnnotationNames
 {
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -35,16 +35,7 @@ public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCom
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public KafkaShapedQueryCompilingExpressionVisitorFactory(
-        ShapedQueryCompilingExpressionVisitorDependencies dependencies)
-    {
-        Dependencies = dependencies;
-    }
-
-    /// <summary>
-    ///     Dependencies for this service.
-    /// </summary>
-    protected virtual ShapedQueryCompilingExpressionVisitorDependencies Dependencies { get; }
+    public const string Prefix = "InMemory:";
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -52,7 +43,5 @@ public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCom
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    [DebuggerStepThrough]
-    public virtual ShapedQueryCompilingExpressionVisitor Create(QueryCompilationContext queryCompilationContext)
-        => new KafkaShapedQueryCompilingExpressionVisitor(Dependencies, queryCompilationContext);
+    public const string DefiningQuery = Prefix + "DefiningQuery";
 }

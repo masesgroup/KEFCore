@@ -93,9 +93,14 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                     {
                         variable = Parameter(shaper.StructuralType.ClrType);
                         _variables.Add(variable);
-                        var innerShaper =
+#if NET10_0
+                            var innerShaper =
+                            _kafkaShapedQueryCompilingExpressionVisitor.InjectStructuralTypeMaterializers(shaper);
+#else
+                            var innerShaper =
                             _kafkaShapedQueryCompilingExpressionVisitor.InjectEntityMaterializers(shaper);
-                        innerShaper = Visit(innerShaper);
+#endif
+                            innerShaper = Visit(innerShaper);
                         _expressions.Add(Assign(variable, innerShaper));
                         _mapping[key] = variable;
                     }

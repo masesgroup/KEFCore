@@ -127,6 +127,12 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            9.x
+            10.x
+
       - name: Get last workflow run of JNet
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
         shell: bash
@@ -194,6 +200,7 @@ jobs:
         run: |
           Copy-Item .github\workflows\configuration\* -Destination bin\net8.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
+          Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
 
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v4
@@ -208,13 +215,20 @@ jobs:
           enableCrossOsArchive: true
           path: ./bin/net9.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net9.0_bin_${{ github.sha }}
+
+      - name: Save KEFCore net10.0 bin in cache
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: ./bin/net10.0/
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net10.0_bin_${{ github.sha }}
  
   execute_tests_linux:
     needs: build_windows
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:V3.0.4.0 # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.1.1.0 # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -222,14 +236,14 @@ jobs:
           - 9092:9092
         env:
           KNET_DOCKER_RUNNING_MODE: server-standalone
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
           
     strategy:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         os: [ 'ubuntu-latest' ]
-        framework: [ 'net8.0', 'net9.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
@@ -242,7 +256,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -265,6 +279,12 @@ jobs:
         with:
           dotnet-version: |
             9.x
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net10.0' }}
+        with:
+          dotnet-version: |
+            10.x
 
       - name: Execute Benchmark.KafkaStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -315,7 +335,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         os: [ 'windows-2022' ]
-        framework: [ 'net8.0', 'net9.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
@@ -328,7 +348,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -345,6 +365,12 @@ jobs:
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net10.0' }}
+        with:
+          dotnet-version: |
+            10.x
 
       - name: Disable CET for dotnet process
         run: |
@@ -381,7 +407,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.0.4
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.1
 
       - name: Prepare log files folder
         shell: pwsh
@@ -599,7 +625,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
         os: [ 'macos-14' ]
-        framework: [ 'net8.0', 'net9.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
         jdk_version: [ '17', '21' ] # only LTS versions
         
@@ -612,7 +638,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_4 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -649,7 +675,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.0.4
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.1
 
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties

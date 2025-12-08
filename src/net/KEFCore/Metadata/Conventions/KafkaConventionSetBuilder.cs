@@ -37,18 +37,12 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
 ///     </para>
 /// </remarks>
-public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
+/// <remarks>
+///     Creates a new <see cref="KafkaConventionSetBuilder" /> instance.
+/// </remarks>
+/// <param name="dependencies">The core dependencies for this service.</param>
+public class KafkaConventionSetBuilder(ProviderConventionSetBuilderDependencies dependencies) : ProviderConventionSetBuilder(dependencies)
 {
-    /// <summary>
-    ///     Creates a new <see cref="KafkaConventionSetBuilder" /> instance.
-    /// </summary>
-    /// <param name="dependencies">The core dependencies for this service.</param>
-    public KafkaConventionSetBuilder(
-        ProviderConventionSetBuilderDependencies dependencies)
-        : base(dependencies)
-    {
-    }
-
     /// <inheritdoc />
     public override ConventionSet CreateConventionSet()
     {
@@ -93,10 +87,9 @@ public class KafkaConventionSetBuilder : ProviderConventionSetBuilder
     {
         var serviceProvider = new ServiceCollection()
             .AddEntityFrameworkKafkaDatabase()
-            .AddDbContext<DbContext>(
-                (p, o) =>
-                    o.UseKafkaCluster(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
-                        .UseInternalServiceProvider(p))
+            .AddDbContext<DbContext>((p, o) =>
+                o.UseKafkaCluster(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
+                    .UseInternalServiceProvider(p))
             .BuildServiceProvider();
 
         return serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();

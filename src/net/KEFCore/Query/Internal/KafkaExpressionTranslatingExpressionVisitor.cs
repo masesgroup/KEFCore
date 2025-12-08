@@ -21,6 +21,7 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
@@ -36,10 +37,15 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 {
+#if NET10_0
+    private const string LocalParameterPrefix = "__";
+    private const string RuntimeParameterPrefix = "entity_equality_";
+#else
+    private const string LocalParameterPrefix = QueryCompilationContext.QueryParameterPrefix;
     private const string RuntimeParameterPrefix = QueryCompilationContext.QueryParameterPrefix + "entity_equality_";
-
-    private static readonly List<MethodInfo> SingleResultMethodInfos = new()
-    {
+#endif
+    private static readonly List<MethodInfo> SingleResultMethodInfos =
+    [
         QueryableMethods.FirstWithPredicate,
         QueryableMethods.FirstWithoutPredicate,
         QueryableMethods.FirstOrDefaultWithPredicate,
@@ -52,9 +58,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         QueryableMethods.LastWithoutPredicate,
         QueryableMethods.LastOrDefaultWithPredicate,
         QueryableMethods.LastOrDefaultWithoutPredicate
-        //QueryableMethodProvider.ElementAtMethodInfo,
-        //QueryableMethodProvider.ElementAtOrDefaultMethodInfo
-    };
+    ];
 
     private static readonly MemberInfo ValueBufferIsEmpty = typeof(ValueBuffer).GetMember(nameof(ValueBuffer.IsEmpty))[0];
 
@@ -389,8 +393,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         foreach (var candidate in comparer
                      .GetType()
                      .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                     .Where(
-                         m => m.Name == "Equals" && m.GetParameters().Length == 2)
+                     .Where(m => m.Name == "Equals" && m.GetParameters().Length == 2)
                      .ToList())
         {
             var parameters = candidate.GetParameters();
@@ -499,23 +502,25 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
-    {
-        switch (extensionExpression)
+        => extensionExpression switch
         {
-            case EntityProjectionExpression:
+            EntityProjectionExpression or StructuralTypeReferenceExpression
+                => extensionExpression,
+#if NET10_0
+            QueryParameterExpression queryParameter
+                => Expression.Call(
+                    GetParameterValueMethodInfo.MakeGenericMethod(queryParameter.Type),
+                    QueryCompilationContext.QueryContextParameter,
+                    Expression.Constant(queryParameter.Name)),
+#endif
+            StructuralTypeShaperExpression shaper
+                => new StructuralTypeReferenceExpression(shaper),
 
-            case StructuralTypeReferenceExpression:
-                return extensionExpression;
-            case StructuralTypeShaperExpression shaper:
-                return new StructuralTypeReferenceExpression(shaper);
-            case ProjectionBindingExpression projectionBindingExpression:
-                return ((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
-                    .GetProjection(projectionBindingExpression);
+            ProjectionBindingExpression projectionBindingExpression
+                => ((KafkaQueryExpression)projectionBindingExpression.QueryExpression).GetProjection(projectionBindingExpression),
 
-            default:
-                return QueryCompilationContext.NotTranslatedExpression;
-        }
-    }
+            _ => QueryCompilationContext.NotTranslatedExpression
+        };
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -571,7 +576,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return QueryCompilationContext.NotTranslatedExpression;
         }
 
-        if (TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member), memberExpression.Type) is Expression result)
+        if (TryBindMember(innerExpression, MemberIdentity.Create(memberExpression.Member), memberExpression.Type) is { } result)
         {
             return result;
         }
@@ -901,10 +906,15 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
 
         // if object is nullable, add null safeguard before calling the function
-        // we special-case Nullable<>.GetValueOrDefault, which doesn't need the safeguard
+        // we special-case Nullable<>.GetValueOrDefault, which doesn't need the safeguard,
+        // and Nullable<>.ToString when the object is a nullable value type.
         if (methodCallExpression.Object != null
             && @object!.Type.IsNullableType()
-            && methodCallExpression.Method.Name != nameof(Nullable<int>.GetValueOrDefault))
+            && methodCallExpression.Method.Name != nameof(Nullable<int>.GetValueOrDefault)
+            && !(@object!.Type.IsNullableValueType()
+                && methodCallExpression.Method.Name == nameof(Nullable<int>.ToString)
+                && methodCallExpression.Method.DeclaringType != null
+                && methodCallExpression.Method.DeclaringType.IsNullableType()))
         {
             var result = (Expression)methodCallExpression.Update(
                 Expression.Convert(@object, methodCallExpression.Object.Type),
@@ -936,6 +946,18 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             return Expression.Condition(objectNullCheck, Expression.Constant(null, result.Type), result);
+        }
+
+        // Null-compensate any extension method where the 'this' argument is a reference type
+        // (in theory should do this for value types as well, but that's more complicated as the expression type needs to be changed etc.)
+        if (methodCallExpression is { Object: null, Method: { IsStatic: true } staticMethod }
+            && staticMethod.IsDefined(typeof(ExtensionAttribute), inherit: false)
+            && arguments is [{ Type.IsValueType: false } instance, ..])
+        {
+            return Expression.Condition(
+                Expression.Equal(instance, Expression.Constant(null, instance.Type)),
+                Expression.Default(methodCallExpression.Type),
+                Expression.Call(methodCallExpression.Method, arguments));
         }
 
         return methodCallExpression.Update(@object, arguments);
@@ -1005,14 +1027,15 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
     /// </summary>
     protected override Expression VisitParameter(ParameterExpression parameterExpression)
     {
-        if (parameterExpression.Name?.StartsWith(QueryCompilationContext.QueryParameterPrefix, StringComparison.Ordinal) == true)
+#if !NET10_0_OR_GREATER
+        if (parameterExpression.Name?.StartsWith(LocalParameterPrefix, StringComparison.Ordinal) == true)
         {
             return Expression.Call(
                 GetParameterValueMethodInfo.MakeGenericMethod(parameterExpression.Type),
                 QueryCompilationContext.QueryContextParameter,
                 Expression.Constant(parameterExpression.Name));
         }
-
+#endif
         throw new InvalidOperationException(CoreStrings.TranslationFailed(parameterExpression.Print()));
     }
 
@@ -1226,7 +1249,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     [UsedImplicitly]
     private static T GetParameterValue<T>(QueryContext queryContext, string parameterName)
+#if NET10_0
+        => (T)queryContext.Parameters[parameterName]!;
+#else
         => (T)queryContext.ParameterValues[parameterName]!;
+#endif
 
     private static bool IsConvertedToNullable(Expression result, Expression original)
         => result.Type.IsNullableType()
@@ -1324,7 +1351,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
-                    + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
+                    + $"{parameterName[LocalParameterPrefix.Length..]}_{property.Name}";
 
                 rewrittenSource = _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
                 break;
@@ -1378,11 +1405,10 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             result = Visit(
-                primaryKeyProperties1.Select(
-                        p =>
-                            Expression.MakeBinary(
-                                nodeType, CreatePropertyAccessExpression(nonNullEntityReference, p),
-                                Expression.Constant(null, p.ClrType.MakeNullable())))
+                primaryKeyProperties1.Select(p =>
+                        Expression.MakeBinary(
+                            nodeType, CreatePropertyAccessExpression(nonNullEntityReference, p),
+                            Expression.Constant(null, p.ClrType.MakeNullable())))
                     .Aggregate((l, r) => nodeType == ExpressionType.Equal ? Expression.OrElse(l, r) : Expression.AndAlso(l, r)));
 
             return true;
@@ -1430,16 +1456,14 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
 
         result = Visit(
-            primaryKeyProperties.Select(
-                    p =>
-                        Expression.MakeBinary(
-                            nodeType,
-                            CreatePropertyAccessExpression(left, p),
-                            CreatePropertyAccessExpression(right, p)))
-                .Aggregate(
-                    (l, r) => nodeType == ExpressionType.Equal
-                        ? Expression.AndAlso(l, r)
-                        : Expression.OrElse(l, r)));
+            primaryKeyProperties.Select(p =>
+                    Expression.MakeBinary(
+                        nodeType,
+                        CreatePropertyAccessExpression(left, p),
+                        CreatePropertyAccessExpression(right, p)))
+                .Aggregate((l, r) => nodeType == ExpressionType.Equal
+                    ? Expression.AndAlso(l, r)
+                    : Expression.OrElse(l, r)));
 
         return true;
     }
@@ -1468,13 +1492,13 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
                 var newParameterName =
                     $"{RuntimeParameterPrefix}"
-                    + $"{parameterName[QueryCompilationContext.QueryParameterPrefix.Length..]}_{property.Name}";
+                    + $"{parameterName[LocalParameterPrefix.Length..]}_{property.Name}";
 
                 return _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
 
             case MemberInitExpression memberInitExpression
-                when memberInitExpression.Bindings.SingleOrDefault(
-                    mb => mb.Member.Name == property.Name) is MemberAssignment memberAssignment:
+                when memberInitExpression.Bindings.SingleOrDefault(mb => mb.Member.Name == property.Name) is MemberAssignment 
+                   memberAssignment:
                 return memberAssignment.Expression.Type.IsNullableType()
                     ? memberAssignment.Expression
                     : Expression.Convert(memberAssignment.Expression, property.ClrType.MakeNullable());
@@ -1494,7 +1518,11 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     private static T? ParameterValueExtractor<T>(QueryContext context, string baseParameterName, IProperty property)
     {
+#if NET10_0
+        var baseParameter = context.Parameters[baseParameterName];
+#else
         var baseParameter = context.ParameterValues[baseParameterName];
+#endif
         return baseParameter == null ? (T?)(object?)null : (T?)property.GetGetter().GetClrValue(baseParameter);
     }
 
@@ -1503,11 +1531,17 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         string baseParameterName,
         IProperty property)
     {
+#if NET10_0
+        if (context.Parameters[baseParameterName] is not IEnumerable<TEntity> baseListParameter)
+        {
+            return null;
+        }
+#else
         if (!(context.ParameterValues[baseParameterName] is IEnumerable<TEntity> baseListParameter))
         {
             return null;
         }
-
+#endif
         var getter = property.GetGetter();
         return baseListParameter.Select(e => e != null ? (TProperty?)getter.GetClrValue(e) : (TProperty?)(object?)null).ToList();
     }
@@ -1560,11 +1594,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                     {
                         l = l.Type.IsNullableType() ? l : Expression.Convert(l, r.Type);
                     }
-#if NET7_0_OR_GREATER
+
                     return ExpressionExtensions.CreateEqualsExpression(l, r);
-#else
-                    return Expression.Equal(l, r);
-#endif
                 })
             .Aggregate((a, b) => Expression.AndAlso(a, b));
 
@@ -1678,7 +1709,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return _found;
         }
 
-        [return: NotNullIfNotNull("expression")]
+        [return: NotNullIfNotNull(nameof(expression))]
         public override Expression? Visit(Expression? expression)
         {
             if (_found)
@@ -1736,7 +1767,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             return StructuralType is IEntityType entityType
-                && entityType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type) is IEntityType derivedEntityType
+                && entityType.GetDerivedTypes().FirstOrDefault(et => et.ClrType == type) is { } derivedEntityType
                     ? new StructuralTypeReferenceExpression(this, derivedEntityType)
                     : QueryCompilationContext.NotTranslatedExpression;
         }

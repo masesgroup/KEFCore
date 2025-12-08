@@ -6,8 +6,8 @@
 		<PackageId>MASES.EntityFrameworkCore.KNet.Templates</PackageId>
 		<Title>EntityFrameworkCore KNet Templates - Templates to use with KNet</Title>
 		<Summary>Ready made templates to create applications based on Entity Framework Core provider for Apache Kafka</Summary>
-		<Description>Ready made templates to create applications based on Entity Framework Core provider for Apache Kafka. The templates are ready made starting points, all information and APIs are available in the official website https://masesgroup.github.io/KEFCore</Description>
-		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<Description>Ready made templates to create applications based on Entity Framework Core provider for Apache Kafka. The templates are ready made starting points, all information and APIs are available in the official website https://kefcore.masesgroup.com</Description>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr net8 net 9 net10 apachekafka connect streams producer consumer</PackageTags>
 		<Product>MASES.EntityFrameworkCore.KNet Templates</Product>
 		<IncludeSymbols>false</IncludeSymbols>
 		<IncludeBuildOutput>false</IncludeBuildOutput>

@@ -54,7 +54,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
         public bool UseByteBufferDataTransfer { get; set; } = true;
-        public bool PreserveInformationAcrossContexts { get; set; } = true;
+        public bool PreserveStreamsAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string DatabaseName { get; set; } = "TestDB";
         public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
@@ -127,7 +127,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 }
                 else if (arg.StartsWith(PropertyFormat))
                 {
-                    var argVal = arg[FileFormat.Length..];
+                    var argVal = arg[PropertyFormat.Length..];
                     var values = argVal.Split('=');
                     foreach (var prop in props)
                     {
@@ -166,7 +166,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
                 KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();
-                KEFCore.PreserveInformationAcrossContexts = Config.PreserveInformationAcrossContexts;
+                KEFCore.PreserveStreamsAcrossContexts = Config.PreserveStreamsAcrossContexts;
             }
         }
 

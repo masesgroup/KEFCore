@@ -8,7 +8,7 @@
 		<Description>EntityFrameworkCore KNet - Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Serialization</Product>
 		<OutputPath>..\..\..\bin\</OutputPath>
-		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr net8 net 9 net10 apachekafka connect streams producer consumer</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization</PackageId>
 		<PackageReadmeFile>serialization.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
@@ -43,7 +43,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net9.0'" />
-		<PackageReference Include="MASES.KNet" Version="3.1.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net10.0'" />
+		<PackageReference Include="MASES.KNet" Version="3.1.1">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>

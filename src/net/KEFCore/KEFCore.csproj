@@ -8,7 +8,7 @@
 		<Description>EntityFrameworkCore KNet - EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet</Product>
 		<OutputPath>..\..\..\bin\</OutputPath>
-		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<PackageTags>Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr net8 net 9 net10 apachekafka connect streams producer consumer</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet</PackageId>
 		<PackageReadmeFile>gettingstarted.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
@@ -23,12 +23,35 @@
 	<Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
 		<Copy SourceFiles="@(kefcorefiles_config)" DestinationFolder="$(OutDir)\config\%(RecursiveDir)" />
 	</Target>
-	
-	<ItemGroup Condition="'$(TargetFramework)' != 'net8.0'">
-		<Compile Remove="Shared\ExpressionVisitorExtensions.cs" />
-		<Compile Remove="Shared\OrderedDictionary.cs" />
-		<Compile Remove="Shared\OrderedDictionary.KeyCollection.cs" />
-		<Compile Remove="Shared\OrderedDictionary.ValueCollection.cs" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+	  <Compile Remove="Shared\**" />
+	  <EmbeddedResource Remove="Shared\**" />
+	  <None Remove="Shared\**" />
+	  <Folder Include="SharedEF10\" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\BidirectionalDictionary.cs" Link="SharedEF10\BidirectionalDictionary.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\Check.cs" Link="SharedEF10\Check.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\CodeAnnotations.cs" Link="SharedEF10\CodeAnnotations.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\DictionaryExtensions.cs" Link="SharedEF10\DictionaryExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\DisposableExtensions.cs" Link="SharedEF10\DisposableExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\EFDiagnostics.cs" Link="SharedEF10\EFDiagnostics.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\EnumerableExtensions.cs" Link="SharedEF10\EnumerableExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\EnumerableMethods.cs" Link="SharedEF10\EnumerableMethods.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\ExpressionExtensions.cs" Link="SharedEF10\ExpressionExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\ExpressionVisitorExtensions.cs" Link="SharedEF10\ExpressionVisitorExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\Graph.cs" Link="SharedEF10\Graph.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\HashHelpers.cs" Link="SharedEF10\HashHelpers.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\IDictionaryDebugView.cs" Link="SharedEF10\IDictionaryDebugView.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\MemberInfoExtensions.cs" Link="SharedEF10\MemberInfoExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\MethodInfoExtensions.cs" Link="SharedEF10\MethodInfoExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\Multigraph.cs" Link="SharedEF10\Multigraph.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\NonCapturingLazyInitializer.cs" Link="SharedEF10\NonCapturingLazyInitializer.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\OrderedDictionary.cs" Link="SharedEF10\OrderedDictionary.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\OrderedDictionary.KeyCollection.cs" Link="SharedEF10\OrderedDictionary.KeyCollection.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\OrderedDictionary.ValueCollection.cs" Link="SharedEF10\OrderedDictionary.ValueCollection.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\PropertyInfoExtensions.cs" Link="SharedEF10\PropertyInfoExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\SharedStopwatch.cs" Link="SharedEF10\SharedStopwatch.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\SharedTypeExtensions.cs" Link="SharedEF10\SharedTypeExtensions.cs" />
+	  <Compile Include="..\..\3rdparty\efcore\src\Shared\StringBuilderExtensions.cs" Link="SharedEF10\StringBuilderExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

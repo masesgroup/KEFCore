@@ -8,7 +8,7 @@
 		<Description>EntityFrameworkCore KNet - Protobuf Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</Product>
 		<OutputPath>..\..\..\bin\</OutputPath>
-		<PackageTags>Protobuf;Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr netcore net6 apachekafka connect streams producer consumer</PackageTags>
+		<PackageTags>Protobuf;Entity Framework Core;entity-framework-core;ef;efcore;EntityFrameworkCore;orm;O/RM;sql kafka apache-kafka dotnet clr net8 net 9 net10 apachekafka connect streams producer consumer</PackageTags>
 		<PackageId>MASES.EntityFrameworkCore.KNet.Serialization.Protobuf</PackageId>
 		<PackageReadmeFile>serialization.md</PackageReadmeFile>
 		<Nullable>enable</Nullable>
@@ -42,7 +42,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\KEFCore.SerDes\KEFCore.SerDes.csproj" />
-		<PackageReference Include="Google.Protobuf" Version="3.33.1" />
+		<PackageReference Include="Google.Protobuf" Version="3.33.2" />
 		<PackageReference Include="Google.Protobuf.Tools" Version="3.33.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

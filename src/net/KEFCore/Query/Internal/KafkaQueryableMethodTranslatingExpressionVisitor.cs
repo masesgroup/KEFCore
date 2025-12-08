@@ -254,37 +254,12 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     /// </summary>
     protected override ShapedQueryExpression? TranslateContains(ShapedQueryExpression source, Expression item)
     {
-#if NET7_0_OR_GREATER
         var anyLambdaParameter = Expression.Parameter(item.Type, "p");
         var anyLambda = Expression.Lambda(
             ExpressionExtensions.CreateEqualsExpression(anyLambdaParameter, item),
             anyLambdaParameter);
 
         return TranslateAny(source, anyLambda);
-#else
-        var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
-        var newItem = TranslateExpression(item, preserveType: true);
-        if (newItem == null)
-        {
-            return null;
-        }
-
-        item = newItem;
-
-        kafkaQueryExpression.UpdateServerQueryExpression(
-            Expression.Call(
-                EnumerableMethods.Contains.MakeGenericMethod(item.Type),
-                Expression.Call(
-                    EnumerableMethods.Select.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type, item.Type),
-                    kafkaQueryExpression.ServerQueryExpression,
-                    Expression.Lambda(
-                        kafkaQueryExpression.GetProjection(
-                            new ProjectionBindingExpression(kafkaQueryExpression, new ProjectionMember(), item.Type)),
-                        kafkaQueryExpression.CurrentParameter)),
-                item));
-
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
-#endif
     }
 
     /// <summary>
@@ -566,11 +541,9 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     {
         var left = RemapLambdaBody(outer, outerKeySelector);
         var right = RemapLambdaBody(inner, innerKeySelector);
-#if NET7_0_OR_GREATER
+
         var joinCondition = TranslateExpression(ExpressionExtensions.CreateEqualsExpression(left, right));
-#else
-        var joinCondition = TranslateExpression(Expression.Equal(left, right));
-#endif
+
         var (outerKeyBody, innerKeyBody) = DecomposeJoinCondition(joinCondition);
 
         if (outerKeyBody == null
@@ -719,7 +692,24 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return TranslateTwoParameterSelector(outer, resultSelector);
     }
-
+#if NET10_0
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
+    protected override ShapedQueryExpression? TranslateRightJoin(
+        ShapedQueryExpression outer, 
+        ShapedQueryExpression inner, 
+        LambdaExpression outerKeySelector, 
+        LambdaExpression innerKeySelector, 
+        LambdaExpression resultSelector)
+    {
+#warning to be rewieved
+        return null;
+    }
+#endif
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -1198,6 +1188,18 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         protected override Expression VisitMember(MemberExpression memberExpression)
         {
+            // Fold member access into conditional, i.e. transform
+            // (test ? expr1 : expr2).Member -> (test ? expr1.Member : expr2.Member)
+            if (memberExpression.Expression is ConditionalExpression cond)
+            {
+                return Visit(
+                    Expression.Condition(
+                        cond.Test,
+                        Expression.MakeMemberAccess(cond.IfTrue, memberExpression.Member),
+                        Expression.MakeMemberAccess(cond.IfFalse, memberExpression.Member)
+                    ));
+            }
+
             var innerExpression = Visit(memberExpression.Expression);
 
             return TryExpand(innerExpression, MemberIdentity.Create(memberExpression.Member))
@@ -1225,7 +1227,6 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         private Expression? TryExpand(Expression? source, MemberIdentity member)
         {
             source = source.UnwrapTypeConversion(out var convertedType);
-
             if (source is not StructuralTypeShaperExpression shaper)
             {
                 return null;
@@ -1286,22 +1287,19 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                         ? foreignKey.PrincipalKey.Properties
                         : foreignKey.Properties,
                     makeNullable);
-#if NET7_0_OR_GREATER
+
                 var keyComparison = ExpressionExtensions.CreateEqualsExpression(outerKey, innerKey);
-#else
-                var keyComparison = (Expression)Expression.Call(ObjectEqualsMethodInfo, AddConvertToObject(outerKey), AddConvertToObject(innerKey));
-#endif
+
                 var predicate = makeNullable
                     ? Expression.AndAlso(
                         outerKey is NewArrayExpression newArrayExpression
                             ? newArrayExpression.Expressions
-                                .Select(
-                                    e =>
-                                    {
-                                        var left = (e as UnaryExpression)?.Operand ?? e;
+                                .Select(e =>
+                                {
+                                    var left = (e as UnaryExpression)?.Operand ?? e;
 
-                                        return Expression.NotEqual(left, Expression.Constant(null, left.Type));
-                                    })
+                                    return Expression.NotEqual(left, Expression.Constant(null, left.Type));
+                                })
                                 .Aggregate((l, r) => Expression.AndAlso(l, r))
                             : Expression.NotEqual(outerKey, Expression.Constant(null, outerKey.Type)),
                         keyComparison)
