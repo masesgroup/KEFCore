@@ -118,33 +118,37 @@ public class KafkaCluster : IKafkaCluster
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var coll = new ArrayList<Java.Lang.String>();
+        var topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in designModel.GetEntityTypes())
         {
             string topic = entityType.TopicName(Options);
-            if (!Options.UseCompactedReplicator)
-            {
-                try
-                {
-                    StreamsResetter.ResetApplicationForced(Options.BootstrapServers, entityType.ApplicationIdForTable(Options), topic);
-                }
-                catch (ExecutionException ex)
-                {
-                    if (ex.InnerException != null) throw ex.InnerException;
-                    throw;
-                }
-            }
             if (_topicForEntity.TryRemove(entityType, out string topicName))
             {
                 if (topicName != topic)
                 {
+                    topics.Add(topicName);
                     coll.Add(topicName);
                 }
             }
+            topics.Add(topic);
             coll.Add(topic);
         }
 
-        DeleteTopicsResult? result = default;
-        KafkaFuture<Java.Lang.Void>? future = default;
+        if (!Options.UseCompactedReplicator)
+        {
+            try
+            {
+                StreamsResetter.ResetApplicationForced(Options.BootstrapServers, Options.ApplicationId, topics.ToArray());
+            }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                throw;
+            }
+        }
+
+        DeleteTopicsResult result = default;
+        KafkaFuture<Java.Lang.Void> future = default;
         try
         {
             result = _kafkaAdminClient?.DeleteTopics(coll);
