@@ -160,7 +160,7 @@ public class KafkaCluster : IKafkaCluster
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
-            throw;
+            else throw;
         }
         finally { future?.Dispose(); result?.Dispose(); }
         
