@@ -2496,19 +2496,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.KEFCore.DefaultLog4JConfiguration
   nameWithType: KEFCore.DefaultLog4JConfiguration
-- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
-  name: PreserveInformationAcrossContexts
-  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveInformationAcrossContexts
-  commentId: P:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
-  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
-  nameWithType: KEFCore.PreserveInformationAcrossContexts
-- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts*
-  name: PreserveInformationAcrossContexts
-  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveInformationAcrossContexts_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  name: PreserveStreamsAcrossContexts
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts
+  commentId: P:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  nameWithType: KEFCore.PreserveStreamsAcrossContexts
+- uid: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts*
+  name: PreserveStreamsAcrossContexts
+  href: api/MASES.EntityFrameworkCore.KNet.KEFCore.html#MASES_EntityFrameworkCore_KNet_KEFCore_PreserveStreamsAcrossContexts_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveInformationAcrossContexts
-  nameWithType: KEFCore.PreserveInformationAcrossContexts
+  fullName: MASES.EntityFrameworkCore.KNet.KEFCore.PreserveStreamsAcrossContexts
+  nameWithType: KEFCore.PreserveStreamsAcrossContexts
 - uid: MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions
   name: KafkaDatabaseFacadeExtensions
   href: api/MASES.EntityFrameworkCore.KNet.KafkaDatabaseFacadeExtensions.html
@@ -2939,6 +2939,30 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaConventionSetBuilder.CreateModelBuilder
   nameWithType: KafkaConventionSetBuilder.CreateModelBuilder
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal
+  name: MASES.EntityFrameworkCore.KNet.Metadata.Internal
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.html
+  commentId: N:MASES.EntityFrameworkCore.KNet.Metadata.Internal
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal
+  nameWithType: MASES.EntityFrameworkCore.KNet.Metadata.Internal
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames
+  name: KafkaAnnotationNames
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames
+  nameWithType: KafkaAnnotationNames
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.DefiningQuery
+  name: DefiningQuery
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KafkaAnnotationNames_DefiningQuery
+  commentId: F:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.DefiningQuery
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.DefiningQuery
+  nameWithType: KafkaAnnotationNames.DefiningQuery
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.Prefix
+  name: Prefix
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KafkaAnnotationNames_Prefix
+  commentId: F:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.Prefix
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.Prefix
+  nameWithType: KafkaAnnotationNames.Prefix
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal
   name: MASES.EntityFrameworkCore.KNet.Query.Internal
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.html
@@ -9473,19 +9497,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.ClusterId
   nameWithType: IKafkaCluster.ClusterId
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name: CreateTable(IEntityType)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  nameWithType: IKafkaCluster.CreateTable(IEntityType)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable*
-  name: CreateTable
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTable_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  name: CreateTopicForEntity(IEntityType)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTopicForEntity_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  nameWithType: IKafkaCluster.CreateTopicForEntity(IEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity*
+  name: CreateTopicForEntity
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_CreateTopicForEntity_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTable
-  nameWithType: IKafkaCluster.CreateTable
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.CreateTopicForEntity
+  nameWithType: IKafkaCluster.CreateTopicForEntity
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.EnsureConnected(Microsoft.EntityFrameworkCore.Metadata.IModel,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})
   name: EnsureConnected(IModel, IDiagnosticsLogger<Update>)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_EnsureConnected_Microsoft_EntityFrameworkCore_Metadata_IModel_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__
@@ -9981,19 +10005,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.ClusterId
   nameWithType: KafkaCluster.ClusterId
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name: CreateTable(IEntityType)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_CreateTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  nameWithType: KafkaCluster.CreateTable(IEntityType)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable*
-  name: CreateTable
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_CreateTable_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  name: CreateTopicForEntity(IEntityType)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_CreateTopicForEntity_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
+  nameWithType: KafkaCluster.CreateTopicForEntity(IEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity*
+  name: CreateTopicForEntity
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_CreateTopicForEntity_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTable
-  nameWithType: KafkaCluster.CreateTable
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.CreateTopicForEntity
+  nameWithType: KafkaCluster.CreateTopicForEntity
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.Dispose
   name: Dispose()
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaCluster_Dispose

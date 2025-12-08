@@ -404,6 +404,34 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KafkaAnnotationNames.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Internal",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Query.Internal.AnonymousObject.yml",
       "output": {
         ".html": {
