@@ -46,7 +46,8 @@ jobs:
           add-paths: src/*.*
           commit-message: Update version from ${{ inputs.CurrentVersion }} to ${{ inputs.NewVersion }}
           title: Update version from ${{ inputs.CurrentVersion }} to ${{ inputs.NewVersion }}
-          body: Automated changes by GitHub action #254
+          body: |
+            Automated changes by GitHub action fix #254
           reviewers: masesdevelopers
           assignees: masesdevelopers
-          labels: documentation, enhancement
+          labels: enhancement
