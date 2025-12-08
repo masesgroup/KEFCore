@@ -158,7 +158,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             lock (_managedEntities)
             {
-                if (!KEFCore.PreserveInformationAcrossContexts)
+                if (!KEFCore.PreserveStreamsAcrossContexts)
                 {
                     _managedEntities.Remove(entityType);
                     if (_managedEntities.Count == 0)

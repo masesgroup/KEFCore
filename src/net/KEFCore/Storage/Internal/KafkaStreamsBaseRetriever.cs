@@ -113,7 +113,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             _entityType = entityType;
             _keySerdes = keySerdes;
             _valueSerdes = valueSerdes;
-            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<Org.Apache.Kafka.Streams.State.ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, Org.Apache.Kafka.Streams.State.QueryableStoreTypes.KeyValueStore<K, V>()));
+            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"KafkaEnumerator for {_entityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif

@@ -33,12 +33,7 @@ public class KafkaValueGeneratorSelector(
     IKafkaDatabase kafkaDatabase) : ValueGeneratorSelector(dependencies)
 {
     private readonly IKafkaCluster _kafkaCluster = kafkaDatabase.Cluster;
-#if NET9_0
-    /// <inheritdoc/>
-    public override bool TryCreate(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
-    {
-        return base.TryCreate(property, typeBase, out valueGenerator);
-    }
+#if NET9_0 || NET10_0
     /// <inheritdoc/>
     public override bool TrySelect(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
     {
@@ -112,7 +107,7 @@ public class KafkaValueGeneratorSelector(
         {
             return _kafkaCluster.GetIntegerValueGenerator<sbyte>(property);
         }
-#if NET9_0
+#if NET9_0 || NET10_0
         throw new ArgumentException(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));

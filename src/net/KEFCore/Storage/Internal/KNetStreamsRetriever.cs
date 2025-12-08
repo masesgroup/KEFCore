@@ -55,7 +55,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
-                                                                                            : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
+                                                                                                   : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
             CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
             CreateTopology = static (builder) => builder.Build(),

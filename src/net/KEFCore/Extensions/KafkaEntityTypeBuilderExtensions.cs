@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet;
@@ -115,9 +116,5 @@ public static class KafkaEntityTypeBuilderExtensions
         this IConventionEntityTypeBuilder entityTypeBuilder,
         LambdaExpression? query,
         bool fromDataAnnotation = false)
-#pragma warning disable EF1001 // Internal EF Core API usage.
-#pragma warning disable CS0612 // Il tipo o il membro è obsoleto
-        => entityTypeBuilder.CanSetAnnotation(CoreAnnotationNames.DefiningQuery, query, fromDataAnnotation);
-#pragma warning restore CS0612 // Il tipo o il membro è obsoleto
-#pragma warning restore EF1001 // Internal EF Core API usage.
+        => entityTypeBuilder.CanSetAnnotation(KafkaAnnotationNames.DefiningQuery, query, fromDataAnnotation);
 }

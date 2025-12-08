@@ -15,9 +15,8 @@
 *
 *  Refer to LICENSE for more information.
 */
-#if NET8_0 || NET9_0
+
 using Microsoft.EntityFrameworkCore.Storage.Json;
-#endif
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -48,7 +47,7 @@ public class KafkaTypeMapping : CoreTypeMapping
         : base(parameters)
     {
     }
-#if NET9_0
+#if NET9_0 || NET10_0
     /// <inheritdoc/>
     protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
     {

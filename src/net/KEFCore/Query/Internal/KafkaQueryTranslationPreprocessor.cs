@@ -64,4 +64,9 @@ public class KafkaQueryTranslationPreprocessor : QueryTranslationPreprocessor
 
         return result;
     }
+#if NET10_0_OR_GREATER
+    /// <inheritdoc />
+    protected override bool IsEfConstantSupported
+        => true;
+#endif
 }

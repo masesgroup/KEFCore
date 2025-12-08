@@ -32,32 +32,22 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public partial class KafkaShapedQueryCompilingExpressionVisitor
 {
-    private sealed class QueryingEnumerable<T> : IAsyncEnumerable<T>, IEnumerable<T>, IQueryingEnumerable
+    private sealed class QueryingEnumerable<T>(
+        QueryContext queryContext,
+        IEnumerable<ValueBuffer> innerEnumerable,
+        Func<QueryContext, ValueBuffer, T> shaper,
+        Type contextType,
+        bool standAloneStateManager,
+        bool threadSafetyChecksEnabled)
+        : IAsyncEnumerable<T>, IEnumerable<T>, IQueryingEnumerable
     {
-        private readonly QueryContext _queryContext;
-        private readonly IEnumerable<ValueBuffer> _innerEnumerable;
-        private readonly Func<QueryContext, ValueBuffer, T> _shaper;
-        private readonly Type _contextType;
-        private readonly IDiagnosticsLogger<DbLoggerCategory.Query> _queryLogger;
-        private readonly bool _standAloneStateManager;
-        private readonly bool _threadSafetyChecksEnabled;
-
-        public QueryingEnumerable(
-            QueryContext queryContext,
-            IEnumerable<ValueBuffer> innerEnumerable,
-            Func<QueryContext, ValueBuffer, T> shaper,
-            Type contextType,
-            bool standAloneStateManager,
-            bool threadSafetyChecksEnabled)
-        {
-            _queryContext = queryContext;
-            _innerEnumerable = innerEnumerable;
-            _shaper = shaper;
-            _contextType = contextType;
-            _queryLogger = queryContext.QueryLogger;
-            _standAloneStateManager = standAloneStateManager;
-            _threadSafetyChecksEnabled = threadSafetyChecksEnabled;
-        }
+        private readonly QueryContext _queryContext = queryContext;
+        private readonly IEnumerable<ValueBuffer> _innerEnumerable = innerEnumerable;
+        private readonly Func<QueryContext, ValueBuffer, T> _shaper = shaper;
+        private readonly Type _contextType = contextType;
+        private readonly IDiagnosticsLogger<DbLoggerCategory.Query> _queryLogger = queryContext.QueryLogger;
+        private readonly bool _standAloneStateManager = standAloneStateManager;
+        private readonly bool _threadSafetyChecksEnabled = threadSafetyChecksEnabled;
 
         public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
             => new Enumerator(this, cancellationToken);
@@ -81,9 +71,8 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
             private readonly bool _standAloneStateManager;
             private readonly CancellationToken _cancellationToken;
             private readonly IConcurrencyDetector? _concurrencyDetector;
-#if NET7_0_OR_GREATER
             private readonly IExceptionDetector _exceptionDetector;
-#endif
+
             private IEnumerator<ValueBuffer>? _enumerator;
 
             public Enumerator(QueryingEnumerable<T> queryingEnumerable, CancellationToken cancellationToken = default)
@@ -95,9 +84,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                 _queryLogger = queryingEnumerable._queryLogger;
                 _standAloneStateManager = queryingEnumerable._standAloneStateManager;
                 _cancellationToken = cancellationToken;
-#if NET7_0_OR_GREATER
                 _exceptionDetector = _queryContext.ExceptionDetector;
-#endif
                 Current = default!;
 
                 _concurrencyDetector = queryingEnumerable._threadSafetyChecksEnabled
@@ -114,20 +101,12 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
             {
                 try
                 {
-                    _concurrencyDetector?.EnterCriticalSection();
+                    using var _ = _concurrencyDetector?.EnterCriticalSection();
 
-                    try
-                    {
-                        return MoveNextHelper();
-                    }
-                    finally
-                    {
-                        _concurrencyDetector?.ExitCriticalSection();
-                    }
+                    return MoveNextHelper();
                 }
                 catch (Exception exception)
                 {
-#if NET7_0_OR_GREATER
                     if (_exceptionDetector.IsCancellation(exception))
                     {
                         _queryLogger.QueryCanceled(_contextType);
@@ -136,9 +115,6 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                     {
                         _queryLogger.QueryIterationFailed(_contextType, exception);
                     }
-#else
-                    _queryLogger.QueryIterationFailed(_contextType, exception);
-#endif
 
                     throw;
                 }
@@ -148,22 +124,14 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
             {
                 try
                 {
-                    _concurrencyDetector?.EnterCriticalSection();
+                    using var _ = _concurrencyDetector?.EnterCriticalSection();
 
-                    try
-                    {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                    _cancellationToken.ThrowIfCancellationRequested();
 
-                        return ValueTask.FromResult(MoveNextHelper());
-                    }
-                    finally
-                    {
-                        _concurrencyDetector?.ExitCriticalSection();
-                    }
+                    return ValueTask.FromResult(MoveNextHelper());
                 }
                 catch (Exception exception)
                 {
-#if NET7_0_OR_GREATER
                     if (_exceptionDetector.IsCancellation(exception, _cancellationToken))
                     {
                         _queryLogger.QueryCanceled(_contextType);
@@ -172,9 +140,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                     {
                         _queryLogger.QueryIterationFailed(_contextType, exception);
                     }
-#else
-                    _queryLogger.QueryIterationFailed(_contextType, exception);
-#endif
+
                     throw;
                 }
             }

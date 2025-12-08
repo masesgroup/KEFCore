@@ -94,10 +94,9 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             foreach (var derivedEntityType in entityType.GetDerivedTypes())
             {
                 var entityCheck = derivedEntityType.GetConcreteDerivedTypesInclusive()
-                    .Select(
-                        e => keyValueComparer.ExtractEqualsBody(
-                            propertyExpressionsMap[discriminatorProperty],
-                            Constant(e.GetDiscriminatorValue(), discriminatorProperty.ClrType)))
+                    .Select(e => keyValueComparer.ExtractEqualsBody(
+                        propertyExpressionsMap[discriminatorProperty],
+                        Constant(e.GetDiscriminatorValue(), discriminatorProperty.ClrType)))
                     .Aggregate((l, r) => OrElse(l, r));
 
                 foreach (var property in derivedEntityType.GetDeclaredProperties())
@@ -218,7 +217,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         EntityProjectionExpression AddEntityProjection(EntityProjectionExpression entityProjectionExpression)
         {
             var readExpressionMap = new Dictionary<IProperty, MethodCallExpression>();
-            foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+            foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
             {
                 var expression = entityProjectionExpression.BindProperty(property);
                 selectorExpressions.Add(expression);
@@ -284,7 +283,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                     case EntityProjectionExpression entityProjectionExpression:
                     {
                         var indexMap = new Dictionary<IProperty, int>();
-                        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+                        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
                         {
                             selectorExpressions.Add(entityProjectionExpression.BindProperty(property));
                             indexMap[property] = selectorExpressions.Count - 1;
@@ -325,7 +324,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                 if (expression is EntityProjectionExpression entityProjectionExpression)
                 {
                     var indexMap = new Dictionary<IProperty, int>();
-                    foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+                    foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
                     {
                         selectorExpressions.Add(entityProjectionExpression.BindProperty(property));
                         indexMap[property] = selectorExpressions.Count - 1;
@@ -402,7 +401,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                     && value2 is EntityProjectionExpression entityProjection2)
                 {
                     var map = new Dictionary<IProperty, MethodCallExpression>();
-                    foreach (var property in GetAllPropertiesInHierarchy(entityProjection1.EntityType))
+                    foreach (var property in GetAllPropertiesInHierarchy(entityProjection1))
                     {
                         var expressionToAdd1 = entityProjection1.BindProperty(property);
                         var expressionToAdd2 = entityProjection2.BindProperty(property);
@@ -692,7 +691,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         var outerIndex = selectorExpressions.Count;
         var innerEntityProjection = (EntityProjectionExpression)innerQueryExpression._projectionMapping[new ProjectionMember()];
         var innerReadExpressionMap = new Dictionary<IProperty, MethodCallExpression>();
-        foreach (var property in GetAllPropertiesInHierarchy(innerEntityProjection.EntityType))
+        foreach (var property in GetAllPropertiesInHierarchy(innerEntityProjection))
         {
             var propertyExpression = innerEntityProjection.BindProperty(property);
             propertyExpression = MakeReadValueNullable(propertyExpression);
@@ -892,7 +891,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
                     (EntityProjectionExpression)((KafkaQueryExpression)projectionBindingExpression.QueryExpression)
                     .GetProjection(projectionBindingExpression);
                 var readExpressions = new Dictionary<IProperty, MethodCallExpression>();
-                foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+                foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
                 {
                     readExpressions[property] = (MethodCallExpression)GetGroupingKey(
                         entityProjectionExpression.BindProperty(property),
@@ -1048,23 +1047,22 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             New(
                 ValueBufferConstructor, NewArrayInit(
                     typeof(object),
-                    resultSelectorExpressions.Select(
-                        (e, i) =>
+                    resultSelectorExpressions.Select((e, i) =>
+                    {
+                        var expression = replacingVisitor.Visit(e);
+                        if (innerNullable
+                            && i > outerIndex)
                         {
-                            var expression = replacingVisitor.Visit(e);
-                            if (innerNullable
-                                && i > outerIndex)
-                            {
-                                expression = MakeReadValueNullable(expression);
-                            }
+                            expression = MakeReadValueNullable(expression);
+                        }
 
-                            if (expression.Type.IsValueType)
-                            {
-                                expression = Convert(expression, typeof(object));
-                            }
+                        if (expression.Type.IsValueType)
+                        {
+                            expression = Convert(expression, typeof(object));
+                        }
 
-                            return expression;
-                        }))),
+                        return expression;
+                    }))),
             outerParameter,
             innerParameter);
 
@@ -1174,9 +1172,13 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
     private MethodCallExpression CreateReadValueExpression(Type type, int index, IPropertyBase? property)
         => (MethodCallExpression)_valueBufferParameter.CreateValueBufferReadValueExpression(type, index, property);
 
-    private static IEnumerable<IProperty> GetAllPropertiesInHierarchy(IEntityType entityType)
-        => entityType.GetAllBaseTypes().Concat(entityType.GetDerivedTypesInclusive())
+    private static IEnumerable<IProperty> GetAllPropertiesInHierarchy(EntityProjectionExpression entityProjectionExpression)
+#if NET8_0
+        => entityProjectionExpression.EntityType.GetAllBaseTypes().Concat(entityProjectionExpression.EntityType.GetDerivedTypesInclusive())
             .SelectMany(t => t.GetDeclaredProperties());
+#else
+        => entityProjectionExpression.EntityType.GetPropertiesInHierarchy();
+#endif
 
     private static IPropertyBase? InferPropertyFromInner(Expression expression)
         => expression is MethodCallExpression { Method.IsGenericMethod: true } methodCallExpression
@@ -1187,7 +1189,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
     private static EntityProjectionExpression MakeEntityProjectionNullable(EntityProjectionExpression entityProjectionExpression)
     {
         var readExpressionMap = new Dictionary<IProperty, MethodCallExpression>();
-        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
         {
             readExpressionMap[property] = MakeReadValueNullable(entityProjectionExpression.BindProperty(property));
         }
@@ -1295,7 +1297,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         bool makeNullable)
     {
         var readExpressionMap = new Dictionary<IProperty, MethodCallExpression>();
-        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression.EntityType))
+        foreach (var property in GetAllPropertiesInHierarchy(entityProjectionExpression))
         {
             var expression = entityProjectionExpression.BindProperty(property);
             if (makeNullable)

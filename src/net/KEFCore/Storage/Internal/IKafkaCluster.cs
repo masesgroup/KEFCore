@@ -41,9 +41,9 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     bool EnsureConnected(IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
-    /// Creates a table for <see cref="IEntityType"/> on Apache Kafka cluster
+    /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
-    string CreateTable(IEntityType entityType);
+    string CreateTopicForEntity(IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/>
     /// </summary>
