@@ -50,4 +50,4 @@ jobs:
             Automated changes by GitHub action fix #254
           reviewers: masesdevelopers
           assignees: masesdevelopers
-          labels: documentation, enhancement
+          labels: enhancement
