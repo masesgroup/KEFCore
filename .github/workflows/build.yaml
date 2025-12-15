@@ -175,7 +175,7 @@ jobs:
 
       - name: Save MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           enableCrossOsArchive: true
           path: ./KNetNuGet/MASES.KNetCLI*
@@ -203,21 +203,21 @@ jobs:
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
 
       - name: Save KEFCore net8.0 bin in cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           enableCrossOsArchive: true
           path: ./bin/net8.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net8.0_bin_${{ github.sha }}
           
       - name: Save KEFCore net9.0 bin in cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           enableCrossOsArchive: true
           path: ./bin/net9.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net9.0_bin_${{ github.sha }}
 
       - name: Save KEFCore net10.0 bin in cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           enableCrossOsArchive: true
           path: ./bin/net10.0/
@@ -260,7 +260,7 @@ jobs:
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
@@ -352,7 +352,7 @@ jobs:
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
@@ -390,7 +390,7 @@ jobs:
 
       - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
@@ -642,7 +642,7 @@ jobs:
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
@@ -658,7 +658,7 @@ jobs:
 
       - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           fail-on-cache-miss: true
           enableCrossOsArchive: true
