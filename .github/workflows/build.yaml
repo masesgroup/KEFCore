@@ -22,6 +22,11 @@ on:
         required: false
         default: false
         type: boolean
+      UseKNetCompactedReplicator:
+        description: 'Use KNetCompactedReplicator as storage backend'
+        required: false
+        default: false
+        type: boolean
       ForceContinueOnError:
         description: 'Force continue-on-error'
         required: false
@@ -228,7 +233,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:V3.1.1.0 # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.1.2.0 # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -236,7 +241,7 @@ jobs:
           - 9092:9092
         env:
           KNET_DOCKER_RUNNING_MODE: server-standalone
-          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
+          JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_6 }}
           
     strategy:
       fail-fast: false
@@ -245,7 +250,7 @@ jobs:
         os: [ 'ubuntu-latest' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -256,7 +261,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_6 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -273,6 +278,12 @@ jobs:
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net8.0' }}
+        with:
+          dotnet-version: |
+            8.x
 
       - uses: actions/setup-dotnet@v5
         if: ${{ matrix.framework == 'net9.0' }}
@@ -311,6 +322,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
@@ -337,7 +349,7 @@ jobs:
         os: [ 'windows-2022' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -348,7 +360,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_6 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -407,7 +419,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.1.1
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.2
 
       - name: Prepare log files folder
         shell: pwsh
@@ -577,6 +589,7 @@ jobs:
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         shell: pwsh
         run: |
@@ -627,7 +640,7 @@ jobs:
         os: [ 'macos-14' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -638,7 +651,7 @@ jobs:
       DOTNET_CreateDumpVerboseDiagnostics: ${{ inputs.EnableVerboseDiagnosticProcessDump }}
       DOTNET_EnableCrashReport: ${{ inputs.EnableProcessDump }}
       DOTNET_CreateDumpLogToFile: ${{ github.workspace }}/coredump.diagnostic
-      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_5 }}
+      JCOBRIDGE_LicensePath: ${{ secrets.JCOBRIDGE_ENCODED_2_6_6 }}
       
     steps:
       - name: Restore KEFCore ${{ matrix.framework }} bin from cache
@@ -655,6 +668,24 @@ jobs:
           distribution: ${{ matrix.jdk_vendor }}
           java-version: ${{ matrix.jdk_version }}
           check-latest: true
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net8.0' }}
+        with:
+          dotnet-version: |
+            8.x
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net9.0' }}
+        with:
+          dotnet-version: |
+            9.x
+
+      - uses: actions/setup-dotnet@v5
+        if: ${{ matrix.framework == 'net10.0' }}
+        with:
+          dotnet-version: |
+            10.x
 
       - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
@@ -675,7 +706,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.1.1
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.2
 
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties
@@ -759,6 +790,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
