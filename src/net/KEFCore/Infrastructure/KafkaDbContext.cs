@@ -222,7 +222,8 @@ const bool perf = false;
     /// <summary>
     /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka Streams
     /// </summary>
-    public virtual bool UseCompactedReplicator { get; set; } = true;
+    [Obsolete("Option will be removed soon")]
+    public virtual bool UseCompactedReplicator { get; set; } = false;
     /// <summary>
     /// Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams
     /// </summary>
@@ -230,6 +231,7 @@ const bool perf = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
+    [Obsolete("Option will be removed soon")] 
     public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
     /// <summary>
     /// The optional <see cref="ProducerConfigBuilder"/>
