@@ -138,7 +138,7 @@ public class KafkaCluster : IKafkaCluster
         {
             try
             {
-                StreamsResetter.ResetApplicationForced(Options.BootstrapServers, Options.ApplicationId, topics.ToArray());
+                StreamsResetter.ResetApplicationForced(Options.BootstrapServers, Options.ApplicationId, topics));
             }
             catch (ExecutionException ex)
             {
