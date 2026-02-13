@@ -50,7 +50,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
-        public bool UseCompactedReplicator { get; set; } = true;
+        public bool UseCompactedReplicator { get; set; } = false;
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
         public bool UseByteBufferDataTransfer { get; set; } = true;
