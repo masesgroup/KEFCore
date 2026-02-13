@@ -35,7 +35,7 @@ Currently the project tries to support, at our best, the [supported Apache Kafka
 
 | KEFCore | State | Apache Kafka™ | .NET | JVM™ |
 |:---:	|:---:	|:---:	|:---:	|:---:	|
-| 2.6.* | Active | 4.0.* | 8+ | 17+ |
+| 2.6.* | Active | 4.1.* | 8+ | 17+ |
 | 2.5.* | Active | 3.9.* | 8+ | 11+ |
 
 ### Community and Contribution
