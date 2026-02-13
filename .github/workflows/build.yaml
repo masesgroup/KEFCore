@@ -22,6 +22,11 @@ on:
         required: false
         default: false
         type: boolean
+      UseKNetCompactedReplicator:
+        description: 'Use KNetCompactedReplicator as storage backend'
+        required: false
+        default: false
+        type: boolean
       ForceContinueOnError:
         description: 'Force continue-on-error'
         required: false
@@ -245,7 +250,7 @@ jobs:
         os: [ 'ubuntu-latest' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -317,6 +322,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetStreams.Buffered.Prefetch.json /p:Use${{ matrix.serialization }}=true
 
       - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
@@ -343,7 +349,7 @@ jobs:
         os: [ 'windows-2022' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -583,6 +589,7 @@ jobs:
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
       - name: Start Kafka and execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         shell: pwsh
         run: |
@@ -633,7 +640,7 @@ jobs:
         os: [ 'macos-14' ]
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
-        jdk_version: [ '17', '21' ] # only LTS versions
+        jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
     env:
@@ -783,6 +790,7 @@ jobs:
           retention-days: 7
 
       - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/Benchmark.KNetReplicator.json /p:Use${{ matrix.serialization }}=true
 
