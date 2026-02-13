@@ -50,6 +50,7 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     /// <inheritdoc cref="KafkaDbContext.UseDeletePolicyForTopic"/>
     bool UseDeletePolicyForTopic { get; }
     /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
     bool UseCompactedReplicator { get; }
     /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
     bool UseKNetStreams { get; }

@@ -227,6 +227,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
     public virtual KafkaOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
     {
         var clone = Clone();

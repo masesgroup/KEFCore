@@ -180,6 +180,7 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     /// </remarks>
     /// <param name="useCompactedReplicator">If <see langword="true" /> then <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> will be used instead of Apache Kafka Streams.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    [Obsolete("Option will be removed soon")]
     public virtual KafkaDbContextOptionsBuilder WithCompactedReplicator(bool useCompactedReplicator = false)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()

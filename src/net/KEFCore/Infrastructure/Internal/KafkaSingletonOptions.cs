@@ -92,6 +92,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseDeletePolicyForTopic { get; private set; }
     /// <inheritdoc/>
+    [Obsolete("Option will be removed soon")] 
     public virtual bool UseCompactedReplicator { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseKNetStreams { get; private set; }
