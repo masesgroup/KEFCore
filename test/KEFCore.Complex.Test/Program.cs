@@ -27,11 +27,10 @@ using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace MASES.EntityFrameworkCore.KNet.Complex.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 {
     partial class Program
     {
