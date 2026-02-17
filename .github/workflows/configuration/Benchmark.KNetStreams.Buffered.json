@@ -1,6 +1,5 @@
 {
   "DatabaseName": "TestDBBenchmark",
-  "UseCompactedReplicator": false,
   "BootstrapServers": "localhost:9092",
   "NumberOfExecutions": 10,
   "UseEnumeratorWithPrefetch": false

@@ -1,3 +1,4 @@
 {
+  "UseCompactedReplicator": true,
   "BootstrapServers": "192.168.0.101:9092"
 }
