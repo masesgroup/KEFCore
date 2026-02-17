@@ -126,10 +126,13 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                 headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                if (data == null) return null!;
+
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
@@ -191,10 +194,12 @@ public static class DefaultKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                 headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                if (data == null) return null!;
 
                 var ms = new MemoryStream();
                 System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);
@@ -304,6 +309,8 @@ public static class DefaultKEFCoreSerDes
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
+                if (data == null) return null!;
+
                 var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data, _options);
                 return Encoding.UTF8.GetBytes(jsonStr);
             }
@@ -367,6 +374,8 @@ public static class DefaultKEFCoreSerDes
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+
+                if (data == null) return null!;
 
                 var ms = new MemoryStream();
                 System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);

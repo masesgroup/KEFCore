@@ -97,7 +97,7 @@ public static class AvroKEFCoreSerDes
             sealed class BinaryRaw<TData> : SerDesRaw<TData>
             {
                 readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(TData).FullName!);
-                readonly byte[] keySerDesName ;
+                readonly byte[] keySerDesName;
                 readonly SpecificDefaultWriter SpecificWriter = new(AvroKeyContainer._SCHEMA);
                 readonly SpecificDefaultReader SpecificReader = new(AvroKeyContainer._SCHEMA, AvroKeyContainer._SCHEMA);
                 readonly ISerDesRaw<TData> _defaultSerDes = default!;
@@ -127,10 +127,12 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
+                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                     headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                     headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                    if (data == null) return null!;
 
                     using MemoryStream memStream = new();
                     BinaryEncoder encoder = new(memStream);
@@ -199,10 +201,12 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
+                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                     headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                     headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                    if (data == null) return null!;
 
                     MemoryStream memStream = new();
                     BinaryEncoder encoder = new(memStream);
@@ -310,10 +314,12 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
+                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                     headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                     headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                    if (data == null) return null!;
 
                     using MemoryStream memStream = new();
                     JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
@@ -334,7 +340,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, memStream);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -377,10 +383,12 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
+                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                     headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                     headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                    if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                    if (data == null) return null!;
 
                     MemoryStream memStream = new();
                     JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
@@ -399,7 +407,7 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                     JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, data);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -497,6 +505,8 @@ public static class AvroKEFCoreSerDes
                     headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                     headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
+                    if (data == null) return null!;
+
                     using MemoryStream memStream = new();
                     BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
@@ -514,7 +524,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -565,6 +575,8 @@ public static class AvroKEFCoreSerDes
                     headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                     headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
+                    if (data == null) return null!;
+
                     MemoryStream memStream = new();
                     BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
@@ -579,7 +591,7 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     BinaryDecoder decoder = new(data);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -671,6 +683,8 @@ public static class AvroKEFCoreSerDes
                     headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                     headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
+                    if (data == null) return null!;
+
                     using MemoryStream memStream = new();
                     JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
@@ -689,7 +703,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroValueContainer._SCHEMA, memStream);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -740,6 +754,8 @@ public static class AvroKEFCoreSerDes
                     headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                     headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
+                    if (data == null) return null!;
+
                     MemoryStream memStream = new();
                     JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
@@ -755,7 +771,7 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     JsonDecoder decoder = new(AvroValueContainer._SCHEMA, data);
-                    TData t = (TData)Activator.CreateInstance(typeof(TData))!;
+                    TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }

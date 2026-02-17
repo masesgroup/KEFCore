@@ -25,15 +25,19 @@ If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
  - OS
+   - [ ] All
    - [ ] Windows - Version: [e.g. Windows 11]
    - [ ] MacOS - Version: [e.g. 14]
    - [ ] Linux
      - Distribution: [e.g. Ubuntu]
      - Version: [e.g. 22.04]
  - .NET
+   - [ ] All
    - [ ] .NET 8
    - [ ] .NET 9
+   - [ ] .NET 10
  - JVM
+   - [ ] All
    - [ ] Oracle - Version: [e.g. 11]
    - [ ] GraalVM - Version: [e.g. 11]
    - [ ] Temurin - Version: [e.g. 11]
