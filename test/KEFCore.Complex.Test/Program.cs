@@ -81,34 +81,34 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                             BooleanValue = i % 2 == 0,
                             PricingInfo = new Pricing()
                             {
-                                Discounts = new List<Discount>()
-                                {
-                                    new Discount()
+                                Discounts =
+                                [
+                                    new()
                                     {
                                         Validity = new DateRange()
                                         {
                                             CurrentDiff = i,
-                                            Min = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow.Subtract(TimeSpan.FromHours(i)): DateTime.Now.Subtract(TimeSpan.FromHours(i)),
-                                            Max = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow.AddHours(i): DateTime.Now.AddHours(i),
+                                            Min = DateTime.UtcNow.Subtract(TimeSpan.FromHours(i)),
+                                            Max = DateTime.Now.AddHours(i),
                                         }
                                     }
-                                },
+                                ],
                                 Tax = new TaxInfo()
                                 {
                                     Code = char.ConvertFromUtf32((int)i)[0],
                                     Percentage = i / 2
                                 }
                             },
-                            ComplexPosts = new List<PostComplex>()
-                            {
-                                new PostComplex()
+                            ComplexPosts =
+                            [
+                                new()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
-                                    CreationTime = ProgramConfig.Config.UseProtobuf ? DateTimeOffset.UtcNow: DateTimeOffset.Now,
+                                    CreationTime = DateTimeOffset.Now,
                                     Identifier = Guid.NewGuid()
                                 }
-                            },
+                            ],
                             Rating = (int)i,
                         });
                     }
@@ -140,9 +140,9 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 1);
+                    post = context.Posts.Single(b => b.BlogId == 100);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
                 catch
                 {
@@ -187,16 +187,16 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
-                            ComplexPosts = new List<PostComplex>()
-                            {
-                                new PostComplex()
+                            ComplexPosts =
+                            [
+                                new()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
-                                    CreationTime = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow : DateTime.Now,
+                                    CreationTime = DateTime.UtcNow,
                                     Identifier = Guid.NewGuid()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }
@@ -211,9 +211,9 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                 try
                 {
                     watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 100);
+                    blog = context.Blogs!.Single(b => b.BlogId == 101);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {

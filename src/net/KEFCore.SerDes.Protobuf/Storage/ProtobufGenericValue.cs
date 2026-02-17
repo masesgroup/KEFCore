@@ -22,6 +22,46 @@ using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
 {
+    public sealed partial class Datetime
+    {
+        /// <summary>
+        /// Initialize a <see cref="Datetime"/> with <paramref name="dt"/>
+        /// </summary>
+        /// <param name="dt">The <see cref="System.DateTime"/></param>
+        public Datetime(System.DateTime dt)
+        {
+            if (dt.Kind == DateTimeKind.Unspecified) throw new InvalidOperationException($"Cannot operate on {nameof(DateTime)} with Kind {DateTimeKind.Unspecified}");
+            DatetimeValue = Timestamp.FromDateTime(dt.ToUniversalTime());
+            UtcValue = dt.Kind == DateTimeKind.Utc;
+        }
+        /// <summary>
+        /// Initialize a <see cref="Datetime"/> with <paramref name="dt"/>
+        /// </summary>
+        /// <param name="dt">The <see cref="System.DateTimeOffset"/></param>
+        public Datetime(System.DateTimeOffset dt) : this(dt.DateTime)
+        {
+        }
+        /// <summary>
+        /// Returns a <see cref="System.DateTime"/>
+        /// </summary>
+        /// <returns>The <see cref="System.DateTime"/> in <see cref="Datetime"/></returns>
+        public System.DateTime GetDateTime()
+        {
+            var dt = DatetimeValue.ToDateTime();
+            return UtcValue ? dt : dt.ToLocalTime();
+        }
+        /// <summary>
+        /// Returns a <see cref="System.DateTimeOffset"/>
+        /// </summary>
+        /// <returns>The <see cref="System.DateTimeOffset"/> in <see cref="Datetime"/></returns>
+        public System.DateTimeOffset GetDateTimeOffset()
+        {
+            var dt = DatetimeValue.ToDateTime();
+            dt = UtcValue ? dt : dt.ToLocalTime();
+            return new DateTimeOffset(dt);
+        }
+    }
+
     public sealed partial class GenericValue
     {
         /// <summary>
@@ -107,11 +147,11 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             }
             else if (input is DateTime dateTimeVal)
             {
-                DatetimeValue = Timestamp.FromDateTime(dateTimeVal);
+                DatetimeValue = new Datetime(dateTimeVal);
             }
             else if (input is DateTimeOffset dateTimeOffsetVal)
             {
-                DatetimeoffsetValue = Timestamp.FromDateTimeOffset(dateTimeOffsetVal);
+                DatetimeoffsetValue = new Datetime(dateTimeOffsetVal);
             }
             else if (input is decimal decimalVal)
             {
@@ -141,8 +181,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                 KindOneofCase.DoubleValue => DoubleValue,
                 KindOneofCase.StringValue => StringValue,
                 KindOneofCase.GuidValue => new Guid([.. GuidValue]),
-                KindOneofCase.DatetimeValue => DatetimeValue.ToDateTime(),
-                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.ToDateTimeOffset(),
+                KindOneofCase.DatetimeValue => DatetimeValue.GetDateTime(),
+                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.GetDateTimeOffset(),
                 KindOneofCase.DecimalValue => decimal.Parse(DecimalValue),
                 _ => throw new InvalidOperationException($"{KindCase} is not managed."),
             };

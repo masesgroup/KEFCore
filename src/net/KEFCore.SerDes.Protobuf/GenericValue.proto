@@ -25,6 +25,15 @@ option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
 // [END csharp_declaration]
 
 // [START messages]
+// Represent a System.Datetime or System.DatetimeOffset
+message Datetime
+{
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetime_value = 1;
+    // Represents a Utc/Local value.
+    bool utc_value = 2;
+}
+
 // Our address book file is just one of these.
 message GenericValue {
   // The kind of value.
@@ -59,10 +68,10 @@ message GenericValue {
     string string_value = 14;
     // Represents a Guid value.
     bytes guid_value = 15;
-    // Represents a Timestamp value.
-    google.protobuf.Timestamp datetime_value = 16;
-    // Represents a Timestamp value.
-    google.protobuf.Timestamp datetimeoffset_value = 17;
+    // Represents a Datetime value.
+    Datetime datetime_value = 16;
+    // Represents a Datetime value.
+    Datetime datetimeoffset_value = 17;
     // Represents a decimal value.
     string decimal_value = 18;
   }

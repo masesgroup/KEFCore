@@ -26,26 +26,28 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           string.Concat(
             "ChJHZW5lcmljVmFsdWUucHJvdG8SB3N0b3JhZ2UaHGdvb2dsZS9wcm90b2J1",
             "Zi9zdHJ1Y3QucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90aW1lc3RhbXAucHJv",
-            "dG8iugQKDEdlbmVyaWNWYWx1ZRIwCgpudWxsX3ZhbHVlGAEgASgOMhouZ29v",
-            "Z2xlLnByb3RvYnVmLk51bGxWYWx1ZUgAEhQKCmJvb2xfdmFsdWUYAiABKAhI",
-            "ABIUCgpjaGFyX3ZhbHVlGAMgASgJSAASFAoKYnl0ZV92YWx1ZRgEIAEoDUgA",
-            "EhUKC3NieXRlX3ZhbHVlGAUgASgFSAASFQoLc2hvcnRfdmFsdWUYBiABKAVI",
-            "ABIWCgx1c2hvcnRfdmFsdWUYByABKA1IABITCglpbnRfdmFsdWUYCCABKAVI",
-            "ABIUCgp1aW50X3ZhbHVlGAkgASgNSAASFAoKbG9uZ192YWx1ZRgKIAEoA0gA",
-            "EhUKC3Vsb25nX3ZhbHVlGAsgASgESAASFQoLZmxvYXRfdmFsdWUYDCABKAJI",
-            "ABIWCgxkb3VibGVfdmFsdWUYDSABKAFIABIWCgxzdHJpbmdfdmFsdWUYDiAB",
-            "KAlIABIUCgpndWlkX3ZhbHVlGA8gASgMSAASNAoOZGF0ZXRpbWVfdmFsdWUY",
-            "ECABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSAASOgoUZGF0ZXRp",
-            "bWVvZmZzZXRfdmFsdWUYESABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0",
-            "YW1wSAASFwoNZGVjaW1hbF92YWx1ZRgSIAEoCUgAEhMKC01hbmFnZWRUeXBl",
-            "GBMgASgFEhMKC1N1cHBvcnROdWxsGBQgASgIQgYKBGtpbmRChwEKNW1hc2Vz",
-            "LmVudGl0eWZyYW1ld29ya2NvcmUua25ldC5zZXJpYWxpemF0aW9uLnByb3Rv",
-            "YnVmQgxHZW5lcmljVmFsdWVQAaoCPU1BU0VTLkVudGl0eUZyYW1ld29ya0Nv",
-            "cmUuS05ldC5TZXJpYWxpemF0aW9uLlByb3RvYnVmLlN0b3JhZ2ViBnByb3Rv",
-            "Mw=="));
+            "dG8iUQoIRGF0ZXRpbWUSMgoOZGF0ZXRpbWVfdmFsdWUYASABKAsyGi5nb29n",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCKoBAoM",
+            "R2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUucHJv",
+            "dG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQKCmNo",
+            "YXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoLc2J5",
+            "dGVfdmFsdWUYBSABKAVIABIVCgtzaG9ydF92YWx1ZRgGIAEoBUgAEhYKDHVz",
+            "aG9ydF92YWx1ZRgHIAEoDUgAEhMKCWludF92YWx1ZRgIIAEoBUgAEhQKCnVp",
+            "bnRfdmFsdWUYCSABKA1IABIUCgpsb25nX3ZhbHVlGAogASgDSAASFQoLdWxv",
+            "bmdfdmFsdWUYCyABKARIABIVCgtmbG9hdF92YWx1ZRgMIAEoAkgAEhYKDGRv",
+            "dWJsZV92YWx1ZRgNIAEoAUgAEhYKDHN0cmluZ192YWx1ZRgOIAEoCUgAEhQK",
+            "Cmd1aWRfdmFsdWUYDyABKAxIABIrCg5kYXRldGltZV92YWx1ZRgQIAEoCzIR",
+            "LnN0b3JhZ2UuRGF0ZXRpbWVIABIxChRkYXRldGltZW9mZnNldF92YWx1ZRgR",
+            "IAEoCzIRLnN0b3JhZ2UuRGF0ZXRpbWVIABIXCg1kZWNpbWFsX3ZhbHVlGBIg",
+            "ASgJSAASEwoLTWFuYWdlZFR5cGUYEyABKAUSEwoLU3VwcG9ydE51bGwYFCAB",
+            "KAhCBgoEa2luZEKHAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3JrY29yZS5rbmV0",
+            "LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDEdlbmVyaWNWYWx1ZVABqgI9TUFT",
+            "RVMuRW50aXR5RnJhbWV3b3JrQ29yZS5LTmV0LlNlcmlhbGl6YXRpb24uUHJv",
+            "dG9idWYuU3RvcmFnZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser, new[]{ "DatetimeValue", "UtcValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
           }));
     }
@@ -55,6 +57,259 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   #region Messages
   /// <summary>
   /// [START messages]
+  /// Represent a System.Datetime or System.DatetimeOffset
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class Datetime : pb::IMessage<Datetime>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<Datetime> _parser = new pb::MessageParser<Datetime>(() => new Datetime());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<Datetime> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime(Datetime other) : this() {
+      datetimeValue_ = other.datetimeValue_ != null ? other.datetimeValue_.Clone() : null;
+      utcValue_ = other.utcValue_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime Clone() {
+      return new Datetime(this);
+    }
+
+    /// <summary>Field number for the "datetime_value" field.</summary>
+    public const int DatetimeValueFieldNumber = 1;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp datetimeValue_;
+    /// <summary>
+    /// Represents a Timestamp value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeValue {
+      get { return datetimeValue_; }
+      set {
+        datetimeValue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "utc_value" field.</summary>
+    public const int UtcValueFieldNumber = 2;
+    private bool utcValue_;
+    /// <summary>
+    /// Represents a Utc/Local value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool UtcValue {
+      get { return utcValue_; }
+      set {
+        utcValue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as Datetime);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(Datetime other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(DatetimeValue, other.DatetimeValue)) return false;
+      if (UtcValue != other.UtcValue) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (datetimeValue_ != null) hash ^= DatetimeValue.GetHashCode();
+      if (UtcValue != false) hash ^= UtcValue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (datetimeValue_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(UtcValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (datetimeValue_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(UtcValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (datetimeValue_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(Datetime other) {
+      if (other == null) {
+        return;
+      }
+      if (other.datetimeValue_ != null) {
+        if (datetimeValue_ == null) {
+          DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        DatetimeValue.MergeFrom(other.DatetimeValue);
+      }
+      if (other.UtcValue != false) {
+        UtcValue = other.UtcValue;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (datetimeValue_ == null) {
+              DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DatetimeValue);
+            break;
+          }
+          case 16: {
+            UtcValue = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (datetimeValue_ == null) {
+              DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DatetimeValue);
+            break;
+          }
+          case 16: {
+            UtcValue = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   /// Our address book file is just one of these.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -72,7 +327,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[0]; }
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -598,12 +853,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     /// <summary>Field number for the "datetime_value" field.</summary>
     public const int DatetimeValueFieldNumber = 16;
     /// <summary>
-    /// Represents a Timestamp value.
+    /// Represents a Datetime value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeValue {
-      get { return kindCase_ == KindOneofCase.DatetimeValue ? (global::Google.Protobuf.WellKnownTypes.Timestamp) kind_ : null; }
+    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime DatetimeValue {
+      get { return kindCase_ == KindOneofCase.DatetimeValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime) kind_ : null; }
       set {
         kind_ = value;
         kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.DatetimeValue;
@@ -613,12 +868,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     /// <summary>Field number for the "datetimeoffset_value" field.</summary>
     public const int DatetimeoffsetValueFieldNumber = 17;
     /// <summary>
-    /// Represents a Timestamp value.
+    /// Represents a Datetime value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeoffsetValue {
-      get { return kindCase_ == KindOneofCase.DatetimeoffsetValue ? (global::Google.Protobuf.WellKnownTypes.Timestamp) kind_ : null; }
+    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime DatetimeoffsetValue {
+      get { return kindCase_ == KindOneofCase.DatetimeoffsetValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime) kind_ : null; }
       set {
         kind_ = value;
         kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.DatetimeoffsetValue;
@@ -1103,13 +1358,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DatetimeValue:
           if (DatetimeValue == null) {
-            DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            DatetimeValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
           }
           DatetimeValue.MergeFrom(other.DatetimeValue);
           break;
         case KindOneofCase.DatetimeoffsetValue:
           if (DatetimeoffsetValue == null) {
-            DatetimeoffsetValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            DatetimeoffsetValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
           }
           DatetimeoffsetValue.MergeFrom(other.DatetimeoffsetValue);
           break;
@@ -1199,7 +1454,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 130: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeValue) {
               subBuilder.MergeFrom(DatetimeValue);
             }
@@ -1208,7 +1463,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 138: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }
@@ -1309,7 +1564,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 130: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeValue) {
               subBuilder.MergeFrom(DatetimeValue);
             }
@@ -1318,7 +1573,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 138: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }
