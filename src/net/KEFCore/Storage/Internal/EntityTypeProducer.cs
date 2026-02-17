@@ -269,7 +269,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                 }
 
-                future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+                future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.Key, record.Value(TValueContainerConstructor)!, headers)!;
 #endif
             }
 
