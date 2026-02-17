@@ -233,7 +233,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:V3.1.2.0 # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.1.3.0 # to be changed with official version when will be available
         credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -419,7 +419,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.1.2
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.3
 
       - name: Prepare log files folder
         shell: pwsh
@@ -706,7 +706,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.1.2
+        run: dotnet tool update -g MASES.KNetCLI --version 3.1.3
 
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties
