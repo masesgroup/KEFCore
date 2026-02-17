@@ -19,14 +19,212 @@
 #nullable enable
 
 using Java.Util;
+using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Consumer;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Common.Serialization;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
+
+/// <summary>
+/// An helper class used to manage native and special types in serialization
+/// </summary>
+public static class NativeTypeMapper
+{
+    static readonly ConcurrentDictionary<Type, (ManagedTypes, bool)> dict = new();
+    static readonly ConcurrentDictionary<(ManagedTypes, bool), Type> reverseDict = new();
+    readonly static Type StringType = typeof(string);
+    readonly static Type GuidType = typeof(Guid);
+    readonly static Type NullableGuidType = typeof(Guid?);
+    readonly static Type DateTimeType = typeof(DateTime);
+    readonly static Type NullableDateTimeType = typeof(DateTime?);
+    readonly static Type DateTimeOffsetType = typeof(DateTimeOffset);
+    readonly static Type NullableDateTimeOffsetType = typeof(DateTimeOffset?);
+    readonly static Type BoolType = typeof(bool);
+    readonly static Type NullableBoolType = typeof(bool?);
+    readonly static Type CharType = typeof(char);
+    readonly static Type NullableCharType = typeof(char?);
+    readonly static Type SByteType = typeof(sbyte);
+    readonly static Type NullableSByteType = typeof(sbyte?);
+    readonly static Type ByteType = typeof(byte);
+    readonly static Type NullableByteType = typeof(byte?);
+    readonly static Type ShortType = typeof(short);
+    readonly static Type NullableShortType = typeof(short?);
+    readonly static Type UShortType = typeof(ushort);
+    readonly static Type NullableUShortType = typeof(ushort?);
+    readonly static Type IntType = typeof(int);
+    readonly static Type NullableIntType = typeof(int?);
+    readonly static Type UIntType = typeof(uint);
+    readonly static Type NullableUIntType = typeof(uint?);
+    readonly static Type LongType = typeof(long);
+    readonly static Type NullableLongType = typeof(long?);
+    readonly static Type ULongType = typeof(ulong);
+    readonly static Type NullableULongType = typeof(ulong?);
+    readonly static Type DoubleType = typeof(double);
+    readonly static Type NullableDoubleType = typeof(double?);
+    readonly static Type FloatType = typeof(float);
+    readonly static Type NullableFloatType = typeof(float?);
+    readonly static Type DecimalType = typeof(decimal);
+    readonly static Type NullableDecimalType = typeof(decimal?);
+
+    /// <summary>
+    /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
+    /// </summary>
+    public enum ManagedTypes
+    {
+        /// <summary>
+        /// Not defined or not found
+        /// </summary>
+        Undefined,
+        /// <summary>
+        /// <see cref="string"/>
+        /// </summary>
+        String,
+        /// <summary>
+        /// <see cref="Guid"/>
+        /// </summary>
+        Guid,
+        /// <summary>
+        /// <see cref="DateTime"/>
+        /// </summary>
+        DateTime,
+        /// <summary>
+        /// <see cref="DateTimeOffset"/>
+        /// </summary>
+        DateTimeOffset,
+        /// <summary>
+        /// <see cref="bool"/>
+        /// </summary>
+        Bool,
+        /// <summary>
+        /// <see cref="char"/>
+        /// </summary>
+        Char,
+        /// <summary>
+        /// <see cref="sbyte"/>
+        /// </summary>
+        SByte,
+        /// <summary>
+        /// <see cref="byte"/>
+        /// </summary>
+        Byte,
+        /// <summary>
+        /// <see cref="short"/>
+        /// </summary>
+        Short,
+        /// <summary>
+        /// <see cref="ushort"/>
+        /// </summary>
+        UShort,
+        /// <summary>
+        /// <see cref="int"/>
+        /// </summary>
+        Int,
+        /// <summary>
+        /// <see cref="uint"/>
+        /// </summary>
+        UInt,
+        /// <summary>
+        /// <see cref="long"/>
+        /// </summary>
+        Long,
+        /// <summary>
+        /// <see cref="ulong"/>
+        /// </summary>
+        ULong,
+        /// <summary>
+        /// <see cref="double"/>
+        /// </summary>
+        Double,
+        /// <summary>
+        /// <see cref="float"/>
+        /// </summary>
+        Float,
+        /// <summary>
+        /// <see cref="decimal"/>
+        /// </summary>
+        Decimal,
+    }
+
+    static NativeTypeMapper()
+    {
+        dict.TryAdd(StringType, (ManagedTypes.String, true)); reverseDict.TryAdd((ManagedTypes.String, true), StringType);
+
+        dict.TryAdd(GuidType, (ManagedTypes.Guid, false)); reverseDict.TryAdd((ManagedTypes.Guid, false), GuidType);
+        dict.TryAdd(NullableGuidType, (ManagedTypes.Guid, true)); reverseDict.TryAdd((ManagedTypes.Guid, true), NullableGuidType);
+
+        dict.TryAdd(DateTimeType, (ManagedTypes.DateTime, false)); reverseDict.TryAdd((ManagedTypes.DateTime, false), DateTimeType);
+        dict.TryAdd(NullableDateTimeType, (ManagedTypes.DateTime, true)); reverseDict.TryAdd((ManagedTypes.DateTime, true), NullableDateTimeType);
+
+        dict.TryAdd(DateTimeOffsetType, (ManagedTypes.DateTimeOffset, false)); reverseDict.TryAdd((ManagedTypes.DateTimeOffset, false), DateTimeOffsetType);
+        dict.TryAdd(NullableDateTimeOffsetType, (ManagedTypes.DateTimeOffset, true)); reverseDict.TryAdd((ManagedTypes.DateTimeOffset, true), NullableDateTimeOffsetType);
+
+        dict.TryAdd(BoolType, (ManagedTypes.Bool, false)); reverseDict.TryAdd((ManagedTypes.Bool, false), BoolType);
+        dict.TryAdd(NullableBoolType, (ManagedTypes.Bool, true)); reverseDict.TryAdd((ManagedTypes.Bool, true), NullableBoolType);
+
+        dict.TryAdd(CharType, (ManagedTypes.Char, false)); reverseDict.TryAdd((ManagedTypes.Char, false), CharType);
+        dict.TryAdd(NullableCharType, (ManagedTypes.Char, true)); reverseDict.TryAdd((ManagedTypes.Char, true), NullableCharType);
+
+        dict.TryAdd(SByteType, (ManagedTypes.SByte, false)); reverseDict.TryAdd((ManagedTypes.SByte, false), SByteType);
+        dict.TryAdd(NullableSByteType, (ManagedTypes.SByte, true)); reverseDict.TryAdd((ManagedTypes.SByte, true), NullableSByteType);
+
+        dict.TryAdd(ByteType, (ManagedTypes.Byte, false)); reverseDict.TryAdd((ManagedTypes.Byte, false), ByteType);
+        dict.TryAdd(NullableByteType, (ManagedTypes.Byte, true)); reverseDict.TryAdd((ManagedTypes.Byte, true), NullableByteType);
+
+        dict.TryAdd(ShortType, (ManagedTypes.Short, false)); reverseDict.TryAdd((ManagedTypes.Short, false), ShortType);
+        dict.TryAdd(NullableShortType, (ManagedTypes.Short, true)); reverseDict.TryAdd((ManagedTypes.Short, true), NullableShortType);
+
+        dict.TryAdd(UShortType, (ManagedTypes.UShort, false)); reverseDict.TryAdd((ManagedTypes.UShort, false), UShortType);
+        dict.TryAdd(NullableUShortType, (ManagedTypes.UShort, true)); reverseDict.TryAdd((ManagedTypes.UShort, true), NullableUShortType);
+
+        dict.TryAdd(IntType, (ManagedTypes.Int, false)); reverseDict.TryAdd((ManagedTypes.Int, false), IntType);
+        dict.TryAdd(NullableIntType, (ManagedTypes.Int, true)); reverseDict.TryAdd((ManagedTypes.Int, true), NullableIntType);
+
+        dict.TryAdd(UIntType, (ManagedTypes.UInt, false)); reverseDict.TryAdd((ManagedTypes.UInt, false), UIntType);
+        dict.TryAdd(NullableUIntType, (ManagedTypes.UInt, true)); reverseDict.TryAdd((ManagedTypes.UInt, true), NullableUIntType);
+
+        dict.TryAdd(LongType, (ManagedTypes.Long, false)); reverseDict.TryAdd((ManagedTypes.Long, false), LongType);
+        dict.TryAdd(NullableLongType, (ManagedTypes.Long, true)); reverseDict.TryAdd((ManagedTypes.Long, true), NullableLongType);
+
+        dict.TryAdd(ULongType, (ManagedTypes.ULong, false)); reverseDict.TryAdd((ManagedTypes.ULong, false), ULongType);
+        dict.TryAdd(NullableULongType, (ManagedTypes.ULong, true)); reverseDict.TryAdd((ManagedTypes.ULong, true), NullableULongType);
+
+        dict.TryAdd(DoubleType, (ManagedTypes.Double, false)); reverseDict.TryAdd((ManagedTypes.Double, false), DoubleType);
+        dict.TryAdd(NullableDoubleType, (ManagedTypes.Double, true)); reverseDict.TryAdd((ManagedTypes.Double, true), NullableDoubleType);
+
+        dict.TryAdd(FloatType, (ManagedTypes.Float, false)); reverseDict.TryAdd((ManagedTypes.Float, false), FloatType);
+        dict.TryAdd(NullableFloatType, (ManagedTypes.Float, true)); reverseDict.TryAdd((ManagedTypes.Float, true), NullableFloatType);
+
+        dict.TryAdd(DecimalType, (ManagedTypes.Decimal, false)); reverseDict.TryAdd((ManagedTypes.Decimal, false), DecimalType);
+        dict.TryAdd(NullableDecimalType, (ManagedTypes.Decimal, true)); reverseDict.TryAdd((ManagedTypes.Decimal, true), NullableDecimalType);
+    }
+
+    /// <summary>
+    /// Returns a <see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> indicating if the types supports <see cref="Nullable"/>
+    /// </summary>
+    /// <param name="type">The <see cref="Type"/> to check</param>
+    /// <returns>A <see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> if <paramref name="type"/> is mapped otherwise returns <see cref="ManagedTypes.Undefined"/> and <see langword="false"/> for <see cref="Nullable"/> support</returns>
+    public static (ManagedTypes, bool) GetValue(Type? type)
+    {
+        if (type == null || !dict.TryGetValue(type, out (ManagedTypes, bool) result)) { result = (ManagedTypes.Undefined, false); }
+        return result;
+    }
+    /// <summary>
+    /// Returns a <see cref="Type"/> mapped from the <paramref name="type"/> in input
+    /// </summary>
+    /// <param name="type"><see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> indicating if the type needs support for <see cref="Nullable"/></param>
+    /// <returns>A <see cref="Type"/> associated to the <paramref name="type"/> in input, otherwise <see langword="null"/></returns>
+    public static Type GetValue((ManagedTypes, bool) type)
+    {
+        if (!reverseDict.TryGetValue(type, out Type result)) { result = null!; }
+        return result;
+    }
+}
+
 /// <summary>
 /// This is an helper class to extract data information from Kafka Records stored in topics
 /// </summary>

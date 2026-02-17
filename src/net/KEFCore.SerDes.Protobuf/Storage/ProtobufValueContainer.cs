@@ -16,7 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-// #define DEBUG_PERFORMANCE
+//#define DEBUG_PERFORMANCE
 
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
@@ -70,7 +70,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
                 PropertyIndex = index,
                 PropertyName = item.Name,
                 ClrType = item.ClrType?.ToAssemblyQualified(),
-                Value = new GenericValue(rData[index])
+                Value = new GenericValue(item.ClrType!, rData[index])
             };
             _innerMessage.Data.Add(pRecord);
         }
@@ -105,19 +105,19 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         {
             fullSw.Start();
 #endif
-        if (_innerMessage.Data == null) { return; }
+            if (_innerMessage.Data == null) { return; }
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-        array = new object[_innerMessage.Data.Count];
+            array = new object[_innerMessage.Data.Count];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-        for (int i = 0; i < _innerMessage.Data.Count; i++)
-        {
-            array[i] = _innerMessage.Data[i].Value.GetContent();
-        }
+            for (int i = 0; i < _innerMessage.Data.Count; i++)
+            {
+                array[i] = _innerMessage.Data[i].Value.GetContent();
+            }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
             fullSw.Stop();

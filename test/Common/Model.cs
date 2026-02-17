@@ -22,6 +22,7 @@
  *  SOFTWARE.
  */
 
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -32,6 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public int BlogId { get; set; }
         public string Url { get; set; }
         public int Rating { get; set; }
+
         public List<Post> Posts { get; set; }
 
         public override string ToString()
@@ -39,7 +41,58 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
             return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
         }
     }
+    [PrimaryKey("BlogId")]
+    public class BlogComplex
+    {
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
 
+        public bool BooleanValue { get; set; }
+        public bool? NullableBooleanValue { get; set; }
+
+        // Nested complex type
+        public Pricing PricingInfo { get; set; }
+
+        public List<PostComplex> ComplexPosts { get; set; }
+
+        public override string ToString()
+        {
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating} BooleanValue: {BooleanValue} NullableBooleanValue: {NullableBooleanValue}";
+        }
+    }
+    [PrimaryKey("PricingId")]
+    public class Pricing
+    {
+        public int PricingId { get; set; }
+        public decimal BasePrice { get; set; }
+        public List<Discount> Discounts { get; set; } // Nested collection!
+        public TaxInfo Tax { get; set; } // Nested object!
+    }
+    [PrimaryKey("DiscountId")]
+    public class Discount
+    {
+        public int DiscountId { get; set; }
+        public string Code { get; set; }
+        public decimal Percentage { get; set; }
+        public DateRange Validity { get; set; } // Another nested object!
+    }
+    [PrimaryKey("DateRangeId")]
+    public class DateRange
+    {
+        public int DateRangeId { get; set; }
+        public uint CurrentDiff { get; set; }
+        public DateTime Min { get; set; }
+        public DateTime Max { get; set; }
+    }
+    [Owned]
+    public class TaxInfo
+    {
+        public int TaxInfoId { get; set; }
+        public char Code { get; set; }
+        public decimal Percentage { get; set; }
+    }
+    [PrimaryKey("PostId")]
     public class Post
     {
         public int PostId { get; set; }
@@ -52,6 +105,23 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public override string ToString()
         {
             return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
+    }
+    [PrimaryKey("PostId")]
+    public class PostComplex
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public Guid Identifier { get; set; }
+        public DateTimeOffset CreationTime { get; set; }
+
+        public int BlogId { get; set; }
+        public BlogComplex Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {Blog?.BlogId} CreationTime: {CreationTime} Identifier: {Identifier}";
         }
     }
 }

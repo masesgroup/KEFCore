@@ -189,7 +189,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public static int ManageException(System.Exception e)
         {
             int retCode = 0;
-            if (e is ExecutionException ee)
+            if (e is System.Reflection.TargetInvocationException ti)
+            {
+                return ManageException(ti.InnerException);
+            }
+            else if (e is ExecutionException ee)
             {
                 return ManageException(ee.InnerException);
             }

@@ -18,6 +18,7 @@
 
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
 {
@@ -28,8 +29,22 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// </summary>
         /// <param name="input">The value to insert</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue(object input)
+        public GenericValue(object input) : this(input?.GetType(), input)
         {
+        }
+
+        /// <summary>
+        /// Initializer for <paramref name="input"/>
+        /// </summary>
+        /// <param name="clrType">The <see cref="System.Type"/></param>
+        /// <param name="input">The value to insert</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public GenericValue(System.Type? clrType, object? input)
+        {
+            var _type = NativeTypeMapper.GetValue(clrType);
+            ManagedType = (int)_type.Item1;
+            SupportNull = _type.Item2;
+
             if (input is null)
             {
                 NullValue = Google.Protobuf.WellKnownTypes.NullValue.NullValue;
@@ -38,21 +53,41 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             {
                 BoolValue = boolVal;
             }
+            else if (input is char charVal)
+            {
+                CharValue = charVal.ToString();
+            }
             else if (input is byte byteVal)
             {
                 ByteValue = byteVal;
+            }
+            else if (input is sbyte sbyteVal)
+            {
+                SbyteValue = sbyteVal;
             }
             else if (input is short shortVal)
             {
                 ShortValue = shortVal;
             }
+            else if (input is ushort ushortVal)
+            {
+                UshortValue = ushortVal;
+            }
             else if (input is int intVal)
             {
                 IntValue = intVal;
             }
+            else if (input is uint uintVal)
+            {
+                UintValue = uintVal;
+            }
             else if (input is long longVal)
             {
                 LongValue = longVal;
+            }
+            else if (input is ulong ulongVal)
+            {
+                UlongValue = ulongVal;
             }
             else if (input is float floatVal)
             {
@@ -78,6 +113,10 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             {
                 DatetimeoffsetValue = Timestamp.FromDateTimeOffset(dateTimeOffsetVal);
             }
+            else if (input is decimal decimalVal)
+            {
+                DecimalValue = decimalVal.ToString("G29", CultureInfo.InvariantCulture);
+            }
             else throw new InvalidOperationException($"{input.GetType()} is not managed.");
         }
         /// <summary>
@@ -89,16 +128,22 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             {
                 KindOneofCase.NullValue => null!,
                 KindOneofCase.BoolValue => BoolValue,
-                KindOneofCase.ByteValue => ByteValue,
-                KindOneofCase.ShortValue => ShortValue,
+                KindOneofCase.CharValue => CharValue[0],
+                KindOneofCase.ByteValue => (byte)ByteValue,
+                KindOneofCase.SbyteValue => (sbyte)SbyteValue,
+                KindOneofCase.ShortValue => (short)ShortValue,
+                KindOneofCase.UshortValue => (short)UshortValue,
                 KindOneofCase.IntValue => IntValue,
+                KindOneofCase.UintValue => UintValue,
                 KindOneofCase.LongValue => LongValue,
+                KindOneofCase.UlongValue => UlongValue,
                 KindOneofCase.FloatValue => FloatValue,
                 KindOneofCase.DoubleValue => DoubleValue,
                 KindOneofCase.StringValue => StringValue,
-                KindOneofCase.GuidValue => new Guid(GuidValue.ToArray()),
+                KindOneofCase.GuidValue => new Guid([.. GuidValue]),
                 KindOneofCase.DatetimeValue => DatetimeValue.ToDateTime(),
-                KindOneofCase.DatetimeoffsetValue => DatetimeValue.ToDateTimeOffset(),
+                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.ToDateTimeOffset(),
+                KindOneofCase.DecimalValue => decimal.Parse(DecimalValue),
                 _ => throw new InvalidOperationException($"{KindCase} is not managed."),
             };
         }

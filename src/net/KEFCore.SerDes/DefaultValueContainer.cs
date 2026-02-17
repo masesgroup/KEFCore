@@ -16,12 +16,11 @@
 *  Refer to LICENSE for more information.
 */
 
-// #define DEBUG_PERFORMANCE
+//#define DEBUG_PERFORMANCE
 
 #nullable enable
 
 using MASES.KNet.Serialization;
-using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -31,84 +30,6 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 /// </summary>
 public class PropertyData : IJsonOnDeserialized
 {
-    static readonly ConcurrentDictionary<Type, ManagedTypes> dict = new();
-    static readonly ConcurrentDictionary<ManagedTypes, Type> reverseDict = new();
-    readonly static Type StringType = typeof(string);
-    readonly static Type GuidType = typeof(Guid);
-    readonly static Type DateTimeType = typeof(DateTime);
-    readonly static Type DateTimeOffsetType = typeof(DateTimeOffset);
-    readonly static Type ByteType = typeof(byte);
-    readonly static Type ShortType = typeof(short);
-    readonly static Type IntType = typeof(int);
-    readonly static Type LongType = typeof(long);
-    readonly static Type DoubleType = typeof(double);
-    readonly static Type FloatType = typeof(float);
-
-    /// <summary>
-    /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
-    /// </summary>
-    public enum ManagedTypes
-    {
-        /// <summary>
-        /// Not defined or not found
-        /// </summary>
-        Undefined,
-        /// <summary>
-        /// <see cref="string"/>
-        /// </summary>
-        String,
-        /// <summary>
-        /// <see cref="Guid"/>
-        /// </summary>
-        Guid,
-        /// <summary>
-        /// <see cref="DateTime"/>
-        /// </summary>
-        DateTime,
-        /// <summary>
-        /// <see cref="DateTimeOffset"/>
-        /// </summary>
-        DateTimeOffset,
-        /// <summary>
-        /// <see cref="byte"/>
-        /// </summary>
-        Byte,
-        /// <summary>
-        /// <see cref="short"/>
-        /// </summary>
-        Short,
-        /// <summary>
-        /// <see cref="int"/>
-        /// </summary>
-        Int,
-        /// <summary>
-        /// <see cref="long"/>
-        /// </summary>
-        Long,
-        /// <summary>
-        /// <see cref="double"/>
-        /// </summary>
-        Double,
-        /// <summary>
-        /// <see cref="float"/>
-        /// </summary>
-        Float
-    }
-
-    static PropertyData()
-    {
-        dict.TryAdd(StringType, ManagedTypes.String);reverseDict.TryAdd(ManagedTypes.String, StringType);
-        dict.TryAdd(GuidType, ManagedTypes.Guid); reverseDict.TryAdd(ManagedTypes.Guid, GuidType);
-        dict.TryAdd(DateTimeType, ManagedTypes.DateTime); reverseDict.TryAdd(ManagedTypes.DateTime, DateTimeType);
-        dict.TryAdd(DateTimeOffsetType, ManagedTypes.DateTimeOffset); reverseDict.TryAdd(ManagedTypes.DateTimeOffset, DateTimeOffsetType);
-        dict.TryAdd(ByteType, ManagedTypes.Byte); reverseDict.TryAdd(ManagedTypes.Byte, ByteType);
-        dict.TryAdd(ShortType, ManagedTypes.Short); reverseDict.TryAdd(ManagedTypes.Short, ShortType);
-        dict.TryAdd(IntType, ManagedTypes.Int); reverseDict.TryAdd(ManagedTypes.Int, IntType);
-        dict.TryAdd(LongType, ManagedTypes.Long); reverseDict.TryAdd(ManagedTypes.Long, LongType);
-        dict.TryAdd(DoubleType, ManagedTypes.Double); reverseDict.TryAdd(ManagedTypes.Double, DoubleType);
-        dict.TryAdd(FloatType, ManagedTypes.Float); reverseDict.TryAdd(ManagedTypes.Float, FloatType);
-    }
-
     /// <summary>
     /// Initialize a new instance of <see cref="PropertyData"/>
     /// </summary>
@@ -125,8 +46,9 @@ public class PropertyData : IJsonOnDeserialized
     /// <remarks>This constructor is mandatory and it is used from <see cref="DefaultValueContainer{TKey}"/></remarks>
     public PropertyData(IProperty property, object value)
     {
-        if (!dict.TryGetValue(property.ClrType, out ManagedTypes _type)) _type = ManagedTypes.Undefined;
-        ManagedType = _type;
+        (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(property.ClrType);
+        ManagedType = _type.Item1;
+        SupportNull = _type.Item2;
         ClrType = property.ClrType?.ToAssemblyQualified();
         PropertyName = property.Name;
         Value = value;
@@ -136,7 +58,7 @@ public class PropertyData : IJsonOnDeserialized
     {
         if (Value is JsonElement elem)
         {
-            if (ManagedType == null || ManagedType == ManagedTypes.Undefined)
+            if (ManagedType == null || ManagedType == NativeTypeMapper.ManagedTypes.Undefined)
             {
                 switch (elem.ValueKind)
                 {
@@ -172,7 +94,15 @@ public class PropertyData : IJsonOnDeserialized
                         break;
                     case JsonValueKind.Number:
                         var tmp = elem.GetInt64();
-                        Value = Convert.ChangeType(tmp, Type.GetType(ClrType!)!);
+                        var convertingType = Type.GetType(ClrType!);
+                        if (SupportNull && convertingType!.IsConstructedGenericType)
+                        {
+                            convertingType = convertingType.GenericTypeArguments[0];
+                        }
+                        else
+                        {
+                            Value = Convert.ChangeType(tmp, convertingType!);
+                        }
                         break;
                     case JsonValueKind.True:
                         Value = true;
@@ -196,38 +126,35 @@ public class PropertyData : IJsonOnDeserialized
                 {
                     case JsonValueKind.String:
                         Value = elem.GetString()!;
-                        if (ManagedType != ManagedTypes.String)
+                        if (ManagedType != NativeTypeMapper.ManagedTypes.String)
                         {
-                            try
+                            switch (ManagedType.Value)
                             {
-                                
-                                Value = Convert.ChangeType(Value, reverseDict[ManagedType.Value]);
-                            }
-                            catch (InvalidCastException)
-                            {
-                                // failed conversion, try with other methods for known types
-                                if (ManagedType == ManagedTypes.Guid)
-                                {
+                                case NativeTypeMapper.ManagedTypes.Guid:
                                     Value = elem.GetGuid();
-                                }
-                                else if (ManagedType == ManagedTypes.DateTime)
-                                {
+                                    break;
+                                case NativeTypeMapper.ManagedTypes.DateTime:
                                     Value = elem.GetDateTime();
-                                }
-                                else if (ManagedType == ManagedTypes.DateTimeOffset)
-                                {
+                                    break;
+                                case NativeTypeMapper.ManagedTypes.DateTimeOffset:
                                     Value = elem.GetDateTimeOffset();
-                                }
-                                else
-                                {
-                                    Value = elem.GetString()!;
-                                }
+                                    break;
+                                default:
+                                    try
+                                    {
+                                        Value = Convert.ChangeType(Value, NativeTypeMapper.GetValue((ManagedType.Value, SupportNull)));
+                                    }
+                                    catch (InvalidCastException)
+                                    {
+                                        Value = elem.GetString()!;
+                                    }
+                                    break;
                             }
                         }
                         break;
                     case JsonValueKind.Number:
                         var tmp = elem.GetInt64();
-                        Value = Convert.ChangeType(tmp, reverseDict[ManagedType.Value]);
+                        Value = Convert.ChangeType(tmp, NativeTypeMapper.GetValue((ManagedType.Value, false)));
                         break;
                     case JsonValueKind.True:
                         Value = true;
@@ -248,7 +175,7 @@ public class PropertyData : IJsonOnDeserialized
         }
         else
         {
-            Value = Convert.ChangeType(Value, Type.GetType(ClrType!)!);
+            Value = Value != null ? Convert.ChangeType(Value, Type.GetType(ClrType!)!) : Value;
         }
     }
     /// <summary>
@@ -256,9 +183,13 @@ public class PropertyData : IJsonOnDeserialized
     /// </summary>
     public string? PropertyName { get; set; }
     /// <summary>
-    /// The <see cref="ManagedTypes"/> value of the <see cref="ClrType"/>
+    /// The <see cref="NativeTypeMapper.ManagedTypes"/> value of the <see cref="ClrType"/>
     /// </summary>
-    public ManagedTypes? ManagedType { get; set; }
+    public NativeTypeMapper.ManagedTypes? ManagedType { get; set; }
+    /// <summary>
+    /// <see langword="true"/> if <see cref="NativeTypeMapper.ManagedTypes"/> value of the <see cref="ClrType"/> supports <see langword="null"/>
+    /// </summary>
+    public bool SupportNull { get; set; }
     /// <summary>
     /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>
     /// </summary>
@@ -315,19 +246,19 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         {
             fullSw.Start();
 #endif
-        if (Data == null) { return; }
+            if (Data == null) { return; }
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-        array = new object[Data.Count];
+            array = new object[Data.Count];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-        for (int i = 0; i < Data.Count; i++)
-        {
-            array[i] = Data[i].Value!;
-        }
+            for (int i = 0; i < Data.Count; i++)
+            {
+                array[i] = Data[i].Value!;
+            }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
             fullSw.Stop();

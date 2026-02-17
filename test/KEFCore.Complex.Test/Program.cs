@@ -53,28 +53,63 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
+                if (ProgramConfig.Config.DeleteApplicationData)
+                {
+                    ProgramConfig.ReportString("Process EnsureDeleted");
+                    context.Database.EnsureDeleted();
+                    ProgramConfig.ReportString("EnsureDeleted deleted database");
+                    if (context.Database.EnsureCreated())
+                    {
+                        ProgramConfig.ReportString("EnsureCreated created database");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString("EnsureCreated does not created database");
+                    }
+                }
+
                 testWatcher.Start();
                 Stopwatch watch = new Stopwatch();
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Start();
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
+                    for (uint i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
                     {
                         context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
-                            PostComplexs = new List<PostComplex>()
+                            PricingInfo = new Pricing()
+                            {
+                                Discounts = new List<Discount>()
+                                {
+                                    new Discount()
+                                    {
+                                        Validity = new DateRange()
+                                        {
+                                            CurrentDiff = i,
+                                            Min = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow.Subtract(TimeSpan.FromHours(i)): DateTime.Now.Subtract(TimeSpan.FromHours(i)),
+                                            Max = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow.AddHours(i): DateTime.Now.AddHours(i),
+                                        }
+                                    }
+                                },
+                                Tax = new TaxInfo()
+                                {
+                                    Code = char.ConvertFromUtf32((int)i)[0],
+                                    Percentage = i / 2
+                                }
+                            },
+                            ComplexPosts = new List<PostComplex>()
                             {
                                 new PostComplex()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
-                                    CreationTime = DateTime.Now,
+                                    CreationTime = ProgramConfig.Config.UseProtobuf ? DateTimeOffset.UtcNow: DateTimeOffset.Now,
                                     Identifier = Guid.NewGuid()
                                 }
                             },
-                            Rating = i,
+                            Rating = (int)i,
                         });
                     }
                     watch.Stop();
@@ -119,7 +154,7 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                 watch.Stop();
                 ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
-                Blog blog = null;
+                BlogComplex blog = null;
                 try
                 {
                     watch.Restart();
@@ -152,13 +187,13 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
-                            PostComplexs = new List<PostComplex>()
+                            ComplexPosts = new List<PostComplex>()
                             {
                                 new PostComplex()
                                 {
                                     Title = "title",
                                     Content = i.ToString(),
-                                    CreationTime = DateTime.Now,
+                                    CreationTime = ProgramConfig.Config.UseProtobuf ? DateTime.UtcNow : DateTime.Now,
                                     Identifier = Guid.NewGuid()
                                 }
                             },
@@ -171,6 +206,18 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                }
+
+                try
+                {
+                    watch.Restart();
+                    blog = context.Blogs!.Single(b => b.BlogId == 100);
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
 
                 watch.Restart();
@@ -196,8 +243,8 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
 
     public class BloggingContext : KafkaDbContext
     {
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<BlogComplex> Blogs { get; set; }
+        public DbSet<PostComplex> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -216,29 +263,6 @@ namespace MASES.EntityFrameworkCore.KNet.Complex.Test
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
-        }
-    }
-
-    public class BlogComplex : Blog
-    {
-        public bool BooleanValue { get; set; }
-
-        public List<PostComplex> PostComplexs { get; set; }
-
-        public override string ToString()
-        {
-            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating} BooleanValue: {BooleanValue}";
-        }
-    }
-
-    public class PostComplex : Post
-    {
-        public DateTime CreationTime { get; set; }
-        public Guid Identifier { get; set; }
-
-        public override string ToString()
-        {
-            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId} CreationTime: {CreationTime} Identifier: {Identifier}";
         }
     }
 }

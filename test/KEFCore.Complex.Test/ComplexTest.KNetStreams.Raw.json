@@ -1,5 +1,5 @@
 {
-  "DatabaseName": "TestDBBenchmark",
+  "DatabaseName": "TestDBComplex",
   "UseCompactedReplicator": false,
   "UseByteBufferDataTransfer": false,
   "UseEnumeratorWithPrefetch": false,
