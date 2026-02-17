@@ -118,10 +118,13 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
             {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                 headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                if (data == null) return null!;
+
                 KeyContainer keyContainer = null!;
                 if (data is object[] dataArray)
                 {
@@ -185,10 +188,13 @@ public static class ProtobufKEFCoreSerDes
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
             {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
                 headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
                 headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
-                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+                if (data == null) return null!;
+
                 KeyContainer keyContainer = null!;
                 if (data is object[] dataArray)
                 {
@@ -301,11 +307,11 @@ public static class ProtobufKEFCoreSerDes
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
-                using (MemoryStream stream = new())
-                {
-                    data.WriteTo(stream);
-                    return stream.ToArray();
-                }
+                if (data == null) return null!;
+
+                using MemoryStream stream = new();
+                data.WriteTo(stream);
+                return stream.ToArray();
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, byte[] data)
@@ -363,6 +369,8 @@ public static class ProtobufKEFCoreSerDes
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+
+                if (data == null) return null!;
 
                 MemoryStream stream = new();
                 data.WriteTo(stream);

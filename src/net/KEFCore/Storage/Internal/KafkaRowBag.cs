@@ -45,7 +45,7 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topic
     /// <summary>
     /// The Value
     /// </summary>
-    public TValueContainer? Value(ConstructorInfo ci) => UpdateEntry.EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke(new object[] { UpdateEntry.EntityType, ValueBuffer! });
+    public TValueContainer? Value(ConstructorInfo ci) => UpdateEntry.EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([UpdateEntry.EntityType, ValueBuffer!]);
     /// <summary>
     /// The <see cref="ValueBuffer"/> content
     /// </summary>

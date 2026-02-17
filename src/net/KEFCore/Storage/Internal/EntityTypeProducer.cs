@@ -263,13 +263,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
 #else
-                Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                if (record.UpdateEntry.EntityState == EntityState.Deleted)
                 {
-                    headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, record.Key, null!)!;
+                    futures.Add(future);
                 }
+                else
+                {
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
 
-                future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+                    if (future != null) futures.Add(future);
+                }
 #endif
             }
 
