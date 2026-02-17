@@ -4,7 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>true</ImplicitUsings>
 		<AssemblyName>MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Serialization.Avro</RootNamespace>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler</RootNamespace>
 		<Title>EntityFrameworkCore KNet - Avro Serialization support for EntityFrameworkCore provider for Apache Kafka</Title>
 		<Description>EntityFrameworkCore KNet - Avro Serialization support for EntityFrameworkCore provider for Apache Kafka</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler</Product>
