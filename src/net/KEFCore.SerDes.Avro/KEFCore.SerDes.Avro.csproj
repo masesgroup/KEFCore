@@ -53,4 +53,9 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+		<Exec Command="$(OutDir)MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.exe $(ProjectDir)Generated" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
+		<Exec Command="$(OutDir)MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.exe $(ProjectDir)Generated" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" />
+	</Target>
 </Project>

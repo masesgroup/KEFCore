@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.Test", "KEFCore.Test\KEFCore.Test.csproj", "{6999B7F3-6887-41CE-B1E9-2CE6BB881FDA}"
 EndProject
@@ -18,6 +18,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes", "..\src\net\KEFCore.SerDes\KEFCore.SerDes.csproj", "{C8FAF4B6-796E-40C5-990E-A1308306C1F2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Avro", "..\src\net\KEFCore.SerDes.Avro\KEFCore.SerDes.Avro.csproj", "{3F5C48E6-02E8-4921-AA1D-24F8F644F67E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BED3DF6D-B60E-486D-96E9-AD069D0600D2} = {BED3DF6D-B60E-486D-96E9-AD069D0600D2}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEFCore.SerDes.Avro.Compiler", "..\src\net\KEFCore.SerDes.Avro.Compiler\KEFCore.SerDes.Avro.Compiler.csproj", "{BED3DF6D-B60E-486D-96E9-AD069D0600D2}"
 EndProject
