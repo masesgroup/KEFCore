@@ -40,6 +40,10 @@
 		<Using Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<ProjectReference Include="..\KEFCore.SerDes.Avro.Compiler\KEFCore.SerDes.Avro.Compiler.csproj" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\KEFCore.SerDes\KEFCore.SerDes.csproj" />
 		<PackageReference Include="Apache.Avro" Version="1.12.1" />
