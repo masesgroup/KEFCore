@@ -1,7 +1,0 @@
-{
-  "DatabaseName": "TestDBComplex",
-  "UseByteBufferDataTransfer": false,
-  "UseEnumeratorWithPrefetch": false,
-  "BootstrapServers": "localhost:9092",
-  "NumberOfExecutions": 10
-}
