@@ -207,22 +207,37 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
                 _moveNextSw.Start();
 #endif
-                if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
+                bool hasNext = false;
+                TValue? value = default;
+                do
                 {
+                    if (_useEnumeratorWithPrefetch ? _enumerator != null && _enumerator.MoveNext() : _keyValueIterator != null && _keyValueIterator.HasNext())
+                    {
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
-                    _cycles++;
+                        _cycles++;
 #if DEBUG_PERFORMANCE
-                    _valueGetSw.Start();
+                        _valueGetSw.Start();
 #endif
 #endif
-                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
+                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
 #if DEBUG_PERFORMANCE
-                    _valueGetSw.Stop();
-                    _valueGet2Sw.Start();
+                        _valueGetSw.Stop();
+                        _valueGet2Sw.Start();
 #endif
-                    TValue? value = kv != null ? kv.Value : default;
+                        value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
-                    _valueGet2Sw.Stop();
+                        _valueGet2Sw.Stop();
+#endif
+                        if (value == null) continue;
+                        hasNext = true;
+                    }
+                    break;
+                }
+                while (!hasNext);
+
+                if (hasNext)
+                {
+#if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
@@ -231,11 +246,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     _valueBufferSw.Stop();
 #endif
                     _current = new ValueBuffer(array);
-
-                    return true;
                 }
-                _current = ValueBuffer.Empty;
-                return false;
+                else
+                {
+                    _current = ValueBuffer.Empty;
+                }
+                return hasNext;
             }
 #if VERIFY_WHERE_ENUMERATOR_STOPS
             catch (Exception ex)
@@ -255,29 +271,46 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
         }
 
-        public ValueTask<bool> MoveNextAsync()
+        public async ValueTask<bool> MoveNextAsync()
         {
 #if DEBUG_PERFORMANCE
             try
             {
                 _moveNextSw.Start();
 #endif
-                ValueTask<bool> hasNext = _asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync();
-                hasNext.AsTask().Wait();
-                if (hasNext.Result)
+                bool hasNext = false;
+                TValue? value = default;
+
+                do
+                {
+                    hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
+                    if (hasNext)
+                    {
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
+                        _cycles++;
+#if DEBUG_PERFORMANCE
+                        _valueGetSw.Start();
+#endif
+#endif
+                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+#if DEBUG_PERFORMANCE
+                        _valueGetSw.Stop();
+                        _valueGet2Sw.Start();
+#endif
+                        value = kv != null ? kv.Value : default;
+#if DEBUG_PERFORMANCE
+                        _valueGet2Sw.Stop();
+#endif
+                        if (value == null) continue;
+                        hasNext = true;
+                    }
+                    break;
+                }
+                while (!hasNext);
+
+                if (hasNext)
                 {
 #if DEBUG_PERFORMANCE
-                    _cycles++;
-                    _valueGetSw.Start();
-#endif
-                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
-#if DEBUG_PERFORMANCE
-                    _valueGetSw.Stop();
-                    _valueGet2Sw.Start();
-#endif
-                    TValue? value = kv != null ? kv.Value : default;
-#if DEBUG_PERFORMANCE
-                    _valueGet2Sw.Stop();
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
@@ -286,11 +319,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     _valueBufferSw.Stop();
 #endif
                     _current = new ValueBuffer(array);
-
-                    return ValueTask.FromResult(true);
                 }
-                _current = ValueBuffer.Empty;
-                return ValueTask.FromResult(false);
+                else
+                {
+                    _current = ValueBuffer.Empty;
+                }
+                return await ValueTask.FromResult(hasNext);
 #if DEBUG_PERFORMANCE
             }
             finally

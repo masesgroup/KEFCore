@@ -206,27 +206,44 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE
                 _moveNextSw.Start();
 #endif
-                if (_keyValueIterator != null && _keyValueIterator.HasNext())
+                bool hasNext = false;
+                TValue? entityTypeData = default;
+                do
                 {
-#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
-                    _cycles++;
-#if DEBUG_PERFORMANCE
-                    _valueGetSw.Start();
-#endif
-#endif
-                    V? data;
-                    using (KeyValue<K, V> kv = _keyValueIterator.Next())
+                    if (_keyValueIterator != null && _keyValueIterator.HasNext())
                     {
-                        var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
-                        data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
-                    }
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
+                        _cycles++;
 #if DEBUG_PERFORMANCE
-                    _valueGetSw.Stop();
-                    _valueSerdesSw.Start();
+                        _valueGetSw.Start();
 #endif
-                    TValue entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
+#endif
+                        V? data;
+                        using (KeyValue<K, V> kv = _keyValueIterator.Next())
+                        {
+                            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+                            data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
+                        }
 #if DEBUG_PERFORMANCE
-                    _valueSerdesSw.Stop();
+                        _valueGetSw.Stop();
+#endif
+                        if (data == null) continue;
+#if DEBUG_PERFORMANCE
+                        _valueSerdesSw.Start();
+#endif
+                        entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
+#if DEBUG_PERFORMANCE
+                        _valueSerdesSw.Stop();
+#endif
+                        hasNext = true;
+                    }
+                    break;
+                }
+                while (!hasNext);
+
+                if (hasNext)
+                {
+#if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
@@ -235,11 +252,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                     _valueBufferSw.Stop();
 #endif
                     _current = new ValueBuffer(array);
-
-                    return true;
                 }
-                _current = ValueBuffer.Empty;
-                return false;
+                else
+                {
+                    _current = ValueBuffer.Empty;
+                }
+                return hasNext;
             }
 #if VERIFY_WHERE_ENUMERATOR_STOPS
             catch (Exception ex)
