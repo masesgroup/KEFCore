@@ -266,6 +266,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 if (record.UpdateEntry.EntityState == EntityState.Deleted)
                 {
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, record.Key, null!)!;
+                    futures.Add(future);
                 }
                 else
                 {
@@ -276,6 +277,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     }
 
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor), headers);
+                    if (future != null) futures.Add(future);
                 }
 #endif
             }
