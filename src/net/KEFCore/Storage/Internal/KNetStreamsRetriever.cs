@@ -233,7 +233,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     }
                     break;
                 }
-                while (!hasNext);
+                while (true);
 
                 if (hasNext)
                 {
@@ -306,7 +306,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     }
                     break;
                 }
-                while (!hasNext);
+                while (true);
 
                 if (hasNext)
                 {

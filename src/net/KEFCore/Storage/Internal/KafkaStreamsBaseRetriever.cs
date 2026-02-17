@@ -239,7 +239,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                     }
                     break;
                 }
-                while (!hasNext);
+                while (true);
 
                 if (hasNext)
                 {
