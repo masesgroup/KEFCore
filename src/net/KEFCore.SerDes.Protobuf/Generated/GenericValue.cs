@@ -27,7 +27,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             "ChJHZW5lcmljVmFsdWUucHJvdG8SB3N0b3JhZ2UaHGdvb2dsZS9wcm90b2J1",
             "Zi9zdHJ1Y3QucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90aW1lc3RhbXAucHJv",
             "dG8iUQoIRGF0ZXRpbWUSMgoOZGF0ZXRpbWVfdmFsdWUYASABKAsyGi5nb29n",
-            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCKoBAoM",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCKxBAoM",
             "R2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUucHJv",
             "dG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQKCmNo",
             "YXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoLc2J5",
@@ -37,13 +37,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             "bmdfdmFsdWUYCyABKARIABIVCgtmbG9hdF92YWx1ZRgMIAEoAkgAEhYKDGRv",
             "dWJsZV92YWx1ZRgNIAEoAUgAEhYKDHN0cmluZ192YWx1ZRgOIAEoCUgAEhQK",
             "Cmd1aWRfdmFsdWUYDyABKAxIABIrCg5kYXRldGltZV92YWx1ZRgQIAEoCzIR",
-            "LnN0b3JhZ2UuRGF0ZXRpbWVIABIxChRkYXRldGltZW9mZnNldF92YWx1ZRgR",
-            "IAEoCzIRLnN0b3JhZ2UuRGF0ZXRpbWVIABIXCg1kZWNpbWFsX3ZhbHVlGBIg",
-            "ASgJSAASEwoLTWFuYWdlZFR5cGUYEyABKAUSEwoLU3VwcG9ydE51bGwYFCAB",
-            "KAhCBgoEa2luZEKHAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3JrY29yZS5rbmV0",
-            "LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDEdlbmVyaWNWYWx1ZVABqgI9TUFT",
-            "RVMuRW50aXR5RnJhbWV3b3JrQ29yZS5LTmV0LlNlcmlhbGl6YXRpb24uUHJv",
-            "dG9idWYuU3RvcmFnZWIGcHJvdG8z"));
+            "LnN0b3JhZ2UuRGF0ZXRpbWVIABI6ChRkYXRldGltZW9mZnNldF92YWx1ZRgR",
+            "IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIABIXCg1kZWNpbWFs",
+            "X3ZhbHVlGBIgASgJSAASEwoLTWFuYWdlZFR5cGUYEyABKAUSEwoLU3VwcG9y",
+            "dE51bGwYFCABKAhCBgoEa2luZEKHAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3Jr",
+            "Y29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDEdlbmVyaWNWYWx1",
+            "ZVABqgI9TUFTRVMuRW50aXR5RnJhbWV3b3JrQ29yZS5LTmV0LlNlcmlhbGl6",
+            "YXRpb24uUHJvdG9idWYuU3RvcmFnZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -57,7 +57,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   #region Messages
   /// <summary>
   /// [START messages]
-  /// Represent a System.Datetime or System.DatetimeOffset
+  /// Represent a System.Datetime
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class Datetime : pb::IMessage<Datetime>
@@ -872,8 +872,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime DatetimeoffsetValue {
-      get { return kindCase_ == KindOneofCase.DatetimeoffsetValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime) kind_ : null; }
+    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeoffsetValue {
+      get { return kindCase_ == KindOneofCase.DatetimeoffsetValue ? (global::Google.Protobuf.WellKnownTypes.Timestamp) kind_ : null; }
       set {
         kind_ = value;
         kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.DatetimeoffsetValue;
@@ -1364,7 +1364,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DatetimeoffsetValue:
           if (DatetimeoffsetValue == null) {
-            DatetimeoffsetValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
+            DatetimeoffsetValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
           }
           DatetimeoffsetValue.MergeFrom(other.DatetimeoffsetValue);
           break;
@@ -1463,7 +1463,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 138: {
-            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
+            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }
@@ -1573,7 +1573,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             break;
           }
           case 138: {
-            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
+            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }

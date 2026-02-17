@@ -35,30 +35,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             UtcValue = dt.Kind == DateTimeKind.Utc;
         }
         /// <summary>
-        /// Initialize a <see cref="Datetime"/> with <paramref name="dt"/>
-        /// </summary>
-        /// <param name="dt">The <see cref="System.DateTimeOffset"/></param>
-        public Datetime(System.DateTimeOffset dt) : this(dt.DateTime)
-        {
-        }
-        /// <summary>
         /// Returns a <see cref="System.DateTime"/>
         /// </summary>
         /// <returns>The <see cref="System.DateTime"/> in <see cref="Datetime"/></returns>
-        public System.DateTime GetDateTime()
+        public System.DateTime GetContent()
         {
             var dt = DatetimeValue.ToDateTime();
             return UtcValue ? dt : dt.ToLocalTime();
-        }
-        /// <summary>
-        /// Returns a <see cref="System.DateTimeOffset"/>
-        /// </summary>
-        /// <returns>The <see cref="System.DateTimeOffset"/> in <see cref="Datetime"/></returns>
-        public System.DateTimeOffset GetDateTimeOffset()
-        {
-            var dt = DatetimeValue.ToDateTime();
-            dt = UtcValue ? dt : dt.ToLocalTime();
-            return new DateTimeOffset(dt);
         }
     }
 
@@ -151,7 +134,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             }
             else if (input is DateTimeOffset dateTimeOffsetVal)
             {
-                DatetimeoffsetValue = new Datetime(dateTimeOffsetVal);
+                DatetimeoffsetValue = Timestamp.FromDateTimeOffset(dateTimeOffsetVal);
             }
             else if (input is decimal decimalVal)
             {
@@ -181,8 +164,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                 KindOneofCase.DoubleValue => DoubleValue,
                 KindOneofCase.StringValue => StringValue,
                 KindOneofCase.GuidValue => new Guid([.. GuidValue]),
-                KindOneofCase.DatetimeValue => DatetimeValue.GetDateTime(),
-                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.GetDateTimeOffset(),
+                KindOneofCase.DatetimeValue => DatetimeValue.GetContent(),
+                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.ToDateTimeOffset(),
                 KindOneofCase.DecimalValue => decimal.Parse(DecimalValue),
                 _ => throw new InvalidOperationException($"{KindCase} is not managed."),
             };

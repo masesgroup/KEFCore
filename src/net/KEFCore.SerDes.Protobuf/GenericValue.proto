@@ -25,7 +25,7 @@ option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
 // [END csharp_declaration]
 
 // [START messages]
-// Represent a System.Datetime or System.DatetimeOffset
+// Represent a System.Datetime
 message Datetime
 {
     // Represents a Timestamp value.
@@ -71,7 +71,7 @@ message GenericValue {
     // Represents a Datetime value.
     Datetime datetime_value = 16;
     // Represents a Datetime value.
-    Datetime datetimeoffset_value = 17;
+    google.protobuf.Timestamp datetimeoffset_value = 17;
     // Represents a decimal value.
     string decimal_value = 18;
   }
