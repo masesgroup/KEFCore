@@ -105,10 +105,8 @@ Currently the project tries to support, at our best, the [official supported Apa
 
 | KEFCore | State | Apache Kafka™ | .NET | JVM™ |
 |:---:	|:---:	|:---:	|:---:	|:---:	|
-| 2.6.* | Active | 4.1.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/)
- |
-| 2.5.* | Active | 3.9.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/)
- |
+| 2.6.* | Active | 4.1.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
+| 2.5.* | Active | 3.9.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
 
 ### Community and Contribution
 
