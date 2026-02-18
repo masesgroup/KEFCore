@@ -80,7 +80,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 ManagedType = (int)_type.Item1,
                 SupportNull = _type.Item2,
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.ToAssemblyQualified(),
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
                 Value = value
             };
             Data.Add(pRecord);

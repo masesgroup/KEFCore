@@ -19,7 +19,26 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler", "1.12.1+9110c693767c1dde2665b2b57939333478b12036")]
 	public partial class AvroValueContainer : global::Avro.Specific.ISpecificRecord
 	{
-		public static global::Avro.Schema _SCHEMA = global::Avro.Schema.Parse(@"{""type"":""record"",""name"":""AvroValueContainer"",""doc"":""Represents the storage container type to be used from KEFCore values"",""namespace"":""MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage"",""fields"":[{""name"":""EntityName"",""doc"":""Represents the entity name of the Entity in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""ClrType"",""doc"":""Represents the CLR type of the Entity in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""Data"",""type"":{""type"":""array"",""items"":{""type"":""record"",""name"":""PropertyDataRecord"",""doc"":""Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore"",""namespace"":""MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage"",""fields"":[{""name"":""PropertyIndex"",""doc"":""Represents the index of the property in the EF Core schema of the EntityType"",""default"":null,""type"":[""null"",""int""]},{""name"":""PropertyName"",""doc"":""Represents the name of the property in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""ManagedType"",""doc"":""Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType"",""type"":""int""},{""name"":""SupportNull"",""doc"":""true if the ManagedType shall support null, e.g. Nullable type in .NET"",""type"":""boolean""},{""name"":""ClrType"",""doc"":""Represents the CLR type of the property in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""Value"",""type"":[""null"",""boolean"",""int"",""long"",""float"",""double"",""string""]}]}}}]}");
+		public static global::Avro.Schema _SCHEMA = global::Avro.Schema.Parse("{\"type\":\"record\",\"name\":\"AvroValueContainer\",\"doc\":\"Represents the storage contai" +
+				"ner type to be used from KEFCore values\",\"namespace\":\"MASES.EntityFrameworkCore." +
+				"KNet.Serialization.Avro.Storage\",\"fields\":[{\"name\":\"EntityName\",\"doc\":\"Represent" +
+				"s the entity name of the Entity in the EF Core schema of the EntityType\",\"type\":" +
+				"\"string\"},{\"name\":\"ClrType\",\"doc\":\"Represents the CLR type of the Entity in the " +
+				"EF Core schema of the EntityType\",\"type\":\"string\"},{\"name\":\"Data\",\"type\":{\"type\"" +
+				":\"array\",\"items\":{\"type\":\"record\",\"name\":\"PropertyDataRecord\",\"doc\":\"Represents " +
+				"the single container for Entity properties stored in AvroValueContainer and used" +
+				" from KEFCore\",\"namespace\":\"MASES.EntityFrameworkCore.KNet.Serialization.Avro.St" +
+				"orage\",\"fields\":[{\"name\":\"PropertyIndex\",\"doc\":\"Represents the index of the prop" +
+				"erty in the EF Core schema of the EntityType\",\"default\":null,\"type\":[\"null\",\"int" +
+				"\"]},{\"name\":\"PropertyName\",\"doc\":\"Represents the name of the property in the EF " +
+				"Core schema of the EntityType\",\"type\":\"string\"},{\"name\":\"ManagedType\",\"doc\":\"Rep" +
+				"resents the internal KEFCore type associated to the property in the EF Core sche" +
+				"ma of the EntityType\",\"type\":\"int\"},{\"name\":\"SupportNull\",\"doc\":\"true if the Man" +
+				"agedType shall support null, e.g. Nullable type in .NET\",\"type\":\"boolean\"},{\"nam" +
+				"e\":\"ClrType\",\"doc\":\"Represents the CLR type of the property in the EF Core schem" +
+				"a of the EntityType, null for well-known types\",\"default\":null,\"type\":[\"null\",\"s" +
+				"tring\"]},{\"name\":\"Value\",\"type\":[\"null\",\"boolean\",\"int\",\"long\",\"float\",\"double\"," +
+				"\"string\"]}]}}}]}");
 		/// <summary>
 		/// Represents the entity name of the Entity in the EF Core schema of the EntityType
 		/// </summary>
