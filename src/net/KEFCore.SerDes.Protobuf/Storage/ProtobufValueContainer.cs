@@ -67,11 +67,12 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         foreach (var item in properties)
         {
             int index = item.GetIndex();
+            var _type = NativeTypeMapper.GetValue(item.ClrType!);
             var pRecord = new PropertyDataRecord
             {
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.ToAssemblyQualified(),
-                Value = new GenericValue(item.ClrType!, rData[index])
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : string.Empty,
+                Value = new GenericValue(_type, rData[index])
             };
             _innerMessage.Data.Add(pRecord);
         }

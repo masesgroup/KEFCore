@@ -47,8 +47,9 @@
 						},
 						{
 							"name": "ClrType",
-							"doc": "Represents the CLR type of the property in the EF Core schema of the EntityType",
-							"type": "string"
+							"doc": "Represents the CLR type of the property in the EF Core schema of the EntityType, null for well-known types",
+							"type": [ "null", "string" ],
+							"default": null
 						},
 						{
 							"name": "Value",

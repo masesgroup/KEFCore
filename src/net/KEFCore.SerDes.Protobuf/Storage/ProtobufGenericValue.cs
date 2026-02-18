@@ -19,6 +19,7 @@
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using System.Globalization;
+using static MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
 {
@@ -52,19 +53,18 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// </summary>
         /// <param name="input">The value to insert</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue(object input) : this(input?.GetType(), input)
+        public GenericValue(object input) : this(NativeTypeMapper.GetValue(input?.GetType()), input)
         {
         }
 
         /// <summary>
         /// Initializer for <paramref name="input"/>
         /// </summary>
-        /// <param name="clrType">The <see cref="System.Type"/></param>
+        /// <param name="_type">The <see cref="System.Type"/></param>
         /// <param name="input">The value to insert</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue(System.Type? clrType, object? input)
+        public GenericValue((ManagedTypes, bool) _type, object? input)
         {
-            var _type = NativeTypeMapper.GetValue(clrType);
             ManagedType = (int)_type.Item1;
             SupportNull = _type.Item2;
 

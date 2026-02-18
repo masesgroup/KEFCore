@@ -27,7 +27,7 @@ option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
 message PropertyDataRecord {
   optional int32 PropertyIndex = 1;
   string PropertyName = 2;
-  string ClrType = 3;
+  optional string ClrType = 3;
   GenericValue Value = 4;
 }
 

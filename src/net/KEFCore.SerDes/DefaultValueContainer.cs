@@ -46,7 +46,7 @@ public class PropertyData : IJsonOnDeserialized
                 {
                     case JsonValueKind.String:
                         Value = elem.GetString()!;
-                        if (ClrType != StringAssemblyQualified)
+                        if (!string.IsNullOrWhiteSpace(ClrType) && ClrType != StringAssemblyQualified)
                         {
                             try
                             {
@@ -154,7 +154,9 @@ public class PropertyData : IJsonOnDeserialized
         }
         else
         {
-            Value = Value != null ? Convert.ChangeType(Value, Type.GetType(ClrType!)!) : Value;
+            Type type = NativeTypeMapper.GetValue((ManagedType!.Value, SupportNull));
+            if (type == null && !string.IsNullOrWhiteSpace(ClrType)) type = Type.GetType(ClrType!)!;
+            Value = Value != null ? Convert.ChangeType(Value, type!) : Value;
         }
     }
     /// <summary>
@@ -170,8 +172,9 @@ public class PropertyData : IJsonOnDeserialized
     /// </summary>
     public bool SupportNull { get; set; }
     /// <summary>
-    /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>
+    /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>, null for well-known types
     /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
     public string? ClrType { get; set; }
     /// <summary>
     /// The raw value associated to the <see cref="IProperty"/>
@@ -210,7 +213,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 ManagedType = _type.Item1,
                 SupportNull = _type.Item2,
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.ToAssemblyQualified(),
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
                 Value = rData[item.GetIndex()]
             };
 
@@ -224,6 +227,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <summary>
     /// The data stored associated to the <see cref="IEntityType"/>
     /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Dictionary<int, PropertyData>? Data { get; set; }
     /// <summary>
     /// The data stored associated to the <see cref="IEntityType"/>
