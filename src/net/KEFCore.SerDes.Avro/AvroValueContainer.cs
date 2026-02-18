@@ -83,7 +83,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 ClrType = item.ClrType?.ToAssemblyQualified(),
                 Value = value
             };
-            Data[index] = pRecord;
+            Data.Add(pRecord);
         }
     }
     /// <inheritdoc/>
