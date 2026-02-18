@@ -30,13 +30,17 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 /// </summary>
 public class PropertyData : IJsonOnDeserialized
 {
+    static readonly string StringAssemblyQualified = typeof(string).ToAssemblyQualified();
+    static readonly string GuidAssemblyQualified = typeof(Guid).ToAssemblyQualified();
+    static readonly string DateTimeAssemblyQualified = typeof(DateTime).ToAssemblyQualified();
+    static readonly string DateTimeOffsetAssemblyQualified = typeof(DateTimeOffset).ToAssemblyQualified();
+
     /// <summary>
     /// Initialize a new instance of <see cref="PropertyData"/>
     /// </summary>
     /// <remarks>It is mainly used from the JSON serializer</remarks>
     public PropertyData()
     {
-
     }
     /// <summary>
     /// Initialize a new instance of <see cref="PropertyData"/>
@@ -64,7 +68,7 @@ public class PropertyData : IJsonOnDeserialized
                 {
                     case JsonValueKind.String:
                         Value = elem.GetString()!;
-                        if (ClrType != typeof(string).ToAssemblyQualified())
+                        if (ClrType != StringAssemblyQualified)
                         {
                             try
                             {
@@ -73,15 +77,15 @@ public class PropertyData : IJsonOnDeserialized
                             catch (InvalidCastException)
                             {
                                 // failed conversion, try with other methods for known types
-                                if (ClrType == typeof(Guid).ToAssemblyQualified())
+                                if (ClrType == GuidAssemblyQualified)
                                 {
                                     Value = elem.GetGuid();
                                 }
-                                else if (ClrType == typeof(DateTime).ToAssemblyQualified())
+                                else if (ClrType == DateTimeAssemblyQualified)
                                 {
                                     Value = elem.GetDateTime();
                                 }
-                                else if (ClrType == typeof(DateTimeOffset).ToAssemblyQualified())
+                                else if (ClrType == DateTimeOffsetAssemblyQualified)
                                 {
                                     Value = elem.GetDateTimeOffset();
                                 }

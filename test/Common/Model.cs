@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
