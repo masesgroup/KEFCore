@@ -103,10 +103,7 @@ public class PropertyData : IJsonOnDeserialized
                         {
                             convertingType = convertingType.GenericTypeArguments[0];
                         }
-                        else
-                        {
-                            Value = Convert.ChangeType(tmp, convertingType!);
-                        }
+                        Value = Convert.ChangeType(tmp, convertingType!);
                         break;
                     case JsonValueKind.True:
                         Value = true;
