@@ -13,11 +13,11 @@ Before read following chapters it is important to understand [how it works](howi
 ## [Apache Kafka™](https://kafka.apache.org/) as Database
 
 > [!IMPORTANT]
-> The concept of database is not related to any [ACID](https://en.wikipedia.org/wiki/ACID) behavior of the provider.
+> **The concept of database is not related to any [ACID](https://en.wikipedia.org/wiki/ACID) behavior of the provider.**
 
 The first use case can be coupled to a standard usage of [Entity Framework Core](https://learn.microsoft.com/ef/core/), the same when it is used with database providers.
 In [getting started](gettingstarted.md) is proposed a simple example following the online documentation.
-In the example the data within the model are stored in multiple Apache Kafka™ topics, each topic is correlated to the `DbSet` described from the `DbContext`.
+In the example the data within the model are stored in multiple Apache Kafka™ topics, each topic is correlated to the `DbSet` described from the `DbContext` as described in [how it works](howitworks.md).
 
 The constraints are managed using `OnModelCreating` of `DbContext`.
 
@@ -79,9 +79,40 @@ When a change event is triggered the application can react to it and take an act
 
 The triggered distributed cache can be used side-by-side with [SignalR](https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr): combining [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) and [SignalR](https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr) in an application, subscribing to the change events, it is possible to feed the connected applications to [SignalR](https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr). 
 
-### Redis
+### KEFCore vs Redis
 
 The triggered distributed cache can be seen as a [Redis](https://redis.io/) backend.
+Here below some differences between them and when KEFCore can be used.
+
+#### Use KEFCore When You Need:
+
+- ✅ **Complex Object Persistence** Store and query deeply nested objects with LINQ. No manual serialization required.
+
+- ✅ **Structured Data Sharing** Share complex configuration, catalogs, and reference data across microservices with automatic synchronization.
+
+- ✅ **Durable Distributed Cache** Multi-region deployment with Kafka replication. All data is durable and recoverable.
+
+- ✅ **Change Event Triggers** React to data changes across your distributed system. Perfect for SignalR, workflow triggers, and reactive apps.
+
+- ✅ **Schema Evolution** Avro and Protobuf support for forward/backward compatibility.
+
+#### Use Redis When You Need:
+
+- ✅ **Atomic Operations** INCR, DECR, and other atomic primitives for counters and rate limiting.
+
+- ✅ **Sub-Millisecond Latency** Pure in-memory cache for extreme performance requirements.
+
+- ✅ **Native Data Structure Operations** Sorted sets for leaderboards, sets for uniqueness, lists for queues.
+
+- ✅ **Per-Key TTL** Individual expiration times for cache entries.
+
+#### Can You Use Both?
+
+**Yes!**:
+- **Redis**: Hot cache, rate limiting, session store
+- **KEFCore**: Durable shared state, complex data, cross-region sync
+
+They complement each other.
 
 ## Data processing out-side [Entity Framework Core](https://learn.microsoft.com/ef/core/) application
 

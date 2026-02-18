@@ -118,7 +118,7 @@ where DatabaseName is the property defined from `BloggingContext` see [KafkaDbCo
 > - Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post
 
 Established how [Apache Kafka™](https://kafka.apache.org/) stores the data it is important to understand how the storage is filled with the data in the model.
-Each element in the [DbSet](https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1), in the above example there **Blogs** and **Posts**, is converted in something can be used from [Apache Kafka™](https://kafka.apache.org/).
+Each element in the [DbSet](https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1), in the above example there are **Blogs** and **Posts**, is converted in something can be used from [Apache Kafka™](https://kafka.apache.org/).
 The conversion is done using serializers that converts the Entities (data in the model) into [Apache Kafka™](https://kafka.apache.org/) records and viceversa: see [serialization chapter](serialization.md) for more info.
 The serializers are the glue between [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/).
 
@@ -140,7 +140,7 @@ The features below are strictly correlated with the consumers receiving back the
 ### Distributed cache
 
 In the previous chapter was stated that consumers align the application data to the last topics information.
-The alignment is managed from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/), everything is driven from the Apache Kafka™ back-end.
+The alignment is managed from ~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or~~ [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/), everything is driven from the Apache Kafka™ back-end.
 Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
 This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka™ back-end:
 - Apache Kafka™ stores physically the cache (shared state) within the topics and routes changes to the subscribed applications
@@ -154,7 +154,7 @@ If an application restarts it will be able to retrieve latest data (latest cache
 
 Generally, an application based on [Entity Framework Core](https://learn.microsoft.com/ef/core/), executes queries to the back-end to store, or retrieve, information on demand.
 The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode:
-- Mainly these change events are used from [`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) to align the local state;
+- Mainly these change events are used from ~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or~~ [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) to align the local state;
 - Moreover [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) can inform, using callbacks and at zero cost, the registered application about these events.
 
 Then the application can use the reported events in many modes:
