@@ -193,14 +193,16 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
     /// </summary>
     /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="DefaultValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/></param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="DefaultValueContainer{TKey}"/></remarks>
-    public DefaultValueContainer(IEntityType tName, object[] rData)
+    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
     {
+        properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
-        Data = [];
-        foreach (var item in tName.GetProperties())
+        Properties = [];
+        foreach (var item in properties)
         {
             (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType);
             var pRecord = new PropertyData
@@ -212,7 +214,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 Value = rData[item.GetIndex()]
             };
 
-            Data.Add(pRecord);
+            Properties.Add(pRecord);
         }
     }
     /// <inheritdoc/>

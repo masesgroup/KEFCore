@@ -52,17 +52,19 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
     /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="ProtobufValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/></param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="ProtobufValueContainer{TKey}"/></remarks>
-    public ProtobufValueContainer(IEntityType tName, object[] rData)
+    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
     {
+        properties ??= [.. tName.GetProperties()];
         _innerMessage = new ValueContainer
         {
             EntityName = tName.Name,
             ClrType = tName.ClrType?.ToAssemblyQualified()!
         };
         _innerMessage.Data.Clear();
-        foreach (var item in tName.GetProperties())
+        foreach (var item in properties)
         {
             int index = item.GetIndex();
             var pRecord = new PropertyDataRecord

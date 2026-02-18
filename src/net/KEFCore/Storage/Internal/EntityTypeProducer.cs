@@ -192,7 +192,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _onChangeEvent = _cluster.Options.OnChangeEvent;
 
         var tTValueContainer = typeof(TValueContainer);
-        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
+        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 3);
 
         var keySelector = _cluster.Options.SerDesSelectorForKey(_entityType) as ISerDesSelector<TKey>;
         var valueSelector = _cluster.Options.SerDesSelectorForValue(_entityType) as ISerDesSelector<TValueContainer>;
@@ -268,7 +268,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
 #else
-                if (record.UpdateEntry.EntityState == EntityState.Deleted)
+                if (record.EntityState == EntityState.Deleted)
                 {
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, record.Key, null!)!;
                     futures.Add(future);

@@ -40,14 +40,16 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     /// Initialize a new instance of <see cref="AvroValueContainer{TKey}"/>
     /// </summary>
     /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="AvroValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/></param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="AvroValueContainer{TKey}"/></remarks>
-    public AvroValueContainer(IEntityType tName, object[] rData)
+    public AvroValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
     {
+        properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
         Data = [];
-        foreach (var item in tName.GetProperties())
+        foreach (var item in properties)
         {
             int index = item.GetIndex();
             (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType!);
@@ -81,7 +83,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 ClrType = item.ClrType?.ToAssemblyQualified(),
                 Value = value
             };
-            Data.Add(pRecord);
+            Data[index] = pRecord;
         }
     }
     /// <inheritdoc/>
