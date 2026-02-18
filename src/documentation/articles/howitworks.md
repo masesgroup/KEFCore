@@ -130,7 +130,68 @@ From the point of view of an application, the use of [Entity Framework Core](htt
 
 ### A note on [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations)
 
-The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly: however, on opposite side, the schema evolution is intrinsecally available 
+The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly: however, on opposite side, the schema evolution is intrinsecally available from the serialization structure used.
+Let's consider the following **Blog** entity:
+
+```C#
+[PrimaryKey("BlogId")]
+[Table("Blog", Schema = "Simple")]
+public class Blog
+{
+    public int BlogId { get; set; }
+    public string Url { get; set; }
+    public int Rating { get; set; }
+
+    public List<Post> Posts { get; set; }
+}
+```
+its Json serialized value is:
+```json
+{
+  "EntityName": "MASES.EntityFrameworkCore.KNet.Test.Model.Blog",
+  "ClrType": "MASES.EntityFrameworkCore.KNet.Test.Model.Blog, MASES.EntityFrameworkCore.KNet.Test.Common",
+  "Properties": [
+    {
+      "PropertyName": "BlogId",
+      "ManagedType": 11,
+      "SupportNull": false,
+      "ClrType": "System.Int32, System.Private.CoreLib",
+      "Value": 1019
+    },
+    {
+      "PropertyName": "Rating",
+      "ManagedType": 11,
+      "SupportNull": false,
+      "ClrType": "System.Int32, System.Private.CoreLib",
+      "Value": 1018
+    },
+    {
+      "PropertyName": "Url",
+      "ManagedType": 1,
+      "SupportNull": true,
+      "ClrType": "System.String, System.Private.CoreLib",
+      "Value": "http://blogs.msdn.com/adonet1018"
+    }
+  ]
+}
+```
+
+then it becomes:
+
+```C#
+[PrimaryKey("BlogId")]
+[Table("Blog", Schema = "Simple")]
+public class BlogNoUrlWithDatetime
+{
+    public int BlogId { get; set; }
+    public int Rating { get; set; }
+    public DateTime Date { get; set; }
+
+    public List<Post> Posts { get; set; }
+}
+```
+**Url** was removed and **Date** was added.
+Reading the previous value the application 
 
 
 

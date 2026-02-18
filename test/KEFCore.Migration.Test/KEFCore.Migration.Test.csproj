@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Migration.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Migration.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test</Title>
+		<Description>EntityFrameworkCore KNet Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Migration.Test</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
+	</ItemGroup>
+</Project>

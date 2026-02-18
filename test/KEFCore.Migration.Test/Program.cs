@@ -19,10 +19,9 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -53,49 +52,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (ProgramConfig.Config.DeleteApplicationData)
+                if (context.Database.EnsureCreated())
                 {
-                    ProgramConfig.ReportString("Process EnsureDeleted");
-                    context.Database.EnsureDeleted();
-                    ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
+                    ProgramConfig.ReportString("EnsureCreated created database");
                 }
+                else
+                {
+                    ProgramConfig.ReportString("EnsureCreated does not created database");
+                }
+
+                _ = context.Blogs.All((o) => true);
 
                 testWatcher.Start();
                 Stopwatch watch = new Stopwatch();
-                if (ProgramConfig.Config.LoadApplicationData)
-                {
-                    watch.Start();
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
-                    {
-                        context.Add(new Blog
-                        {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            },
-                            Rating = i,
-                        });
-                    }
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-                }
 
                 if (ProgramConfig.Config.UseModelBuilder)
                 {
@@ -162,15 +131,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     {
                         context.Add(new Blog
                         {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
-                                new Post()
+                            Date = DateTime.Now,
+                            Posts =
+                            [
+                                new()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }
