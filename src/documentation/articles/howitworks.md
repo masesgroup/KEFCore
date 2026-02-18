@@ -54,7 +54,73 @@ The behavior is intrinsic and does not need any extra call to the back-end.
 ### Data storage
 
 Apache Kafka™ stores the information using records. It is important to convert entities in something usable from Apache Kafka™.
-The conversion is done using serializers that converts the Entities (data in the model) into Apache Kafka™ records and viceversa: see [serialization chapter](serialization.md) for more info.
+
+At first glance each Entity is translated into a topic in Apache Kafka™; consider the following simple model extracted from [Model.cs](https://github.com/masesgroup/KEFCore/blob/53baf6aa6a875a4eee7291d9b16c3495fda07f1f/test/Common/Model.cs):
+
+```C#
+namespace MASES.EntityFrameworkCore.KNet.Test.Model
+{
+    [Table("Blog", Schema = "Simple")]
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+
+        public List<Post> Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
+        }
+    }
+    [PrimaryKey("PostId")]
+    [Table("Post", Schema = "Simple")]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
+    }
+}
+```
+used in:
+```C#
+namespace MASES.EntityFrameworkCore.KNet.Test
+{
+    public class BloggingContext : KafkaDbContext
+    {
+        public override string DatabaseName => "Test";
+
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Post> Posts { get; set; }
+    }
+}
+```
+
+each entity maps to a specific topic:
+- Blog belongs to the topic named [DatabaseName].Simple.Blog
+- Post belongs to the topic named [DatabaseName].Simple.Post
+
+where DatabaseName is the property defined from `BloggingContext` see [KafkaDbContext](kafkadbcontext.md).
+
+> [!IMPORTANT]
+> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the **Name** property of the Entity which belongs to the namespace defining it:
+> - Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog
+> - Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post
+
+Established how [Apache Kafka™](https://kafka.apache.org/) stores the data it is important to understand how the storage is filled with the data in the model.
+Each element in the [DbSet](https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1), in the above example there **Blogs** and **Posts**, is converted in something can be used from [Apache Kafka™](https://kafka.apache.org/).
+The conversion is done using serializers that converts the Entities (data in the model) into [Apache Kafka™](https://kafka.apache.org/) records and viceversa: see [serialization chapter](serialization.md) for more info.
+The serializers are the glue between [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/).
 
 ## [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) compared to other providers
 
