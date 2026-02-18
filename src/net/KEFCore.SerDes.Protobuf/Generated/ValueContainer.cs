@@ -25,19 +25,19 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRWYWx1ZUNvbnRhaW5lci5wcm90bxIHc3RvcmFnZRoSR2VuZXJpY1ZhbHVl",
-            "LnByb3RvIngKElByb3BlcnR5RGF0YVJlY29yZBIVCg1Qcm9wZXJ0eUluZGV4",
-            "GAEgASgFEhQKDFByb3BlcnR5TmFtZRgCIAEoCRIPCgdDbHJUeXBlGAMgASgJ",
-            "EiQKBVZhbHVlGAQgASgLMhUuc3RvcmFnZS5HZW5lcmljVmFsdWUiYAoOVmFs",
-            "dWVDb250YWluZXISEgoKRW50aXR5TmFtZRgBIAEoCRIPCgdDbHJUeXBlGAIg",
-            "ASgJEikKBERhdGEYAyADKAsyGy5zdG9yYWdlLlByb3BlcnR5RGF0YVJlY29y",
-            "ZEKJAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3JrY29yZS5rbmV0LnNlcmlhbGl6",
-            "YXRpb24ucHJvdG9idWZCDlZhbHVlQ29udGFpbmVyUAGqAj1NQVNFUy5FbnRp",
-            "dHlGcmFtZXdvcmtDb3JlLktOZXQuU2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5T",
-            "dG9yYWdlYgZwcm90bzM="));
+            "LnByb3RvIo8BChJQcm9wZXJ0eURhdGFSZWNvcmQSGgoNUHJvcGVydHlJbmRl",
+            "eBgBIAEoBUgAiAEBEhQKDFByb3BlcnR5TmFtZRgCIAEoCRIPCgdDbHJUeXBl",
+            "GAMgASgJEiQKBVZhbHVlGAQgASgLMhUuc3RvcmFnZS5HZW5lcmljVmFsdWVC",
+            "EAoOX1Byb3BlcnR5SW5kZXgiYAoOVmFsdWVDb250YWluZXISEgoKRW50aXR5",
+            "TmFtZRgBIAEoCRIPCgdDbHJUeXBlGAIgASgJEikKBERhdGEYAyADKAsyGy5z",
+            "dG9yYWdlLlByb3BlcnR5RGF0YVJlY29yZEKJAQo1bWFzZXMuZW50aXR5ZnJh",
+            "bWV3b3JrY29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDlZhbHVl",
+            "Q29udGFpbmVyUAGqAj1NQVNFUy5FbnRpdHlGcmFtZXdvcmtDb3JlLktOZXQu",
+            "U2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5TdG9yYWdlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.Parser, new[]{ "PropertyIndex", "PropertyName", "ClrType", "Value" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.Parser, new[]{ "PropertyIndex", "PropertyName", "ClrType", "Value" }, new[]{ "PropertyIndex" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer.Parser, new[]{ "EntityName", "ClrType", "Data" }, null, null, null, null)
           }));
     }
@@ -56,6 +56,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   {
     private static readonly pb::MessageParser<PropertyDataRecord> _parser = new pb::MessageParser<PropertyDataRecord>(() => new PropertyDataRecord());
     private pb::UnknownFieldSet _unknownFields;
+    private int _hasBits0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<PropertyDataRecord> Parser { get { return _parser; } }
@@ -83,6 +84,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public PropertyDataRecord(PropertyDataRecord other) : this() {
+      _hasBits0 = other._hasBits0;
       propertyIndex_ = other.propertyIndex_;
       propertyName_ = other.propertyName_;
       clrType_ = other.clrType_;
@@ -98,14 +100,29 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
 
     /// <summary>Field number for the "PropertyIndex" field.</summary>
     public const int PropertyIndexFieldNumber = 1;
+    private readonly static int PropertyIndexDefaultValue = 0;
+
     private int propertyIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int PropertyIndex {
-      get { return propertyIndex_; }
+      get { if ((_hasBits0 & 1) != 0) { return propertyIndex_; } else { return PropertyIndexDefaultValue; } }
       set {
+        _hasBits0 |= 1;
         propertyIndex_ = value;
       }
+    }
+    /// <summary>Gets whether the "PropertyIndex" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasPropertyIndex {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "PropertyIndex" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearPropertyIndex() {
+      _hasBits0 &= ~1;
     }
 
     /// <summary>Field number for the "PropertyName" field.</summary>
@@ -170,7 +187,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PropertyIndex != 0) hash ^= PropertyIndex.GetHashCode();
+      if (HasPropertyIndex) hash ^= PropertyIndex.GetHashCode();
       if (PropertyName.Length != 0) hash ^= PropertyName.GetHashCode();
       if (ClrType.Length != 0) hash ^= ClrType.GetHashCode();
       if (value_ != null) hash ^= Value.GetHashCode();
@@ -192,7 +209,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PropertyIndex != 0) {
+      if (HasPropertyIndex) {
         output.WriteRawTag(8);
         output.WriteInt32(PropertyIndex);
       }
@@ -218,7 +235,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PropertyIndex != 0) {
+      if (HasPropertyIndex) {
         output.WriteRawTag(8);
         output.WriteInt32(PropertyIndex);
       }
@@ -244,7 +261,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PropertyIndex != 0) {
+      if (HasPropertyIndex) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PropertyIndex);
       }
       if (PropertyName.Length != 0) {
@@ -268,7 +285,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (other == null) {
         return;
       }
-      if (other.PropertyIndex != 0) {
+      if (other.HasPropertyIndex) {
         PropertyIndex = other.PropertyIndex;
       }
       if (other.PropertyName.Length != 0) {

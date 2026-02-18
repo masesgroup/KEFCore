@@ -106,14 +106,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 ```
 
-each entity maps to a specific topic:
+each entity maps to a specific topic using the feature added with https://github.com/masesgroup/KEFCore/issues/417:
 - Blog belongs to the topic named [DatabaseName].Simple.Blog
 - Post belongs to the topic named [DatabaseName].Simple.Post
 
 where DatabaseName is the property defined from `BloggingContext` see [KafkaDbContext](kafkadbcontext.md).
 
 > [!IMPORTANT]
-> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the **Name** property of the Entity which belongs to the namespace defining it:
+> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the [**Name**](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name) property of the Entity which belongs to the namespace defining it:
 > - Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog
 > - Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post
 
@@ -130,7 +130,9 @@ From the point of view of an application, the use of [Entity Framework Core](htt
 
 ### A note on [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations)
 
-The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly.
+The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly: however, on opposite side, the schema evolution is intrinsecally available 
+
+
 
 ## [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) features not available in other providers
 

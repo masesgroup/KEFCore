@@ -27,7 +27,8 @@
 						{
 							"name": "PropertyIndex",
 							"doc": "Represents the index of the property in the EF Core schema of the EntityType",
-							"type": "int"
+							"type": [ "null", "int" ],
+							"default": null
 						},
 						{
 							"name": "PropertyName",

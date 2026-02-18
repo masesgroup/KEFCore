@@ -42,15 +42,17 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
+    private readonly IProperty[] _properties;
     private readonly string _storageId;
 
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IKafkaCluster kafkaCluster, IEntityType entityType)
+    public KNetStreamsRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties)
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
+        _properties = properties;
         _streamsManager ??= new(_kafkaCluster, _entityType)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
@@ -81,7 +83,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_kafkaCluster, _entityType, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
+        return new KafkaEnumberable(_kafkaCluster, _entityType, _properties, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
@@ -89,12 +91,14 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
+        private readonly IProperty[] _properties;
         private readonly ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore = null;
 
-        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, string storageId, bool useEnumeratorWithPrefetch)
+        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, string storageId, bool useEnumeratorWithPrefetch)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
+            _properties = properties;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
 #if DEBUG_PERFORMANCE
@@ -109,7 +113,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -123,7 +127,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting async KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
         }
     }
 
@@ -133,6 +137,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
+        private readonly IProperty[] _properties;
         private readonly KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? _keyValueIterator = null;
         private readonly IEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _enumerator = null;
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
@@ -148,10 +153,11 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         int _cycles = 0;
 #endif
 
-        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
+        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
         {
             _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
+            _properties = properties;
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
@@ -241,7 +247,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
-                    value?.GetData(_entityType, ref array);
+                    value?.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif
@@ -314,7 +320,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
-                    value?.GetData(_entityType, ref array);
+                    value?.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif

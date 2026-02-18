@@ -103,10 +103,10 @@ The project is based on available information within the official [EntityFramewo
 
 Currently the project tries to support, at our best, the [official supported Apache Kafka™ binary distribution](https://kafka.apache.org/downloads):
 
-| KEFCore | State | Apache Kafka™ | .NET | JVM™ |
-|:---:	|:---:	|:---:	|:---:	|:---:	|
-| 2.6.* | Active | 4.1.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
-| 2.5.* | Active | 3.9.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
+| KEFCore | State | KNet | Apache Kafka™ | .NET | JVM™ |
+|:---:	|:---:	|:---:	|:---:	|:---:	|:---:	|
+| 2.6.*+ | Active | 3.1.x | 4.1.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
+| 2.5.* | Deprecated | 2.9.x | 3.9.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
 
 ### Community and Contribution
 

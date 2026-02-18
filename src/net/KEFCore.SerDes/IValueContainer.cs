@@ -34,14 +34,15 @@ public interface IValueContainer<in T> where T : notnull
     /// </summary>
     string ClrType { get; }
     /// <summary>
-    /// Returns back the raw data associated to the Entity
+    /// Returns back the raw data associated to the Entity contained in <see cref="IValueContainer{T}"/> instance
     /// </summary>
     /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
-    void GetData(IEntityType tName, ref object[] array);
+    void GetData(IEntityType tName, IProperty[]? properties, ref object[] array);
     /// <summary>
-    /// Returns back a dictionary of properties (PropertyIndex, PropertyName) associated to the Entity
+    /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <returns>A dictionary of properties (PropertyIndex, PropertyName) filled in with the data stored in the ValueContainer</returns>
-    IReadOnlyDictionary<int, string> GetProperties();
+    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
+    IReadOnlyDictionary<string, object> GetProperties();
 }

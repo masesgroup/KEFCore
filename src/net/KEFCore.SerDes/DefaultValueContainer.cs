@@ -35,28 +35,6 @@ public class PropertyData : IJsonOnDeserialized
     static readonly string DateTimeAssemblyQualified = typeof(DateTime).ToAssemblyQualified();
     static readonly string DateTimeOffsetAssemblyQualified = typeof(DateTimeOffset).ToAssemblyQualified();
 
-    /// <summary>
-    /// Initialize a new instance of <see cref="PropertyData"/>
-    /// </summary>
-    /// <remarks>It is mainly used from the JSON serializer</remarks>
-    public PropertyData()
-    {
-    }
-    /// <summary>
-    /// Initialize a new instance of <see cref="PropertyData"/>
-    /// </summary>
-    /// <param name="property">The <see cref="IProperty"/> to be stored into <see cref="PropertyData"/> associated to <paramref name="value"/></param>
-    /// <param name="value">The data, built from EFCore, to be stored in the <see cref="PropertyData"/></param>
-    /// <remarks>This constructor is mandatory and it is used from <see cref="DefaultValueContainer{TKey}"/></remarks>
-    public PropertyData(IProperty property, object value)
-    {
-        (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(property.ClrType);
-        ManagedType = _type.Item1;
-        SupportNull = _type.Item2;
-        ClrType = property.ClrType?.ToAssemblyQualified();
-        PropertyName = property.Name;
-        Value = value;
-    }
     /// <inheritdoc/>
     public void OnDeserialized()
     {
@@ -118,7 +96,7 @@ public class PropertyData : IJsonOnDeserialized
                     case JsonValueKind.Array:
                     case JsonValueKind.Undefined:
                     default:
-                        throw new InvalidOperationException($"Failed to deserialize {PropertyName}, ValueKind is {elem.ValueKind}");
+                        throw new InvalidOperationException($"Failed to deserialize {Value} as {ClrType}, ValueKind is {elem.ValueKind}");
                 }
             }
             else
@@ -170,7 +148,7 @@ public class PropertyData : IJsonOnDeserialized
                     case JsonValueKind.Array:
                     case JsonValueKind.Undefined:
                     default:
-                        throw new InvalidOperationException($"Failed to deserialize {PropertyName}, ValueKind is {elem.ValueKind}");
+                        throw new InvalidOperationException($"Failed to deserialize {Value} as {ClrType}, ValueKind is {elem.ValueKind}");
                 }
             }
         }
@@ -180,7 +158,7 @@ public class PropertyData : IJsonOnDeserialized
         }
     }
     /// <summary>
-    /// The name of the <see cref="IProperty"/>
+    /// The value associated to the <see cref="IReadOnlyPropertyBase.Name"/>
     /// </summary>
     public string? PropertyName { get; set; }
     /// <summary>
@@ -221,11 +199,20 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     {
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
-        Data = new Dictionary<int, PropertyData>();
+        Data = [];
         foreach (var item in tName.GetProperties())
         {
-            int index = item.GetIndex();
-            Data.Add(index, new PropertyData(item, rData[index]));
+            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType);
+            var pRecord = new PropertyData
+            {
+                ManagedType = _type.Item1,
+                SupportNull = _type.Item2,
+                PropertyName = item.Name,
+                ClrType = item.ClrType?.ToAssemblyQualified(),
+                Value = rData[item.GetIndex()]
+            };
+
+            Data.Add(pRecord);
         }
     }
     /// <inheritdoc/>
@@ -236,9 +223,14 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// The data stored associated to the <see cref="IEntityType"/>
     /// </summary>
     public Dictionary<int, PropertyData>? Data { get; set; }
+    /// <summary>
+    /// The data stored associated to the <see cref="IEntityType"/>
+    /// </summary>
+    public IList<PropertyData>? Properties { get; set; }
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
     {
+        properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
         Stopwatch fullSw = new Stopwatch();
         Stopwatch newSw = new Stopwatch();
@@ -247,18 +239,32 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         {
             fullSw.Start();
 #endif
-            if (Data == null) { return; }
+            if (Data == null && Properties == null) { return; }
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[Data.Count];
+            array = new object[properties.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            for (int i = 0; i < Data.Count; i++)
+            if (Data != null)
             {
-                array[i] = Data[i].Value!;
+                foreach (var item in Data!)
+                {
+                    var prop = tName.FindProperty(item.Value?.PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema 
+                    array[prop.GetIndex()] = item.Value?.Value!;
+                }
+            }
+            else
+            {
+                foreach (var item in Properties!)
+                {
+                    var prop = tName.FindProperty(item.PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema 
+                    array[prop.GetIndex()] = item?.Value!;
+                }
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -268,18 +274,30 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         {
             if (Infrastructure.KafkaDbContext.TraceEntityTypeDataStorageGetData)
             {
-                Infrastructure.KafkaDbContext.ReportString($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+                Infrastructure.KafkaDbContext.ReportString($"Time to GetData with length {Data?.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
             }
         }
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<int, string> GetProperties()
+    public IReadOnlyDictionary<string, object> GetProperties()
     {
-        Dictionary<int, string> props = new();
-        for (int i = 0; i < Data!.Count; i++)
+        Dictionary<string, object> props = [];
+        if (Data == null && Properties == null) { return props; }
+
+        if (Data != null)
         {
-            props.Add(i, Data[i].PropertyName!);
+            // old implementation
+            foreach (var item in Data!)
+            {
+                props.Add(item.Value.PropertyName!, item.Value.Value!);
+            }
+            return props;
+        }
+
+        foreach (var item in Properties!)
+        {
+            props.Add(item.PropertyName!, item.Value!);
         }
         return props;
     }

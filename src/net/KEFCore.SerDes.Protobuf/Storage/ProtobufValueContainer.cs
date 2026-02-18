@@ -67,7 +67,6 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             int index = item.GetIndex();
             var pRecord = new PropertyDataRecord
             {
-                PropertyIndex = index,
                 PropertyName = item.Name,
                 ClrType = item.ClrType?.ToAssemblyQualified(),
                 Value = new GenericValue(item.ClrType!, rData[index])
@@ -95,8 +94,9 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     public void WriteTo(CodedOutputStream output) => _innerMessage.WriteTo(output);
 
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
     {
+        properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
         Stopwatch fullSw = new Stopwatch();
         Stopwatch newSw = new Stopwatch();
@@ -109,14 +109,16 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[_innerMessage.Data.Count];
+            array = new object[properties.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            for (int i = 0; i < _innerMessage.Data.Count; i++)
+            foreach (var item in _innerMessage.Data)
             {
-                array[i] = _innerMessage.Data[i].Value.GetContent();
+                var prop = tName.FindProperty(item.PropertyName!);
+                if (prop == null) continue; // a property was removed from the schema 
+                array[prop.GetIndex()] = item?.Value.GetContent()!;
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -132,12 +134,12 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<int, string> GetProperties()
+    public IReadOnlyDictionary<string, object> GetProperties()
     {
-        Dictionary<int, string> props = new();
-        for (int i = 0; i < _innerMessage.Data.Count; i++)
+        Dictionary<string, object> props = [];
+        foreach (var item in _innerMessage.Data)
         {
-            props.Add(_innerMessage.Data[i].PropertyIndex, _innerMessage.Data[i].PropertyName);
+            props.Add(item.PropertyName, item.Value.GetContent());
         }
         return props;
     }
