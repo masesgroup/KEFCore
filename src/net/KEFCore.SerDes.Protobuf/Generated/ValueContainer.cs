@@ -25,19 +25,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRWYWx1ZUNvbnRhaW5lci5wcm90bxIHc3RvcmFnZRoSR2VuZXJpY1ZhbHVl",
-            "LnByb3RvIo8BChJQcm9wZXJ0eURhdGFSZWNvcmQSGgoNUHJvcGVydHlJbmRl",
-            "eBgBIAEoBUgAiAEBEhQKDFByb3BlcnR5TmFtZRgCIAEoCRIPCgdDbHJUeXBl",
-            "GAMgASgJEiQKBVZhbHVlGAQgASgLMhUuc3RvcmFnZS5HZW5lcmljVmFsdWVC",
-            "EAoOX1Byb3BlcnR5SW5kZXgiYAoOVmFsdWVDb250YWluZXISEgoKRW50aXR5",
-            "TmFtZRgBIAEoCRIPCgdDbHJUeXBlGAIgASgJEikKBERhdGEYAyADKAsyGy5z",
-            "dG9yYWdlLlByb3BlcnR5RGF0YVJlY29yZEKJAQo1bWFzZXMuZW50aXR5ZnJh",
-            "bWV3b3JrY29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDlZhbHVl",
-            "Q29udGFpbmVyUAGqAj1NQVNFUy5FbnRpdHlGcmFtZXdvcmtDb3JlLktOZXQu",
-            "U2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5TdG9yYWdlYgZwcm90bzM="));
+            "LnByb3RvIqABChJQcm9wZXJ0eURhdGFSZWNvcmQSGgoNUHJvcGVydHlJbmRl",
+            "eBgBIAEoBUgAiAEBEhQKDFByb3BlcnR5TmFtZRgCIAEoCRIUCgdDbHJUeXBl",
+            "GAMgASgJSAGIAQESJAoFVmFsdWUYBCABKAsyFS5zdG9yYWdlLkdlbmVyaWNW",
+            "YWx1ZUIQCg5fUHJvcGVydHlJbmRleEIKCghfQ2xyVHlwZSJgCg5WYWx1ZUNv",
+            "bnRhaW5lchISCgpFbnRpdHlOYW1lGAEgASgJEg8KB0NsclR5cGUYAiABKAkS",
+            "KQoERGF0YRgDIAMoCzIbLnN0b3JhZ2UuUHJvcGVydHlEYXRhUmVjb3JkQokB",
+            "CjVtYXNlcy5lbnRpdHlmcmFtZXdvcmtjb3JlLmtuZXQuc2VyaWFsaXphdGlv",
+            "bi5wcm90b2J1ZkIOVmFsdWVDb250YWluZXJQAaoCPU1BU0VTLkVudGl0eUZy",
+            "YW1ld29ya0NvcmUuS05ldC5TZXJpYWxpemF0aW9uLlByb3RvYnVmLlN0b3Jh",
+            "Z2ViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.Parser, new[]{ "PropertyIndex", "PropertyName", "ClrType", "Value" }, new[]{ "PropertyIndex" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.Parser, new[]{ "PropertyIndex", "PropertyName", "ClrType", "Value" }, new[]{ "PropertyIndex", "ClrType" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer.Parser, new[]{ "EntityName", "ClrType", "Data" }, null, null, null, null)
           }));
     }
@@ -139,14 +140,28 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
 
     /// <summary>Field number for the "ClrType" field.</summary>
     public const int ClrTypeFieldNumber = 3;
-    private string clrType_ = "";
+    private readonly static string ClrTypeDefaultValue = "";
+
+    private string clrType_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string ClrType {
-      get { return clrType_; }
+      get { return clrType_ ?? ClrTypeDefaultValue; }
       set {
         clrType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+    /// <summary>Gets whether the "ClrType" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasClrType {
+      get { return clrType_ != null; }
+    }
+    /// <summary>Clears the value of the "ClrType" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearClrType() {
+      clrType_ = null;
     }
 
     /// <summary>Field number for the "Value" field.</summary>
@@ -189,7 +204,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       int hash = 1;
       if (HasPropertyIndex) hash ^= PropertyIndex.GetHashCode();
       if (PropertyName.Length != 0) hash ^= PropertyName.GetHashCode();
-      if (ClrType.Length != 0) hash ^= ClrType.GetHashCode();
+      if (HasClrType) hash ^= ClrType.GetHashCode();
       if (value_ != null) hash ^= Value.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -217,7 +232,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(18);
         output.WriteString(PropertyName);
       }
-      if (ClrType.Length != 0) {
+      if (HasClrType) {
         output.WriteRawTag(26);
         output.WriteString(ClrType);
       }
@@ -243,7 +258,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(18);
         output.WriteString(PropertyName);
       }
-      if (ClrType.Length != 0) {
+      if (HasClrType) {
         output.WriteRawTag(26);
         output.WriteString(ClrType);
       }
@@ -267,7 +282,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (PropertyName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(PropertyName);
       }
-      if (ClrType.Length != 0) {
+      if (HasClrType) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(ClrType);
       }
       if (value_ != null) {
@@ -291,7 +306,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (other.PropertyName.Length != 0) {
         PropertyName = other.PropertyName;
       }
-      if (other.ClrType.Length != 0) {
+      if (other.HasClrType) {
         ClrType = other.ClrType;
       }
       if (other.value_ != null) {
