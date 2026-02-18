@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet;
 
@@ -77,7 +78,13 @@ public static class KafkaEntityTypeExtensions
     /// </summary>
     public static string TopicName(this IEntityType entityType, KafkaOptionsExtension options)
     {
-        return $"{options.DatabaseName}.{entityType.Name}";
+        var schema = entityType.Name;
+        var table = entityType.ClrType.GetCustomAttribute<TableAttribute>();
+        if (table != null)
+        {
+            schema = table.Schema != null ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
+        }
+        return $"{options.DatabaseName}.{schema}";
     }
     /// <summary>
     /// Creates the storage id

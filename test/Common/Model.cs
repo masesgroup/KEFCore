@@ -24,9 +24,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Model
 {
+    [Table("Blog", Schema = "Simple")]
     public class Blog
     {
         public int BlogId { get; set; }
@@ -39,7 +41,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
             return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
         }
     }
-
+    [Table("Post", Schema = "Simple")]
     public class Post
     {
         public int PostId { get; set; }
