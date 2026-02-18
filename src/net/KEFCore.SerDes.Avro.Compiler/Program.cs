@@ -44,7 +44,9 @@ partial class Program
     {
         try
         {
-            AvroSerializationHelper.BuildDefaultSchema("Generated");
+            var outFolder = "Generated";
+            if (args.Length != 0 && Directory.Exists( args[0])) outFolder = args[0];
+            AvroSerializationHelper.BuildDefaultSchema(outFolder);
         }
         catch (Exception ex)
         {

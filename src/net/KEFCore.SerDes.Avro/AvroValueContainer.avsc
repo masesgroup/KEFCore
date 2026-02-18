@@ -6,10 +6,12 @@
 	"fields": [
 		{
 			"name": "EntityName",
+			"doc": "Represents the entity name of the Entity in the EF Core schema of the EntityType",
 			"type": "string"
 		},
 		{
 			"name": "ClrType",
+			"doc": "Represents the CLR type of the Entity in the EF Core schema of the EntityType",
 			"type": "string"
 		},
 		{
@@ -24,14 +26,27 @@
 					"fields": [
 						{
 							"name": "PropertyIndex",
+							"doc": "Represents the index of the property in the EF Core schema of the EntityType",
 							"type": "int"
 						},
 						{
 							"name": "PropertyName",
+							"doc": "Represents the name of the property in the EF Core schema of the EntityType",
 							"type": "string"
 						},
 						{
+							"name": "ManagedType",
+							"doc": "Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType",
+							"type": "int"
+						},
+						{
+							"name": "SupportNull",
+							"doc": "true if the ManagedType shall support null, e.g. Nullable type in .NET",
+							"type": "boolean"
+						},
+						{
 							"name": "ClrType",
+							"doc": "Represents the CLR type of the property in the EF Core schema of the EntityType",
 							"type": "string"
 						},
 						{

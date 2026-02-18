@@ -25,6 +25,15 @@ option csharp_namespace = "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
 // [END csharp_declaration]
 
 // [START messages]
+// Represent a System.Datetime
+message Datetime
+{
+    // Represents a Timestamp value.
+    google.protobuf.Timestamp datetime_value = 1;
+    // Represents a Utc/Local value.
+    bool utc_value = 2;
+}
+
 // Our address book file is just one of these.
 message GenericValue {
   // The kind of value.
@@ -33,26 +42,40 @@ message GenericValue {
     google.protobuf.NullValue null_value = 1;
     // Represents a boolean value.
     bool bool_value = 2;
+    // Represents a char value.
+    string char_value = 3;
     // Represents a int value.
-    int32 byte_value = 3;
+    uint32 byte_value = 4;
     // Represents a int value.
-    int32 short_value = 4;
+    int32 sbyte_value = 5;
     // Represents a int value.
-    int32 int_value = 5;
+    int32 short_value = 6;
+    // Represents a int value.
+    uint32 ushort_value = 7;
+    // Represents a int value.
+    int32 int_value = 8;
+    // Represents a int value.
+    uint32 uint_value = 9;
     // Represents a long value.
-    int64 long_value = 6;
+    int64 long_value = 10;
+    // Represents a long value.
+    uint64 ulong_value = 11;
     // Represents a float value.
-    float float_value = 7;
+    float float_value = 12;
     // Represents a double value.
-    double double_value = 8;
+    double double_value = 13;
     // Represents a string value.
-    string string_value = 9;
+    string string_value = 14;
     // Represents a Guid value.
-    bytes guid_value = 10;
-    // Represents a Timestamp value.
-    google.protobuf.Timestamp datetime_value = 11;
-    // Represents a Timestamp value.
-    google.protobuf.Timestamp datetimeoffset_value = 12;
+    bytes guid_value = 15;
+    // Represents a Datetime value.
+    Datetime datetime_value = 16;
+    // Represents a Datetime value.
+    google.protobuf.Timestamp datetimeoffset_value = 17;
+    // Represents a decimal value.
+    string decimal_value = 18;
   }
+  int32 ManagedType = 19;
+  bool SupportNull = 20;
 }
 // [END messages]

@@ -26,22 +26,29 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           string.Concat(
             "ChJHZW5lcmljVmFsdWUucHJvdG8SB3N0b3JhZ2UaHGdvb2dsZS9wcm90b2J1",
             "Zi9zdHJ1Y3QucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90aW1lc3RhbXAucHJv",
-            "dG8ihQMKDEdlbmVyaWNWYWx1ZRIwCgpudWxsX3ZhbHVlGAEgASgOMhouZ29v",
-            "Z2xlLnByb3RvYnVmLk51bGxWYWx1ZUgAEhQKCmJvb2xfdmFsdWUYAiABKAhI",
-            "ABIUCgpieXRlX3ZhbHVlGAMgASgFSAASFQoLc2hvcnRfdmFsdWUYBCABKAVI",
-            "ABITCglpbnRfdmFsdWUYBSABKAVIABIUCgpsb25nX3ZhbHVlGAYgASgDSAAS",
-            "FQoLZmxvYXRfdmFsdWUYByABKAJIABIWCgxkb3VibGVfdmFsdWUYCCABKAFI",
-            "ABIWCgxzdHJpbmdfdmFsdWUYCSABKAlIABIUCgpndWlkX3ZhbHVlGAogASgM",
-            "SAASNAoOZGF0ZXRpbWVfdmFsdWUYCyABKAsyGi5nb29nbGUucHJvdG9idWYu",
-            "VGltZXN0YW1wSAASOgoUZGF0ZXRpbWVvZmZzZXRfdmFsdWUYDCABKAsyGi5n",
-            "b29nbGUucHJvdG9idWYuVGltZXN0YW1wSABCBgoEa2luZEKHAQo1bWFzZXMu",
-            "ZW50aXR5ZnJhbWV3b3JrY29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9i",
-            "dWZCDEdlbmVyaWNWYWx1ZVABqgI9TUFTRVMuRW50aXR5RnJhbWV3b3JrQ29y",
-            "ZS5LTmV0LlNlcmlhbGl6YXRpb24uUHJvdG9idWYuU3RvcmFnZWIGcHJvdG8z"));
+            "dG8iUQoIRGF0ZXRpbWUSMgoOZGF0ZXRpbWVfdmFsdWUYASABKAsyGi5nb29n",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCKxBAoM",
+            "R2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUucHJv",
+            "dG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQKCmNo",
+            "YXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoLc2J5",
+            "dGVfdmFsdWUYBSABKAVIABIVCgtzaG9ydF92YWx1ZRgGIAEoBUgAEhYKDHVz",
+            "aG9ydF92YWx1ZRgHIAEoDUgAEhMKCWludF92YWx1ZRgIIAEoBUgAEhQKCnVp",
+            "bnRfdmFsdWUYCSABKA1IABIUCgpsb25nX3ZhbHVlGAogASgDSAASFQoLdWxv",
+            "bmdfdmFsdWUYCyABKARIABIVCgtmbG9hdF92YWx1ZRgMIAEoAkgAEhYKDGRv",
+            "dWJsZV92YWx1ZRgNIAEoAUgAEhYKDHN0cmluZ192YWx1ZRgOIAEoCUgAEhQK",
+            "Cmd1aWRfdmFsdWUYDyABKAxIABIrCg5kYXRldGltZV92YWx1ZRgQIAEoCzIR",
+            "LnN0b3JhZ2UuRGF0ZXRpbWVIABI6ChRkYXRldGltZW9mZnNldF92YWx1ZRgR",
+            "IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIABIXCg1kZWNpbWFs",
+            "X3ZhbHVlGBIgASgJSAASEwoLTWFuYWdlZFR5cGUYEyABKAUSEwoLU3VwcG9y",
+            "dE51bGwYFCABKAhCBgoEa2luZEKHAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3Jr",
+            "Y29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDEdlbmVyaWNWYWx1",
+            "ZVABqgI9TUFTRVMuRW50aXR5RnJhbWV3b3JrQ29yZS5LTmV0LlNlcmlhbGl6",
+            "YXRpb24uUHJvdG9idWYuU3RvcmFnZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "ByteValue", "ShortValue", "IntValue", "LongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue" }, new[]{ "Kind" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser, new[]{ "DatetimeValue", "UtcValue" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
           }));
     }
     #endregion
@@ -50,6 +57,259 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   #region Messages
   /// <summary>
   /// [START messages]
+  /// Represent a System.Datetime
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class Datetime : pb::IMessage<Datetime>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<Datetime> _parser = new pb::MessageParser<Datetime>(() => new Datetime());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<Datetime> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime(Datetime other) : this() {
+      datetimeValue_ = other.datetimeValue_ != null ? other.datetimeValue_.Clone() : null;
+      utcValue_ = other.utcValue_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public Datetime Clone() {
+      return new Datetime(this);
+    }
+
+    /// <summary>Field number for the "datetime_value" field.</summary>
+    public const int DatetimeValueFieldNumber = 1;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp datetimeValue_;
+    /// <summary>
+    /// Represents a Timestamp value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeValue {
+      get { return datetimeValue_; }
+      set {
+        datetimeValue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "utc_value" field.</summary>
+    public const int UtcValueFieldNumber = 2;
+    private bool utcValue_;
+    /// <summary>
+    /// Represents a Utc/Local value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool UtcValue {
+      get { return utcValue_; }
+      set {
+        utcValue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as Datetime);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(Datetime other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(DatetimeValue, other.DatetimeValue)) return false;
+      if (UtcValue != other.UtcValue) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (datetimeValue_ != null) hash ^= DatetimeValue.GetHashCode();
+      if (UtcValue != false) hash ^= UtcValue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (datetimeValue_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(UtcValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (datetimeValue_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(UtcValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (datetimeValue_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DatetimeValue);
+      }
+      if (UtcValue != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(Datetime other) {
+      if (other == null) {
+        return;
+      }
+      if (other.datetimeValue_ != null) {
+        if (datetimeValue_ == null) {
+          DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        DatetimeValue.MergeFrom(other.DatetimeValue);
+      }
+      if (other.UtcValue != false) {
+        UtcValue = other.UtcValue;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (datetimeValue_ == null) {
+              DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DatetimeValue);
+            break;
+          }
+          case 16: {
+            UtcValue = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (datetimeValue_ == null) {
+              DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DatetimeValue);
+            break;
+          }
+          case 16: {
+            UtcValue = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   /// Our address book file is just one of these.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -67,7 +327,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[0]; }
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -87,6 +347,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GenericValue(GenericValue other) : this() {
+      managedType_ = other.managedType_;
+      supportNull_ = other.supportNull_;
       switch (other.KindCase) {
         case KindOneofCase.NullValue:
           NullValue = other.NullValue;
@@ -94,17 +356,32 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         case KindOneofCase.BoolValue:
           BoolValue = other.BoolValue;
           break;
+        case KindOneofCase.CharValue:
+          CharValue = other.CharValue;
+          break;
         case KindOneofCase.ByteValue:
           ByteValue = other.ByteValue;
+          break;
+        case KindOneofCase.SbyteValue:
+          SbyteValue = other.SbyteValue;
           break;
         case KindOneofCase.ShortValue:
           ShortValue = other.ShortValue;
           break;
+        case KindOneofCase.UshortValue:
+          UshortValue = other.UshortValue;
+          break;
         case KindOneofCase.IntValue:
           IntValue = other.IntValue;
           break;
+        case KindOneofCase.UintValue:
+          UintValue = other.UintValue;
+          break;
         case KindOneofCase.LongValue:
           LongValue = other.LongValue;
+          break;
+        case KindOneofCase.UlongValue:
+          UlongValue = other.UlongValue;
           break;
         case KindOneofCase.FloatValue:
           FloatValue = other.FloatValue;
@@ -123,6 +400,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DatetimeoffsetValue:
           DatetimeoffsetValue = other.DatetimeoffsetValue.Clone();
+          break;
+        case KindOneofCase.DecimalValue:
+          DecimalValue = other.DecimalValue;
           break;
       }
 
@@ -193,15 +473,44 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "char_value" field.</summary>
+    public const int CharValueFieldNumber = 3;
+    /// <summary>
+    /// Represents a char value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string CharValue {
+      get { return HasCharValue ? (string) kind_ : ""; }
+      set {
+        kind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        kindCase_ = KindOneofCase.CharValue;
+      }
+    }
+    /// <summary>Gets whether the "char_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasCharValue {
+      get { return kindCase_ == KindOneofCase.CharValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "char_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearCharValue() {
+      if (HasCharValue) {
+        ClearKind();
+      }
+    }
+
     /// <summary>Field number for the "byte_value" field.</summary>
-    public const int ByteValueFieldNumber = 3;
+    public const int ByteValueFieldNumber = 4;
     /// <summary>
     /// Represents a int value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ByteValue {
-      get { return HasByteValue ? (int) kind_ : 0; }
+    public uint ByteValue {
+      get { return HasByteValue ? (uint) kind_ : 0; }
       set {
         kind_ = value;
         kindCase_ = KindOneofCase.ByteValue;
@@ -222,8 +531,37 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "sbyte_value" field.</summary>
+    public const int SbyteValueFieldNumber = 5;
+    /// <summary>
+    /// Represents a int value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SbyteValue {
+      get { return HasSbyteValue ? (int) kind_ : 0; }
+      set {
+        kind_ = value;
+        kindCase_ = KindOneofCase.SbyteValue;
+      }
+    }
+    /// <summary>Gets whether the "sbyte_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasSbyteValue {
+      get { return kindCase_ == KindOneofCase.SbyteValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "sbyte_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearSbyteValue() {
+      if (HasSbyteValue) {
+        ClearKind();
+      }
+    }
+
     /// <summary>Field number for the "short_value" field.</summary>
-    public const int ShortValueFieldNumber = 4;
+    public const int ShortValueFieldNumber = 6;
     /// <summary>
     /// Represents a int value.
     /// </summary>
@@ -251,8 +589,37 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "ushort_value" field.</summary>
+    public const int UshortValueFieldNumber = 7;
+    /// <summary>
+    /// Represents a int value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint UshortValue {
+      get { return HasUshortValue ? (uint) kind_ : 0; }
+      set {
+        kind_ = value;
+        kindCase_ = KindOneofCase.UshortValue;
+      }
+    }
+    /// <summary>Gets whether the "ushort_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUshortValue {
+      get { return kindCase_ == KindOneofCase.UshortValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "ushort_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUshortValue() {
+      if (HasUshortValue) {
+        ClearKind();
+      }
+    }
+
     /// <summary>Field number for the "int_value" field.</summary>
-    public const int IntValueFieldNumber = 5;
+    public const int IntValueFieldNumber = 8;
     /// <summary>
     /// Represents a int value.
     /// </summary>
@@ -280,8 +647,37 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "uint_value" field.</summary>
+    public const int UintValueFieldNumber = 9;
+    /// <summary>
+    /// Represents a int value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint UintValue {
+      get { return HasUintValue ? (uint) kind_ : 0; }
+      set {
+        kind_ = value;
+        kindCase_ = KindOneofCase.UintValue;
+      }
+    }
+    /// <summary>Gets whether the "uint_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUintValue {
+      get { return kindCase_ == KindOneofCase.UintValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "uint_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUintValue() {
+      if (HasUintValue) {
+        ClearKind();
+      }
+    }
+
     /// <summary>Field number for the "long_value" field.</summary>
-    public const int LongValueFieldNumber = 6;
+    public const int LongValueFieldNumber = 10;
     /// <summary>
     /// Represents a long value.
     /// </summary>
@@ -309,8 +705,37 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "ulong_value" field.</summary>
+    public const int UlongValueFieldNumber = 11;
+    /// <summary>
+    /// Represents a long value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ulong UlongValue {
+      get { return HasUlongValue ? (ulong) kind_ : 0UL; }
+      set {
+        kind_ = value;
+        kindCase_ = KindOneofCase.UlongValue;
+      }
+    }
+    /// <summary>Gets whether the "ulong_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUlongValue {
+      get { return kindCase_ == KindOneofCase.UlongValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "ulong_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUlongValue() {
+      if (HasUlongValue) {
+        ClearKind();
+      }
+    }
+
     /// <summary>Field number for the "float_value" field.</summary>
-    public const int FloatValueFieldNumber = 7;
+    public const int FloatValueFieldNumber = 12;
     /// <summary>
     /// Represents a float value.
     /// </summary>
@@ -339,7 +764,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "double_value" field.</summary>
-    public const int DoubleValueFieldNumber = 8;
+    public const int DoubleValueFieldNumber = 13;
     /// <summary>
     /// Represents a double value.
     /// </summary>
@@ -368,7 +793,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "string_value" field.</summary>
-    public const int StringValueFieldNumber = 9;
+    public const int StringValueFieldNumber = 14;
     /// <summary>
     /// Represents a string value.
     /// </summary>
@@ -397,7 +822,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "guid_value" field.</summary>
-    public const int GuidValueFieldNumber = 10;
+    public const int GuidValueFieldNumber = 15;
     /// <summary>
     /// Represents a Guid value.
     /// </summary>
@@ -426,14 +851,14 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "datetime_value" field.</summary>
-    public const int DatetimeValueFieldNumber = 11;
+    public const int DatetimeValueFieldNumber = 16;
     /// <summary>
-    /// Represents a Timestamp value.
+    /// Represents a Datetime value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp DatetimeValue {
-      get { return kindCase_ == KindOneofCase.DatetimeValue ? (global::Google.Protobuf.WellKnownTypes.Timestamp) kind_ : null; }
+    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime DatetimeValue {
+      get { return kindCase_ == KindOneofCase.DatetimeValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime) kind_ : null; }
       set {
         kind_ = value;
         kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.DatetimeValue;
@@ -441,9 +866,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "datetimeoffset_value" field.</summary>
-    public const int DatetimeoffsetValueFieldNumber = 12;
+    public const int DatetimeoffsetValueFieldNumber = 17;
     /// <summary>
-    /// Represents a Timestamp value.
+    /// Represents a Datetime value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -455,22 +880,81 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "decimal_value" field.</summary>
+    public const int DecimalValueFieldNumber = 18;
+    /// <summary>
+    /// Represents a decimal value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DecimalValue {
+      get { return HasDecimalValue ? (string) kind_ : ""; }
+      set {
+        kind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        kindCase_ = KindOneofCase.DecimalValue;
+      }
+    }
+    /// <summary>Gets whether the "decimal_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasDecimalValue {
+      get { return kindCase_ == KindOneofCase.DecimalValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "decimal_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearDecimalValue() {
+      if (HasDecimalValue) {
+        ClearKind();
+      }
+    }
+
+    /// <summary>Field number for the "ManagedType" field.</summary>
+    public const int ManagedTypeFieldNumber = 19;
+    private int managedType_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ManagedType {
+      get { return managedType_; }
+      set {
+        managedType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "SupportNull" field.</summary>
+    public const int SupportNullFieldNumber = 20;
+    private bool supportNull_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool SupportNull {
+      get { return supportNull_; }
+      set {
+        supportNull_ = value;
+      }
+    }
+
     private object kind_;
     /// <summary>Enum of possible cases for the "kind" oneof.</summary>
     public enum KindOneofCase {
       None = 0,
       NullValue = 1,
       BoolValue = 2,
-      ByteValue = 3,
-      ShortValue = 4,
-      IntValue = 5,
-      LongValue = 6,
-      FloatValue = 7,
-      DoubleValue = 8,
-      StringValue = 9,
-      GuidValue = 10,
-      DatetimeValue = 11,
-      DatetimeoffsetValue = 12,
+      CharValue = 3,
+      ByteValue = 4,
+      SbyteValue = 5,
+      ShortValue = 6,
+      UshortValue = 7,
+      IntValue = 8,
+      UintValue = 9,
+      LongValue = 10,
+      UlongValue = 11,
+      FloatValue = 12,
+      DoubleValue = 13,
+      StringValue = 14,
+      GuidValue = 15,
+      DatetimeValue = 16,
+      DatetimeoffsetValue = 17,
+      DecimalValue = 18,
     }
     private KindOneofCase kindCase_ = KindOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -503,16 +987,24 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
       if (NullValue != other.NullValue) return false;
       if (BoolValue != other.BoolValue) return false;
+      if (CharValue != other.CharValue) return false;
       if (ByteValue != other.ByteValue) return false;
+      if (SbyteValue != other.SbyteValue) return false;
       if (ShortValue != other.ShortValue) return false;
+      if (UshortValue != other.UshortValue) return false;
       if (IntValue != other.IntValue) return false;
+      if (UintValue != other.UintValue) return false;
       if (LongValue != other.LongValue) return false;
+      if (UlongValue != other.UlongValue) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FloatValue, other.FloatValue)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(DoubleValue, other.DoubleValue)) return false;
       if (StringValue != other.StringValue) return false;
       if (GuidValue != other.GuidValue) return false;
       if (!object.Equals(DatetimeValue, other.DatetimeValue)) return false;
       if (!object.Equals(DatetimeoffsetValue, other.DatetimeoffsetValue)) return false;
+      if (DecimalValue != other.DecimalValue) return false;
+      if (ManagedType != other.ManagedType) return false;
+      if (SupportNull != other.SupportNull) return false;
       if (KindCase != other.KindCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -523,16 +1015,24 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       int hash = 1;
       if (HasNullValue) hash ^= NullValue.GetHashCode();
       if (HasBoolValue) hash ^= BoolValue.GetHashCode();
+      if (HasCharValue) hash ^= CharValue.GetHashCode();
       if (HasByteValue) hash ^= ByteValue.GetHashCode();
+      if (HasSbyteValue) hash ^= SbyteValue.GetHashCode();
       if (HasShortValue) hash ^= ShortValue.GetHashCode();
+      if (HasUshortValue) hash ^= UshortValue.GetHashCode();
       if (HasIntValue) hash ^= IntValue.GetHashCode();
+      if (HasUintValue) hash ^= UintValue.GetHashCode();
       if (HasLongValue) hash ^= LongValue.GetHashCode();
+      if (HasUlongValue) hash ^= UlongValue.GetHashCode();
       if (HasFloatValue) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FloatValue);
       if (HasDoubleValue) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(DoubleValue);
       if (HasStringValue) hash ^= StringValue.GetHashCode();
       if (HasGuidValue) hash ^= GuidValue.GetHashCode();
       if (kindCase_ == KindOneofCase.DatetimeValue) hash ^= DatetimeValue.GetHashCode();
       if (kindCase_ == KindOneofCase.DatetimeoffsetValue) hash ^= DatetimeoffsetValue.GetHashCode();
+      if (HasDecimalValue) hash ^= DecimalValue.GetHashCode();
+      if (ManagedType != 0) hash ^= ManagedType.GetHashCode();
+      if (SupportNull != false) hash ^= SupportNull.GetHashCode();
       hash ^= (int) kindCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -560,45 +1060,77 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(16);
         output.WriteBool(BoolValue);
       }
+      if (HasCharValue) {
+        output.WriteRawTag(26);
+        output.WriteString(CharValue);
+      }
       if (HasByteValue) {
-        output.WriteRawTag(24);
-        output.WriteInt32(ByteValue);
+        output.WriteRawTag(32);
+        output.WriteUInt32(ByteValue);
+      }
+      if (HasSbyteValue) {
+        output.WriteRawTag(40);
+        output.WriteInt32(SbyteValue);
       }
       if (HasShortValue) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(48);
         output.WriteInt32(ShortValue);
       }
+      if (HasUshortValue) {
+        output.WriteRawTag(56);
+        output.WriteUInt32(UshortValue);
+      }
       if (HasIntValue) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(64);
         output.WriteInt32(IntValue);
       }
+      if (HasUintValue) {
+        output.WriteRawTag(72);
+        output.WriteUInt32(UintValue);
+      }
       if (HasLongValue) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(80);
         output.WriteInt64(LongValue);
       }
+      if (HasUlongValue) {
+        output.WriteRawTag(88);
+        output.WriteUInt64(UlongValue);
+      }
       if (HasFloatValue) {
-        output.WriteRawTag(61);
+        output.WriteRawTag(101);
         output.WriteFloat(FloatValue);
       }
       if (HasDoubleValue) {
-        output.WriteRawTag(65);
+        output.WriteRawTag(105);
         output.WriteDouble(DoubleValue);
       }
       if (HasStringValue) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(114);
         output.WriteString(StringValue);
       }
       if (HasGuidValue) {
-        output.WriteRawTag(82);
+        output.WriteRawTag(122);
         output.WriteBytes(GuidValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeValue) {
-        output.WriteRawTag(90);
+        output.WriteRawTag(130, 1);
         output.WriteMessage(DatetimeValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
-        output.WriteRawTag(98);
+        output.WriteRawTag(138, 1);
         output.WriteMessage(DatetimeoffsetValue);
+      }
+      if (HasDecimalValue) {
+        output.WriteRawTag(146, 1);
+        output.WriteString(DecimalValue);
+      }
+      if (ManagedType != 0) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(ManagedType);
+      }
+      if (SupportNull != false) {
+        output.WriteRawTag(160, 1);
+        output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -618,45 +1150,77 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(16);
         output.WriteBool(BoolValue);
       }
+      if (HasCharValue) {
+        output.WriteRawTag(26);
+        output.WriteString(CharValue);
+      }
       if (HasByteValue) {
-        output.WriteRawTag(24);
-        output.WriteInt32(ByteValue);
+        output.WriteRawTag(32);
+        output.WriteUInt32(ByteValue);
+      }
+      if (HasSbyteValue) {
+        output.WriteRawTag(40);
+        output.WriteInt32(SbyteValue);
       }
       if (HasShortValue) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(48);
         output.WriteInt32(ShortValue);
       }
+      if (HasUshortValue) {
+        output.WriteRawTag(56);
+        output.WriteUInt32(UshortValue);
+      }
       if (HasIntValue) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(64);
         output.WriteInt32(IntValue);
       }
+      if (HasUintValue) {
+        output.WriteRawTag(72);
+        output.WriteUInt32(UintValue);
+      }
       if (HasLongValue) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(80);
         output.WriteInt64(LongValue);
       }
+      if (HasUlongValue) {
+        output.WriteRawTag(88);
+        output.WriteUInt64(UlongValue);
+      }
       if (HasFloatValue) {
-        output.WriteRawTag(61);
+        output.WriteRawTag(101);
         output.WriteFloat(FloatValue);
       }
       if (HasDoubleValue) {
-        output.WriteRawTag(65);
+        output.WriteRawTag(105);
         output.WriteDouble(DoubleValue);
       }
       if (HasStringValue) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(114);
         output.WriteString(StringValue);
       }
       if (HasGuidValue) {
-        output.WriteRawTag(82);
+        output.WriteRawTag(122);
         output.WriteBytes(GuidValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeValue) {
-        output.WriteRawTag(90);
+        output.WriteRawTag(130, 1);
         output.WriteMessage(DatetimeValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
-        output.WriteRawTag(98);
+        output.WriteRawTag(138, 1);
         output.WriteMessage(DatetimeoffsetValue);
+      }
+      if (HasDecimalValue) {
+        output.WriteRawTag(146, 1);
+        output.WriteString(DecimalValue);
+      }
+      if (ManagedType != 0) {
+        output.WriteRawTag(152, 1);
+        output.WriteInt32(ManagedType);
+      }
+      if (SupportNull != false) {
+        output.WriteRawTag(160, 1);
+        output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -674,17 +1238,32 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (HasBoolValue) {
         size += 1 + 1;
       }
+      if (HasCharValue) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CharValue);
+      }
       if (HasByteValue) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ByteValue);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ByteValue);
+      }
+      if (HasSbyteValue) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SbyteValue);
       }
       if (HasShortValue) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ShortValue);
       }
+      if (HasUshortValue) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(UshortValue);
+      }
       if (HasIntValue) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(IntValue);
       }
+      if (HasUintValue) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(UintValue);
+      }
       if (HasLongValue) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(LongValue);
+      }
+      if (HasUlongValue) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(UlongValue);
       }
       if (HasFloatValue) {
         size += 1 + 4;
@@ -699,10 +1278,19 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(GuidValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeValue) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DatetimeValue);
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DatetimeValue);
       }
       if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DatetimeoffsetValue);
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DatetimeoffsetValue);
+      }
+      if (HasDecimalValue) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(DecimalValue);
+      }
+      if (ManagedType != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ManagedType);
+      }
+      if (SupportNull != false) {
+        size += 2 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -716,6 +1304,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (other == null) {
         return;
       }
+      if (other.ManagedType != 0) {
+        ManagedType = other.ManagedType;
+      }
+      if (other.SupportNull != false) {
+        SupportNull = other.SupportNull;
+      }
       switch (other.KindCase) {
         case KindOneofCase.NullValue:
           NullValue = other.NullValue;
@@ -723,17 +1317,32 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         case KindOneofCase.BoolValue:
           BoolValue = other.BoolValue;
           break;
+        case KindOneofCase.CharValue:
+          CharValue = other.CharValue;
+          break;
         case KindOneofCase.ByteValue:
           ByteValue = other.ByteValue;
+          break;
+        case KindOneofCase.SbyteValue:
+          SbyteValue = other.SbyteValue;
           break;
         case KindOneofCase.ShortValue:
           ShortValue = other.ShortValue;
           break;
+        case KindOneofCase.UshortValue:
+          UshortValue = other.UshortValue;
+          break;
         case KindOneofCase.IntValue:
           IntValue = other.IntValue;
           break;
+        case KindOneofCase.UintValue:
+          UintValue = other.UintValue;
+          break;
         case KindOneofCase.LongValue:
           LongValue = other.LongValue;
+          break;
+        case KindOneofCase.UlongValue:
+          UlongValue = other.UlongValue;
           break;
         case KindOneofCase.FloatValue:
           FloatValue = other.FloatValue;
@@ -749,7 +1358,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DatetimeValue:
           if (DatetimeValue == null) {
-            DatetimeValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            DatetimeValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
           }
           DatetimeValue.MergeFrom(other.DatetimeValue);
           break;
@@ -758,6 +1367,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             DatetimeoffsetValue = new global::Google.Protobuf.WellKnownTypes.Timestamp();
           }
           DatetimeoffsetValue.MergeFrom(other.DatetimeoffsetValue);
+          break;
+        case KindOneofCase.DecimalValue:
+          DecimalValue = other.DecimalValue;
           break;
       }
 
@@ -789,40 +1401,60 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             BoolValue = input.ReadBool();
             break;
           }
-          case 24: {
-            ByteValue = input.ReadInt32();
+          case 26: {
+            CharValue = input.ReadString();
             break;
           }
           case 32: {
-            ShortValue = input.ReadInt32();
+            ByteValue = input.ReadUInt32();
             break;
           }
           case 40: {
-            IntValue = input.ReadInt32();
+            SbyteValue = input.ReadInt32();
             break;
           }
           case 48: {
+            ShortValue = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            UshortValue = input.ReadUInt32();
+            break;
+          }
+          case 64: {
+            IntValue = input.ReadInt32();
+            break;
+          }
+          case 72: {
+            UintValue = input.ReadUInt32();
+            break;
+          }
+          case 80: {
             LongValue = input.ReadInt64();
             break;
           }
-          case 61: {
+          case 88: {
+            UlongValue = input.ReadUInt64();
+            break;
+          }
+          case 101: {
             FloatValue = input.ReadFloat();
             break;
           }
-          case 65: {
+          case 105: {
             DoubleValue = input.ReadDouble();
             break;
           }
-          case 74: {
+          case 114: {
             StringValue = input.ReadString();
             break;
           }
-          case 82: {
+          case 122: {
             GuidValue = input.ReadBytes();
             break;
           }
-          case 90: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+          case 130: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeValue) {
               subBuilder.MergeFrom(DatetimeValue);
             }
@@ -830,13 +1462,25 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             DatetimeValue = subBuilder;
             break;
           }
-          case 98: {
+          case 138: {
             global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }
             input.ReadMessage(subBuilder);
             DatetimeoffsetValue = subBuilder;
+            break;
+          }
+          case 146: {
+            DecimalValue = input.ReadString();
+            break;
+          }
+          case 152: {
+            ManagedType = input.ReadInt32();
+            break;
+          }
+          case 160: {
+            SupportNull = input.ReadBool();
             break;
           }
         }
@@ -867,40 +1511,60 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             BoolValue = input.ReadBool();
             break;
           }
-          case 24: {
-            ByteValue = input.ReadInt32();
+          case 26: {
+            CharValue = input.ReadString();
             break;
           }
           case 32: {
-            ShortValue = input.ReadInt32();
+            ByteValue = input.ReadUInt32();
             break;
           }
           case 40: {
-            IntValue = input.ReadInt32();
+            SbyteValue = input.ReadInt32();
             break;
           }
           case 48: {
+            ShortValue = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            UshortValue = input.ReadUInt32();
+            break;
+          }
+          case 64: {
+            IntValue = input.ReadInt32();
+            break;
+          }
+          case 72: {
+            UintValue = input.ReadUInt32();
+            break;
+          }
+          case 80: {
             LongValue = input.ReadInt64();
             break;
           }
-          case 61: {
+          case 88: {
+            UlongValue = input.ReadUInt64();
+            break;
+          }
+          case 101: {
             FloatValue = input.ReadFloat();
             break;
           }
-          case 65: {
+          case 105: {
             DoubleValue = input.ReadDouble();
             break;
           }
-          case 74: {
+          case 114: {
             StringValue = input.ReadString();
             break;
           }
-          case 82: {
+          case 122: {
             GuidValue = input.ReadBytes();
             break;
           }
-          case 90: {
-            global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+          case 130: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime();
             if (kindCase_ == KindOneofCase.DatetimeValue) {
               subBuilder.MergeFrom(DatetimeValue);
             }
@@ -908,13 +1572,25 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             DatetimeValue = subBuilder;
             break;
           }
-          case 98: {
+          case 138: {
             global::Google.Protobuf.WellKnownTypes.Timestamp subBuilder = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             if (kindCase_ == KindOneofCase.DatetimeoffsetValue) {
               subBuilder.MergeFrom(DatetimeoffsetValue);
             }
             input.ReadMessage(subBuilder);
             DatetimeoffsetValue = subBuilder;
+            break;
+          }
+          case 146: {
+            DecimalValue = input.ReadString();
+            break;
+          }
+          case 152: {
+            ManagedType = input.ReadInt32();
+            break;
+          }
+          case 160: {
+            SupportNull = input.ReadBool();
             break;
           }
         }

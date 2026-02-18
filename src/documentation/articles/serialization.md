@@ -5,21 +5,19 @@ _description: Describes how works the serialization in Entity Framework Core pro
 
 # KEFCore: serialization
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities used within the model in something viable from the backend.
 Each backend has its own schema to convert entities into something else; database providers converts entities into database schema or blob in Cosmos.
-
-> IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.
 
 ## Basic concepts
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities into record will be stored in the topics of Apache Kafka™ cluster.
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) shall convert the entities into record will be stored in the topics of Apache Kafka™ cluster.
 The way the entities are converted shall follows a schema.
 The current schema follows a JSON pattern and reports the information of each entity as:
 - Primary Key:
   - Simple: if the Primary Key is a native type (e.g. int, long, double, and so on) the serialization is made using the Apache Kafka™ default serializer for that type
-  - Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using a JSON serializer
+  - Complex: if the Primary Key is a complex type (e.g. int-int, int-long, int-string, and so on), Entity Framework reports it as an array of objects and the serialization is made using the configured serializer (default is a JSON serializer)
 
-- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), as an array of objects associated to properties of the Entity. 
+- Entity data: the Entity is managed, from [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), as an array of objects associated to the properties of the Entity. 
   The schema of the Apache Kafka™ record value follows the code definition in `DefaultValueContainer<T>`. Below two examples:
   ```json
   {
@@ -76,16 +74,57 @@ The current schema follows a JSON pattern and reports the information of each en
 
 The equivalent JSON schema is not available till now.
 
+### AVRO and Protobuf
+
+Beside the JSON serializer there are both [AVRO](#avro-serialization) and [Protobuf](#protobuf-serialization) serializer.
+
+### Default managed types
+
+Each serializer supports the following list of types can be used to declare the fields of the entities in [Entity Framework Core](https://learn.microsoft.com/ef/core/):
+- string
+- Guid
+- Guid?
+- DateTime
+- DateTime?
+- DateTimeOffset
+- DateTimeOffset?
+- bool
+- bool?
+- char
+- char?
+- sbyte
+- sbyte?
+- byte
+- byte?
+- short
+- short?
+- ushort
+- ushort?
+- int
+- int?
+- uint
+- uint?
+- long
+- long?
+- ulong
+- ulong?
+- double
+- double?
+- float
+- float?
+- decimal
+- decimal?
+
 ## Code and user override
 
-The code is based on three elements shall be available to [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) in order to work:
+The code is based on three elements shall be available to [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) in order to work:
 - **ValueContainer type**: a type which encapsulate the Entity and stores needed information
 - **Key SerDes**: the serializer of the Primary Key
 - **ValueContainer SerDes**: the serializer of the ValueContainer
 
 ### Default types
 
-[Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) comes with some default values:
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) comes with some default values:
 - **ValueContainer** class: KEFCore uses `DefaultValueContainer<T>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainer`) which stores the CLR type of Entity, the properties ordered by their index with associated CLT type, name and JSON serializaed value; the class is marked for JSON serialization and it is used from the **ValueContainer SerDes**;
 - **Key SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.Key.JsonRaw<T>` (i.e. `DefaultKEFCoreSerDes.DefaultKeySerialization`), the type automatically manages simple or complex Primary Key
 - **ValueContainer SerDes** class: KEFCore uses `DefaultKEFCoreSerDes.ValueContainer.JsonRaw<>` (i.e. `DefaultKEFCoreSerDes.DefaultValueContainerSerialization`)
@@ -165,6 +204,8 @@ public class CustomKeySerDes<T> : SerDesRaw<T>
         headers?.Add(KEFCoreSerDesNames.KeyTypeIdentifier, keyTypeName);
         headers?.Add(KEFCoreSerDesNames.KeySerializerIdentifier, customSerDesName);
 
+        if (data == null) return null;
+
         var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
@@ -219,6 +260,8 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
         headers?.Add(KEFCoreSerDesNames.ValueContainerSerializerIdentifier, valueContainerSerDesName);
         headers?.Add(KEFCoreSerDesNames.ValueContainerIdentifier, valueContainerName);
 
+        if (data == null) return null;
+
         var jsonStr = System.Text.Json.JsonSerializer.Serialize<T>(data);
         return Encoding.UTF8.GetBytes(jsonStr);
     }
@@ -243,7 +286,7 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
 - **ValueSerializationType**: set the value of the **ValueContainer SerDes** type in the form `CustomSerDes<>`
 - **ValueContainerType**: set the value of the **ValueContainer** type in the form `CustomValueContainer<>`
 
-> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
+> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
 
 ## **Avro** serialization
 
@@ -270,6 +313,7 @@ The following schema is the default used from the engine and can be registered i
   	"fields": [
   		{
   			"name": "PrimaryKey",
+  			"doc": "Represents a primary key used from KEFCore",
   			"type": {
   				"type": "array",
   				"items": [
@@ -294,14 +338,16 @@ The following schema is the default used from the engine and can be registered i
   	"namespace": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage",
   	"type": "record",
   	"name": "AvroValueContainer",
-  	"doc": "Represents the storage container type to be used from KEFCore",
+  	"doc": "Represents the storage container type to be used from KEFCore values",
   	"fields": [
   		{
   			"name": "EntityName",
+  			"doc": "Represents the entity name of the Entity in the EF Core schema of the EntityType",
   			"type": "string"
   		},
   		{
   			"name": "ClrType",
+  			"doc": "Represents the CLR type of the Entity in the EF Core schema of the EntityType",
   			"type": "string"
   		},
   		{
@@ -316,14 +362,27 @@ The following schema is the default used from the engine and can be registered i
   					"fields": [
   						{
   							"name": "PropertyIndex",
+  							"doc": "Represents the index of the property in the EF Core schema of the EntityType",
   							"type": "int"
   						},
   						{
   							"name": "PropertyName",
+  							"doc": "Represents the name of the property in the EF Core schema of the EntityType",
   							"type": "string"
   						},
   						{
+  							"name": "ManagedType",
+  							"doc": "Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType",
+  							"type": "int"
+  						},
+  						{
+  							"name": "SupportNull",
+  							"doc": "true if the ManagedType shall support null, e.g. Nullable type in .NET",
+  							"type": "boolean"
+  						},
+  						{
   							"name": "ClrType",
+  							"doc": "Represents the CLR type of the property in the EF Core schema of the EntityType",
   							"type": "string"
   						},
   						{
@@ -404,6 +463,15 @@ The following schema is the default used from the engine and can be registered i
   // [END csharp_declaration]
   
   // [START messages]
+  // Represent a System.Datetime
+  message Datetime
+  {
+      // Represents a Timestamp value.
+      google.protobuf.Timestamp datetime_value = 1;
+      // Represents a Utc/Local value.
+      bool utc_value = 2;
+  }
+  
   // Our address book file is just one of these.
   message GenericValue {
     // The kind of value.
@@ -412,27 +480,41 @@ The following schema is the default used from the engine and can be registered i
       google.protobuf.NullValue null_value = 1;
       // Represents a boolean value.
       bool bool_value = 2;
+      // Represents a char value.
+      string char_value = 3;
       // Represents a int value.
-      int32 byte_value = 3;
+      uint32 byte_value = 4;
       // Represents a int value.
-      int32 short_value = 4;
+      int32 sbyte_value = 5;
       // Represents a int value.
-      int32 int_value = 5;
+      int32 short_value = 6;
+      // Represents a int value.
+      uint32 ushort_value = 7;
+      // Represents a int value.
+      int32 int_value = 8;
+      // Represents a int value.
+      uint32 uint_value = 9;
       // Represents a long value.
-      int64 long_value = 6;
+      int64 long_value = 10;
+      // Represents a long value.
+      uint64 ulong_value = 11;
       // Represents a float value.
-      float float_value = 7;
+      float float_value = 12;
       // Represents a double value.
-      double double_value = 8;
+      double double_value = 13;
       // Represents a string value.
-      string string_value = 9;
+      string string_value = 14;
       // Represents a Guid value.
-      bytes guid_value = 10;
-      // Represents a Timestamp value.
-      google.protobuf.Timestamp datetime_value = 11;
-      // Represents a Timestamp value.
-      google.protobuf.Timestamp datetimeoffset_value = 12;
+      bytes guid_value = 15;
+      // Represents a Datetime value.
+      Datetime datetime_value = 16;
+      // Represents a Datetime value.
+      google.protobuf.Timestamp datetimeoffset_value = 17;
+      // Represents a decimal value.
+      string decimal_value = 18;
     }
+    int32 ManagedType = 19;
+    bool SupportNull = 20;
   }
   // [END messages]
   ```
@@ -491,7 +573,7 @@ The following schema is the default used from the engine and can be registered i
   // [START messages]
   message PropertyDataRecord {
     int32 PropertyIndex = 1;
-    string PropertyName = 2; 
+    string PropertyName = 2;
     string ClrType = 3;
     GenericValue Value = 4;
   }

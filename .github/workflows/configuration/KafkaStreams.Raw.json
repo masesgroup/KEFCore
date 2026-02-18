@@ -1,6 +1,4 @@
 {
-  "DatabaseName": "TestDBBenchmark",
-  "UseCompactedReplicator": false,
   "UseKNetStreams": false,
   "UseByteBufferDataTransfer": false,
   "BootstrapServers": "localhost:9092",

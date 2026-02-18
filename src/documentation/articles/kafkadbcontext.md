@@ -5,7 +5,7 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
 
 # KEFCore: KafkaDbContext
 
-`KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/it-it/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/):
+`KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/):
 - `KafkaDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
 - `KafkaDbContext` defines the following properties:
   - **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key
@@ -22,7 +22,7 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **UseEnumeratorWithPrefetch**: set to **true** to prefer enumerator instances able to do a prefetch on data speeding up execution, used if **UseKNetStreams** is **true** and **UseCompactedReplicator** is **false**
   - **UseByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
   - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy)
-  - **UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka™ Streams to manage data to or from topics
+  - ~~**UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka™ Streams to manage data to or from topics~~
   - **UseKNetStreams**: Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams, used if **UseCompactedReplicator** is **false**
   - **ConsumerConfig**: parameters to use for Producer
   - **ProducerConfig**: parameters to use for Producer
@@ -35,7 +35,7 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
 The most simple example of usage can be found in [KEFCore usage](usage.md). By default, `KafkaDbContext` automatically manages `OnConfiguring` method of `DbContext`:
 - `KafkaDbContext` checks the mandatory options like **BootstrapServers** and **DbName**
 - `KafkaDbContext` setup the options needed to use an Apache Kafka™ cluster:
-  - default `ConsumerConfig` can be overridden using **ConsumerConfig** property of `KafkaDbContext`
+  - ~~default `ConsumerConfig` can be overridden using **ConsumerConfig** property of `KafkaDbContext`~~
   - default `ProducerConfig` can be overridden using **ProducerConfig** property of `KafkaDbContext`
   - default `StreamsConfig` can be overridden using **StreamsConfig** property of `KafkaDbContext`
   - default `TopicConfig` can be overridden using **TopicConfig** property of `KafkaDbContext`

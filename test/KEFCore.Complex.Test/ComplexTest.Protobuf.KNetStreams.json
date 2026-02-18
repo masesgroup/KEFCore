@@ -1,6 +1,6 @@
 {
-  "UseAvro": true,
-  "DatabaseName": "TestDBBenchmarkAvro",
+  "UseProtobuf": true,
+  "DatabaseName": "TestDBComplexProtobuf",
   "BootstrapServers": "192.168.1.114:9092",
   "NumberOfExecutions": 10
 }
