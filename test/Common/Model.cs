@@ -25,9 +25,11 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Model
 {
+    [Table("Blog", Schema = "Simple")]
     public class Blog
     {
         public int BlogId { get; set; }
