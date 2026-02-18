@@ -78,6 +78,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
+                            NullableBooleanValue = i % 3 == 0 ? null : i % 2 == 0,
                             PricingInfo = new Pricing()
                             {
                                 Discounts =

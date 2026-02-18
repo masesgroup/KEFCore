@@ -43,7 +43,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
             return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
         }
     }
+
     [PrimaryKey("BlogId")]
+    [Table("BlogComplex", Schema = "ComplexTest")]
     public class BlogComplex
     {
         public int BlogId { get; set; }
@@ -63,7 +65,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
             return $"BlogId: {BlogId} Url: {Url} Rating: {Rating} BooleanValue: {BooleanValue} NullableBooleanValue: {NullableBooleanValue}";
         }
     }
+
     [PrimaryKey("PricingId")]
+    [Table("Pricing", Schema = "ComplexTest")]
     public class Pricing
     {
         public int PricingId { get; set; }
@@ -71,7 +75,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public List<Discount> Discounts { get; set; } // Nested collection!
         public TaxInfo Tax { get; set; } // Nested object!
     }
+
     [PrimaryKey("DiscountId")]
+    [Table("Discount", Schema = "ComplexTest")]
     public class Discount
     {
         public int DiscountId { get; set; }
@@ -79,7 +85,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public decimal Percentage { get; set; }
         public DateRange Validity { get; set; } // Another nested object!
     }
+    
     [PrimaryKey("DateRangeId")]
+    [Table("DateRange", Schema = "ComplexTest")]
     public class DateRange
     {
         public int DateRangeId { get; set; }
@@ -87,14 +95,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public DateTime Min { get; set; }
         public DateTime Max { get; set; }
     }
+
     [Owned]
+    [Table("TaxInfo", Schema = "ComplexTest")]
     public class TaxInfo
     {
         public int TaxInfoId { get; set; }
         public char Code { get; set; }
         public decimal Percentage { get; set; }
     }
+
     [PrimaryKey("PostId")]
+    [Table("Post", Schema = "Simple")]
     public class Post
     {
         public int PostId { get; set; }
@@ -109,7 +121,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
             return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
         }
     }
+
     [PrimaryKey("PostId")]
+    [Table("PostComplex", Schema = "ComplexTest")]
     public class PostComplex
     {
         public int PostId { get; set; }
