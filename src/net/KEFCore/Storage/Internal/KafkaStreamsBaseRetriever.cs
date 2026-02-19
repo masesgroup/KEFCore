@@ -133,38 +133,6 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         return true;
     }
 
-    V GetV(TKey key)
-    {
-        ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-        if (keyValueStore == null) return default!;
-        var k = _keySerdes.Serialize(null, key);
-        var v = keyValueStore.Get(k);
-        return v;
-    }
-
-    /// <inheritdoc/>
-    public bool Exist(TKey key)
-    {
-        var v = GetV(key);
-        return v != null;
-    }
-    /// <inheritdoc/>
-    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
-    {
-        var v = GetV(key);
-        if (v == null)
-        {
-            valueBuffer = ValueBuffer.Empty; 
-            return false;
-        }
-        var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
-
-        object[] array = null!;
-        entityTypeData?.GetData(_entityType, ref array);
-        valueBuffer = new ValueBuffer(array);
-        return true;
-    }
-
     class KafkaEnumberable : IEnumerable<ValueBuffer>
     {
         private readonly IKafkaCluster _kafkaCluster;
