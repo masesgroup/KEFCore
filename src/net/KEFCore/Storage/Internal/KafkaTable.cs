@@ -160,10 +160,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
         else
         {
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
-        }
-        else
-        {
             var properties = entry.EntityType.GetProperties().ToArray();
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
 
