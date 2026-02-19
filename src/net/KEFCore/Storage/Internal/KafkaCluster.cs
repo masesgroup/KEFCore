@@ -88,27 +88,20 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
     /// <inheritdoc/>
-    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
-        IProperty property)
+    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property)
     {
-#if NET9_0 || NET10_0
-            var entityType = property.DeclaringType;
+#if NET8_0 || NET9_0 || NET10_0
+        var entityType = property.DeclaringType;
 
-            return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
-                property,
-                entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
-#elif NET8_0
-            var entityType = property.DeclaringType;
-
-            return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
-                property,
-                entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
+        return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
+            property,
+            [.. entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type))]);
 #else
-            var entityType = property.DeclaringEntityType;
+        var entityType = property.DeclaringEntityType;
 
-            return EnsureTable(entityType).GetIntegerValueGenerator<TProperty>(
-                property,
-                entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
+        return EnsureTable(entityType).GetIntegerValueGenerator<TProperty>(
+            property,
+            entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
 #endif
     }
     /// <inheritdoc/>
@@ -160,14 +153,14 @@ public class KafkaCluster : IKafkaCluster
             if (ex.InnerException is UnknownTopicOrPartitionException)
             {
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message); 
+                Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message);
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
             else throw;
         }
         finally { future?.Dispose(); result?.Dispose(); }
-        
+
         if (_tables == null)
         {
             return false;

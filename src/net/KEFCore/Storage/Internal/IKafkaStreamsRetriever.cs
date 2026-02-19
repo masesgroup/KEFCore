@@ -25,11 +25,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaStreamsRetriever : IDisposable
+public interface IKafkaStreamsRetriever<TKey> : IDisposable where TKey : notnull
 {
     /// <summary>
-    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKafkaStreamsRetriever"/> instance
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKafkaStreamsRetriever{TKey}"/> instance
     /// </summary>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffers();
+    /// <summary>
+    /// Che if a <paramref name="key"/> exist
+    /// </summary>
+    /// <param name="key">The key to check for existance</param>
+    /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
+    bool Exist(TKey key);
+    /// <summary>
+    /// Returns the values associated to the <paramref name="key"/>
+    /// </summary>
+    /// <param name="key">The key to retrieve</param>
+    /// <param name="valueBuffer">A <see cref="ValueBuffer"/> containing the information, or <see langword="null"/> otherwise</param>
+    /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
+    bool TryGetValue(TKey key, out ValueBuffer valueBuffer);
 }
