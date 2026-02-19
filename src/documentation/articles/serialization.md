@@ -140,9 +140,12 @@ The default serialization can be overridden with user defined **ValueContainer**
 #### **ValueContainer** class
 
 A custom **ValueContainer** class must contains enough information and shall follow the following rules:
-- must implements the `IValueContainer<T>` interface
+- must implements the [`IValueContainer<T>` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs)
 - must be a generic type
-- must have at least a default constructor and a constructor which accept two parameters: a first parameter which is `IEntityType` and a second paramater of `object[]`
+- must have at least a default constructor and a constructor which accept three parameters in this order:
+  1. `IEntityType` 
+  2. `IProperty[]?`
+  3. `object[]`
 
 An example snippet is the follow:
 
@@ -153,26 +156,40 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// Initialize a new instance of <see cref="CustomValueContainer{TKey}"/>
     /// </summary>
     /// <param name="tName">The <see cref="IEntityType"/> requesting the ValueContainer for <paramref name="rData"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="rData">The data, built from EFCore, to be stored in the ValueContainer</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a ValueContainer</remarks>
-    public CustomValueContainer(IEntityType tName, object[] rData)
+    public CustomValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
     {
+        properties ??= [.. tName.GetProperties()];
 
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// The Entity name of <see cref="IEntityType"/>
+    /// </summary>
     public string EntityName { get; set; }
-    /// <inheritdoc/>
-    public string ClrType { get; set; }
-    /// <inheritdoc/>
-    public void GetData(IEntityType tName, ref object[] array)
+    /// <summary>
+    /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
+    /// </summary>
+    string ClrType { get; set; }
+    /// <summary>
+    /// Returns back the raw data associated to the Entity contained in <see cref="IValueContainer{T}"/> instance
+    /// </summary>
+    /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
+    /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
+    void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
     {
-
+        // add specific logic
     }
-    /// <inheritdoc/>
-    public IReadOnlyDictionary<int, string> GetProperties()
+    /// <summary>
+    /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
+    /// </summary>
+    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
+    public IReadOnlyDictionary<string, object> GetProperties()
     {
-        // build properties
+        // add specific logic
     }
 }
 ```
