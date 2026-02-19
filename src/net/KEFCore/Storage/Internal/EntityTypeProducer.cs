@@ -278,7 +278,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
                 var value = record.Value(TValueContainerConstructor);
-                if (_kafkaCompactedReplicator != null) _kafkaCompactedReplicator[record.Key] = value!;
+                _kafkaCompactedReplicator?[record.Key] = value!;
             }
 
             return null!;
@@ -306,7 +306,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.Key, record.Value(TValueContainerConstructor)!, headers)!;
                     if (future != null) futures.Add(future);
                 }
