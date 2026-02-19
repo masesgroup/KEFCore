@@ -35,7 +35,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IEntityTypeProducer
+public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IEntityTypeProducer<TKey>
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
 {
@@ -46,7 +46,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IProperty[] _properties;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
     private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
-    private readonly IKafkaStreamsRetriever? _streamData;
+    private readonly IKafkaStreamsRetriever<TKey>? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
@@ -243,6 +243,30 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <inheritdoc/>
+    public bool Exist(TKey key)
+    {
+        if (_streamData != null) return _streamData.Exist(key);
+        else if (_kafkaCompactedReplicator != null) return _kafkaCompactedReplicator.ContainsKey(key);
+        throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    {
+        if (_streamData != null) return _streamData.TryGetValue(key, out valueBuffer);
+        else if (_kafkaCompactedReplicator != null)
+        {
+            if (!_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
+            {
+                object[] array = null!;
+                valueContainer?.GetData(_entityType, ref array);
+                valueBuffer = new ValueBuffer(array);
+            }
+        }
+
+        throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+
+    /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
     /// <inheritdoc/>
     public IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
@@ -319,8 +343,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         get
         {
-            if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _properties, _kafkaCompactedReplicator);
             if (_streamData != null) return _streamData.GetValueBuffers();
+            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _properties, _kafkaCompactedReplicator);
             throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
         }
     }

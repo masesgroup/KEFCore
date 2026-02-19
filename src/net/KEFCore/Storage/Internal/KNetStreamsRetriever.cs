@@ -34,7 +34,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStreamsRetriever
+public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStreamsRetriever<TKey>
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -84,6 +84,44 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
         return new KafkaEnumberable(_kafkaCluster, _entityType, _properties, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
+    }
+
+    TValue GetTValue(TKey key)
+    {
+        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        if (keyValueStore == null) return default!;
+        var v = keyValueStore.Get(key);
+        return v;
+    }
+
+    /// <inheritdoc/>
+    public bool Exist(TKey key)
+    {
+        var v = GetTValue(key);
+        return v != null;
+    }
+    /// <inheritdoc/>
+    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    {
+        var v = GetTValue(key);
+        if (v == null)
+        {
+            valueBuffer = ValueBuffer.Empty;
+            return false;
+        }
+
+        object[] array = null!;
+        v?.GetData(_entityType, ref array);
+        valueBuffer = new ValueBuffer(array);
+        return true;
+    }
+    /// <inheritdoc/>
+    public ValueBuffer GetValue(TKey key)
+    {
+        var v = GetTValue(key);
+        object[] array = null!;
+        v?.GetData(_entityType, ref array);
+        return new ValueBuffer(array);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
