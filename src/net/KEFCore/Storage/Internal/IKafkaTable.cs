@@ -29,14 +29,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public interface IKafkaTable : IEntityTypeProducer
 {
-    ///// <summary>
-    ///// Create snapshot
-    ///// </summary>
-    //IReadOnlyList<object?[]> SnapshotRows();
-    ///// <summary>
-    ///// Current rows
-    ///// </summary>
-    //IEnumerable<object?[]> Rows { get; }
     /// <summary>
     /// Creates a new row
     /// </summary>
