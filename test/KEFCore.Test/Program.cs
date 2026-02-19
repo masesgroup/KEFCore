@@ -78,14 +78,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         context.Add(new Blog
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
+                            Posts =
+                            [
                                 new Post()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }

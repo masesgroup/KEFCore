@@ -29,7 +29,7 @@ Apache Kafka™ cluster adds the ability to store this information within the to
 ## How [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) works
 
 An application based on [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) is both a producer and a consumer at the same time:
-- when an entity is created/updated/deleted (e.g. calling [SaveChanges](https://learn.microsoft.com/en-us/ef/core/saving/basic)) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster
+- when an entity is created/updated/deleted (e.g. calling [SaveChanges](https://learn.microsoft.com/ef/core/saving/basic)) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster
 - then the consumer subscribed will be informed about this new record and will store it back: this seems not useful till now, but it will be more clear later
 
 Apache Kafka™ cluster becomes:
@@ -128,72 +128,11 @@ In the previous chapter was described how [Entity Framework Core](https://learn.
 Starting from the model defined in the code, the data are stored in the topics and each topic can be seen as a table of a database filled in with the same data.
 From the point of view of an application, the use of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) is similar to the use of the InMemory provider.
 
-### A note on [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations)
+### A note on [migrations](https://learn.microsoft.com/ef/core/managing-schemas/migrations)
 
-The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly: however, on opposite side, the schema evolution is intrinsecally available from the serialization structure used.
-Let's consider the following **Blog** entity:
+The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/ef/core/managing-schemas/migrations) using an external tool: the schema evolution is intrinsecally available from the serialization structure used.
 
-```C#
-[PrimaryKey("BlogId")]
-[Table("Blog", Schema = "Simple")]
-public class Blog
-{
-    public int BlogId { get; set; }
-    public string Url { get; set; }
-    public int Rating { get; set; }
-
-    public List<Post> Posts { get; set; }
-}
-```
-its Json serialized value is:
-```json
-{
-  "EntityName": "MASES.EntityFrameworkCore.KNet.Test.Model.Blog",
-  "ClrType": "MASES.EntityFrameworkCore.KNet.Test.Model.Blog, MASES.EntityFrameworkCore.KNet.Test.Common",
-  "Properties": [
-    {
-      "PropertyName": "BlogId",
-      "ManagedType": 11,
-      "SupportNull": false,
-      "ClrType": "System.Int32, System.Private.CoreLib",
-      "Value": 1019
-    },
-    {
-      "PropertyName": "Rating",
-      "ManagedType": 11,
-      "SupportNull": false,
-      "ClrType": "System.Int32, System.Private.CoreLib",
-      "Value": 1018
-    },
-    {
-      "PropertyName": "Url",
-      "ManagedType": 1,
-      "SupportNull": true,
-      "ClrType": "System.String, System.Private.CoreLib",
-      "Value": "http://blogs.msdn.com/adonet1018"
-    }
-  ]
-}
-```
-
-then it becomes:
-
-```C#
-[PrimaryKey("BlogId")]
-[Table("Blog", Schema = "Simple")]
-public class BlogNoUrlWithDatetime
-{
-    public int BlogId { get; set; }
-    public int Rating { get; set; }
-    public DateTime Date { get; set; }
-
-    public List<Post> Posts { get; set; }
-}
-```
-**Url** was removed and **Date** was added.
-Reading the previous value the application 
-
-
+Read more about migration in [KEFCore migration](migration.md).
 
 ## [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) features not available in other providers
 
@@ -228,7 +167,7 @@ Then the application can use the reported events in many modes:
 
 ![Alt text](../images/events.gif "Distributed cache")
 
-> **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
+> **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
 
 ### Applications not based on [Entity Framework Core](https://learn.microsoft.com/ef/core/)
 

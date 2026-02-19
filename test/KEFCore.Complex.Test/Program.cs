@@ -18,7 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Model;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
@@ -256,7 +256,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
         {
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
-            modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+            modelBuilder.Entity<BlogComplex>().HasKey(c => new { c.BlogId, c.Rating });
         }
     }
 }

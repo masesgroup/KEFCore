@@ -61,8 +61,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString("EnsureCreated does not created database");
                 }
 
-                _ = context.Blogs.All((o) => true);
-
                 testWatcher.Start();
                 Stopwatch watch = new Stopwatch();
 
@@ -79,14 +77,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 }
 
                 watch.Restart();
-                var post = context.Posts.Single(b => b.BlogId == 2);
+                var post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 20);
                 watch.Stop();
                 ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 1);
+                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 10);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
@@ -104,7 +102,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 try
                 {
                     watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 1);
+                    blog = context.Blogs!.Single(b => b.BlogId == 100);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }

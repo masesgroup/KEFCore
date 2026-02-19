@@ -99,7 +99,7 @@ using (var db = new BloggingContext())
 
 can be done on a set of topics in an [Apache Kafka™](https://kafka.apache.org/) cluster.
 
-The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider.
+The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/ef/core/providers/writing-a-provider.
 
 Currently the project tries to support, at our best, the [official supported Apache Kafka™ binary distribution](https://kafka.apache.org/downloads):
 

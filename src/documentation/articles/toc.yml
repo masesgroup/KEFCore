@@ -11,7 +11,9 @@
 - name: Template usage
   href: usageTemplates.md  
 - name: Serialization
-  href: serialization.md 
+  href: serialization.md
+- name: Schema migration
+  href: migration.md
 - name: External application
   href: externalapplication.md 
 - name: Roadmap
