@@ -123,7 +123,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         if (_producer.Exist(key))
         {
             // to do: add a new string
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, [entry]);
+            throw new DbUpdateConcurrencyException(KafkaStrings.DuplicateKeyException(key), [entry]);
         }
         else
         {
@@ -155,7 +155,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         var key = CreateKey(entry);
         if (!_producer.TryGetValue(key, out var valueBuffer))
         {
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
+            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
         else
         {
@@ -213,7 +213,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
         if (!_producer.TryGetValue(key, out var data))
         {
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
+            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
         else
         {
