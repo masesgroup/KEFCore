@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetriever
+public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetriever<TKey>
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -97,6 +97,38 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
         return new KafkaEnumberable(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, _storageId);
+    }
+
+    V GetV(TKey key)
+    {
+        ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        if (keyValueStore == null) return default!;
+        var k = _keySerdes.Serialize(null, key);
+        var v = keyValueStore.Get(k);
+        return v;
+    }
+
+    /// <inheritdoc/>
+    public bool Exist(TKey key)
+    {
+        var v = GetV(key);
+        return v != null;
+    }
+    /// <inheritdoc/>
+    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    {
+        var v = GetV(key);
+        if (v == null)
+        {
+            valueBuffer = ValueBuffer.Empty; 
+            return false;
+        }
+        var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
+
+        object[] array = null!;
+        entityTypeData?.GetData(_entityType, ref array);
+        valueBuffer = new ValueBuffer(array);
+        return true;
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>

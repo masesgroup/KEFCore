@@ -123,6 +123,9 @@
   <data name="DistinctOnSubqueryNotSupported" xml:space="preserve">
     <value>Using 'Distinct' operation on a projection containing a subquery is not supported.</value>
   </data>
+  <data name="DuplicateKeyException" xml:space="preserve">
+    <value>Attempted to create an entity with the same key in the store: {tkey}.</value>
+  </data>
   <data name="InvalidDerivedTypeInEntityProjection" xml:space="preserve">
     <value>The specified entity type '{derivedType}' is not derived from '{entityType}'.</value>
   </data>
@@ -153,7 +156,7 @@
     <value>Unable to bind '{memberType}' '{member}' to entity projection of '{entityType}'.</value>
   </data>
   <data name="UpdateConcurrencyException" xml:space="preserve">
-    <value>Attempted to update or delete an entity that does not exist in the store.</value>
+    <value>Attempted to update or delete an entity that does not exist in the store: {tkey}.</value>
   </data>
   <data name="UpdateConcurrencyTokenException" xml:space="preserve">
     <value>Conflicts were detected for instance of entity type '{entityType}' on the concurrency token properties {properties}. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting values.</value>
