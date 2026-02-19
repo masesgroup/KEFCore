@@ -128,7 +128,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
 
         object[] array = null!;
-        entityTypeData?.GetData(_entityType, ref array);
+        entityTypeData?.GetData(_entityType, _entityTypeProperties, ref array);
         valueBuffer = new ValueBuffer(array);
         return true;
     }

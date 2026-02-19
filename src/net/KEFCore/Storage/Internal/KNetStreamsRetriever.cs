@@ -111,7 +111,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         }
 
         object[] array = null!;
-        v?.GetData(_entityType, ref array);
+        v?.GetData(_entityType, _properties, ref array);
         valueBuffer = new ValueBuffer(array);
         return true;
     }
@@ -120,7 +120,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     {
         var v = GetTValue(key);
         object[] array = null!;
-        v?.GetData(_entityType, ref array);
+        v?.GetData(_entityType, _properties, ref array);
         return new ValueBuffer(array);
     }
 

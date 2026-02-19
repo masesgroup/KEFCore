@@ -258,7 +258,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (!_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 object[] array = null!;
-                valueContainer?.GetData(_entityType, ref array);
+                valueContainer?.GetData(_entityType, _properties, ref array);
                 valueBuffer = new ValueBuffer(array);
             }
         }
