@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+//#define DEBUG_PERFORMANCE
+
 #nullable disable
 
 using MASES.KNet.Streams;
@@ -23,8 +25,8 @@ using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable> 
-        where TStream: class
+    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>
+        where TStream : class
         where TStreamBuilder : class
         where TTopology : class
     {
@@ -51,8 +53,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private TTopology _topology;
         private TStream _streams;
 
-        private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable> > _errorHandler;
-        private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable> > _stateListener;
+        private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>> _errorHandler;
+        private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>> _stateListener;
         private Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
 
@@ -124,7 +126,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
-             var topicName = entityType.TopicName(_kafkaCluster.Options);
+            var topicName = entityType.TopicName(_kafkaCluster.Options);
 
             string storageId = entityType.StorageIdForTable(_kafkaCluster.Options);
             storageId = _usePersistentStorage ? storageId : Process.GetCurrentProcess().ProcessName + "-" + storageId;
@@ -174,7 +176,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private void StartTopology(TStream streams)
         {
 #if DEBUG_PERFORMANCE
-            Stopwatch watch = Stopwatch.StartNew(); 
+            Stopwatch watch = Stopwatch.StartNew();
 #endif
             _dataReceived?.Reset();
             _resetEvent?.Reset();
@@ -200,7 +202,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             if (index == WaitHandle.WaitTimeout)
                             {
 #if DEBUG_PERFORMANCE
-                            Infrastructure.KafkaDbContext.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
+                                Infrastructure.KafkaDbContext.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
 #endif
                                 continue;
                             }

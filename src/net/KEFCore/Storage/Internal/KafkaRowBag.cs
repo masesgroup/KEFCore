@@ -34,8 +34,18 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topic
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {
-    /// <inheritdoc/>
-    public IUpdateEntry UpdateEntry { get; } = entry;
+    /// <summary>
+    /// The <see cref="IEntityType"/> with changes
+    /// </summary>
+    public IEntityType EntityType { get; } = entry.EntityType;
+    /// <summary>
+    /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
+    /// </summary>
+    public IProperty[] EntityProperties { get; } = [.. entry.EntityType.GetProperties()];
+    /// <summary>
+    /// The <see cref="EntityState"/> associated to <see cref="EntityType"/>
+    /// </summary>
+    public EntityState EntityState { get; } = entry.EntityState;
     /// <inheritdoc/>
     public string AssociatedTopicName { get; } = topicName;
     /// <summary>
@@ -45,7 +55,7 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topic
     /// <summary>
     /// The Value
     /// </summary>
-    public TValueContainer? Value(ConstructorInfo ci) => UpdateEntry.EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([UpdateEntry.EntityType, ValueBuffer!]);
+    public TValueContainer? Value(ConstructorInfo ci) => EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([EntityType, EntityProperties, ValueBuffer!]);
     /// <summary>
     /// The <see cref="ValueBuffer"/> content
     /// </summary>

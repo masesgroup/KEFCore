@@ -48,6 +48,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
+    private readonly IProperty[] _entityTypeProperties;
     private readonly ISerDes<TKey, K> _keySerdes;
     private readonly ISerDes<TValue, V> _valueSerdes;
     private readonly string _storageId;
@@ -55,10 +56,11 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, StreamsBuilder builder)
+    public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, StreamsBuilder builder)
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
+        _entityTypeProperties = properties;
         _keySerdes = keySerdes;
         _valueSerdes = valueSerdes;
         _builder ??= builder;
@@ -96,7 +98,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, _storageId);
+        return new KafkaEnumberable(_kafkaCluster, _entityType, _entityTypeProperties, _keySerdes, _valueSerdes, _storageId);
     }
 
     V GetV(TKey key)
@@ -126,7 +128,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
 
         object[] array = null!;
-        entityTypeData?.GetData(_entityType, ref array);
+        entityTypeData?.GetData(_entityType, _entityTypeProperties, ref array);
         valueBuffer = new ValueBuffer(array);
         return true;
     }
@@ -135,14 +137,16 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
+        private readonly IProperty[] _properties;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
 
-        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
+        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
         {
             _kafkaCluster = kafkaCluster;
             _entityType = entityType;
+            _properties = properties;
             _keySerdes = keySerdes;
             _valueSerdes = valueSerdes;
             _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
@@ -158,7 +162,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE
             Infrastructure.KafkaDbContext.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _keySerdes, _valueSerdes, _keyValueStore?.All());
+            return new KafkaEnumerator(_kafkaCluster, _entityType, _properties, _keySerdes, _valueSerdes, _keyValueStore?.All());
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -171,6 +175,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
+        private readonly IProperty[] _properties;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
@@ -185,10 +190,11 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
         int _cycles = 0;
 #endif
-        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
+        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
         {
             _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
+            _properties = properties;
             _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
@@ -279,7 +285,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                     _valueBufferSw.Start();
 #endif
                     object[] array = null!;
-                    entityTypeData?.GetData(_entityType, ref array);
+                    entityTypeData?.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif

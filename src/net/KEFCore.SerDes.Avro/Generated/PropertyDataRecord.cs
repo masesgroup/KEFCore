@@ -19,11 +19,11 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler", "1.12.1+9110c693767c1dde2665b2b57939333478b12036")]
 	public partial class PropertyDataRecord : global::Avro.Specific.ISpecificRecord
 	{
-		public static global::Avro.Schema _SCHEMA = global::Avro.Schema.Parse(@"{""type"":""record"",""name"":""PropertyDataRecord"",""doc"":""Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore"",""namespace"":""MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage"",""fields"":[{""name"":""PropertyIndex"",""doc"":""Represents the index of the property in the EF Core schema of the EntityType"",""type"":""int""},{""name"":""PropertyName"",""doc"":""Represents the name of the property in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""ManagedType"",""doc"":""Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType"",""type"":""int""},{""name"":""SupportNull"",""doc"":""true if the ManagedType shall support null, e.g. Nullable type in .NET"",""type"":""boolean""},{""name"":""ClrType"",""doc"":""Represents the CLR type of the property in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""Value"",""type"":[""null"",""boolean"",""int"",""long"",""float"",""double"",""string""]}]}");
+		public static global::Avro.Schema _SCHEMA = global::Avro.Schema.Parse(@"{""type"":""record"",""name"":""PropertyDataRecord"",""doc"":""Represents the single container for Entity properties stored in AvroValueContainer and used from KEFCore"",""namespace"":""MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage"",""fields"":[{""name"":""PropertyIndex"",""doc"":""Represents the index of the property in the EF Core schema of the EntityType"",""default"":null,""type"":[""null"",""int""]},{""name"":""PropertyName"",""doc"":""Represents the name of the property in the EF Core schema of the EntityType"",""type"":""string""},{""name"":""ManagedType"",""doc"":""Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType"",""type"":""int""},{""name"":""SupportNull"",""doc"":""true if the ManagedType shall support null, e.g. Nullable type in .NET"",""type"":""boolean""},{""name"":""ClrType"",""doc"":""Represents the CLR type of the property in the EF Core schema of the EntityType, null for well-known types"",""default"":null,""type"":[""null"",""string""]},{""name"":""Value"",""type"":[""null"",""boolean"",""int"",""long"",""float"",""double"",""string""]}]}");
 		/// <summary>
 		/// Represents the index of the property in the EF Core schema of the EntityType
 		/// </summary>
-		private int _PropertyIndex;
+		private System.Nullable<System.Int32> _PropertyIndex;
 		/// <summary>
 		/// Represents the name of the property in the EF Core schema of the EntityType
 		/// </summary>
@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 		/// </summary>
 		private bool _SupportNull;
 		/// <summary>
-		/// Represents the CLR type of the property in the EF Core schema of the EntityType
+		/// Represents the CLR type of the property in the EF Core schema of the EntityType, null for well-known types
 		/// </summary>
 		private string _ClrType;
 		private object _Value;
@@ -51,7 +51,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 		/// <summary>
 		/// Represents the index of the property in the EF Core schema of the EntityType
 		/// </summary>
-		public int PropertyIndex
+		public System.Nullable<System.Int32> PropertyIndex
 		{
 			get
 			{
@@ -105,7 +105,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 			}
 		}
 		/// <summary>
-		/// Represents the CLR type of the property in the EF Core schema of the EntityType
+		/// Represents the CLR type of the property in the EF Core schema of the EntityType, null for well-known types
 		/// </summary>
 		public string ClrType
 		{
@@ -146,7 +146,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 		{
 			switch (fieldPos)
 			{
-			case 0: this.PropertyIndex = (System.Int32)fieldValue; break;
+			case 0: this.PropertyIndex = (System.Nullable<System.Int32>)fieldValue; break;
 			case 1: this.PropertyName = (System.String)fieldValue; break;
 			case 2: this.ManagedType = (System.Int32)fieldValue; break;
 			case 3: this.SupportNull = (System.Boolean)fieldValue; break;

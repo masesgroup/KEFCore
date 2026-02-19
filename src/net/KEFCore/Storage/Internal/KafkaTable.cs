@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+//#define DEBUG_PERFORMANCE
+
 #nullable enable
 
 using Java.Util.Concurrent;

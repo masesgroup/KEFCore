@@ -19,7 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Model;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -78,14 +78,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         context.Add(new Blog
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
+                            Posts =
+                            [
                                 new Post()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }

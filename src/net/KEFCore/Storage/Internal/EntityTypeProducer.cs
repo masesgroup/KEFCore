@@ -43,6 +43,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
+    private readonly IProperty[] _properties;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
     private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
     private readonly IKafkaStreamsRetriever<TKey>? _streamData;
@@ -51,9 +52,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly Action<EntityTypeChanged>? _onChangeEvent;
 
     #region KNetCompactedReplicatorEnumerable
-    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
+    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IProperty[] properties, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
     {
         readonly IEntityType _entityType = entityType;
+        readonly IProperty[] _properties = properties;
         readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator = kafkaCompactedReplicator;
 
         #region KNetCompactedReplicatorEnumerator
@@ -65,11 +67,13 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             Stopwatch _valueBufferSw = new Stopwatch();
 #endif
             readonly IEntityType _entityType;
+            readonly IProperty[] _properties;
             readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
             readonly IEnumerator<KeyValuePair<TKey, TValueContainer>>? _enumerator;
-            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator)
+            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IProperty[] properties, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator)
             {
                 _entityType = entityType;
+                _properties = properties;
                 _kafkaCompactedReplicator = kafkaCompactedReplicator;
 #if DEBUG_PERFORMANCE
                 Stopwatch sw = Stopwatch.StartNew();
@@ -132,7 +136,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         _valueBufferSw.Start();
 #endif
                         object[] array = null!;
-                        _enumerator.Current.Value.GetData(_entityType, ref array);
+                        _enumerator.Current.Value.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
@@ -164,7 +168,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
-            return new KNetCompactedReplicatorEnumerator(_entityType, _kafkaCompactedReplicator);
+            return new KNetCompactedReplicatorEnumerator(_entityType, _properties, _kafkaCompactedReplicator);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -182,12 +186,13 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         Infrastructure.KafkaDbContext.ReportString($"Creating new EntityTypeProducer for {entityType.Name}");
 #endif
         _entityType = entityType;
+        _properties = [.. _entityType.GetProperties()];
         _cluster = cluster;
         _useCompactedReplicator = _cluster.Options.UseCompactedReplicator;
         _onChangeEvent = _cluster.Options.OnChangeEvent;
 
         var tTValueContainer = typeof(TValueContainer);
-        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
+        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 3);
 
         var keySelector = _cluster.Options.SerDesSelectorForKey(_entityType) as ISerDesSelector<TKey>;
         var valueSelector = _cluster.Options.SerDesSelectorForValue(_entityType) as ISerDesSelector<TValueContainer>;
@@ -232,8 +237,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else
         {
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
-            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType)
-                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _keySerdes!, _valueSerdes!);
+            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _properties)
+                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _properties, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -256,7 +261,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 object[] array = null!;
-                valueContainer?.GetData(_entityType, ref array);
+                valueContainer?.GetData(_entityType, _properties, ref array);
                 valueBuffer = new ValueBuffer(array);
                 return true;
             }
@@ -294,7 +299,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 future = _kafkaProducer?.Send(newRecord);
                 futures.Add(future!);
 #else
-                if (record.UpdateEntry.EntityState == EntityState.Deleted)
+                if (record.EntityState == EntityState.Deleted)
                 {
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, record.Key, null!)!;
                     futures.Add(future);
@@ -345,7 +350,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         get
         {
             if (_streamData != null) return _streamData.GetValueBuffers();
-            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _kafkaCompactedReplicator);
+            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _properties, _kafkaCompactedReplicator);
             throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
         }
     }

@@ -56,18 +56,16 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
         if (entityType != null)
         {
             var newEntity = Activator.CreateInstance(entityType!);
-            object[] data = null!;
-            valueContainer.GetData(null!, ref data);
             foreach (var property in valueContainer.GetProperties())
             {
-                var propInfo = entityType.GetProperty(property.Value);
+                var propInfo = entityType.GetProperty(property.Key);
                 if (propInfo != null)
                 {
                     if (propInfo.CanWrite)
                     {
-                        propInfo.SetValue(newEntity, data[property.Key]);
+                        propInfo.SetValue(newEntity, property.Value);
                     }
-                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {data[property.Key]}");
+                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
                 }
                 else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }

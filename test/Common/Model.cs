@@ -21,8 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Model
+namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
 {
+    [PrimaryKey("BlogId")]
     [Table("Blog", Schema = "Simple")]
     public class Blog
     {
@@ -38,6 +39,62 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         }
     }
 
+    [PrimaryKey("PostId")]
+    [Table("Post", Schema = "Simple")]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
+    }
+}
+
+namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved
+{
+    [PrimaryKey("BlogId")]
+    [Table("Blog", Schema = "Simple")]
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public int Rating { get; set; }
+        public DateTime? Date { get; set; }
+
+        public List<Post> Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $"BlogId: {BlogId} Rating: {Rating} Date: {Date}";
+        }
+    }
+
+    [PrimaryKey("PostId")]
+    [Table("Post", Schema = "Simple")]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
+        }
+    }
+}
+
+namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
+{
     [PrimaryKey("BlogId")]
     [Table("BlogComplex", Schema = "ComplexTest")]
     public class BlogComplex
@@ -79,7 +136,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public decimal Percentage { get; set; }
         public DateRange Validity { get; set; } // Another nested object!
     }
-    
+
     [PrimaryKey("DateRangeId")]
     [Table("DateRange", Schema = "ComplexTest")]
     public class DateRange
@@ -97,23 +154,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Model
         public int TaxInfoId { get; set; }
         public char Code { get; set; }
         public decimal Percentage { get; set; }
-    }
-
-    [PrimaryKey("PostId")]
-    [Table("Post", Schema = "Simple")]
-    public class Post
-    {
-        public int PostId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-
-        public int BlogId { get; set; }
-        public Blog Blog { get; set; }
-
-        public override string ToString()
-        {
-            return $"PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}";
-        }
     }
 
     [PrimaryKey("PostId")]

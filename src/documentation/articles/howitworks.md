@@ -29,7 +29,7 @@ Apache Kafka™ cluster adds the ability to store this information within the to
 ## How [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) works
 
 An application based on [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) is both a producer and a consumer at the same time:
-- when an entity is created/updated/deleted (e.g. calling [SaveChanges](https://learn.microsoft.com/en-us/ef/core/saving/basic)) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster
+- when an entity is created/updated/deleted (e.g. calling [SaveChanges](https://learn.microsoft.com/ef/core/saving/basic)) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster
 - then the consumer subscribed will be informed about this new record and will store it back: this seems not useful till now, but it will be more clear later
 
 Apache Kafka™ cluster becomes:
@@ -106,14 +106,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 ```
 
-each entity maps to a specific topic:
+each entity maps to a specific topic using the feature added with https://github.com/masesgroup/KEFCore/issues/417:
 - Blog belongs to the topic named [DatabaseName].Simple.Blog
 - Post belongs to the topic named [DatabaseName].Simple.Post
 
 where DatabaseName is the property defined from `BloggingContext` see [KafkaDbContext](kafkadbcontext.md).
 
 > [!IMPORTANT]
-> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the **Name** property of the Entity which belongs to the namespace defining it:
+> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the [**Name**](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name) property of the Entity which belongs to the namespace defining it:
 > - Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog
 > - Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post
 
@@ -128,9 +128,11 @@ In the previous chapter was described how [Entity Framework Core](https://learn.
 Starting from the model defined in the code, the data are stored in the topics and each topic can be seen as a table of a database filled in with the same data.
 From the point of view of an application, the use of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) is similar to the use of the InMemory provider.
 
-### A note on [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations)
+### A note on [migrations](https://learn.microsoft.com/ef/core/managing-schemas/migrations)
 
-The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations) explicitly.
+The current version of [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) does not support [migrations](https://learn.microsoft.com/ef/core/managing-schemas/migrations) using an external tool: the schema evolution is intrinsecally available from the serialization structure used.
+
+Read more about migration in [KEFCore migration](migration.md).
 
 ## [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) features not available in other providers
 
@@ -165,7 +167,7 @@ Then the application can use the reported events in many modes:
 
 ![Alt text](../images/events.gif "Distributed cache")
 
-> **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
+> **IMPORTANT NOTE**: the events are raised from external threads and this can lead to [concurrent exceptions](https://learn.microsoft.com/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues) if the `KafkaDbContext` is used to retrieve information.
 
 ### Applications not based on [Entity Framework Core](https://learn.microsoft.com/ef/core/)
 

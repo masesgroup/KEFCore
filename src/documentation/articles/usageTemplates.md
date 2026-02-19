@@ -5,7 +5,7 @@ _description: Describes how to use templates of Entity Framework Core provider f
 
 # KEFCore: Template Usage Guide
 
-For more information related to .NET templates look at https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new-sdk-templates.
+For more information related to .NET templates look at https://docs.microsoft.com/dotnet/core/tools/dotnet-new-sdk-templates.
 
 ## Installation
 

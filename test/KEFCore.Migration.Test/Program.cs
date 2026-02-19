@@ -17,18 +17,20 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Stream
+namespace MASES.EntityFrameworkCore.KNet.Test
 {
     partial class Program
     {
+        static BloggingContext context = null;
+
         static void Main(string[] args)
         {
             ProgramConfig.LoadConfig(args);
@@ -39,57 +41,28 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
         {
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
+
             try
             {
                 globalWatcher.Start();
-                using var context = new BloggingContext();
+                context = new BloggingContext()
+                {
+                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
+                };
+
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (ProgramConfig.Config.DeleteApplicationData)
+                if (context.Database.EnsureCreated())
                 {
-                    ProgramConfig.ReportString("Process EnsureDeleted");
-                    context.Database.EnsureDeleted();
-                    ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
+                    ProgramConfig.ReportString("EnsureCreated created database");
+                }
+                else
+                {
+                    ProgramConfig.ReportString("EnsureCreated does not created database");
                 }
 
                 testWatcher.Start();
                 Stopwatch watch = new Stopwatch();
-                if (ProgramConfig.Config.LoadApplicationData)
-                {
-                    watch.Start();
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
-                    {
-                        context.Add(new Blog
-                        {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            },
-                            Rating = i,
-                        });
-                    }
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-                }
-
-                // ended data load 
 
                 if (ProgramConfig.Config.UseModelBuilder)
                 {
@@ -104,14 +77,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                 }
 
                 watch.Restart();
-                var post = context.Posts.Single(b => b.BlogId == 2);
+                var post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 20);
                 watch.Stop();
                 ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 1);
+                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 10);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
@@ -129,7 +102,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                 try
                 {
                     watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 1);
+                    blog = context.Blogs!.Single(b => b.BlogId == 100);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
@@ -156,15 +129,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                     {
                         context.Add(new Blog
                         {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
-                                new Post()
+                            Date = DateTime.Now,
+                            Posts =
+                            [
+                                new()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }
@@ -190,10 +163,24 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
             }
             finally
             {
+                context?.Dispose();
                 testWatcher.Stop();
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
+        }
+
+        static void OnEvent(EntityTypeChanged change)
+        {
+            object value = null;
+            try
+            {
+                value = context.Find(change.EntityType.ClrType, change.Key);
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+
+            ProgramConfig.ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 

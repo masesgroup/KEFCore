@@ -52,25 +52,27 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
     /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="ProtobufValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
     /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/></param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="ProtobufValueContainer{TKey}"/></remarks>
-    public ProtobufValueContainer(IEntityType tName, object[] rData)
+    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
     {
+        properties ??= [.. tName.GetProperties()];
         _innerMessage = new ValueContainer
         {
             EntityName = tName.Name,
             ClrType = tName.ClrType?.ToAssemblyQualified()!
         };
         _innerMessage.Data.Clear();
-        foreach (var item in tName.GetProperties())
+        foreach (var item in properties)
         {
             int index = item.GetIndex();
+            var _type = NativeTypeMapper.GetValue(item.ClrType!);
             var pRecord = new PropertyDataRecord
             {
-                PropertyIndex = index,
                 PropertyName = item.Name,
-                ClrType = item.ClrType?.ToAssemblyQualified(),
-                Value = new GenericValue(item.ClrType!, rData[index])
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : string.Empty,
+                Value = new GenericValue(_type, rData[index])
             };
             _innerMessage.Data.Add(pRecord);
         }
@@ -95,8 +97,9 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     public void WriteTo(CodedOutputStream output) => _innerMessage.WriteTo(output);
 
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
     {
+        properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
         Stopwatch fullSw = new Stopwatch();
         Stopwatch newSw = new Stopwatch();
@@ -109,14 +112,16 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[_innerMessage.Data.Count];
+            array = new object[properties.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            for (int i = 0; i < _innerMessage.Data.Count; i++)
+            foreach (var item in _innerMessage.Data)
             {
-                array[i] = _innerMessage.Data[i].Value.GetContent();
+                var prop = tName.FindProperty(item.PropertyName!);
+                if (prop == null) continue; // a property was removed from the schema 
+                array[prop.GetIndex()] = item?.Value.GetContent()!;
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -132,12 +137,12 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<int, string> GetProperties()
+    public IReadOnlyDictionary<string, object> GetProperties()
     {
-        Dictionary<int, string> props = new();
-        for (int i = 0; i < _innerMessage.Data.Count; i++)
+        Dictionary<string, object> props = [];
+        foreach (var item in _innerMessage.Data)
         {
-            props.Add(_innerMessage.Data[i].PropertyIndex, _innerMessage.Data[i].PropertyName);
+            props.Add(item.PropertyName, item.Value.GetContent());
         }
         return props;
     }
