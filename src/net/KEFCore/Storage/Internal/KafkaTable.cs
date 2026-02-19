@@ -97,9 +97,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     public virtual IEntityType EntityType { get; }
     /// <inheritdoc/>
-    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(
-        IProperty property,
-        IReadOnlyList<IKafkaTable> tables)
+    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables)
     {
         _integerGenerators ??= new Dictionary<int, IKafkaIntegerValueGenerator>();
 
@@ -108,14 +106,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         {
             generator = new KafkaIntegerValueGenerator<TProperty>(propertyIndex);
             _integerGenerators[propertyIndex] = generator;
-
-            //foreach (var table in tables)
-            //{
-            //    foreach (var row in table.Rows)
-            //    {
-            //        generator.Bump(row);
-            //    }
-            //}
         }
 
         return (KafkaIntegerValueGenerator<TProperty>)generator;
@@ -124,42 +114,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
-    ///// <inheritdoc/>
-    //public virtual IEnumerable<object?[]> Rows => RowsInTable();
-    ///// <inheritdoc/>
-    //public virtual IReadOnlyList<object?[]> SnapshotRows()
-    //{
-    //    var rows = Rows.ToList();
-    //    var rowCount = rows.Count;
-    //    var properties = EntityType.GetProperties().ToList();
-    //    var propertyCount = properties.Count;
-
-    //    for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
-    //    {
-    //        var snapshotRow = new object?[propertyCount];
-    //        Array.Copy(rows[rowIndex], snapshotRow, propertyCount);
-
-    //        if (_valueConverters != null)
-    //        {
-    //            foreach (var (index, converter) in _valueConverters)
-    //            {
-    //                snapshotRow[index] = converter.ConvertFromProvider(snapshotRow[index]);
-    //            }
-    //        }
-
-    //        if (_valueComparers != null)
-    //        {
-    //            foreach (var (index, comparer) in _valueComparers)
-    //            {
-    //                snapshotRow[index] = comparer.Snapshot(snapshotRow[index]);
-    //            }
-    //        }
-
-    //        rows[rowIndex] = snapshotRow;
-    //    }
-
-    //    return rows;
-    //}
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => [.. properties.Select(p => p.GetKeyValueComparer())];
 
@@ -170,8 +124,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
         if (_producer.Exist(key))
         {
-            // to do: add a new string
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, [entry]);
+            throw new DbUpdateConcurrencyException(KafkaStrings.DuplicateKeyException(key), [entry]);
         }
         else
         {
@@ -202,6 +155,10 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     {
         var key = CreateKey(entry);
         if (!_producer.TryGetValue(key, out var valueBuffer))
+        {
+            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
+        }
+        else
         {
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
         }
@@ -261,7 +218,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
         if (!_producer.TryGetValue(key, out var data))
         {
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException, new[] { entry });
+            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
         else
         {

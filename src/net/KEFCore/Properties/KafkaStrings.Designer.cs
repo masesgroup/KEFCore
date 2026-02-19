@@ -36,6 +36,14 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             => GetString("DistinctOnSubqueryNotSupported");
 
         /// <summary>
+        ///     Attempted to create an entity with the same key in the store: {tkey}.
+        /// </summary>
+        public static string DuplicateKeyException(object? tkey)
+            => string.Format(
+                GetString("DuplicateKeyException", nameof(tkey)),
+                tkey);
+
+        /// <summary>
         ///     The specified entity type '{derivedType}' is not derived from '{entityType}'.
         /// </summary>
         public static string InvalidDerivedTypeInEntityProjection(object? derivedType, object? entityType)
@@ -86,10 +94,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                 memberType, member, entityType);
 
         /// <summary>
-        ///     Attempted to update or delete an entity that does not exist in the store.
+        ///     Attempted to update or delete an entity that does not exist in the store: {tkey}.
         /// </summary>
-        public static string UpdateConcurrencyException
-            => GetString("UpdateConcurrencyException");
+        public static string UpdateConcurrencyException(object? tkey)
+            => string.Format(
+                GetString("UpdateConcurrencyException", nameof(tkey)),
+                tkey);
 
         /// <summary>
         ///     Conflicts were detected for instance of entity type '{entityType}' on the concurrency token properties {properties}. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting values.

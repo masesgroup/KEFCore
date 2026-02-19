@@ -406,6 +406,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
+                    if (data == null) return default!;
+
                     JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, data);
                     TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
@@ -590,6 +592,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
+                    if (data == null) return default!;
+
                     BinaryDecoder decoder = new(data);
                     TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);
@@ -770,6 +774,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
+                    if (data == null) return default!;
+
                     JsonDecoder decoder = new(AvroValueContainer._SCHEMA, data);
                     TData t = Activator.CreateInstance<TData>()!;
                     t = SpecificReader.Read(t!, decoder);

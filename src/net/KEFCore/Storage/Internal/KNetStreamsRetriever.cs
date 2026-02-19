@@ -124,6 +124,44 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         return new ValueBuffer(array);
     }
 
+    TValue GetTValue(TKey key)
+    {
+        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        if (keyValueStore == null) return default!;
+        var v = keyValueStore.Get(key);
+        return v;
+    }
+
+    /// <inheritdoc/>
+    public bool Exist(TKey key)
+    {
+        var v = GetTValue(key);
+        return v != null;
+    }
+    /// <inheritdoc/>
+    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    {
+        var v = GetTValue(key);
+        if (v == null)
+        {
+            valueBuffer = ValueBuffer.Empty;
+            return false;
+        }
+
+        object[] array = null!;
+        v?.GetData(_entityType, ref array);
+        valueBuffer = new ValueBuffer(array);
+        return true;
+    }
+    /// <inheritdoc/>
+    public ValueBuffer GetValue(TKey key)
+    {
+        var v = GetTValue(key);
+        object[] array = null!;
+        v?.GetData(_entityType, ref array);
+        return new ValueBuffer(array);
+    }
+
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;

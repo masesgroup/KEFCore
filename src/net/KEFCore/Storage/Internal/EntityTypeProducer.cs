@@ -252,15 +252,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
     {
-        if (_streamData != null) return _streamData.TryGetValue(key, out valueBuffer);
+        if (_streamData != null)
+        {
+            return _streamData.TryGetValue(key, out valueBuffer);
+        }
         else if (_kafkaCompactedReplicator != null)
         {
-            if (!_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
+            if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 object[] array = null!;
-                valueContainer?.GetData(_entityType, _properties, ref array);
+                valueContainer?.GetData(_entityType, ref array);
                 valueBuffer = new ValueBuffer(array);
+                return true;
             }
+
+            valueBuffer = default;
+            return false;
         }
 
         throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
@@ -276,7 +283,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
             {
                 var value = record.Value(TValueContainerConstructor);
-                if (_kafkaCompactedReplicator != null) _kafkaCompactedReplicator[record.Key] = value!;
+                _kafkaCompactedReplicator?[record.Key] = value!;
             }
 
             return null!;
@@ -304,7 +311,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.Key, record.Value(TValueContainerConstructor)!, headers)!;
                     if (future != null) futures.Add(future);
                 }
