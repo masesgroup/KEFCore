@@ -122,7 +122,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
         if (_producer.Exist(key))
         {
-            // to do: add a new string
             throw new DbUpdateConcurrencyException(KafkaStrings.DuplicateKeyException(key), [entry]);
         }
         else
