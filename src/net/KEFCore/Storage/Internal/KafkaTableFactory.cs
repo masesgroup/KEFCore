@@ -27,22 +27,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaTableFactory : IKafkaTableFactory
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaTableFactory(
+    ILoggingOptions loggingOptions,
+    IKafkaSingletonOptions options) : IKafkaTableFactory
 {
-    private readonly IKafkaSingletonOptions _options;
-    private readonly bool _sensitiveLoggingEnabled;
+    private readonly ILoggingOptions _loggingOptions = loggingOptions;
+    private readonly IKafkaSingletonOptions _options = options;
 
     private readonly ConcurrentDictionary<(IKafkaCluster Cluster, IEntityType EntityType), Func<IKafkaTable>> _factories = new();
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaTableFactory(
-        ILoggingOptions loggingOptions,
-        IKafkaSingletonOptions options)
-    {
-        _options = options;
-        _sensitiveLoggingEnabled = loggingOptions.IsSensitiveDataLoggingEnabled;
-    }
+
     /// <inheritdoc/>
     public virtual IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType)
         => _factories.GetOrAdd((cluster, entityType), e => CreateTable(e.Cluster, e.EntityType))();
@@ -55,17 +51,17 @@ public class KafkaTableFactory : IKafkaTableFactory
     private Func<IKafkaTable> CreateTable(IKafkaCluster cluster, IEntityType entityType)
         => (Func<IKafkaTable>)typeof(KafkaTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
-            .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(), 
+            .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(),
                                _options.ValueContainerType(entityType),
                                _options.JVMKeyType(entityType),
                                _options.JVMValueContainerType(entityType))
-            .Invoke(null, new object?[] { cluster, entityType, _sensitiveLoggingEnabled })!;
+            .Invoke(null, new object?[] { cluster, entityType, _loggingOptions })!;
 
     private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(
         IKafkaCluster cluster,
         IEntityType entityType,
-        bool sensitiveLoggingEnabled)
+        ILoggingOptions loggingOptions)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, sensitiveLoggingEnabled);
+        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, loggingOptions);
 }

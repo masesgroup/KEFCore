@@ -18,8 +18,6 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -41,14 +39,6 @@ public interface IKafkaTable : IEntityTypeProducer
     /// Updates a row
     /// </summary>
     IKafkaRowBag Update(IUpdateEntry entry);
-    /// <summary>
-    /// Get an <see cref="KafkaIntegerValueGenerator{TValue}"/>
-    /// </summary>
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables);
-    /// <summary>
-    /// Bumps values
-    /// </summary>
-    void BumpValueGenerators(object?[] row);
     /// <summary>
     /// The referring <see cref="IKafkaCluster"/>
     /// </summary>

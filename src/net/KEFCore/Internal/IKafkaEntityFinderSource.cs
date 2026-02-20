@@ -1,3 +1,6 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
 /*
 *  Copyright (c) 2022-2026 MASES s.r.l.
 *
@@ -16,27 +19,14 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.Internal;
 
-namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-/// <remarks>
-/// Default initializer
-/// </remarks>
-public class KafkaQueryContextFactory(
-    QueryContextDependencies dependencies,
-    IKafkaClusterCache clusterCache,
-    IDbContextOptions contextOptions) : IQueryContextFactory
+public interface IKafkaEntityFinderSource
 {
-    /// <summary>
-    ///     Dependencies for this service.
-    /// </summary>
-    protected virtual QueryContextDependencies Dependencies { get; } = dependencies;
-    /// <inheritdoc/>
-    public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, clusterCache.GetCluster(contextOptions));
 }

@@ -16,7 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-// #define DEBUG_PERFORMANCE
+//#define DEBUG_PERFORMANCE
 
 #nullable disable
 
@@ -24,7 +24,6 @@ using Java.Util;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
@@ -42,6 +41,8 @@ public class KafkaCluster : IKafkaCluster
 {
     private readonly KafkaOptionsExtension _options;
     private readonly IKafkaTableFactory _tableFactory;
+    private readonly IUpdateAdapterFactory _updateAdapterFactory;
+    private readonly IModel _designModel;
     private readonly bool _useNameMatching;
     private readonly Admin? _kafkaAdminClient = null;
     private readonly Properties _bootstrapProperties;
@@ -51,10 +52,15 @@ public class KafkaCluster : IKafkaCluster
     /// <summary>
     /// Dfault initializer
     /// </summary>
-    public KafkaCluster(KafkaOptionsExtension options, IKafkaTableFactory tableFactory)
+    public KafkaCluster(KafkaOptionsExtension options,
+        IKafkaTableFactory tableFactory,
+        IUpdateAdapterFactory updateAdapterFactory,
+        IModel designModel)
     {
         _options = options;
         _tableFactory = tableFactory;
+        _updateAdapterFactory = updateAdapterFactory;
+        _designModel = designModel;
         _useNameMatching = options.UseNameMatching;
 
         _bootstrapProperties = AdminClientConfigBuilder.Create().WithBootstrapServers(Options.BootstrapServers).ToProperties();
@@ -88,31 +94,11 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
     /// <inheritdoc/>
-    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property)
-    {
-#if NET8_0 || NET9_0 || NET10_0
-        var entityType = property.DeclaringType;
-
-        return EnsureTable(entityType.ContainingEntityType).GetIntegerValueGenerator<TProperty>(
-            property,
-            [.. entityType.ContainingEntityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type))]);
-#else
-        var entityType = property.DeclaringEntityType;
-
-        return EnsureTable(entityType).GetIntegerValueGenerator<TProperty>(
-            property,
-            entityType.GetDerivedTypesInclusive().Select(type => EnsureTable(type)).ToArray());
-#endif
-    }
-    /// <inheritdoc/>
-    public virtual bool EnsureDeleted(
-        IUpdateAdapterFactory updateAdapterFactory,
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var coll = new ArrayList<Java.Lang.String>();
         var topics = new System.Collections.Generic.List<string>();
-        foreach (var entityType in designModel.GetEntityTypes())
+        foreach (var entityType in _designModel.GetEntityTypes())
         {
             string topic = entityType.TopicName(Options);
             if (_topicForEntity.TryRemove(entityType, out string topicName))
@@ -171,19 +157,16 @@ public class KafkaCluster : IKafkaCluster
         return true;
     }
     /// <inheritdoc/>
-    public virtual bool EnsureCreated(
-        IUpdateAdapterFactory updateAdapterFactory,
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {
             _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
 
-            var updateAdapter = updateAdapterFactory.CreateStandalone();
+            var updateAdapter = _updateAdapterFactory.CreateStandalone();
             var entries = new System.Collections.Generic.List<IUpdateEntry>();
-            foreach (var entityType in designModel.GetEntityTypes())
+            foreach (var entityType in _designModel.GetEntityTypes())
             {
                 EnsureTable(entityType);
 
@@ -203,9 +186,7 @@ public class KafkaCluster : IKafkaCluster
         return valuesSeeded;
     }
     /// <inheritdoc/>
-    public virtual bool EnsureConnected(
-        IModel designModel,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    public virtual bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         return true;
     }

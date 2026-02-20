@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -31,15 +30,15 @@ public interface IKafkaCluster : IDisposable
     /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
     /// </summary>
-    bool EnsureDeleted(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseCreated"/>
     /// </summary>
-    bool EnsureCreated(IUpdateAdapterFactory updateAdapterFactory, IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseConnected"/>
     /// </summary>
-    bool EnsureConnected(IModel designModel, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
@@ -48,10 +47,6 @@ public interface IKafkaCluster : IDisposable
     /// Retrieve the <see cref="ValueBuffer"/>
     /// </summary>
     IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
-    /// <summary>
-    /// Gets the <see cref="KafkaIntegerValueGenerator{TValue}"/>
-    /// </summary>
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property);
     /// <summary>
     /// Executes a transaction
     /// </summary>

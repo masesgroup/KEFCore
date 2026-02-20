@@ -16,6 +16,10 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Internal;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -25,17 +29,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaDatabase : Database, IKafkaDatabase
 {
+    private readonly IKafkaEntityFinderSource _finder;
     private readonly IKafkaClusterCache _clusterCache;
+
     private readonly IKafkaCluster _cluster;
-    private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
-    private readonly IDesignTimeModel _designTimeModel;
     /// <summary>
     /// Default initializer
     /// </summary>
     public KafkaDatabase(
         DatabaseDependencies dependencies,
         IKafkaClusterCache clusterCache,
+        IEntityFinderSource entityFinderSource,
+        //IValueGeneratorSelector valueSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
@@ -43,9 +49,8 @@ public class KafkaDatabase : Database, IKafkaDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.GetCluster(options);
-        _designTimeModel = designTimeModel;
-        _updateAdapterFactory = updateAdapterFactory;
+        _finder = (IKafkaEntityFinderSource)entityFinderSource;
+        _cluster = _clusterCache.GetCluster(options, updateAdapterFactory, designTimeModel.Model);
         _updateLogger = updateLogger;
     }
     /// <inheritdoc/>
@@ -66,11 +71,11 @@ public class KafkaDatabase : Database, IKafkaDatabase
             : Task.FromResult(_cluster.ExecuteTransaction(entries, _updateLogger));
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseDeleted()
-        => _cluster.EnsureDeleted(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureDeleted(_updateLogger);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseCreated()
-        => _cluster.EnsureCreated(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureCreated(_updateLogger);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseConnected()
-        => _cluster.EnsureConnected(_designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureConnected(_updateLogger);
 }

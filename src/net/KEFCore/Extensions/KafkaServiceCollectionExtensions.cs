@@ -18,6 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 using MASES.EntityFrameworkCore.KNet.Query.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -49,8 +50,10 @@ public static class KafkaServiceCollectionExtensions
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static IServiceCollection AddEntityFrameworkKafkaDatabase(this IServiceCollection serviceCollection)
     {
+#pragma warning disable EF1001 // Internal EF Core API usage.
         var builder = new EntityFrameworkServicesBuilder(serviceCollection)
             .TryAdd<LoggingDefinitions, KafkaLoggingDefinitions>()
+            .TryAdd<EntityFrameworkCore.Internal.IEntityFinderSource, KafkaEntityFinderSource>()
             .TryAdd<IDatabaseProvider, DatabaseProvider<KafkaOptionsExtension>>()
             .TryAdd<IValueGeneratorSelector, KafkaValueGeneratorSelector>()
             .TryAdd<IDatabase>(p => p.GetRequiredService<IKafkaDatabase>())
@@ -70,6 +73,7 @@ public static class KafkaServiceCollectionExtensions
                     .TryAddSingleton<IKafkaClusterCache, KafkaClusterCache>()
                     .TryAddSingleton<IKafkaTableFactory, KafkaTableFactory>()
                     .TryAddScoped<IKafkaDatabase, KafkaDatabase>());
+#pragma warning restore EF1001 // Internal EF Core API usage.
 
         builder.TryAddCoreServices();
 
