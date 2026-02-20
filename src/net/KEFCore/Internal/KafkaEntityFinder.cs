@@ -72,7 +72,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         {
             // insert local logic
 
-            return _internalEntityFinderTEntity.Find(keyValues));
+            return _internalEntityFinderTEntity.Find(keyValues);
         }
 
         /// <summary>
