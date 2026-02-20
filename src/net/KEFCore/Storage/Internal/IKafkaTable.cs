@@ -19,13 +19,27 @@
 #nullable enable
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
+
+/// <summary>
+/// Reaches backend to find entities
+/// </summary>
+public interface IKafkaTableEntityFinder
+{
+    /// <summary>
+    /// Find in backend and add on tracker since it was not found before
+    /// </summary>
+    /// <param name="keyValues"></param>
+    /// <returns><see langword="true"/> if the item was found and added to the tracker, <see langword="false"/> otherwise</returns>
+    bool FindAndAddOnTracker(object[] keyValues, IEntityType entityType);
+}
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaTable : IEntityTypeProducer
+public interface IKafkaTable : IEntityTypeProducer, IKafkaTableEntityFinder
 {
     /// <summary>
     /// Creates a new row
@@ -44,3 +58,4 @@ public interface IKafkaTable : IEntityTypeProducer
     /// </summary>
     IKafkaCluster Cluster { get; }
 }
+

@@ -91,6 +91,23 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
+    public bool FindAndAddOnTracker(object[] keyValues, IEntityType entityType)
+    {
+        if (keyValues == null) return default;
+        TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+        if (key != null && _producer.TryGetProperties(key, out var props))
+        {
+            // we are here because the Entity is not tracker yet, create and it 
+            var adapter = Cluster.UpdateAdapterFactory.Create();
+            var newEntry = adapter.CreateEntry(props, entityType);
+            newEntry.EntityState = EntityState.Added;
+            adapter.DetectChanges();
+            return true;
+        }
+        return false;
+    }
+
+    /// <inheritdoc/>
     public virtual IKafkaCluster Cluster { get; }
     /// <inheritdoc/>
     public virtual IEntityType EntityType { get; }
@@ -139,7 +156,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual IKafkaRowBag Delete(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
-        if (!_producer.TryGetValue(key, out var valueBuffer))
+        if (!_producer.TryGetValueBuffer(key, out var valueBuffer))
         {
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
@@ -197,7 +214,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     {
         var key = CreateKey(entry);
 
-        if (!_producer.TryGetValue(key, out var data))
+        if (!_producer.TryGetValueBuffer(key, out var data))
         {
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
@@ -244,7 +261,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     void BumpValueGenerators(object?[] row)
     {
-      //  Cluster.ValueGeneratorSelector.BumpAll(row);
+        //  Cluster.ValueGeneratorSelector.BumpAll(row);
     }
 
     private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry)!;

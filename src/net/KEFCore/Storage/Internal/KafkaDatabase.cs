@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Internal;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;

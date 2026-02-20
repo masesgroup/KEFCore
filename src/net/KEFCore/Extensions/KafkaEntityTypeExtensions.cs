@@ -73,10 +73,18 @@ public static class KafkaEntityTypeExtensions
     /// <returns>The configuration source for <see cref="GetKafkaQuery" />.</returns>
     public static ConfigurationSource? GetDefiningQueryConfigurationSource(this IConventionEntityType entityType)
         => entityType.FindAnnotation(KafkaAnnotationNames.DefiningQuery)?.GetConfigurationSource();
+
     /// <summary>
     /// Creates the topic name
     /// </summary>
     public static string TopicName(this IEntityType entityType, KafkaOptionsExtension options)
+    {
+        return TopicName(entityType, options.DatabaseName);
+    }
+    /// <summary>
+    /// Creates the topic name
+    /// </summary>
+    public static string TopicName(this IEntityType entityType, string databaseName)
     {
         var schema = entityType.Name;
         var table = entityType.ClrType.GetCustomAttribute<TableAttribute>();
@@ -84,7 +92,7 @@ public static class KafkaEntityTypeExtensions
         {
             schema = table.Schema != null ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
         }
-        return $"{options.DatabaseName}.{schema}";
+        return $"{databaseName}.{schema}";
     }
     /// <summary>
     /// Creates the storage id

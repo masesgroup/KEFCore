@@ -59,4 +59,12 @@ public interface IKafkaCluster : IDisposable
     /// The <see cref="KafkaOptionsExtension"/>
     /// </summary>
     KafkaOptionsExtension Options { get; }
+    /// <summary>
+    /// The associated <see cref="IModel"/>
+    /// </summary>
+    IModel Model { get; }
+    /// <summary>
+    /// The associated <see cref="IUpdateAdapterFactory"/>
+    /// </summary>
+    IUpdateAdapterFactory UpdateAdapterFactory { get; }
 }

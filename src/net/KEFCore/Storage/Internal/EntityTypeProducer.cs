@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Storage;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 
@@ -250,7 +251,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    public bool TryGetValueBuffer(TKey key, out ValueBuffer valueBuffer)
     {
         if (_streamData != null)
         {
@@ -267,6 +268,28 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             }
 
             valueBuffer = default;
+            return false;
+        }
+
+        throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+
+    /// <inheritdoc/>
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    {
+        if (_streamData != null)
+        {
+            return _streamData.TryGetProperties(key, out properties);
+        }
+        else if (_kafkaCompactedReplicator != null)
+        {
+            if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
+            {
+                properties = valueContainer?.GetProperties()!;
+                return true;
+            }
+
+            properties = default!;
             return false;
         }
 

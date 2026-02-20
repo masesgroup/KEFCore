@@ -33,11 +33,15 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         private readonly IDbSetCache _setCache;
         private readonly IEntityType _entityType;
         private readonly IKafkaTableFactory _kafkaTableFactory;
+        private readonly IKafkaClusterCache _kafkaClusterCache;
+        private readonly IKafkaCluster _cluster;
+        private readonly IKafkaTableEntityFinder _kafkaTableEntityFinder;
         private readonly IKey _primaryKey;
         private readonly Type _primaryKeyType;
         private readonly int _primaryKeyPropertiesCount;
 
-        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType, IKafkaTableFactory kafkaTableFactory)
+        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType,
+                                 IKafkaTableFactory kafkaTableFactory, IKafkaClusterCache kafkaClusterCache)
         {
             _internalEntityFinderTEntity = new EntityFinder<TEntity>(stateManager, setSource, setCache, entityType);
             _internalEntityFinder = _internalEntityFinderTEntity as IEntityFinder;
@@ -46,6 +50,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             _setCache = setCache;
             _entityType = entityType;
             _kafkaTableFactory = kafkaTableFactory;
+            _kafkaClusterCache = kafkaClusterCache;
+
+            IDbContextOptions options = ((DbContext)_setCache).GetService<IDbContextOptions>();
+            _cluster = _kafkaClusterCache.GetCluster(options);
+            _kafkaTableEntityFinder = _kafkaTableFactory.Get(_cluster, entityType) as IKafkaTableEntityFinder;
+
             _primaryKey = entityType.FindPrimaryKey()!;
             _primaryKeyPropertiesCount = _primaryKey.Properties.Count;
             _primaryKeyType = _primaryKeyPropertiesCount == 1 ? _primaryKey.Properties[0].ClrType : typeof(IReadOnlyList<object?>);
@@ -67,12 +77,15 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
             var (processedKeyValues, _) = ValidateKeyPropertiesAndExtractCancellationToken(keyValues!, async: false, default);
 
-            return FindTracked(processedKeyValues) ?? FindLocal(keyValues);
+            return FindTracked(processedKeyValues) ?? FindLocal(processedKeyValues);
         }
 
-        private TEntity? FindLocal(object?[]? keyValues)
+        private TEntity? FindLocal(object[] keyValues)
         {
-            // insert local logic
+            if (_kafkaTableEntityFinder.FindAndAddOnTracker(keyValues, _entityType))
+            {
+                // search again on tracker
+            }
 
             return _internalEntityFinderTEntity.Find(keyValues);
         }
@@ -159,14 +172,17 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             var tracked = FindTracked(processedKeyValues);
             return tracked != null
                 ? new ValueTask<TEntity?>(tracked)
-                : FindAsyncLocal(keyValues, cancellationToken);
+                : FindAsyncLocal(processedKeyValues, cancellationToken);
         }
 
-        ValueTask<TEntity?> FindAsyncLocal(object?[]? keyValues, CancellationToken cancellationToken = default)
+        ValueTask<TEntity?> FindAsyncLocal(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            // insert local logic
+            if (_kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType))
+            {
+                // search again on tracker
+            }
 
-            return _internalEntityFinderTEntity.FindAsync(keyValues, cancellationToken);
+            return _internalEntityFinderTEntity.FindAsync(processedKeyValues, cancellationToken);
         }
 
         /// <summary>

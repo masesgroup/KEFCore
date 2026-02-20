@@ -94,6 +94,10 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
     /// <inheritdoc/>
+    public virtual IModel Model => _designModel;
+    /// <inheritdoc/>
+    public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
+    /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var coll = new ArrayList<Java.Lang.String>();
