@@ -16,27 +16,28 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Internal
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "No other way to override the find behavior from a provider.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
     internal class KafkaEntityFinder<TEntity> : IEntityFinder<TEntity> where TEntity : class
     {
         readonly IEntityFinder _internalEntityFinder;
         readonly IEntityFinder<TEntity> _internalEntityFinderTEntity; // used to propagate search on original one without override it
 
-
         private readonly IStateManager _stateManager;
         private readonly IDbSetSource _setSource;
         private readonly IDbSetCache _setCache;
         private readonly IEntityType _entityType;
+        private readonly IKafkaTableFactory _kafkaTableFactory;
         private readonly IKey _primaryKey;
         private readonly Type _primaryKeyType;
         private readonly int _primaryKeyPropertiesCount;
 
-        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType)
+        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType, IKafkaTableFactory kafkaTableFactory)
         {
             _internalEntityFinderTEntity = new EntityFinder<TEntity>(stateManager, setSource, setCache, entityType);
             _internalEntityFinder = _internalEntityFinderTEntity as IEntityFinder;
@@ -44,6 +45,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             _setSource = setSource;
             _setCache = setCache;
             _entityType = entityType;
+            _kafkaTableFactory = kafkaTableFactory;
             _primaryKey = entityType.FindPrimaryKey()!;
             _primaryKeyPropertiesCount = _primaryKey.Properties.Count;
             _primaryKeyType = _primaryKeyPropertiesCount == 1 ? _primaryKey.Properties[0].ClrType : typeof(IReadOnlyList<object?>);
