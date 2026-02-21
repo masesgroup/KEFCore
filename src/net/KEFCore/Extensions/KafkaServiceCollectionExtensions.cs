@@ -48,9 +48,9 @@ public static class KafkaServiceCollectionExtensions
     ///     The same service collection so that multiple calls can be chained.
     /// </returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
     public static IServiceCollection AddEntityFrameworkKafkaDatabase(this IServiceCollection serviceCollection)
     {
-#pragma warning disable EF1001 // Internal EF Core API usage.
         var builder = new EntityFrameworkServicesBuilder(serviceCollection)
             .TryAdd<LoggingDefinitions, KafkaLoggingDefinitions>()
             .TryAdd<EntityFrameworkCore.Internal.IEntityFinderSource, KafkaEntityFinderSource>()
@@ -73,7 +73,6 @@ public static class KafkaServiceCollectionExtensions
                     .TryAddSingleton<IKafkaClusterCache, KafkaClusterCache>()
                     .TryAddSingleton<IKafkaTableFactory, KafkaTableFactory>()
                     .TryAddScoped<IKafkaDatabase, KafkaDatabase>());
-#pragma warning restore EF1001 // Internal EF Core API usage.
 
         builder.TryAddCoreServices();
 

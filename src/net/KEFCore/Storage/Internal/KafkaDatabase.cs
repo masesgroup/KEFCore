@@ -16,9 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Internal;
-using Microsoft.EntityFrameworkCore.Internal;
-
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -28,7 +25,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KafkaDatabase : Database, IKafkaDatabase
 {
-    private readonly IKafkaEntityFinderSource _finder;
     private readonly IKafkaClusterCache _clusterCache;
 
     private readonly IKafkaCluster _cluster;
@@ -39,8 +35,6 @@ public class KafkaDatabase : Database, IKafkaDatabase
     public KafkaDatabase(
         DatabaseDependencies dependencies,
         IKafkaClusterCache clusterCache,
-        IEntityFinderSource entityFinderSource,
-        //IValueGeneratorSelector valueSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
@@ -48,7 +42,6 @@ public class KafkaDatabase : Database, IKafkaDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _finder = (IKafkaEntityFinderSource)entityFinderSource;
         _cluster = _clusterCache.GetCluster(options, updateAdapterFactory, designTimeModel.Model);
         _updateLogger = updateLogger;
     }
