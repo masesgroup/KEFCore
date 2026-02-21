@@ -199,11 +199,10 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                 : FindAsyncLocalIEntityFinder(keyValues, cancellationToken);
         }
 
-        ValueTask<object?> FindAsyncLocalIEntityFinder(object?[]? keyValues, CancellationToken cancellationToken = default)
+        ValueTask<object?> FindAsyncLocalIEntityFinder(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            // insert local logic
-
-            return _internalEntityFinder.FindAsync(keyValues, cancellationToken);
+            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType);
+            return _internalEntityFinder.FindAsync(processedKeyValues, cancellationToken);
         }
 
         /// <summary>
