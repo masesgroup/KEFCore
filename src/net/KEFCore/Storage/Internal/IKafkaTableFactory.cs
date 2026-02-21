@@ -33,6 +33,13 @@ public interface IKafkaTableFactory
     /// <returns></returns>
     IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType);
     /// <summary>
+    /// Returns a <see cref="IKafkaTable"/>
+    /// </summary>
+    /// <param name="cluster"></param>
+    /// <param name="entityType"></param>
+    /// <returns></returns>
+    IKafkaTable Get(IKafkaCluster cluster, IEntityType entityType);
+    /// <summary>
     /// Dispose a previously allocated <see cref="IKafkaTable"/>
     /// </summary>
     void Dispose(IKafkaTable table);

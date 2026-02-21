@@ -18,16 +18,30 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
+
+/// <summary>
+/// Reaches backend to find entities
+/// </summary>
+public interface IKafkaTableEntityFinder
+{
+    /// <summary>
+    /// Find in backend and add on tracker since it was not found before
+    /// </summary>
+    /// <param name="keyValues">The set of value defined by key to be find</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> defined from <see cref="IStateManager"/></param>
+    void FindAndAddOnTracker(object[] keyValues);
+}
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaTable : IEntityTypeProducer
+public interface IKafkaTable : IEntityTypeProducer, IKafkaTableEntityFinder
 {
     /// <summary>
     /// Creates a new row
@@ -42,15 +56,8 @@ public interface IKafkaTable : IEntityTypeProducer
     /// </summary>
     IKafkaRowBag Update(IUpdateEntry entry);
     /// <summary>
-    /// Get an <see cref="KafkaIntegerValueGenerator{TValue}"/>
-    /// </summary>
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables);
-    /// <summary>
-    /// Bumps values
-    /// </summary>
-    void BumpValueGenerators(object?[] row);
-    /// <summary>
     /// The referring <see cref="IKafkaCluster"/>
     /// </summary>
     IKafkaCluster Cluster { get; }
 }
+

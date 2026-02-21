@@ -286,9 +286,9 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<string, object> GetProperties()
+    public IDictionary<string, object?> GetProperties()
     {
-        Dictionary<string, object> props = [];
+        Dictionary<string, object?> props = [];
         if (Data == null && Properties == null) { return props; }
 
         if (Data != null)
@@ -305,6 +305,6 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         {
             props.Add(item.PropertyName!, item.Value!);
         }
-        return props;
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
 }

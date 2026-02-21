@@ -44,5 +44,5 @@ public interface IValueContainer<in T> where T : notnull
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
-    IReadOnlyDictionary<string, object> GetProperties();
+    IDictionary<string, object?> GetProperties();
 }

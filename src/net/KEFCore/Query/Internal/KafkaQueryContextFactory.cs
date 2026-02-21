@@ -33,12 +33,10 @@ public class KafkaQueryContextFactory(
     IKafkaClusterCache clusterCache,
     IDbContextOptions contextOptions) : IQueryContextFactory
 {
-    private readonly IKafkaCluster _cluster = clusterCache.GetCluster(contextOptions);
-
     /// <summary>
     ///     Dependencies for this service.
     /// </summary>
     protected virtual QueryContextDependencies Dependencies { get; } = dependencies;
     /// <inheritdoc/>
-    public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, _cluster);
+    public virtual QueryContext Create() => new KafkaQueryContext(Dependencies, clusterCache.GetCluster(contextOptions));
 }

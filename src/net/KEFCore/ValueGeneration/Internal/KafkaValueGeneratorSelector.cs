@@ -16,7 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// <summary>
@@ -28,11 +28,21 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaValueGeneratorSelector(
-    ValueGeneratorSelectorDependencies dependencies,
-    IKafkaDatabase kafkaDatabase) : ValueGeneratorSelector(dependencies)
+public class KafkaValueGeneratorSelector(ValueGeneratorSelectorDependencies dependencies) : ValueGeneratorSelector(dependencies)
 {
-    private readonly IKafkaCluster _kafkaCluster = kafkaDatabase.Cluster;
+    private ConcurrentDictionary<IProperty, IKafkaIntegerValueGenerator>? _integerGenerators;
+
+    public void BumpAll(object?[] row)
+    {
+        if (_integerGenerators != null)
+        {
+            foreach (var generator in _integerGenerators.Values)
+            {
+                generator.Bump(row);
+            }
+        }
+    }
+
 #if NET9_0 || NET10_0
     /// <inheritdoc/>
     public override bool TrySelect(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
@@ -70,48 +80,44 @@ public class KafkaValueGeneratorSelector(
 
         if (type == typeof(long))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<long>(property);
+            return GetIntegerValueGenerator<long>(property);
         }
 
         if (type == typeof(int))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<int>(property);
+            return GetIntegerValueGenerator<int>(property);
         }
 
         if (type == typeof(short))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<short>(property);
+            return GetIntegerValueGenerator<short>(property);
         }
 
         if (type == typeof(byte))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<byte>(property);
+            return GetIntegerValueGenerator<byte>(property);
         }
 
         if (type == typeof(ulong))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<ulong>(property);
+            return GetIntegerValueGenerator<ulong>(property);
         }
 
         if (type == typeof(uint))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<uint>(property);
+            return GetIntegerValueGenerator<uint>(property);
         }
 
         if (type == typeof(ushort))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<ushort>(property);
+            return GetIntegerValueGenerator<ushort>(property);
         }
 
         if (type == typeof(sbyte))
         {
-            return _kafkaCluster.GetIntegerValueGenerator<sbyte>(property);
+            return GetIntegerValueGenerator<sbyte>(property);
         }
-#if NET9_0 || NET10_0
-        throw new ArgumentException(
-            CoreStrings.InvalidValueGeneratorFactoryProperty(
-                "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
-#elif NET8_0
+#if NET8_0 || NET9_0 || NET10_0
         throw new ArgumentException(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
@@ -120,5 +126,20 @@ public class KafkaValueGeneratorSelector(
             CoreStrings.InvalidValueGeneratorFactoryProperty(
                 "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringEntityType.DisplayName()));
 #endif
+    }
+
+    /// <inheritdoc/>
+    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property)
+    {
+        _integerGenerators ??= new ConcurrentDictionary<IProperty, IKafkaIntegerValueGenerator>();
+
+        var propertyIndex = property.GetIndex();
+        if (!_integerGenerators.TryGetValue(property, out var generator))
+        {
+            generator = new KafkaIntegerValueGenerator<TProperty>(propertyIndex);
+            _integerGenerators[property] = generator;
+        }
+
+        return (KafkaIntegerValueGenerator<TProperty>)generator;
     }
 }

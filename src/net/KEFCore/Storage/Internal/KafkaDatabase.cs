@@ -26,10 +26,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KafkaDatabase : Database, IKafkaDatabase
 {
     private readonly IKafkaClusterCache _clusterCache;
+
     private readonly IKafkaCluster _cluster;
-    private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
-    private readonly IDesignTimeModel _designTimeModel;
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -43,9 +42,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.GetCluster(options);
-        _designTimeModel = designTimeModel;
-        _updateAdapterFactory = updateAdapterFactory;
+        _cluster = _clusterCache.GetCluster(options, updateAdapterFactory, designTimeModel.Model);
         _updateLogger = updateLogger;
     }
     /// <inheritdoc/>
@@ -66,11 +63,11 @@ public class KafkaDatabase : Database, IKafkaDatabase
             : Task.FromResult(_cluster.ExecuteTransaction(entries, _updateLogger));
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseDeleted()
-        => _cluster.EnsureDeleted(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureDeleted(_updateLogger);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseCreated()
-        => _cluster.EnsureCreated(_updateAdapterFactory, _designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureCreated(_updateLogger);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseConnected()
-        => _cluster.EnsureConnected(_designTimeModel.Model, _updateLogger);
+        => _cluster.EnsureConnected(_updateLogger);
 }

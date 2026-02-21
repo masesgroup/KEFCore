@@ -32,4 +32,10 @@ public static class KafkaClusterCacheExtensions
     /// </summary>
     public static IKafkaCluster GetCluster(this IKafkaClusterCache storeCache, IDbContextOptions options)
         => storeCache.GetCluster(options.Extensions.OfType<KafkaOptionsExtension>().First());
+
+    /// <summary>
+    /// Gets the <see cref="IKafkaCluster"/>
+    /// </summary>
+    public static IKafkaCluster GetCluster(this IKafkaClusterCache storeCache, IDbContextOptions options, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
+        => storeCache.GetCluster(options.Extensions.OfType<KafkaOptionsExtension>().First(), updateAdapterFactory, designModel);
 }
