@@ -91,7 +91,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
-    public void FindAndAddOnTracker(object[] keyValues, IEntityType entityType)
+    public void FindAndAddOnTracker(object[] keyValues)
     {
         if (keyValues == null) return;
         TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
@@ -99,7 +99,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         {
             // we are here because the Entity is not tracker yet, create and it 
             var adapter = Cluster.UpdateAdapterFactory.Create();
-            var newEntry = adapter.CreateEntry(props, entityType);
+            var newEntry = adapter.CreateEntry(props, EntityType);
             newEntry.EntityState = EntityState.Added;
             adapter.DetectChanges();
         }

@@ -32,7 +32,7 @@ public interface IKafkaTableEntityFinder
     /// </summary>
     /// <param name="keyValues">The set of value defined by key to be find</param>
     /// <param name="entityType">The <see cref="IEntityType"/> defined from <see cref="IStateManager"/></param>
-    void FindAndAddOnTracker(object[] keyValues, IEntityType entityType);
+    void FindAndAddOnTracker(object[] keyValues);
 }
 
 /// <summary>

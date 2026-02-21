@@ -25,7 +25,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Storage;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 
