@@ -33,7 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal;
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
-public class KafkaEntityFinderSource(IKafkaTableFactory tableFactory, IKafkaClusterCache kafkaClusterCache) : IEntityFinderSource, IKafkaEntityFinderSource
+public class KafkaEntityFinderSource(IKafkaTableFactory tableFactory, IKafkaClusterCache kafkaClusterCache) : IEntityFinderSource
 {
     private readonly IKafkaTableFactory _tableFactory = tableFactory;
     private readonly IKafkaClusterCache _kafkaClusterCache = kafkaClusterCache;

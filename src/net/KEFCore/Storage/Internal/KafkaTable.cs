@@ -91,9 +91,9 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
-    public bool FindAndAddOnTracker(object[] keyValues, IEntityType entityType)
+    public void FindAndAddOnTracker(object[] keyValues, IEntityType entityType)
     {
-        if (keyValues == null) return default;
+        if (keyValues == null) return;
         TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
         if (key != null && _producer.TryGetProperties(key, out var props))
         {
@@ -102,9 +102,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
             var newEntry = adapter.CreateEntry(props, entityType);
             newEntry.EntityState = EntityState.Added;
             adapter.DetectChanges();
-            return true;
         }
-        return false;
     }
 
     /// <inheritdoc/>

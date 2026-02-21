@@ -82,11 +82,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         private TEntity? FindLocal(object[] keyValues)
         {
-            if (_kafkaTableEntityFinder.FindAndAddOnTracker(keyValues, _entityType))
-            {
-                // search again on tracker
-            }
-
+            _kafkaTableEntityFinder.FindAndAddOnTracker(keyValues, _entityType);
             return _internalEntityFinderTEntity.Find(keyValues);
         }
 
@@ -177,11 +173,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         ValueTask<TEntity?> FindAsyncLocal(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            if (_kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType))
-            {
-                // search again on tracker
-            }
-
+            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType);
             return _internalEntityFinderTEntity.FindAsync(processedKeyValues, cancellationToken);
         }
 

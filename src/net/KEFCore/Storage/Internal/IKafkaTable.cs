@@ -18,6 +18,8 @@
 
 #nullable enable
 
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 /// <summary>
@@ -28,9 +30,9 @@ public interface IKafkaTableEntityFinder
     /// <summary>
     /// Find in backend and add on tracker since it was not found before
     /// </summary>
-    /// <param name="keyValues"></param>
-    /// <returns><see langword="true"/> if the item was found and added to the tracker, <see langword="false"/> otherwise</returns>
-    bool FindAndAddOnTracker(object[] keyValues, IEntityType entityType);
+    /// <param name="keyValues">The set of value defined by key to be find</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> defined from <see cref="IStateManager"/></param>
+    void FindAndAddOnTracker(object[] keyValues, IEntityType entityType);
 }
 
 /// <summary>
