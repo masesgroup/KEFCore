@@ -1,6 +1,7 @@
 {
   "DatabaseName": "TestDBBenchmark",
+  "BootstrapServers": "192.168.1.114:9092",
   "UseCompactedReplicator": true,
-  "BootstrapServers": "192.168.0.101:9092",
-  "NumberOfExecutions": 10
+  "NumberOfExecutions": 10,
+  "WithEvents": true
 }

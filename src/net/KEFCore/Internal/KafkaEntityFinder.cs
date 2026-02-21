@@ -82,7 +82,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         private TEntity? FindLocal(object[] keyValues)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(keyValues, _entityType);
+            _kafkaTableEntityFinder.FindAndAddOnTracker(keyValues);
             return _internalEntityFinderTEntity.Find(keyValues);
         }
 
@@ -173,7 +173,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         ValueTask<TEntity?> FindAsyncLocal(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType);
+            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
             return _internalEntityFinderTEntity.FindAsync(processedKeyValues, cancellationToken);
         }
 
@@ -196,12 +196,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             var tracked = FindTracked(processedKeyValues);
             return tracked != null
                 ? new ValueTask<object?>(tracked)
-                : FindAsyncLocalIEntityFinder(keyValues, cancellationToken);
+                : FindAsyncLocalIEntityFinder(processedKeyValues, cancellationToken);
         }
 
         ValueTask<object?> FindAsyncLocalIEntityFinder(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues, _entityType);
+            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
             return _internalEntityFinder.FindAsync(processedKeyValues, cancellationToken);
         }
 

@@ -427,20 +427,20 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     }
 
     /// <summary>
-    ///      Set the optional handler to be used to receive notification when the back-end triggers a data change. Works if <see cref="WithCompactedReplicator(bool)"/> is invoked with <see langword="true"/>
+    ///      Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="onChangeEvent">The <see cref="Action{IEntityType, Boolean, Object}"/> will be used to report change event.</param>
+    /// <param name="emitEvents"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithOnChangeEvent(Action<EntityTypeChanged> onChangeEvent)
+    public virtual KafkaDbContextOptionsBuilder WithEmitEvents(bool emitEvents)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithOnChangeEvent(onChangeEvent);
+        extension = extension.WithEmitEvents(emitEvents);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

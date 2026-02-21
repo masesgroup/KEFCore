@@ -139,7 +139,7 @@ public static class AvroKEFCoreSerDes
                     var container = new AvroKeyContainer();
                     if (data is object[] dataArray)
                     {
-                        container.PrimaryKey = new List<object>(dataArray);
+                        container.PrimaryKey = [.. dataArray];
                     }
                     else throw new InvalidDataException($"Cannot manage inputs different from object[], input is {data?.GetType()}");
                     SpecificWriter.Write(container, encoder);
@@ -213,7 +213,7 @@ public static class AvroKEFCoreSerDes
                     var container = new AvroKeyContainer();
                     if (data is object[] dataArray)
                     {
-                        container.PrimaryKey = new List<object>(dataArray);
+                        container.PrimaryKey = [.. dataArray];
                     }
                     else throw new InvalidDataException($"Cannot manage inputs different from object[], input is {data?.GetType()}");
                     SpecificWriter.Write(container, encoder);
@@ -230,7 +230,7 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                     BinaryDecoder decoder = new(data);
-                    AvroKeyContainer t = new AvroKeyContainer();
+                    AvroKeyContainer t = new();
                     t = SpecificReader.Read(t!, decoder);
                     return (TData)(object)(t.PrimaryKey.ToArray());
                 }

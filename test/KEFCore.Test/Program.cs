@@ -46,12 +46,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             try
             {
                 globalWatcher.Start();
-                context = new BloggingContext()
-                {
-                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
-                };
-
+                context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                if (ProgramConfig.Config.WithEvents)
+                {
+                    context.ChangeTracker.Tracked += (sender, e) =>
+                    {
+
+                    };
+                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
+                    {
+
+                    };
+                }
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {

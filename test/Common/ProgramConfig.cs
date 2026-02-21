@@ -82,6 +82,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
+            context.EmitEvents = WithEvents;
 
             if (UseJson)
             { // default

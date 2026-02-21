@@ -1,5 +1,4 @@
 ﻿using MASES.EntityFrameworkCore.KNet.Infrastructure;
-using MASES.EntityFrameworkCore.KNet.Storage;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,18 +9,6 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
     partial class Program
     {
         static BloggingContext context = null;
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context?.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { } // the context can be disposed if the program exited
-            catch (InvalidOperationException) { } // there are multiple concurrent operations on context https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues
-
-            Console.WriteLine($"Entity {change.EntityType.Name} has {(change.KeyRemoved ? "removed" : "added/updated")} the key {change.Key} with value {value}");
-        }
 
         static void Main(string[] args)
         {
@@ -31,8 +18,7 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
                 {
                     BootstrapServers = "KAFKA-BROKER:9092",
                     ApplicationId = "MyApplicationId",
-                    DatabaseName = "MyDB",
-                    OnChangeEvent = OnEvent
+                    DatabaseName = "MyDB"
                 };
                 // cleanup topics on Broker
                 context.Database.EnsureDeleted();

@@ -246,9 +246,14 @@ const bool perf = false;
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <summary>
+    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    /// </summary>
+    public virtual bool EmitEvents { get; set; }
+    /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
-    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/></remarks>
+    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="EmitEvents"/></remarks>
+    [Obsolete("Replaced with events attached to ChangeTracker, use EmitEvents to enable them.", true)] 
     public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
@@ -271,10 +276,10 @@ const bool perf = false;
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
+            o.WithEmitEvents(EmitEvents);
             if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
-            if (OnChangeEvent != null) o.WithOnChangeEvent(OnChangeEvent);
         });
     }
 }

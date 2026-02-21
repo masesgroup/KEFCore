@@ -59,7 +59,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
-    private Action<EntityTypeChanged>? _onChangeEvent = null;
+    private bool _emitEvents = false;
     private DbContextOptionsExtensionInfo? _info;
 
     /// <summary>
@@ -93,7 +93,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
-        _onChangeEvent = copyFrom._onChangeEvent;
+        _emitEvents = copyFrom._emitEvents;
     }
     /// <inheritdoc/>
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -143,8 +143,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
-    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    public virtual Action<EntityTypeChanged> OnChangeEvent => _onChangeEvent!;
+    /// <inheritdoc cref="KafkaDbContext.EmitEvents"/>
+    public virtual bool EmitEvents => _emitEvents!;
 
     int IKafkaSingletonOptions.DefaultReplicationFactor => throw new NotImplementedException();
 
@@ -335,12 +335,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
 
         return clone;
     }
-    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    public virtual KafkaOptionsExtension WithOnChangeEvent(Action<EntityTypeChanged> onChangeEvent)
+
+    /// <inheritdoc cref="KafkaDbContext.EmitEvents"/>
+    public virtual KafkaOptionsExtension WithEmitEvents(bool emitEvents)
     {
         var clone = Clone();
 
-        clone._onChangeEvent = onChangeEvent;
+        clone._emitEvents = emitEvents;
 
         return clone;
     }

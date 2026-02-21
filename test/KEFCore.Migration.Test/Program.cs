@@ -45,12 +45,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             try
             {
                 globalWatcher.Start();
-                context = new BloggingContext()
-                {
-                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
-                };
-
+                context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                if (ProgramConfig.Config.WithEvents)
+                {
+                    context.ChangeTracker.Tracked += (sender, e) =>
+                    {
+
+                    };
+                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
+                    {
+
+                    };
+                }
 
                 if (context.Database.EnsureCreated())
                 {
@@ -168,19 +176,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
-        }
-
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
-
-            ProgramConfig.ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 
