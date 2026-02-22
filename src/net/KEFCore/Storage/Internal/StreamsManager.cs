@@ -141,7 +141,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _currentState = newState;
                 if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             });
@@ -160,7 +160,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public required Func<TStreamBuilder, string, TConsumed, TMaterialized, TKTable> CreateTable { get; set; }
         public required Func<TStreamBuilder, TTopology> CreateTopology { get; set; }
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
-        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>, KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
+        public required Action<TStream, 
+                               KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
+                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Close { get; set; }
 
@@ -286,7 +288,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             if (index == WaitHandle.WaitTimeout)
                             {
 #if DEBUG_PERFORMANCE
-                                Infrastructure.KafkaDbContext.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
+                                KNet.Internal.DebugPerformanceHelper.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
 #endif
                                 continue;
                             }
@@ -309,13 +311,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _resetEvent?.WaitOne();
             Start(streams);
 #if DEBUG_PERFORMANCE
-            Infrastructure.KafkaDbContext.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
 #endif
             _resetEvent?.WaitOne(); // wait running state
             ThrowException();
 #if DEBUG_PERFORMANCE
             watch.Stop();
-            Infrastructure.KafkaDbContext.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
 #endif
         }
 

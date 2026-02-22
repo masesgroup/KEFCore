@@ -129,9 +129,9 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         }
         finally
         {
-            if (Infrastructure.KafkaDbContext.TraceEntityTypeDataStorageGetData)
+            if (Internal.DebugPerformanceHelper.TraceEntityTypeDataStorageGetData)
             {
-                Infrastructure.KafkaDbContext.ReportString($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+                Internal.DebugPerformanceHelper.ReportString($"Time to GetData with length {_innerMessage.Data?.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
             }
         }
 #endif

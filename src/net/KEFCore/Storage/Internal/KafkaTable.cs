@@ -55,7 +55,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         ILoggingOptions loggingOptions)
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
 #endif
         Cluster = cluster;
         EntityType = entityType;
@@ -88,7 +88,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
 #endif
         EntityTypeProducers.Dispose(_producer!);
     }

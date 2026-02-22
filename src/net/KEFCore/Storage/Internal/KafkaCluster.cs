@@ -78,7 +78,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"Disposing KafkaCluster");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
 #endif
         if (_tables != null)
         {
@@ -152,7 +152,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.InnerException is UnknownTopicOrPartitionException)
             {
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message);
+				KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
@@ -285,7 +285,7 @@ public class KafkaCluster : IKafkaCluster
         finally
         {
             valueBufferSw.Stop();
-            Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+			KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -365,7 +365,7 @@ public class KafkaCluster : IKafkaCluster
             _ = _tables.GetOrAdd(key, (k) =>
             {
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
+				KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
 #endif
                 return _tableFactory.Create(this, currentEntityType);
             });
