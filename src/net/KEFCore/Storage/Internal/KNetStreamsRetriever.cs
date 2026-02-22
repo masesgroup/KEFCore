@@ -22,8 +22,10 @@
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.KNet.Consumer;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
+using MASES.KNet.Streams.Processor;
 using MASES.KNet.Streams.State;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -34,32 +36,62 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStreamsRetriever<TKey>
+public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStreamsRetriever<TKey>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    static StreamsManager<KNetStreams, StreamsBuilder, Topology, Org.Apache.Kafka.Streams.State.KeyValueBytesStoreSupplier, Materialized<TKey, TValue, TJVMKey, TJVMValue>, GlobalKTable<TKey, TValue, TJVMKey, TJVMValue>>? _streamsManager;
+    class KNetStreamsRetrieverTimestampExtractor(Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey) 
+        : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
+    {
+        private readonly Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> _pushChanges = pushChanges;
+        private readonly IStreamsChangeManager _manager = manager;
+        private readonly IEntityType _entityType = entityType;
+        private readonly IKey _primaryKey = primaryKey;
+
+        public override DateTime Extract()
+        {
+            _pushChanges.Invoke((_manager, _entityType, _primaryKey, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            return Record.DateTime;
+        }
+    }
+
+    static StreamsManager<KNetStreams,
+                          StreamsBuilder,
+                          Topology,
+                          Org.Apache.Kafka.Streams.State.KeyValueBytesStoreSupplier,
+                          TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>,
+                          Consumed<TKey, TValue, TJVMKey, TJVMValue>,
+                          Materialized<TKey, TValue, TJVMKey, TJVMValue>,
+                          GlobalKTable<TKey, TValue, TJVMKey, TJVMValue>,
+                          KTable<TKey, TValue, TJVMKey, TJVMValue>>? _streamsManager;
 
     private readonly IKafkaCluster _kafkaCluster;
     private readonly IEntityType _entityType;
+    private readonly IKey _primaryKey;
     private readonly IProperty[] _properties;
     private readonly string _storageId;
 
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties)
+    public KNetStreamsRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKey primaryKey, IProperty[] properties)
     {
         _kafkaCluster = kafkaCluster;
         _entityType = entityType;
+        _primaryKey = primaryKey;
         _properties = properties;
+
         _streamsManager ??= new(_kafkaCluster, _entityType)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
+            GetStreamsChangeManager = () => this,
+            CreateTimestampExtractor = (enqueuer, manager, entity, key, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity, key),
+            CreateConsumed = (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
             CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
+            CreateTable = static (builder, topicName, consumed, materialized) => builder.Table(topicName, consumed, materialized),
             CreateTopology = static (builder) => builder.Build(),
             CreateStreams = static (topology, streamsConfig) => new(topology, streamsConfig),
             SetHandlers = static (streams, errorHandler, stateListener) =>
@@ -71,7 +103,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             Close = static (streams) => streams.Close()
         };
 
-        _storageId = _streamsManager.AddEntity(entityType);
+        _storageId = _streamsManager.AddEntity(entityType, null);
     }
 
     /// <inheritdoc/>
@@ -128,6 +160,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
         properties = v?.GetProperties()!;
         return true;
+    }
+
+    void IStreamsChangeManager.ManageChange(IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
+    {
+        var input = (Tuple<TKey, TValue>) data;
+        KafkaStateHelper.ManageAdded(adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
@@ -219,7 +257,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     _currentSw.Start();
 #endif
-                    return _current;
+                return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -328,53 +366,53 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             {
                 _moveNextSw.Start();
 #endif
-                bool hasNext = false;
-                TValue? value = default;
+            bool hasNext = false;
+            TValue? value = default;
 
-                do
+            do
+            {
+                hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
+                if (hasNext)
                 {
-                    hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
-                    if (hasNext)
-                    {
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
                         _cycles++;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Start();
 #endif
 #endif
-                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                    value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
-                        hasNext = true;
-                    }
-                    break;
+                    if (value == null) continue;
+                    hasNext = true;
                 }
-                while (true);
+                break;
+            }
+            while (true);
 
-                if (hasNext)
-                {
+            if (hasNext)
+            {
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
-                    object[] array = null!;
-                    value?.GetData(_entityType, _properties, ref array);
+                object[] array = null!;
+                value?.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif
-                    _current = new ValueBuffer(array);
-                }
-                else
-                {
-                    _current = ValueBuffer.Empty;
-                }
-                return await ValueTask.FromResult(hasNext);
+                _current = new ValueBuffer(array);
+            }
+            else
+            {
+                _current = ValueBuffer.Empty;
+            }
+            return await ValueTask.FromResult(hasNext);
 #if DEBUG_PERFORMANCE
             }
             finally

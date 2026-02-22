@@ -97,8 +97,8 @@ public class KafkaCluster : IKafkaCluster
     public virtual IModel Model => _designModel;
     /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
-    /// <inheritdoc/>
-    public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+
+    ArrayList<Java.Lang.String> ResetStream()
     {
         var coll = new ArrayList<Java.Lang.String>();
         var topics = new System.Collections.Generic.List<string>();
@@ -129,6 +129,15 @@ public class KafkaCluster : IKafkaCluster
                 throw;
             }
         }
+
+        return coll;
+    }
+
+
+    /// <inheritdoc/>
+    public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    {
+        var coll = ResetStream();
 
         DeleteTopicsResult result = default;
         KafkaFuture<Java.Lang.Void> future = default;
@@ -163,6 +172,8 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        ResetStream();
+
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {

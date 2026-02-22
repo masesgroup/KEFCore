@@ -18,7 +18,7 @@ To install the templates executes the following command within a command shell:
 The command installs the latest version and on success will list all templates added to the list of available templates.
 There is single template:
 1. `kefcoreApp`: a project to create a console application using Entity Framework Core provider for Apache Kafka™
-2. `kefcoreAppWithEvents`: a project to create a console application using Entity Framework Core provider for Apache Kafka™ which reports events when the back-end send back modifications
+2. `kefcoreAppManageEvents`: a project to create a console application using Entity Framework Core provider for Apache Kafka™ which reports events when the back-end send back modifications
 
 ## Simple usage
 
@@ -32,4 +32,4 @@ the previous command will create a .NET project for an executable. The user shal
 
 The `kefcoreApp` template create the topics and fill them, then execute queries on previously data loaded.
 
-The `kefcoreAppWithEvents` template create the topics and fill them, then execute queries on previously data loaded. While the data are received from the back-end the event handler is triggered so the user can take an action, current behavior is to report something in the console.
+The `kefcoreAppManageEvents` template create the topics and fill them, then execute queries on previously data loaded. While the data are received from the back-end the event handler is triggered so the user can take an action, current behavior is to report something in the console.

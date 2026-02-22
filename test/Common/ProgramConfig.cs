@@ -60,7 +60,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfElements { get; set; } = 1000;
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
-        public bool WithEvents { get; set; } = false;
+        public bool ManageEvents { get; set; } = false;
 
         public void ApplyOnContext(KafkaDbContext context)
         {
@@ -82,6 +82,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
+            context.ManageEvents = ManageEvents;
 
             if (UseJson)
             { // default
