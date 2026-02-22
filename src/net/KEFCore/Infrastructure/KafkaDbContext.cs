@@ -193,7 +193,7 @@ const bool perf = false;
     /// <summary>
     /// Default number of partitions associated to each topic
     /// </summary>
-    public virtual int DefaultNumPartitions { get; set; } = 10;
+    public virtual int DefaultNumPartitions { get; set; } = 1;
     /// <summary>
     /// Default replication factor associated to each topic
     /// </summary>
@@ -248,12 +248,12 @@ const bool perf = false;
     /// <summary>
     ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
     /// </summary>
-    public virtual bool EmitEvents { get; set; }
+    public virtual bool ManageEvents { get; set; }
     /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
-    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="EmitEvents"/></remarks>
-    [Obsolete("Replaced with events attached to ChangeTracker, use EmitEvents to enable them.", true)] 
+    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
+    [Obsolete("Replaced with events attached to ChangeTracker, use ManageEvents to enable them.", true)] 
     public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
@@ -264,6 +264,11 @@ const bool perf = false;
 
         optionsBuilder.UseKafkaCluster(ApplicationId, DatabaseName, BootstrapServers, (o) =>
         {
+            if (ManageEvents && !UseCompactedReplicator && DefaultNumPartitions > 1)
+            {
+                throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+            }
+
             o.WithUseNameMatching(UseNameMatching);
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
@@ -276,7 +281,7 @@ const bool perf = false;
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
-            o.WithEmitEvents(EmitEvents);
+            o.WithManageEvents(ManageEvents);
             if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);

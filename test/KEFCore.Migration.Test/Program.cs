@@ -48,15 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (ProgramConfig.Config.WithEvents)
+                if (ProgramConfig.Config.ManageEvents)
                 {
                     context.ChangeTracker.Tracked += (sender, e) =>
                     {
-
-                    };
-                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
-                    {
-
+                        ProgramConfig.ReportString($"Tracked {e.Entry}");
                     };
                 }
 
@@ -92,7 +88,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 10);
+                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 15);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }

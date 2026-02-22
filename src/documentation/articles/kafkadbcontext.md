@@ -15,7 +15,7 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **BootstrapServers**: the server hosting the broker of Apache Kafka™
   - **ApplicationId**: the application identifier used to identify the context
   - **DatabaseName**: the user defined name which declares the database name, it is used to prepend every Topic which belongs to this database
-  - **DefaultNumPartitions**: the default number of partitions used when topics are created for each entity
+  - ~~**DefaultNumPartitions**: the default number of partitions used when topics are created for each entity~~
   - **DefaultReplicationFactor**: the replication factor to use when data are stored in Apache Kafka™
   - **DefaultConsumerInstances**: the consumer instances to be allocated when UseCompactedReplicator is **true**
   - **UsePersistentStorage**: set to **true** to use a persistent storage between multiple application startup

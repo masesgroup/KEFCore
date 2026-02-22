@@ -52,6 +52,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
+    private readonly IUpdateAdapter? _updateAdapter;
+    private readonly IEntityType? _entityTypeForChanges;
+    private readonly IKey? _primaryKeyForChanges;
+
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable(IEntityType entityType, IProperty[] properties, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
     {
@@ -221,8 +225,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
-            if (_cluster.Options.EmitEvents)
+            if (_cluster.Options.ManageEvents)
             {
+                _updateAdapter = _cluster.UpdateAdapterFactory.Create();
+                _entityTypeForChanges = _updateAdapter.Model.FindEntityType(_entityType.ClrType)!;
+                _primaryKeyForChanges = _entityTypeForChanges.FindPrimaryKey()!;
                 _kafkaCompactedReplicator.OnRemoteAdd += KafkaCompactedReplicator_OnRemoteAdd;
                 _kafkaCompactedReplicator.OnRemoteUpdate += KafkaCompactedReplicator_OnRemoteUpdate;
                 _kafkaCompactedReplicator.OnRemoteRemove += KafkaCompactedReplicator_OnRemoteRemove;
@@ -239,8 +246,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else
         {
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
-            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _properties)
-                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _properties, _keySerdes!, _valueSerdes!);
+            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _primaryKey, _properties)
+                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, _primaryKey, _properties, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -357,7 +364,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_kafkaCompactedReplicator != null)
         {
-            if (_cluster.Options.EmitEvents)
+            if (_cluster.Options.ManageEvents)
             {
                 _kafkaCompactedReplicator.OnRemoteAdd -= KafkaCompactedReplicator_OnRemoteAdd;
                 _kafkaCompactedReplicator.OnRemoteUpdate -= KafkaCompactedReplicator_OnRemoteUpdate;
@@ -386,31 +393,16 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageAdded(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, arg2.Key, arg2.Value);
-
-        //Task.Factory.StartNew(() =>
-        //{
-        //    _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Added, arg2.Key));
-        //});
+        KafkaStateHelper.ManageAdded(_updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageUpdate(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, arg2.Key, arg2.Value);
-
-        //Task.Factory.StartNew(() =>
-        //{
-        //    _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Updated, arg2.Key));
-        //});
+        KafkaStateHelper.ManageUpdate(_updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageDelete(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, arg2.Key, arg2.Value);
-
-        //Task.Factory.StartNew(() =>
-        //{
-        //    _onChangeEvent?.Invoke(new EntityTypeChanged(_entityType, EntityTypeChanged.ChangeKindType.Removed, arg2.Key));
-        //});
+        KafkaStateHelper.ManageDelete(_updateAdapter!, _primaryKeyForChanges!, arg2.Key);
     }
 }

@@ -24,30 +24,55 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     {
         public static void ManageAdded<TKey, TValueContainer>(IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
-            where TValueContainer : class, IValueContainer<TKey>
+            where TValueContainer : IValueContainer<TKey>
         {
+            var adapter = factory.Create();
             if (key is not object?[] keyValues)
             {
                 keyValues = [key];
             }
 
-            ManageAddedInternal(factory, entityType, ikey, keyValues, container.GetProperties());
+            if (container is null) 
+            {
+                // maybe a record removed (tombstone) and it is still in kafka, try a delete
+                ManageDeleteInternal(adapter, ikey, keyValues);
+            } 
+            else
+            {
+                ManageAddedInternal(adapter, entityType, ikey, keyValues, container.GetProperties());
+            }
         }
 
-        static void ManageAddedInternal(IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> container)
+        public static void ManageAdded<TKey, TValueContainer>(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+            where TKey : notnull
+            where TValueContainer : IValueContainer<TKey>
         {
-            lock (factory)
+            if (container is null) return; // maybe a record removed (tombstone) that it is still in kafka
+
+            if (key is not object?[] keyValues)
             {
-                var adapter = factory.Create();
-                IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-                if (entry == null)
-                {
-                    // the key does not exist
-                    var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
-                    var newEntry = adapter.CreateEntry(container, entity2!);
-                    newEntry.EntityState = EntityState.Unchanged;
-                    adapter.DetectChanges();
-                }
+                keyValues = [key];
+            }
+
+            ManageAddedInternal(adapter, entityType, ikey, keyValues, container.GetProperties());
+        }
+
+        static void ManageAddedInternal(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> properties)
+        {
+            var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
+            var _primaryKey = entity2!.FindPrimaryKey();
+            IUpdateEntry? entry = adapter.TryGetEntry(_primaryKey!, keyValues);
+            if (entry == null)
+            {
+                // the key does not exist
+                // var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
+                var newEntry = adapter.CreateEntry(properties, entity2!);
+                newEntry.EntityState = EntityState.Unchanged;
+                //adapter.DetectChanges();
+            }
+            else
+            {
+                ManageUpdateInternal(entry, properties);
             }
         }
 
@@ -55,79 +80,115 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
+            if (container is null) return; // maybe a record removed (tombstone) that it is still in kafka
+
             if (key is not object?[] keyValues)
             {
                 keyValues = [key];
             }
 
-            lock (factory)
+            var adapter = factory.Create();
+            IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
+            var properties = container.GetProperties();
+            if (entry != null)
             {
-                var adapter = factory.Create();
-                IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-                var props = container.GetProperties();
-                if (entry != null)
-                {
-                    bool changed = false;              
-                    foreach (var item in props)
-                    {
-                        var prop = entityType.FindProperty(item.Key!);
-                        if (prop == null) continue; // a property was removed from the schema
-                        var currentValue = entry.GetCurrentValue(prop);
-                        if (!item.Value!.Equals(currentValue))
-                        {
-                            changed = true;
-                            entry.SetOriginalValue(prop, item.Value);
-                        }
-                    }
-
-                    if (changed)
-                    {
-                        entry.EntityState = EntityState.Modified;
-                        adapter.DetectChanges();
-                    }
-                }
-                else
-                {
-                    ManageAddedInternal(factory, entityType, ikey, keyValues, props);
-                }
+                ManageUpdateInternal(entry, properties);
+            }
+            else
+            {
+                ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
             }
         }
 
-        public static void ManageDelete<TKey, TValueContainer>(IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
+        {
+            if (container is null) return; // maybe a record removed (tombstone) that it is still in kafka
+
+            if (key is not object?[] keyValues)
+            {
+                keyValues = [key];
+            }
+
+            IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
+            var properties = container.GetProperties();
+            if (entry != null)
+            {
+                ManageUpdateInternal(entry, properties);
+            }
+            else
+            {
+                ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
+            }
+        }
+
+        public static void ManageUpdateInternal(IUpdateEntry entry, IDictionary<string, object?> properties)
+        {
+            bool changed = false;
+            foreach (var item in properties)
+            {
+                var prop = entry.EntityType.FindProperty(item.Key!);
+                if (prop == null) continue; // a property was removed from the schema
+                var currentValue = entry.GetCurrentValue(prop);
+                if (!item.Value!.Equals(currentValue))
+                {
+                    changed = true;
+                    entry.SetOriginalValue(prop, item.Value);
+                }
+            }
+
+            if (changed)
+            {
+                entry.EntityState = EntityState.Modified;
+                //adapter.DetectChanges();
+            }
+        }
+
+        public static void ManageDelete<TKey>(IUpdateAdapterFactory factory, IKey ikey, TKey key)
+            where TKey : notnull
         {
             if (key is not object?[] keyValues)
             {
                 keyValues = [key];
             }
 
-            lock (factory)
+            var adapter = factory.Create();
+            ManageDeleteInternal(adapter, ikey, keyValues);
+        }
+
+        public static void ManageDelete<TKey>(IUpdateAdapter adapter, IKey ikey, TKey key)
+            where TKey : notnull
+        {
+            if (key is not object?[] keyValues)
             {
-                var adapter = factory.Create();
-                IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-                if (entry != null && entry.EntityState != EntityState.Deleted)
-                {
-                    adapter.CascadeDelete(entry);
-                    adapter.DetectChanges();
-                }
+                keyValues = [key];
+            }
+
+            ManageDeleteInternal(adapter, ikey, keyValues);
+        }
+
+        public static void ManageDeleteInternal(IUpdateAdapter adapter, IKey ikey, object?[] keyValues)
+        {
+            IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
+            if (entry != null && entry.EntityState != EntityState.Deleted)
+            {
+                adapter.CascadeDelete(entry);
+                //adapter.DetectChanges();
             }
         }
 
         public static void ManageFind(IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? properties)
         {
-            lock (factory)
+            var adapter = factory.Create();
+            IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
+            if (entry == null)
             {
-                var adapter = factory.Create();
-                IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
-                if (entry == null)
-                {
-                    var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
-                    // the key does not exist
-                    var newEntry = adapter.CreateEntry(properties!, entity2!);
-                    newEntry.EntityState = EntityState.Unchanged;
-                    adapter.DetectChanges();
-                }
+                var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
+                // the key does not exist
+                var newEntry = adapter.CreateEntry(properties!, entity2!);
+                newEntry.EntityState = EntityState.Unchanged;
+                //adapter.DetectChanges();
             }
         }
     }

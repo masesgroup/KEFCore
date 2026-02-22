@@ -59,7 +59,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private ProducerConfigBuilder? _producerConfigBuilder;
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
-    private bool _emitEvents = false;
+    private bool _manageEvents = false;
     private DbContextOptionsExtensionInfo? _info;
 
     /// <summary>
@@ -93,7 +93,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
-        _emitEvents = copyFrom._emitEvents;
+        _manageEvents = copyFrom._manageEvents;
     }
     /// <inheritdoc/>
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -143,8 +143,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
-    /// <inheritdoc cref="KafkaDbContext.EmitEvents"/>
-    public virtual bool EmitEvents => _emitEvents!;
+    /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
+    public virtual bool ManageEvents => _manageEvents!;
 
     int IKafkaSingletonOptions.DefaultReplicationFactor => throw new NotImplementedException();
 
@@ -291,7 +291,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.DefaultReplicationFactor"/>
-    public virtual KafkaOptionsExtension WithDefaultReplicationFactor(short defaultReplicationFactor = 1)
+    public virtual KafkaOptionsExtension WithDefaultReplicationFactor(short defaultReplicationFactor = 3)
     {
         var clone = Clone();
 
@@ -336,12 +336,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
 
-    /// <inheritdoc cref="KafkaDbContext.EmitEvents"/>
-    public virtual KafkaOptionsExtension WithEmitEvents(bool emitEvents)
+    /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
+    public virtual KafkaOptionsExtension WithManageEvents(bool manageEvents)
     {
         var clone = Clone();
 
-        clone._emitEvents = emitEvents;
+        clone._manageEvents = manageEvents;
 
         return clone;
     }

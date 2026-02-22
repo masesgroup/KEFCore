@@ -49,7 +49,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (ProgramConfig.Config.WithEvents)
+                if (ProgramConfig.Config.ManageEvents)
                 {
                     context.ChangeTracker.Tracked += (sender, e) =>
                     {

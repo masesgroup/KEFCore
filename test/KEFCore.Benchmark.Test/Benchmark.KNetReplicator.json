@@ -3,5 +3,5 @@
   "BootstrapServers": "192.168.1.114:9092",
   "UseCompactedReplicator": true,
   "NumberOfExecutions": 10,
-  "WithEvents": true
+  "ManageEvents": true
 }

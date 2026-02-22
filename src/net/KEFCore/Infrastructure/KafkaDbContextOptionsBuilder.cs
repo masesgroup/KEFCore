@@ -433,14 +433,14 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="emitEvents"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
+    /// <param name="manageEvents"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithEmitEvents(bool emitEvents)
+    public virtual KafkaDbContextOptionsBuilder WithManageEvents(bool manageEvents)
     {
         var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithEmitEvents(emitEvents);
+        extension = extension.WithManageEvents(manageEvents);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

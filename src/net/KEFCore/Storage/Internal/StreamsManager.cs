@@ -21,22 +21,45 @@
 #nullable disable
 
 using MASES.KNet.Streams;
+using System.Collections.Concurrent;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>
+    internal interface IStreamsChangeManager
+    {
+        void ManageChange(IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
+    }
+
+
+    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>
         where TStream : class
         where TStreamBuilder : class
         where TTopology : class
+        where TStoreSupplier : class
+        where TTimestampExtractor : class, IDisposable
+        where TConsumed : class
+        where TMaterialized : class
+        where TGlobalKTable : class
+        where TKTable : class
     {
-        struct StreamsAssociatedData(TStoreSupplier storeSupplier, TMaterialized materialized, TGlobalKTable globalTable)
+        struct StreamsAssociatedData(TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed, TMaterialized materialized, TGlobalKTable globalTable, TKTable table) : IDisposable
         {
             public TStoreSupplier StoreSupplier = storeSupplier;
+            public TConsumed Consumed = consumed;
+            public TTimestampExtractor TimestampExtractor = extractor;
             public TMaterialized Materialized = materialized;
             public TGlobalKTable GlobalTable = globalTable;
+            public TKTable Table = table;
+
+            public readonly void Dispose()
+            {
+                TimestampExtractor?.Dispose();
+            }
         }
 
+        // enqueues changes
+        readonly ConcurrentQueue<(IStreamsChangeManager Manager, IEntityType EntityType, IKey PrimaryKey, object Data)> _dataFromStream = new();
         // this dictionary controls the entities
         private readonly System.Collections.Generic.Dictionary<IEntityType, IEntityType> _managedEntities = new(EntityTypeFullNameComparer.Instance);
         // while this one is used to retain the allocated object to avoid thier finalization before the streams is completly finalized
@@ -53,13 +76,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private TTopology _topology;
         private TStream _streams;
 
-        private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>> _errorHandler;
-        private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>> _stateListener;
+        IUpdateAdapter _updateAdapter;
+
+        private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _errorHandler;
+        private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _stateListener;
         private Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
 
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly bool _usePersistentStorage;
+        private readonly bool _manageEvents;
+        private readonly Thread _thread;
 
         static Java.Util.Properties PropertyUpdate(StreamsConfigBuilder builder)
         {
@@ -82,9 +109,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public StreamsManager(IKafkaCluster kafkaCluster, IEntityType entityType)
         {
             _kafkaCluster = kafkaCluster;
+            _updateAdapter = kafkaCluster.UpdateAdapterFactory.Create();
             _streamsConfig ??= kafkaCluster.Options.StreamsOptions(entityType);
             _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
             _useEnumeratorWithPrefetch = _kafkaCluster.Options.UseEnumeratorWithPrefetch;
+            _manageEvents = _kafkaCluster.Options.ManageEvents;
+
+            if (_manageEvents)
+            {
+                _thread = new Thread(EventChangePusher)
+                {
+                    IsBackground = true
+                };
+                _thread.Start();
+            }
 
             _dataReceived = new(false);
             _resetEvent = new(false);
@@ -114,15 +152,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
         public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
+        public required Func<IStreamsChangeManager> GetStreamsChangeManager { get; set; }
+        public required Func<Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)>, IStreamsChangeManager, IEntityType, IKey, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
+        public required Func<TTimestampExtractor, TConsumed> CreateConsumed { get; set; }
         public required Func<TStoreSupplier, TMaterialized> CreateMaterialized { get; set; }
         public required Func<TStreamBuilder, string, TMaterialized, TGlobalKTable> CreateGlobalTable { get; set; }
+        public required Func<TStreamBuilder, string, TConsumed, TMaterialized, TKTable> CreateTable { get; set; }
         public required Func<TStreamBuilder, TTopology> CreateTopology { get; set; }
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
-        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>>, KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TMaterialized, TGlobalKTable>>> SetHandlers { get; set; }
+        public required Action<TStream, KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>, KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Close { get; set; }
 
-        public string AddEntity(IEntityType entityType)
+        public string AddEntity(IEntityType entityType, object optional)
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
@@ -136,10 +178,29 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 if (!_managedEntities.ContainsKey(entityType))
                 {
                     var storeSupplier = CreateStoreSupplier(_usePersistentStorage, storageId);
+                    TTimestampExtractor timestampExtractor = null;
+                    TConsumed consumed = null;
+                    if (_manageEvents)
+                    {
+                        IEntityType entityType1 = _updateAdapter.Model.FindEntityType(entityType.ClrType);
+                        IKey key1 = entityType1.FindPrimaryKey();
+                        var changeManager = GetStreamsChangeManager();
+                        timestampExtractor = CreateTimestampExtractor(EventChangeReceiver, changeManager, entityType1, key1, optional);
+                        consumed = CreateConsumed(timestampExtractor);
+                    }
                     var materialized = CreateMaterialized(storeSupplier);
-                    var globalTable = CreateGlobalTable(_builder!, topicName, materialized);
+                    TGlobalKTable globalTable = null;
+                    TKTable table = null;
+                    if (!_manageEvents)
+                    {
+                        globalTable = CreateGlobalTable(_builder!, topicName, materialized);
+                    }
+                    else
+                    {
+                        table = CreateTable(_builder!, topicName, consumed, materialized);
+                    }
                     _managedEntities.Add(entityType, entityType);
-                    _storagesForEntities.Add(entityType, new StreamsAssociatedData(storeSupplier, materialized, globalTable));
+                    _storagesForEntities.Add(entityType, new StreamsAssociatedData(storeSupplier, timestampExtractor, consumed, materialized, globalTable, table));
 
                     if (_streams != null)
                     {
@@ -156,12 +217,35 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             return storageId;
         }
 
+        private void EventChangeReceiver((IStreamsChangeManager Manager, IEntityType EntityType, IKey PrimaryKey, object Data) data)
+        {
+            _dataFromStream.Enqueue(data);
+        }
+
+        private void EventChangePusher()
+        {
+            while(true)
+            {
+                do
+                {
+                    if (!_dataFromStream.TryDequeue(out var current)) break;
+                    current.Manager.ManageChange(_updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
+                }
+                while (!_dataFromStream.IsEmpty);
+                Thread.Sleep(10);
+            }
+        }
+
         public void Dispose(IEntityType entityType)
         {
             lock (_managedEntities)
             {
                 if (!KEFCore.PreserveStreamsAcrossContexts)
                 {
+                    if (_managedEntities.TryGetAndRemove(entityType, out StreamsAssociatedData data))
+                    {
+                        data.Dispose();
+                    }
                     _managedEntities.Remove(entityType);
                     if (_managedEntities.Count == 0)
                     {

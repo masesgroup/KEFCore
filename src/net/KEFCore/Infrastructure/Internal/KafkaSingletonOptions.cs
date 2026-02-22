@@ -57,7 +57,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             ProducerConfig = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
             StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
             TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
-            EmitEvents = kafkaOptions.EmitEvents;
+            ManageEvents = kafkaOptions.ManageEvents;
         }
     }
     /// <inheritdoc/>
@@ -116,5 +116,5 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
     /// <inheritdoc/>
-    public virtual bool EmitEvents { get; private set; }
+    public virtual bool ManageEvents { get; private set; }
 }
