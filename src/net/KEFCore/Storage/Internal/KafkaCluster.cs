@@ -211,8 +211,7 @@ public class KafkaCluster : IKafkaCluster
                     KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
 #endif
                 }
-                if (!(read && write) { throw new InvalidOperationException($"Topic shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
-                ;
+                if (!(read && write)) { throw new InvalidOperationException($"Topic shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
             }
         }
         catch (ExecutionException ex)
