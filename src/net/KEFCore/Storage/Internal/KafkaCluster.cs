@@ -46,11 +46,11 @@ public class KafkaCluster : IKafkaCluster
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
     private readonly bool _useNameMatching;
-    private readonly Admin? _kafkaAdminClient = null;
+    private readonly Admin _kafkaAdminClient = null;
     private readonly Properties _bootstrapProperties;
 
-    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>? _tables;
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string>? _topicForEntity = new();
+    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable> _tables;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
     /// <summary>
     /// Dfault initializer
     /// </summary>
@@ -211,7 +211,7 @@ public class KafkaCluster : IKafkaCluster
                     KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
 #endif
                 }
-                if (!(read && write)) { throw new InvalidOperationException($"Topic shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
+                if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
             }
         }
         catch (ExecutionException ex)
