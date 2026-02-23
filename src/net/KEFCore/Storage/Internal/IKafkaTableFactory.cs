@@ -40,6 +40,12 @@ public interface IKafkaTableFactory
     /// <returns></returns>
     IKafkaTable Get(IKafkaCluster cluster, IEntityType entityType);
     /// <summary>
+    /// Returns a <see cref="IKafkaTable"/>
+    /// </summary>
+    /// <param name="tables"></param>
+    /// <returns></returns>
+    void Start(IEnumerable<IKafkaTable> tables);
+    /// <summary>
     /// Dispose a previously allocated <see cref="IKafkaTable"/>
     /// </summary>
     void Dispose(IKafkaTable table);

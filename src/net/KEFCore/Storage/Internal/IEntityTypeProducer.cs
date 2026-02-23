@@ -44,6 +44,10 @@ public interface IEntityTypeProducer : IDisposable
     /// The current <see cref="ValueBuffer"/>s
     /// </summary>
     IEnumerable<ValueBuffer> ValueBuffers { get; }
+    /// <summary>
+    /// Starts the <see cref="IEntityTypeProducer"/> instance
+    /// </summary>
+    void Start();
 }
 
 /// <summary>

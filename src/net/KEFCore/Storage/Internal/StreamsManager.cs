@@ -31,8 +31,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         void ManageChange(IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
     }
 
+    public interface IStreamsManager
+    {
+        void CreateAndStartTopology();
+    }
 
-    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>
+    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> : IStreamsManager
         where TStream : class
         where TStreamBuilder : class
         where TTopology : class
@@ -152,7 +156,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
         public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
-        public required Func<IStreamsChangeManager> GetStreamsChangeManager { get; set; }
         public required Func<Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)>, IStreamsChangeManager, IEntityType, IKey, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
         public required Func<TTimestampExtractor, TConsumed> CreateConsumed { get; set; }
         public required Func<TStoreSupplier, TMaterialized> CreateMaterialized { get; set; }
@@ -164,9 +167,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
                                KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
         public required Action<TStream> Start { get; set; }
+        public required Action<TStream> Pause { get; set; }
+        public required Action<TStream> Resume { get; set; }
         public required Action<TStream> Close { get; set; }
+        public required Func<TStream, Org.Apache.Kafka.Streams.KafkaStreams.State> GetState { get; set; }
+        public required Func<TStream, bool> GetIsPaused { get; set; }
 
-        public string AddEntity(IEntityType entityType, object optional)
+        public string AddEntity(IStreamsChangeManager changeManager, IEntityType entityType, object optional)
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
@@ -186,7 +193,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         IEntityType entityType1 = _updateAdapter.Model.FindEntityType(entityType.ClrType);
                         IKey key1 = entityType1.FindPrimaryKey();
-                        var changeManager = GetStreamsChangeManager();
                         timestampExtractor = CreateTimestampExtractor(EventChangeReceiver, changeManager, entityType1, key1, optional);
                         consumed = CreateConsumed(timestampExtractor);
                     }
@@ -204,15 +210,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     _managedEntities.Add(entityType, entityType);
                     _storagesForEntities.Add(entityType, new StreamsAssociatedData(storeSupplier, timestampExtractor, consumed, materialized, globalTable, table));
 
-                    if (_streams != null)
+                    if (CheckState())
                     {
-                        Close(_streams!);
-                        _streams = null;
+                        CreateAndStartTopology();
                     }
-                    _topology = CreateTopology(_builder!);
-                    _streams = CreateStreams(_topology, _streamsConfig!);
-                    SetHandlers(_streams, _errorHandler!, _stateListener!);
-                    StartTopology(_streams);
                 }
             }
 
@@ -255,6 +256,59 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         _streams = null;
                         _storagesForEntities.Clear();
                     }
+                }
+            }
+        }
+
+        bool CheckState()
+        {
+            lock (this)
+            {
+                bool wasRunning = false;
+                if (_streams != null)
+                {
+                    var state = GetState(_streams);
+                    if (state != null)
+                    {
+                        if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING) { _started = false; }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
+                        {
+                            Close(_streams!);
+                            _streams = null;
+                            wasRunning = true;
+                            _started = false;
+                        }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN ||
+                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
+                        {
+                            Thread.Sleep(1000);
+                            CheckState();
+                        }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_ERROR ||
+                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
+                        {
+                            Close(_streams!);
+                            _streams = null;
+                            _started = false;
+                        }
+                    }
+                }
+                return wasRunning;
+            }
+        }
+
+        bool _started = false;
+        public void CreateAndStartTopology()
+        {
+            lock (this)
+            {
+                if (!_started)
+                {
+                    _topology = CreateTopology(_builder!);
+                    _streams = CreateStreams(_topology, _streamsConfig!);
+                    SetHandlers(_streams, _errorHandler!, _stateListener!);
+                    StartTopology(_streams);
+                    _started = true;
                 }
             }
         }

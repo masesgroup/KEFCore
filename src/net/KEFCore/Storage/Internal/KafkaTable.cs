@@ -107,6 +107,8 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
+    /// <inheritdoc/>
+    public void Start() => _producer.Start();
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => [.. properties.Select(p => p.GetKeyValueComparer())];
 

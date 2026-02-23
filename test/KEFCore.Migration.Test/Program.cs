@@ -88,7 +88,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 15);
+                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 17);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }

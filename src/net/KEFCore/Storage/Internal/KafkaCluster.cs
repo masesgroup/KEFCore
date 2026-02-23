@@ -172,18 +172,19 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        ResetStream();
+        var coll = ResetStream();
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {
+            System.Collections.Generic.List<IKafkaTable> tables = new ();
             _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
 
             var updateAdapter = _updateAdapterFactory.CreateStandalone();
             var entries = new System.Collections.Generic.List<IUpdateEntry>();
             foreach (var entityType in _designModel.GetEntityTypes())
             {
-                EnsureTable(entityType);
+                tables.Add(EnsureTable(entityType));
 
                 IEntityType? targetEntityType = null;
                 foreach (var targetSeed in entityType.GetSeedData())
@@ -194,6 +195,12 @@ public class KafkaCluster : IKafkaCluster
                     entries.Add(entry);
                 }
             }
+
+            _tableFactory.Start(tables);
+
+#if DEBUG
+            Thread.Sleep(5000);
+#endif
 
             ExecuteTransaction(entries, updateLogger);
         }
