@@ -23,10 +23,12 @@
 using Java.Util;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
+using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
 
@@ -78,7 +80,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-		KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
+        KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
 #endif
         if (_tables != null)
         {
@@ -152,7 +154,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.InnerException is UnknownTopicOrPartitionException)
             {
 #if DEBUG_PERFORMANCE
-				KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
+                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
@@ -174,10 +176,62 @@ public class KafkaCluster : IKafkaCluster
     {
         var coll = ResetStream();
 
+        DescribeTopicsResult result = default;
+        KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
+        DescribeTopicsOptions describeTopicsOptions = new();
+        describeTopicsOptions.IncludeAuthorizedOperations(true);
+        try
+        {
+            result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
+            future = result?.AllTopicNames();
+            foreach (var item in future.Get().EntrySet())
+            {
+                if (item.Value.IsInternal())
+                {
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} is internal");
+#endif
+                    continue;
+                }
+                var partitionsData = item.Value.Partitions();
+                var numPartition = partitionsData.Size();
+                if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
+                {
+                    throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+                }
+
+                bool write = false;
+                bool read = false;
+
+                foreach (var operation in item.Value.AuthorizedOperations())
+                {
+                    if (operation == AclOperation.WRITE) write = true;
+                    if (operation == AclOperation.READ) read = true;
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
+#endif
+                }
+                if (!(read && write) { throw new InvalidOperationException($"Topic shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
+                ;
+            }
+        }
+        catch (ExecutionException ex)
+        {
+            if (ex.InnerException is UnknownTopicOrPartitionException)
+            {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
+#endif
+            }
+            else if (ex.InnerException != null) throw ex.InnerException;
+            else throw;
+        }
+        finally { future?.Dispose(); result?.Dispose(); }
+
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {
-            System.Collections.Generic.List<IKafkaTable> tables = new ();
+            System.Collections.Generic.List<IKafkaTable> tables = new();
             _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
 
             var updateAdapter = _updateAdapterFactory.CreateStandalone();
@@ -226,16 +280,25 @@ public class KafkaCluster : IKafkaCluster
         if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic>? coll = default;
-        CreateTopicsResult? result = default;
-        KafkaFuture<Java.Lang.Void>? future = default;
+        Set<NewTopic> coll = default;
+        CreateTopicsResult result = default;
+        KafkaFuture<Java.Lang.Void> future = default;
         try
         {
-            NewTopic? topic = default;
-            Map<Java.Lang.String, Java.Lang.String>? map = default;
+            var requestedPartitions = entityType.NumPartitions(Options);
+            var requestedReplicationFactor = entityType.ReplicationFactor(Options);
+            if (Options.ManageEvents
+                && !Options.UseCompactedReplicator
+                && requestedPartitions > 1)
+            {
+                throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+            }
+
+            NewTopic topic = default;
+            Map<Java.Lang.String, Java.Lang.String> map = default;
             try
             {
-                topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                topic = new NewTopic(topicName, requestedPartitions, requestedReplicationFactor);
                 Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
                                                     ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
                                                     : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
@@ -292,7 +355,7 @@ public class KafkaCluster : IKafkaCluster
         finally
         {
             valueBufferSw.Stop();
-			KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -372,7 +435,7 @@ public class KafkaCluster : IKafkaCluster
             _ = _tables.GetOrAdd(key, (k) =>
             {
 #if DEBUG_PERFORMANCE
-				KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
 #endif
                 return _tableFactory.Create(this, currentEntityType);
             });
