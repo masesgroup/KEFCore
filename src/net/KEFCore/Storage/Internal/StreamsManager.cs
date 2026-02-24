@@ -418,7 +418,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #endif
             _resetEvent?.WaitOne(); // wait running state
             ThrowException();
-            WaitAlignment();
 #if DEBUG_PERFORMANCE
             watch.Stop();
             KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
@@ -453,25 +452,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             while (timeout == Timeout.Infinite || watcher.ElapsedMilliseconds < timeout);
             return false;
-        }
-
-        void WaitAlignment()
-        {
-            foreach (var lags in GetLags(_streams).EntrySet())
-            {
-                var topic = lags.Key;
-                foreach (var item in lags.Value.EntrySet())
-                {
-                    var partition = item.Key;
-                    var currentOffset = item.Value.CurrentOffsetPosition();
-                    var endOffset = item.Value.EndOffsetPosition();
-
-                    var lag = endOffset - currentOffset;
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager in {_currentState} - topic {topic} partition {partition} lag {lag}");
-#endif
-                }
-            }
         }
 
         public void ThrowException()
