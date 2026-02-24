@@ -265,9 +265,9 @@ Class ProtobufValueContainer&lt;TKey&gt;  <a class="header-action link-secondary
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])">
-  ProtobufValueContainer(IEntityType, object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])">
+  ProtobufValueContainer(IEntityType, IProperty[]?, object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initialize a new instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html">ProtobufValueContainer&lt;TKey&gt;</a></p>
@@ -275,13 +275,16 @@ Class ProtobufValueContainer&lt;TKey&gt;  <a class="header-action link-secondary
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ProtobufValueContainer(IEntityType tName, object[] rData)</code></pre>
+    <pre><code class="lang-csharp hljs">public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>tName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> requesting the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html">ProtobufValueContainer&lt;TKey&gt;</a> for <code class="paramref">rData</code></p>
+</dd>
+    <dt><code>properties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>[]</dt>
+    <dd><p>The set of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a> deducted from <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype.getproperties">GetProperties()</a>, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> the implmenting instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> shall deduct it</p>
 </dd>
     <dt><code>rData</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
     <dd><p>The data, built from EFCore, to be stored in the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html">ProtobufValueContainer&lt;TKey&gt;</a></p>
@@ -295,7 +298,7 @@ Class ProtobufValueContainer&lt;TKey&gt;  <a class="header-action link-secondary
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>This constructor is mandatory and it is used from KEFCore to request a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html">ProtobufValueContainer&lt;TKey&gt;</a></p>
 </div>
 
@@ -310,7 +313,7 @@ Class ProtobufValueContainer&lt;TKey&gt;  <a class="header-action link-secondary
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_ClrType" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.ClrType">
   ClrType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L83"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The CLR <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
@@ -342,7 +345,7 @@ Class ProtobufValueContainer&lt;TKey&gt;  <a class="header-action link-secondary
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_Descriptor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Descriptor">
   Descriptor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L83"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L85"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Descriptor for this message. All instances are expected to return the same descriptor,
@@ -376,7 +379,7 @@ same value as the static property declared on the type.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_EntityName" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.EntityName">
   EntityName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L81"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The Entity name of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
@@ -412,7 +415,7 @@ same value as the static property declared on the type.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_CalculateSize" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.CalculateSize">
   CalculateSize()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Calculates the size of this message in Protocol Buffer wire format, in bytes.</p>
@@ -446,7 +449,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_Clone" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Clone">
   Clone()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L89"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a deep clone of this object.</p>
@@ -479,7 +482,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer__0__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer{`0})">
   Equals(ProtobufValueContainer&lt;TKey&gt;?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L91"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
@@ -518,7 +521,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_Equals_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.Equals(System.Object)">
   Equals(object?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L145"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L150"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Determines whether the specified object is equal to the current object.</p>
@@ -555,23 +558,26 @@ to a coded output stream.</p>
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)">
-  GetData(IEntityType, ref object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)">
+  GetData(IEntityType, IProperty[]?, ref object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L100"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns back the raw data associated to the Entity</p>
+  <div class="markdown level1 summary"><p>Returns back the raw data associated to the Entity contained in <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void GetData(IEntityType tName, ref object[] array)</code></pre>
+    <pre><code class="lang-csharp hljs">public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>tName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd><p>The requesting <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> to get the data back, can <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> if not available</p>
+</dd>
+    <dt><code>properties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>[]</dt>
+    <dd><p>The set of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a> deducted from <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype.getproperties">GetProperties()</a>, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> the implmenting instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> shall deduct it</p>
 </dd>
     <dt><code>array</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
     <dd><p>The array of object to be filled in with the data stored in the ValueContainer</p>
@@ -593,7 +599,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetHashCode" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetHashCode">
   GetHashCode()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L155"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L160"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Serves as the default hash function.</p>
@@ -626,22 +632,22 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetProperties" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetProperties">
   GetProperties()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L135"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L140"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns back a dictionary of properties (PropertyIndex, PropertyName) associated to the Entity</p>
+  <div class="markdown level1 summary"><p>Returns back a dictionary of properties (PropertyName, Value) associated to the Entity</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IReadOnlyDictionary&lt;int, string&gt; GetProperties()</code></pre>
+    <pre><code class="lang-csharp hljs">public IReadOnlyDictionary&lt;string, object&gt; GetProperties()</code></pre>
   </div>
 
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
-    <dd><p>A dictionary of properties (PropertyIndex, PropertyName) filled in with the data stored in the ValueContainer</p>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;</dt>
+    <dd><p>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</p>
 </dd>
   </dl>
 
@@ -659,7 +665,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_MergeFrom_Google_Protobuf_CodedInputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.MergeFrom(Google.Protobuf.CodedInputStream)">
   MergeFrom(CodedInputStream)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L95"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Merges the data from the specified coded input stream with the current message.</p>
@@ -694,7 +700,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer__0__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer{`0})">
   MergeFrom(ProtobufValueContainer&lt;TKey&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L93"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Merges the given message into this one.</p>
@@ -730,7 +736,7 @@ to a coded output stream.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_WriteTo_Google_Protobuf_CodedOutputStream_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.WriteTo(Google.Protobuf.CodedOutputStream)">
   WriteTo(CodedOutputStream)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Protobuf/Storage/ProtobufValueContainer.cs/#L97"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Writes the data to the given coded output stream.</p>

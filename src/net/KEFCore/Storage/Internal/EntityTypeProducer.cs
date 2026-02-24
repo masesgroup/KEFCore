@@ -305,6 +305,28 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <inheritdoc/>
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    {
+        if (_streamData != null)
+        {
+            return _streamData.TryGetProperties(key, out properties);
+        }
+        else if (_kafkaCompactedReplicator != null)
+        {
+            if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
+            {
+                properties = valueContainer?.GetProperties()!;
+                return true;
+            }
+
+            properties = default!;
+            return false;
+        }
+
+        throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+
+    /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
     /// <inheritdoc/>
     public IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)

@@ -197,10 +197,11 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_ClrType" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ClrType">
   ClrType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L110"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Represents the CLR type of the property in the EF Core schema of the EntityType, null for well-known types</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -224,18 +225,19 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyIndex_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyIndex*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_ManagedType_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyIndex" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyIndex">
-  PropertyIndex
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_ManagedType" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType">
+  ManagedType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Represents the internal KEFCore type associated to the property in the EF Core schema of the EntityType</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int PropertyIndex { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int ManagedType { get; set; }</code></pre>
   </div>
 
 
@@ -255,14 +257,47 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyIndex_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyIndex*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyIndex" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyIndex">
+  PropertyIndex
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Represents the index of the property in the EF Core schema of the EntityType</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? PropertyIndex { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyName_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyName*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyName" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyName">
   PropertyName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Represents the name of the property in the EF Core schema of the EntityType</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -290,7 +325,7 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Schema" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Schema">
   Schema
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Schema of this instance.</p>
@@ -318,11 +353,43 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_SupportNull_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_SupportNull" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull">
+  SupportNull
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>true if the ManagedType shall support null, e.g. Nullable type in .NET</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool SupportNull { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Value_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Value*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Value" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Value">
   Value
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L121"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -357,7 +424,7 @@ Class PropertyDataRecord  <a class="header-action link-secondary" title="View so
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Get_System_Int32_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Get(System.Int32)">
   Get(int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L78"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L132"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Return the value of a field given its position in the schema.
@@ -398,7 +465,7 @@ This method is not meant to be called by user code, but only by
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Put_System_Int32_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Put(System.Int32,System.Object)">
   Put(int, object)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes.Avro/Generated/PropertyDataRecord.cs/#L145"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set the value of a field given its position in the schema.

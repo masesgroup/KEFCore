@@ -29,6 +29,22 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaCluster : IDisposable
 {
     /// <summary>
+    /// The Apche Kafka cluster identifier
+    /// </summary>
+    string ClusterId { get; }
+    /// <summary>
+    /// The <see cref="KafkaOptionsExtension"/>
+    /// </summary>
+    KafkaOptionsExtension Options { get; }
+    /// <summary>
+    /// The associated <see cref="IModel"/>
+    /// </summary>
+    IModel Model { get; }
+    /// <summary>
+    /// The associated <see cref="IUpdateAdapterFactory"/>
+    /// </summary>
+    IUpdateAdapterFactory UpdateAdapterFactory { get; }
+    /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
     /// </summary>
     bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
@@ -44,6 +60,9 @@ public interface IKafkaCluster : IDisposable
     /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
     /// </summary>
     bool? EnsureSynchronized(long timeout);
+    /// Retrieves the <see cref="IKafkaTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKafkaCluster"/>
+    /// </summary>
+    IKafkaTable GetTable(IEntityType entityType);
     /// <summary>
     /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
@@ -62,20 +81,4 @@ public interface IKafkaCluster : IDisposable
     /// Executes a transaction
     /// </summary>
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-    /// <summary>
-    /// The Apche Kafka cluster identifier
-    /// </summary>
-    string ClusterId { get; }
-    /// <summary>
-    /// The <see cref="KafkaOptionsExtension"/>
-    /// </summary>
-    KafkaOptionsExtension Options { get; }
-    /// <summary>
-    /// The associated <see cref="IModel"/>
-    /// </summary>
-    IModel Model { get; }
-    /// <summary>
-    /// The associated <see cref="IUpdateAdapterFactory"/>
-    /// </summary>
-    IUpdateAdapterFactory UpdateAdapterFactory { get; }
 }
