@@ -26,13 +26,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
     internal class KafkaEntityFinder<TEntity> : IEntityFinder<TEntity> where TEntity : class
     {
         readonly IEntityFinder _internalEntityFinder;
-        readonly IEntityFinder<TEntity> _internalEntityFinderTEntity; // used to propagate search on original one without override it
+        readonly EntityFinder<TEntity> _internalEntityFinderTEntity; // used to propagate search on original one without override it
 
         private readonly IStateManager _stateManager;
         private readonly IDbSetSource _setSource;
         private readonly IDbSetCache _setCache;
         private readonly IEntityType _entityType;
-        private readonly IKafkaTableFactory _kafkaTableFactory;
         private readonly IKafkaClusterCache _kafkaClusterCache;
         private readonly IKafkaCluster _cluster;
         private readonly IKafkaTableEntityFinder _kafkaTableEntityFinder;
@@ -40,8 +39,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         private readonly Type _primaryKeyType;
         private readonly int _primaryKeyPropertiesCount;
 
-        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType,
-                                 IKafkaTableFactory kafkaTableFactory, IKafkaClusterCache kafkaClusterCache)
+        public KafkaEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType, IKafkaClusterCache kafkaClusterCache)
         {
             _internalEntityFinderTEntity = new EntityFinder<TEntity>(stateManager, setSource, setCache, entityType);
             _internalEntityFinder = _internalEntityFinderTEntity as IEntityFinder;
@@ -49,12 +47,11 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             _setSource = setSource;
             _setCache = setCache;
             _entityType = entityType;
-            _kafkaTableFactory = kafkaTableFactory;
             _kafkaClusterCache = kafkaClusterCache;
 
             IDbContextOptions options = ((DbContext)_setCache).GetService<IDbContextOptions>();
             _cluster = _kafkaClusterCache.GetCluster(options);
-            _kafkaTableEntityFinder = _kafkaTableFactory.Get(_cluster, entityType) as IKafkaTableEntityFinder;
+            _kafkaTableEntityFinder = _cluster.GetTable(entityType) as IKafkaTableEntityFinder;
 
             _primaryKey = entityType.FindPrimaryKey()!;
             _primaryKeyPropertiesCount = _primaryKey.Properties.Count;

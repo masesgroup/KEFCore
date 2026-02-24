@@ -28,30 +28,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaCluster : IDisposable
 {
     /// <summary>
-    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
-    /// </summary>
-    bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-    /// <summary>
-    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseCreated"/>
-    /// </summary>
-    bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-    /// <summary>
-    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseConnected"/>
-    /// </summary>
-    bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-    /// <summary>
-    /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
-    /// </summary>
-    string CreateTopicForEntity(IEntityType entityType);
-    /// <summary>
-    /// Retrieve the <see cref="ValueBuffer"/>
-    /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
-    /// <summary>
-    /// Executes a transaction
-    /// </summary>
-    int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
-    /// <summary>
     /// The Apche Kafka cluster identifier
     /// </summary>
     string ClusterId { get; }
@@ -67,4 +43,32 @@ public interface IKafkaCluster : IDisposable
     /// The associated <see cref="IUpdateAdapterFactory"/>
     /// </summary>
     IUpdateAdapterFactory UpdateAdapterFactory { get; }
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
+    /// </summary>
+    bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseCreated"/>
+    /// </summary>
+    bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    /// <summary>
+    /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseConnected"/>
+    /// </summary>
+    bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    /// <summary>
+    /// Retrieves the <see cref="IKafkaTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKafkaCluster"/>
+    /// </summary>
+    IKafkaTable GetTable(IEntityType entityType);
+    /// <summary>
+    /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
+    /// </summary>
+    string CreateTopicForEntity(IEntityType entityType);
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/>
+    /// </summary>
+    IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
+    /// <summary>
+    /// Executes a transaction
+    /// </summary>
+    int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
 }
