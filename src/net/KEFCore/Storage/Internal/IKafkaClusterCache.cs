@@ -28,15 +28,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKafkaClusterCache
 {
     /// <summary>
-    /// Gets an <see cref="IKafkaCluster"/>
+    /// Create new or get a previously allocated <see cref="IKafkaCluster"/> instance associated to the <paramref name="options"/>
+    /// </summary>
+    IKafkaCluster CreateCluster(KafkaOptionsExtension options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
+    /// <summary>
+    /// Gets an <see cref="IKafkaCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
     IKafkaCluster GetCluster(KafkaOptionsExtension options);
     /// <summary>
-    /// Gets an <see cref="IKafkaCluster"/>
-    /// </summary>
-    IKafkaCluster GetCluster(KafkaOptionsExtension options, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
-    /// <summary>
-    /// Dispose an <see cref="IKafkaCluster"/>
+    /// Dispose an <see cref="IKafkaCluster"/> referenced from <paramref name="cluster"/>
     /// </summary>
     void Dispose(IKafkaCluster cluster);
 }

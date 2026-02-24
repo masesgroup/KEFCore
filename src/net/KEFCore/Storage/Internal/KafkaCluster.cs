@@ -43,6 +43,7 @@ public class KafkaCluster : IKafkaCluster
 {
     private readonly KafkaOptionsExtension _options;
     private readonly IKafkaTableFactory _tableFactory;
+    private readonly IValueGeneratorSelector _valueGeneratorSelector;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
     private readonly bool _useNameMatching;
@@ -56,11 +57,13 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public KafkaCluster(KafkaOptionsExtension options,
         IKafkaTableFactory tableFactory,
+        IValueGeneratorSelector valueGeneratorSelector,
         IUpdateAdapterFactory updateAdapterFactory,
         IModel designModel)
     {
         _options = options;
         _tableFactory = tableFactory;
+        _valueGeneratorSelector = valueGeneratorSelector;
         _updateAdapterFactory = updateAdapterFactory;
         _designModel = designModel;
         _useNameMatching = options.UseNameMatching;
@@ -95,6 +98,8 @@ public class KafkaCluster : IKafkaCluster
     public virtual string ClusterId => _options.ClusterId;
     /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
+    /// <inheritdoc/>
+    public IValueGeneratorSelector ValueGeneratorSelector => _valueGeneratorSelector;
     /// <inheritdoc/>
     public virtual IModel Model => _designModel;
     /// <inheritdoc/>

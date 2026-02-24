@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2022-2026 MASES s.r.l.
+* Copyright (c) 2022-2026 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -23,10 +23,21 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaIntegerValueGenerator
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaDateTimeOffsetValueGenerator(int propertyIndex) : ValueGenerator<DateTimeOffset>, IKafkaValueGenerator
 {
-    /// <summary>
-    /// Execute a bump on data
-    /// </summary>
-    void Bump(object?[] row);
+    private readonly int _propertyIndex = propertyIndex;
+    private DateTimeOffset _current;
+
+    /// <inheritdoc/>
+    public virtual void Bump(object?[] row)
+    {
+        // no op
+    }
+    /// <inheritdoc/>
+    public override DateTimeOffset Next(EntityEntry entry) => _current = DateTimeOffset.Now;
+    /// <inheritdoc/>
+    public override bool GeneratesTemporaryValues => false;
 }

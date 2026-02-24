@@ -534,10 +534,13 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         if (kafkaOptions == null) throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
 
         if (string.IsNullOrEmpty(kafkaOptions.DatabaseName)) throw new ArgumentException("It is manadatory", "DatabaseName");
-        if (string.IsNullOrEmpty(kafkaOptions.ApplicationId)) throw new ArgumentException("It is manadatory", "ApplicationId");
+        if (!UseCompactedReplicator && string.IsNullOrEmpty(ApplicationId))
+        {
+            throw new ArgumentException("Cannot be null or empty when Streams based backend is in use.", nameof(ApplicationId));
+        }
         if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
     }
-
+    /// <inheritdoc/>
     public void Initialize(IDbContextOptions options)
     {
         throw new NotImplementedException();

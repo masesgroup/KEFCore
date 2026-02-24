@@ -37,6 +37,10 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     KafkaOptionsExtension Options { get; }
     /// <summary>
+    /// Returns the <see cref="IValueGeneratorSelector"/> instance
+    /// </summary>
+    IValueGeneratorSelector ValueGeneratorSelector { get; }
+    /// <summary>
     /// The associated <see cref="IModel"/>
     /// </summary>
     IModel Model { get; }
@@ -60,6 +64,7 @@ public interface IKafkaCluster : IDisposable
     /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
     /// </summary>
     bool? EnsureSynchronized(long timeout);
+    /// <summary>
     /// Retrieves the <see cref="IKafkaTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKafkaCluster"/>
     /// </summary>
     IKafkaTable GetTable(IEntityType entityType);

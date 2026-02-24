@@ -28,7 +28,7 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaIntegerValueGenerator<TValue>(int propertyIndex) : ValueGenerator<TValue>, IKafkaIntegerValueGenerator
+public class KafkaIntegerValueGenerator<TValue>(int propertyIndex) : ValueGenerator<TValue>, IKafkaValueGenerator
 {
     private readonly int _propertyIndex = propertyIndex;
     private long _current;
