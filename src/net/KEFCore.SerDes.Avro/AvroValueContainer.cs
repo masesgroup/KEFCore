@@ -86,6 +86,105 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             Data.Add(pRecord);
         }
     }
+
+    object ConvertInnerData(PropertyDataRecord record)
+    {
+        switch ((NativeTypeMapper.ManagedTypes)record.ManagedType)
+        {
+            case NativeTypeMapper.ManagedTypes.Guid:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!Guid.TryParse(record.Value as string, out Guid guid)) throw new InvalidCastException($"Unable to convert {record} into {nameof(Guid)}");
+                        return guid;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Guid)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.DateTime:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!DateTime.TryParse(record.Value as string, out DateTime dt)) throw new InvalidCastException($"Unable to convert {record} into {nameof(DateTime)}");
+                        return dt;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTime)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.DateTimeOffset:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!DateTimeOffset.TryParse(record.Value as string, out DateTimeOffset dto)) throw new InvalidCastException($"Unable to convert {record} into {nameof(DateTimeOffset)}");
+                        return dto;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTimeOffset)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.Char:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!char.TryParse(record.Value as string, out char dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.Char)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Char)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.SByte:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!sbyte.TryParse(record.Value as string, out sbyte dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.SByte)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.SByte)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.UShort:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!ushort.TryParse(record.Value as string, out ushort dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt16)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt16)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.UInt:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!uint.TryParse(record.Value as string, out uint dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt32)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt32)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.ULong:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!ulong.TryParse(record.Value as string, out ulong dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt64)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt64)}");
+                }
+                break;
+            case NativeTypeMapper.ManagedTypes.Decimal:
+                {
+                    if (record.Value != null)
+                    {
+                        if (!decimal.TryParse(record.Value as string, out decimal dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.Decimal)}");
+                        return dec;
+                    }
+                    else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
+                }
+                break;
+            default: return record.Value;
+        }
+    }
+
     /// <inheritdoc/>
     public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
     {
@@ -112,102 +211,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 var prop = tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
                 int i = prop.GetIndex();
-                array[i] = item?.Value!;
-                switch ((NativeTypeMapper.ManagedTypes)Data[i].ManagedType)
-                {
-                    case NativeTypeMapper.ManagedTypes.Guid:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!Guid.TryParse(array[i] as string, out Guid guid)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(Guid)}");
-                                array[i] = guid;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Guid)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.DateTime:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!DateTime.TryParse(array[i] as string, out DateTime dt)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(DateTime)}");
-                                array[i] = dt;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTime)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.DateTimeOffset:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!DateTimeOffset.TryParse(array[i] as string, out DateTimeOffset dto)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(DateTimeOffset)}");
-                                array[i] = dto;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTimeOffset)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.Char:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!char.TryParse(array[i] as string, out char dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.Char)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Char)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.SByte:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!sbyte.TryParse(array[i] as string, out sbyte dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.SByte)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.SByte)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.UShort:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!ushort.TryParse(array[i] as string, out ushort dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.UInt16)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt16)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.UInt:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!uint.TryParse(array[i] as string, out uint dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.UInt32)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt32)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.ULong:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!ulong.TryParse(array[i] as string, out ulong dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.UInt64)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt64)}");
-                        }
-                        break;
-                    case NativeTypeMapper.ManagedTypes.Decimal:
-                        {
-                            if (array[i] != null)
-                            {
-                                if (!decimal.TryParse(array[i] as string, out decimal dec)) throw new InvalidCastException($"Unable to convert {array[i]} into {nameof(System.Decimal)}");
-                                array[i] = dec;
-                            }
-                            else if (!Data[i].SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                array[i] = ConvertInnerData(item);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -228,7 +232,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         Dictionary<string, object?> props = new();
         foreach (var item in Data)
         {
-            props.Add(item.PropertyName, item.Value!);
+            props.Add(item.PropertyName, ConvertInnerData(item));
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
