@@ -251,9 +251,30 @@ public class KafkaCluster : IKafkaCluster
 
             _tableFactory.Start(tables);
 
-#if DEBUG
-            Thread.Sleep(5000);
+            if (Options.DefaultSynchronizationTimeout != 0)
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                try
+                {
+                    EnsureSynchronized(Options.DefaultSynchronizationTimeout);
+                }
+                catch
+                {
+                    updateLogger.Logger.Log(LogLevel.Error, "Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Failed to execute synchronization within a timeout of {Options.DefaultSynchronizationTimeout} for cluster id {Options.ClusterId}");
 #endif
+                    throw;
+                }
+                finally
+                {
+                    stopwatch.Stop();
+                    updateLogger.Logger.Log(LogLevel.Information, "Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Synchronization of {Options.ApplicationId} with cluster id {Options.ClusterId} done in {stopwatch.Elapsed}");
+#endif
+                }
+            }
 
             ExecuteTransaction(entries, updateLogger);
         }
@@ -265,6 +286,37 @@ public class KafkaCluster : IKafkaCluster
     {
         return true;
     }
+    /// <inheritdoc/>
+    public virtual bool? EnsureSynchronized(long timeout)
+    {
+        var remainingTimeout = timeout;
+        bool?[] bools = new bool?[_tables.Count];
+        int index = 0;
+        Stopwatch stopwatch = new Stopwatch();
+        foreach (var item in _tables)
+        {
+            stopwatch.Restart();
+            bools[index] = item.Value.EnsureSynchronized(remainingTimeout);
+            stopwatch.Stop();
+            if (timeout != Timeout.Infinite)
+            {
+                remainingTimeout -= stopwatch.ElapsedMilliseconds;
+                if (remainingTimeout < 0)
+                {
+                    throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.Key}");
+                }
+            }
+            index++;
+        }
+        bool? result = null;
+        foreach (var item in bools)
+        {
+            if (!item.HasValue) return null; // if one item is uncertain return uncertain
+            result &= item;
+        }
+        return result;
+    }
+
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
@@ -327,6 +379,44 @@ public class KafkaCluster : IKafkaCluster
         finally { future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
 
         return topicName;
+    }
+
+
+    /// <inheritdoc/>
+    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    {
+        Java.Lang.String topicName = entityType.TopicName(Options);
+        System.Collections.Generic.Dictionary<int, long> dictionary = new();
+        var coll = Collections.Singleton(topicName);
+        DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+        using var future = describeTopicsResult.AllTopicNames();
+        var result = future.Get();
+        foreach (var item in result.EntrySet())
+        {
+            if (item.Key.Equals(topicName))
+            {
+                HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
+                foreach (var partition in item.Value.Partitions())
+                {
+                    var partitionIndex = partition.Partition();
+                    TopicPartition topicPartition = new(topicName, partitionIndex);
+                    hashMap.Put(topicPartition, OffsetSpec.Latest());
+                }
+
+                var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                using var offsetResultFuture = listOffsetResult.All();
+                var offsetResult = offsetResultFuture.Get();
+                foreach (var offsetResultItem in offsetResult.EntrySet())
+                {
+                    if (offsetResultItem.Key.Topic().Equals(topicName))
+                    {
+                        dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                    }
+                }
+                break;
+            }
+        }
+        return dictionary;
     }
 
     /// <inheritdoc/>

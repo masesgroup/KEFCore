@@ -48,6 +48,10 @@ public interface IEntityTypeProducer : IDisposable
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>
     void Start();
+    /// <summary>
+    /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+    /// </summary>
+    bool? EnsureSynchronized(long timeout);
 }
 
 /// <summary>

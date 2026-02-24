@@ -41,4 +41,8 @@ public interface IKafkaDatabase : IDatabase, IDisposable
     /// Execute the <see cref="IDatabaseCreator.CanConnect"/>
     /// </summary>
     bool EnsureDatabaseConnected();
+    /// <summary>
+    /// Verify if local instance is synchronized with the <see cref="Cluster"/>
+    /// </summary>
+    bool? EnsureDatabaseSynchronized(long timeout);
 }

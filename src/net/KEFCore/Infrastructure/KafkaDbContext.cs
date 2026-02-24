@@ -22,6 +22,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.EntityFrameworkCore.KNet.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -31,7 +32,7 @@ using MASES.KNet.Streams;
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
 /// <summary>
-///     A <see cref="KafkaDbContext"/> instance represents a session with the Apache Kafka cluster and can be used to query and save
+///     A <see cref="KafkaDbContext"/> instance represents a session with the Apache Kafka™ cluster and can be used to query and save
 ///     instances of your entities. <see cref="KafkaDbContext"/> extends <see cref="DbContext"/> and it is a combination of the Unit Of Work and Repository patterns.
 /// </summary>
 /// <remarks>
@@ -131,13 +132,15 @@ public class KafkaDbContext : DbContext
     /// </summary>
     public virtual bool UseNameMatching { get; set; } = true;
     /// <summary>
-    /// The bootstrap servers of the Apache Kafka cluster
+    /// The bootstrap servers of the Apache Kafka™ cluster
     /// </summary>
     public virtual string? BootstrapServers { get; set; }
     /// <summary>
-    /// The application id
+    /// The application id associated to the application in use, shall be set if <see cref="UseCompactedReplicator"/> is <see langword="false"/>
     /// </summary>
-    public virtual string ApplicationId { get; set; } = Guid.NewGuid().ToString();
+    /// <remarks>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
+    /// If <see cref="UseGlobalTable"/> is <see langword="false"/> the partitions associated to each topic are shared across all instances with the same <see cref="ApplicationId"/> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</remarks>
+    public virtual string? ApplicationId { get; set; }
     /// <summary>
     /// Database name means whe prefix of the topics associated to the instance of <see cref="KafkaDbContext"/>
     /// </summary>
@@ -155,7 +158,7 @@ public class KafkaDbContext : DbContext
     /// </summary>
     public virtual int? DefaultConsumerInstances { get; set; } = null;
     /// <summary>
-    /// Use persistent storage when Apache Kafka Streams is in use
+    /// Use persistent storage when Apache Kafka™ Streams is in use
     /// </summary>
     public virtual bool UsePersistentStorage { get; set; } = false;
     /// <summary>
@@ -172,14 +175,25 @@ public class KafkaDbContext : DbContext
     /// </summary>
     public bool UseDeletePolicyForTopic { get; set; } = false;
     /// <summary>
-    /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka Streams
+    /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka™ Streams
     /// </summary>
     [Obsolete("Option will be removed soon")]
     public virtual bool UseCompactedReplicator { get; set; } = false;
     /// <summary>
-    /// Use KNet version of Apache Kafka Streams instead of standard Apache Kafka Streams
+    /// Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams
     /// </summary>
     public virtual bool UseKNetStreams { get; set; } = true;
+    /// <summary>
+    /// Setting this property to <see langword="true"/> the engine based on Streams (i.e. <see cref="UseCompactedReplicator"/> is <see langword="false"/>) 
+    /// will use <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
+    /// instead of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>) to manage local storage of information.
+    /// </summary>
+    /// <remarks>Setting <see cref="UseGlobalTable"/> to <see langword="true"/> is in contrast with <see cref="ManageEvents"/> that needs <see cref="UseCompactedReplicator"/>=<see langword="true"/> or a backend based on <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
+    /// The behavior can be changed if the application based on KEFCore does not needs events (<see cref="ManageEvents"/>=<see langword="true"/>) and/or there is a limitation using <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>) 
+    /// coming from other configuration parameters like <see cref="ApplicationId"/>: using the same <see cref="ApplicationId"/> across the same cluster, the partitions of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
+    /// are managed from multiple instances.
+    /// </remarks>
+    public virtual bool UseGlobalTable { get; set; } = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
     /// </summary>
@@ -198,25 +212,61 @@ public class KafkaDbContext : DbContext
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <summary>
-    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>, default is <see langword="true"/>
     /// </summary>
-    public virtual bool ManageEvents { get; set; }
+    public virtual bool ManageEvents { get; set; } = true;
+    /// <summary>
+    /// The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
+    /// Setting <see cref="DefaultSynchronizationTimeout"/> to <see langword="0"/> the synchronization will be disabled
+    /// </summary>
+    /// <remarks>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <see cref="DefaultSynchronizationTimeout"/> when <see cref="DatabaseFacade.EnsureCreated"/> of <see cref="DbContext.Database"/> is invoked.</remarks>
+    public virtual long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
     /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
     /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
     [Obsolete("Replaced with events attached to ChangeTracker, use ManageEvents to enable them.", true)] 
     public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
+    /// <summary>
+    /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka™ backend
+    /// </summary>
+    /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka™ backend</param>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <exception cref="TimeoutException">Raised if the <paramref name="waitTime"/> has expired without receive an information</exception>
+    public bool? WaitForSynchronization(TimeSpan waitTime)
+    {
+        return WaitForSynchronization((long)waitTime.TotalMilliseconds);
+    }
+    /// <summary>
+    /// Invoke the method to wait a timeout defined from <paramref name="waitTimeMs"/> for synchonization with Apache Kafka™ backend
+    /// </summary>
+    /// <param name="waitTimeMs">The time expressed as milliseconds to wait for synchonization with Apache Kafka™ backend</param>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <exception cref="TimeoutException">Raised if the <paramref name="waitTimeMs"/> has expired without receive an information</exception>
+    public bool? WaitForSynchronization(long waitTimeMs = Timeout.Infinite)
+    {
+        if (waitTimeMs != Timeout.Infinite && waitTimeMs <= 0) throw new ArgumentException($"Timeout can be the default or shall be greater than 0", nameof(waitTimeMs));
+        var database = this.GetService<IKafkaDatabase>();
+        return database.EnsureDatabaseSynchronized(waitTimeMs);
+    }
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (BootstrapServers == null) throw new ArgumentNullException(nameof(BootstrapServers));
-        if (DatabaseName == null) throw new ArgumentNullException(nameof(DatabaseName));
+        base.OnConfiguring(optionsBuilder);
+        if (!UseCompactedReplicator && string.IsNullOrEmpty(ApplicationId))
+        {
+            throw new ArgumentException("Cannot be null or empty when Streams based backend is in use.", nameof(ApplicationId));
+        }
+
+        if (string.IsNullOrWhiteSpace(BootstrapServers)) throw new ArgumentException("Cannot be null or empty", nameof(BootstrapServers));
+        if (string.IsNullOrWhiteSpace(DatabaseName)) throw new ArgumentException("Cannot be null or empty", nameof(DatabaseName));
 
         optionsBuilder.UseKafkaCluster(ApplicationId, DatabaseName, BootstrapServers, (o) =>
         {
-            if (ManageEvents && !UseCompactedReplicator && DefaultNumPartitions > 1)
+            if (ManageEvents 
+                && !(UseCompactedReplicator || UseGlobalTable) 
+                && DefaultNumPartitions > 1)
             {
                 throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
             }
@@ -232,8 +282,10 @@ public class KafkaDbContext : DbContext
             o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
+            o.WithUseGlobalTable(UseGlobalTable);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             o.WithManageEvents(ManageEvents);
+            o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);
             if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);

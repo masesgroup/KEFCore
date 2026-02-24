@@ -45,14 +45,14 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 {
     class KafkaStreamsBaseRetrieverTimestampExtractor : TimestampExtractor
     {
-        private readonly Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> _pushChanges;
+        private readonly Action<EventChange> _pushChanges;
         private readonly IStreamsChangeManager _manager;
         private readonly IEntityType _entityType;
         private readonly IKey _primaryKey;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
 
-        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, object optional)
+        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<EventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, object optional)
         {
             _pushChanges = pushChanges;
             _manager = manager;
@@ -72,7 +72,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, record2.Key());
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, record2.Value());
 
-            _pushChanges.Invoke((_manager, _entityType, _primaryKey, new Tuple<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new EventChange(_manager, _entityType, _primaryKey, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
 
             return record.Timestamp();
         }
@@ -105,7 +105,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             CreateConsumed = (extractor) => Consumed<K, V>.With(extractor),
             CreateMaterialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
-            CreateTable = static (builder, topicName, consumed, materialized) => builder.Table(topicName, consumed, materialized),
+            CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized) 
+                                                                                                  : builder.Table(topicName, materialized),
             CreateTopology = static (builder) => builder.Build(),
             CreateStreams = static (topology, streamsConfig) =>
             {
@@ -122,6 +123,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             Resume = static (streams) => streams.Resume(),
             Close = static (streams) => streams.Close(),
             GetState = static (streams) => streams.StateMethod(),
+            GetLags = static (streams) => streams.AllLocalStorePartitionLags(),
             GetIsPaused = static (streams) => streams.IsPaused(),
         };
 

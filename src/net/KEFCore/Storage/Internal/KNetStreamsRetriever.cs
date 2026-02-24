@@ -39,17 +39,17 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
+    class KNetStreamsRetrieverTimestampExtractor(Action<EventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
-        private readonly Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> _pushChanges = pushChanges;
+        private readonly Action<EventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
         private readonly IEntityType _entityType = entityType;
         private readonly IKey _primaryKey = primaryKey;
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke((_manager, _entityType, _primaryKey, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            _pushChanges.Invoke(new EventChange(_manager, _entityType, _primaryKey, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
             return Record.DateTime;
         }
     }
@@ -81,7 +81,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             CreateConsumed = (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
             CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
-            CreateTable = static (builder, topicName, consumed, materialized) => builder.Table(topicName, consumed, materialized),
+            CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized) 
+                                                                                                  : builder.Table(topicName, materialized),
             CreateTopology = static (builder) => builder.Build(),
             CreateStreams = static (topology, streamsConfig) => new(topology, streamsConfig),
             SetHandlers = static (streams, errorHandler, stateListener) =>
@@ -94,6 +95,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             Resume = static (streams) => streams.Resume(),
             Close = static (streams) => streams.Close(),
             GetState = static (streams) => streams.State,
+            GetLags = static (streams) => streams.AllLocalStorePartitionLags,
             GetIsPaused = static (streams) => streams.IsPaused,
         };
 

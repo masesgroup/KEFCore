@@ -13,6 +13,9 @@
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Update="Test.KNetReplicatorWithEvents.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Test.KNetStreamsManageEvents.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
@@ -41,6 +44,9 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Test.KNetReplicatorManageEvents.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetStreamsWithEvents.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Update="TestAvro.KNetReplicatorModelBuilder.json">
