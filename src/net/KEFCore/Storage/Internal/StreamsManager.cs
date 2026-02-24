@@ -103,12 +103,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 TimestampExtractor?.Dispose();
             }
-            public TKTable Table = table;
-
-            public readonly void Dispose()
-            {
-                TimestampExtractor?.Dispose();
-            }
         }
 
         // enqueues changes
