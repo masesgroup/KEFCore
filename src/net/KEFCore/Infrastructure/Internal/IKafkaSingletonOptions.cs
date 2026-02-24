@@ -54,6 +54,8 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     bool UseCompactedReplicator { get; }
     /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
     bool UseKNetStreams { get; }
+    /// <inheritdoc cref="KafkaDbContext.UseGlobalTable"/>
+    bool UseGlobalTable { get; }
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     bool UsePersistentStorage { get; }
     /// <inheritdoc cref="KafkaDbContext.UseEnumeratorWithPrefetch"/>
@@ -76,4 +78,6 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     TopicConfigBuilder? TopicConfig { get; }
     /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
     bool ManageEvents { get; }
+    /// <inheritdoc cref="KafkaDbContext.DefaultSynchronizationTimeout"/>
+    long DefaultSynchronizationTimeout { get; }
 }

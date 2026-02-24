@@ -47,6 +47,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             UseDeletePolicyForTopic = kafkaOptions.UseDeletePolicyForTopic;
             UseCompactedReplicator = kafkaOptions.UseCompactedReplicator;
             UseKNetStreams = kafkaOptions.UseKNetStreams;
+            UseGlobalTable = kafkaOptions.UseGlobalTable;
             UsePersistentStorage = kafkaOptions.UsePersistentStorage;
             UseEnumeratorWithPrefetch = kafkaOptions.UseEnumeratorWithPrefetch;
             UseByteBufferDataTransfer = kafkaOptions.UseByteBufferDataTransfer;
@@ -58,6 +59,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
             TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
             ManageEvents = kafkaOptions.ManageEvents;
+            DefaultSynchronizationTimeout = kafkaOptions.DefaultSynchronizationTimeout;
         }
     }
     /// <inheritdoc/>
@@ -96,6 +98,8 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseKNetStreams { get; private set; }
     /// <inheritdoc/>
+    public virtual bool UseGlobalTable { get; private set; }
+    /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseEnumeratorWithPrefetch { get; private set; }
@@ -117,4 +121,6 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
     /// <inheritdoc/>
     public virtual bool ManageEvents { get; private set; }
+    /// <inheritdoc/>
+    public virtual long DefaultSynchronizationTimeout { get; private set; }
 }

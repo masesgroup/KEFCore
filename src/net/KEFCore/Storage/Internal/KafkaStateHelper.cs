@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+//#define DEBUG_PERFORMANCE
+
 using MASES.EntityFrameworkCore.KNet.Serialization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
@@ -34,11 +36,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             if (container is null) 
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} removed (tombstone) try delete");
+#endif
                 // maybe a record removed (tombstone) and it is still in kafka, try a delete
                 ManageDeleteInternal(adapter, ikey, keyValues);
             } 
             else
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} added");
+#endif
                 ManageAddedInternal(adapter, entityType, ikey, keyValues, container.GetProperties());
             }
         }
@@ -59,19 +67,22 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         static void ManageAddedInternal(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> properties)
         {
-            var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
-            var _primaryKey = entity2!.FindPrimaryKey();
-            IUpdateEntry? entry = adapter.TryGetEntry(_primaryKey!, keyValues);
+            IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry == null)
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record not available, adding");
+#endif
                 // the key does not exist
-                // var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
-                var newEntry = adapter.CreateEntry(properties, entity2!);
+                var newEntry = adapter.CreateEntry(properties, entityType);
                 newEntry.EntityState = EntityState.Unchanged;
                 //adapter.DetectChanges();
             }
             else
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record available, try update");
+#endif
                 ManageUpdateInternal(entry, properties);
             }
         }
@@ -92,10 +103,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var properties = container.GetProperties();
             if (entry != null)
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} exist, update");
+#endif
                 ManageUpdateInternal(entry, properties);
             }
             else
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} does not exists, add");
+#endif
                 ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
             }
         }
@@ -115,10 +132,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var properties = container.GetProperties();
             if (entry != null)
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record exists, update");
+#endif
                 ManageUpdateInternal(entry, properties);
             }
             else
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record does not exists, add");
+#endif
                 ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
             }
         }
@@ -137,7 +160,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     entry.SetOriginalValue(prop, item.Value);
                 }
             }
-
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdateInternal: Record changed={changed}");
+#endif
             if (changed)
             {
                 entry.EntityState = EntityState.Modified;
@@ -152,7 +177,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 keyValues = [key];
             }
-
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString($"ManageDelete: Record {key} try delete");
+#endif
             var adapter = factory.Create();
             ManageDeleteInternal(adapter, ikey, keyValues);
         }
@@ -173,6 +200,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry != null && entry.EntityState != EntityState.Deleted)
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageDeleteInternal: Record exists, delete with cascade");
+#endif
                 adapter.CascadeDelete(entry);
                 //adapter.DetectChanges();
             }
@@ -184,6 +214,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
             if (entry == null)
             {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageFind: Record does not exist exists, add in state as Unchanged");
+#endif
                 var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
                 // the key does not exist
                 var newEntry = adapter.CreateEntry(properties!, entity2!);

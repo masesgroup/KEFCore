@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using Org.Apache.Kafka.Common;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -56,6 +57,9 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
+    /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+    /// </summary>
+    bool? EnsureSynchronized(long timeout);
     /// Retrieves the <see cref="IKafkaTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKafkaCluster"/>
     /// </summary>
     IKafkaTable GetTable(IEntityType entityType);
@@ -63,6 +67,12 @@ public interface IKafkaCluster : IDisposable
     /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
     string CreateTopicForEntity(IEntityType entityType);
+    /// <summary>
+    /// Returns the latest offset for each partition associated to <paramref name="entityType"/>
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to check</param>
+    /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the values</returns>
+    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/>
     /// </summary>

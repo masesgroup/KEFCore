@@ -215,6 +215,29 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     }
 
     /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine based on Streams (i.e. <see cref="KafkaDbContext.UseCompactedReplicator"/> is <see langword="false"/>) 
+    ///     will use <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="KafkaDbContext.UseKNetStreams"/> is <see langword="true"/>)
+    ///     instead of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="KafkaDbContext.UseKNetStreams"/> is <see langword="true"/>) to manage local storage of information.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useGlobalTable">If <see langword="true" /> then <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="KafkaDbContext.UseKNetStreams"/> is <see langword="true" />.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithUseGlobalTable(bool useGlobalTable = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithUseGlobalTable(useGlobalTable);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
     ///     Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
     /// </summary>
     /// <remarks>
@@ -446,6 +469,29 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
 
         return this;
     }
+
+    /// <summary>
+    ///      The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
+    ///      Setting <see cref="KafkaDbContext.DefaultSynchronizationTimeout"/> to <see langword="0"/> the synchronization will be disabled
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultSynchronizationTimeout">The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithDefaultSynchronizationTimeout(long defaultSynchronizationTimeout)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithDefaultSynchronizationTimeout(defaultSynchronizationTimeout);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
 
     #region Hidden System.Object members
 

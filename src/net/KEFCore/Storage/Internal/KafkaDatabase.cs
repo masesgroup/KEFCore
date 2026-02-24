@@ -70,4 +70,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseConnected()
         => _cluster.EnsureConnected(_updateLogger);
+    /// <inheritdoc/>
+    public virtual bool? EnsureDatabaseSynchronized(long timeout)
+        => _cluster.EnsureSynchronized(timeout);
 }

@@ -47,8 +47,9 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private string? _applicationId;
     private string? _bootstrapServers;
     private bool _useDeletePolicyForTopic = false;
-    private bool _useCompactedReplicator = true;
+    private bool _useCompactedReplicator = false;
     private bool _useKNetStreams = true;
+    private bool _useGlobalTable = false;
     private bool _usePersistentStorage = false;
     private bool _useEnumeratorWithPrefetch = true;
     private bool _useByteBufferDataTransfer = false;
@@ -60,6 +61,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
     private bool _manageEvents = false;
+    private long _defaultSynchronizationTimeout = Timeout.Infinite;
     private DbContextOptionsExtensionInfo? _info;
 
     /// <summary>
@@ -83,6 +85,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _useDeletePolicyForTopic = copyFrom._useDeletePolicyForTopic;
         _useCompactedReplicator = copyFrom._useCompactedReplicator;
         _useKNetStreams = copyFrom._useKNetStreams;
+        _useGlobalTable = copyFrom._useGlobalTable;
         _usePersistentStorage = copyFrom._usePersistentStorage;
         _useEnumeratorWithPrefetch = copyFrom._useEnumeratorWithPrefetch;
         _useByteBufferDataTransfer = copyFrom._useByteBufferDataTransfer;
@@ -94,6 +97,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
         _manageEvents = copyFrom._manageEvents;
+        _defaultSynchronizationTimeout = copyFrom._defaultSynchronizationTimeout;
     }
     /// <inheritdoc/>
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -123,6 +127,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual bool UseCompactedReplicator => _useCompactedReplicator;
     /// <inheritdoc cref="KafkaDbContext.UseKNetStreams"/>
     public virtual bool UseKNetStreams => _useKNetStreams;
+    /// <inheritdoc cref="KafkaDbContext.UseGlobalTable"/>
+    public virtual bool UseGlobalTable => _useGlobalTable;
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage => _usePersistentStorage;
     /// <inheritdoc cref="KafkaDbContext.UseByteBufferDataTransfer"/>
@@ -145,8 +151,10 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
     public virtual bool ManageEvents => _manageEvents!;
+    /// <inheritdoc cref="KafkaDbContext.DefaultSynchronizationTimeout"/>
+    public virtual long DefaultSynchronizationTimeout => _defaultSynchronizationTimeout!;
 
-    int IKafkaSingletonOptions.DefaultReplicationFactor => throw new NotImplementedException();
+    int IKafkaSingletonOptions.DefaultReplicationFactor => _defaultReplicationFactor;
 
     /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
     public virtual KafkaOptionsExtension WithKeySerDesSelectorType(Type serializationType)
@@ -218,7 +226,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.UseDeletePolicyForTopic"/>
-    public virtual KafkaOptionsExtension WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
+    public virtual KafkaOptionsExtension WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = true)
     {
         var clone = Clone();
 
@@ -245,8 +253,17 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
 
         return clone;
     }
+    /// <inheritdoc cref="KafkaDbContext.UseGlobalTable"/>
+    public virtual KafkaOptionsExtension WithUseGlobalTable(bool useGlobalTable = true)
+    {
+        var clone = Clone();
+
+        clone._useGlobalTable = useGlobalTable;
+
+        return clone;
+    }
     /// <inheritdoc cref="KafkaDbContext.UsePersistentStorage"/>
-    public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = false)
+    public virtual KafkaOptionsExtension WithUsePersistentStorage(bool usePersistentStorage = true)
     {
         var clone = Clone();
 
@@ -264,7 +281,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.UseByteBufferDataTransfer"/>
-    public virtual KafkaOptionsExtension WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = false)
+    public virtual KafkaOptionsExtension WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
     {
         var clone = Clone();
 
@@ -342,6 +359,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         var clone = Clone();
 
         clone._manageEvents = manageEvents;
+
+        return clone;
+    }
+
+    /// <inheritdoc cref="KafkaDbContext.DefaultSynchronizationTimeout"/>
+    public virtual KafkaOptionsExtension WithDefaultSynchronizationTimeout(long defaultSynchronizationTimeout)
+    {
+        var clone = Clone();
+
+        clone._defaultSynchronizationTimeout = defaultSynchronizationTimeout;
 
         return clone;
     }

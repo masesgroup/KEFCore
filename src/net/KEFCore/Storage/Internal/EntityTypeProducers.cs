@@ -41,6 +41,7 @@ public class EntityTypeProducers
     {
         return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster));
     }
+
     /// <summary>
     /// Dispose a previously allocated <see cref="IEntityTypeProducer"/>
     /// </summary>

@@ -78,7 +78,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-		KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
+        KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
 #endif
         if (_tables != null)
         {
@@ -152,7 +152,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.InnerException is UnknownTopicOrPartitionException)
             {
 #if DEBUG_PERFORMANCE
-				KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
+                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
@@ -172,18 +172,19 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        ResetStream();
+        var coll = ResetStream();
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {
+            System.Collections.Generic.List<IKafkaTable> tables = new();
             _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
 
             var updateAdapter = _updateAdapterFactory.CreateStandalone();
             var entries = new System.Collections.Generic.List<IUpdateEntry>();
             foreach (var entityType in _designModel.GetEntityTypes())
             {
-                EnsureTable(entityType);
+                tables.Add(EnsureTable(entityType));
 
                 IEntityType? targetEntityType = null;
                 foreach (var targetSeed in entityType.GetSeedData())
@@ -192,6 +193,33 @@ public class KafkaCluster : IKafkaCluster
                     var entry = updateAdapter.CreateEntry(targetSeed, targetEntityType);
                     entry.EntityState = EntityState.Added;
                     entries.Add(entry);
+                }
+            }
+
+            _tableFactory.Start(tables);
+
+            if (Options.DefaultSynchronizationTimeout != 0)
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                try
+                {
+                    EnsureSynchronized(Options.DefaultSynchronizationTimeout);
+                }
+                catch
+                {
+                    updateLogger.Logger.Log(LogLevel.Error, "Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Failed to execute synchronization within a timeout of {Options.DefaultSynchronizationTimeout} for cluster id {Options.ClusterId}");
+#endif
+                    throw;
+                }
+                finally
+                {
+                    stopwatch.Stop();
+                    updateLogger.Logger.Log(LogLevel.Information, "Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Synchronization of {Options.ApplicationId} with cluster id {Options.ClusterId} done in {stopwatch.Elapsed}");
+#endif
                 }
             }
 
@@ -205,6 +233,37 @@ public class KafkaCluster : IKafkaCluster
     {
         return true;
     }
+    /// <inheritdoc/>
+    public virtual bool? EnsureSynchronized(long timeout)
+    {
+        var remainingTimeout = timeout;
+        bool?[] bools = new bool?[_tables.Count];
+        int index = 0;
+        Stopwatch stopwatch = new Stopwatch();
+        foreach (var item in _tables)
+        {
+            stopwatch.Restart();
+            bools[index] = item.Value.EnsureSynchronized(remainingTimeout);
+            stopwatch.Stop();
+            if (timeout != Timeout.Infinite)
+            {
+                remainingTimeout -= stopwatch.ElapsedMilliseconds;
+                if (remainingTimeout < 0)
+                {
+                    throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.Key}");
+                }
+            }
+            index++;
+        }
+        bool? result = null;
+        foreach (var item in bools)
+        {
+            if (!item.HasValue) return null; // if one item is uncertain return uncertain
+            result &= item;
+        }
+        return result;
+    }
+
     /// <inheritdoc/>
     public IKafkaTable GetTable(IEntityType entityType)
     {
@@ -266,6 +325,44 @@ public class KafkaCluster : IKafkaCluster
         return topicName;
     }
 
+
+    /// <inheritdoc/>
+    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    {
+        Java.Lang.String topicName = entityType.TopicName(Options);
+        System.Collections.Generic.Dictionary<int, long> dictionary = new();
+        var coll = Collections.Singleton(topicName);
+        DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+        using var future = describeTopicsResult.AllTopicNames();
+        var result = future.Get();
+        foreach (var item in result.EntrySet())
+        {
+            if (item.Key.Equals(topicName))
+            {
+                HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
+                foreach (var partition in item.Value.Partitions())
+                {
+                    var partitionIndex = partition.Partition();
+                    TopicPartition topicPartition = new(topicName, partitionIndex);
+                    hashMap.Put(topicPartition, OffsetSpec.Latest());
+                }
+
+                var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                using var offsetResultFuture = listOffsetResult.All();
+                var offsetResult = offsetResultFuture.Get();
+                foreach (var offsetResultItem in offsetResult.EntrySet())
+                {
+                    if (offsetResultItem.Key.Topic().Equals(topicName))
+                    {
+                        dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                    }
+                }
+                break;
+            }
+        }
+        return dictionary;
+    }
+
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
@@ -291,7 +388,7 @@ public class KafkaCluster : IKafkaCluster
         finally
         {
             valueBufferSw.Stop();
-			KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -371,7 +468,7 @@ public class KafkaCluster : IKafkaCluster
             _ = _tables.GetOrAdd(key, (k) =>
             {
 #if DEBUG_PERFORMANCE
-				KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
 #endif
                 return _tableFactory.Create(this, currentEntityType);
             });

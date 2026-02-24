@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
-using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +62,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 else
                 {
                     ProgramConfig.ReportString("EnsureCreated does not created database");
+                }
+
+                try
+                { 
+                    context.WaitForSynchronization(10000);
+                }
+                catch(TimeoutException)
+                {
+
                 }
 
                 testWatcher.Start();

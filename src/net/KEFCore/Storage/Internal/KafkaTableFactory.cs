@@ -53,6 +53,17 @@ public class KafkaTableFactory(
         return table;
     }
 
+    /// <summary>
+    /// Allocates a new <see cref="IEntityTypeProducer"/>
+    /// </summary>
+    public void Start(IEnumerable<IKafkaTable> tables)
+    {
+        foreach (var table in tables)
+        {
+            table.Start();
+        }
+    }
+
     /// <inheritdoc/>
     public void Dispose(IKafkaTable table)
     {

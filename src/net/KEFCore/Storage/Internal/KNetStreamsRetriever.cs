@@ -40,17 +40,17 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey) 
+    class KNetStreamsRetrieverTimestampExtractor(Action<EventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
-        private readonly Action<(IStreamsChangeManager, IEntityType EntityType, IKey PrimaryKey, object Data)> _pushChanges = pushChanges;
+        private readonly Action<EventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
         private readonly IEntityType _entityType = entityType;
         private readonly IKey _primaryKey = primaryKey;
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke((_manager, _entityType, _primaryKey, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            _pushChanges.Invoke(new EventChange(_manager, _entityType, _primaryKey, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
             return Record.DateTime;
         }
     }
@@ -65,33 +65,25 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                           GlobalKTable<TKey, TValue, TJVMKey, TJVMValue>,
                           KTable<TKey, TValue, TJVMKey, TJVMValue>>? _streamsManager;
 
-    private readonly IKafkaCluster _kafkaCluster;
-    private readonly IEntityType _entityType;
-    private readonly IKey _primaryKey;
-    private readonly IProperty[] _properties;
-    private readonly string _storageId;
-
     /// <summary>
-    /// Default initializer
+    /// Creates an instance of <see cref="IStreamsManager"/>
     /// </summary>
-    public KNetStreamsRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKey primaryKey, IProperty[] properties)
+    /// <param name="cluster"></param>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public static IStreamsManager Create(IKafkaCluster cluster, IEntityType entity)
     {
-        _kafkaCluster = kafkaCluster;
-        _entityType = entityType;
-        _primaryKey = primaryKey;
-        _properties = properties;
-
-        _streamsManager ??= new(_kafkaCluster, _entityType)
+        _streamsManager ??= new(cluster, entity)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
-            GetStreamsChangeManager = () => this,
             CreateTimestampExtractor = (enqueuer, manager, entity, key, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity, key),
             CreateConsumed = (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
             CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
-            CreateTable = static (builder, topicName, consumed, materialized) => builder.Table(topicName, consumed, materialized),
+            CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized) 
+                                                                                                  : builder.Table(topicName, materialized),
             CreateTopology = static (builder) => builder.Build(),
             CreateStreams = static (topology, streamsConfig) => new(topology, streamsConfig),
             SetHandlers = static (streams, errorHandler, stateListener) =>
@@ -100,10 +92,31 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 streams.SetStateListener(stateListener);
             },
             Start = static (streams) => streams.Start(),
-            Close = static (streams) => streams.Close()
+            Pause = static (streams) => streams.Pause(),
+            Resume = static (streams) => streams.Resume(),
+            Close = static (streams) => streams.Close(),
+            GetState = static (streams) => streams.State,
+            GetLags = static (streams) => streams.AllLocalStorePartitionLags,
+            GetIsPaused = static (streams) => streams.IsPaused,
         };
 
-        _storageId = _streamsManager.AddEntity(entityType, null);
+        return _streamsManager;
+    }
+
+    private readonly IEntityType _entityType;
+    private readonly IKey _primaryKey;
+    private readonly IProperty[] _properties;
+    private readonly string _storageId;
+
+    /// <summary>
+    /// Default initializer
+    /// </summary>
+    public KNetStreamsRetriever(IEntityType entityType, IKey primaryKey, IProperty[] properties)
+    {
+        _entityType = entityType;
+        _primaryKey = primaryKey;
+        _properties = properties;
+        _storageId = _streamsManager!.AddEntity(this, entityType, null);
     }
 
     /// <inheritdoc/>
@@ -115,7 +128,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_kafkaCluster, _entityType, _properties, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
+        return new KafkaEnumberable(_entityType, _properties, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
     }
 
     TValue GetTValue(TKey key)
@@ -164,21 +177,19 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
     void IStreamsChangeManager.ManageChange(IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
-        var input = (Tuple<TKey, TValue>) data;
+        var input = (Tuple<TKey, TValue>)data;
         KafkaStateHelper.ManageAdded(adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;
-        private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
         private readonly IProperty[] _properties;
         private readonly ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore = null;
 
-        public KafkaEnumberable(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, string storageId, bool useEnumeratorWithPrefetch)
+        public KafkaEnumberable(IEntityType entityType, IProperty[] properties, string storageId, bool useEnumeratorWithPrefetch)
         {
-            _kafkaCluster = kafkaCluster;
             _entityType = entityType;
             _properties = properties;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
@@ -195,7 +206,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -209,7 +220,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting async KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_kafkaCluster, _entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
+            return new KafkaEnumerator(_entityType, _properties, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
         }
     }
 
@@ -217,7 +228,6 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         , IAsyncEnumerator<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;
-        private readonly IKafkaCluster _kafkaCluster;
         private readonly IEntityType _entityType;
         private readonly IProperty[] _properties;
         private readonly KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? _keyValueIterator = null;
@@ -235,9 +245,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         int _cycles = 0;
 #endif
 
-        public KafkaEnumerator(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
+        public KafkaEnumerator(IEntityType entityType, IProperty[] properties, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
         {
-            _kafkaCluster = kafkaCluster ?? throw new ArgumentNullException(nameof(kafkaCluster));
             _entityType = entityType;
             _properties = properties;
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
