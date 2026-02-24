@@ -16,20 +16,21 @@
 *  Refer to LICENSE for more information.
 */
 
+using Java.Lang;
+using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
+using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
-using System.Diagnostics;
 using System;
-using System.IO;
-using System.Text.Json;
-using Java.Lang;
-using Java.Util.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
@@ -60,7 +61,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfElements { get; set; } = 1000;
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
-        public bool WithEvents { get; set; } = false;
+        public bool ManageEvents { get; set; } = false;
 
         public void ApplyOnContext(KafkaDbContext context)
         {
@@ -82,6 +83,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
+            context.ManageEvents = ManageEvents;
 
             if (UseJson)
             { // default
@@ -153,7 +155,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             ReportString(JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
 
-            if (!KafkaDbContext.EnableKEFCoreTracing) KafkaDbContext.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
+            if (!DebugPerformanceHelper.EnableKEFCoreTracing) DebugPerformanceHelper.EnableKEFCoreTracing = Config.EnableKEFCoreTracing;
 
             if (!Config.UseInMemoryProvider)
             {

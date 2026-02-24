@@ -38,6 +38,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
 {
+    private readonly IKey? _primaryKey;
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly ILoggingOptions _loggingOptions;
     private readonly IList<(int, ValueConverter)>? _valueConverters;
@@ -54,13 +55,14 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         ILoggingOptions loggingOptions)
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
 #endif
         Cluster = cluster;
         EntityType = entityType;
         _tableAssociatedTopicName = Cluster.CreateTopicForEntity(entityType);
         _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, Cluster);
-        _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
+        _primaryKey = entityType.FindPrimaryKey();
+        _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
 
         foreach (var property in entityType.GetProperties())
@@ -70,14 +72,14 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
             if (converter != null)
             {
-                _valueConverters ??= new List<(int, ValueConverter)>();
+                _valueConverters ??= [];
                 _valueConverters.Add((property.GetIndex(), converter));
             }
 
             var comparer = property.GetKeyValueComparer();
             if (!comparer.IsDefault())
             {
-                _valueComparers ??= new List<(int, ValueComparer)>();
+                _valueComparers ??= [];
                 _valueComparers.Add((property.GetIndex(), comparer));
             }
         }
@@ -86,23 +88,14 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
 #endif
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
     public void FindAndAddOnTracker(object[] keyValues)
     {
-        if (keyValues == null) return;
-        TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
-        if (key != null && _producer.TryGetProperties(key, out var props))
-        {
-            // we are here because the Entity is not tracker yet, create and it 
-            var adapter = Cluster.UpdateAdapterFactory.Create();
-            var newEntry = adapter.CreateEntry(props, EntityType);
-            newEntry.EntityState = EntityState.Added;
-            adapter.DetectChanges();
-        }
+        _producer?.TryAddKey(keyValues);
     }
 
     /// <inheritdoc/>

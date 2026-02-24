@@ -18,9 +18,8 @@
 
 #nullable enable
 
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
+
 
 /// <summary>
 /// Reaches backend to find entities

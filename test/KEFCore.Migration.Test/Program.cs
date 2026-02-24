@@ -45,12 +45,16 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             try
             {
                 globalWatcher.Start();
-                context = new BloggingContext()
-                {
-                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
-                };
-
+                context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                if (ProgramConfig.Config.ManageEvents)
+                {
+                    context.ChangeTracker.Tracked += (sender, e) =>
+                    {
+                        ProgramConfig.ReportString($"Tracked {e.Entry}");
+                    };
+                }
 
                 if (context.Database.EnsureCreated())
                 {
@@ -84,7 +88,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 10);
+                    post = context.Posts.Include(o => o.Blog).Single(b => b.BlogId == 15);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
@@ -168,19 +172,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
-        }
-
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
-
-            ProgramConfig.ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 

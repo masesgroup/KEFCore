@@ -74,6 +74,6 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     StreamsConfigBuilder? StreamsConfig { get; }
     /// <inheritdoc cref="KafkaDbContext.TopicConfig"/>
     TopicConfigBuilder? TopicConfig { get; }
-    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    Action<EntityTypeChanged>? OnChangeEvent { get; }
+    /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
+    bool ManageEvents { get; }
 }

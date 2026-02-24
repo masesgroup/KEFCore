@@ -78,7 +78,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual void Dispose()
     {
 #if DEBUG_PERFORMANCE
-        Infrastructure.KafkaDbContext.ReportString($"Disposing KafkaCluster");
+		KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
 #endif
         if (_tables != null)
         {
@@ -97,8 +97,8 @@ public class KafkaCluster : IKafkaCluster
     public virtual IModel Model => _designModel;
     /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
-    /// <inheritdoc/>
-    public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+
+    ArrayList<Java.Lang.String> ResetStream()
     {
         var coll = new ArrayList<Java.Lang.String>();
         var topics = new System.Collections.Generic.List<string>();
@@ -130,6 +130,15 @@ public class KafkaCluster : IKafkaCluster
             }
         }
 
+        return coll;
+    }
+
+
+    /// <inheritdoc/>
+    public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    {
+        var coll = ResetStream();
+
         DeleteTopicsResult result = default;
         KafkaFuture<Java.Lang.Void> future = default;
         try
@@ -143,7 +152,7 @@ public class KafkaCluster : IKafkaCluster
             if (ex.InnerException is UnknownTopicOrPartitionException)
             {
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString(ex.InnerException.Message);
+				KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
 #endif
             }
             else if (ex.InnerException != null) throw ex.InnerException;
@@ -163,6 +172,8 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        ResetStream();
+
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
         {
@@ -280,7 +291,7 @@ public class KafkaCluster : IKafkaCluster
         finally
         {
             valueBufferSw.Stop();
-            Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+			KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -360,7 +371,7 @@ public class KafkaCluster : IKafkaCluster
             _ = _tables.GetOrAdd(key, (k) =>
             {
 #if DEBUG_PERFORMANCE
-                Infrastructure.KafkaDbContext.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
+				KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
 #endif
                 return _tableFactory.Create(this, currentEntityType);
             });

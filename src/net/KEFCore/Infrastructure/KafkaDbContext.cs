@@ -69,54 +69,6 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 /// </remarks>
 public class KafkaDbContext : DbContext
 {
-#if DEBUG_PERFORMANCE
-    const bool perf = true;
-    /// <summary>
-    /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer{TKey, TValueContainer, TKeySerializer, TValueSerializer}"/>
-    /// </summary>
-    public static bool TraceEntityTypeDataStorageGetData = false;
-
-    public static void ReportString(string message)
-    {
-        if (!_enableKEFCoreTracing) return;
-
-        if (Debugger.IsAttached)
-        {
-            Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
-        }
-        else
-        {
-            Console.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
-        }
-    }
-#else
-const bool perf = false;
-#endif
-    /// <summary>
-    /// Reports if the library was compiled to reports performance information
-    /// </summary>
-    public const bool IsPerformanceVersion = perf;
-#if DEBUG_PERFORMANCE
-    static bool _enableKEFCoreTracing = true;
-#else
-    static bool _enableKEFCoreTracing = false;
-#endif
-    /// <summary>
-    /// Set to <see langword="true"/> to enable tracing of KEFCore
-    /// </summary>
-    /// <remarks>Can be set only if the project is compiled with DEBUG_PERFORMANCE preprocessor directive, otherwise an <see cref="InvalidOperationException"/> is raised</remarks>
-    public static bool EnableKEFCoreTracing
-    {
-        get { return _enableKEFCoreTracing; }
-        set 
-        {
-            _enableKEFCoreTracing = value;
-#if DEBUG_PERFORMANCE
-            if (_enableKEFCoreTracing) throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE preprocessor directive");
-#endif
-        }
-    }
-
     /// <summary>
     ///     The default <see cref="ConsumerConfig"/> configuration
     /// </summary>
@@ -193,7 +145,7 @@ const bool perf = false;
     /// <summary>
     /// Default number of partitions associated to each topic
     /// </summary>
-    public virtual int DefaultNumPartitions { get; set; } = 10;
+    public virtual int DefaultNumPartitions { get; set; } = 1;
     /// <summary>
     /// Default replication factor associated to each topic
     /// </summary>
@@ -246,9 +198,14 @@ const bool perf = false;
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <summary>
+    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    /// </summary>
+    public virtual bool ManageEvents { get; set; }
+    /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
-    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/></remarks>
+    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
+    [Obsolete("Replaced with events attached to ChangeTracker, use ManageEvents to enable them.", true)] 
     public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
@@ -259,6 +216,11 @@ const bool perf = false;
 
         optionsBuilder.UseKafkaCluster(ApplicationId, DatabaseName, BootstrapServers, (o) =>
         {
+            if (ManageEvents && !UseCompactedReplicator && DefaultNumPartitions > 1)
+            {
+                throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+            }
+
             o.WithUseNameMatching(UseNameMatching);
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
@@ -271,10 +233,10 @@ const bool perf = false;
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithUseKNetStreams(UseKNetStreams);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
+            o.WithManageEvents(ManageEvents);
             if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
-            if (OnChangeEvent != null) o.WithOnChangeEvent(OnChangeEvent);
         });
     }
 }

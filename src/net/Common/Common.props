@@ -22,6 +22,9 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\Common\efcorekafka.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+	<!--<PropertyGroup>
+		<DefineConstants>$(DefineConstants);DEBUG_PERFORMANCE</DefineConstants>
+	</PropertyGroup>-->
 	<ItemGroup Condition="True">
 		<kefcorefiles_config Include="$(ProjectDir)\..\..\config\**\*.*" />
 	</ItemGroup>

@@ -33,8 +33,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes, StreamsBuilder builder)
-    : KafkaStreamsBaseRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(kafkaCluster, entityType, properties, keySerdes, valueSerdes, builder)
+public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKafkaCluster kafkaCluster, IEntityType entityType, IKey primaryKey, IProperty[] properties, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes, StreamsBuilder builder)
+    : KafkaStreamsBaseRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(kafkaCluster, entityType, primaryKey, properties, keySerdes, valueSerdes, builder)
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {
@@ -43,8 +43,8 @@ public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, T
     /// <summary>
     /// Initializer
     /// </summary>
-    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes)
-        : this(kafkaCluster, entityType, properties, keySerdes, valueSerdes, new StreamsBuilder())
+    public KafkaStreamsTableRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IKey primaryKey, IProperty[] properties, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes)
+        : this(kafkaCluster, entityType, primaryKey, properties, keySerdes, valueSerdes, new StreamsBuilder())
     {
     }
 }

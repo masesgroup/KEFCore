@@ -215,9 +215,9 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         }
         finally
         {
-            if (Infrastructure.KafkaDbContext.TraceEntityTypeDataStorageGetData)
+            if (Internal.DebugPerformanceHelper.TraceEntityTypeDataStorageGetData)
             {
-                Infrastructure.KafkaDbContext.ReportString($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
+                Internal.DebugPerformanceHelper.ReportString($"Time to GetData with length {Data.Count}: {fullSw.Elapsed} - new array took: {newSw.Elapsed} - Iteration took: {iterationSw.Elapsed}");
             }
         }
 #endif
