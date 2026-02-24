@@ -122,7 +122,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         var v = GetV(key);
         if (v == null)
         {
-            valueBuffer = ValueBuffer.Empty; 
+            valueBuffer = ValueBuffer.Empty;
             return false;
         }
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
@@ -130,6 +130,19 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         object[] array = null!;
         entityTypeData?.GetData(_entityType, _entityTypeProperties, ref array);
         valueBuffer = new ValueBuffer(array);
+        return true;
+    }
+    /// <inheritdoc/>
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    {
+        var v = GetV(key);
+        if (v == null)
+        {
+            properties = default!;
+            return false;
+        }
+        var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
+        properties = entityTypeData?.GetProperties()!;
         return true;
     }
 

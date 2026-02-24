@@ -34,24 +34,17 @@ public class KafkaDatabaseCreator(IDatabase database) : IDatabaseCreator
     /// <summary>
     /// The <see cref="IKafkaDatabase"/>
     /// </summary>
-    protected virtual IKafkaDatabase Database
-        => (IKafkaDatabase)_database;
+    protected virtual IKafkaDatabase Database => (IKafkaDatabase)_database;
     /// <inheritdoc/>
-    public virtual bool EnsureDeleted()
-        => Database.EnsureDatabaseDeleted();
+    public virtual bool EnsureDeleted() => Database.EnsureDatabaseDeleted();
     /// <inheritdoc/>
-    public virtual Task<bool> EnsureDeletedAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult(Database.EnsureDatabaseDeleted());
+    public virtual Task<bool> EnsureDeletedAsync(CancellationToken cancellationToken = default) => Task.FromResult(Database.EnsureDatabaseDeleted());
     /// <inheritdoc/>
-    public virtual bool EnsureCreated()
-        => Database.EnsureDatabaseCreated();
+    public virtual bool EnsureCreated() => Database.EnsureDatabaseCreated();
     /// <inheritdoc/>
-    public virtual Task<bool> EnsureCreatedAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult(Database.EnsureDatabaseCreated());
+    public virtual Task<bool> EnsureCreatedAsync(CancellationToken cancellationToken = default) => Task.FromResult(Database.EnsureDatabaseCreated());
     /// <inheritdoc/>
-    public virtual bool CanConnect()
-        => Database.EnsureDatabaseConnected();
+    public virtual bool CanConnect() => Database.EnsureDatabaseConnected();
     /// <inheritdoc/>
-    public virtual Task<bool> CanConnectAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult(Database.EnsureDatabaseConnected());
+    public virtual Task<bool> CanConnectAsync(CancellationToken cancellationToken = default) => Task.FromResult(Database.EnsureDatabaseConnected());
 }

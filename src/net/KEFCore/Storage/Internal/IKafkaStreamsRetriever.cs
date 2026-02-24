@@ -45,4 +45,11 @@ public interface IKafkaStreamsRetriever<TKey> : IDisposable where TKey : notnull
     /// <param name="valueBuffer">A <see cref="ValueBuffer"/> containing the information, or <see langword="null"/> otherwise</param>
     /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
     bool TryGetValue(TKey key, out ValueBuffer valueBuffer);
+    /// <summary>
+    /// Returns the values associated to the <paramref name="key"/>
+    /// </summary>
+    /// <param name="key">The key to retrieve</param>
+    /// <param name="properties">A <see cref="IDictionary{TKey, TValue}"/> containing the property name and associated value, or <see langword="null"/> otherwise</param>
+    /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
+    bool TryGetProperties(TKey key, out IDictionary<string, object?> properties);
 }

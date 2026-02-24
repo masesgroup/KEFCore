@@ -16,8 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
-using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -26,23 +26,28 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaClusterCache : IKafkaClusterCache
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaClusterCache(IKafkaTableFactory tableFactory) : IKafkaClusterCache
 {
-    private readonly IKafkaTableFactory _tableFactory;
-    private readonly ConcurrentDictionary<string, IKafkaCluster> _namedClusters;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KafkaClusterCache(
-        IKafkaTableFactory tableFactory,
-        IKafkaSingletonOptions? options)
-    {
-        _tableFactory = tableFactory;
-        _namedClusters = new ConcurrentDictionary<string, IKafkaCluster>();
-    }
+    private readonly IKafkaTableFactory _tableFactory = tableFactory;
+    private readonly ConcurrentDictionary<string, IKafkaCluster> _namedClusters = new();
+
     /// <inheritdoc/>
     public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory));
+    {
+        if (!_namedClusters.TryGetValue(options.ClusterId, out var cluster))
+        {
+            throw new InvalidOperationException($"ClusterId {options.ClusterId} not registered yet.");
+        }
+        return cluster;
+    }
+
+    /// <inheritdoc/>
+    public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, updateAdapterFactory, designModel));
+
     /// <inheritdoc/>
     public virtual void Dispose(IKafkaCluster cluster)
     {

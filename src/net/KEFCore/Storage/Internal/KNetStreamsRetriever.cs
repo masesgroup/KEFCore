@@ -116,6 +116,20 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         return true;
     }
 
+    /// <inheritdoc/>
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    {
+        var v = GetTValue(key);
+        if (v == null)
+        {
+            properties = default!;
+            return false;
+        }
+
+        properties = v?.GetProperties()!;
+        return true;
+    }
+
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;

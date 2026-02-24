@@ -32,6 +32,10 @@ public interface IKafkaClusterCache
     /// </summary>
     IKafkaCluster GetCluster(KafkaOptionsExtension options);
     /// <summary>
+    /// Gets an <see cref="IKafkaCluster"/>
+    /// </summary>
+    IKafkaCluster GetCluster(KafkaOptionsExtension options, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
+    /// <summary>
     /// Dispose an <see cref="IKafkaCluster"/>
     /// </summary>
     void Dispose(IKafkaCluster cluster);

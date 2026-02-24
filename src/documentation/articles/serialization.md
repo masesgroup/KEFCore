@@ -187,7 +187,7 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
-    public IReadOnlyDictionary<string, object> GetProperties()
+    public IDictionary<string, object?> GetProperties()
     {
         // add specific logic
     }

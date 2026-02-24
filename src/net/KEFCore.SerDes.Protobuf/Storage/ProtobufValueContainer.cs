@@ -137,14 +137,14 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<string, object> GetProperties()
+    public IDictionary<string, object?> GetProperties()
     {
-        Dictionary<string, object> props = [];
+        Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
             props.Add(item.PropertyName, item.Value.GetContent());
         }
-        return props;
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
     /// <inheritdoc/>
     public override bool Equals(object? obj)

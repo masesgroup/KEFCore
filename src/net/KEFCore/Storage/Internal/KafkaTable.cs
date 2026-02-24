@@ -23,7 +23,6 @@
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 using System.Globalization;
@@ -40,11 +39,10 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     where TValueContainer : class, IValueContainer<TKey>
 {
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
-    private readonly bool _sensitiveLoggingEnabled;
+    private readonly ILoggingOptions _loggingOptions;
     private readonly IList<(int, ValueConverter)>? _valueConverters;
     private readonly IList<(int, ValueComparer)>? _valueComparers;
 
-    private Dictionary<int, IKafkaIntegerValueGenerator>? _integerGenerators;
     readonly IEntityTypeProducer<TKey> _producer;
     private readonly string _tableAssociatedTopicName;
     /// <summary>
@@ -53,7 +51,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public KafkaTable(
         IKafkaCluster cluster,
         IEntityType entityType,
-        bool sensitiveLoggingEnabled)
+        ILoggingOptions loggingOptions)
     {
 #if DEBUG_PERFORMANCE
         Infrastructure.KafkaDbContext.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
@@ -63,7 +61,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         _tableAssociatedTopicName = Cluster.CreateTopicForEntity(entityType);
         _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, Cluster);
         _keyValueFactory = entityType.FindPrimaryKey()!.GetPrincipalKeyValueFactory<TKey>();
-        _sensitiveLoggingEnabled = sensitiveLoggingEnabled;
+        _loggingOptions = loggingOptions;
 
         foreach (var property in entityType.GetProperties())
         {
@@ -93,23 +91,25 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
+    public void FindAndAddOnTracker(object[] keyValues)
+    {
+        if (keyValues == null) return;
+        TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+        if (key != null && _producer.TryGetProperties(key, out var props))
+        {
+            // we are here because the Entity is not tracker yet, create and it 
+            var adapter = Cluster.UpdateAdapterFactory.Create();
+            var newEntry = adapter.CreateEntry(props, EntityType);
+            newEntry.EntityState = EntityState.Added;
+            adapter.DetectChanges();
+        }
+    }
+
+    /// <inheritdoc/>
     public virtual IKafkaCluster Cluster { get; }
     /// <inheritdoc/>
     public virtual IEntityType EntityType { get; }
-    /// <inheritdoc/>
-    public virtual KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property, IReadOnlyList<IKafkaTable> tables)
-    {
-        _integerGenerators ??= new Dictionary<int, IKafkaIntegerValueGenerator>();
 
-        var propertyIndex = property.GetIndex();
-        if (!_integerGenerators.TryGetValue(propertyIndex, out var generator))
-        {
-            generator = new KafkaIntegerValueGenerator<TProperty>(propertyIndex);
-            _integerGenerators[propertyIndex] = generator;
-        }
-
-        return (KafkaIntegerValueGenerator<TProperty>)generator;
-    }
     /// <inheritdoc/>
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
     /// <inheritdoc/>
@@ -154,7 +154,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual IKafkaRowBag Delete(IUpdateEntry entry)
     {
         var key = CreateKey(entry);
-        if (!_producer.TryGetValue(key, out var valueBuffer))
+        if (!_producer.TryGetValueBuffer(key, out var valueBuffer))
         {
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
@@ -212,7 +212,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     {
         var key = CreateKey(entry);
 
-        if (!_producer.TryGetValue(key, out var data))
+        if (!_producer.TryGetValueBuffer(key, out var data))
         {
             throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
         }
@@ -257,15 +257,9 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
     }
     /// <inheritdoc/>
-    public virtual void BumpValueGenerators(object?[] row)
+    void BumpValueGenerators(object?[] row)
     {
-        if (_integerGenerators != null)
-        {
-            foreach (var generator in _integerGenerators.Values)
-            {
-                generator.Bump(row);
-            }
-        }
+        //  Cluster.ValueGeneratorSelector.BumpAll(row);
     }
 
     private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry)!;
@@ -307,7 +301,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         IUpdateEntry entry,
         IList<IProperty> nullabilityErrors)
     {
-        if (_sensitiveLoggingEnabled)
+        if (_loggingOptions.IsSensitiveDataLoggingEnabled)
         {
             throw new DbUpdateException(
                 KafkaStrings.NullabilityErrorExceptionSensitive(
@@ -333,7 +327,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         IUpdateEntry entry,
         Dictionary<IProperty, object?> concurrencyConflicts)
     {
-        if (_sensitiveLoggingEnabled)
+        if (_loggingOptions.IsSensitiveDataLoggingEnabled)
         {
             throw new DbUpdateConcurrencyException(
                 KafkaStrings.UpdateConcurrencyTokenExceptionSensitive(

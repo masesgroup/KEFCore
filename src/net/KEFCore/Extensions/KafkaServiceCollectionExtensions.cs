@@ -18,6 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 using MASES.EntityFrameworkCore.KNet.Query.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -47,10 +48,12 @@ public static class KafkaServiceCollectionExtensions
     ///     The same service collection so that multiple calls can be chained.
     /// </returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
     public static IServiceCollection AddEntityFrameworkKafkaDatabase(this IServiceCollection serviceCollection)
     {
         var builder = new EntityFrameworkServicesBuilder(serviceCollection)
             .TryAdd<LoggingDefinitions, KafkaLoggingDefinitions>()
+            .TryAdd<EntityFrameworkCore.Internal.IEntityFinderSource, KafkaEntityFinderSource>()
             .TryAdd<IDatabaseProvider, DatabaseProvider<KafkaOptionsExtension>>()
             .TryAdd<IValueGeneratorSelector, KafkaValueGeneratorSelector>()
             .TryAdd<IDatabase>(p => p.GetRequiredService<IKafkaDatabase>())

@@ -223,13 +223,13 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
     }
     /// <inheritdoc/>
-    public IReadOnlyDictionary<string, object> GetProperties()
+    public IDictionary<string, object?> GetProperties()
     {
-        Dictionary<string, object> props = new();
+        Dictionary<string, object?> props = new();
         foreach (var item in Data)
         {
             props.Add(item.PropertyName, item.Value!);
         }
-        return props;
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
 }
