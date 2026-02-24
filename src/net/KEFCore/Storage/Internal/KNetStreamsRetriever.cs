@@ -22,6 +22,7 @@
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.KNet.Consumer;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
 using MASES.KNet.Streams.Processor;
@@ -265,7 +266,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     _currentSw.Start();
 #endif
-                    return _current;
+                return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -374,53 +375,53 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             {
                 _moveNextSw.Start();
 #endif
-                bool hasNext = false;
-                TValue? value = default;
+            bool hasNext = false;
+            TValue? value = default;
 
-                do
+            do
+            {
+                hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
+                if (hasNext)
                 {
-                    hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
-                    if (hasNext)
-                    {
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
                         _cycles++;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Start();
 #endif
 #endif
-                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                    value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
-                        hasNext = true;
-                    }
-                    break;
+                    if (value == null) continue;
+                    hasNext = true;
                 }
-                while (true);
+                break;
+            }
+            while (true);
 
-                if (hasNext)
-                {
+            if (hasNext)
+            {
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
-                    object[] array = null!;
-                    value?.GetData(_entityType, _properties, ref array);
+                object[] array = null!;
+                value?.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif
-                    _current = new ValueBuffer(array);
-                }
-                else
-                {
-                    _current = ValueBuffer.Empty;
-                }
-                return await ValueTask.FromResult(hasNext);
+                _current = new ValueBuffer(array);
+            }
+            else
+            {
+                _current = ValueBuffer.Empty;
+            }
+            return await ValueTask.FromResult(hasNext);
 #if DEBUG_PERFORMANCE
             }
             finally

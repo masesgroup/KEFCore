@@ -46,9 +46,6 @@
 	  <None Update="Test.KNetReplicatorManageEvents.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetStreamsWithEvents.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	  <None Update="TestAvro.KNetReplicatorModelBuilder.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>

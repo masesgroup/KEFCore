@@ -104,7 +104,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         _currentSw.Start();
 #endif
-                        return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -136,22 +136,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 {
                     _moveNextSw.Start();
 #endif
-                    if (_enumerator != null && _enumerator.MoveNext())
-                    {
+                if (_enumerator != null && _enumerator.MoveNext())
+                {
 #if DEBUG_PERFORMANCE
                         _cycles++;
                         _valueBufferSw.Start();
 #endif
-                        object[] array = null!;
-                        _enumerator.Current.Value.GetData(_entityType, _properties, ref array);
+                    object[] array = null!;
+                    _enumerator.Current.Value.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
-                        _current = new ValueBuffer(array);
-                        return true;
-                    }
-                    _current = ValueBuffer.Empty;
-                    return false;
+                    _current = new ValueBuffer(array);
+                    return true;
+                }
+                _current = ValueBuffer.Empty;
+                return false;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -302,6 +302,33 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             return;
         }
         else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public void TryAddKey(object[] keyValues)
+    {
+        if (keyValues == null) return;
+        TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+        if (key == null) return;
+
+        if (_streamData != null)
+        {
+            if (_streamData.TryGetProperties(key, out var properties))
+            {
+                KafkaStateHelper.ManageFind(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties);
+            }
+            return;
+        }
+        else if (_kafkaCompactedReplicator != null)
+        {
+            if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
+            {
+                IDictionary<string, object?>? properties = valueContainer?.GetProperties()!;
+                KafkaStateHelper.ManageFind(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties);
+            }
+            return;
+        }
+
+        throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
     }
 
     /// <inheritdoc/>
