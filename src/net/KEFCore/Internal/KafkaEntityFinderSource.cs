@@ -33,11 +33,10 @@ namespace MASES.EntityFrameworkCore.KNet.Internal;
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
-public class KafkaEntityFinderSource(IKafkaTableFactory tableFactory, IKafkaClusterCache kafkaClusterCache) : IEntityFinderSource
+public class KafkaEntityFinderSource(IKafkaClusterCache kafkaClusterCache) : IEntityFinderSource
 {
-    private readonly IKafkaTableFactory _tableFactory = tableFactory;
     private readonly IKafkaClusterCache _kafkaClusterCache = kafkaClusterCache;
-    private readonly ConcurrentDictionary<Type, Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaTableFactory, IKafkaClusterCache, IEntityFinder>> _cache = new();
+    private readonly ConcurrentDictionary<Type, Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaClusterCache, IEntityFinder>> _cache = new();
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -52,11 +51,11 @@ public class KafkaEntityFinderSource(IKafkaTableFactory tableFactory, IKafkaClus
         IEntityType type)
         => _cache.GetOrAdd(
             type.ClrType,
-            t => (Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaTableFactory, IKafkaClusterCache, IEntityFinder >)
+            t => (Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaClusterCache, IEntityFinder >)
                 typeof(KafkaEntityFinderSource).GetMethod(nameof(CreateConstructor), BindingFlags.NonPublic | BindingFlags.Static)!
-                    .MakeGenericMethod(t).Invoke(null, null)!)(stateManager, setSource, setCache, type, _tableFactory, _kafkaClusterCache);
+                    .MakeGenericMethod(t).Invoke(null, null)!)(stateManager, setSource, setCache, type, _kafkaClusterCache);
 
-    private static Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaTableFactory, IKafkaClusterCache, IEntityFinder> CreateConstructor<TEntity>()
+    private static Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKafkaClusterCache, IEntityFinder> CreateConstructor<TEntity>()
         where TEntity : class
-        => (s, src, c, t, factory, cluster) => new KafkaEntityFinder<TEntity>(s, src, c, t, factory, cluster);
+        => (s, src, c, t, cluster) => new KafkaEntityFinder<TEntity>(s, src, c, t, cluster);
 }

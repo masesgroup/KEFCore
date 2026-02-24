@@ -87,7 +87,7 @@
         <article data-uid="">
 <h1 id="kefcore-kafkadbcontext">KEFCore: KafkaDbContext</h1>
 
-<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>:</p>
+<p><code>KafkaDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>:</p>
 <ul>
 <li><code>KafkaDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
 <li><code>KafkaDbContext</code> defines the following properties:
@@ -106,7 +106,7 @@
 <li><strong>UseEnumeratorWithPrefetch</strong>: set to <strong>true</strong> to prefer enumerator instances able to do a prefetch on data speeding up execution, used if <strong>UseKNetStreams</strong> is <strong>true</strong> and <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
 <li><strong>UseByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <see cref="Java.Nio.ByteBuffer"></see> data exchange in serializer instances</li>
 <li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a></li>
-<li><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka™ Streams to manage data to or from topics</li>
+<li><del><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka™ Streams to manage data to or from topics</del></li>
 <li><strong>UseKNetStreams</strong>: Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams, used if <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
 <li><strong>ConsumerConfig</strong>: parameters to use for Producer</li>
 <li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
@@ -122,7 +122,7 @@
 <li><code>KafkaDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
 <li><code>KafkaDbContext</code> setup the options needed to use an Apache Kafka™ cluster:
 <ul>
-<li>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KafkaDbContext</code></li>
+<li><del>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KafkaDbContext</code></del></li>
 <li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property of <code>KafkaDbContext</code></li>
 <li>default <code>StreamsConfig</code> can be overridden using <strong>StreamsConfig</strong> property of <code>KafkaDbContext</code></li>
 <li>default <code>TopicConfig</code> can be overridden using <strong>TopicConfig</strong> property of <code>KafkaDbContext</code></li>

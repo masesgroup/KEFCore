@@ -321,6 +321,12 @@ public class KafkaCluster : IKafkaCluster
     }
 
     /// <inheritdoc/>
+    public IKafkaTable GetTable(IEntityType entityType)
+    {
+        return _tableFactory.Get(this, entityType);
+    }
+
+    /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
         return _topicForEntity.GetOrAdd(entityType, (et) =>

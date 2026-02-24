@@ -87,9 +87,9 @@
         <article data-uid="">
 <h1 id="kefcore-how-it-works">KEFCore: how it works</h1>
 
-<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can be used in some <a href="usecases.html">operative conditions</a>.</p>
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can be used in some <a href="usecases.html">operative conditions</a>.</p>
 <p>It is important to start with a simple description on how it works.
-In the following chapters sometime it is used the term back-end and sometime Apache Kafka™ cluster: they shall be considered the same thing int the <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> context.</p>
+In the following chapters sometime it is used the term back-end and sometime Apache Kafka™ cluster: they shall be considered the same thing int the <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> context.</p>
 <h2 id="basic-concepts">Basic concepts</h2>
 <p>Here below an image from Wikipedia describing simple concepts:</p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Overview_of_Apache_Kafka.svg" alt="Alt text" title="Kafka™ basic concepts"></p>
@@ -105,19 +105,19 @@ Apache Kafka™ cluster adds the ability to store this information within the to
 <li>an application consuming from the Apache Kafka™ cluster can hear only latest changes or position to a specific position in the past and start from that point to receive data</li>
 <li>the standard way to consume from Apache Kafka™ cluster is to start from the end (latest available record) or start from the beginning (first available record)</li>
 </ul>
-<h2 id="how-entity-framework-core-provider-for-apache-kafka-works">How <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> works</h2>
-<p>An application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is both a producer and a consumer at the same time:</p>
+<h2 id="how-entity-framework-core-provider-for-apache-kafka-works">How <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> works</h2>
+<p>An application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is both a producer and a consumer at the same time:</p>
 <ul>
-<li>when an entity is created/updated/deleted (e.g. calling <a href="https://learn.microsoft.com/en-us/ef/core/saving/basic">SaveChanges</a>) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster</li>
+<li>when an entity is created/updated/deleted (e.g. calling <a href="https://learn.microsoft.com/ef/core/saving/basic">SaveChanges</a>) the provider will invoke the right producer to store a new record in the right topic of the Apache Kafka™ cluster</li>
 <li>then the consumer subscribed will be informed about this new record and will store it back: this seems not useful till now, but it will be more clear later</li>
 </ul>
-<p>Apache Kafka™ cluster becams a:</p>
+<p>Apache Kafka™ cluster becomes:</p>
 <ol>
-<li>a central routing for data changes in <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> based applications.</li>
+<li>a central routing for data changes in <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> based applications.</li>
 <li>a reliable storage because, when the application restarts, the data stored in the topics will be read back from the consumers so the state will be aligned to the latest available.</li>
 </ol>
 <p>Apache Kafka™ comes with <a href="https://kafka.apache.org/documentation/#compaction">topic compaction</a> feature, thanks to it the point 2 is optimized.
-<a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is interested to store only the latest state of the entity and not the changes.
+<a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is interested to store only the latest state of the entity and not the changes.
 Using the <a href="https://kafka.apache.org/documentation/#compaction">topic compaction</a>, the combination of producer, consumer and Apache Kafka™ cluster can apply the CRUD operations on data:</p>
 <ul>
 <li>Create: a producer stores a new record with a unique key</li>
@@ -125,25 +125,90 @@ Using the <a href="https://kafka.apache.org/documentation/#compaction">topic com
 <li>Update: a producer storing a new record with a previously stored unique key will discard the old records</li>
 <li>Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key</li>
 </ul>
-<p>All CRUD operations are helped, behind the scene, from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>.</p>
+<p>All CRUD operations are helped, behind the scene, from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or</del> <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>.</p>
 <h3 id="first-level-cache">First-level cache</h3>
-<p><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> act as first-level cache of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>: <strong>data coming from the Apache Kafka™ cluster updates their content while the system is running</strong>.
+<p><del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> act as first-level cache of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>: <strong>data coming from the Apache Kafka™ cluster updates their content while the system is running</strong>.
 The behavior is intrinsic and does not need any extra call to the back-end.</p>
 <h3 id="data-storage">Data storage</h3>
-<p>Apache Kafka™ stores the information using records. It is important to convert entities in something usable from Apache Kafka™.
-The conversion is done using serializers that converts the Entities (data in the model) into Apache Kafka™ records and viceversa: see <a href="serialization.html">serialization chapter</a> for more info.</p>
-<h2 id="entity-framework-core-provider-for-apache-kafka-compared-to-other-providers"><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> compared to other providers</h2>
-<p>In the previous chapter was described how <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> permits to reproduce the CRUD operations.
+<p>Apache Kafka™ stores the information using records. It is important to convert entities in something usable from Apache Kafka™.</p>
+<p>At first glance each Entity is translated into a topic in Apache Kafka™; consider the following simple model extracted from <a href="https://github.com/masesgroup/KEFCore/blob/53baf6aa6a875a4eee7291d9b16c3495fda07f1f/test/Common/Model.cs">Model.cs</a>:</p>
+<pre><code class="lang-C#">namespace MASES.EntityFrameworkCore.KNet.Test.Model
+{
+    [Table(&quot;Blog&quot;, Schema = &quot;Simple&quot;)]
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+
+        public List&lt;Post&gt; Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;BlogId: {BlogId} Url: {Url} Rating: {Rating}&quot;;
+        }
+    }
+    [PrimaryKey(&quot;PostId&quot;)]
+    [Table(&quot;Post&quot;, Schema = &quot;Simple&quot;)]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}&quot;;
+        }
+    }
+}
+</code></pre>
+<p>used in:</p>
+<pre><code class="lang-C#">namespace MASES.EntityFrameworkCore.KNet.Test
+{
+    public class BloggingContext : KafkaDbContext
+    {
+        public override string DatabaseName =&gt; &quot;Test&quot;;
+
+        public DbSet&lt;Blog&gt; Blogs { get; set; }
+        public DbSet&lt;Post&gt; Posts { get; set; }
+    }
+}
+</code></pre>
+<p>each entity maps to a specific topic using the feature added with <a href="https://github.com/masesgroup/KEFCore/issues/417">https://github.com/masesgroup/KEFCore/issues/417</a>:</p>
+<ul>
+<li>Blog belongs to the topic named [DatabaseName].Simple.Blog</li>
+<li>Post belongs to the topic named [DatabaseName].Simple.Post</li>
+</ul>
+<p>where DatabaseName is the property defined from <code>BloggingContext</code> see <a href="kafkadbcontext.html">KafkaDbContext</a>.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>The entities Blog and Post are decorated with <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a>, if the attribute is missing the topic name becomes different and use the <a href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name"><strong>Name</strong></a> property of the Entity which belongs to the namespace defining it:</p>
+<ul>
+<li>Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog</li>
+<li>Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post</li>
+</ul>
+</div>
+<p>Established how <a href="https://kafka.apache.org/">Apache Kafka™</a> stores the data it is important to understand how the storage is filled with the data in the model.
+Each element in the <a href="https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1">DbSet</a>, in the above example there are <strong>Blogs</strong> and <strong>Posts</strong>, is converted in something can be used from <a href="https://kafka.apache.org/">Apache Kafka™</a>.
+The conversion is done using serializers that converts the Entities (data in the model) into <a href="https://kafka.apache.org/">Apache Kafka™</a> records and viceversa: see <a href="serialization.html">serialization chapter</a> for more info.
+The serializers are the glue between <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a>.</p>
+<h2 id="entity-framework-core-provider-for-apache-kafka-compared-to-other-providers"><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> compared to other providers</h2>
+<p>In the previous chapter was described how <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> permits to reproduce the CRUD operations.
 Starting from the model defined in the code, the data are stored in the topics and each topic can be seen as a table of a database filled in with the same data.
-From the point of view of an application, the use of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is similar to the use of the InMemory provider.</p>
-<h3 id="a-note-on-migrations">A note on <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations">migrations</a></h3>
-<p>The current version of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> does not support <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations">migrations</a> explicitly.</p>
-<h2 id="entity-framework-core-provider-for-apache-kafka-features-not-available-in-other-providers"><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> features not available in other providers</h2>
-<p>Here a list of features <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> gives to its user and useful in some use cases.
+From the point of view of an application, the use of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> is similar to the use of the InMemory provider.</p>
+<h3 id="a-note-on-migrations">A note on <a href="https://learn.microsoft.com/ef/core/managing-schemas/migrations">migrations</a></h3>
+<p>The current version of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> does not support <a href="https://learn.microsoft.com/ef/core/managing-schemas/migrations">migrations</a> using an external tool: the schema evolution is intrinsecally available from the serialization structure used.</p>
+<p>Read more about migration in <a href="migration.html">KEFCore migration</a>.</p>
+<h2 id="entity-framework-core-provider-for-apache-kafka-features-not-available-in-other-providers"><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> features not available in other providers</h2>
+<p>Here a list of features <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> gives to its user and useful in some use cases.
 The features below are strictly correlated with the consumers receiving back the record from Apache Kafka™ cluster described above.</p>
 <h3 id="distributed-cache">Distributed cache</h3>
 <p>In the previous chapter was stated that consumers align the application data to the last topics information.
-The alignment is managed from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>, everything is driven from the Apache Kafka™ back-end.
+The alignment is managed from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>, everything is driven from the Apache Kafka™ back-end.
 Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
 This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka™ back-end:</p>
 <ul>
@@ -153,11 +218,11 @@ This implies that, virtually, there is a distributed cache between the applicati
 <p>If an application restarts it will be able to retrieve latest data (latest cache) and aligns to the shared state.</p>
 <p><img src="../images/cache.gif" alt="Alt text" title="Distributed cache"></p>
 <h3 id="events">Events</h3>
-<p>Generally, an application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, executes queries to the back-end to store, or retrieve, information on demand.
+<p>Generally, an application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, executes queries to the back-end to store, or retrieve, information on demand.
 The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode:</p>
 <ul>
-<li>Mainly these change events are used from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> to align the local state;</li>
-<li>Moreover <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can inform, using callbacks and at zero cost, the registered application about these events.</li>
+<li>Mainly these change events are used from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> to align the local state;</li>
+<li>Moreover <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can inform, using callbacks and at zero cost, the registered application about these events.</li>
 </ul>
 <p>Then the application can use the reported events in many modes:</p>
 <ul>
@@ -168,15 +233,15 @@ The alignment (record consumed) can be considered a change event: so any change 
 </ul>
 <p><img src="../images/events.gif" alt="Alt text" title="Distributed cache"></p>
 <blockquote>
-<p><strong>IMPORTANT NOTE</strong>: the events are raised from external threads and this can lead to <a href="https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues">concurrent exceptions</a> if the <code>KafkaDbContext</code> is used to retrieve information.</p>
+<p><strong>IMPORTANT NOTE</strong>: the events are raised from external threads and this can lead to <a href="https://learn.microsoft.com/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues">concurrent exceptions</a> if the <code>KafkaDbContext</code> is used to retrieve information.</p>
 </blockquote>
-<h3 id="applications-not-based-on-entity-framework-core">Applications not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></h3>
-<p>Till now was spoken about applications based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, however this provider can be used to feed applications not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>.
-<a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> comes with ready-made helping classes to subscribe to any topic of the Apache Kafka™ cluster to retrieve the data stored from an application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>.
+<h3 id="applications-not-based-on-entity-framework-core">Applications not based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a></h3>
+<p>Till now was spoken about applications based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, however this provider can be used to feed applications not based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>.
+<a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> comes with ready-made helping classes to subscribe to any topic of the Apache Kafka™ cluster to retrieve the data stored from an application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>.
 Any application can use this feature to:</p>
 <ul>
-<li>read latest data stored in the topics from the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></li>
-<li>attach to the topics involved from the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> and receive change events upon something was produced</li>
+<li>read latest data stored in the topics from the application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a></li>
+<li>attach to the topics involved from the application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and receive change events upon something was produced</li>
 </ul>
 <p>The ready-made helping classes upon a record is received, deserialize it and returns back the filled Entity.</p>
 
