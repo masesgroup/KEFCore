@@ -22,6 +22,7 @@
 #nullable enable
 
 using Java.Util;
+using Javax.Xml.Crypto;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;

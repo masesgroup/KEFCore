@@ -104,7 +104,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         _currentSw.Start();
 #endif
-                        return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -136,22 +136,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 {
                     _moveNextSw.Start();
 #endif
-                    if (_enumerator != null && _enumerator.MoveNext())
-                    {
+                if (_enumerator != null && _enumerator.MoveNext())
+                {
 #if DEBUG_PERFORMANCE
                         _cycles++;
                         _valueBufferSw.Start();
 #endif
-                        object[] array = null!;
-                        _enumerator.Current.Value.GetData(_entityType, _properties, ref array);
+                    object[] array = null!;
+                    _enumerator.Current.Value.GetData(_entityType, _properties, ref array);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
-                        _current = new ValueBuffer(array);
-                        return true;
-                    }
-                    _current = ValueBuffer.Empty;
-                    return false;
+                    _current = new ValueBuffer(array);
+                    return true;
+                }
+                _current = ValueBuffer.Empty;
+                return false;
 #if DEBUG_PERFORMANCE
                 }
                 finally
