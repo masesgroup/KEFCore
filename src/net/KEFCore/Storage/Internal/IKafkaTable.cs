@@ -20,6 +20,7 @@
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
+
 /// <summary>
 /// Reaches backend to find entities
 /// </summary>
@@ -29,6 +30,7 @@ public interface IKafkaTableEntityFinder
     /// Find in backend and add on tracker since it was not found before
     /// </summary>
     /// <param name="keyValues">The set of value defined by key to be find</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> defined from <see cref="IStateManager"/></param>
     void FindAndAddOnTracker(object[] keyValues);
 }
 

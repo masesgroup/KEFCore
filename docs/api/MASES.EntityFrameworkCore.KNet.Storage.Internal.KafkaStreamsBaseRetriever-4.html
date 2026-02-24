@@ -105,7 +105,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt; : IKafkaStreamsRetriever, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt; : IKafkaStreamsRetriever&lt;TKey&gt;, IDisposable where TKey : notnull where TValue : IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
 
@@ -133,7 +133,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <dl class="typelist implements">
     <dt>Implements</dt>
     <dd>
-      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html">IKafkaStreamsRetriever</a></div>
+      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html">IKafkaStreamsRetriever</a>&lt;TKey&gt;</div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
     </dd>
   </dl>
@@ -182,9 +182,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)">
-  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes&lt;TKey, K&gt;, ISerDes&lt;TValue, V&gt;, StreamsBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)">
+  KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes&lt;TKey, K&gt;, ISerDes&lt;TValue, V&gt;, StreamsBuilder)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Default initializer</p>
@@ -192,7 +192,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, ISerDes&lt;TKey, K&gt; keySerdes, ISerDes&lt;TValue, V&gt; valueSerdes, StreamsBuilder builder)</code></pre>
+    <pre><code class="lang-csharp hljs">public KafkaStreamsBaseRetriever(IKafkaCluster kafkaCluster, IEntityType entityType, IProperty[] properties, ISerDes&lt;TKey, K&gt; keySerdes, ISerDes&lt;TValue, V&gt; valueSerdes, StreamsBuilder builder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -200,6 +200,8 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt><code>kafkaCluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html">IKafkaCluster</a></dt>
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+    <dt><code>properties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>[]</dt>
     <dd></dd>
     <dt><code>keySerdes</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDes-2.html">ISerDes</a>&lt;TKey, K&gt;</dt>
     <dd></dd>
@@ -228,7 +230,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L93"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -251,14 +253,53 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Exist_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Exist__0_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist(`0)">
+  Exist(TKey)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Che if a <code class="paramref">key</code> exist</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Exist(TKey key)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key to check for existance</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the <code class="paramref">key</code> exist, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> otherwise</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers">
   GetValueBuffers()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L99"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html">IKafkaStreamsRetriever</a> instance</p>
+  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html">IKafkaStreamsRetriever&lt;TKey&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -271,6 +312,48 @@ doing so can result in application failures when updating to a new Entity Framew
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>&gt;</dt>
     <dd><p>An <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_TryGetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)">
+  TryGetValue(TKey, out ValueBuffer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KafkaStreamsBaseRetriever.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the values associated to the <code class="paramref">key</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key to retrieve</p>
+</dd>
+    <dt><code>valueBuffer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a></dt>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> containing the information, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> otherwise</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the <code class="paramref">key</code> exist, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> otherwise</p>
 </dd>
   </dl>
 

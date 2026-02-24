@@ -2329,6 +2329,22 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DistinctOnSubqueryNotSupported
   nameWithType: KafkaStrings.DistinctOnSubqueryNotSupported
+- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException(System.Object)
+  name: DuplicateKeyException(object?)
+  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_DuplicateKeyException_System_Object_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException(System.Object)
+  name.vb: DuplicateKeyException(Object)
+  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException(object?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException(Object)
+  nameWithType: KafkaStrings.DuplicateKeyException(object?)
+  nameWithType.vb: KafkaStrings.DuplicateKeyException(Object)
+- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException*
+  name: DuplicateKeyException
+  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_DuplicateKeyException_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.DuplicateKeyException
+  nameWithType: KafkaStrings.DuplicateKeyException
 - uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.InvalidDerivedTypeInEntityProjection(System.Object,System.Object)
   name: InvalidDerivedTypeInEntityProjection(object?, object?)
   href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_InvalidDerivedTypeInEntityProjection_System_Object_System_Object_
@@ -2432,12 +2448,15 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UnableToBindMemberToEntityProjection
   nameWithType: KafkaStrings.UnableToBindMemberToEntityProjection
-- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException
-  name: UpdateConcurrencyException
-  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_UpdateConcurrencyException
-  commentId: P:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException
-  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException
-  nameWithType: KafkaStrings.UpdateConcurrencyException
+- uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException(System.Object)
+  name: UpdateConcurrencyException(object?)
+  href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_UpdateConcurrencyException_System_Object_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException(System.Object)
+  name.vb: UpdateConcurrencyException(Object)
+  fullName: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException(object?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException(Object)
+  nameWithType: KafkaStrings.UpdateConcurrencyException(object?)
+  nameWithType.vb: KafkaStrings.UpdateConcurrencyException(Object)
 - uid: MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.UpdateConcurrencyException*
   name: UpdateConcurrencyException
   href: api/MASES.EntityFrameworkCore.KNet.Internal.KafkaStrings.html#MASES_EntityFrameworkCore_KNet_Internal_KafkaStrings_UpdateConcurrencyException_
@@ -5962,15 +5981,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).New()
   nameWithType: AvroValueContainer<TKey>.AvroValueContainer()
   nameWithType.vb: AvroValueContainer(Of TKey).New()
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name: AvroValueContainer(IEntityType, object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name.vb: New(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer<TKey>.AvroValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: AvroValueContainer<TKey>.AvroValueContainer(IEntityType, object[])
-  nameWithType.vb: AvroValueContainer(Of TKey).New(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name: AvroValueContainer(IEntityType, IProperty[]?, object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name.vb: New(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer<TKey>.AvroValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: AvroValueContainer<TKey>.AvroValueContainer(IEntityType, IProperty[]?, object[])
+  nameWithType.vb: AvroValueContainer(Of TKey).New(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.#ctor*
   name: AvroValueContainer
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1__ctor_
@@ -5981,15 +6000,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).New
   nameWithType: AvroValueContainer<TKey>.AvroValueContainer
   nameWithType.vb: AvroValueContainer(Of TKey).New
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name: GetData(IEntityType, ref object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name.vb: GetData(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, ref object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: AvroValueContainer<TKey>.GetData(IEntityType, ref object[])
-  nameWithType.vb: AvroValueContainer(Of TKey).GetData(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name: GetData(IEntityType, IProperty[]?, ref object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name.vb: GetData(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, ref object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: AvroValueContainer<TKey>.GetData(IEntityType, IProperty[]?, ref object[])
+  nameWithType.vb: AvroValueContainer(Of TKey).GetData(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer`1.GetData*
   name: GetData
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_AvroValueContainer_1_GetData_
@@ -6051,6 +6070,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Get
   nameWithType: PropertyDataRecord.Get
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType
+  name: ManagedType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_ManagedType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType
+  nameWithType: PropertyDataRecord.ManagedType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType*
+  name: ManagedType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_ManagedType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.ManagedType
+  nameWithType: PropertyDataRecord.ManagedType
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.PropertyIndex
   name: PropertyIndex
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_PropertyIndex
@@ -6106,6 +6138,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Schema
   nameWithType: PropertyDataRecord.Schema
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_SupportNull
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull
+  nameWithType: PropertyDataRecord.SupportNull
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull*
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_SupportNull_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.SupportNull
+  nameWithType: PropertyDataRecord.SupportNull
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.Value
   name: Value
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Avro_Storage_PropertyDataRecord_Value
@@ -6258,15 +6303,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer(Of T).EntityName
   nameWithType: IValueContainer<T>.EntityName
   nameWithType.vb: IValueContainer(Of T).EntityName
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name: GetData(IEntityType, ref object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name.vb: GetData(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer<T>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, ref object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer(Of T).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: IValueContainer<T>.GetData(IEntityType, ref object[])
-  nameWithType.vb: IValueContainer(Of T).GetData(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name: GetData(IEntityType, IProperty[]?, ref object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name.vb: GetData(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer<T>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, ref object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer(Of T).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: IValueContainer<T>.GetData(IEntityType, IProperty[]?, ref object[])
+  nameWithType.vb: IValueContainer(Of T).GetData(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetData*
   name: GetData
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetData_
@@ -6605,15 +6650,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).New()
   nameWithType: DefaultValueContainer<TKey>.DefaultValueContainer()
   nameWithType.vb: DefaultValueContainer(Of TKey).New()
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name: DefaultValueContainer(IEntityType, object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name.vb: New(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.DefaultValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: DefaultValueContainer<TKey>.DefaultValueContainer(IEntityType, object[])
-  nameWithType.vb: DefaultValueContainer(Of TKey).New(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name: DefaultValueContainer(IEntityType, IProperty[]?, object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name.vb: New(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.DefaultValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: DefaultValueContainer<TKey>.DefaultValueContainer(IEntityType, IProperty[]?, object[])
+  nameWithType.vb: DefaultValueContainer(Of TKey).New(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.#ctor*
   name: DefaultValueContainer
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1__ctor_
@@ -6675,15 +6720,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).EntityName
   nameWithType: DefaultValueContainer<TKey>.EntityName
   nameWithType.vb: DefaultValueContainer(Of TKey).EntityName
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name: GetData(IEntityType, ref object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name.vb: GetData(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, ref object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: DefaultValueContainer<TKey>.GetData(IEntityType, ref object[])
-  nameWithType.vb: DefaultValueContainer(Of TKey).GetData(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name: GetData(IEntityType, IProperty[]?, ref object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name.vb: GetData(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, ref object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: DefaultValueContainer<TKey>.GetData(IEntityType, IProperty[]?, ref object[])
+  nameWithType.vb: DefaultValueContainer(Of TKey).GetData(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.GetData*
   name: GetData
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1_GetData_
@@ -6710,40 +6755,29 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).GetProperties
   nameWithType: DefaultValueContainer<TKey>.GetProperties
   nameWithType.vb: DefaultValueContainer(Of TKey).GetProperties
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.Properties
+  name: Properties
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1_Properties
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.Properties
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.Properties
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).Properties
+  nameWithType: DefaultValueContainer<TKey>.Properties
+  nameWithType.vb: DefaultValueContainer(Of TKey).Properties
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.Properties*
+  name: Properties
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_DefaultValueContainer_1_Properties_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer`1.Properties
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer<TKey>.Properties
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer(Of TKey).Properties
+  nameWithType: DefaultValueContainer<TKey>.Properties
+  nameWithType.vb: DefaultValueContainer(Of TKey).Properties
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData
   name: PropertyData
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html
   commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData
   nameWithType: PropertyData
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor
-  name: PropertyData()
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData__ctor
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor
-  name.vb: New()
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.PropertyData()
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.New()
-  nameWithType: PropertyData.PropertyData()
-  nameWithType.vb: PropertyData.New()
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor(Microsoft.EntityFrameworkCore.Metadata.IProperty,System.Object)
-  name: PropertyData(IProperty, object)
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData__ctor_Microsoft_EntityFrameworkCore_Metadata_IProperty_System_Object_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor(Microsoft.EntityFrameworkCore.Metadata.IProperty,System.Object)
-  name.vb: New(IProperty, Object)
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.PropertyData(Microsoft.EntityFrameworkCore.Metadata.IProperty, object)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.New(Microsoft.EntityFrameworkCore.Metadata.IProperty, Object)
-  nameWithType: PropertyData.PropertyData(IProperty, object)
-  nameWithType.vb: PropertyData.New(IProperty, Object)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor*
-  name: PropertyData
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData__ctor_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.PropertyData
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.New
-  nameWithType: PropertyData.PropertyData
-  nameWithType.vb: PropertyData.New
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ClrType
   name: ClrType
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType
@@ -6770,78 +6804,6 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedType
   nameWithType: PropertyData.ManagedType
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes
-  name: PropertyData.ManagedTypes
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes
-  nameWithType: PropertyData.ManagedTypes
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Byte
-  name: Byte
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Byte
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Byte
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Byte
-  nameWithType: PropertyData.ManagedTypes.Byte
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTime
-  name: DateTime
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_DateTime
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTime
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTime
-  nameWithType: PropertyData.ManagedTypes.DateTime
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTimeOffset
-  name: DateTimeOffset
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_DateTimeOffset
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTimeOffset
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.DateTimeOffset
-  nameWithType: PropertyData.ManagedTypes.DateTimeOffset
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Double
-  name: Double
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Double
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Double
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Double
-  nameWithType: PropertyData.ManagedTypes.Double
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Float
-  name: Float
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Float
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Float
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Float
-  nameWithType: PropertyData.ManagedTypes.Float
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Guid
-  name: Guid
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Guid
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Guid
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Guid
-  nameWithType: PropertyData.ManagedTypes.Guid
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Int
-  name: Int
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Int
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Int
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Int
-  nameWithType: PropertyData.ManagedTypes.Int
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Long
-  name: Long
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Long
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Long
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Long
-  nameWithType: PropertyData.ManagedTypes.Long
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Short
-  name: Short
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Short
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Short
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Short
-  nameWithType: PropertyData.ManagedTypes.Short
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.String
-  name: String
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_String
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.String
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.String
-  nameWithType: PropertyData.ManagedTypes.String
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Undefined
-  name: Undefined
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedTypes_Undefined
-  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Undefined
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.Undefined
-  nameWithType: PropertyData.ManagedTypes.Undefined
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.OnDeserialized
   name: OnDeserialized()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_OnDeserialized
@@ -6868,6 +6830,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.PropertyName
   nameWithType: PropertyData.PropertyName
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_SupportNull
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull
+  nameWithType: PropertyData.SupportNull
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull*
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_SupportNull_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull
+  nameWithType: PropertyData.SupportNull
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.Value
   name: Value
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_Value
@@ -6881,6 +6856,151 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.Value
   nameWithType: PropertyData.Value
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper
+  name: NativeTypeMapper
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper
+  nameWithType: NativeTypeMapper
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.Type)
+  name: GetValue(Type?)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_System_Type_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.Type)
+  name.vb: GetValue(Type)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.Type?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.Type)
+  nameWithType: NativeTypeMapper.GetValue(Type?)
+  nameWithType.vb: NativeTypeMapper.GetValue(Type)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes,System.Boolean})
+  name: GetValue((ManagedTypes, bool))
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_System_ValueTuple_MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_System_Boolean__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes,System.Boolean})
+  name.vb: GetValue((ManagedTypes, Boolean))
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue((MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes, bool))
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue((MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes, Boolean))
+  nameWithType: NativeTypeMapper.GetValue((NativeTypeMapper.ManagedTypes, bool))
+  nameWithType.vb: NativeTypeMapper.GetValue((NativeTypeMapper.ManagedTypes, Boolean))
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue*
+  name: GetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue
+  nameWithType: NativeTypeMapper.GetValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes
+  name: NativeTypeMapper.ManagedTypes
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes
+  nameWithType: NativeTypeMapper.ManagedTypes
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Bool
+  name: Bool
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Bool
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Bool
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Bool
+  nameWithType: NativeTypeMapper.ManagedTypes.Bool
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Byte
+  name: Byte
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Byte
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Byte
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Byte
+  nameWithType: NativeTypeMapper.ManagedTypes.Byte
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Char
+  name: Char
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Char
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Char
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Char
+  nameWithType: NativeTypeMapper.ManagedTypes.Char
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTime
+  name: DateTime
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_DateTime
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTime
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTime
+  nameWithType: NativeTypeMapper.ManagedTypes.DateTime
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTimeOffset
+  name: DateTimeOffset
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_DateTimeOffset
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTimeOffset
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.DateTimeOffset
+  nameWithType: NativeTypeMapper.ManagedTypes.DateTimeOffset
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Decimal
+  name: Decimal
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Decimal
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Decimal
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Decimal
+  nameWithType: NativeTypeMapper.ManagedTypes.Decimal
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Double
+  name: Double
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Double
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Double
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Double
+  nameWithType: NativeTypeMapper.ManagedTypes.Double
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Float
+  name: Float
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Float
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Float
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Float
+  nameWithType: NativeTypeMapper.ManagedTypes.Float
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Guid
+  name: Guid
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Guid
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Guid
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Guid
+  nameWithType: NativeTypeMapper.ManagedTypes.Guid
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Int
+  name: Int
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Int
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Int
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Int
+  nameWithType: NativeTypeMapper.ManagedTypes.Int
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Long
+  name: Long
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Long
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Long
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Long
+  nameWithType: NativeTypeMapper.ManagedTypes.Long
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.SByte
+  name: SByte
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_SByte
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.SByte
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.SByte
+  nameWithType: NativeTypeMapper.ManagedTypes.SByte
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Short
+  name: Short
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Short
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Short
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Short
+  nameWithType: NativeTypeMapper.ManagedTypes.Short
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.String
+  name: String
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_String
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.String
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.String
+  nameWithType: NativeTypeMapper.ManagedTypes.String
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UInt
+  name: UInt
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_UInt
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UInt
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UInt
+  nameWithType: NativeTypeMapper.ManagedTypes.UInt
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.ULong
+  name: ULong
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_ULong
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.ULong
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.ULong
+  nameWithType: NativeTypeMapper.ManagedTypes.ULong
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UShort
+  name: UShort
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_UShort
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UShort
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.UShort
+  nameWithType: NativeTypeMapper.ManagedTypes.UShort
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Undefined
+  name: Undefined
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Undefined
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Undefined
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.Undefined
+  nameWithType: NativeTypeMapper.ManagedTypes.Undefined
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
   name: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.html
@@ -7175,6 +7295,232 @@ references:
   commentId: N:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
   nameWithType: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime
+  name: Datetime
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime
+  nameWithType: Datetime
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor
+  name: Datetime()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime__ctor
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor
+  name.vb: New()
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Datetime()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.New()
+  nameWithType: Datetime.Datetime()
+  nameWithType.vb: Datetime.New()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  name: Datetime(Datetime)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime__ctor_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  name.vb: New(Datetime)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Datetime(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.New(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  nameWithType: Datetime.Datetime(Datetime)
+  nameWithType.vb: Datetime.New(Datetime)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor(System.DateTime)
+  name: Datetime(DateTime)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime__ctor_System_DateTime_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor(System.DateTime)
+  name.vb: New(Date)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Datetime(System.DateTime)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.New(Date)
+  nameWithType: Datetime.Datetime(DateTime)
+  nameWithType.vb: Datetime.New(Date)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor*
+  name: Datetime
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Datetime
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.New
+  nameWithType: Datetime.Datetime
+  nameWithType.vb: Datetime.New
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize
+  name: CalculateSize()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_CalculateSize
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize()
+  nameWithType: Datetime.CalculateSize()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize*
+  name: CalculateSize
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_CalculateSize_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.CalculateSize
+  nameWithType: Datetime.CalculateSize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone
+  name: Clone()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Clone
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone()
+  nameWithType: Datetime.Clone()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone*
+  name: Clone
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Clone_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Clone
+  nameWithType: Datetime.Clone
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue
+  name: DatetimeValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_DatetimeValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue
+  nameWithType: Datetime.DatetimeValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue*
+  name: DatetimeValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_DatetimeValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValue
+  nameWithType: Datetime.DatetimeValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValueFieldNumber
+  name: DatetimeValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_DatetimeValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.DatetimeValueFieldNumber
+  nameWithType: Datetime.DatetimeValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor
+  name: Descriptor
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Descriptor
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor
+  nameWithType: Datetime.Descriptor
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor*
+  name: Descriptor
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Descriptor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Descriptor
+  nameWithType: Datetime.Descriptor
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  name: Equals(Datetime)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Equals_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  nameWithType: Datetime.Equals(Datetime)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(System.Object)
+  name: Equals(object)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Equals_System_Object_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(System.Object)
+  name.vb: Equals(Object)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(object)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals(Object)
+  nameWithType: Datetime.Equals(object)
+  nameWithType.vb: Datetime.Equals(Object)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals*
+  name: Equals
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Equals_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Equals
+  nameWithType: Datetime.Equals
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent
+  name: GetContent()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_GetContent
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent()
+  nameWithType: Datetime.GetContent()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent*
+  name: GetContent
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_GetContent_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetContent
+  nameWithType: Datetime.GetContent
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode
+  name: GetHashCode()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_GetHashCode
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode()
+  nameWithType: Datetime.GetHashCode()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode*
+  name: GetHashCode
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_GetHashCode_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.GetHashCode
+  nameWithType: Datetime.GetHashCode
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(Google.Protobuf.CodedInputStream)
+  name: MergeFrom(CodedInputStream)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_MergeFrom_Google_Protobuf_CodedInputStream_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(Google.Protobuf.CodedInputStream)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(Google.Protobuf.CodedInputStream)
+  nameWithType: Datetime.MergeFrom(CodedInputStream)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  name: MergeFrom(Datetime)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_MergeFrom_MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime)
+  nameWithType: Datetime.MergeFrom(Datetime)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom*
+  name: MergeFrom
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_MergeFrom_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.MergeFrom
+  nameWithType: Datetime.MergeFrom
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser
+  name: Parser
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Parser
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser
+  nameWithType: Datetime.Parser
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser*
+  name: Parser
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_Parser_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser
+  nameWithType: Datetime.Parser
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString
+  name: ToString()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_ToString
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString()
+  nameWithType: Datetime.ToString()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString*
+  name: ToString
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_ToString_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.ToString
+  nameWithType: Datetime.ToString
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue
+  name: UtcValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_UtcValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue
+  nameWithType: Datetime.UtcValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue*
+  name: UtcValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_UtcValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValue
+  nameWithType: Datetime.UtcValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValueFieldNumber
+  name: UtcValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_UtcValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.UtcValueFieldNumber
+  nameWithType: Datetime.UtcValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo(Google.Protobuf.CodedOutputStream)
+  name: WriteTo(CodedOutputStream)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_WriteTo_Google_Protobuf_CodedOutputStream_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo(Google.Protobuf.CodedOutputStream)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo(Google.Protobuf.CodedOutputStream)
+  nameWithType: Datetime.WriteTo(CodedOutputStream)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo*
+  name: WriteTo
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_Datetime_WriteTo_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.WriteTo
+  nameWithType: Datetime.WriteTo
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue
   name: GenericValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html
@@ -7208,6 +7554,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.New(Object)
   nameWithType: GenericValue.GenericValue(object)
   nameWithType.vb: GenericValue.New(Object)
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes,System.Boolean},System.Object)
+  name: GenericValue((ManagedTypes, bool), object?)
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_System_ValueTuple_MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_System_Boolean__System_Object_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes,System.Boolean},System.Object)
+  name.vb: New((ManagedTypes, Boolean), Object)
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.GenericValue((MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes, bool), object?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.New((MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes, Boolean), Object)
+  nameWithType: GenericValue.GenericValue((NativeTypeMapper.ManagedTypes, bool), object?)
+  nameWithType.vb: GenericValue.New((NativeTypeMapper.ManagedTypes, Boolean), Object)
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.#ctor*
   name: GenericValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue__ctor_
@@ -7269,6 +7624,25 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CalculateSize
   nameWithType: GenericValue.CalculateSize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue
+  name: CharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CharValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue
+  nameWithType: GenericValue.CharValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue*
+  name: CharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CharValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValue
+  nameWithType: GenericValue.CharValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValueFieldNumber
+  name: CharValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_CharValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.CharValueFieldNumber
+  nameWithType: GenericValue.CharValueFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearBoolValue
   name: ClearBoolValue()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearBoolValue
@@ -7295,6 +7669,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearByteValue
   nameWithType: GenericValue.ClearByteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue
+  name: ClearCharValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearCharValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue()
+  nameWithType: GenericValue.ClearCharValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue*
+  name: ClearCharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearCharValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearCharValue
+  nameWithType: GenericValue.ClearCharValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue
+  name: ClearDecimalValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDecimalValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue()
+  nameWithType: GenericValue.ClearDecimalValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue*
+  name: ClearDecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDecimalValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDecimalValue
+  nameWithType: GenericValue.ClearDecimalValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearDoubleValue
   name: ClearDoubleValue()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearDoubleValue
@@ -7386,6 +7786,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearNullValue
   nameWithType: GenericValue.ClearNullValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue
+  name: ClearSbyteValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearSbyteValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue()
+  nameWithType: GenericValue.ClearSbyteValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue*
+  name: ClearSbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearSbyteValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearSbyteValue
+  nameWithType: GenericValue.ClearSbyteValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearShortValue
   name: ClearShortValue()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearShortValue
@@ -7412,6 +7825,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearStringValue
   nameWithType: GenericValue.ClearStringValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue
+  name: ClearUintValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUintValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue()
+  nameWithType: GenericValue.ClearUintValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue*
+  name: ClearUintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUintValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUintValue
+  nameWithType: GenericValue.ClearUintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue
+  name: ClearUlongValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUlongValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue()
+  nameWithType: GenericValue.ClearUlongValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue*
+  name: ClearUlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUlongValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUlongValue
+  nameWithType: GenericValue.ClearUlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue
+  name: ClearUshortValue()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUshortValue
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue()
+  nameWithType: GenericValue.ClearUshortValue()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue*
+  name: ClearUshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ClearUshortValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ClearUshortValue
+  nameWithType: GenericValue.ClearUshortValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Clone
   name: Clone()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Clone
@@ -7463,6 +7915,25 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValueFieldNumber
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DatetimeoffsetValueFieldNumber
   nameWithType: GenericValue.DatetimeoffsetValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue
+  name: DecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DecimalValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue
+  nameWithType: GenericValue.DecimalValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue*
+  name: DecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DecimalValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValue
+  nameWithType: GenericValue.DecimalValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValueFieldNumber
+  name: DecimalValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_DecimalValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.DecimalValueFieldNumber
+  nameWithType: GenericValue.DecimalValueFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Descriptor
   name: Descriptor
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_Descriptor
@@ -7607,6 +8078,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasByteValue
   nameWithType: GenericValue.HasByteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue
+  name: HasCharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasCharValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue
+  nameWithType: GenericValue.HasCharValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue*
+  name: HasCharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasCharValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasCharValue
+  nameWithType: GenericValue.HasCharValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue
+  name: HasDecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDecimalValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue
+  nameWithType: GenericValue.HasDecimalValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue*
+  name: HasDecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDecimalValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDecimalValue
+  nameWithType: GenericValue.HasDecimalValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasDoubleValue
   name: HasDoubleValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasDoubleValue
@@ -7685,6 +8182,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasNullValue
   nameWithType: GenericValue.HasNullValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue
+  name: HasSbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasSbyteValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue
+  nameWithType: GenericValue.HasSbyteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue*
+  name: HasSbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasSbyteValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasSbyteValue
+  nameWithType: GenericValue.HasSbyteValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasShortValue
   name: HasShortValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasShortValue
@@ -7711,6 +8221,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasStringValue
   nameWithType: GenericValue.HasStringValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue
+  name: HasUintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUintValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue
+  nameWithType: GenericValue.HasUintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue*
+  name: HasUintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUintValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUintValue
+  nameWithType: GenericValue.HasUintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue
+  name: HasUlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUlongValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue
+  nameWithType: GenericValue.HasUlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue*
+  name: HasUlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUlongValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUlongValue
+  nameWithType: GenericValue.HasUlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue
+  name: HasUshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUshortValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue
+  nameWithType: GenericValue.HasUshortValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue*
+  name: HasUshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_HasUshortValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.HasUshortValue
+  nameWithType: GenericValue.HasUshortValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.IntValue
   name: IntValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_IntValue
@@ -7761,6 +8310,12 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.ByteValue
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.ByteValue
   nameWithType: GenericValue.KindOneofCase.ByteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.CharValue
+  name: CharValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_CharValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.CharValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.CharValue
+  nameWithType: GenericValue.KindOneofCase.CharValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DatetimeValue
   name: DatetimeValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_DatetimeValue
@@ -7773,6 +8328,12 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DatetimeoffsetValue
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DatetimeoffsetValue
   nameWithType: GenericValue.KindOneofCase.DatetimeoffsetValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DecimalValue
+  name: DecimalValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_DecimalValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DecimalValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DecimalValue
+  nameWithType: GenericValue.KindOneofCase.DecimalValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.DoubleValue
   name: DoubleValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_DoubleValue
@@ -7815,6 +8376,12 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.NullValue
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.NullValue
   nameWithType: GenericValue.KindOneofCase.NullValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.SbyteValue
+  name: SbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_SbyteValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.SbyteValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.SbyteValue
+  nameWithType: GenericValue.KindOneofCase.SbyteValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.ShortValue
   name: ShortValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_ShortValue
@@ -7827,6 +8394,24 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.StringValue
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.StringValue
   nameWithType: GenericValue.KindOneofCase.StringValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UintValue
+  name: UintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_UintValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UintValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UintValue
+  nameWithType: GenericValue.KindOneofCase.UintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UlongValue
+  name: UlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_UlongValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UlongValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UlongValue
+  nameWithType: GenericValue.KindOneofCase.UlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UshortValue
+  name: UshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_KindOneofCase_UshortValue
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UshortValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.UshortValue
+  nameWithType: GenericValue.KindOneofCase.UshortValue
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValue
   name: LongValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_LongValue
@@ -7846,6 +8431,25 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValueFieldNumber
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.LongValueFieldNumber
   nameWithType: GenericValue.LongValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType
+  name: ManagedType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ManagedType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType
+  nameWithType: GenericValue.ManagedType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType*
+  name: ManagedType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ManagedType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedType
+  nameWithType: GenericValue.ManagedType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedTypeFieldNumber
+  name: ManagedTypeFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ManagedTypeFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedTypeFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ManagedTypeFieldNumber
+  nameWithType: GenericValue.ManagedTypeFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.MergeFrom(Google.Protobuf.CodedInputStream)
   name: MergeFrom(CodedInputStream)
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_MergeFrom_Google_Protobuf_CodedInputStream_
@@ -7897,6 +8501,25 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser
   nameWithType: GenericValue.Parser
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue
+  name: SbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SbyteValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue
+  nameWithType: GenericValue.SbyteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue*
+  name: SbyteValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SbyteValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValue
+  nameWithType: GenericValue.SbyteValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValueFieldNumber
+  name: SbyteValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SbyteValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SbyteValueFieldNumber
+  nameWithType: GenericValue.SbyteValueFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ShortValue
   name: ShortValue
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ShortValue
@@ -7935,6 +8558,25 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValueFieldNumber
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.StringValueFieldNumber
   nameWithType: GenericValue.StringValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SupportNull
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull
+  nameWithType: GenericValue.SupportNull
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull*
+  name: SupportNull
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SupportNull_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNull
+  nameWithType: GenericValue.SupportNull
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNullFieldNumber
+  name: SupportNullFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_SupportNullFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNullFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.SupportNullFieldNumber
+  nameWithType: GenericValue.SupportNullFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ToString
   name: ToString()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_ToString
@@ -7948,6 +8590,63 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.ToString
   nameWithType: GenericValue.ToString
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue
+  name: UintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UintValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue
+  nameWithType: GenericValue.UintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue*
+  name: UintValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UintValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValue
+  nameWithType: GenericValue.UintValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValueFieldNumber
+  name: UintValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UintValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UintValueFieldNumber
+  nameWithType: GenericValue.UintValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue
+  name: UlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UlongValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue
+  nameWithType: GenericValue.UlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue*
+  name: UlongValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UlongValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValue
+  nameWithType: GenericValue.UlongValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValueFieldNumber
+  name: UlongValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UlongValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UlongValueFieldNumber
+  nameWithType: GenericValue.UlongValueFieldNumber
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue
+  name: UshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UshortValue
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue
+  nameWithType: GenericValue.UshortValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue*
+  name: UshortValue
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UshortValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValue
+  nameWithType: GenericValue.UshortValue
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValueFieldNumber
+  name: UshortValueFieldNumber
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_UshortValueFieldNumber
+  commentId: F:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValueFieldNumber
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.UshortValueFieldNumber
+  nameWithType: GenericValue.UshortValueFieldNumber
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.WriteTo(Google.Protobuf.CodedOutputStream)
   name: WriteTo(CodedOutputStream)
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_GenericValue_WriteTo_Google_Protobuf_CodedOutputStream_
@@ -8460,6 +9159,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.CalculateSize
   nameWithType: PropertyDataRecord.CalculateSize
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType
+  name: ClearClrType()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_ClearClrType
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType()
+  nameWithType: PropertyDataRecord.ClearClrType()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType*
+  name: ClearClrType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_ClearClrType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearClrType
+  nameWithType: PropertyDataRecord.ClearClrType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex
+  name: ClearPropertyIndex()
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_ClearPropertyIndex
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex()
+  nameWithType: PropertyDataRecord.ClearPropertyIndex()
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex*
+  name: ClearPropertyIndex
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_ClearPropertyIndex_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.ClearPropertyIndex
+  nameWithType: PropertyDataRecord.ClearPropertyIndex
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.Clone
   name: Clone()
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_Clone
@@ -8540,6 +9265,32 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.GetHashCode
   nameWithType: PropertyDataRecord.GetHashCode
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType
+  name: HasClrType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_HasClrType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType
+  nameWithType: PropertyDataRecord.HasClrType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType*
+  name: HasClrType
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_HasClrType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasClrType
+  nameWithType: PropertyDataRecord.HasClrType
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex
+  name: HasPropertyIndex
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_HasPropertyIndex
+  commentId: P:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex
+  nameWithType: PropertyDataRecord.HasPropertyIndex
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex*
+  name: HasPropertyIndex
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_HasPropertyIndex_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.HasPropertyIndex
+  nameWithType: PropertyDataRecord.HasPropertyIndex
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.MergeFrom(Google.Protobuf.CodedInputStream)
   name: MergeFrom(CodedInputStream)
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.PropertyDataRecord.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_PropertyDataRecord_MergeFrom_Google_Protobuf_CodedInputStream_
@@ -8691,15 +9442,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).New(MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ValueContainer)
   nameWithType: ProtobufValueContainer<TKey>.ProtobufValueContainer(ValueContainer)
   nameWithType.vb: ProtobufValueContainer(Of TKey).New(ValueContainer)
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name: ProtobufValueContainer(IEntityType, object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])
-  name.vb: New(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.ProtobufValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: ProtobufValueContainer<TKey>.ProtobufValueContainer(IEntityType, object[])
-  nameWithType.vb: ProtobufValueContainer(Of TKey).New(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name: ProtobufValueContainer(IEntityType, IProperty[]?, object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[])
+  name.vb: New(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.ProtobufValueContainer(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).New(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: ProtobufValueContainer<TKey>.ProtobufValueContainer(IEntityType, IProperty[]?, object[])
+  nameWithType.vb: ProtobufValueContainer(Of TKey).New(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.#ctor*
   name: ProtobufValueContainer
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1__ctor_
@@ -8822,15 +9573,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).Equals
   nameWithType: ProtobufValueContainer<TKey>.Equals
   nameWithType.vb: ProtobufValueContainer(Of TKey).Equals
-- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name: GetData(IEntityType, ref object[])
-  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object____
-  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[]@)
-  name.vb: GetData(IEntityType, Object())
-  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, ref object[])
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Object())
-  nameWithType: ProtobufValueContainer<TKey>.GetData(IEntityType, ref object[])
-  nameWithType.vb: ProtobufValueContainer(Of TKey).GetData(IEntityType, Object())
+- uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name: GetData(IEntityType, IProperty[]?, ref object[])
+  href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___System_Object____
+  commentId: M:MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],System.Object[]@)
+  name.vb: GetData(IEntityType, IProperty(), Object())
+  fullName: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer<TKey>.GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[]?, ref object[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer(Of TKey).GetData(Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), Object())
+  nameWithType: ProtobufValueContainer<TKey>.GetData(IEntityType, IProperty[]?, ref object[])
+  nameWithType.vb: ProtobufValueContainer(Of TKey).GetData(IEntityType, IProperty(), Object())
 - uid: MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer`1.GetData*
   name: GetData
   href: api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ProtobufValueContainer-1.html#MASES_EntityFrameworkCore_KNet_Serialization_Protobuf_Storage_ProtobufValueContainer_1_GetData_
@@ -9378,6 +10129,41 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).EntityType
   nameWithType: EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.EntityType
   nameWithType.vb: EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Exist(`0)
+  name: Exist(TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Exist__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Exist(`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Exist(TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Exist(TKey)
+  nameWithType: EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Exist(TKey)
+  nameWithType.vb: EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Exist(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Exist*
+  name: Exist
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_Exist_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.Exist
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Exist
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Exist
+  nameWithType: EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Exist
+  nameWithType.vb: EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Exist
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name: TryGetValue(TKey, out ValueBuffer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name.vb: TryGetValue(TKey, ValueBuffer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.TryGetValue(TKey, out Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).TryGetValue(TKey, Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  nameWithType: EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.TryGetValue(TKey, out ValueBuffer)
+  nameWithType.vb: EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).TryGetValue(TKey, ValueBuffer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.TryGetValue*
+  name: TryGetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_TryGetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.TryGetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.TryGetValue
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).TryGetValue
+  nameWithType: EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.TryGetValue
+  nameWithType.vb: EntityTypeProducer(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).TryGetValue
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer`4.ValueBuffers
   name: ValueBuffers
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducer-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_EntityTypeProducer_4_ValueBuffers
@@ -9478,6 +10264,50 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.ValueBuffers
   nameWithType: IEntityTypeProducer.ValueBuffers
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1
+  name: IEntityTypeProducer<TKey>
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1
+  name.vb: IEntityTypeProducer(Of TKey)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer(Of TKey)
+  nameWithType: IEntityTypeProducer<TKey>
+  nameWithType.vb: IEntityTypeProducer(Of TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.Exist(`0)
+  name: Exist(TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_Exist__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.Exist(`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>.Exist(TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer(Of TKey).Exist(TKey)
+  nameWithType: IEntityTypeProducer<TKey>.Exist(TKey)
+  nameWithType.vb: IEntityTypeProducer(Of TKey).Exist(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.Exist*
+  name: Exist
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_Exist_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.Exist
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>.Exist
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer(Of TKey).Exist
+  nameWithType: IEntityTypeProducer<TKey>.Exist
+  nameWithType.vb: IEntityTypeProducer(Of TKey).Exist
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name: TryGetValue(TKey, out ValueBuffer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name.vb: TryGetValue(TKey, ValueBuffer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>.TryGetValue(TKey, out Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer(Of TKey).TryGetValue(TKey, Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  nameWithType: IEntityTypeProducer<TKey>.TryGetValue(TKey, out ValueBuffer)
+  nameWithType.vb: IEntityTypeProducer(Of TKey).TryGetValue(TKey, ValueBuffer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue*
+  name: TryGetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>.TryGetValue
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer(Of TKey).TryGetValue
+  nameWithType: IEntityTypeProducer<TKey>.TryGetValue
+  nameWithType.vb: IEntityTypeProducer(Of TKey).TryGetValue
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster
   name: IKafkaCluster
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster.html
@@ -9725,38 +10555,106 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.AssociatedTopicName
   nameWithType: IKafkaRowBag.AssociatedTopicName
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry
-  name: UpdateEntry
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_UpdateEntry
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry
-  nameWithType: IKafkaRowBag.UpdateEntry
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry*
-  name: UpdateEntry
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_UpdateEntry_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties
+  name: EntityProperties
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityProperties
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties
+  nameWithType: IKafkaRowBag.EntityProperties
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties*
+  name: EntityProperties
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityProperties_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.UpdateEntry
-  nameWithType: IKafkaRowBag.UpdateEntry
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever
-  name: IKafkaStreamsRetriever
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html
-  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever
-  nameWithType: IKafkaStreamsRetriever
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityProperties
+  nameWithType: IKafkaRowBag.EntityProperties
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState
+  name: EntityState
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityState
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState
+  nameWithType: IKafkaRowBag.EntityState
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState*
+  name: EntityState
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityState_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityState
+  nameWithType: IKafkaRowBag.EntityState
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType
+  nameWithType: IKafkaRowBag.EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType*
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag_EntityType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaRowBag.EntityType
+  nameWithType: IKafkaRowBag.EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1
+  name: IKafkaStreamsRetriever<TKey>
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1
+  name.vb: IKafkaStreamsRetriever(Of TKey)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey)
+  nameWithType: IKafkaStreamsRetriever<TKey>
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.Exist(`0)
+  name: Exist(TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_Exist__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.Exist(`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.Exist(TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).Exist(TKey)
+  nameWithType: IKafkaStreamsRetriever<TKey>.Exist(TKey)
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).Exist(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.Exist*
+  name: Exist
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_Exist_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.Exist
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.Exist
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).Exist
+  nameWithType: IKafkaStreamsRetriever<TKey>.Exist
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).Exist
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.GetValueBuffers
   name: GetValueBuffers()
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_GetValueBuffers
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers()
-  nameWithType: IKafkaStreamsRetriever.GetValueBuffers()
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers*
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_GetValueBuffers
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.GetValueBuffers
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.GetValueBuffers()
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).GetValueBuffers()
+  nameWithType: IKafkaStreamsRetriever<TKey>.GetValueBuffers()
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).GetValueBuffers()
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.GetValueBuffers*
   name: GetValueBuffers
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_GetValueBuffers_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_GetValueBuffers_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.GetValueBuffers
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.GetValueBuffers
-  nameWithType: IKafkaStreamsRetriever.GetValueBuffers
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.GetValueBuffers
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).GetValueBuffers
+  nameWithType: IKafkaStreamsRetriever<TKey>.GetValueBuffers
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).GetValueBuffers
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name: TryGetValue(TKey, out ValueBuffer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name.vb: TryGetValue(TKey, ValueBuffer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.TryGetValue(TKey, out Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).TryGetValue(TKey, Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  nameWithType: IKafkaStreamsRetriever<TKey>.TryGetValue(TKey, out ValueBuffer)
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).TryGetValue(TKey, ValueBuffer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.TryGetValue*
+  name: TryGetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaStreamsRetriever_1_TryGetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever`1.TryGetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>.TryGetValue
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever(Of TKey).TryGetValue
+  nameWithType: IKafkaStreamsRetriever<TKey>.TryGetValue
+  nameWithType.vb: IKafkaStreamsRetriever(Of TKey).TryGetValue
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable
   name: IKafkaTable
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html
@@ -9834,32 +10732,6 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.GetIntegerValueGenerator(Of TProperty)(Microsoft.EntityFrameworkCore.Metadata.IProperty, System.Collections.Generic.IReadOnlyList(Of MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable))
   nameWithType: IKafkaTable.GetIntegerValueGenerator<TProperty>(IProperty, IReadOnlyList<IKafkaTable>)
   nameWithType.vb: IKafkaTable.GetIntegerValueGenerator(Of TProperty)(IProperty, IReadOnlyList(Of IKafkaTable))
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Rows
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows
-  nameWithType: IKafkaTable.Rows
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows*
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Rows_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Rows
-  nameWithType: IKafkaTable.Rows
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows
-  name: SnapshotRows()
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_SnapshotRows
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows()
-  nameWithType: IKafkaTable.SnapshotRows()
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows*
-  name: SnapshotRows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_SnapshotRows_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.SnapshotRows
-  nameWithType: IKafkaTable.SnapshotRows
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.Update(Microsoft.EntityFrameworkCore.Update.IUpdateEntry)
   name: Update(IUpdateEntry)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaTable_Update_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_
@@ -9914,15 +10786,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue)
   nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>
   nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name: KNetStreamsRetriever(IKafkaCluster, IEntityType)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name.vb: New(IKafkaCluster, IEntityType)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.KNetStreamsRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.KNetStreamsRetriever(IKafkaCluster, IEntityType)
-  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).New(IKafkaCluster, IEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[])
+  name: KNetStreamsRetriever(IKafkaCluster, IEntityType, IProperty[])
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[])
+  name.vb: New(IKafkaCluster, IEntityType, IProperty())
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.KNetStreamsRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[])
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty())
+  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.KNetStreamsRetriever(IKafkaCluster, IEntityType, IProperty[])
+  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).New(IKafkaCluster, IEntityType, IProperty())
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.#ctor*
   name: KNetStreamsRetriever
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4__ctor_
@@ -9950,6 +10822,23 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Dispose
   nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.Dispose
   nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Dispose
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Exist(`0)
+  name: Exist(TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_Exist__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Exist(`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.Exist(TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Exist(TKey)
+  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.Exist(TKey)
+  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Exist(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Exist*
+  name: Exist
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_Exist_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.Exist
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.Exist
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Exist
+  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.Exist
+  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).Exist
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.GetValueBuffers
   name: GetValueBuffers()
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_GetValueBuffers
@@ -9967,6 +10856,24 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).GetValueBuffers
   nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.GetValueBuffers
   nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).GetValueBuffers
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name: TryGetValue(TKey, out ValueBuffer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name.vb: TryGetValue(TKey, ValueBuffer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.TryGetValue(TKey, out Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).TryGetValue(TKey, Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.TryGetValue(TKey, out ValueBuffer)
+  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).TryGetValue(TKey, ValueBuffer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.TryGetValue*
+  name: TryGetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KNetStreamsRetriever_4_TryGetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever`4.TryGetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.TryGetValue
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).TryGetValue
+  nameWithType: KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>.TryGetValue
+  nameWithType.vb: KNetStreamsRetriever(Of TKey, TValue, TJVMKey, TJVMValue).TryGetValue
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster
   name: KafkaCluster
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaCluster.html
@@ -10490,6 +11397,57 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).AssociatedTopicName
   nameWithType: KafkaRowBag<TKey, TValueContainer>.AssociatedTopicName
   nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).AssociatedTopicName
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityProperties
+  name: EntityProperties
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityProperties
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityProperties
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityProperties
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityProperties
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityProperties
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityProperties
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityProperties*
+  name: EntityProperties
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityProperties_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityProperties
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityProperties
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityProperties
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityProperties
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityProperties
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityState
+  name: EntityState
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityState
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityState
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityState
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityState
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityState
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityState
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityState*
+  name: EntityState
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityState_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityState
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityState
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityState
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityState
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityState
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityType
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityType
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityType
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityType
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityType
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityType
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityType*
+  name: EntityType
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_EntityType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.EntityType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.EntityType
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).EntityType
+  nameWithType: KafkaRowBag<TKey, TValueContainer>.EntityType
+  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).EntityType
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Key
   name: Key
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Key
@@ -10507,23 +11465,6 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).Key
   nameWithType: KafkaRowBag<TKey, TValueContainer>.Key
   nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).Key
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry
-  name: UpdateEntry
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_UpdateEntry
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.UpdateEntry
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).UpdateEntry
-  nameWithType: KafkaRowBag<TKey, TValueContainer>.UpdateEntry
-  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).UpdateEntry
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry*
-  name: UpdateEntry
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_UpdateEntry_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.UpdateEntry
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag<TKey, TValueContainer>.UpdateEntry
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag(Of TKey, TValueContainer).UpdateEntry
-  nameWithType: KafkaRowBag<TKey, TValueContainer>.UpdateEntry
-  nameWithType.vb: KafkaRowBag(Of TKey, TValueContainer).UpdateEntry
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag`2.Value(System.Reflection.ConstructorInfo)
   name: Value(ConstructorInfo)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaRowBag-2.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaRowBag_2_Value_System_Reflection_ConstructorInfo_
@@ -10567,15 +11508,15 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V)
   nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>
   nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
-  name: KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, K>, ISerDes<TValue, V>, StreamsBuilder)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
-  name.vb: New(IKafkaCluster, IEntityType, ISerDes(Of TKey, K), ISerDes(Of TValue, V), StreamsBuilder)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes<TKey, K>, MASES.KNet.Serialization.ISerDes<TValue, V>, Org.Apache.Kafka.Streams.StreamsBuilder)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes(Of TKey, K), MASES.KNet.Serialization.ISerDes(Of TValue, V), Org.Apache.Kafka.Streams.StreamsBuilder)
-  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, K>, ISerDes<TValue, V>, StreamsBuilder)
-  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(IKafkaCluster, IEntityType, ISerDes(Of TKey, K), ISerDes(Of TValue, V), StreamsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name: KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, K>, ISerDes<TValue, V>, StreamsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name.vb: New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, K), ISerDes(Of TValue, V), StreamsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[], MASES.KNet.Serialization.ISerDes<TKey, K>, MASES.KNet.Serialization.ISerDes<TValue, V>, Org.Apache.Kafka.Streams.StreamsBuilder)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), MASES.KNet.Serialization.ISerDes(Of TKey, K), MASES.KNet.Serialization.ISerDes(Of TValue, V), Org.Apache.Kafka.Streams.StreamsBuilder)
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.KafkaStreamsBaseRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, K>, ISerDes<TValue, V>, StreamsBuilder)
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, K), ISerDes(Of TValue, V), StreamsBuilder)
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.#ctor*
   name: KafkaStreamsBaseRetriever
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4__ctor_
@@ -10603,6 +11544,23 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Dispose
   nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Dispose
   nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Dispose
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist(`0)
+  name: Exist(TKey)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Exist__0_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist(`0)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Exist(TKey)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Exist(TKey)
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Exist(TKey)
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Exist(TKey)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist*
+  name: Exist
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_Exist_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.Exist
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Exist
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Exist
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.Exist
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).Exist
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.GetValueBuffers
   name: GetValueBuffers()
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_GetValueBuffers
@@ -10620,6 +11578,24 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers
   nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.GetValueBuffers
   nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).GetValueBuffers
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name: TryGetValue(TKey, out ValueBuffer)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)
+  name.vb: TryGetValue(TKey, ValueBuffer)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.TryGetValue(TKey, out Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).TryGetValue(TKey, Microsoft.EntityFrameworkCore.Storage.ValueBuffer)
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.TryGetValue(TKey, out ValueBuffer)
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).TryGetValue(TKey, ValueBuffer)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue*
+  name: TryGetValue
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsBaseRetriever_4_TryGetValue_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever`4.TryGetValue
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>.TryGetValue
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).TryGetValue
+  nameWithType: KafkaStreamsBaseRetriever<TKey, TValue, K, V>.TryGetValue
+  nameWithType.vb: KafkaStreamsBaseRetriever(Of TKey, TValue, K, V).TryGetValue
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4
   name: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html
@@ -10629,24 +11605,24 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer)
   nameWithType: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>
   nameWithType.vb: KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer)
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3})
-  name: KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3})
-  name.vb: New(IKafkaCluster, IEntityType, ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer))
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes<TKey, TJVMKey>, MASES.KNet.Serialization.ISerDes<TValueContainer, TJVMValueContainer>)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes(Of TKey, TJVMKey), MASES.KNet.Serialization.ISerDes(Of TValueContainer, TJVMValueContainer))
-  nameWithType: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>)
-  nameWithType.vb: KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(IKafkaCluster, IEntityType, ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer))
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
-  name: KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>, StreamsBuilder)
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
-  name.vb: New(IKafkaCluster, IEntityType, ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer), StreamsBuilder)
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes<TKey, TJVMKey>, MASES.KNet.Serialization.ISerDes<TValueContainer, TJVMValueContainer>, Org.Apache.Kafka.Streams.StreamsBuilder)
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.KNet.Serialization.ISerDes(Of TKey, TJVMKey), MASES.KNet.Serialization.ISerDes(Of TValueContainer, TJVMValueContainer), Org.Apache.Kafka.Streams.StreamsBuilder)
-  nameWithType: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>, StreamsBuilder)
-  nameWithType.vb: KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(IKafkaCluster, IEntityType, ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer), StreamsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3})
+  name: KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3})
+  name.vb: New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer))
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[], MASES.KNet.Serialization.ISerDes<TKey, TJVMKey>, MASES.KNet.Serialization.ISerDes<TValueContainer, TJVMValueContainer>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), MASES.KNet.Serialization.ISerDes(Of TKey, TJVMKey), MASES.KNet.Serialization.ISerDes(Of TValueContainer, TJVMValueContainer))
+  nameWithType: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>)
+  nameWithType.vb: KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer))
+- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name: KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>, StreamsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_4__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_Microsoft_EntityFrameworkCore_Metadata_IProperty___MASES_KNet_Serialization_ISerDes__0__2__MASES_KNet_Serialization_ISerDes__1__3__Org_Apache_Kafka_Streams_StreamsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType,Microsoft.EntityFrameworkCore.Metadata.IProperty[],MASES.KNet.Serialization.ISerDes{`0,`2},MASES.KNet.Serialization.ISerDes{`1,`3},Org.Apache.Kafka.Streams.StreamsBuilder)
+  name.vb: New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer), StreamsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty[], MASES.KNet.Serialization.ISerDes<TKey, TJVMKey>, MASES.KNet.Serialization.ISerDes<TValueContainer, TJVMValueContainer>, Org.Apache.Kafka.Streams.StreamsBuilder)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaCluster, Microsoft.EntityFrameworkCore.Metadata.IEntityType, Microsoft.EntityFrameworkCore.Metadata.IProperty(), MASES.KNet.Serialization.ISerDes(Of TKey, TJVMKey), MASES.KNet.Serialization.ISerDes(Of TValueContainer, TJVMValueContainer), Org.Apache.Kafka.Streams.StreamsBuilder)
+  nameWithType: KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.KafkaStreamsTableRetriever(IKafkaCluster, IEntityType, IProperty[], ISerDes<TKey, TJVMKey>, ISerDes<TValueContainer, TJVMValueContainer>, StreamsBuilder)
+  nameWithType.vb: KafkaStreamsTableRetriever(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).New(IKafkaCluster, IEntityType, IProperty(), ISerDes(Of TKey, TJVMKey), ISerDes(Of TValueContainer, TJVMValueContainer), StreamsBuilder)
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever`4.#ctor*
   name: KafkaStreamsTableRetriever
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaStreamsTableRetriever_4__ctor_
@@ -10875,40 +11851,6 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).GetIntegerValueGenerator(Of TProperty)(Microsoft.EntityFrameworkCore.Metadata.IProperty, System.Collections.Generic.IReadOnlyList(Of MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaTable))
   nameWithType: KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.GetIntegerValueGenerator<TProperty>(IProperty, IReadOnlyList<IKafkaTable>)
   nameWithType.vb: KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).GetIntegerValueGenerator(Of TProperty)(IProperty, IReadOnlyList(Of IKafkaTable))
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Rows
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Rows
-  commentId: P:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Rows
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Rows
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Rows
-  nameWithType: KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Rows
-  nameWithType.vb: KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Rows
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Rows*
-  name: Rows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_Rows_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.Rows
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Rows
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Rows
-  nameWithType: KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Rows
-  nameWithType.vb: KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).Rows
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.SnapshotRows
-  name: SnapshotRows()
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_SnapshotRows
-  commentId: M:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.SnapshotRows
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.SnapshotRows()
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).SnapshotRows()
-  nameWithType: KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.SnapshotRows()
-  nameWithType.vb: KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).SnapshotRows()
-- uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.SnapshotRows*
-  name: SnapshotRows
-  href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_SnapshotRows_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.SnapshotRows
-  isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.SnapshotRows
-  fullName.vb: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).SnapshotRows
-  nameWithType: KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.SnapshotRows
-  nameWithType.vb: KafkaTable(Of TKey, TValueContainer, TJVMKey, TJVMValueContainer).SnapshotRows
 - uid: MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable`4.ThrowUpdateConcurrencyException(Microsoft.EntityFrameworkCore.Update.IUpdateEntry,System.Collections.Generic.Dictionary{Microsoft.EntityFrameworkCore.Metadata.IProperty,System.Object})
   name: ThrowUpdateConcurrencyException(IUpdateEntry, Dictionary<IProperty, object?>)
   href: api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaTable-4.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KafkaTable_4_ThrowUpdateConcurrencyException_Microsoft_EntityFrameworkCore_Update_IUpdateEntry_System_Collections_Generic_Dictionary_Microsoft_EntityFrameworkCore_Metadata_IProperty_System_Object__

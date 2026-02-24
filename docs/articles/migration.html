@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>How KEFCore works | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="How KEFCore works | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="Describes how works Entity Framework Core provider for Apache Kafka�">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/migration.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="kefcore-migration">KEFCore: migration</h1>
+
+<p>The current version of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka�</a> does not support <a href="https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations">migrations</a> using an external tool: the schema evolution is intrinsecally available from the serialization structure used.</p>
+<p>In real world projects, data models change as features get implemented: new entities or properties are added and removed, and database schemas need to be changed accordingly to be kept in sync with the application.
+KEFCore provides a way to incrementally update the schema to keep it in sync with the application's data model while preserving existing data in the <a href="https://kafka.apache.org/">Apache Kafka�</a> cluster.</p>
+<h2 id="getting-started">Getting started</h2>
+<p>Let's assume you've just completed your first EF Core application based on KEFCore, which contains the following simple model:</p>
+<pre><code class="lang-C#">namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
+{
+    [PrimaryKey(&quot;BlogId&quot;)]
+    [Table(&quot;Blog&quot;, Schema = &quot;Simple&quot;)]
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+
+        public List&lt;Post&gt; Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;BlogId: {BlogId} Url: {Url} Rating: {Rating}&quot;;
+        }
+    }
+
+    [PrimaryKey(&quot;PostId&quot;)]
+    [Table(&quot;Post&quot;, Schema = &quot;Simple&quot;)]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}&quot;;
+        }
+    }
+}
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>The model use the <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a> to define the topic to be used, this will be important later due to a change in namespace of the model.
+For more info see <a href="howitworks.html#%5Edata-storage">Data storage</a></p>
+</div>
+<h3 id="first-application-run">First application run</h3>
+<p>Considering the applcation is using the JSON serialization just for simplicity, the value stored on <a href="https://kafka.apache.org/">Apache Kafka�</a> cluster are:</p>
+<ul>
+<li><p>[DBName].Simple.Blog topic:</p>
+<pre><code class="lang-json">{
+  &quot;EntityName&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base.Blog&quot;,
+  &quot;ClrType&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base.Blog, MASES.EntityFrameworkCore.KNet.Test.Common&quot;,
+  &quot;Properties&quot;: [
+    {
+      &quot;PropertyName&quot;: &quot;BlogId&quot;,
+      &quot;ManagedType&quot;: 11,
+      &quot;SupportNull&quot;: false,
+      &quot;Value&quot;: 976
+    },
+    {
+      &quot;PropertyName&quot;: &quot;Rating&quot;,
+      &quot;ManagedType&quot;: 11,
+      &quot;SupportNull&quot;: false,
+      &quot;Value&quot;: 975
+    },
+    {
+      &quot;PropertyName&quot;: &quot;Url&quot;,
+      &quot;ManagedType&quot;: 1,
+      &quot;SupportNull&quot;: true,
+      &quot;Value&quot;: &quot;http://blogs.msdn.com/adonet975&quot;
+    }
+  ]
+}
+</code></pre>
+</li>
+<li><p>[DBName].Simple.Post topic:</p>
+<pre><code class="lang-json">{
+  &quot;EntityName&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base.Post&quot;,
+  &quot;ClrType&quot;: &quot;MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base.Post, MASES.EntityFrameworkCore.KNet.Test.Common&quot;,
+  &quot;Properties&quot;: [
+    {
+      &quot;PropertyName&quot;: &quot;PostId&quot;,
+      &quot;ManagedType&quot;: 11,
+      &quot;SupportNull&quot;: false,
+      &quot;Value&quot;: 976
+    },
+    {
+      &quot;PropertyName&quot;: &quot;BlogId&quot;,
+      &quot;ManagedType&quot;: 11,
+      &quot;SupportNull&quot;: false,
+      &quot;Value&quot;: 976
+    },
+    {
+      &quot;PropertyName&quot;: &quot;Content&quot;,
+      &quot;ManagedType&quot;: 1,
+      &quot;SupportNull&quot;: true,
+      &quot;Value&quot;: &quot;975&quot;
+    },
+    {
+      &quot;PropertyName&quot;: &quot;Title&quot;,
+      &quot;ManagedType&quot;: 1,
+      &quot;SupportNull&quot;: true,
+      &quot;Value&quot;: &quot;title&quot;
+    }
+  ]
+}
+</code></pre>
+</li>
+</ul>
+<h2 id="evolving-your-model">Evolving your model</h2>
+<p>A few days have passed, and you're asked to add a creation timestamp (<strong>Date</strong>) to your blogs removing the <strong>Url</strong>.
+You've done the necessary changes to your application, and your model now looks like this:</p>
+<pre><code class="lang-C#">namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved
+{
+    [PrimaryKey(&quot;BlogId&quot;)]
+    [Table(&quot;Blog&quot;, Schema = &quot;Simple&quot;)]
+    public class Blog
+    {
+        public int BlogId { get; set; }
+        public int Rating { get; set; }
+        public DateTime? Date { get; set; }
+
+        public List&lt;Post&gt; Posts { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;BlogId: {BlogId} Rating: {Rating} Date: {Date}&quot;;
+        }
+    }
+
+    [PrimaryKey(&quot;PostId&quot;)]
+    [Table(&quot;Post&quot;, Schema = &quot;Simple&quot;)]
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public int BlogId { get; set; }
+        public Blog Blog { get; set; }
+
+        public override string ToString()
+        {
+            return $&quot;PostId: {PostId} Title: {Title} Content: {Content} BlogId: {BlogId}&quot;;
+        }
+    }
+}
+</code></pre>
+<p>now you think:</p>
+<ul>
+<li>I have to rebuild everything?</li>
+<li>What happens to my stored information?</li>
+</ul>
+<p>No problem: KEFCore will automagically manages yuor changes without any interruption!!!</p>
+<h3 id="how-old-data-are-retrieved">How old data are retrieved?</h3>
+<p>When the application try to retrieve the information using something like:</p>
+<pre><code class="lang-C#">var post = context.Posts.Include(o =&gt; o.Blog).Single(b =&gt; b.BlogId == 20);
+</code></pre>
+<p>the result will be:</p>
+<ul>
+<li><p>Post:</p>
+<pre><code class="lang-C#">post.ToString();
+</code></pre>
+<pre><code class="lang-sh">PostId: 20 Title: title Content: 19 BlogId: 20
+</code></pre>
+</li>
+<li><p>Blog:</p>
+<pre><code class="lang-C#">post.Blog.ToString();
+</code></pre>
+<pre><code class="lang-sh">BlogId: 20 Rating: 19 Date: 
+</code></pre>
+</li>
+</ul>
+<p>The previous stored data was read and serializer identified:</p>
+<ul>
+<li>removed properties: the unmanaged content of the stored data was discarded (<strong>Url</strong> in the example above) and nothing was returned to EF Core</li>
+<li>added properties: the new property was not identified and nothing was done, each new property is returned to EF Core with its default value: in the example above <strong>Date</strong> is returned as <em>null</em></li>
+</ul>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Current implementation does not support type change, i.e. a property with the same name, but different type</p>
+</div>
+<h2 id="how-new-data-are-managed">How new data are managed</h2>
+<p>The application will continue its execution and new information will be stored.
+The new one will use</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/migration.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
