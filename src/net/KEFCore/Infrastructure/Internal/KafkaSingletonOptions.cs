@@ -20,6 +20,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -59,6 +60,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
             TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
             ManageEvents = kafkaOptions.ManageEvents;
+            ReadOnlyMode = kafkaOptions.ReadOnlyMode;
             DefaultSynchronizationTimeout = kafkaOptions.DefaultSynchronizationTimeout;
         }
     }
@@ -121,6 +123,8 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
     /// <inheritdoc/>
     public virtual bool ManageEvents { get; private set; }
+    /// <inheritdoc/>
+    public virtual bool ReadOnlyMode { get; private set; }
     /// <inheritdoc/>
     public virtual long DefaultSynchronizationTimeout { get; private set; }
 }

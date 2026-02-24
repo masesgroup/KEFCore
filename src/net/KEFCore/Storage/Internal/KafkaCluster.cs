@@ -135,7 +135,6 @@ public class KafkaCluster : IKafkaCluster
         return coll;
     }
 
-
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
@@ -211,7 +210,11 @@ public class KafkaCluster : IKafkaCluster
                     KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
 #endif
                 }
-                if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support at least {AclOperation.WRITE} and {AclOperation.READ}"); }
+                if (Options.ReadOnlyMode)
+                {
+                    if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                }
+                else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
             }
         }
         catch (ExecutionException ex)
@@ -453,6 +456,11 @@ public class KafkaCluster : IKafkaCluster
         System.Collections.Generic.IList<IUpdateEntry> entries,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        if (Options.ReadOnlyMode)
+        {
+            throw new InvalidOperationException($"Cannot execute any operation since the instance is in read-only mode.");
+        }
+
         var rowsAffected = 0;
         System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = new();
 
@@ -492,7 +500,7 @@ public class KafkaCluster : IKafkaCluster
                     continue;
             }
 
-            if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag>? recordList))
+            if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag> recordList))
             {
                 recordList = [];
                 dataInTransaction[table] = recordList;

@@ -78,6 +78,8 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     TopicConfigBuilder? TopicConfig { get; }
     /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
     bool ManageEvents { get; }
+    /// <inheritdoc cref="KafkaDbContext.ReadOnlyMode"/>
+    bool ReadOnlyMode { get; }
     /// <inheritdoc cref="KafkaDbContext.DefaultSynchronizationTimeout"/>
     long DefaultSynchronizationTimeout { get; }
 }

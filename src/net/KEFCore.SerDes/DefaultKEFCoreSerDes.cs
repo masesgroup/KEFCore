@@ -107,7 +107,7 @@ public static class DefaultKEFCoreSerDes
                 }
                 else if (!typeof(TData).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                 }
                 else
                 {
@@ -175,7 +175,7 @@ public static class DefaultKEFCoreSerDes
                 }
                 else if (!typeof(TData).IsArray)
                 {
-                    throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                    throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                 }
                 else
                 {

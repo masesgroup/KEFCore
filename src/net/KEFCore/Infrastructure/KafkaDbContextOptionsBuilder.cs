@@ -450,13 +450,13 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     }
 
     /// <summary>
-    ///      Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    ///      Setting this property to <see langword="true"/> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.WRITE"/> and <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.READ"/>
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="manageEvents"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
+    /// <param name="manageEvents"><see langword="true"/> if the engine shall reject any write operation</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
     public virtual KafkaDbContextOptionsBuilder WithManageEvents(bool manageEvents)
     {
@@ -464,6 +464,27 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
             ?? new KafkaOptionsExtension();
 
         extension = extension.WithManageEvents(manageEvents);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="readOnlyMode"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KafkaDbContextOptionsBuilder WithReadOnlyMode(bool readOnlyMode)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
+            ?? new KafkaOptionsExtension();
+
+        extension = extension.WithReadOnlyMode(readOnlyMode);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

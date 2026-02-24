@@ -63,9 +63,9 @@ public interface IEntityTypeProducer : IDisposable
 public interface IEntityTypeProducer<TKey> : IEntityTypeProducer where TKey : notnull
 {
     /// <summary>
-    /// Che if a <paramref name="key"/> exist
+    /// Check if a <paramref name="key"/> exist
     /// </summary>
-    /// <param name="key">The key to check for existance</param>
+    /// <param name="key">The key to check for existence</param>
     /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
     bool Exist(TKey key);
     /// <summary>

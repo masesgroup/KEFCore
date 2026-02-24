@@ -109,7 +109,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly ConcurrentQueue<EventChange> _dataFromStream = new();
         // this dictionary controls the entities
         private readonly System.Collections.Generic.Dictionary<IEntityType, IEntityType> _managedEntities = new(EntityTypeFullNameComparer.Instance);
-        // while this one is used to retain the allocated object to avoid thier finalization before the streams is completly finalized
+        // while this one is used to retain the allocated object to avoid their finalization before the streams is completly finalized
         private readonly System.Collections.Generic.Dictionary<IEntityType, StreamsAssociatedData> _storagesForEntities = new(EntityTypeFullNameComparer.Instance);
 
         private readonly AutoResetEvent _dataReceived;
