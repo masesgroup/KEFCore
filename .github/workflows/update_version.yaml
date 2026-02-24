@@ -11,9 +11,17 @@ on:
         description: 'The current version'
         required: true
         type: string
+      PreReleaseCurrentVersion:
+        description: 'The current version pre-release tag'
+        required: false
+        type: string
       NewVersion:
         description: 'The new version'
         required: true
+        type: string
+      PreReleaseNewVersion:
+        description: 'The new version pre-release tag'
+        required: false
         type: string
         
 # This workflow contains one job called "build_documentation"
@@ -35,9 +43,9 @@ jobs:
           fetch-depth: '1'
           submodules: 'true'
 
-      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}.0</Version>', '<Version>${{ inputs.NewVersion }}.0</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
-      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj).Replace('${{ inputs.CurrentVersion }}', '${{ inputs.NewVersion }}') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj
-      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj).Replace('${{ inputs.CurrentVersion }}', '${{ inputs.NewVersion }}') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj
+      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}.0${{ inputs.PreReleaseCurrentVersion }}</Version>', '<Version>${{ inputs.NewVersion }}.0inputs.PreReleaseNewVersion }}</V</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
+      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}inputs.PreReleaseNewVersion }}</V') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj
+      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}inputs.PreReleaseNewVersion }}</V') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj
       
       - name: Request a PR to commit changes
         uses: peter-evans/create-pull-request@v8
