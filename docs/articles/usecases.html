@@ -87,16 +87,20 @@
         <article data-uid="">
 <h1 id="kefcore-use-cases">KEFCore: use cases</h1>
 
-<p><a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can be used in some operative conditions.
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can be used in some operative conditions.
 Here a possible, non exhaustive list, of use cases.</p>
 <p>Before read following chapters it is important to understand <a href="howitworks.html">how it works</a>.</p>
 <h2 id="apache-kafka-as-database"><a href="https://kafka.apache.org/">Apache Kafka™</a> as Database</h2>
-<p>The first use case can be coupled to a standard usage of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, the same when it is used with database providers.
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><strong>The concept of database is not related to any <a href="https://en.wikipedia.org/wiki/ACID">ACID</a> behavior of the provider.</strong></p>
+</div>
+<p>The first use case can be coupled to a standard usage of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, the same when it is used with database providers.
 In <a href="gettingstarted.html">getting started</a> is proposed a simple example following the online documentation.
-In the example the data within the model are stored in multiple Apache Kafka™ topics, each topic is correlated to the <code>DbSet</code> described from the <code>DbContext</code>.</p>
+In the example the data within the model are stored in multiple Apache Kafka™ topics, each topic is correlated to the <code>DbSet</code> described from the <code>DbContext</code> as described in <a href="howitworks.html">how it works</a>.</p>
 <p>The constraints are managed using <code>OnModelCreating</code> of <code>DbContext</code>.</p>
 <h2 id="a-different-way-to-define-data-within-apache-kafka-topics">A different way to define data within <a href="https://kafka.apache.org/">Apache Kafka™</a> topics</h2>
-<p>Changing the mind about model, another use case can be coupled on how an <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> model can be used.
+<p>Changing the mind about model, another use case can be coupled on how an <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> model can be used.
 Starting from the model proposed in <a href="gettingstarted.html">getting started</a>, the data within the model are stored in multiple Apache Kafka™ topics.
 If the model is written in a way it describes the data to be stored within the topics it is possible to define an uncorrelated model containing the data of interest:</p>
 <pre><code class="lang-cs">public class ModelContext : KafkaDbContext
@@ -117,7 +121,7 @@ public class SecondData
     public string Data { get; set; }
 }
 </code></pre>
-<p>Then using standard APIs of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, an user interacting with <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> can stores, or retrieves, data without any, or limited, knowledge of Apache Kafka™.</p>
+<p>Then using standard APIs of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, an user interacting with <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> can stores, or retrieves, data without any, or limited, knowledge of Apache Kafka™.</p>
 <h2 id="apache-kafka-as-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka™</a> as distributed cache</h2>
 <p>Changing the mind a model is written for, it is possible to define a set of classes which acts as storage for data we want to use as a cache.
 It is possible to build a new model like:</p>
@@ -134,21 +138,53 @@ public class Item
 </code></pre>
 <p>Sharing it between multiple applications and allocating the <code>CachingContext</code> in each application, the cache is shared and the same data are available.</p>
 <h2 id="apache-kafka-as-a-triggered-distributed-cache"><a href="https://kafka.apache.org/">Apache Kafka™</a> as a triggered distributed cache</h2>
-<p>Continuing from the previous use case, using the events reported from <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> it is possible to write a reactive application.
+<p>Continuing from the previous use case, using the events reported from <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> it is possible to write a reactive application.
 When a change event is triggered the application can react to it and take an action.</p>
 <p><img src="../images/triggeredcache.gif" alt="Alt text" title="Triggered distributed cache"></p>
 <h3 id="signalr">SignalR</h3>
-<p>The triggered distributed cache can be used side-by-side with <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>: combining <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> and <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a> in an application, subscribing to the change events, it is possible to feed the connected applications to <a href="https://learn.microsoft.com/it-it/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>.</p>
-<h3 id="redis">Redis</h3>
-<p>The triggered distributed cache can be seen as a <a href="https://redis.io/">Redis</a> backend.</p>
-<h2 id="data-processing-out-side-entity-framework-core-application">Data processing out-side <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> application</h2>
+<p>The triggered distributed cache can be used side-by-side with <a href="https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>: combining <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> and <a href="https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a> in an application, subscribing to the change events, it is possible to feed the connected applications to <a href="https://learn.microsoft.com/aspnet/signalr/overview/getting-started/introduction-to-signalr">SignalR</a>.</p>
+<h3 id="kefcore-vs-redis">KEFCore vs Redis</h3>
+<p>The triggered distributed cache can be seen as a <a href="https://redis.io/">Redis</a> backend.
+Here below some differences between them and when KEFCore can be used.</p>
+<h4 id="use-kefcore-when-you-need">Use KEFCore When You Need:</h4>
+<ul>
+<li><p>✅ <strong>Complex Object Persistence</strong> Store and query deeply nested objects with LINQ. No manual serialization required.</p>
+</li>
+<li><p>✅ <strong>Structured Data Sharing</strong> Share complex configuration, catalogs, and reference data across microservices with automatic synchronization.</p>
+</li>
+<li><p>✅ <strong>Durable Distributed Cache</strong> Multi-region deployment with Kafka replication. All data is durable and recoverable.</p>
+</li>
+<li><p>✅ <strong>Change Event Triggers</strong> React to data changes across your distributed system. Perfect for SignalR, workflow triggers, and reactive apps.</p>
+</li>
+<li><p>✅ <strong>Schema Evolution</strong> Avro and Protobuf support for forward/backward compatibility.</p>
+</li>
+</ul>
+<h4 id="use-redis-when-you-need">Use Redis When You Need:</h4>
+<ul>
+<li><p>✅ <strong>Atomic Operations</strong> INCR, DECR, and other atomic primitives for counters and rate limiting.</p>
+</li>
+<li><p>✅ <strong>Sub-Millisecond Latency</strong> Pure in-memory cache for extreme performance requirements.</p>
+</li>
+<li><p>✅ <strong>Native Data Structure Operations</strong> Sorted sets for leaderboards, sets for uniqueness, lists for queues.</p>
+</li>
+<li><p>✅ <strong>Per-Key TTL</strong> Individual expiration times for cache entries.</p>
+</li>
+</ul>
+<h4 id="can-you-use-both">Can You Use Both?</h4>
+<p><strong>Yes!</strong>:</p>
+<ul>
+<li><strong>Redis</strong>: Hot cache, rate limiting, session store</li>
+<li><strong>KEFCore</strong>: Durable shared state, complex data, cross-region sync</li>
+</ul>
+<p>They complement each other.</p>
+<h2 id="data-processing-out-side-entity-framework-core-application">Data processing out-side <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> application</h2>
 <p>The schema used to write the information in the topics are available, or can be defined from the user, so an external application can use the data in many mode:</p>
 <ul>
-<li>Using the feature to extract the entities stored in the topics outside the application based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a></li>
+<li>Using the feature to extract the entities stored in the topics outside the application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a></li>
 <li>Use some features of Apache Kafka™ like Apache Kafka™ Streams or Apache Kafka™ Connect.</li>
 </ul>
 <h3 id="external-application">External application</h3>
-<p>An application, not based on <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a>, can subscribe to the topics to:</p>
+<p>An application, not based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, can subscribe to the topics to:</p>
 <ul>
 <li>store all change events to another medium</li>
 <li>analyze the data or the changes</li>

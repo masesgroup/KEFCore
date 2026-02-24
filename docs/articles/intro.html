@@ -85,9 +85,9 @@
         </div>
 
         <article data-uid="">
-<h1 id="kefcore-entity-framework-core-provider-for-apache-kafka">KEFCore: <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a></h1>
+<h1 id="kefcore-entity-framework-core-provider-for-apache-kafka">KEFCore: <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a></h1>
 
-<p>KEFCore is the <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>.
+<p>KEFCore is the <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>.
 Based on <a href="https://github.com/masesgroup/KNet">KNet</a> it allows to use <a href="https://kafka.apache.org/">Apache Kafka™</a> as a distributed database and more.</p>
 <h3 id="libraries-and-tools">Libraries and Tools</h3>
 <table>
@@ -117,36 +117,99 @@ Based on <a href="https://github.com/masesgroup/KNet">KNet</a> it allows to use 
 <p>KEFCore is a project, curated by MASES Group, can be supported by the open-source community.</p>
 <p>Its primary scope is to support other, public or internal, MASES Group projects: open-source community and commercial entities can use it for their needs and support this project, moreover there are dedicated community and commercial subscription plans.</p>
 <p>The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.</p>
-<p>Looking for the help of <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> experts? MASES Group can help you design, build, deploy, and manage <a href="https://learn.microsoft.com/it-it/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> applications.</p>
+<p>Looking for the help of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> experts? MASES Group can help you design, build, deploy, and manage <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> applications.</p>
 <hr>
 <h2 id="scope-of-the-project">Scope of the project</h2>
-<p>This project aims to create a provider to access the information stored within an Apache Kafka™ cluster using the paradigm behind Entity Framework.
-The project is based on available information within the official <a href="https://github.com/dotnet/efcore">EntityFrameworkCore repository</a>, many classes was copied from there as reported in the official documentation within the Microsoft website at <a href="https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider">https://docs.microsoft.com/en-us/ef/core/providers/writing-a-provider</a>.</p>
-<p>Currently the project tries to support, at our best, the <a href="https://kafka.apache.org/downloads">supported Apache Kafka™ binary distribution</a>:</p>
+<p>This project aims to create a provider able to save data to, and read data from, an Apache Kafka™ cluster using the paradigm behind Entity Framework.</p>
+<p>Have you ever reached the <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core introduction page</a>?
+The first example proposed is:</p>
+<pre><code class="lang-c#">using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
+namespace Intro;
+
+public class BloggingContext : DbContext
+{
+    public DbSet&lt;Blog&gt; Blogs { get; set; }
+    public DbSet&lt;Post&gt; Posts { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(
+            @&quot;Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;ConnectRetryCount=0&quot;);
+    }
+}
+
+public class Blog
+{
+    public int BlogId { get; set; }
+    public string Url { get; set; }
+    public int Rating { get; set; }
+    public List&lt;Post&gt; Posts { get; set; }
+}
+
+public class Post
+{
+    public int PostId { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
+
+    public int BlogId { get; set; }
+    public Blog Blog { get; set; }
+}
+</code></pre>
+<p>which uses a SQL Server instance to store and retrieve the data.</p>
+<p>With <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> any user can replace a database (the available providers always use a database) with an <a href="https://kafka.apache.org/">Apache Kafka™</a> cluster.
+So the following query:</p>
+<pre><code class="lang-c#">using (var db = new BloggingContext())
+{
+    var blogs = await db.Blogs
+        .Where(b =&gt; b.Rating &gt; 3)
+        .OrderBy(b =&gt; b.Url)
+        .ToListAsync();
+}
+</code></pre>
+<p>or the following operation:</p>
+<pre><code class="lang-c#">using (var db = new BloggingContext())
+{
+    var blog = new Blog { Url = &quot;http://sample.com&quot; };
+    db.Blogs.Add(blog);
+    await db.SaveChangesAsync();
+}
+</code></pre>
+<p>can be done on a set of topics in an <a href="https://kafka.apache.org/">Apache Kafka™</a> cluster.</p>
+<p>The project is based on available information within the official <a href="https://github.com/dotnet/efcore">EntityFrameworkCore repository</a>, many classes was copied from there as reported in the official documentation within the Microsoft website at <a href="https://docs.microsoft.com/ef/core/providers/writing-a-provider">https://docs.microsoft.com/ef/core/providers/writing-a-provider</a>.</p>
+<p>Currently the project tries to support, at our best, the <a href="https://kafka.apache.org/downloads">official supported Apache Kafka™ binary distribution</a>:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">KEFCore</th>
 <th style="text-align: center;">State</th>
+<th style="text-align: center;">KNet</th>
 <th style="text-align: center;">Apache Kafka™</th>
 <th style="text-align: center;">.NET</th>
 <th style="text-align: center;">JVM™</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">2.6.*</td>
+<td style="text-align: center;">2.6.<em>+</em></td>
 <td style="text-align: center;">Active</td>
-<td style="text-align: center;">4.1.*</td>
-<td style="text-align: center;">8+</td>
-<td style="text-align: center;">17+</td>
+<td style="text-align: center;">3.1.x</td>
+<td style="text-align: center;">4.1.x</td>
+<td style="text-align: center;"><a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-8%2B-purple" alt=".NET 8+"></a></td>
+<td style="text-align: center;"><a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java-17%2B-blue" alt="Java 17+"></a></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: center;">2.5.*</td>
-<td style="text-align: center;">Active</td>
-<td style="text-align: center;">3.9.*</td>
-<td style="text-align: center;">8+</td>
-<td style="text-align: center;">11+</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">2.5.</td>
+<td style="text-align: center;">Deprecated</td>
+<td style="text-align: center;">2.9.x</td>
+<td style="text-align: center;">3.9.x</td>
+<td style="text-align: center;"><a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-8%2B-purple" alt=".NET 8+"></a></td>
+<td><a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java-11%2B-blue" alt="Java 11+"></a></td>
 </tr>
 </tbody>
 </table>

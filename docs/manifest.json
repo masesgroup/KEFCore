@@ -834,7 +834,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.yml\" sourcestartlinenumber=\"1\">Represents the storage container type to be used from KEFCore</p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.yml\" sourcestartlinenumber=\"1\">Represents the storage container type to be used from KEFCore values</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -964,20 +964,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedTypes.yml\" sourcestartlinenumber=\"1\">List of <xref href=\"System.Type\" data-throw-if-not-resolved=\"false\"></xref> managed from <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.yml",
       "output": {
         ".html": {
@@ -1017,6 +1003,34 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json",
       "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.yml\" sourcestartlinenumber=\"1\">List of <xref href=\"System.Type\" data-throw-if-not-resolved=\"false\"></xref> managed from <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.yml\" sourcestartlinenumber=\"1\">An helper class used to manage native and special types in serialization</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1062,6 +1076,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.yml\" sourcestartlinenumber=\"1\">[START messages]\nRepresent a System.Datetime</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.KindOneofCase.yml",
       "output": {
         ".html": {
@@ -1086,7 +1114,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.yml\" sourcestartlinenumber=\"1\">[START messages]\nOur address book file is just one of these.</p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.yml\" sourcestartlinenumber=\"1\">Our address book file is just one of these.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1300,6 +1328,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer<TKey>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.yml",
       "output": {
         ".html": {
@@ -1370,17 +1412,17 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.html"
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.html"
         }
       },
       "version": "",
       "Uid": null,
       "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever<TKey>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKafkaStreamsRetriever-1.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1881,6 +1923,16 @@
       "output": {
         ".html": {
           "relative_path": "articles/kafkadbcontext.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/migration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/migration.html"
         }
       },
       "version": ""
