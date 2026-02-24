@@ -252,6 +252,12 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
     }
     /// <inheritdoc/>
+    public bool? EnsureSynchronized(long timeout)
+    {
+        return _producer.EnsureSynchronized(timeout);
+    }
+
+    /// <inheritdoc/>
     void BumpValueGenerators(object?[] row)
     {
         //  Cluster.ValueGeneratorSelector.BumpAll(row);

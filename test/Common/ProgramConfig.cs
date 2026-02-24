@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
@@ -62,6 +63,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
         public bool ManageEvents { get; set; } = false;
+        public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
 
         public void ApplyOnContext(KafkaDbContext context)
         {
@@ -84,6 +86,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
             context.ManageEvents = ManageEvents;
+            context.DefaultSynchronizationTimeout = DefaultSynchronizationTimeout;
 
             if (UseJson)
             { // default

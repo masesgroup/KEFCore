@@ -41,6 +41,10 @@ public interface IKafkaTableEntityFinder
 public interface IKafkaTable : IEntityTypeProducer, IKafkaTableEntityFinder
 {
     /// <summary>
+    /// The referring <see cref="IKafkaCluster"/>
+    /// </summary>
+    IKafkaCluster Cluster { get; }
+    /// <summary>
     /// Creates a new row
     /// </summary>
     IKafkaRowBag Create(IUpdateEntry entry);
@@ -52,9 +56,5 @@ public interface IKafkaTable : IEntityTypeProducer, IKafkaTableEntityFinder
     /// Updates a row
     /// </summary>
     IKafkaRowBag Update(IUpdateEntry entry);
-    /// <summary>
-    /// The referring <see cref="IKafkaCluster"/>
-    /// </summary>
-    IKafkaCluster Cluster { get; }
 }
 

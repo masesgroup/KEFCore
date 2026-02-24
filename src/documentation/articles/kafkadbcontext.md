@@ -23,11 +23,14 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **UseByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
   - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy)
   - ~~**UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka™ Streams to manage data to or from topics~~
-  - **UseKNetStreams**: Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams, used if **UseCompactedReplicator** is **false**
-  - **ConsumerConfig**: parameters to use for Producer
+  - **UseKNetStreams**: Setting this property to true the KNet version of Apache Kafka™ Streams is used instead of standard Apache Kafka™ Streams, the property is used if **UseCompactedReplicator** is **false**
+  - **UseGlobalTable**: Setting this property to true the engine based on Streams (i.e. **UseCompactedReplicator** is false will use `Org.Apache.Kafka.Streams.Kstream.GlobalKTable` (`MASES.KNet.Streams.Kstream.GlobalKTable` if **UseKNetStreams** is true) instead of `Org.Apache.Kafka.Streams.Kstream.KTable` (`MASES.KNet.Streams.Kstream.KTable` if **UseKNetStreams** is true) to manage local storage of information.
+  - ~~**ConsumerConfig**: parameters to use for Producer~~
   - **ProducerConfig**: parameters to use for Producer
   - **StreamsConfig**: parameters to use for Apche Kafka™ Streams application
   - **TopicConfig**: parameters to use on topic creation for each entity
+  - **ManageEvents**: Setting this property to true (default) the backend emits events on ChangeTracker
+  - **DefaultSynchronizationTimeout**: The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster. Setting this property to 0 the synchronization will be disabled
   - **OnChangeEvent**: handler to receive change events from back-end
 
 ## How to use `KafkaDbContext` class

@@ -394,10 +394,37 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 #if DEBUG_PERFORMANCE
             Stopwatch sw = Stopwatch.StartNew();
 #endif
-            if (!_kafkaCompactedReplicator.StartAndWait()) throw new InvalidOperationException($"Failed to synchronize with {_kafkaCompactedReplicator.StateName}");
+            _kafkaCompactedReplicator.Start();
 #if DEBUG_PERFORMANCE
             sw.Stop();
             KNet.Internal.DebugPerformanceHelper.ReportString($"EntityTypeProducer - KNetCompactedReplicator::StartAndWait for {_entityType.Name} in {sw.Elapsed}");
+#endif
+        }
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+
+    /// <summary>
+    /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+    /// </summary>
+    public bool? EnsureSynchronized(long timeout)
+    {
+        if (_streamData != null) return _streamsManager!.EnsureSynchronized(timeout, _entityType);
+        else if (_kafkaCompactedReplicator != null)
+        {
+#if DEBUG_PERFORMANCE
+            Stopwatch sw = null!;
+            try
+            {
+                sw = Stopwatch.StartNew();
+#endif
+                return _kafkaCompactedReplicator.SyncWait((int)timeout);
+#if DEBUG_PERFORMANCE
+            }
+            finally
+            {
+                sw?.Stop();
+                KNet.Internal.DebugPerformanceHelper.ReportString($"EntityTypeProducer - KNetCompactedReplicator::SyncWait for {_entityType.Name} in {sw?.Elapsed}");
+            }
 #endif
         }
         else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
