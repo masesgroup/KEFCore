@@ -74,6 +74,7 @@ public class KafkaDbContext : DbContext
     ///     The default <see cref="ConsumerConfig"/> configuration
     /// </summary>
     /// <returns>The default <see cref="ConsumerConfig"/> configuration.</returns>
+    [Obsolete("Option will be removed soon")]
     public static ConsumerConfigBuilder DefaultConsumerConfig => ConsumerConfigBuilder.Create().WithEnableAutoCommit(true)
                                                                                                .WithAutoOffsetReset(ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
                                                                                                .WithAllowAutoCreateTopics(false);
@@ -215,6 +216,10 @@ public class KafkaDbContext : DbContext
     ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>, default is <see langword="true"/>
     /// </summary>
     public virtual bool ManageEvents { get; set; } = true;
+    /// <summary>
+    ///  Setting this property to <see langword="true"/> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.WRITE"/> and <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.READ"/>
+    /// </summary>
+    public virtual bool ReadOnlyMode { get; set; } = false;
     /// <summary>
     /// The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
     /// Setting <see cref="DefaultSynchronizationTimeout"/> to <see langword="0"/> the synchronization will be disabled

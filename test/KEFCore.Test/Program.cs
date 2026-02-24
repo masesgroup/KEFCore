@@ -190,11 +190,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                 }
 
-                var postion = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
+                var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
                 watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == postion);
+                post = context.Posts.Single(b => b.BlogId == position);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {postion}) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }

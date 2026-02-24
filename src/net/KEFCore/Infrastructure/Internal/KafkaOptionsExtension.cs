@@ -27,6 +27,7 @@ using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
 
@@ -61,6 +62,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private StreamsConfigBuilder? _streamsConfigBuilder;
     private TopicConfigBuilder? _topicConfigBuilder;
     private bool _manageEvents = false;
+    private bool _readOnlyMode = false;
     private long _defaultSynchronizationTimeout = Timeout.Infinite;
     private DbContextOptionsExtensionInfo? _info;
 
@@ -97,6 +99,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
         _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
         _manageEvents = copyFrom._manageEvents;
+        _readOnlyMode = copyFrom._readOnlyMode;
         _defaultSynchronizationTimeout = copyFrom._defaultSynchronizationTimeout;
     }
     /// <inheritdoc/>
@@ -151,6 +154,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
     /// <inheritdoc cref="KafkaDbContext.ManageEvents"/>
     public virtual bool ManageEvents => _manageEvents!;
+    /// <inheritdoc cref="KafkaDbContext.ReadOnlyMode"/>
+    public virtual bool ReadOnlyMode => _readOnlyMode!;
     /// <inheritdoc cref="KafkaDbContext.DefaultSynchronizationTimeout"/>
     public virtual long DefaultSynchronizationTimeout => _defaultSynchronizationTimeout!;
 
@@ -208,7 +213,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         return clone;
     }
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
-    public virtual KafkaOptionsExtension WithApplicationId(string applicationId)
+    public virtual KafkaOptionsExtension WithApplicationId(string? applicationId)
     {
         var clone = Clone();
 
@@ -359,6 +364,16 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         var clone = Clone();
 
         clone._manageEvents = manageEvents;
+
+        return clone;
+    }
+
+    /// <inheritdoc cref="KafkaDbContext.ReadOnlyMode"/>
+    public virtual KafkaOptionsExtension WithReadOnlyMode(bool readOnlyMode)
+    {
+        var clone = Clone();
+
+        clone._readOnlyMode = readOnlyMode;
 
         return clone;
     }

@@ -23,10 +23,12 @@
 using Java.Util;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
+using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
 
@@ -44,11 +46,11 @@ public class KafkaCluster : IKafkaCluster
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
     private readonly bool _useNameMatching;
-    private readonly Admin? _kafkaAdminClient = null;
+    private readonly Admin _kafkaAdminClient = null;
     private readonly Properties _bootstrapProperties;
 
-    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>? _tables;
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string>? _topicForEntity = new();
+    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable> _tables;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
     /// <summary>
     /// Dfault initializer
     /// </summary>
@@ -133,7 +135,6 @@ public class KafkaCluster : IKafkaCluster
         return coll;
     }
 
-
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
@@ -173,6 +174,61 @@ public class KafkaCluster : IKafkaCluster
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         var coll = ResetStream();
+
+        DescribeTopicsResult result = default;
+        KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
+        DescribeTopicsOptions describeTopicsOptions = new();
+        describeTopicsOptions.IncludeAuthorizedOperations(true);
+        try
+        {
+            result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
+            future = result?.AllTopicNames();
+            foreach (var item in future.Get().EntrySet())
+            {
+                if (item.Value.IsInternal())
+                {
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} is internal");
+#endif
+                    continue;
+                }
+                var partitionsData = item.Value.Partitions();
+                var numPartition = partitionsData.Size();
+                if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
+                {
+                    throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+                }
+
+                bool write = false;
+                bool read = false;
+
+                foreach (var operation in item.Value.AuthorizedOperations())
+                {
+                    if (operation == AclOperation.WRITE) write = true;
+                    if (operation == AclOperation.READ) read = true;
+#if DEBUG_PERFORMANCE
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
+#endif
+                }
+                if (Options.ReadOnlyMode)
+                {
+                    if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                }
+                else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
+            }
+        }
+        catch (ExecutionException ex)
+        {
+            if (ex.InnerException is UnknownTopicOrPartitionException)
+            {
+#if DEBUG_PERFORMANCE
+                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
+#endif
+            }
+            else if (ex.InnerException != null) throw ex.InnerException;
+            else throw;
+        }
+        finally { future?.Dispose(); result?.Dispose(); }
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -284,16 +340,25 @@ public class KafkaCluster : IKafkaCluster
         if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic>? coll = default;
-        CreateTopicsResult? result = default;
-        KafkaFuture<Java.Lang.Void>? future = default;
+        Set<NewTopic> coll = default;
+        CreateTopicsResult result = default;
+        KafkaFuture<Java.Lang.Void> future = default;
         try
         {
-            NewTopic? topic = default;
-            Map<Java.Lang.String, Java.Lang.String>? map = default;
+            var requestedPartitions = entityType.NumPartitions(Options);
+            var requestedReplicationFactor = entityType.ReplicationFactor(Options);
+            if (Options.ManageEvents
+                && !Options.UseCompactedReplicator
+                && requestedPartitions > 1)
+            {
+                throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+            }
+
+            NewTopic topic = default;
+            Map<Java.Lang.String, Java.Lang.String> map = default;
             try
             {
-                topic = new NewTopic(topicName, entityType.NumPartitions(Options), entityType.ReplicationFactor(Options));
+                topic = new NewTopic(topicName, requestedPartitions, requestedReplicationFactor);
                 Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
                                                     ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
                                                     : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
@@ -397,6 +462,11 @@ public class KafkaCluster : IKafkaCluster
         System.Collections.Generic.IList<IUpdateEntry> entries,
         IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        if (Options.ReadOnlyMode)
+        {
+            throw new InvalidOperationException($"Cannot execute any operation since the instance is in read-only mode.");
+        }
+
         var rowsAffected = 0;
         System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = new();
 
@@ -436,7 +506,7 @@ public class KafkaCluster : IKafkaCluster
                     continue;
             }
 
-            if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag>? recordList))
+            if (!dataInTransaction.TryGetValue(table, out System.Collections.Generic.IList<IKafkaRowBag> recordList))
             {
                 recordList = [];
                 dataInTransaction[table] = recordList;

@@ -115,7 +115,7 @@ public static class AvroKEFCoreSerDes
                     }
                     else if (!typeof(TData).IsArray)
                     {
-                        throw new InvalidOperationException($"{typeof(BinaryRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                        throw new InvalidOperationException($"{typeof(BinaryRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                     }
                 }
 
@@ -189,7 +189,7 @@ public static class AvroKEFCoreSerDes
                     }
                     else if (!typeof(TData).IsArray)
                     {
-                        throw new InvalidOperationException($"{typeof(BinaryBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                        throw new InvalidOperationException($"{typeof(BinaryBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                     }
                 }
 
@@ -302,7 +302,7 @@ public static class AvroKEFCoreSerDes
                     }
                     else if (!typeof(TData).IsArray)
                     {
-                        throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                        throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                     }
                 }
 
@@ -371,7 +371,7 @@ public static class AvroKEFCoreSerDes
                     }
                     else if (!typeof(TData).IsArray)
                     {
-                        throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializaer");
+                        throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
                     }
                 }
 

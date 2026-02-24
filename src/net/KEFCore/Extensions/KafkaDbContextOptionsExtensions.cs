@@ -88,7 +88,7 @@ public static class KafkaDbContextOptionsExtensions
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder UseKafkaCluster(
         this DbContextOptionsBuilder optionsBuilder,
-        string applicationId,
+        string? applicationId,
         string databaseName,
         string bootstrapServers,
         Action<KafkaDbContextOptionsBuilder>? kafkaOptionsAction = null)
