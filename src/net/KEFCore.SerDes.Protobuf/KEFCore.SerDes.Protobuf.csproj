@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<ImplicitUsings>true</ImplicitUsings>
@@ -49,7 +49,10 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" 
+			Condition="'$(Configuration)' == 'Debug'"
+			Inputs="GenericValue.proto;KeyContainer.proto;ValueContainer.proto"
+			Outputs="$(ProjectDir)Generated\GenericValue.cs;$(ProjectDir)Generated\KeyContainer.cs;$(ProjectDir)Generated\ValueContainer.cs">
 		<Exec Command="$(protoc_windows32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
 		<Exec Command="$(protoc_windows64) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" />
 		<Exec Command="$(protoc_linux32) -I=$(protoc_tools) --proto_path=$(ProjectDir) --csharp_out=$(ProjectDir)Generated *.proto" Condition="'$(OS)' != 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
