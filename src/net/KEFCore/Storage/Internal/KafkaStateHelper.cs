@@ -168,7 +168,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var prop = entry.EntityType.FindProperty(item.Key!);
                 if (prop == null) continue; // a property was removed from the schema
                 var currentValue = entry.GetCurrentValue(prop);
-                if (!item.Value!.Equals(currentValue))
+                if ((item.Value == null && currentValue != null) // if received data introduced a null value while current value is not null
+                    || !item.Value!.Equals(currentValue)) // or received data is different from current value
                 {
                     changed = true;
                     entry.SetOriginalValue(prop, item.Value);
