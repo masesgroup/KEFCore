@@ -196,7 +196,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             var tracked = FindTracked(processedKeyValues);
             return tracked != null
                 ? new ValueTask<object?>(tracked)
-                : FindAsyncLocalIEntityFinder(processedKeyValues, cancellationToken);
+                : FindAsyncLocalIEntityFinder(processedKeyValues, ct);
         }
 
         ValueTask<object?> FindAsyncLocalIEntityFinder(object[] processedKeyValues, CancellationToken cancellationToken = default)
