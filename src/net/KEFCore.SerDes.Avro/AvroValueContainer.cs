@@ -95,7 +95,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!Guid.TryParse(record.Value as string, out Guid guid)) throw new InvalidCastException($"Unable to convert {record} into {nameof(Guid)}");
+                        if (!Guid.TryParse(record.Value as string, out Guid guid)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(Guid)}");
                         return guid;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Guid)}");
@@ -105,7 +105,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!DateTime.TryParse(record.Value as string, out DateTime dt)) throw new InvalidCastException($"Unable to convert {record} into {nameof(DateTime)}");
+                        if (!DateTime.TryParse(record.Value as string, out DateTime dt)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(DateTime)}");
                         return dt;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTime)}");
@@ -115,7 +115,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!DateTimeOffset.TryParse(record.Value as string, out DateTimeOffset dto)) throw new InvalidCastException($"Unable to convert {record} into {nameof(DateTimeOffset)}");
+                        if (!DateTimeOffset.TryParse(record.Value as string, out DateTimeOffset dto)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(DateTimeOffset)}");
                         return dto;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTimeOffset)}");
@@ -125,7 +125,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!char.TryParse(record.Value as string, out char dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.Char)}");
+                        if (!char.TryParse(record.Value as string, out char dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.Char)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Char)}");
@@ -135,7 +135,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!sbyte.TryParse(record.Value as string, out sbyte dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.SByte)}");
+                        if (!sbyte.TryParse(record.Value as string, out sbyte dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.SByte)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.SByte)}");
@@ -145,7 +145,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!ushort.TryParse(record.Value as string, out ushort dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt16)}");
+                        if (!ushort.TryParse(record.Value as string, out ushort dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt16)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt16)}");
@@ -155,7 +155,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!uint.TryParse(record.Value as string, out uint dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt32)}");
+                        if (!uint.TryParse(record.Value as string, out uint dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt32)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt32)}");
@@ -165,7 +165,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!ulong.TryParse(record.Value as string, out ulong dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.UInt64)}");
+                        if (!ulong.TryParse(record.Value as string, out ulong dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt64)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt64)}");
@@ -175,7 +175,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 {
                     if (record.Value != null)
                     {
-                        if (!decimal.TryParse(record.Value as string, out decimal dec)) throw new InvalidCastException($"Unable to convert {record} into {nameof(System.Decimal)}");
+                        if (!decimal.TryParse(record.Value as string, out decimal dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.Decimal)}");
                         return dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
