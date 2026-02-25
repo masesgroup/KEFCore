@@ -181,8 +181,9 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
                 }
                 break;
-            default: return record.Value;
+            default: break;
         }
+        return record?.Value!;
     }
 
     /// <inheritdoc/>
