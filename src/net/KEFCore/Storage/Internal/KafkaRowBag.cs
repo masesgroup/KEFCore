@@ -30,8 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, IEntityType entityType,
-                                                string topicName, TKey key,
+public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topicName, TKey key,
                                                 IProperty[] properties, object?[]? propertyValues,
                                                 IComplexProperty[]? complexProperties, object?[]? complexPropertyValues) : IKafkaRowBag
     where TKey : notnull
@@ -40,7 +39,7 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, IEntityType 
     /// <summary>
     /// The <see cref="IEntityType"/> with changes
     /// </summary>
-    public IEntityType EntityType { get; } = entityType;
+    public IEntityType EntityType { get; } = entry.EntityType;
     /// <summary>
     /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
     /// </summary>
