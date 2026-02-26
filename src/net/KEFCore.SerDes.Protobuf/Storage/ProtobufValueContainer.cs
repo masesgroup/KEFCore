@@ -136,15 +136,9 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
             foreach (var item in _innerMessage.Data)
             {
-                IPropertyBase? prop;
-                if (item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType)
-                {
-                    prop = tName.FindComplexProperty(item.PropertyName!);
-                }
-                else
-                {
-                    prop = tName.FindProperty(item.PropertyName!);
-                }
+                IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                    ? tName.FindComplexProperty(item.PropertyName!)
+                    : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
                 allPropertyValues[prop.GetIndex()] = item?.Value.GetContent(prop, complexTypeFactory)!;
             }
