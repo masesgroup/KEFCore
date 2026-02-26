@@ -19,6 +19,7 @@
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using MASES.KNet.Serialization;
+using Org.W3c.Dom.Ls;
 using System.Globalization;
 using static MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper;
 
@@ -60,20 +61,23 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             ClrtypeValue = input?.GetType()?.ToAssemblyQualified();
             if (complexTypeFactory != null
                 && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
-                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook))
-                    && complexTypeHook!.Convert(ref input))
+                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
             {
-                if (input is string str)
+                if (complexTypeHook!.Convert(ref input))
                 {
-                    StringValue = str;
+                    if (input is string str)
+                    {
+                        StringValue = str;
+                    }
+                    else if (input is byte[] bArray)
+                    {
+                        BytesValue = ByteString.CopyFrom(bArray);
+                    }
+                    else throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[].");
                 }
-                else if (input is byte[] bArray)
-                {
-                    BytesValue = ByteString.CopyFrom(bArray);
-                }
-                else throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[].");
+                else throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {input} for {ClrtypeValue}.");
             }
-            else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
+            else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance: complexTypeFactory is {complexTypeFactory}.");
         }
         /// <summary>
         /// Returns a the converted object
@@ -91,10 +95,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             };
             if (complexTypeFactory != null 
                 && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook) 
-                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook))
-                && complexTypeHook!.ConvertBack(ref result))
+                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
             {
-                return result;
+                if (complexTypeHook!.ConvertBack(ref result))
+                {
+                    return result;
+                }
+                else throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {result} for {ClrtypeValue}.");
             }
             else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
         }

@@ -124,6 +124,7 @@ public class PropertyData : IJsonOnDeserialized
                                 case NativeTypeMapper.ManagedTypes.DateTimeOffset:
                                     Value = elem.GetDateTimeOffset();
                                     break;
+                                case NativeTypeMapper.ManagedTypes.ComplexType: break;
                                 default:
                                     try
                                     {
@@ -345,7 +346,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
                 complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
             {
-                complexTypeHook?.Convert(ref value!);
+                complexTypeHook?.ConvertBack(ref value!);
             }
             props.Add(item.PropertyName!, value);
         }
