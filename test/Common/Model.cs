@@ -172,7 +172,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     {
         public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
 
-        public bool Convert(ref object input)
+        public bool Convert(PreferredConversionType conversionType, ref object input)
         {
             if (input is TaxInfoExtended taxInfoExtended)
             {
@@ -182,7 +182,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
             return false;
         }
 
-        public bool ConvertBack(ref object input)
+        public bool ConvertBack(PreferredConversionType conversionType, ref object input)
         {
             if (input is string str)
             {

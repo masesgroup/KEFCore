@@ -246,7 +246,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 };
                 if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out var complexTypeHook))
                 {
-                    complexTypeHook?.Convert(ref complexPropertyValues[i]!);
+                    complexTypeHook?.Convert(PreferredConversionType.Text, ref complexPropertyValues[i]!);
                 }
                 Properties[i + properties.Length].Value = complexPropertyValues[i];
             }
@@ -264,7 +264,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <summary>
     /// The data stored associated to the <see cref="IProperty"/> and <see cref="IComplexProperty"/> of <see cref="IEntityType"/>
     /// </summary>
-    public PropertyData[] Properties { get; set; }
+    public PropertyData[]? Properties { get; set; }
     /// <inheritdoc/>
     public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
@@ -295,7 +295,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                     allPropertyValues[prop.GetIndex()] = item.Value?.Value!;
                 }
             }
-            else
+            else if (Properties != null)
             {
                 for (int i = 0; i < Properties.Length; i++)
                 {
@@ -307,7 +307,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                     if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
                         complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
                     {
-                        complexTypeHook?.Convert(ref allPropertyValues[i]!);
+                        complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
                     }
                 }
             }
@@ -346,7 +346,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
                 complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
             {
-                complexTypeHook?.ConvertBack(ref value!);
+                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
             }
             props.Add(item.PropertyName!, value);
         }

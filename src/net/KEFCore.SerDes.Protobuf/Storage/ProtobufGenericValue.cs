@@ -19,7 +19,6 @@
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using MASES.KNet.Serialization;
-using Org.W3c.Dom.Ls;
 using System.Globalization;
 using static MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper;
 
@@ -63,7 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                 && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
                                      : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
             {
-                if (complexTypeHook!.Convert(ref input))
+                if (complexTypeHook!.Convert(PreferredConversionType.Binary, ref input))
                 {
                     if (input is string str)
                     {
@@ -97,7 +96,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                 && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook) 
                                      : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
             {
-                if (complexTypeHook!.ConvertBack(ref result))
+                if (complexTypeHook!.ConvertBack(PreferredConversionType.Binary, ref result))
                 {
                     return result;
                 }

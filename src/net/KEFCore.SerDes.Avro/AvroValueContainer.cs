@@ -121,7 +121,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             case NativeTypeMapper.ManagedTypes.ComplexType:
                 if (complexTypeFactory != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
                 {
-                    complexTypeHook?.Convert(ref inputValue);
+                    complexTypeHook?.Convert(PreferredConversionType.Binary, ref inputValue);
                 } 
                 break;
             default: break; // no op
@@ -229,11 +229,11 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     {
                         if (property != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
                         {
-                            complexTypeHook?.ConvertBack(ref value!);
+                            complexTypeHook?.ConvertBack(PreferredConversionType.Binary, ref value!);
                         }
                         else if (complexTypeFactory.TryGet(record.ClrType, out complexTypeHook))
                         {
-                            complexTypeHook?.ConvertBack(ref value!);
+                            complexTypeHook?.ConvertBack(PreferredConversionType.Binary, ref value!);
                         }
                     }
                     input = value;

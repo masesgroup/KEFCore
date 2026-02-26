@@ -21,6 +21,22 @@
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 
 /// <summary>
+/// <see cref="PreferredConversionType"/> defines the preferred conversion the underlying serializer expected
+/// </summary>
+/// <remarks>The value is not strictly mandatory, however it defines if the underlying serializer is <see cref="Text"/> (maybe Json) or <see cref="Binary"/> (Avro/Protobuf)</remarks>
+public enum PreferredConversionType
+{
+    /// <summary>
+    /// The preferred conversion expect a <see cref="string"/>, generally requested from text based serializers like Json
+    /// </summary>
+    Text,
+    /// <summary>
+    /// The preferred conversion expect a <see cref="byte"/> array, generally requested from binary based serializers like AVRO/Protobuf
+    /// </summary>
+    Binary
+}
+
+/// <summary>
 /// The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <see cref="IComplexProperty"/>
 /// </summary>
 /// <remarks>The implementation shall be thread-safe and the class shall have at least a default initializer</remarks>
@@ -33,15 +49,17 @@ public interface IComplexTypeConverter
     /// <summary>
     /// The method is used from constructor of <see cref="IValueContainer{T}"/> to manage <see cref="IComplexProperty"/> that does not have an autonomous conversion
     /// </summary>
+    /// <param name="conversionType">The preferred conversion can be applied, however the <see cref="IComplexTypeConverter"/> can decide autonomously</param>
     /// <param name="data">The input data coming from EF Core to be converted, the converted value shall return on the same reference</param>
     /// <returns><see langword="true"/> if the <see cref="IComplexTypeConverter"/> has converted the <paramref name="data"/>, if it not able to execute the conversion, or want to leave the management to the subsystem, shall return <see langword="false"/></returns>
     /// <remarks>The <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer{TKey}"/> by default uses POCO serialization so it does not need to implement the method and can return <see langword="false"/>.</remarks>
-    bool Convert(ref object? data);
+    bool Convert(PreferredConversionType conversionType, ref object? data);
     /// <summary>
     /// The method is used from <see cref="IValueContainer{T}.GetData(IEntityType, IProperty[], IComplexProperty[], ref object[], IComplexTypeConverterFactory?)"/> and <see cref="IValueContainer{T}.GetProperties"/> to manage <see cref="IComplexProperty"/> that does not have an autonomous conversion
     /// </summary>
+    /// <param name="conversionType">The preferred conversion can be applied, however the <see cref="IComplexTypeConverter"/> can decide autonomously</param>
     /// <param name="data">The input data coming from serialization to be converted back, the converted value shall return on the same reference</param>
     /// <returns><see langword="true"/> if the <see cref="IComplexTypeConverter"/> has converted the <paramref name="data"/>, if it not able to execute the conversion shall return <see langword="false"/></returns>
     /// <remarks>The <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer{TKey}"/> by default uses POCO serialization so it does not need to implement the method and can return <see langword="false"/>.</remarks>
-    bool ConvertBack(ref object? data);
+    bool ConvertBack(PreferredConversionType conversionType, ref object? data);
 }

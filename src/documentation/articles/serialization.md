@@ -661,8 +661,20 @@ public interface IComplexTypeConverter
     /// The set of <see cref="Type"/> supported from the converter
     /// </summary>
     IEnumerable<Type> SupportedClrTypes { get; }
-    bool Convert(ref object? data);
-    bool ConvertBack(ref object? data);
+    bool Convert(PreferredConversionType conversionType, ref object? data);
+    bool ConvertBack(PreferredConversionType conversionType, ref object? data);
+}
+
+public enum PreferredConversionType
+{
+    /// <summary>
+    /// The preferred conversion expect a <see cref="string"/>, generally requested from text based serializers like Json
+    /// </summary>
+    Text,
+    /// <summary>
+    /// The preferred conversion expect a <see cref="byte"/> array, generally requested from binary based serializers like AVRO/Protobuf
+    /// </summary>
+    Binary
 }
 ```
 
@@ -715,8 +727,8 @@ An user can choose two different approaches:
   ```C#
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-  	modelBuilder.Entity<TaxInfo>(x => { x.ComplexProperty(y => y.TaxInfoExtended, y => { y.IsRequired(); }); });
-  	base.OnModelCreating(modelBuilder);
+      modelBuilder.Entity<TaxInfo>(x => { x.ComplexProperty(y => y.TaxInfoExtended, y => { y.IsRequired(); }); });
+  	  base.OnModelCreating(modelBuilder);
   }
   ```
 
@@ -726,30 +738,37 @@ public class TaxInfoExtendedConverter : IComplexTypeConverter
 {
     public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
 
-    public bool Convert(ref object? input)
+    public bool Convert(PreferredConversionType conversionType, ref object input)
     {
         if (input is TaxInfoExtended taxInfoExtended)
         {
-            input = $"{taxInfoExtended.Code}|{taxInfoExtended.Percentage}";
+            input = $"{taxInfoExtended.CodeExtended}_{taxInfoExtended.PercentageExtended}";
             return true;
         }
         return false;
     }
 
-    public bool ConvertBack(ref object? input)
+    public bool ConvertBack(PreferredConversionType conversionType, ref object input)
     {
         if (input is string str)
         {
             try
             {
-                var values = str.Split("|");
-                var tie = new TaxInfoExtended();
-                tie.Code = int.Parse(values[0]);
-                tie.Percentage = decimal.Parse(values[1]);
+                var values = str.Split("_");
+                var tie = new TaxInfoExtended
+                {
+                    CodeExtended = int.Parse(values[0]),
+                    PercentageExtended = decimal.Parse(values[1])
+                };
                 input = tie;
                 return true;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
+                input = new TaxInfoExtended();
+                return true;
+            }
         }
         return false;
     }
