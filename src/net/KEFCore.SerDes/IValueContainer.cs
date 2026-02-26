@@ -48,5 +48,5 @@ public interface IValueContainer<in T> where T : notnull
     /// </summary>
     /// <param name="complexTypeHook">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeHook = null);
+    IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeHook);
 }

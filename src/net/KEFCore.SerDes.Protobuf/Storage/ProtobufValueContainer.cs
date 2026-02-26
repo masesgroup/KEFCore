@@ -75,7 +75,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             {
                 PropertyName = item.Name,
                 ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : string.Empty,
-                Value = new GenericValue(_type, propertyValues[index])
+                Value = new GenericValue(_type, ref propertyValues[index]!)
             };
             _innerMessage.Data.Add(pRecord);
         }
@@ -88,7 +88,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
                 {
                     PropertyName = item.Name,
                     ClrType = item.ClrType?.ToAssemblyQualified(),
-                    Value = new GenericValue((NativeTypeMapper.ManagedTypes.ComplexType, false), complexPropertyValues[index])
+                    Value = new GenericValue((NativeTypeMapper.ManagedTypes.ComplexType, false), ref complexPropertyValues[index]!, item, complexTypeFactory)
                 };
                 _innerMessage.Data.Add(pRecord);
             }
@@ -134,13 +134,14 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             newSw.Stop();
             iterationSw.Start();
 #endif
-            foreach (var item in _innerMessage.Data)
+            for (int i = 0; i < _innerMessage.Data.Count; i++)
             {
+                var item = _innerMessage.Data[i];
                 IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
                     ? tName.FindComplexProperty(item.PropertyName!)
                     : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
-                allPropertyValues[prop.GetIndex()] = item?.Value.GetContent(prop, complexTypeFactory)!;
+                allPropertyValues[i] = item?.Value.GetContent(prop, complexTypeFactory)!;
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -156,7 +157,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory = null)
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)

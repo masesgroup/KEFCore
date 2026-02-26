@@ -128,7 +128,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         }
     }
 
-    object ConvertInnerData(PropertyDataRecord record, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    void ConvertInnerData(PropertyDataRecord record, ref object? input, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         switch ((NativeTypeMapper.ManagedTypes)record.ManagedType)
         {
@@ -137,7 +137,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!Guid.TryParse(record.Value as string, out Guid guid)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(Guid)}");
-                        return guid;
+                        input = guid;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Guid)}");
                 }
@@ -147,7 +147,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!DateTime.TryParse(record.Value as string, out DateTime dt)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(DateTime)}");
-                        return dt;
+                        input = dt;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTime)}");
                 }
@@ -157,7 +157,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!DateTimeOffset.TryParse(record.Value as string, out DateTimeOffset dto)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(DateTimeOffset)}");
-                        return dto;
+                        input = dto;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.DateTimeOffset)}");
                 }
@@ -167,7 +167,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!char.TryParse(record.Value as string, out char dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.Char)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Char)}");
                 }
@@ -177,7 +177,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!sbyte.TryParse(record.Value as string, out sbyte dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.SByte)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.SByte)}");
                 }
@@ -187,7 +187,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!ushort.TryParse(record.Value as string, out ushort dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt16)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt16)}");
                 }
@@ -197,7 +197,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!uint.TryParse(record.Value as string, out uint dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt32)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt32)}");
                 }
@@ -207,7 +207,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!ulong.TryParse(record.Value as string, out ulong dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.UInt64)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.UInt64)}");
                 }
@@ -217,7 +217,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     if (record.Value != null)
                     {
                         if (!decimal.TryParse(record.Value as string, out decimal dec)) throw new InvalidCastException($"Unable to convert {record.Value} (property '{record.PropertyName}', managed type {(NativeTypeMapper.ManagedTypes)record.ManagedType}) into {nameof(System.Decimal)}");
-                        return dec;
+                        input = dec;
                     }
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
                 }
@@ -236,11 +236,11 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                             complexTypeHook?.ConvertBack(ref value!);
                         }
                     }
-                    return value;
+                    input = value;
                 }
-            default: break;
+                break;
+            default: input = record?.Value!; break;
         }
-        return record?.Value!;
     }
 
     /// <inheritdoc/>
@@ -264,14 +264,13 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             newSw.Stop();
             iterationSw.Start();
 #endif
-            foreach (var item in Data)
+            for (int i = 0; i < Data.Count; i++)
             {
-                IPropertyBase? prop = item.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
-                    ? tName.FindComplexProperty(item.PropertyName!)
-                    : tName.FindProperty(item.PropertyName!);
+                IPropertyBase? prop = Data[i].ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                    ? tName.FindComplexProperty(Data[i].PropertyName!)
+                    : tName.FindProperty(Data[i].PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
-                int i = prop.GetIndex();
-                allPropertyValues[i] = ConvertInnerData(item, prop, complexTypeFactory);
+                ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -287,12 +286,14 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory = null)
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = new();
         foreach (var item in Data)
         {
-            props.Add(item.PropertyName, ConvertInnerData(item, complexTypeFactory: complexTypeFactory));
+            object? result = null!;
+            ConvertInnerData(item, ref result, complexTypeFactory: complexTypeFactory);
+            props.Add(item.PropertyName, result);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }

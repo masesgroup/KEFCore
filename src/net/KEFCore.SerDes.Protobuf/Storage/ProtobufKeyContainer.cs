@@ -26,9 +26,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         public PrimaryKeyType(params object[] input)
         {
             this.Values.Clear();
-            foreach (var item in input)
+            for (int i = 0; i < input.Length; i++)
             {
-                Values.Add(new GenericValue(item));
+                Values.Add(new GenericValue(ref input[i]));
             }
         }
         /// <summary>

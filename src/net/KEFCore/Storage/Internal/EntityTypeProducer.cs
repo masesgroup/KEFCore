@@ -306,7 +306,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
-                IDictionary<string, object?>? properties = valueContainer?.GetProperties()!;
+                IDictionary<string, object?>? properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
                 KafkaStateHelper.ManageFind(_cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties);
             }
             return;
@@ -325,7 +325,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
-                properties = valueContainer?.GetProperties()!;
+                properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
                 return true;
             }
 
@@ -464,12 +464,12 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageAdded(_cluster.ValueGeneratorSelector, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        KafkaStateHelper.ManageAdded(_cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageUpdate(_cluster.ValueGeneratorSelector, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        KafkaStateHelper.ManageUpdate(_cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)

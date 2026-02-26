@@ -219,39 +219,35 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
-        Properties = [];
-        foreach (var item in properties)
+        Properties = new PropertyData[properties.Length + (complexProperties != null && complexPropertyValues != null ? complexProperties.Length : 0)];
+        for (int i = 0; i < properties.Length; i++)
         {
-            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType);
-            var pRecord = new PropertyData
+            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(properties[i].ClrType);
+            Properties[i] = new PropertyData
             {
                 ManagedType = _type.Item1,
                 SupportNull = _type.Item2,
-                PropertyName = item.Name,
-                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
-                Value = propertyValues[item.GetIndex()]
+                PropertyName = properties[i].Name,
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? properties[i].ClrType?.ToAssemblyQualified() : null,
+                Value = propertyValues[i]
             };
-
-            Properties.Add(pRecord);
         }
         if (complexProperties != null && complexPropertyValues != null)
         {
-            foreach (var item in complexProperties)
+            for (int i = 0; i < complexProperties.Length; i++)
             {
-                var pRecord = new PropertyData
+                Properties[i + properties.Length] = new PropertyData
                 {
                     ManagedType = NativeTypeMapper.ManagedTypes.ComplexType,
                     SupportNull = false,
-                    PropertyName = item.Name,
-                    ClrType = item.ClrType?.ToAssemblyQualified(),
+                    PropertyName = complexProperties[i].Name,
+                    ClrType = complexProperties[i].ClrType?.ToAssemblyQualified(),
                 };
-                var index = item.GetIndex();
-                if (complexTypeFactory != null && complexTypeFactory.TryGet(item, out var complexTypeHook))
+                if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out var complexTypeHook))
                 {
-                    complexTypeHook?.Convert(ref complexPropertyValues[index]!);
+                    complexTypeHook?.Convert(ref complexPropertyValues[i]!);
                 }
-                pRecord.Value = complexPropertyValues[index];
-                Properties.Add(pRecord);
+                Properties[i + properties.Length].Value = complexPropertyValues[i];
             }
         }
     }
@@ -267,7 +263,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <summary>
     /// The data stored associated to the <see cref="IProperty"/> and <see cref="IComplexProperty"/> of <see cref="IEntityType"/>
     /// </summary>
-    public IList<PropertyData>? Properties { get; set; }
+    public PropertyData[] Properties { get; set; }
     /// <inheritdoc/>
     public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
@@ -300,18 +296,17 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
             else
             {
-                foreach (var item in Properties!)
+                for (int i = 0; i < Properties.Length; i++)
                 {
-                    IPropertyBase? prop = item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
-                        ? tName.FindComplexProperty(item.PropertyName!)
-                        : tName.FindProperty(item.PropertyName!);
+                    IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                        : tName.FindProperty(Properties[i].PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema
-                    int index = prop.GetIndex();
-                    allPropertyValues[index] = item?.Value!;
-                    if (item?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                    allPropertyValues[i] = Properties[i]?.Value!;
+                    if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
                         complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
                     {
-                        complexTypeHook?.Convert(ref allPropertyValues[index]!);
+                        complexTypeHook?.Convert(ref allPropertyValues[i]!);
                     }
                 }
             }
@@ -329,7 +324,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory = null)
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = [];
         if (Data == null && Properties == null) { return props; }

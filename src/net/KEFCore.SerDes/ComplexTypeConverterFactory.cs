@@ -47,7 +47,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                 IComplexTypeConverter converter = (IComplexTypeConverter)Activator.CreateInstance(type)!;
                 Register(converter);
             }
-            throw new InvalidOperationException($"Trying to register a type {type} that does not support {nameof(IComplexTypeConverter)}");
+            else throw new InvalidOperationException($"Trying to register a type {type} that does not support {nameof(IComplexTypeConverter)}");
         }
         /// <inheritdoc/>
         public void Register(IComplexTypeConverter converter)

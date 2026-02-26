@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -163,8 +164,43 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     [ComplexType]
     public class TaxInfoExtended
     {
-        public char Code { get; set; }
+        public int Code { get; set; }
         public decimal Percentage { get; set; }
+    }
+
+    public class TaxInfoExtendedConverter : IComplexTypeConverter
+    {
+        public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
+
+        public bool Convert(ref object input)
+        {
+            if (input is TaxInfoExtended taxInfoExtended)
+            {
+                input = $"{taxInfoExtended.Code}_{taxInfoExtended.Percentage}";
+                return true;
+            }
+            return false;
+        }
+
+        public bool ConvertBack(ref object input)
+        {
+            if (input is string str)
+            {
+                try
+                {
+                    var values = str.Split("_");
+                    var tie = new TaxInfoExtended
+                    {
+                        Code = int.Parse(values[0]),
+                        Percentage = decimal.Parse(values[1])
+                    };
+                    input = tie;
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
     }
 
     [PrimaryKey("PostId")]

@@ -679,9 +679,81 @@ A single instance can support multiple `Type`s (this is the type declared as [Co
 An user can build an external library and can register the custom converters within the system using the singleton service implementing [`IComplexTypeConverterFactory` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs):
 - using `GetService`:
 
-```C#
-var context = new KakfaDbContext();
-context.GetService<IComplexTypeConverterFactory>();
-factory.Register(converter);
-```
+  ```C#
+  var context = new KakfaDbContext();
+  context.GetService<IComplexTypeConverterFactory>();
+  factory.Register(converter);
+  ```
 - using the methods available in [`KakfaDbContext`](kafkadbcontext.md)
+
+### How to declare a complex property
+
+Some good examples comes from https://www.learnentityframeworkcore.com/model/complex-type. 
+An user can choose two different approaches:
+- if the user is declaring its own model the [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute) is a good choice:
+
+  ```C#
+  [Table("TaxInfo", Schema = "ComplexTest")]
+  public class TaxInfo
+  {
+      public int TaxInfoId { get; set; }
+      public char Code { get; set; }
+      public decimal Percentage { get; set; }
+      [Required]
+      public TaxInfoExtended TaxInfoExtended { get; set; }
+      public int ExtraValue { get; set; } // used to check index consistency since the method GetIndex of IComplexProperty is zero-based 
+  }
+
+  [ComplexType]
+  public class TaxInfoExtended
+  {
+      public int Code { get; set; }
+      public decimal Percentage { get; set; }
+  }
+  ```
+- however many time this kind of classes are defined in assemblies outside the control of the user (as requested from https://github.com/masesgroup/KEFCore/issues/445 the OPC-UA types are defined in specific assemblies) and EF Core offers the way to declare them programmatically:
+  ```C#
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+  	modelBuilder.Entity<TaxInfo>(x => { x.ComplexProperty(y => y.TaxInfoExtended, y => { y.IsRequired(); }); });
+  	base.OnModelCreating(modelBuilder);
+  }
+  ```
+
+If the user is using the Json serialization there is no problem with the type, but with AVRO and Protobuf the type cannot be managed. A serializer shall be defined and registered:
+```C#
+public class TaxInfoExtendedConverter : IComplexTypeConverter
+{
+    public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
+
+    public bool Convert(ref object? input)
+    {
+        if (input is TaxInfoExtended taxInfoExtended)
+        {
+            input = $"{taxInfoExtended.Code}|{taxInfoExtended.Percentage}";
+            return true;
+        }
+        return false;
+    }
+
+    public bool ConvertBack(ref object? input)
+    {
+        if (input is string str)
+        {
+            try
+            {
+                var values = str.Split("|");
+                var tie = new TaxInfoExtended();
+                tie.Code = int.Parse(values[0]);
+                tie.Percentage = decimal.Parse(values[1]);
+                input = tie;
+                return true;
+            }
+            catch { }
+        }
+        return false;
+    }
+}
+```
+
+The previous in only an example which converts, and converts back, `TaxInfoExtended` using a string which can be managed from underlying sub-system.

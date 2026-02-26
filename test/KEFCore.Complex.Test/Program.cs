@@ -44,7 +44,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
             {
                 globalWatcher.Start();
                 context = new BloggingContext();
+
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
@@ -94,7 +97,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     Percentage = i / 2,
                                     TaxInfoExtended = new TaxInfoExtended()
                                     {
-                                        Code = char.ConvertFromUtf32((int)i)[0],
+                                        Code = (int)i * 3,
                                         Percentage = i / 3,
                                     }
                                 }

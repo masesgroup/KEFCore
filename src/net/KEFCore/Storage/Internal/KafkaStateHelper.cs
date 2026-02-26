@@ -25,7 +25,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KafkaStateHelper
     {
-        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -48,11 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} added");
 #endif
-                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties());
+                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
             }
         }
 
-        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -63,7 +63,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 keyValues = [key];
             }
 
-            ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties());
+            ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
         }
 
         static void ManageAddedInternal(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues)
@@ -101,7 +101,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -114,7 +114,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties();
+            var properties = container.GetProperties(converterFactory);
             if (entry != null)
             {
 #if DEBUG_PERFORMANCE
@@ -131,7 +131,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -143,7 +143,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
 
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties();
+            var properties = container.GetProperties(converterFactory);
             if (entry != null)
             {
 #if DEBUG_PERFORMANCE
