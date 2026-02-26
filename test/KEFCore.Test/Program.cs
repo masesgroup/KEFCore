@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Start();
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                if (!ProgramConfig.Config.UseInMemoryProvider)
+                {
+                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
+                }
 
                 if (ProgramConfig.Config.ManageEvents)
                 {

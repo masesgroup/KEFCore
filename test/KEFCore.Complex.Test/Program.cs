@@ -47,7 +47,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
+                if (!ProgramConfig.Config.UseInMemoryProvider)
+                {
+                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
+                }
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
