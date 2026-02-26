@@ -142,7 +142,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
                     ? tName.FindComplexProperty(item.PropertyName!)
                     : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
-                item?.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
+                item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

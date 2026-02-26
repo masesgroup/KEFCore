@@ -292,10 +292,10 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 {
                     var prop = tName.FindProperty(item.Value?.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema 
-                    allPropertyValues[prop.GetIndex()] = item.Value?.Value!;
+                    allPropertyValues[item.Key] = item.Value?.Value!;
                 }
             }
-            else if (Properties != null)
+            else
             {
                 for (int i = 0; i < Properties.Length; i++)
                 {
