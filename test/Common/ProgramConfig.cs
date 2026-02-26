@@ -62,7 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfElements { get; set; } = 1000;
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
-        public bool ManageEvents { get; set; } = false;
+        public bool ManageEvents { get; set; } = true;
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
 
         public void ApplyOnContext(KafkaDbContext context)

@@ -51,14 +51,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     ProgramConfig.ReportString("Process EnsureDeleted");
                     context.Database.EnsureDeleted();
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
+                }
+
+                if (context.Database.EnsureCreated()) // call always for initialization
+                {
+                    ProgramConfig.ReportString("EnsureCreated created database");
+                }
+                else
+                {
+                    ProgramConfig.ReportString("EnsureCreated does not created database");
                 }
 
                 testWatcher.Start();
@@ -90,7 +91,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                 Tax = new TaxInfo()
                                 {
                                     Code = char.ConvertFromUtf32((int)i)[0],
-                                    Percentage = i / 2
+                                    Percentage = i / 2,
+                                    TaxInfoExtended = new TaxInfoExtended()
+                                    {
+                                        Code = char.ConvertFromUtf32((int)i)[0],
+                                        Percentage = i / 3,
+                                    }
                                 }
                             },
                             ComplexPosts =
@@ -154,6 +160,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
+                    var code = blog.PricingInfo.Tax.TaxInfoExtended.Code;
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
@@ -213,12 +220,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 {
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
-
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + (ProgramConfig.Config.NumberOfExtraElements != 0 ? 1 : 0));
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
+                if (ProgramConfig.Config.LoadApplicationData)
+                {
+                    watch.Restart();
+                    post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + (ProgramConfig.Config.NumberOfExtraElements != 0 ? 1 : 0));
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                }
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)

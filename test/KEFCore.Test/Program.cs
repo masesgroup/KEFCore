@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
-using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
@@ -66,14 +65,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString("Process EnsureDeleted");
                     context.Database.EnsureDeleted();
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
+                }
+
+                if (context.Database.EnsureCreated())
+                {
+                    ProgramConfig.ReportString("EnsureCreated created database");
+                }
+                else
+                {
+                    ProgramConfig.ReportString("EnsureCreated does not created database");
                 }
 
                 testWatcher.Start();
@@ -188,14 +188,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+                    var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
+                    watch.Restart();
+                    post = context.Posts.Single(b => b.BlogId == position);
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
-
-                var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == position);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)
@@ -209,19 +208,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Stop();
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
-        }
-
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
-
-            ProgramConfig.ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
         }
     }
 

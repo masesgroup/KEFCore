@@ -66,14 +66,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         ProgramConfig.ReportString("Process EnsureDeleted");
                         context.Database.EnsureDeleted();
                         ProgramConfig.ReportString("EnsureDeleted deleted database");
-                        if (context.Database.EnsureCreated())
-                        {
-                            ProgramConfig.ReportString("EnsureCreated created database");
-                        }
-                        else
-                        {
-                            ProgramConfig.ReportString("EnsureCreated does not created database");
-                        }
+                    }
+
+                    if (context.Database.EnsureCreated())
+                    {
+                        ProgramConfig.ReportString("EnsureCreated created database");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString("EnsureCreated does not created database");
                     }
 
                     testWatcher.Start();

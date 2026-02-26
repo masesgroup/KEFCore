@@ -19,6 +19,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
@@ -152,6 +153,16 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     public class TaxInfo
     {
         public int TaxInfoId { get; set; }
+        public char Code { get; set; }
+        public decimal Percentage { get; set; }
+        [Required]
+        public TaxInfoExtended TaxInfoExtended { get; set; }
+        public int ExtraValue { get; set; } // used to check index consistency since the method GetIndex of IComplexProperty is zero-based 
+    }
+
+    [ComplexType]
+    public class TaxInfoExtended
+    {
         public char Code { get; set; }
         public decimal Percentage { get; set; }
     }
