@@ -18,6 +18,7 @@
 
 // #define DEBUG_PERFORMANCE
 
+using Javax.Naming;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
@@ -300,19 +301,22 @@ public class KafkaDbContext : DbContext
     /// <inheritdoc cref="IComplexTypeConverterFactory.Register(Assembly)"/>
     public void RegisterComplexTypeConverter(Assembly assembly)
     {
-        var factory = this.GetService<IComplexTypeConverterFactory>();
-        factory.Register(assembly);
+        var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
+        var factory = serviceProvider.GetService<IComplexTypeConverterFactory>();
+        factory?.Register(assembly);
     }
     /// <inheritdoc cref="IComplexTypeConverterFactory.Register(Type)"/>
     public void RegisterComplexTypeConverter(Type type)
     {
-        var factory = this.GetService<IComplexTypeConverterFactory>();
-        factory.Register(type);
+        var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
+        var factory = serviceProvider.GetService<IComplexTypeConverterFactory>();
+        factory?.Register(type);
     }
     /// <inheritdoc cref="IComplexTypeConverterFactory.Register(IComplexTypeConverter)"/>
     public void RegisterComplexTypeConverter(IComplexTypeConverter converter)
     {
-        var factory = this.GetService<IComplexTypeConverterFactory>();
-        factory.Register(converter);
+        var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
+        var factory = serviceProvider.GetService<IComplexTypeConverterFactory>();
+        factory?.Register(converter);
     }
 }
