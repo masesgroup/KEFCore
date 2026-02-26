@@ -164,8 +164,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     [ComplexType]
     public class TaxInfoExtended
     {
-        public int Code { get; set; }
-        public decimal Percentage { get; set; }
+        public int CodeExtended { get; set; }
+        public decimal PercentageExtended { get; set; }
     }
 
     public class TaxInfoExtendedConverter : IComplexTypeConverter
@@ -176,7 +176,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
         {
             if (input is TaxInfoExtended taxInfoExtended)
             {
-                input = $"{taxInfoExtended.Code}_{taxInfoExtended.Percentage}";
+                input = $"{taxInfoExtended.CodeExtended}_{taxInfoExtended.PercentageExtended}";
                 return true;
             }
             return false;
@@ -191,13 +191,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
                     var values = str.Split("_");
                     var tie = new TaxInfoExtended
                     {
-                        Code = int.Parse(values[0]),
-                        Percentage = decimal.Parse(values[1])
+                        CodeExtended = int.Parse(values[0]),
+                        PercentageExtended = decimal.Parse(values[1])
                     };
                     input = tie;
                     return true;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
+                    input = new TaxInfoExtended();
+                    return true;
+                }
             }
             return false;
         }

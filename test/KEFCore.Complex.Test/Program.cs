@@ -97,8 +97,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     Percentage = i / 2,
                                     TaxInfoExtended = new TaxInfoExtended()
                                     {
-                                        Code = (int)i * 3,
-                                        Percentage = i / 3,
+                                        CodeExtended = (int)i * 3,
+                                        PercentageExtended = i / 3,
                                     }
                                 }
                             },
@@ -163,7 +163,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
-                    var code = blog.PricingInfo.Tax.TaxInfoExtended.Code;
+                    var code = blog.PricingInfo.Tax.TaxInfoExtended.CodeExtended;
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
