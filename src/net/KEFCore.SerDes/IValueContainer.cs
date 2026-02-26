@@ -19,6 +19,7 @@
 #nullable enable
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
+
 /// <summary>
 /// This is the main interface a class must implement to be a ValueContainer. More info <see href="https://masesgroup.github.io/KEFCore/articles/serialization.html">here</see>
 /// </summary>
@@ -37,12 +38,15 @@ public interface IValueContainer<in T> where T : notnull
     /// Returns back the raw data associated to the Entity contained in <see cref="IValueContainer{T}"/> instance
     /// </summary>
     /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
-    void GetData(IEntityType tName, IProperty[]? properties, ref object[] array);
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="allPropertyValues">The array of object to be filled in with the data stored in the <see cref="IValueContainer{T}"/> instance for both <paramref name="properties"/> and <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
+    void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory);
     /// <summary>
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
-    IDictionary<string, object?> GetProperties();
+    /// <param name="complexTypeHook">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
+    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
+    IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeHook = null);
 }

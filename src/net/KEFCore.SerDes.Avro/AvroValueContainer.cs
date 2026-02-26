@@ -22,6 +22,7 @@
 
 using MASES.KNet.Serialization;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 
@@ -39,11 +40,14 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     /// <summary>
     /// Initialize a new instance of <see cref="AvroValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="AvroValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="AvroValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
     /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/></param>
+    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="AvroValueContainer{TKey}"/></remarks>
-    public AvroValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
+    public AvroValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
@@ -53,41 +57,78 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         {
             int index = item.GetIndex();
             (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType!);
-            object? value = _type.Item1 switch
-            {
-                NativeTypeMapper.ManagedTypes.Guid => _type.Item2 ? (rData[index] as Guid?)?.ToString()!
-                                                                  : ((Guid)rData[index]).ToString(),
-                NativeTypeMapper.ManagedTypes.DateTime => _type.Item2 ? (rData[index] as DateTime?)?.ToString("O")!
-                                                                      : ((DateTime)rData[index]).ToString("O"),
-                NativeTypeMapper.ManagedTypes.DateTimeOffset => _type.Item2 ? (rData[index] as DateTimeOffset?)?.ToString("O")!
-                                                                            : ((DateTimeOffset)rData[index]).ToString("O"),
-                NativeTypeMapper.ManagedTypes.Char => _type.Item2 ? (rData[index] as char?)?.ToString(CultureInfo.InvariantCulture)
-                                                                  : ((char)rData[index]).ToString(CultureInfo.InvariantCulture),
-                NativeTypeMapper.ManagedTypes.SByte => _type.Item2 ? (rData[index] as sbyte?)?.ToString(CultureInfo.InvariantCulture)
-                                                                   : ((sbyte)rData[index]).ToString(CultureInfo.InvariantCulture),
-                NativeTypeMapper.ManagedTypes.UShort => _type.Item2 ? (rData[index] as ushort?)?.ToString(CultureInfo.InvariantCulture)
-                                                                    : ((ushort)rData[index]).ToString(CultureInfo.InvariantCulture),
-                NativeTypeMapper.ManagedTypes.UInt => _type.Item2 ? (rData[index] as uint?)?.ToString(CultureInfo.InvariantCulture)
-                                                                  : ((uint)rData[index]).ToString(CultureInfo.InvariantCulture),
-                NativeTypeMapper.ManagedTypes.ULong => _type.Item2 ? (rData[index] as ulong?)?.ToString(CultureInfo.InvariantCulture)
-                                                                   : ((ulong)rData[index]).ToString(CultureInfo.InvariantCulture),
-                NativeTypeMapper.ManagedTypes.Decimal => _type.Item2 ? (rData[index] as decimal?)?.ToString("G29", CultureInfo.InvariantCulture)
-                                                                     : ((decimal)rData[index]).ToString("G29", CultureInfo.InvariantCulture),
-                _ => rData[index],
-            };
+            BuildPropertyValue(item, _type.Item1, _type.Item2, ref propertyValues[index]!);
             var pRecord = new PropertyDataRecord
             {
                 ManagedType = (int)_type.Item1,
                 SupportNull = _type.Item2,
                 PropertyName = item.Name,
                 ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
-                Value = value
+                Value = propertyValues[index]
             };
             Data.Add(pRecord);
         }
+        if (complexProperties != null && complexPropertyValues != null)
+        {
+            foreach (var item in complexProperties)
+            {
+                int index = item.GetIndex();
+                BuildPropertyValue(item, NativeTypeMapper.ManagedTypes.ComplexType, false, ref complexPropertyValues[index]!, complexTypeFactory);
+                var pRecord = new PropertyDataRecord
+                {
+                    ManagedType = (int)NativeTypeMapper.ManagedTypes.ComplexType,
+                    SupportNull = false,
+                    PropertyName = item.Name,
+                    ClrType = item.ClrType?.ToAssemblyQualified(),
+                    Value = complexPropertyValues[index]
+                };
+                Data.Add(pRecord);
+            }
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    static void BuildPropertyValue(IPropertyBase? property, NativeTypeMapper.ManagedTypes managedType, bool supportNull, ref object? inputValue, IComplexTypeConverterFactory? complexTypeFactory = null)
+    {
+        switch (managedType)
+        {
+            case NativeTypeMapper.ManagedTypes.Guid:
+                inputValue = supportNull ? (inputValue as Guid?)?.ToString()! : ((Guid)inputValue).ToString();
+                break;
+            case NativeTypeMapper.ManagedTypes.DateTime:
+                inputValue = supportNull ? (inputValue as DateTime?)?.ToString("O")! : ((DateTime)inputValue).ToString("O");
+                break;
+            case NativeTypeMapper.ManagedTypes.DateTimeOffset:
+                inputValue = supportNull ? (inputValue as DateTimeOffset?)?.ToString("O")! : ((DateTimeOffset)inputValue).ToString("O");
+                break;
+            case NativeTypeMapper.ManagedTypes.Char:
+                inputValue = supportNull ? (inputValue as char?)?.ToString(CultureInfo.InvariantCulture) : ((char)inputValue).ToString(CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.SByte:
+                inputValue = supportNull ? (inputValue as sbyte?)?.ToString(CultureInfo.InvariantCulture) : ((sbyte)inputValue).ToString(CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.UShort:
+                inputValue = supportNull ? (inputValue as ushort?)?.ToString(CultureInfo.InvariantCulture) : ((ushort)inputValue).ToString(CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.UInt:
+                inputValue = supportNull ? (inputValue as uint?)?.ToString(CultureInfo.InvariantCulture) : ((uint)inputValue).ToString(CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.ULong:
+                inputValue = supportNull ? (inputValue as ulong?)?.ToString(CultureInfo.InvariantCulture) : ((ulong)inputValue).ToString(CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.Decimal:
+                inputValue = supportNull ? (inputValue as decimal?)?.ToString("G29", CultureInfo.InvariantCulture) : ((decimal)inputValue).ToString("G29", CultureInfo.InvariantCulture);
+                break;
+            case NativeTypeMapper.ManagedTypes.ComplexType:
+                if (complexTypeFactory != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
+                {
+                    complexTypeHook?.Convert(ref inputValue);
+                } 
+                break;
+            default: break; // no op
+        }
     }
 
-    object ConvertInnerData(PropertyDataRecord record)
+    object ConvertInnerData(PropertyDataRecord record, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         switch ((NativeTypeMapper.ManagedTypes)record.ManagedType)
         {
@@ -181,13 +222,29 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     else if (!record.SupportNull) throw new InvalidCastException($"Unable to manage null values with {nameof(System.Decimal)}");
                 }
                 break;
+            case NativeTypeMapper.ManagedTypes.ComplexType:
+                {
+                    object value = record.Value;
+                    if (complexTypeFactory != null)
+                    {
+                        if (property != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
+                        {
+                            complexTypeHook?.ConvertBack(ref value!);
+                        }
+                        else if (complexTypeFactory.TryGet(record.ClrType, out complexTypeHook))
+                        {
+                            complexTypeHook?.ConvertBack(ref value!);
+                        }
+                    }
+                    return value;
+                }
             default: break;
         }
         return record?.Value!;
     }
 
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
         properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
@@ -202,17 +259,25 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[properties.Length];
+            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
             foreach (var item in Data)
             {
-                var prop = tName.FindProperty(item.PropertyName!);
+                IPropertyBase? prop;
+                if (item.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType)
+                {
+                    prop = tName.FindComplexProperty(item.PropertyName!);
+                }
+                else
+                {
+                    prop = tName.FindProperty(item.PropertyName!);
+                }
                 if (prop == null) continue; // a property was removed from the schema 
                 int i = prop.GetIndex();
-                array[i] = ConvertInnerData(item);
+                allPropertyValues[i] = ConvertInnerData(item, prop, complexTypeFactory);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -228,12 +293,12 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties()
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         Dictionary<string, object?> props = new();
         foreach (var item in Data)
         {
-            props.Add(item.PropertyName, ConvertInnerData(item));
+            props.Add(item.PropertyName, ConvertInnerData(item, complexTypeFactory: complexTypeFactory));
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }

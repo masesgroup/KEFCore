@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Common;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -45,6 +46,10 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     IUpdateAdapterFactory UpdateAdapterFactory { get; }
     /// <summary>
+    /// The global <see cref="IComplexTypeConverterFactory"/>
+    /// </summary>
+    IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }
+    /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
     /// </summary>
     bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
@@ -60,6 +65,7 @@ public interface IKafkaCluster : IDisposable
     /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
     /// </summary>
     bool? EnsureSynchronized(long timeout);
+    /// <summary>
     /// Retrieves the <see cref="IKafkaTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKafkaCluster"/>
     /// </summary>
     IKafkaTable GetTable(IEntityType entityType);

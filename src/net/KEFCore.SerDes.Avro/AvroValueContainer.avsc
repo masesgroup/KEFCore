@@ -60,7 +60,8 @@
 								"long",
 								"float",
 								"double",
-								"string"
+								"string",
+								"bytes"
 							]
 						}
 					]

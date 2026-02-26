@@ -18,6 +18,7 @@
 
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using MASES.KNet.Serialization;
 using System.Globalization;
 using static MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper;
 
@@ -46,6 +47,59 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         }
     }
 
+    public sealed partial class ComplexType
+    {
+        /// <summary>
+        /// Initialize a <see cref="ComplexType"/> with <paramref name="input"/>
+        /// </summary>
+        /// <param name="property">The <see cref="IPropertyBase"/> to be converted</param>
+        /// <param name="input">The generic object to be stored</param>
+        /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> used for conversion</param>
+        public ComplexType(IPropertyBase? property, ref object? input, IComplexTypeConverterFactory? complexTypeFactory = null)
+        {
+            ClrtypeValue = input?.GetType()?.ToAssemblyQualified();
+            if (complexTypeFactory != null
+                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
+                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook))
+                    && complexTypeHook.Convert(ref input))
+            {
+                if (input is string str)
+                {
+                    StringValue = str;
+                }
+                else if (input is byte[] bArray)
+                {
+                    BytesValue = ByteString.CopyFrom(bArray);
+                }
+                else throw new InvalidOperationException("Protobuf ComplexType can manage only string or byte[] results.");
+            }
+            throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
+        }
+        /// <summary>
+        /// Returns a the converted object
+        /// </summary>
+        /// <param name="property">The <see cref="IPropertyBase"/> to be converted</param>
+        /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> used for conversion</param>
+        /// <returns>The object stored in <see cref="ComplexType"/></returns>
+        public object? GetContent(IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+        {
+            object? result = KindCase switch
+            {
+                KindOneofCase.StringValue => StringValue,
+                KindOneofCase.BytesValue => BytesValue.Memory,
+                _ => throw new InvalidOperationException("Protobuf ComplexType can manage only string or byte[] results."),
+            };
+            if (complexTypeFactory != null 
+                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook) 
+                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook))
+                && complexTypeHook.ConvertBack(ref result))
+            {
+                return result;
+            }
+            throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
+        }
+    }
+
     public sealed partial class GenericValue
     {
         /// <summary>
@@ -62,8 +116,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// </summary>
         /// <param name="_type">The <see cref="System.Type"/></param>
         /// <param name="input">The value to insert</param>
+        /// <param name="complexTypeFactory"><see cref="IComplexTypeConverterFactory"/> to use for conversions</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue((ManagedTypes, bool) _type, object? input)
+        public GenericValue((ManagedTypes, bool) _type, object? input, IComplexTypeConverterFactory? complexTypeFactory = null)
         {
             ManagedType = (int)_type.Item1;
             SupportNull = _type.Item2;
@@ -140,12 +195,16 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             {
                 DecimalValue = decimalVal.ToString("G29", CultureInfo.InvariantCulture);
             }
+            else if (input is byte[] bytes)
+            {
+                BytesValue = ByteString.CopyFrom(bytes);
+            }
             else throw new InvalidOperationException($"{input.GetType()} is not managed.");
         }
         /// <summary>
         /// Returns the content of <see cref="GenericValue"/>
         /// </summary>
-        public object GetContent()
+        public object? GetContent(IPropertyBase? property, IComplexTypeConverterFactory? complexTypeFactory)
         {
             return KindCase switch
             {
@@ -167,6 +226,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                 KindOneofCase.DatetimeValue => DatetimeValue.GetContent(),
                 KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.ToDateTimeOffset(),
                 KindOneofCase.DecimalValue => decimal.Parse(DecimalValue),
+                KindOneofCase.BytesValue => BytesValue.Memory,
+                KindOneofCase.ComplextypeValue => ComplextypeValue.GetContent(property, complexTypeFactory),
                 _ => throw new InvalidOperationException($"{KindCase} is not managed."),
             };
         }

@@ -28,6 +28,7 @@ using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
+using Microsoft.Extensions.Options;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
@@ -295,5 +296,23 @@ public class KafkaDbContext : DbContext
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);
         });
+    }
+    /// <inheritdoc cref="IComplexTypeConverterFactory.Register(Assembly)"/>
+    public void RegisterComplexTypeConverter(Assembly assembly)
+    {
+        var factory = this.GetService<IComplexTypeConverterFactory>();
+        factory.Register(assembly);
+    }
+    /// <inheritdoc cref="IComplexTypeConverterFactory.Register(Type)"/>
+    public void RegisterComplexTypeConverter(Type type)
+    {
+        var factory = this.GetService<IComplexTypeConverterFactory>();
+        factory.Register(type);
+    }
+    /// <inheritdoc cref="IComplexTypeConverterFactory.Register(IComplexTypeConverter)"/>
+    public void RegisterComplexTypeConverter(IComplexTypeConverter converter)
+    {
+        var factory = this.GetService<IComplexTypeConverterFactory>();
+        factory.Register(converter);
     }
 }

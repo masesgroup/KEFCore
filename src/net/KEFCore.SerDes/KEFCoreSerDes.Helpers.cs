@@ -38,7 +38,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 #if DEBUG_PERFORMANCE
         const bool perf = true;
         /// <summary>
-        /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(IEntityType, IProperty[], ref object[])"/>
+        /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(IEntityType, IProperty[], IComplexProperty[], ref object[], Serialization.IComplexTypeConverterFactory?)"/>
         /// </summary>
         public static bool TraceEntityTypeDataStorageGetData = false;
         /// <summary>
@@ -49,7 +49,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         {
             if (!_enableKEFCoreTracing) return;
 
-            if (Debugger.IsAttached)
+            if (false && Debugger.IsAttached)
             {
                 Trace.WriteLine($"{DateTime.Now:HH::mm::ss:ffff} - {message}");
             }
@@ -130,6 +130,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         readonly static Type NullableFloatType = typeof(float?);
         readonly static Type DecimalType = typeof(decimal);
         readonly static Type NullableDecimalType = typeof(decimal?);
+        readonly static Type BytesType = typeof(byte[]);
 
         /// <summary>
         /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
@@ -208,6 +209,14 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             /// <see cref="decimal"/>
             /// </summary>
             Decimal,
+            /// <summary>
+            /// Represent a generic array of <see cref="byte"/>
+            /// </summary>
+            Bytes,
+            /// <summary>
+            /// Defines a property as <see cref="IComplexType"/>
+            /// </summary>
+            ComplexType = 0x10000000,
         }
 
         static NativeTypeMapper()
@@ -261,6 +270,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
 
             dict.TryAdd(DecimalType, (ManagedTypes.Decimal, false)); reverseDict.TryAdd((ManagedTypes.Decimal, false), DecimalType);
             dict.TryAdd(NullableDecimalType, (ManagedTypes.Decimal, true)); reverseDict.TryAdd((ManagedTypes.Decimal, true), NullableDecimalType);
+
+            dict.TryAdd(BytesType, (ManagedTypes.Bytes, true)); reverseDict.TryAdd((ManagedTypes.Bytes, true), BytesType);
         }
 
         /// <summary>
@@ -280,7 +291,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <returns>A <see cref="Type"/> associated to the <paramref name="type"/> in input, otherwise <see langword="null"/></returns>
         public static Type GetValue((ManagedTypes, bool) type)
         {
-            if (!reverseDict.TryGetValue(type, out Type result)) { result = null!; }
+            if (!reverseDict.TryGetValue(type, out Type? result)) { result = null!; }
             return result;
         }
     }

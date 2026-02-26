@@ -30,18 +30,25 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topicName, TKey key, object?[]? row) : IKafkaRowBag
+public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, IEntityType entityType,
+                                                string topicName, TKey key,
+                                                IProperty[] properties, object?[]? propertyValues,
+                                                IComplexProperty[]? complexProperties, object?[]? complexPropertyValues) : IKafkaRowBag
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {
     /// <summary>
     /// The <see cref="IEntityType"/> with changes
     /// </summary>
-    public IEntityType EntityType { get; } = entry.EntityType;
+    public IEntityType EntityType { get; } = entityType;
     /// <summary>
     /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
     /// </summary>
-    public IProperty[] EntityProperties { get; } = [.. entry.EntityType.GetProperties()];
+    public IProperty[] Properties { get; } = properties;
+    /// <summary>
+    /// The <see cref="IComplexProperty"/> associated to <see cref="EntityType"/>
+    /// </summary>
+    public IComplexProperty[]? ComplexProperties { get; } = complexProperties;
     /// <summary>
     /// The <see cref="EntityState"/> associated to <see cref="EntityType"/>
     /// </summary>
@@ -55,9 +62,14 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topic
     /// <summary>
     /// The Value
     /// </summary>
-    public TValueContainer? Value(ConstructorInfo ci) => EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([EntityType, EntityProperties, ValueBuffer!]);
+    public TValueContainer? Value(ConstructorInfo ci, IComplexTypeConverterFactory complexTypeConverterFactory) 
+        => EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([EntityType, Properties, PropertyValues, ComplexProperties, ComplexPropertyValues, complexTypeConverterFactory]);
     /// <summary>
-    /// The <see cref="ValueBuffer"/> content
+    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="Properties"/>
     /// </summary>
-    public object?[]? ValueBuffer { get; } = row;
+    public object?[]? PropertyValues { get; } = propertyValues;
+    /// <summary>
+    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="ComplexProperties"/>
+    /// </summary>
+    public object?[]? ComplexPropertyValues { get; } = complexPropertyValues;
 }

@@ -39,7 +39,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             object[] values = new object[Values.Count];
             for (int i = 0; i < Values.Count; i++)
             {
-                values[i] = Values[i].GetContent();
+                values[i] = Values[i].GetContent(null, null)!;
             }
             return values;
         }
