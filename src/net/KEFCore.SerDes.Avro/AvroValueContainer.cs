@@ -289,9 +289,9 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = new();
+        object? result = null!;
         foreach (var item in Data)
         {
-            object? result = null!;
             ConvertInnerData(item, ref result, complexTypeFactory: complexTypeFactory);
             props.Add(item.PropertyName, result);
         }

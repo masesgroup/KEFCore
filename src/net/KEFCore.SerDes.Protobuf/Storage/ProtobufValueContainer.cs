@@ -137,11 +137,12 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             for (int i = 0; i < _innerMessage.Data.Count; i++)
             {
                 var item = _innerMessage.Data[i];
+                if (item == null) continue;
                 IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
                     ? tName.FindComplexProperty(item.PropertyName!)
                     : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
-                allPropertyValues[i] = item?.Value.GetContent(prop, complexTypeFactory)!;
+                item?.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -159,10 +160,12 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// <inheritdoc/>
     public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
+        object? value = null;
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
-            props.Add(item.PropertyName, item.Value.GetContent(null, complexTypeFactory : complexTypeFactory));
+            item.Value.GetContent(null, complexTypeFactory: complexTypeFactory, ref value!);
+            props.Add(item.PropertyName, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }

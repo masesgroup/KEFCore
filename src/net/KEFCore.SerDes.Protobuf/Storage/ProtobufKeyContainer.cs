@@ -28,7 +28,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             this.Values.Clear();
             for (int i = 0; i < input.Length; i++)
             {
-                Values.Add(new GenericValue(ref input[i]));
+                Values.Add(new GenericValue(ref input[i]!));
             }
         }
         /// <summary>
@@ -36,12 +36,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// </summary>
         public object[] GetContent()
         {
-            object[] values = new object[Values.Count];
+            object?[] values = new object?[Values.Count];
             for (int i = 0; i < Values.Count; i++)
             {
-                values[i] = Values[i].GetContent(null, null)!;
+                Values[i].GetContent(null, null, ref values[i]);
             }
-            return values;
+            return values!;
         }
     }
 

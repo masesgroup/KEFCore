@@ -339,10 +339,10 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
             return props;
         }
-
+        object? value;
         foreach (var item in Properties!)
         {
-            object? value = item.Value!;
+            value = item.Value!;
             if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
                 complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
             {

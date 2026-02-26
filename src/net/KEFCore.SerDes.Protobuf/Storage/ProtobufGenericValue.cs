@@ -40,10 +40,10 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// Returns a <see cref="System.DateTime"/>
         /// </summary>
         /// <returns>The <see cref="System.DateTime"/> in <see cref="Datetime"/></returns>
-        public System.DateTime GetContent()
+        public void GetContent(ref object? result)
         {
             var dt = DatetimeValue.ToDateTime();
-            return UtcValue ? dt : dt.ToLocalTime();
+            result = UtcValue ? dt : dt.ToLocalTime();
         }
     }
 
@@ -81,26 +81,25 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// <summary>
         /// Returns a the converted object
         /// </summary>
+        /// <param name="result">The object stored in <see cref="ComplexType"/></param>
         /// <param name="property">The <see cref="IPropertyBase"/> to be converted</param>
         /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> used for conversion</param>
-        /// <returns>The object stored in <see cref="ComplexType"/></returns>
-        public object? GetContent(IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+        public void GetContent(ref object? result, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
         {
-            object? result = KindCase switch
+            result = KindCase switch
             {
                 KindOneofCase.StringValue => StringValue,
                 KindOneofCase.BytesValue => BytesValue.Memory,
                 _ => throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[]."),
             };
-            if (complexTypeFactory != null 
-                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook) 
+            if (complexTypeFactory != null
+                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
                                      : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
             {
-                if (complexTypeHook!.ConvertBack(PreferredConversionType.Binary, ref result))
+                if (!complexTypeHook!.ConvertBack(PreferredConversionType.Binary, ref result))
                 {
-                    return result;
+                    throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {result} for {ClrtypeValue}.");
                 }
-                else throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {result} for {ClrtypeValue}.");
             }
             else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
         }
@@ -113,7 +112,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// </summary>
         /// <param name="input">The value to insert</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue(ref object input) : this(NativeTypeMapper.GetValue(input?.GetType()), ref input)
+        public GenericValue(ref object? input) : this(NativeTypeMapper.GetValue(input?.GetType()), ref input)
         {
         }
 
@@ -215,32 +214,75 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// <summary>
         /// Returns the content of <see cref="GenericValue"/>
         /// </summary>
-        public object? GetContent(IPropertyBase? property, IComplexTypeConverterFactory? complexTypeFactory)
+        public void GetContent(IPropertyBase? property, IComplexTypeConverterFactory? complexTypeFactory, ref object? result)
         {
-            return KindCase switch
+            switch (KindCase)
             {
-                KindOneofCase.NullValue => null!,
-                KindOneofCase.BoolValue => BoolValue,
-                KindOneofCase.CharValue => CharValue[0],
-                KindOneofCase.ByteValue => (byte)ByteValue,
-                KindOneofCase.SbyteValue => (sbyte)SbyteValue,
-                KindOneofCase.ShortValue => (short)ShortValue,
-                KindOneofCase.UshortValue => (short)UshortValue,
-                KindOneofCase.IntValue => IntValue,
-                KindOneofCase.UintValue => UintValue,
-                KindOneofCase.LongValue => LongValue,
-                KindOneofCase.UlongValue => UlongValue,
-                KindOneofCase.FloatValue => FloatValue,
-                KindOneofCase.DoubleValue => DoubleValue,
-                KindOneofCase.StringValue => StringValue,
-                KindOneofCase.GuidValue => new Guid([.. GuidValue]),
-                KindOneofCase.DatetimeValue => DatetimeValue.GetContent(),
-                KindOneofCase.DatetimeoffsetValue => DatetimeoffsetValue.ToDateTimeOffset(),
-                KindOneofCase.DecimalValue => decimal.Parse(DecimalValue),
-                KindOneofCase.BytesValue => BytesValue.Memory,
-                KindOneofCase.ComplextypeValue => ComplextypeValue.GetContent(property, complexTypeFactory),
-                _ => throw new InvalidOperationException($"{KindCase} is not managed."),
-            };
+                case KindOneofCase.None:
+                    result = null!;
+                    break;
+                case KindOneofCase.NullValue:
+                    result = null!;
+                    break;
+                case KindOneofCase.BoolValue:
+                    result = BoolValue;
+                    break;
+                case KindOneofCase.CharValue:
+                    result = CharValue[0];
+                    break;
+                case KindOneofCase.ByteValue:
+                    result = (byte)ByteValue;
+                    break;
+                case KindOneofCase.SbyteValue:
+                    result = (sbyte)SbyteValue;
+                    break;
+                case KindOneofCase.ShortValue:
+                    result = (short)ShortValue;
+                    break;
+                case KindOneofCase.UshortValue:
+                    result = (short)UshortValue;
+                    break;
+                case KindOneofCase.IntValue:
+                    result = IntValue;
+                    break;
+                case KindOneofCase.UintValue:
+                    result = UintValue;
+                    break;
+                case KindOneofCase.LongValue:
+                    result = LongValue;
+                    break;
+                case KindOneofCase.UlongValue:
+                    result = UlongValue;
+                    break;
+                case KindOneofCase.FloatValue:
+                    result = FloatValue;
+                    break;
+                case KindOneofCase.DoubleValue:
+                    result = DoubleValue;
+                    break;
+                case KindOneofCase.StringValue:
+                    result = StringValue;
+                    break;
+                case KindOneofCase.GuidValue:
+                    result = new Guid([.. GuidValue]);
+                    break;
+                case KindOneofCase.DatetimeValue:
+                    DatetimeValue.GetContent(ref result);
+                    break;
+                case KindOneofCase.DatetimeoffsetValue:
+                    result = DatetimeoffsetValue.ToDateTimeOffset();
+                    break;
+                case KindOneofCase.DecimalValue:
+                    result = decimal.Parse(DecimalValue);
+                    break;
+                case KindOneofCase.BytesValue:
+                    result = BytesValue.Memory;
+                    break;
+                case KindOneofCase.ComplextypeValue:
+                    ComplextypeValue.GetContent(ref result, property, complexTypeFactory);
+                    break;
+                default: throw new InvalidOperationException($"KindCase {KindCase} is not managed.");
+            }
         }
     }
 }
