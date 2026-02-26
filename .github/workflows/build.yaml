@@ -330,6 +330,10 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true
 
+      - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false
+
       - uses: actions/upload-artifact@v6
         with:
           if-no-files-found: ignore
@@ -630,6 +634,7 @@ jobs:
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
           dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -839,6 +844,10 @@ jobs:
       - name: Execute ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true
+
+      - name: Execute only reload ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false
 
       - uses: actions/upload-artifact@v6
         if: ${{ inputs.UploadServerLogs == true }}
