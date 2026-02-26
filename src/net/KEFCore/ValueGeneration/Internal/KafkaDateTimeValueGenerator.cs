@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2022-2026 MASES s.r.l.
+* Copyright (c) 2022-2026 MASES s.r.l.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -16,21 +16,28 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-
-namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
+namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public static class KafkaClusterCacheExtensions
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaDateTimeValueGenerator(int propertyIndex) : ValueGenerator<DateTime>, IKafkaValueGenerator
 {
-    /// <inheritdoc cref="IKafkaClusterCache.CreateCluster(KafkaOptionsExtension, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)"/>
-    public static IKafkaCluster CreateCluster(this IKafkaClusterCache storeCache, IDbContextOptions options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => storeCache.CreateCluster(options.Extensions.OfType<KafkaOptionsExtension>().First(), valueGeneratorSelector, updateAdapterFactory, designModel);
-    /// <inheritdoc cref="IKafkaClusterCache.GetCluster(KafkaOptionsExtension)"/>
-    public static IKafkaCluster GetCluster(this IKafkaClusterCache storeCache, IDbContextOptions options)
-        => storeCache.GetCluster(options.Extensions.OfType<KafkaOptionsExtension>().First());
+    private readonly int _propertyIndex = propertyIndex;
+    private DateTime _current;
+
+    /// <inheritdoc/>
+    public virtual void Bump(object?[] row)
+    {
+        // no op
+    }
+    /// <inheritdoc/>
+    public override DateTime Next(EntityEntry entry) => _current = DateTime.Now;
+    /// <inheritdoc/>
+    public override bool GeneratesTemporaryValues => false;
 }

@@ -266,15 +266,9 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
             foreach (var item in Data)
             {
-                IPropertyBase? prop;
-                if (item.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType)
-                {
-                    prop = tName.FindComplexProperty(item.PropertyName!);
-                }
-                else
-                {
-                    prop = tName.FindProperty(item.PropertyName!);
-                }
+                IPropertyBase? prop = item.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                    ? tName.FindComplexProperty(item.PropertyName!)
+                    : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
                 int i = prop.GetIndex();
                 allPropertyValues[i] = ConvertInnerData(item, prop, complexTypeFactory);

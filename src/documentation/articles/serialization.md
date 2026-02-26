@@ -114,6 +114,7 @@ Each serializer supports the following list of types can be used to declare the 
 - float?
 - decimal
 - decimal?
+- byte[]
 
 ## Code and user override
 
@@ -142,10 +143,13 @@ The default serialization can be overridden with user defined **ValueContainer**
 A custom **ValueContainer** class must contains enough information and shall follow the following rules:
 - must implements the [`IValueContainer<T>` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs)
 - must be a generic type
-- must have at least a default constructor and a constructor which accept three parameters in this order:
-  1. `IEntityType` 
-  2. `IProperty[]?`
-  3. `object[]`
+- must have at least a default constructor and a constructor which accept six parameters in this order:
+  1. `IEntityType` -> the Entity will be serialized
+  2. `IProperty[]?` -> the properties associated to the Entity at point 1
+  3. `object[]` -> an array of values associated on each property at point 2
+  4. `IComplexProperty[]?` -> an optional array of properties associated to the Entity at point 1 which represents the Complex properties
+  5. `object[]?` -> an optional array of values associated on each property at point 4
+  6. `IComplexTypeConverterFactory?` -> an optional reference to the factory where the instance will retrieve specialized serializer, see [Complex type serialization](#complex-type-serialization)
 
 An example snippet is the follow:
 
@@ -155,11 +159,14 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// <summary>
     /// Initialize a new instance of <see cref="CustomValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the ValueContainer for <paramref name="rData"/></param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="rData">The data, built from EFCore, to be stored in the ValueContainer</param>
-    /// <remarks>This constructor is mandatory and it is used from KEFCore to request a ValueContainer</remarks>
-    public CustomValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
+    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="CustomValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
+    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="CustomValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="CustomValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
+    /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="CustomValueContainer{TKey}"/></remarks>
+    public CustomValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
 
@@ -172,22 +179,25 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// <summary>
     /// The CLR <see cref="Type"/> of <see cref="IEntityType"/>
     /// </summary>
-    string ClrType { get; set; }
+    public string ClrType { get; set; }
     /// <summary>
     /// Returns back the raw data associated to the Entity contained in <see cref="IValueContainer{T}"/> instance
     /// </summary>
     /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="array">The array of object to be filled in with the data stored in the ValueContainer</param>
-    void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="allPropertyValues">The array of object to be filled in with the data stored in the <see cref="IValueContainer{T}"/> instance for both <paramref name="properties"/> and <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
+    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }
     /// <summary>
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer</returns>
-    public IDictionary<string, object?> GetProperties()
+    /// <param name="complexTypeHook">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
+    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeHook = null)
     {
         // add specific logic
     }
@@ -629,3 +639,49 @@ using (context = new BloggingContext()
 	// execute stuff here
 }
 ```
+
+## Complex type serialization
+
+Some types can be marked as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute) and EF Core will manage them differently from other types associated to the model.
+An instance of EF Core using classic database provider will create, depends on the implementation, some extra columns to manage the content of each property of the CLR type marked as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute).
+KEFCore works in a different way since the content stored in Kafka contains the serializable information of the Entity plus the references to other types in the model.
+KEFCore is based on the serializer described above and the new behavior supports conversion of ComplexType using two distinct behavior:
+1. Enabling the default serialization based on Json format the complex type are threated as POCO object and the sub-system leave the responsability to the .NET Json serializer
+2. Each type declared as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute) can have its own converter which manages the specific object using specialized classes implementing [`IComplexTypeConverter` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs)
+
+The [`IComplexTypeConverter` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs) is very simple:
+```C#
+/// <summary>
+/// The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <see cref="IComplexProperty"/>
+/// </summary>
+/// <remarks>The implementation shall be thread-safe and the class shall have at least a default initializer</remarks>
+public interface IComplexTypeConverter
+{
+    /// <summary>
+    /// The set of <see cref="Type"/> supported from the converter
+    /// </summary>
+    IEnumerable<Type> SupportedClrTypes { get; }
+    bool Convert(ref object? data);
+    bool ConvertBack(ref object? data);
+}
+```
+
+A single instance can support multiple `Type`s (this is the type declared as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute)) and exposes two methods:
+- `Convert`: converts EF Core types declared as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute) to something manageable from the underlying serializer, so the final output can be one of the type declared in [Default managed types](#default-managed-types)
+- `ConvertBack`: converts back something manageable from the underlying serializer (i.e. one of the type declared in [Default managed types](#default-managed-types)) to an EF Core types declared as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute)
+
+> [!TIP]
+> For implementers: the parameter is passed with `ref` keyword to avoid an excessive memory pressure and the converted value shall replace the received input.
+
+> [!IMPORTANT]
+> The implementation of [`IComplexTypeConverter` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs) shall be thread-safe.
+
+An user can build an external library and can register the custom converters within the system using the singleton service implementing [`IComplexTypeConverterFactory` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs):
+- using `GetService`:
+
+```C#
+var context = new KakfaDbContext();
+context.GetService<IComplexTypeConverterFactory>();
+factory.Register(converter);
+```
+- using the methods available in [`KakfaDbContext`](kafkadbcontext.md)

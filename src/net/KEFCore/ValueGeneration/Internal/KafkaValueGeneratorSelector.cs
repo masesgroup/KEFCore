@@ -30,30 +30,24 @@ namespace MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 /// </remarks>
 public class KafkaValueGeneratorSelector(ValueGeneratorSelectorDependencies dependencies) : ValueGeneratorSelector(dependencies)
 {
-    private ConcurrentDictionary<IProperty, IKafkaIntegerValueGenerator>? _integerGenerators;
+    private ConcurrentDictionary<IProperty, IKafkaValueGenerator>? _generators;
 
 #if NET9_0 || NET10_0
     /// <inheritdoc/>
     public override bool TrySelect(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
     {
-        if (property.GetValueGeneratorFactory() == null
-                && property.ClrType.IsInteger()
-                && property.ClrType.UnwrapNullableType() != typeof(char))
+        if (property.GetValueGeneratorFactory() == null)
         {
-            valueGenerator = GetOrCreate(property);
+            valueGenerator = GetOrCreate(property, typeBase);
+            if (valueGenerator != null) return true;
         }
-        else return base.TrySelect(property, typeBase, out valueGenerator);
-
-        return valueGenerator != null;
+        return base.TrySelect(property, typeBase, out valueGenerator);
     }
 #elif NET8_0
     /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, ITypeBase typeBase)
-        => property.GetValueGeneratorFactory() == null
-                && property.ClrType.IsInteger()
-                && property.ClrType.UnwrapNullableType() != typeof(char)
-                    ? GetOrCreate(property)
-                    : base.Select(property, typeBase);
+        => property.GetValueGeneratorFactory() == null ? GetOrCreate(property, typeBase) ?? base.Select(property, typeBase) 
+                                                       : base.Select(property, typeBase);
 #else
     /// <inheritdoc/>
     public override ValueGenerator Select(IProperty property, IEntityType entityType)
@@ -63,72 +57,119 @@ public class KafkaValueGeneratorSelector(ValueGeneratorSelectorDependencies depe
                 ? GetOrCreate(property)
                 : base.Select(property, entityType);
 #endif
-    private ValueGenerator GetOrCreate(IProperty property)
+
+    private ValueGenerator GetOrCreate(IProperty property, ITypeBase typeBase)
     {
-        var type = property.ClrType.UnwrapNullableType().UnwrapEnumType();
-
-        if (type == typeof(long))
+        if (property.ClrType.IsInteger()
+            && property.ClrType.UnwrapNullableType() != typeof(char))
         {
-            return GetIntegerValueGenerator<long>(property);
-        }
+            var type = property.ClrType.UnwrapNullableType().UnwrapEnumType();
 
-        if (type == typeof(int))
-        {
-            return GetIntegerValueGenerator<int>(property);
-        }
+            if (type == typeof(long))
+            {
+                return GetIntegerValueGenerator<long>(property);
+            }
 
-        if (type == typeof(short))
-        {
-            return GetIntegerValueGenerator<short>(property);
-        }
+            if (type == typeof(int))
+            {
+                return GetIntegerValueGenerator<int>(property);
+            }
 
-        if (type == typeof(byte))
-        {
-            return GetIntegerValueGenerator<byte>(property);
-        }
+            if (type == typeof(short))
+            {
+                return GetIntegerValueGenerator<short>(property);
+            }
 
-        if (type == typeof(ulong))
-        {
-            return GetIntegerValueGenerator<ulong>(property);
-        }
+            if (type == typeof(byte))
+            {
+                return GetIntegerValueGenerator<byte>(property);
+            }
 
-        if (type == typeof(uint))
-        {
-            return GetIntegerValueGenerator<uint>(property);
-        }
+            if (type == typeof(ulong))
+            {
+                return GetIntegerValueGenerator<ulong>(property);
+            }
 
-        if (type == typeof(ushort))
-        {
-            return GetIntegerValueGenerator<ushort>(property);
-        }
+            if (type == typeof(uint))
+            {
+                return GetIntegerValueGenerator<uint>(property);
+            }
 
-        if (type == typeof(sbyte))
-        {
-            return GetIntegerValueGenerator<sbyte>(property);
-        }
+            if (type == typeof(ushort))
+            {
+                return GetIntegerValueGenerator<ushort>(property);
+            }
+
+            if (type == typeof(sbyte))
+            {
+                return GetIntegerValueGenerator<sbyte>(property);
+            }
 #if NET8_0 || NET9_0 || NET10_0
-        throw new ArgumentException(
-            CoreStrings.InvalidValueGeneratorFactoryProperty(
-                "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
+            throw new ArgumentException(
+                CoreStrings.InvalidValueGeneratorFactoryProperty(
+                    "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
 #else
-        throw new ArgumentException(
-            CoreStrings.InvalidValueGeneratorFactoryProperty(
-                "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringEntityType.DisplayName()));
+            throw new ArgumentException(
+                CoreStrings.InvalidValueGeneratorFactoryProperty(
+                    "KafkaIntegerValueGeneratorFactory", property.Name, property.DeclaringEntityType.DisplayName()));
 #endif
+        }
+        else if (property.ClrType == typeof(DateTime)
+                 || property.ClrType.UnwrapNullableType() == typeof(DateTime))
+        {
+            return GetDateTimeValueGenerator(property);
+        }
+        else if (property.ClrType == typeof(DateTimeOffset)
+                 || property.ClrType.UnwrapNullableType() == typeof(DateTimeOffset))
+        {
+            return GetDateTimeOffsetValueGenerator(property);
+        }
+
+        return null!;
     }
 
     /// <inheritdoc/>
-    KafkaIntegerValueGenerator<TProperty> GetIntegerValueGenerator<TProperty>(IProperty property)
+    ValueGenerator GetIntegerValueGenerator<TProperty>(IProperty property)
     {
-        _integerGenerators ??= new ConcurrentDictionary<IProperty, IKafkaIntegerValueGenerator>();
+        _generators ??= new ConcurrentDictionary<IProperty, IKafkaValueGenerator>();
 
         var propertyIndex = property.GetIndex();
-        if (!_integerGenerators.TryGetValue(property, out var generator))
+        if (!_generators.TryGetValue(property, out var generator))
         {
             generator = new KafkaIntegerValueGenerator<TProperty>(propertyIndex);
-            _integerGenerators[property] = generator;
+            _generators[property] = generator;
         }
 
-        return (KafkaIntegerValueGenerator<TProperty>)generator;
+        return (ValueGenerator)generator;
+    }
+
+    /// <inheritdoc/>
+    ValueGenerator GetDateTimeValueGenerator(IProperty property)
+    {
+        _generators ??= new ConcurrentDictionary<IProperty, IKafkaValueGenerator>();
+
+        var propertyIndex = property.GetIndex();
+        if (!_generators.TryGetValue(property, out var generator))
+        {
+            generator = new KafkaDateTimeValueGenerator(propertyIndex);
+            _generators[property] = generator;
+        }
+
+        return (ValueGenerator)generator;
+    }
+
+    /// <inheritdoc/>
+    ValueGenerator GetDateTimeOffsetValueGenerator(IProperty property)
+    {
+        _generators ??= new ConcurrentDictionary<IProperty, IKafkaValueGenerator>();
+
+        var propertyIndex = property.GetIndex();
+        if (!_generators.TryGetValue(property, out var generator))
+        {
+            generator = new KafkaDateTimeOffsetValueGenerator(propertyIndex);
+            _generators[property] = generator;
+        }
+
+        return (ValueGenerator)generator;
     }
 }

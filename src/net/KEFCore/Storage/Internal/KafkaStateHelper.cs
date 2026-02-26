@@ -19,12 +19,13 @@
 //#define DEBUG_PERFORMANCE
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KafkaStateHelper
     {
-        public static void ManageAdded<TKey, TValueContainer>(IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -47,11 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} added");
 #endif
-                ManageAddedInternal(adapter, entityType, ikey, keyValues, container.GetProperties());
+                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties());
             }
         }
 
-        public static void ManageAdded<TKey, TValueContainer>(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -62,10 +63,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 keyValues = [key];
             }
 
-            ManageAddedInternal(adapter, entityType, ikey, keyValues, container.GetProperties());
+            ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties());
         }
 
-        static void ManageAddedInternal(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> properties)
+        static void ManageAddedInternal(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues)
         {
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry == null)
@@ -73,8 +74,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record not available, adding");
 #endif
+                var properties = entityType.GetValueGeneratingProperties();
+                foreach (var item in properties)
+                {
+#if NET9_0 || NET10_0
+                    if (!valueGeneratorSelector.TrySelect(item, entityType, out ValueGenerator? valueGenerator)) valueGenerator = null;
+#else
+                    ValueGenerator? valueGenerator = valueGeneratorSelector?.Select(item, entityType);
+#endif
+                    if (valueGenerator is IKafkaValueGenerator iKafkaGenerator)
+                    {
+                        iKafkaGenerator.Bump(keyValues);
+                    }
+                }
                 // the key does not exist
-                var newEntry = adapter.CreateEntry(properties, entityType);
+                var newEntry = adapter.CreateEntry(propertyValues, entityType);
                 newEntry.EntityState = EntityState.Unchanged;
                 //adapter.DetectChanges();
             }
@@ -83,11 +97,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record available, try update");
 #endif
-                ManageUpdateInternal(entry, properties);
+                ManageUpdateInternal(valueGeneratorSelector, entry, propertyValues);
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -106,18 +120,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} exist, update");
 #endif
-                ManageUpdateInternal(entry, properties);
+                ManageUpdateInternal(valueGeneratorSelector, entry, properties);
             }
             else
             {
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} does not exists, add");
 #endif
-                ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
+                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -135,26 +149,26 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record exists, update");
 #endif
-                ManageUpdateInternal(entry, properties);
+                ManageUpdateInternal(valueGeneratorSelector, entry, properties);
             }
             else
             {
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record does not exists, add");
 #endif
-                ManageAddedInternal(adapter, entityType, ikey, keyValues, properties);
+                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
             }
         }
 
-        public static void ManageUpdateInternal(IUpdateEntry entry, IDictionary<string, object?> properties)
+        public static void ManageUpdateInternal(IValueGeneratorSelector valueGeneratorSelector, IUpdateEntry entry, IDictionary<string, object?> propertyValues)
         {
             bool changed = false;
-            foreach (var item in properties)
+            foreach (var item in propertyValues)
             {
                 var prop = entry.EntityType.FindProperty(item.Key!);
                 if (prop == null) continue; // a property was removed from the schema
                 var currentValue = entry.GetCurrentValue(prop);
-                if (!Equals(item.Value, currentValue))
+                if (!Equals(item.Value, currentValue)) // if received data introduced a null value while current value is not null or received data is different from current value
                 {
                     changed = true;
                     entry.SetOriginalValue(prop, item.Value);
@@ -208,7 +222,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageFind(IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? properties)
+        public static void ManageFind(IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? propertyValues)
         {
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
@@ -219,7 +233,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #endif
                 var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
                 // the key does not exist
-                var newEntry = adapter.CreateEntry(properties!, entity2!);
+                var newEntry = adapter.CreateEntry(propertyValues!, entity2!);
                 newEntry.EntityState = EntityState.Unchanged;
                 //adapter.DetectChanges();
             }

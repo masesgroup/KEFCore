@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization
@@ -31,13 +32,10 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         public void Register(Assembly assembly)
         {
             ArgumentNullException.ThrowIfNull(assembly);
-            foreach (var type in assembly.ExportedTypes)
+            foreach (var type in assembly.ExportedTypes.Where(type => type.GetInterface(nameof(IComplexTypeConverter)) != null))
             {
-                if (type.GetInterface(nameof(IComplexTypeConverter)) != null)
-                {
-                    IComplexTypeConverter converter = (IComplexTypeConverter)Activator.CreateInstance(type)!;
-                    Register(converter);
-                }
+                IComplexTypeConverter converter = (IComplexTypeConverter)Activator.CreateInstance(type)!;
+                Register(converter);
             }
         }
         /// <inheritdoc/>
@@ -55,28 +53,28 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         public void Register(IComplexTypeConverter converter)
         {
             ArgumentNullException.ThrowIfNull(converter);
-            foreach (var item in converter.SupportedClrTypes)
+            foreach (var item in converter.SupportedClrTypes.Where(item => !_converters.TryAdd(item, converter)))
             {
-                if (!_converters.TryAdd(item, converter))
-                {
-                    _loggingOptions.Logger.LogWarning("Trying to register a type {Type} that was previously register.", item);
-                }
+                _loggingOptions.Logger.LogWarning("Trying to register a type {Type} that was previously register.", item);
             }
         }
 
         /// <inheritdoc/>
         public bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter? converter)
         {
+            ArgumentNullException.ThrowIfNull(complexProperty);
             return _converters.TryGetValue(complexProperty?.ClrType!, out converter);
         }
         /// <inheritdoc/>
         public bool TryGet(Type complexPropertyType, out IComplexTypeConverter? converter)
         {
+            ArgumentNullException.ThrowIfNull(complexPropertyType);
             return _converters.TryGetValue(complexPropertyType!, out converter);
         }
         /// <inheritdoc/>
         public bool TryGet(string complexPropertyType, out IComplexTypeConverter? converter)
         {
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(complexPropertyType);
             return _converters.TryGetValue(Type.GetType(complexPropertyType, true)!, out converter);
         }
     }

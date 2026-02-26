@@ -47,8 +47,8 @@ public class KafkaClusterCache(IKafkaTableFactory tableFactory, IComplexTypeConv
     }
 
     /// <inheritdoc/>
-    public virtual IKafkaCluster GetCluster(KafkaOptionsExtension options, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, _complexTypeConverterFactory, updateAdapterFactory, designModel));
+    public virtual IKafkaCluster CreateCluster(KafkaOptionsExtension options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, _complexTypeConverterFactory, valueGeneratorSelector, updateAdapterFactory, designModel));
 
     /// <inheritdoc/>
     public virtual void Dispose(IKafkaCluster cluster)

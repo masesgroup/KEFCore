@@ -38,6 +38,10 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     KafkaOptionsExtension Options { get; }
     /// <summary>
+    /// Returns the <see cref="IValueGeneratorSelector"/> instance
+    /// </summary>
+    IValueGeneratorSelector ValueGeneratorSelector { get; }
+    /// <summary>
     /// The associated <see cref="IModel"/>
     /// </summary>
     IModel Model { get; }

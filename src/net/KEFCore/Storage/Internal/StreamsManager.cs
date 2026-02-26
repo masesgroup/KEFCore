@@ -42,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
     internal interface IStreamsChangeManager
     {
-        void ManageChange(IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
+        void ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
     }
     /// <summary>
     /// Central interface for stream management
@@ -281,7 +281,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 do
                 {
                     if (!_dataFromStream.TryDequeue(out var current)) break;
-                    current.Manager.ManageChange(_updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
+                    current.Manager.ManageChange(_kafkaCluster.ValueGeneratorSelector, _updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
                 }
                 while (!_dataFromStream.IsEmpty);
                 System.Threading.Thread.Sleep(10);

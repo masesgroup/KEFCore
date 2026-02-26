@@ -302,15 +302,9 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             {
                 foreach (var item in Properties!)
                 {
-                    IPropertyBase? prop;
-                    if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType)
-                    {
-                        prop = tName.FindComplexProperty(item.PropertyName!);
-                    }
-                    else
-                    {
-                        prop = tName.FindProperty(item.PropertyName!);
-                    }
+                    IPropertyBase? prop = item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(item.PropertyName!)
+                        : tName.FindProperty(item.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema
                     int index = prop.GetIndex();
                     allPropertyValues[index] = item?.Value!;
@@ -353,12 +347,12 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         foreach (var item in Properties!)
         {
             object? value = item.Value!;
-            if (item?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
-                complexTypeFactory != null && complexTypeFactory.TryGet(item?.ClrType, out var complexTypeHook))
+            if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
             {
                 complexTypeHook?.Convert(ref value!);
             }
-            props.Add(item?.PropertyName!, value);
+            props.Add(item.PropertyName!, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
