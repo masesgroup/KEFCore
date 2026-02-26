@@ -32,17 +32,6 @@ public class KafkaValueGeneratorSelector(ValueGeneratorSelectorDependencies depe
 {
     private ConcurrentDictionary<IProperty, IKafkaIntegerValueGenerator>? _integerGenerators;
 
-    public void BumpAll(object?[] row)
-    {
-        if (_integerGenerators != null)
-        {
-            foreach (var generator in _integerGenerators.Values)
-            {
-                generator.Bump(row);
-            }
-        }
-    }
-
 #if NET9_0 || NET10_0
     /// <inheritdoc/>
     public override bool TrySelect(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)

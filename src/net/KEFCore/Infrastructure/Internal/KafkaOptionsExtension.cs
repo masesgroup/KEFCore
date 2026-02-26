@@ -537,7 +537,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         if (string.IsNullOrEmpty(kafkaOptions.ApplicationId)) throw new ArgumentException("It is manadatory", "ApplicationId");
         if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
     }
-
+    /// <inheritdoc/>
     public void Initialize(IDbContextOptions options)
     {
         throw new NotImplementedException();
