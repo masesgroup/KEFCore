@@ -58,7 +58,10 @@
 	  </None>
 	</ItemGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" 
+			Condition="'$(Configuration)' == 'Debug'"
+			Inputs="AvroKeyContainer.avsc;AvroValueContainer.avsc" 
+			Outputs="$(ProjectDir)Generated\AvroKeyContainer.cs;$(ProjectDir)Generated\AvroValueContainer.cs">
 		<Exec Command="$(OutDir)MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.exe $(ProjectDir)Generated" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'False'" />
 		<Exec Command="$(OutDir)MASES.EntityFrameworkCore.KNet.Serialization.Avro.Compiler.exe $(ProjectDir)Generated" Condition="'$(OS)' == 'Windows_NT' And '$([System.Environment]::Is64BitOperatingSystem)' == 'True'" />
 	</Target>

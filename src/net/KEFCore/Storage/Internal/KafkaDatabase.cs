@@ -35,6 +35,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
     public KafkaDatabase(
         DatabaseDependencies dependencies,
         IKafkaClusterCache clusterCache,
+        IValueGeneratorSelector valueGeneratorSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
@@ -42,7 +43,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.GetCluster(options, updateAdapterFactory, designTimeModel.Model);
+        _cluster = _clusterCache.CreateCluster(options, valueGeneratorSelector, updateAdapterFactory, designTimeModel.Model);
         _updateLogger = updateLogger;
     }
     /// <inheritdoc/>

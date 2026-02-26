@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.KNet;
 
 namespace MASES.EntityFrameworkCore.KNet
@@ -54,7 +55,7 @@ namespace MASES.EntityFrameworkCore.KNet
         /// <summary>
         /// Set to <see langword="false"/> to disable Apache Kafka Streams caching, default is <see langword="true"/>
         /// </summary>
-        /// <remarks>This value is read only once when application starts: if the backend uses Apache Kafka Streams (i.e. <see cref="MASES.EntityFrameworkCore.KNet.Internal.DebugPerformanceHelper.UseCompactedReplicator"/> is <see langword="false"/>), the value is read to understand how to manage Streams instances lifetime</remarks>
+        /// <remarks>This value is read only once when application starts: if the backend uses Apache Kafka Streams (i.e. <see cref="KafkaDbContext.UseCompactedReplicator"/> is <see langword="false"/>), the value is read to understand how to manage Streams instances lifetime</remarks>
         public static bool PreserveStreamsAcrossContexts { get; set; } = true;
     }
 }
