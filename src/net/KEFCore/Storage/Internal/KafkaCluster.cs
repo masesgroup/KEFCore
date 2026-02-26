@@ -25,6 +25,7 @@ using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
@@ -43,6 +44,7 @@ public class KafkaCluster : IKafkaCluster
 {
     private readonly KafkaOptionsExtension _options;
     private readonly IKafkaTableFactory _tableFactory;
+    private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
     private readonly bool _useNameMatching;
@@ -56,11 +58,13 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public KafkaCluster(KafkaOptionsExtension options,
         IKafkaTableFactory tableFactory,
+        IComplexTypeConverterFactory complexTypeConverterFactory,
         IUpdateAdapterFactory updateAdapterFactory,
         IModel designModel)
     {
         _options = options;
         _tableFactory = tableFactory;
+        _complexTypeConverterFactory = complexTypeConverterFactory;
         _updateAdapterFactory = updateAdapterFactory;
         _designModel = designModel;
         _useNameMatching = options.UseNameMatching;
@@ -99,6 +103,8 @@ public class KafkaCluster : IKafkaCluster
     public virtual IModel Model => _designModel;
     /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
+    /// <inheritdoc/>
+    public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => _complexTypeConverterFactory;
 
     ArrayList<Java.Lang.String> ResetStream()
     {
@@ -242,7 +248,7 @@ public class KafkaCluster : IKafkaCluster
             {
                 tables.Add(EnsureTable(entityType));
 
-                IEntityType? targetEntityType = null;
+                IEntityType targetEntityType = null;
                 foreach (var targetSeed in entityType.GetSeedData())
                 {
                     targetEntityType ??= updateAdapter.Model.FindEntityType(entityType.Name)!;
@@ -294,30 +300,35 @@ public class KafkaCluster : IKafkaCluster
     {
         var remainingTimeout = timeout;
         bool?[] bools = new bool?[_tables.Count];
-        int index = 0;
-        Stopwatch stopwatch = new Stopwatch();
-        foreach (var item in _tables)
+        Stopwatch stopwatch = new();
+        do
         {
-            stopwatch.Restart();
-            bools[index] = item.Value.EnsureSynchronized(remainingTimeout);
-            stopwatch.Stop();
-            if (timeout != Timeout.Infinite)
+            int index = 0;
+            foreach (var item in _tables)
             {
-                remainingTimeout -= stopwatch.ElapsedMilliseconds;
-                if (remainingTimeout < 0)
+                stopwatch.Restart();
+                bools[index] = item.Value.EnsureSynchronized(remainingTimeout);
+                stopwatch.Stop();
+                if (timeout != Timeout.Infinite)
                 {
-                    throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.Key}");
+                    remainingTimeout -= stopwatch.ElapsedMilliseconds;
+                    if (remainingTimeout < 0)
+                    {
+                        throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.Key}");
+                    }
                 }
+                index++;
             }
-            index++;
+            bool? result = true;
+            foreach (var item in bools)
+            {
+                if (!item.HasValue) return null; // if one item is uncertain return uncertain
+                result &= item;
+            }
+            if (result.HasValue && result.Value) return true;
         }
-        bool? result = null;
-        foreach (var item in bools)
-        {
-            if (!item.HasValue) return null; // if one item is uncertain return uncertain
-            result &= item;
-        }
-        return result;
+        while (timeout == Timeout.Infinite || remainingTimeout > 0);
+        return false;
     }
 
     /// <inheritdoc/>
