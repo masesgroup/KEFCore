@@ -18,6 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -172,6 +173,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     {
         public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
 
+        public IDiagnosticsLogger<DbLoggerCategory.Infrastructure> Logging { get; set; }
+
         public bool Convert(PreferredConversionType conversionType, ref object input)
         {
             if (input is TaxInfoExtended taxInfoExtended)
@@ -205,6 +208,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
                 }
             }
             return false;
+        }
+
+        public void Register(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logging)
+        {
+            Logging = logging;
         }
     }
 

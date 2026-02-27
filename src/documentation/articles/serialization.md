@@ -651,20 +651,6 @@ KEFCore is based on the serializer described above and the new behavior supports
 
 The [`IComplexTypeConverter` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs) is very simple:
 ```C#
-/// <summary>
-/// The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <see cref="IComplexProperty"/>
-/// </summary>
-/// <remarks>The implementation shall be thread-safe and the class shall have at least a default initializer</remarks>
-public interface IComplexTypeConverter
-{
-    /// <summary>
-    /// The set of <see cref="Type"/> supported from the converter
-    /// </summary>
-    IEnumerable<Type> SupportedClrTypes { get; }
-    bool Convert(PreferredConversionType conversionType, ref object? data);
-    bool ConvertBack(PreferredConversionType conversionType, ref object? data);
-}
-
 public enum PreferredConversionType
 {
     /// <summary>
@@ -676,6 +662,30 @@ public enum PreferredConversionType
     /// </summary>
     Binary
 }
+
+/// <summary>
+/// The interface adds support to <see cref="IComplexTypeConverter"/> for logging behavior
+/// </summary>
+public interface IComplexTypeConverterLogging
+{
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> Logging { get; }
+    void Register(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logging);
+}
+
+/// <summary>
+/// The interface shall be implemented and used from any external converter which neeeds to interact with serialization sub-system to manage <see cref="IComplexProperty"/>
+/// </summary>
+/// <remarks>The implementation of <see cref="Convert(PreferredConversionType, ref object?)"/> and <see cref="ConvertBack(PreferredConversionType, ref object?)"/> shall be thread-safe and the class shall have at least a default initializer</remarks>
+public interface IComplexTypeConverter : IComplexTypeConverterLogging
+{
+    /// <summary>
+    /// The set of <see cref="Type"/> supported from the converter
+    /// </summary>
+    IEnumerable<Type> SupportedClrTypes { get; }
+    bool Convert(PreferredConversionType conversionType, ref object? data);
+    bool ConvertBack(PreferredConversionType conversionType, ref object? data);
+}
+
 ```
 
 A single instance can support multiple `Type`s (this is the type declared as [ComplexType](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute)) and exposes two methods:

@@ -37,10 +37,27 @@ public enum PreferredConversionType
 }
 
 /// <summary>
-/// The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <see cref="IComplexProperty"/>
+/// The interface adds support to <see cref="IComplexTypeConverter"/> for logging behavior
 /// </summary>
-/// <remarks>The implementation shall be thread-safe and the class shall have at least a default initializer</remarks>
-public interface IComplexTypeConverter
+public interface IComplexTypeConverterLogging
+{
+    /// <summary>
+    /// <see cref="IDiagnosticsLogger{TLoggerCategory}"/> can be used to give back information
+    /// </summary>
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> Logging { get; }
+    /// <summary>
+    /// Register an <see cref="IDiagnosticsLogger{TLoggerCategory}"/> instance can be used to give back information
+    /// </summary>
+    /// <param name="logging"><see cref="IDiagnosticsLogger{TLoggerCategory}"/> can be used to give back information</param>
+    /// <remarks>This method is invoked only once to register the <paramref name="logging"/> without the need of a specific costructor</remarks>
+    void Register(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logging);
+}
+
+/// <summary>
+/// The interface shall be implemented and used from any external converter which neeeds to interact with serialization sub-system to manage <see cref="IComplexProperty"/>
+/// </summary>
+/// <remarks>The implementation of <see cref="Convert(PreferredConversionType, ref object?)"/> and <see cref="ConvertBack(PreferredConversionType, ref object?)"/> shall be thread-safe and the class shall have at least a default initializer</remarks>
+public interface IComplexTypeConverter : IComplexTypeConverterLogging
 {
     /// <summary>
     /// The set of <see cref="Type"/> supported from the converter
