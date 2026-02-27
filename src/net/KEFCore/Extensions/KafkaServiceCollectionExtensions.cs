@@ -21,6 +21,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 using MASES.EntityFrameworkCore.KNet.Query.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using System.ComponentModel;
@@ -72,6 +73,7 @@ public static class KafkaServiceCollectionExtensions
                     .TryAddSingleton<IKafkaSingletonOptions, KafkaSingletonOptions>()
                     .TryAddSingleton<IKafkaClusterCache, KafkaClusterCache>()
                     .TryAddSingleton<IKafkaTableFactory, KafkaTableFactory>()
+                    .TryAddSingleton<IComplexTypeConverterFactory, ComplexTypeConverterFactory>()
                     .TryAddScoped<IKafkaDatabase, KafkaDatabase>());
 
         builder.TryAddCoreServices();

@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Common;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -48,6 +49,10 @@ public interface IKafkaCluster : IDisposable
     /// The associated <see cref="IUpdateAdapterFactory"/>
     /// </summary>
     IUpdateAdapterFactory UpdateAdapterFactory { get; }
+    /// <summary>
+    /// The global <see cref="IComplexTypeConverterFactory"/>
+    /// </summary>
+    IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }
     /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
     /// </summary>

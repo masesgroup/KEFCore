@@ -34,7 +34,11 @@ public interface IKafkaRowBag
     /// <summary>
     /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
     /// </summary>
-    IProperty[] EntityProperties { get; }
+    IProperty[] Properties { get; }
+    /// <summary>
+    /// The <see cref="IComplexProperty"/> associated to <see cref="EntityType"/>
+    /// </summary>
+    IComplexProperty[]? ComplexProperties { get; }
     /// <summary>
     /// The <see cref="EntityState"/> associated to <see cref="EntityType"/>
     /// </summary>

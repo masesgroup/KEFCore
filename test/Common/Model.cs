@@ -16,9 +16,11 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
@@ -154,6 +156,56 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
         public int TaxInfoId { get; set; }
         public char Code { get; set; }
         public decimal Percentage { get; set; }
+        [Required]
+        public TaxInfoExtended TaxInfoExtended { get; set; }
+        public int ExtraValue { get; set; } // used to check index consistency since the method GetIndex of IComplexProperty is zero-based 
+    }
+
+    [ComplexType]
+    public class TaxInfoExtended
+    {
+        public int CodeExtended { get; set; }
+        public decimal PercentageExtended { get; set; }
+    }
+
+    public class TaxInfoExtendedConverter : IComplexTypeConverter
+    {
+        public IEnumerable<Type> SupportedClrTypes => [typeof(TaxInfoExtended)];
+
+        public bool Convert(PreferredConversionType conversionType, ref object input)
+        {
+            if (input is TaxInfoExtended taxInfoExtended)
+            {
+                input = $"{taxInfoExtended.CodeExtended}_{taxInfoExtended.PercentageExtended}";
+                return true;
+            }
+            return false;
+        }
+
+        public bool ConvertBack(PreferredConversionType conversionType, ref object input)
+        {
+            if (input is string str)
+            {
+                try
+                {
+                    var values = str.Split("_");
+                    var tie = new TaxInfoExtended
+                    {
+                        CodeExtended = int.Parse(values[0]),
+                        PercentageExtended = decimal.Parse(values[1])
+                    };
+                    input = tie;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
+                    input = new TaxInfoExtended();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     [PrimaryKey("PostId")]

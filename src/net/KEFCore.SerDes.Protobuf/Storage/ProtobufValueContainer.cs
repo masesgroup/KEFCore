@@ -51,11 +51,14 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// <summary>
     /// Initialize a new instance of <see cref="ProtobufValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="ProtobufValueContainer{TKey}"/> for <paramref name="rData"/></param>
+    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="ProtobufValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
     /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/></param>
+    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="ProtobufValueContainer{TKey}"/></remarks>
-    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
+    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
         _innerMessage = new ValueContainer
@@ -72,9 +75,23 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             {
                 PropertyName = item.Name,
                 ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : string.Empty,
-                Value = new GenericValue(_type, rData[index])
+                Value = new GenericValue(_type, ref propertyValues[index]!)
             };
             _innerMessage.Data.Add(pRecord);
+        }
+        if (complexProperties != null && complexPropertyValues != null)
+        {
+            foreach (var item in complexProperties)
+            {
+                int index = item.GetIndex();
+                var pRecord = new PropertyDataRecord
+                {
+                    PropertyName = item.Name,
+                    ClrType = item.ClrType?.ToAssemblyQualified(),
+                    Value = new GenericValue((NativeTypeMapper.ManagedTypes.ComplexType, false), ref complexPropertyValues[index]!, item, complexTypeFactory)
+                };
+                _innerMessage.Data.Add(pRecord);
+            }
         }
     }
     /// <inheritdoc/>
@@ -97,7 +114,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     public void WriteTo(CodedOutputStream output) => _innerMessage.WriteTo(output);
 
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
@@ -112,16 +129,20 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[properties.Length];
+            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            foreach (var item in _innerMessage.Data)
+            for (int i = 0; i < _innerMessage.Data.Count; i++)
             {
-                var prop = tName.FindProperty(item.PropertyName!);
+                var item = _innerMessage.Data[i];
+                if (item == null) continue;
+                IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                    ? tName.FindComplexProperty(item.PropertyName!)
+                    : tName.FindProperty(item.PropertyName!);
                 if (prop == null) continue; // a property was removed from the schema 
-                array[prop.GetIndex()] = item?.Value.GetContent()!;
+                item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
@@ -137,12 +158,14 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties()
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
+        object? value = null;
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
-            props.Add(item.PropertyName, item.Value.GetContent());
+            item.Value.GetContent(null, complexTypeFactory: complexTypeFactory, ref value!);
+            props.Add(item.PropertyName, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }

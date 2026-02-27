@@ -34,6 +34,22 @@ message Datetime
     bool utc_value = 2;
 }
 
+// [START messages]
+// Represent a ComplexType
+message ComplexType
+{
+  // The kind of value.
+  oneof kind {
+    // Represents a string value.
+    string string_value = 1;
+    // Represents a Guid value.
+    bytes bytes_value = 2;
+  }
+    // Represents a the clr type value.
+  string clrtype_value = 3;
+}
+
+// [START messages]
 // Our address book file is just one of these.
 message GenericValue {
   // The kind of value.
@@ -74,8 +90,12 @@ message GenericValue {
     google.protobuf.Timestamp datetimeoffset_value = 17;
     // Represents a decimal value.
     string decimal_value = 18;
+    // Represents a generic byte[] value.
+    bytes bytes_value = 19;
+    // Represents a decimal value.
+    ComplexType complextype_value = 20;
   }
-  int32 ManagedType = 19;
-  bool SupportNull = 20;
+  int32 ManagedType = 21;
+  bool SupportNull = 22;
 }
 // [END messages]

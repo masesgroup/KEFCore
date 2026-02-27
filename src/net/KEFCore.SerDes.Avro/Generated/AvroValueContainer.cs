@@ -38,7 +38,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
 				"e\":\"ClrType\",\"doc\":\"Represents the CLR type of the property in the EF Core schem" +
 				"a of the EntityType, null for well-known types\",\"default\":null,\"type\":[\"null\",\"s" +
 				"tring\"]},{\"name\":\"Value\",\"type\":[\"null\",\"boolean\",\"int\",\"long\",\"float\",\"double\"," +
-				"\"string\"]}]}}}]}");
+				"\"string\",\"bytes\"]}]}}}]}");
 		/// <summary>
 		/// Represents the entity name of the Entity in the EF Core schema of the EntityType
 		/// </summary>

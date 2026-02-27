@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
     public class ProgramConfig
     {
-        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem? "4G" : "2G";
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "4G" : "2G";
         public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "512M" : "256M";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
@@ -162,6 +162,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             if (!Config.UseInMemoryProvider)
             {
+                if (Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)  // for GitHub problem with Linux container
+                {
+                    KEFCore.ApplicationIgnoreUnrecognized = true; // add this condition if the JVM does not support the UseContainerSupport
+                    KEFCore.AddJVMOption("-XX:-UseContainerSupport");
+                }
                 KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
                 KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();

@@ -27,28 +27,33 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             "ChJHZW5lcmljVmFsdWUucHJvdG8SB3N0b3JhZ2UaHGdvb2dsZS9wcm90b2J1",
             "Zi9zdHJ1Y3QucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90aW1lc3RhbXAucHJv",
             "dG8iUQoIRGF0ZXRpbWUSMgoOZGF0ZXRpbWVfdmFsdWUYASABKAsyGi5nb29n",
-            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCKxBAoM",
-            "R2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUucHJv",
-            "dG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQKCmNo",
-            "YXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoLc2J5",
-            "dGVfdmFsdWUYBSABKAVIABIVCgtzaG9ydF92YWx1ZRgGIAEoBUgAEhYKDHVz",
-            "aG9ydF92YWx1ZRgHIAEoDUgAEhMKCWludF92YWx1ZRgIIAEoBUgAEhQKCnVp",
-            "bnRfdmFsdWUYCSABKA1IABIUCgpsb25nX3ZhbHVlGAogASgDSAASFQoLdWxv",
-            "bmdfdmFsdWUYCyABKARIABIVCgtmbG9hdF92YWx1ZRgMIAEoAkgAEhYKDGRv",
-            "dWJsZV92YWx1ZRgNIAEoAUgAEhYKDHN0cmluZ192YWx1ZRgOIAEoCUgAEhQK",
-            "Cmd1aWRfdmFsdWUYDyABKAxIABIrCg5kYXRldGltZV92YWx1ZRgQIAEoCzIR",
-            "LnN0b3JhZ2UuRGF0ZXRpbWVIABI6ChRkYXRldGltZW9mZnNldF92YWx1ZRgR",
-            "IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIABIXCg1kZWNpbWFs",
-            "X3ZhbHVlGBIgASgJSAASEwoLTWFuYWdlZFR5cGUYEyABKAUSEwoLU3VwcG9y",
-            "dE51bGwYFCABKAhCBgoEa2luZEKHAQo1bWFzZXMuZW50aXR5ZnJhbWV3b3Jr",
-            "Y29yZS5rbmV0LnNlcmlhbGl6YXRpb24ucHJvdG9idWZCDEdlbmVyaWNWYWx1",
-            "ZVABqgI9TUFTRVMuRW50aXR5RnJhbWV3b3JrQ29yZS5LTmV0LlNlcmlhbGl6",
-            "YXRpb24uUHJvdG9idWYuU3RvcmFnZWIGcHJvdG8z"));
+            "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCJbCgtD",
+            "b21wbGV4VHlwZRIWCgxzdHJpbmdfdmFsdWUYASABKAlIABIVCgtieXRlc192",
+            "YWx1ZRgCIAEoDEgAEhUKDWNscnR5cGVfdmFsdWUYAyABKAlCBgoEa2luZCL7",
+            "BAoMR2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUu",
+            "cHJvdG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQK",
+            "CmNoYXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoL",
+            "c2J5dGVfdmFsdWUYBSABKAVIABIVCgtzaG9ydF92YWx1ZRgGIAEoBUgAEhYK",
+            "DHVzaG9ydF92YWx1ZRgHIAEoDUgAEhMKCWludF92YWx1ZRgIIAEoBUgAEhQK",
+            "CnVpbnRfdmFsdWUYCSABKA1IABIUCgpsb25nX3ZhbHVlGAogASgDSAASFQoL",
+            "dWxvbmdfdmFsdWUYCyABKARIABIVCgtmbG9hdF92YWx1ZRgMIAEoAkgAEhYK",
+            "DGRvdWJsZV92YWx1ZRgNIAEoAUgAEhYKDHN0cmluZ192YWx1ZRgOIAEoCUgA",
+            "EhQKCmd1aWRfdmFsdWUYDyABKAxIABIrCg5kYXRldGltZV92YWx1ZRgQIAEo",
+            "CzIRLnN0b3JhZ2UuRGF0ZXRpbWVIABI6ChRkYXRldGltZW9mZnNldF92YWx1",
+            "ZRgRIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIABIXCg1kZWNp",
+            "bWFsX3ZhbHVlGBIgASgJSAASFQoLYnl0ZXNfdmFsdWUYEyABKAxIABIxChFj",
+            "b21wbGV4dHlwZV92YWx1ZRgUIAEoCzIULnN0b3JhZ2UuQ29tcGxleFR5cGVI",
+            "ABITCgtNYW5hZ2VkVHlwZRgVIAEoBRITCgtTdXBwb3J0TnVsbBgWIAEoCEIG",
+            "CgRraW5kQocBCjVtYXNlcy5lbnRpdHlmcmFtZXdvcmtjb3JlLmtuZXQuc2Vy",
+            "aWFsaXphdGlvbi5wcm90b2J1ZkIMR2VuZXJpY1ZhbHVlUAGqAj1NQVNFUy5F",
+            "bnRpdHlGcmFtZXdvcmtDb3JlLktOZXQuU2VyaWFsaXphdGlvbi5Qcm90b2J1",
+            "Zi5TdG9yYWdlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser, new[]{ "DatetimeValue", "UtcValue" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType.Parser, new[]{ "StringValue", "BytesValue", "ClrtypeValue" }, new[]{ "Kind" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "BytesValue", "ComplextypeValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
           }));
     }
     #endregion
@@ -310,6 +315,353 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
   }
 
   /// <summary>
+  /// [START messages]
+  /// Represent a ComplexType
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ComplexType : pb::IMessage<ComplexType>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ComplexType> _parser = new pb::MessageParser<ComplexType>(() => new ComplexType());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ComplexType> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ComplexType() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ComplexType(ComplexType other) : this() {
+      clrtypeValue_ = other.clrtypeValue_;
+      switch (other.KindCase) {
+        case KindOneofCase.StringValue:
+          StringValue = other.StringValue;
+          break;
+        case KindOneofCase.BytesValue:
+          BytesValue = other.BytesValue;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ComplexType Clone() {
+      return new ComplexType(this);
+    }
+
+    /// <summary>Field number for the "string_value" field.</summary>
+    public const int StringValueFieldNumber = 1;
+    /// <summary>
+    /// Represents a string value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string StringValue {
+      get { return HasStringValue ? (string) kind_ : ""; }
+      set {
+        kind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        kindCase_ = KindOneofCase.StringValue;
+      }
+    }
+    /// <summary>Gets whether the "string_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasStringValue {
+      get { return kindCase_ == KindOneofCase.StringValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "string_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearStringValue() {
+      if (HasStringValue) {
+        ClearKind();
+      }
+    }
+
+    /// <summary>Field number for the "bytes_value" field.</summary>
+    public const int BytesValueFieldNumber = 2;
+    /// <summary>
+    /// Represents a Guid value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString BytesValue {
+      get { return HasBytesValue ? (pb::ByteString) kind_ : pb::ByteString.Empty; }
+      set {
+        kind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        kindCase_ = KindOneofCase.BytesValue;
+      }
+    }
+    /// <summary>Gets whether the "bytes_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasBytesValue {
+      get { return kindCase_ == KindOneofCase.BytesValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "bytes_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearBytesValue() {
+      if (HasBytesValue) {
+        ClearKind();
+      }
+    }
+
+    /// <summary>Field number for the "clrtype_value" field.</summary>
+    public const int ClrtypeValueFieldNumber = 3;
+    private string clrtypeValue_ = "";
+    /// <summary>
+    /// Represents a the clr type value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ClrtypeValue {
+      get { return clrtypeValue_; }
+      set {
+        clrtypeValue_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    private object kind_;
+    /// <summary>Enum of possible cases for the "kind" oneof.</summary>
+    public enum KindOneofCase {
+      None = 0,
+      StringValue = 1,
+      BytesValue = 2,
+    }
+    private KindOneofCase kindCase_ = KindOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KindOneofCase KindCase {
+      get { return kindCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearKind() {
+      kindCase_ = KindOneofCase.None;
+      kind_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ComplexType);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ComplexType other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (StringValue != other.StringValue) return false;
+      if (BytesValue != other.BytesValue) return false;
+      if (ClrtypeValue != other.ClrtypeValue) return false;
+      if (KindCase != other.KindCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (HasStringValue) hash ^= StringValue.GetHashCode();
+      if (HasBytesValue) hash ^= BytesValue.GetHashCode();
+      if (ClrtypeValue.Length != 0) hash ^= ClrtypeValue.GetHashCode();
+      hash ^= (int) kindCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (HasStringValue) {
+        output.WriteRawTag(10);
+        output.WriteString(StringValue);
+      }
+      if (HasBytesValue) {
+        output.WriteRawTag(18);
+        output.WriteBytes(BytesValue);
+      }
+      if (ClrtypeValue.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(ClrtypeValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (HasStringValue) {
+        output.WriteRawTag(10);
+        output.WriteString(StringValue);
+      }
+      if (HasBytesValue) {
+        output.WriteRawTag(18);
+        output.WriteBytes(BytesValue);
+      }
+      if (ClrtypeValue.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(ClrtypeValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (HasStringValue) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(StringValue);
+      }
+      if (HasBytesValue) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(BytesValue);
+      }
+      if (ClrtypeValue.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ClrtypeValue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ComplexType other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ClrtypeValue.Length != 0) {
+        ClrtypeValue = other.ClrtypeValue;
+      }
+      switch (other.KindCase) {
+        case KindOneofCase.StringValue:
+          StringValue = other.StringValue;
+          break;
+        case KindOneofCase.BytesValue:
+          BytesValue = other.BytesValue;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            StringValue = input.ReadString();
+            break;
+          }
+          case 18: {
+            BytesValue = input.ReadBytes();
+            break;
+          }
+          case 26: {
+            ClrtypeValue = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            StringValue = input.ReadString();
+            break;
+          }
+          case 18: {
+            BytesValue = input.ReadBytes();
+            break;
+          }
+          case 26: {
+            ClrtypeValue = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
+  /// [START messages]
   /// Our address book file is just one of these.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -327,7 +679,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[1]; }
+      get { return global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValueReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -403,6 +755,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DecimalValue:
           DecimalValue = other.DecimalValue;
+          break;
+        case KindOneofCase.BytesValue:
+          BytesValue = other.BytesValue;
+          break;
+        case KindOneofCase.ComplextypeValue:
+          ComplextypeValue = other.ComplextypeValue.Clone();
           break;
       }
 
@@ -909,8 +1267,52 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "bytes_value" field.</summary>
+    public const int BytesValueFieldNumber = 19;
+    /// <summary>
+    /// Represents a generic byte[] value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString BytesValue {
+      get { return HasBytesValue ? (pb::ByteString) kind_ : pb::ByteString.Empty; }
+      set {
+        kind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        kindCase_ = KindOneofCase.BytesValue;
+      }
+    }
+    /// <summary>Gets whether the "bytes_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasBytesValue {
+      get { return kindCase_ == KindOneofCase.BytesValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "bytes_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearBytesValue() {
+      if (HasBytesValue) {
+        ClearKind();
+      }
+    }
+
+    /// <summary>Field number for the "complextype_value" field.</summary>
+    public const int ComplextypeValueFieldNumber = 20;
+    /// <summary>
+    /// Represents a decimal value.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType ComplextypeValue {
+      get { return kindCase_ == KindOneofCase.ComplextypeValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType) kind_ : null; }
+      set {
+        kind_ = value;
+        kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.ComplextypeValue;
+      }
+    }
+
     /// <summary>Field number for the "ManagedType" field.</summary>
-    public const int ManagedTypeFieldNumber = 19;
+    public const int ManagedTypeFieldNumber = 21;
     private int managedType_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -922,7 +1324,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "SupportNull" field.</summary>
-    public const int SupportNullFieldNumber = 20;
+    public const int SupportNullFieldNumber = 22;
     private bool supportNull_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -955,6 +1357,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       DatetimeValue = 16,
       DatetimeoffsetValue = 17,
       DecimalValue = 18,
+      BytesValue = 19,
+      ComplextypeValue = 20,
     }
     private KindOneofCase kindCase_ = KindOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1003,6 +1407,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (!object.Equals(DatetimeValue, other.DatetimeValue)) return false;
       if (!object.Equals(DatetimeoffsetValue, other.DatetimeoffsetValue)) return false;
       if (DecimalValue != other.DecimalValue) return false;
+      if (BytesValue != other.BytesValue) return false;
+      if (!object.Equals(ComplextypeValue, other.ComplextypeValue)) return false;
       if (ManagedType != other.ManagedType) return false;
       if (SupportNull != other.SupportNull) return false;
       if (KindCase != other.KindCase) return false;
@@ -1031,6 +1437,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (kindCase_ == KindOneofCase.DatetimeValue) hash ^= DatetimeValue.GetHashCode();
       if (kindCase_ == KindOneofCase.DatetimeoffsetValue) hash ^= DatetimeoffsetValue.GetHashCode();
       if (HasDecimalValue) hash ^= DecimalValue.GetHashCode();
+      if (HasBytesValue) hash ^= BytesValue.GetHashCode();
+      if (kindCase_ == KindOneofCase.ComplextypeValue) hash ^= ComplextypeValue.GetHashCode();
       if (ManagedType != 0) hash ^= ManagedType.GetHashCode();
       if (SupportNull != false) hash ^= SupportNull.GetHashCode();
       hash ^= (int) kindCase_;
@@ -1124,12 +1532,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(146, 1);
         output.WriteString(DecimalValue);
       }
+      if (HasBytesValue) {
+        output.WriteRawTag(154, 1);
+        output.WriteBytes(BytesValue);
+      }
+      if (kindCase_ == KindOneofCase.ComplextypeValue) {
+        output.WriteRawTag(162, 1);
+        output.WriteMessage(ComplextypeValue);
+      }
       if (ManagedType != 0) {
-        output.WriteRawTag(152, 1);
+        output.WriteRawTag(168, 1);
         output.WriteInt32(ManagedType);
       }
       if (SupportNull != false) {
-        output.WriteRawTag(160, 1);
+        output.WriteRawTag(176, 1);
         output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
@@ -1214,12 +1630,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(146, 1);
         output.WriteString(DecimalValue);
       }
+      if (HasBytesValue) {
+        output.WriteRawTag(154, 1);
+        output.WriteBytes(BytesValue);
+      }
+      if (kindCase_ == KindOneofCase.ComplextypeValue) {
+        output.WriteRawTag(162, 1);
+        output.WriteMessage(ComplextypeValue);
+      }
       if (ManagedType != 0) {
-        output.WriteRawTag(152, 1);
+        output.WriteRawTag(168, 1);
         output.WriteInt32(ManagedType);
       }
       if (SupportNull != false) {
-        output.WriteRawTag(160, 1);
+        output.WriteRawTag(176, 1);
         output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
@@ -1285,6 +1709,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
       if (HasDecimalValue) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(DecimalValue);
+      }
+      if (HasBytesValue) {
+        size += 2 + pb::CodedOutputStream.ComputeBytesSize(BytesValue);
+      }
+      if (kindCase_ == KindOneofCase.ComplextypeValue) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ComplextypeValue);
       }
       if (ManagedType != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ManagedType);
@@ -1370,6 +1800,15 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
           break;
         case KindOneofCase.DecimalValue:
           DecimalValue = other.DecimalValue;
+          break;
+        case KindOneofCase.BytesValue:
+          BytesValue = other.BytesValue;
+          break;
+        case KindOneofCase.ComplextypeValue:
+          if (ComplextypeValue == null) {
+            ComplextypeValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+          }
+          ComplextypeValue.MergeFrom(other.ComplextypeValue);
           break;
       }
 
@@ -1475,11 +1914,24 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             DecimalValue = input.ReadString();
             break;
           }
-          case 152: {
+          case 154: {
+            BytesValue = input.ReadBytes();
+            break;
+          }
+          case 162: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+            if (kindCase_ == KindOneofCase.ComplextypeValue) {
+              subBuilder.MergeFrom(ComplextypeValue);
+            }
+            input.ReadMessage(subBuilder);
+            ComplextypeValue = subBuilder;
+            break;
+          }
+          case 168: {
             ManagedType = input.ReadInt32();
             break;
           }
-          case 160: {
+          case 176: {
             SupportNull = input.ReadBool();
             break;
           }
@@ -1585,11 +2037,24 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             DecimalValue = input.ReadString();
             break;
           }
-          case 152: {
+          case 154: {
+            BytesValue = input.ReadBytes();
+            break;
+          }
+          case 162: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+            if (kindCase_ == KindOneofCase.ComplextypeValue) {
+              subBuilder.MergeFrom(ComplextypeValue);
+            }
+            input.ReadMessage(subBuilder);
+            ComplextypeValue = subBuilder;
+            break;
+          }
+          case 168: {
             ManagedType = input.ReadInt32();
             break;
           }
-          case 160: {
+          case 176: {
             SupportNull = input.ReadBool();
             break;
           }

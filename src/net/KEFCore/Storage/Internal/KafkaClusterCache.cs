@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -29,9 +30,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaClusterCache(IKafkaTableFactory tableFactory) : IKafkaClusterCache
+public class KafkaClusterCache(IKafkaTableFactory tableFactory, IComplexTypeConverterFactory complexTypeConverterFactory) : IKafkaClusterCache
 {
     private readonly IKafkaTableFactory _tableFactory = tableFactory;
+    private readonly IComplexTypeConverterFactory _complexTypeConverterFactory = complexTypeConverterFactory;
     private readonly ConcurrentDictionary<string, IKafkaCluster> _namedClusters = new();
 
     /// <inheritdoc/>
@@ -46,7 +48,7 @@ public class KafkaClusterCache(IKafkaTableFactory tableFactory) : IKafkaClusterC
 
     /// <inheritdoc/>
     public virtual IKafkaCluster CreateCluster(KafkaOptionsExtension options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, valueGeneratorSelector, updateAdapterFactory, designModel));
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KafkaCluster(options, _tableFactory, _complexTypeConverterFactory, valueGeneratorSelector, updateAdapterFactory, designModel));
 
     /// <inheritdoc/>
     public virtual void Dispose(IKafkaCluster cluster)

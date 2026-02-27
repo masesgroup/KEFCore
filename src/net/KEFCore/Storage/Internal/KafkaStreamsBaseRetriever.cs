@@ -105,7 +105,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             CreateConsumed = (extractor) => Consumed<K, V>.With(extractor),
             CreateMaterialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As,
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
-            CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized) 
+            CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized)
                                                                                                   : builder.Table(topicName, materialized),
             CreateTopology = static (builder) => builder.Build(),
             CreateStreams = static (topology, streamsConfig) =>
@@ -135,6 +135,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     private readonly IEntityType _entityType;
     private readonly IKey _primaryKey;
     private readonly IProperty[] _entityTypeProperties;
+    private readonly IComplexProperty[]? _complexProperties;
+    private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly ISerDes<TKey, K> _keySerdes;
     private readonly ISerDes<TValue, V> _valueSerdes;
     private readonly string _storageId;
@@ -142,11 +144,13 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IEntityType entityType, IKey primaryKey, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
+    public KafkaStreamsBaseRetriever(IEntityType entityType, IKey primaryKey, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
     {
         _entityType = entityType;
         _primaryKey = primaryKey;
         _entityTypeProperties = properties;
+        _complexProperties = complexProperties;
+        _complexTypeConverterFactory = complexTypeConverterFactory;
         _keySerdes = keySerdes;
         _valueSerdes = valueSerdes;
 
@@ -162,7 +166,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_entityType, _entityTypeProperties, _keySerdes, _valueSerdes, _storageId);
+        return new KafkaEnumberable(_entityType, _entityTypeProperties, _complexProperties, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId);
     }
 
     V GetV(TKey key)
@@ -191,9 +195,9 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         }
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
 
-        object[] array = null!;
-        entityTypeData?.GetData(_entityType, _entityTypeProperties, ref array);
-        valueBuffer = new ValueBuffer(array);
+        object[] propertyValues = null!;
+        entityTypeData?.GetData(_entityType, _entityTypeProperties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
+        valueBuffer = new ValueBuffer(propertyValues);
         return true;
     }
     /// <inheritdoc/>
@@ -206,28 +210,32 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             return false;
         }
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
-        properties = entityTypeData?.GetProperties()!;
+        properties = entityTypeData?.GetProperties(_complexTypeConverterFactory)!;
         return true;
     }
 
     void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KafkaStateHelper.ManageAdded(valueGeneratorSelector, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KafkaStateHelper.ManageAdded(valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>
     {
         private readonly IEntityType _entityType;
         private readonly IProperty[] _properties;
+        private readonly IComplexProperty[]? _complexProperties;
+        private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
 
-        public KafkaEnumberable(IEntityType entityType, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
+        public KafkaEnumberable(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId)
         {
             _entityType = entityType;
             _properties = properties;
+            _complexProperties = complexProperties;
+            _complexTypeConverterFactory = complexTypeConverterFactory;
             _keySerdes = keySerdes;
             _valueSerdes = valueSerdes;
             _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
@@ -243,7 +251,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_entityType, _properties, _keySerdes, _valueSerdes, _keyValueStore?.All());
+            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _keyValueStore?.All());
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -256,6 +264,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         private readonly IEntityType _entityType;
         private readonly IProperty[] _properties;
+        private readonly IComplexProperty[]? _complexProperties;
+        private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
@@ -270,10 +280,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
         int _cycles = 0;
 #endif
-        public KafkaEnumerator(IEntityType entityType, IProperty[] properties, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
+        public KafkaEnumerator(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? keyValueIterator)
         {
             _entityType = entityType;
             _properties = properties;
+            _complexProperties = complexProperties;
+            _complexTypeConverterFactory = complexTypeConverterFactory;
             _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
@@ -363,12 +375,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
-                    object[] array = null!;
-                    entityTypeData?.GetData(_entityType, _properties, ref array);
+                    object[] propertyValues = null!;
+                    entityTypeData?.GetData(_entityType, _properties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif
-                    _current = new ValueBuffer(array);
+                    _current = new ValueBuffer(propertyValues);
                 }
                 else
                 {

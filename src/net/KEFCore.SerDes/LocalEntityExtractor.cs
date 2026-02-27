@@ -56,7 +56,7 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
         if (entityType != null)
         {
             var newEntity = Activator.CreateInstance(entityType!);
-            foreach (var property in valueContainer.GetProperties())
+            foreach (var property in valueContainer.GetProperties(null)) // to be added complex entity manager
             {
                 var propInfo = entityType.GetProperty(property.Key);
                 if (propInfo != null)

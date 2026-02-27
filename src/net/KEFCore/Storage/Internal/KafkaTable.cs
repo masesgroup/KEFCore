@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Globalization;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -46,6 +47,12 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
     readonly IEntityTypeProducer<TKey> _producer;
     private readonly string _tableAssociatedTopicName;
+
+    private readonly ConcurrentDictionary<IEntityType, IProperty[]> _propertiesCache = new();
+    private readonly ConcurrentDictionary<IEntityType, IComplexProperty[]> _complexPropertiesCache = new();
+
+    //private readonly IProperty[] _properties;
+    //private readonly IComplexProperty[]? _complexProperties;
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -57,10 +64,8 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 #if DEBUG_PERFORMANCE
 		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
 #endif
-        Cluster = cluster;
-        EntityType = entityType;
-        _tableAssociatedTopicName = Cluster.CreateTopicForEntity(entityType);
-        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, Cluster);
+        _tableAssociatedTopicName = cluster.CreateTopicForEntity(entityType);
+        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
@@ -101,7 +106,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     public virtual IKafkaCluster Cluster { get; }
     /// <inheritdoc/>
-    public virtual IEntityType EntityType { get; }
+    public virtual IEntityType EntityType => _producer.EntityType;
 
     /// <inheritdoc/>
     public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
@@ -123,16 +128,18 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
         else
         {
-            var properties = entry.EntityType.GetProperties().ToArray();
-            var rows = new object?[properties.Length];
-            var nullabilityErrors = new List<IProperty>();
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
 
-            for (var index = 0; index < properties.Length; index++)
+            var propertyValues = new object?[properties.Length];
+            var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
+            var nullabilityErrors = new List<IProperty>();
+            for (int index = 0; index < properties.Length; index++)
             {
                 var propertyValue = SnapshotValue(properties[index], properties[index].GetKeyValueComparer(), entry);
 
-                rows[index] = propertyValue;
-                HasNullabilityError(properties[index], propertyValue, nullabilityErrors);
+                propertyValues[index] = propertyValue;
+                KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(properties[index], propertyValue, nullabilityErrors);
             }
 
             if (nullabilityErrors.Count > 0)
@@ -140,9 +147,14 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 ThrowNullabilityErrorException(entry, nullabilityErrors);
             }
 
-            BumpValueGenerators(rows);
-
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, rows);
+            if (complexProperties != null)
+            {
+                for (int index = 0; index < complexProperties.Length; index++)
+                {
+                    complexPropertyValues![index] = entry.GetCurrentValue(complexProperties[index]);
+                }
+            }
+            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>
@@ -155,7 +167,8 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
         else
         {
-            var properties = entry.EntityType.GetProperties().ToArray();
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
 
             for (var index = 0; index < properties.Length; index++)
@@ -168,7 +181,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 ThrowUpdateConcurrencyException(entry, concurrencyConflicts);
             }
 
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, null);
+            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, null, complexProperties, null);
         }
     }
 
@@ -213,25 +226,27 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         }
         else
         {
-            var properties = entry.EntityType.GetProperties().ToArray();
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
+
             var comparers = GetKeyComparers(properties);
-            var valueBuffer = new object?[properties.Length];
+            var propertyValues = new object?[properties.Length];
+            var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
             var nullabilityErrors = new List<IProperty>();
-
-            for (var index = 0; index < valueBuffer.Length; index++)
+            for (int index = 0; index < properties.Length; index++)
             {
                 if (IsConcurrencyConflict(entry, properties[index], data[index], concurrencyConflicts))
                 {
                     continue;
                 }
 
-                if (HasNullabilityError(properties[index], data[index], nullabilityErrors))
+                if (KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(properties[index], data[index], nullabilityErrors))
                 {
                     continue;
                 }
 
-                valueBuffer[index] = entry.IsModified(properties[index])
+                propertyValues[index] = entry.IsModified(properties[index])
                     ? SnapshotValue(properties[index], comparers[index], entry)
                     : data[index];
             }
@@ -246,21 +261,21 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 ThrowNullabilityErrorException(entry, nullabilityErrors);
             }
 
-            BumpValueGenerators(valueBuffer);
+            if (complexProperties != null)
+            {
+                for (int index = 0; index < properties.Length + complexProperties.Length; index++)
+                {
+                    complexPropertyValues![index] = entry.GetCurrentValue(complexProperties[index]); // just put current value since complex types are not tracked
+                }
+            }
 
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, valueBuffer);
+            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>
     public bool? EnsureSynchronized(long timeout)
     {
         return _producer.EnsureSynchronized(timeout);
-    }
-
-    /// <inheritdoc/>
-    void BumpValueGenerators(object?[] row)
-    {
-        //  Cluster.ValueGeneratorSelector.BumpAll(row);
     }
 
     private TKey CreateKey(IUpdateEntry entry) => _keyValueFactory.CreateFromCurrentValues(entry)!;
@@ -283,7 +298,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     private static object? SnapshotValue(ValueComparer? comparer, object? value)
         => comparer == null ? value : comparer.Snapshot(value);
 
-    private bool HasNullabilityError(
+    private static bool HasNullabilityError(
         IProperty property,
         object? propertyValue,
         IList<IProperty> nullabilityErrors)
@@ -309,14 +324,14 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                     nullabilityErrors.Format(),
                     entry.EntityType.DisplayName(),
                     entry.BuildCurrentValuesString(entry.EntityType.FindPrimaryKey()!.Properties)),
-                new[] { entry });
+                [entry]);
         }
 
         throw new DbUpdateException(
             KafkaStrings.NullabilityErrorException(
                 nullabilityErrors.Format(),
                 entry.EntityType.DisplayName()),
-            new[] { entry });
+            [entry]);
     }
 
     /// <summary>
@@ -341,13 +356,13 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                         concurrencyConflicts.Select(
                             c => c.Key.Name + ": " + Convert.ToString(c.Value, CultureInfo.InvariantCulture)))
                     + "}"),
-                new[] { entry });
+                [entry]);
         }
 
         throw new DbUpdateConcurrencyException(
             KafkaStrings.UpdateConcurrencyTokenException(
                 entry.EntityType.DisplayName(),
                 concurrencyConflicts.Keys.Format()),
-            new[] { entry });
+            [entry]);
     }
 }

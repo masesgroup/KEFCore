@@ -18,6 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,6 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
+                if (!ProgramConfig.Config.UseInMemoryProvider)
+                {
+                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
+                }
+
                 if (ProgramConfig.Config.ManageEvents)
                 {
                     context.ChangeTracker.Tracked += (sender, e) =>
@@ -62,15 +68,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 else
                 {
                     ProgramConfig.ReportString("EnsureCreated does not created database");
-                }
-
-                try
-                { 
-                    context.WaitForSynchronization(10000);
-                }
-                catch(TimeoutException)
-                {
-
                 }
 
                 testWatcher.Start();
@@ -159,14 +156,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+                    var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
+                    watch.Restart();
+                    post = context.Posts.Single(b => b.BlogId == position);
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
-
-                var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == position);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)

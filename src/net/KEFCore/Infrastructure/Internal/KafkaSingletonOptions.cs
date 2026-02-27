@@ -20,7 +20,6 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>

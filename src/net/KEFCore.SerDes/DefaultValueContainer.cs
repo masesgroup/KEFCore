@@ -20,6 +20,7 @@
 
 #nullable enable
 
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -76,12 +77,17 @@ public class PropertyData : IJsonOnDeserialized
                         break;
                     case JsonValueKind.Number:
                         var tmp = elem.GetInt64();
-                        var convertingType = Type.GetType(ClrType!);
-                        if (SupportNull && convertingType!.IsConstructedGenericType)
+                        if (ClrType != null)
                         {
-                            convertingType = convertingType.GenericTypeArguments[0];
+                            var convertingType = Type.GetType(ClrType!);
+                            if (SupportNull)
+                            {
+                                Type? type = Nullable.GetUnderlyingType(convertingType!);
+                                convertingType = type ?? convertingType;
+                            }
+                            Value = Convert.ChangeType(tmp, convertingType!);
                         }
-                        Value = Convert.ChangeType(tmp, convertingType!);
+                        else tmp.ToString();
                         break;
                     case JsonValueKind.True:
                         Value = true;
@@ -118,6 +124,7 @@ public class PropertyData : IJsonOnDeserialized
                                 case NativeTypeMapper.ManagedTypes.DateTimeOffset:
                                     Value = elem.GetDateTimeOffset();
                                     break;
+                                case NativeTypeMapper.ManagedTypes.ComplexType: break;
                                 default:
                                     try
                                     {
@@ -145,6 +152,11 @@ public class PropertyData : IJsonOnDeserialized
                         Value = null;
                         break;
                     case JsonValueKind.Object:
+                        if (ManagedType == NativeTypeMapper.ManagedTypes.ComplexType)
+                        {
+                            break;
+                        }
+                        else throw new InvalidOperationException($"Failed to deserialize {Value} as {ClrType}, ValueKind is {elem.ValueKind}");
                     case JsonValueKind.Array:
                     case JsonValueKind.Undefined:
                     default:
@@ -170,11 +182,12 @@ public class PropertyData : IJsonOnDeserialized
     /// <summary>
     /// <see langword="true"/> if <see cref="NativeTypeMapper.ManagedTypes"/> value of the <see cref="ClrType"/> supports <see langword="null"/>
     /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool SupportNull { get; set; }
     /// <summary>
     /// The full name of the CLR <see cref="Type"/> of the <see cref="IProperty"/>, null for well-known types
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ClrType { get; set; }
     /// <summary>
     /// The raw value associated to the <see cref="IProperty"/>
@@ -195,29 +208,48 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="DefaultValueContainer{TKey}"/> for <paramref name="rData"/></param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="rData">The data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/></param>
+    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="DefaultValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
+    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
+    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
+    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
+    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="DefaultValueContainer{TKey}"/></remarks>
-    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
+    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
-        Properties = [];
-        foreach (var item in properties)
+        Properties = new PropertyData[properties.Length + (complexProperties != null && complexPropertyValues != null ? complexProperties.Length : 0)];
+        for (int i = 0; i < properties.Length; i++)
         {
-            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType);
-            var pRecord = new PropertyData
+            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(properties[i].ClrType);
+            Properties[i] = new PropertyData
             {
                 ManagedType = _type.Item1,
                 SupportNull = _type.Item2,
-                PropertyName = item.Name,
-                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
-                Value = rData[item.GetIndex()]
+                PropertyName = properties[i].Name,
+                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? properties[i].ClrType?.ToAssemblyQualified() : null,
+                Value = propertyValues[i]
             };
-
-            Properties.Add(pRecord);
+        }
+        if (complexProperties != null && complexPropertyValues != null)
+        {
+            for (int i = 0; i < complexProperties.Length; i++)
+            {
+                Properties[i + properties.Length] = new PropertyData
+                {
+                    ManagedType = NativeTypeMapper.ManagedTypes.ComplexType,
+                    SupportNull = false,
+                    PropertyName = complexProperties[i].Name,
+                    ClrType = complexProperties[i].ClrType?.ToAssemblyQualified(),
+                };
+                if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out var complexTypeHook))
+                {
+                    complexTypeHook?.Convert(PreferredConversionType.Text, ref complexPropertyValues[i]!);
+                }
+                Properties[i + properties.Length].Value = complexPropertyValues[i];
+            }
         }
     }
     /// <inheritdoc/>
@@ -230,11 +262,11 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Dictionary<int, PropertyData>? Data { get; set; }
     /// <summary>
-    /// The data stored associated to the <see cref="IEntityType"/>
+    /// The data stored associated to the <see cref="IProperty"/> and <see cref="IComplexProperty"/> of <see cref="IEntityType"/>
     /// </summary>
-    public IList<PropertyData>? Properties { get; set; }
+    public PropertyData[]? Properties { get; set; }
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
+    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
 #if DEBUG_PERFORMANCE
@@ -249,7 +281,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            array = new object[properties.Length];
+            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
@@ -260,16 +292,23 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 {
                     var prop = tName.FindProperty(item.Value?.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema 
-                    array[prop.GetIndex()] = item.Value?.Value!;
+                    allPropertyValues[item.Key] = item.Value?.Value!;
                 }
             }
             else
             {
-                foreach (var item in Properties!)
+                for (int i = 0; i < Properties.Length; i++)
                 {
-                    var prop = tName.FindProperty(item.PropertyName!);
-                    if (prop == null) continue; // a property was removed from the schema 
-                    array[prop.GetIndex()] = item?.Value!;
+                    IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                        : tName.FindProperty(Properties[i].PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema
+                    allPropertyValues[i] = Properties[i]?.Value!;
+                    if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                        complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                    {
+                        complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
+                    }
                 }
             }
 #if DEBUG_PERFORMANCE
@@ -286,7 +325,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties()
+    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = [];
         if (Data == null && Properties == null) { return props; }
@@ -300,10 +339,16 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
             return props;
         }
-
+        object? value;
         foreach (var item in Properties!)
         {
-            props.Add(item.PropertyName!, item.Value!);
+            value = item.Value!;
+            if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
+            {
+                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
+            }
+            props.Add(item.PropertyName!, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
