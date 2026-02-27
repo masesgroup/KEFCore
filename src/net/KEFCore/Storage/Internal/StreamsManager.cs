@@ -83,6 +83,31 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public readonly IDictionary<int, long> CreationKnownOffset = creationKnownOffset; // expected to be invariant
             public readonly IDictionary<int, long> LatestKnownOffset = new ConcurrentDictionary<int, long>();
 
+            public void UpdateCreationKnownOffset(IDictionary<int, long> keyValuePairs)
+            {
+                var lastKnownPartitions = keyValuePairs.Keys.ToList();
+
+                foreach (var kv in keyValuePairs)
+                {
+                    if (CreationKnownOffset.ContainsKey(kv.Key))
+                    {
+                        CreationKnownOffset[kv.Key] = kv.Value;
+                    }
+                    else
+                    {
+                        CreationKnownOffset.Add(kv);
+                    }
+                    lastKnownPartitions.Remove(kv.Key);
+                }
+                if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
+                {
+                    foreach (var item in lastKnownPartitions)
+                    {
+                        CreationKnownOffset.Remove(item);  // ...then remove them
+                    }
+                }
+            }
+
             public bool IsSynchronized()
             {
                 bool[] bools = new bool[CreationKnownOffset.Count];
@@ -123,7 +148,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private TTopology _topology;
         private TStream _streams;
 
-        IUpdateAdapter _updateAdapter;
+        readonly IUpdateAdapter _updateAdapter;
 
         private KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _errorHandler;
         private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _stateListener;
@@ -210,8 +235,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
         public required Action<TStream,
                                KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
-                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers
-        { get; set; }
+                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Pause { get; set; }
         public required Action<TStream> Resume { get; set; }
@@ -438,9 +462,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (_managedEntities.TryGetValue(entity, out var innerEntity) &&
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
-                return EnsureSynchronized(storage, timeout, watch);
+                var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
+                storage.UpdateCreationKnownOffset(currentKnownOffsets);
+                return EnsureSynchronized(storage, timeout, watch) // received data are aligned
+                       && _dataFromStream.IsEmpty; // and all data are processed
             }
-            throw new InvalidOperationException($"{entity} not found");
+            else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool EnsureSynchronized(StreamsAssociatedData storage, long timeout, Stopwatch watcher = null)
