@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization
@@ -34,8 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             ArgumentNullException.ThrowIfNull(assembly);
             foreach (var type in assembly.ExportedTypes.Where(type => type.GetInterface(nameof(IComplexTypeConverter)) != null))
             {
-                IComplexTypeConverter converter = (IComplexTypeConverter)Activator.CreateInstance(type)!;
-                Register(converter);
+                Register(type);
             }
         }
         /// <inheritdoc/>
@@ -45,6 +43,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             if (type.GetInterface(nameof(IComplexTypeConverter)) != null)
             {
                 IComplexTypeConverter converter = (IComplexTypeConverter)Activator.CreateInstance(type)!;
+                converter.Register(_loggingOptions);
                 Register(converter);
             }
             else throw new InvalidOperationException($"Trying to register a type {type} that does not support {nameof(IComplexTypeConverter)}");
