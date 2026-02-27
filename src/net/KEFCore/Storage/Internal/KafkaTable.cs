@@ -51,6 +51,8 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     private readonly ConcurrentDictionary<IEntityType, IProperty[]> _propertiesCache = new();
     private readonly ConcurrentDictionary<IEntityType, IComplexProperty[]> _complexPropertiesCache = new();
 
+    readonly Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag> _createRowBag;
+
     //private readonly IProperty[] _properties;
     //private readonly IComplexProperty[]? _complexProperties;
     /// <summary>
@@ -64,6 +66,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 #if DEBUG_PERFORMANCE
 		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
 #endif
+        Cluster = cluster;
         _tableAssociatedTopicName = cluster.CreateTopicForEntity(entityType);
         _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
         _primaryKey = entityType.FindPrimaryKey();
@@ -88,6 +91,20 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 _valueComparers.Add((property.GetIndex(), comparer));
             }
         }
+
+        var ctor = typeof(KafkaRowBag<TKey>).GetConstructors().First(); // ([typeof(IUpdateEntry), typeof(string), typeof(TKey), typeof(IProperty[]), typeof(object?[]), typeof(IComplexProperty[]), typeof(object?[])])!;
+        var param1 = Expression.Parameter(typeof(IUpdateEntry));
+        var param2 = Expression.Parameter(typeof(string));
+        var param3 = Expression.Parameter(typeof(TKey));
+        var param4 = Expression.Parameter(typeof(IProperty[]));
+        var param5 = Expression.Parameter(typeof(object?[]));
+        var param6 = Expression.Parameter(typeof(IComplexProperty[]));
+        var param7 = Expression.Parameter(typeof(object?[]));
+
+        _createRowBag = Expression.Lambda<Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag>>(
+                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7),
+                                    param1, param2, param3, param4, param5, param6, param7)
+                        .Compile();
     }
     /// <inheritdoc/>
     public virtual void Dispose()
@@ -154,7 +171,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                     complexPropertyValues![index] = entry.GetCurrentValue(complexProperties[index]);
                 }
             }
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>
@@ -181,7 +198,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 ThrowUpdateConcurrencyException(entry, concurrencyConflicts);
             }
 
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, null, complexProperties, null);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, null, complexProperties, null);
         }
     }
 
@@ -269,7 +286,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 }
             }
 
-            return new KafkaRowBag<TKey, TValueContainer>(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>

@@ -58,7 +58,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="ProtobufValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
     /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="ProtobufValueContainer{TKey}"/></remarks>
-    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public ProtobufValueContainer(IEntityType tName, IProperty[]? properties, object?[] propertyValues, IComplexProperty[]? complexProperties = null, object?[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
         _innerMessage = new ValueContainer

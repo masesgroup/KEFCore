@@ -215,7 +215,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
     /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="DefaultValueContainer{TKey}"/></remarks>
-    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object?[] propertyValues, IComplexProperty[]? complexProperties = null, object?[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
