@@ -126,7 +126,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     public virtual IEntityType EntityType => _producer.EntityType;
 
     /// <inheritdoc/>
-    public virtual IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records) => _producer.Commit(records);
+    public virtual void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records) => _producer.Commit(futures, records);
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
     /// <inheritdoc/>

@@ -91,4 +91,8 @@ public interface IKafkaCluster : IDisposable
     /// Executes a transaction
     /// </summary>
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    /// <summary>
+    /// Executes a transaction in async
+    /// </summary>
+    Task<int> ExecuteTransactionAsync(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default);
 }

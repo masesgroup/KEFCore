@@ -22,6 +22,7 @@
 
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
@@ -39,6 +40,17 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
 {
+    class EntityTypeProducerCallback(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> entityTypeProducer, Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int, long?, DateTime?, JVMBridgeException> result) : Callback
+    {
+        readonly EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> _entityTypeProducer = entityTypeProducer;
+        readonly Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int, long?, DateTime?, JVMBridgeException> _result = result;
+
+        public override void OnCompletion(RecordMetadata arg0, JVMBridgeException arg1)
+        {
+            _result?.Invoke(_entityTypeProducer, arg0.Partition(), arg0.HasOffset() ? arg0.Offset() : null, arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null, arg1);
+        }
+    }
+
     private static IStreamsManager? _streamsManager;
 
     private readonly Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
@@ -59,6 +71,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IUpdateAdapter? _updateAdapter;
     private readonly IEntityType? _entityTypeForChanges;
     private readonly IKey? _primaryKeyForChanges;
+
+    private readonly EntityTypeProducerCallback? _producerCallback;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
@@ -112,7 +126,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         _currentSw.Start();
 #endif
-                        return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
                     }
                     finally
@@ -144,22 +158,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 {
                     _moveNextSw.Start();
 #endif
-                    if (_enumerator != null && _enumerator.MoveNext())
-                    {
+                if (_enumerator != null && _enumerator.MoveNext())
+                {
 #if DEBUG_PERFORMANCE
                         _cycles++;
                         _valueBufferSw.Start();
 #endif
-                        object[] propertyValues = null!;
-                        _enumerator.Current.Value.GetData(_entityType, _properties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
+                    object[] propertyValues = null!;
+                    _enumerator.Current.Value.GetData(_entityType, _properties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
-                        _current = new ValueBuffer(propertyValues);
-                        return true;
-                    }
-                    _current = ValueBuffer.Empty;
-                    return false;
+                    _current = new ValueBuffer(propertyValues);
+                    return true;
+                }
+                _current = ValueBuffer.Empty;
+                return false;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -263,6 +277,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             _streamsManager ??= (_cluster.Options.UseKNetStreams ? KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(cluster, entityType)
                                                                  : KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(cluster, entityType));
 
+            _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory)
                                                           : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
@@ -350,7 +365,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
     /// <inheritdoc/>
-    public IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records)
+    public void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records)
     {
         if (_useCompactedReplicator)
         {
@@ -359,12 +374,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var value = record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory);
                 _kafkaCompactedReplicator?[record.GetKey<TKey>()] = value!;
             }
-
-            return null!;
         }
         else
         {
-            System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
             foreach (var record in records)
             {
                 Future<RecordMetadata> future;
@@ -376,7 +388,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 if (record.EntityState == EntityState.Deleted)
                 {
                     future = _kafkaProducer?.Send(record.AssociatedTopicName, record.GetKey<TKey>(), null!)!;
-                    futures.Add(future);
+                    futures?.Add(future);
                 }
                 else
                 {
@@ -385,15 +397,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
-                    if (future != null) futures.Add(future);
+                    var kafkaRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers);
+                    future = _kafkaProducer?.Produce(kafkaRecord, _producerCallback)!;
+                    futures?.Add(future);
                 }
 #endif
             }
 
             _kafkaProducer?.Flush();
-
-            return futures;
         }
     }
 
@@ -446,12 +457,17 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
     }
 
+    private static void UpdateFromCommit(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> producer, int partiton, long? offset, DateTime? timestamp, JVMBridgeException error)
+    {
+        if (offset.HasValue) _streamsManager!.PartitionOffsetWritten(producer.EntityType, partiton, offset.Value);
+    }
+
     /// <summary>
     /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
     /// </summary>
     public bool? EnsureSynchronized(long timeout)
     {
-        if (_streamData != null) return _streamsManager!.EnsureSynchronized(timeout, _entityType);
+        if (_streamData != null) return _streamsManager!.EnsureSynchronized(_entityType, timeout);
         else if (_kafkaCompactedReplicator != null)
         {
 #if DEBUG_PERFORMANCE
@@ -460,7 +476,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 sw = Stopwatch.StartNew();
 #endif
-                return _kafkaCompactedReplicator.SyncWait((int)timeout);
+            return _kafkaCompactedReplicator.SyncWait((int)timeout);
 #if DEBUG_PERFORMANCE
             }
             finally

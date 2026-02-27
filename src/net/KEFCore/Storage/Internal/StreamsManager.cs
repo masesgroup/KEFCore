@@ -54,9 +54,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// </summary>
         void CreateAndStartTopology();
         /// <summary>
+        /// Invoked when a new partiton/offset is received for <paramref name="entity"/>
+        /// </summary>
+        /// <param name="entity">The <see cref="IEntityType"/></param>
+        /// <param name="partition">The partiton where the data was stored</param>
+        /// <param name="offset">The offset received</param>
+        void PartitionOffsetWritten(IEntityType entity, int partition, long offset);
+        /// <summary>
         /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
         /// </summary>
-        bool? EnsureSynchronized(long timeout, IEntityType entity);
+        bool? EnsureSynchronized(IEntityType entity, long timeout);
     }
 
     internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> : IStreamsManager
@@ -80,46 +87,68 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public readonly TMaterialized Materialized = materialized;
             public readonly TGlobalKTable GlobalTable = globalTable;
             public readonly TKTable Table = table;
-            public readonly IDictionary<int, long> CreationKnownOffset = creationKnownOffset; // expected to be invariant
-            public readonly IDictionary<int, long> LatestKnownOffset = new ConcurrentDictionary<int, long>();
+            public readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
+            public readonly IDictionary<int, long> LatestLocalKnownOffset = new ConcurrentDictionary<int, long>();
 
-            public void UpdateCreationKnownOffset(IDictionary<int, long> keyValuePairs)
+            public void UpdateCurrentRemoteKnownOffset(int partition, long offset)
+            {
+                lock (CurrentRemoteKnownOffset)
+                {
+                    if (CurrentRemoteKnownOffset.ContainsKey(partition))
+                    {
+                        CurrentRemoteKnownOffset[partition] = offset;
+                    }
+                    else
+                    {
+                        CurrentRemoteKnownOffset.Add(partition, offset);
+                    }
+                }
+            }
+
+            public void UpdateCurrentRemoteKnownOffset(IDictionary<int, long> keyValuePairs)
             {
                 var lastKnownPartitions = keyValuePairs.Keys.ToList();
 
                 foreach (var kv in keyValuePairs)
                 {
-                    if (CreationKnownOffset.ContainsKey(kv.Key))
+                    lock (CurrentRemoteKnownOffset)
                     {
-                        CreationKnownOffset[kv.Key] = kv.Value;
+                        if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
+                        {
+                            CurrentRemoteKnownOffset[kv.Key] = kv.Value;
+                        }
+                        else
+                        {
+                            CurrentRemoteKnownOffset.Add(kv);
+                        }
+                        lastKnownPartitions.Remove(kv.Key);
                     }
-                    else
-                    {
-                        CreationKnownOffset.Add(kv);
-                    }
-                    lastKnownPartitions.Remove(kv.Key);
                 }
                 if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
                 {
                     foreach (var item in lastKnownPartitions)
                     {
-                        CreationKnownOffset.Remove(item);  // ...then remove them
+                        CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
                     }
                 }
             }
 
             public bool IsSynchronized()
             {
-                bool[] bools = new bool[CreationKnownOffset.Count];
-                int index = 0;
-                foreach (var item in CreationKnownOffset)
+                bool[] bools;
+                lock (CurrentRemoteKnownOffset)
                 {
-                    if (item.Value < 0) bools[index] = true; // the topic is empty
-                    else if (LatestKnownOffset.TryGetValue(item.Key, out var lastOffset))
+                    bools = new bool[CurrentRemoteKnownOffset.Count];
+                    int index = 0;
+                    foreach (var item in CurrentRemoteKnownOffset)
                     {
-                        bools[index] = lastOffset >= item.Value;
+                        if (item.Value < 0) bools[index] = true; // the topic is empty
+                        else if (LatestLocalKnownOffset.TryGetValue(item.Key, out var lastOffset))
+                        {
+                            bools[index] = lastOffset >= item.Value;
+                        }
+                        index++;
                     }
-                    index++;
                 }
                 return bools.All((o) => o == true);
             }
@@ -294,7 +323,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private void EventChangeReceiver(EventChange data)
         {
-            _storagesForEntities[data.EntityType].LatestKnownOffset[data.Partition] = data.Offset;
+            _storagesForEntities[data.EntityType].LatestLocalKnownOffset[data.Partition] = data.Offset;
             _dataFromStream.Enqueue(data);
         }
 
@@ -448,10 +477,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #endif
         }
 
-        /// <summary>
-        /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
-        /// </summary>
-        public bool? EnsureSynchronized(long timeout, IEntityType entity)
+        /// <inheritdoc/>
+        public void PartitionOffsetWritten(IEntityType entity, int partition, long offset)
+        {
+            if (_managedEntities.TryGetValue(entity, out var innerEntity) &&
+                _storagesForEntities.TryGetValue(innerEntity, out var storage))
+            {
+                storage.UpdateCurrentRemoteKnownOffset(partition, offset);
+            }
+            else throw new InvalidOperationException($"{entity} not found in managed entities.");
+        }
+
+        /// <inheritdoc/>
+        public bool? EnsureSynchronized(IEntityType entity, long timeout)
         {
             if (!_manageEvents || _useGlobalTable) return null; // cannot deduct synchronization without events or using GlobalKTable
             Stopwatch watch = null;
@@ -463,7 +501,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
                 var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
-                storage.UpdateCreationKnownOffset(currentKnownOffsets);
+                storage.UpdateCurrentRemoteKnownOffset(currentKnownOffsets);
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _dataFromStream.IsEmpty; // and all data are processed
             }

@@ -28,6 +28,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
+using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
@@ -454,16 +455,16 @@ public class KafkaCluster : IKafkaCluster
         {
             tableSw.Start();
 #endif
-            EnsureTable(entityType);
+        EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
-            if (_tables != null && _tables.TryGetValue(key, out var table))
-            {
-                return table.ValueBuffers;
-            }
-            throw new InvalidOperationException("No table available");
+        var key = _useNameMatching ? (object)entityType.Name : entityType;
+        if (_tables != null && _tables.TryGetValue(key, out var table))
+        {
+            return table.ValueBuffers;
+        }
+        throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally
@@ -473,19 +474,12 @@ public class KafkaCluster : IKafkaCluster
         }
 #endif
     }
-    /// <inheritdoc/>
-    public virtual int ExecuteTransaction(
-        System.Collections.Generic.IList<IUpdateEntry> entries,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+
+    int PrepareTransaction(IDictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction,
+                           System.Collections.Generic.IList<IUpdateEntry> entries,
+                           IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        if (Options.ReadOnlyMode)
-        {
-            throw new InvalidOperationException($"Cannot execute any operation since the instance is in read-only mode.");
-        }
-
         var rowsAffected = 0;
-        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = new();
-
         for (var i = 0; i < entries.Count; i++)
         {
             var entry = entries[i];
@@ -532,11 +526,74 @@ public class KafkaCluster : IKafkaCluster
             rowsAffected++;
         }
 
-        updateLogger.ChangesSaved(entries, rowsAffected);
+        return rowsAffected;
+    }
 
+    IEnumerable<Task<RecordMetadata>> ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, out int rowsAffected, CancellationToken cancellationToken = default)
+    {
+        if (Options.ReadOnlyMode)
+        {
+            throw new InvalidOperationException($"Cannot execute any operation since the instance is in read-only mode.");
+        }
+
+        System.Collections.Generic.Dictionary<IKafkaTable, System.Collections.Generic.IList<IKafkaRowBag>> dataInTransaction = [];
+
+        rowsAffected = PrepareTransaction(dataInTransaction, entries, updateLogger);
+
+        System.Collections.Generic.List<Future<RecordMetadata>> futures = [];
         foreach (var tableData in dataInTransaction)
         {
-            tableData.Key.Commit(tableData.Value);
+            tableData.Key.Commit(null, tableData.Value);
+        }
+
+        return futures.Select(obj => Task.Run(() =>
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return obj.Get();
+            }
+            catch (ExecutionException ex) { throw ex.InnerException; }
+            catch (OperationCanceledException) { return null; }
+        }, cancellationToken));
+    }
+
+    /// <inheritdoc/>
+    public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+    {
+        var ctSource = new CancellationTokenSource();
+        var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
+        var result = Task.WhenAll(tasks);
+        result.Wait();
+        if (result.IsFaulted)
+        {
+            updateLogger.ChangesSaved(entries, rowsAffected); // check entries not saved and update rowsAffected
+
+            throw result.Exception;
+        }
+
+        if (result.IsCompleted)
+        {
+            updateLogger.ChangesSaved(entries, rowsAffected);
+        }
+
+        return rowsAffected;
+    }
+
+    /// <summary>
+    /// Executes a transaction in async
+    /// </summary>
+    public async Task<int> ExecuteTransactionAsync(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
+    {
+        var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, cancellationToken);
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch
+        {
+            updateLogger.ChangesSaved(entries, rowsAffected); // check for unsaved entries and update rowsAffected!
         }
 
         return rowsAffected;
