@@ -18,6 +18,8 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -47,4 +49,17 @@ public interface IKafkaRowBag
     /// The topic data will be stored
     /// </summary>
     string AssociatedTopicName { get; }
+    /// <summary>
+    /// The key associated to the current <see cref="IKafkaRowBag"/>
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    public TKey GetKey<TKey>() where TKey : notnull;
+    /// <summary>
+    /// The value associated to the current <see cref="IKafkaRowBag"/>
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValueContainer">The <see cref="IValueContainer{T}"/> containing the converted data</typeparam>
+    TValueContainer? GetValue<TKey, TValueContainer>(Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
+        where TKey : notnull
+        where TValueContainer : IValueContainer<TKey>;
 }

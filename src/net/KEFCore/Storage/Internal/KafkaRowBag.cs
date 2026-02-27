@@ -30,12 +30,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topicName, TKey key,
-                                                IProperty[] properties, object?[]? propertyValues,
-                                                IComplexProperty[]? complexProperties, object?[]? complexPropertyValues) : IKafkaRowBag
+public class KafkaRowBag<TKey>(IUpdateEntry entry, string topicName, TKey key,
+                               IProperty[] properties, object?[]? propertyValues,
+                               IComplexProperty[]? complexProperties, object?[]? complexPropertyValues) : IKafkaRowBag
     where TKey : notnull
-    where TValueContainer : IValueContainer<TKey>
 {
+    readonly TKey _key = key;
+
     /// <summary>
     /// The <see cref="IEntityType"/> with changes
     /// </summary>
@@ -57,16 +58,18 @@ public class KafkaRowBag<TKey, TValueContainer>(IUpdateEntry entry, string topic
     /// <summary>
     /// The Key
     /// </summary>
-    public TKey Key { get; } = key;
+    public TKeyLocal GetKey<TKeyLocal>() where TKeyLocal : notnull => (TKeyLocal)(object)_key;
     /// <summary>
     /// The Value
     /// </summary>
-    public TValueContainer? Value(ConstructorInfo ci, IComplexTypeConverterFactory complexTypeConverterFactory) 
-        => EntityState == EntityState.Deleted ? default : (TValueContainer)ci.Invoke([EntityType, Properties, PropertyValues, ComplexProperties, ComplexPropertyValues, complexTypeConverterFactory]);
+    public TValueContainer? GetValue<TKeyLocal, TValueContainer>(Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
+        where TKeyLocal : notnull
+        where TValueContainer : IValueContainer<TKeyLocal>
+        => EntityState == EntityState.Deleted ? default : (TValueContainer)creator(EntityType, Properties, PropertyValues, ComplexProperties, ComplexPropertyValues, complexTypeConverterFactory);
     /// <summary>
     /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="Properties"/>
     /// </summary>
-    public object?[]? PropertyValues { get; } = propertyValues;
+    public object?[] PropertyValues { get; } = propertyValues!;
     /// <summary>
     /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="ComplexProperties"/>
     /// </summary>

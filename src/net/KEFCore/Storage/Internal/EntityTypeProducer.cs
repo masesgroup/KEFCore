@@ -41,7 +41,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 {
     private static IStreamsManager? _streamsManager;
 
-    private readonly ConstructorInfo TValueContainerConstructor;
+    private readonly Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
@@ -210,7 +210,18 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _useCompactedReplicator = _cluster.Options.UseCompactedReplicator;
 
         var tTValueContainer = typeof(TValueContainer);
-        TValueContainerConstructor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 6);
+        var ctor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 6);
+        var param1 = Expression.Parameter(typeof(IEntityType));
+        var param2 = Expression.Parameter(typeof(IProperty[]));
+        var param3 = Expression.Parameter(typeof(object?[]));
+        var param4 = Expression.Parameter(typeof(IComplexProperty[]));
+        var param5 = Expression.Parameter(typeof(object?[]));
+        var param6 = Expression.Parameter(typeof(IComplexTypeConverterFactory));
+
+        _createValueContainer = Expression.Lambda<Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer>>(
+                                           Expression.New(ctor, param1, param2, param3, param4, param5, param6),
+                                           param1, param2, param3, param4, param5, param6)
+                                .Compile();
 
         var keySelector = _cluster.Options.SerDesSelectorForKey(_entityType) as ISerDesSelector<TKey>;
         var valueSelector = _cluster.Options.SerDesSelectorForValue(_entityType) as ISerDesSelector<TValueContainer>;
@@ -343,10 +354,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_useCompactedReplicator)
         {
-            foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
+            foreach (var record in records)
             {
-                var value = record.Value(TValueContainerConstructor, _complexTypeConverterFactory);
-                _kafkaCompactedReplicator?[record.Key] = value!;
+                var value = record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory);
+                _kafkaCompactedReplicator?[record.GetKey<TKey>()] = value!;
             }
 
             return null!;
@@ -354,7 +365,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else
         {
             System.Collections.Generic.List<Future<RecordMetadata>> futures = new();
-            foreach (KafkaRowBag<TKey, TValueContainer> record in records.Cast<KafkaRowBag<TKey, TValueContainer>>())
+            foreach (var record in records)
             {
                 Future<RecordMetadata> future;
 #if OLD_WAY
@@ -364,7 +375,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 #else
                 if (record.EntityState == EntityState.Deleted)
                 {
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, record.Key, null!)!;
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, record.GetKey<TKey>(), null!)!;
                     futures.Add(future);
                 }
                 else
@@ -374,7 +385,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.Key, record.Value(TValueContainerConstructor, _complexTypeConverterFactory)!, headers)!;
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
                     if (future != null) futures.Add(future);
                 }
 #endif
