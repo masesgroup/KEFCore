@@ -19,7 +19,6 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
