@@ -169,7 +169,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly AutoResetEvent _dataReceived;
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _stateChanged;
-        private readonly AutoResetEvent _exceptionSet;
 
         private readonly IKafkaCluster _kafkaCluster;
         private StreamsConfigBuilder _streamsConfig;
@@ -230,13 +229,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _dataReceived = new(false);
             _resetEvent = new(false);
             _stateChanged = new(false);
-            _exceptionSet = new(false);
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
                 _resultException = exception;
                 _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", _resultException);
-                _exceptionSet.Set();
+                if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException 
+                    && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a of type {Exception} try with {Action}", 
+                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
+                    return StreamThreadExceptionResponse.REPLACE_THREAD;
+                }
                 return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
@@ -424,7 +428,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _dataReceived?.Reset();
             _resetEvent?.Reset();
             _stateChanged?.Reset();
-            _exceptionSet?.Reset();
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
@@ -433,11 +436,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 try
                 {
                     _resetEvent?.Set();
-                    var index = WaitHandle.WaitAny([_stateChanged!, _exceptionSet!]);
+                    var index = WaitHandle.WaitAny([_stateChanged!]);
                     if (index == 1) return;
                     while (true)
                     {
-                        index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
+                        index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!], waitingTime);
                         if (index == 2) return;
                         if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED
                             || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
@@ -529,7 +532,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _dataReceived?.Dispose();
             _resetEvent?.Dispose();
-            _exceptionSet?.Dispose();
             _stateChanged?.Dispose();
 
             _errorHandler?.Dispose();
