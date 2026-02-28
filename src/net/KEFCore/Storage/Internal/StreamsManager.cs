@@ -239,11 +239,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException 
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a of type {Exception} try with {Action}", 
+                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}", 
                                                                            nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
+
+                    Console.WriteLine($"StreamsUncaughtExceptionHandler request: {StreamThreadExceptionResponse.REPLACE_THREAD}"); // <- added to understand what is raised really
                     return StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+                Console.WriteLine($"StreamsUncaughtExceptionHandler reached end trying for debug: {StreamThreadExceptionResponse.REPLACE_THREAD}");
+                return StreamThreadExceptionResponse.REPLACE_THREAD; // StreamThreadExceptionResponse.SHUTDOWN_APPLICATION; <- JUST FOR TEST
             });
 
             _stateListener ??= new(this, (_This, newState, oldState) =>
