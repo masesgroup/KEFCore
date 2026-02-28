@@ -253,6 +253,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
                 _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
+                Console.WriteLine($"StateListener reports a state change from {oldState} to {newState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
@@ -501,19 +502,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                  || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN
                                  || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
                         {
-                            throw new InvalidOperationException($"Cannot continue since streams is in {_currentState} state");
+                            throw new InvalidOperationException($"Cannot continue since streams is in {_currentState} state.");
                         }
                         else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING)
                         {
-                            throw new InvalidOperationException($"It is impossible that after start the streams is in {_currentState} state");
+                            throw new InvalidOperationException($"It is impossible that the streams is in {_currentState} state after the start was requested.");
                         }
                         else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
                         {
+                            // exit gracefully external wait thread 
                             return;
                         }
-                        else // exit external wait thread 
+                        else
                         {
-                            throw new InvalidOperationException($"Impossible condition since every possible state was checked except {_currentState} state");
+                            throw new InvalidOperationException($"Impossible condition since every possible state was checked except {_currentState} state.");
                         }
                     }
                 }
@@ -523,6 +525,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 finally
                 {
+                    Console.WriteLine($"Exiting from waiting for startup with known state {_currentState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
                     _resetEvent?.Set();
                 }
             });
@@ -532,6 +535,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
 #endif
             _resetEvent?.WaitOne(); // wait running state
+            Console.WriteLine($"Current known state is {_currentState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
             ThrowException();
 #if DEBUG_PERFORMANCE
             watch.Stop();
