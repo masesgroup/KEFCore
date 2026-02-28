@@ -232,28 +232,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
-                Console.WriteLine($"StreamsUncaughtExceptionHandler reports Exception: {exception}"); // <- added to understand what is raised really
-                Console.WriteLine($"StreamsUncaughtExceptionHandler reports InnerException: {exception?.InnerException}"); // <- added to understand what is raised really
-
                 _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
                 if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException 
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
                     _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}", 
                                                                            nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
-
-                    Console.WriteLine($"StreamsUncaughtExceptionHandler request: {StreamThreadExceptionResponse.REPLACE_THREAD}"); // <- added to understand what is raised really
                     return StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
-                Console.WriteLine($"StreamsUncaughtExceptionHandler reached end trying for debug: {StreamThreadExceptionResponse.REPLACE_THREAD}");
-                return StreamThreadExceptionResponse.REPLACE_THREAD; // StreamThreadExceptionResponse.SHUTDOWN_APPLICATION; <- JUST FOR TEST
+                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
             _stateListener ??= new(this, (_This, newState, oldState) =>
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
                 _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
-                Console.WriteLine($"StateListener reports a state change from {oldState} to {newState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
@@ -525,7 +518,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 finally
                 {
-                    Console.WriteLine($"Exiting from waiting for startup with known state {_currentState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
                     _resetEvent?.Set();
                 }
             });
@@ -535,7 +527,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager started on {DateTime.Now:HH:mm:ss.FFFFFFF} after {watch.Elapsed}");
 #endif
             _resetEvent?.WaitOne(); // wait running state
-            Console.WriteLine($"Current known state is {_currentState}"); // <- added to understand what is reported due to error on startup when streams is in STARTING state that is not available
             ThrowException();
 #if DEBUG_PERFORMANCE
             watch.Stop();

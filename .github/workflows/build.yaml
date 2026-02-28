@@ -12,6 +12,11 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      UseSpecialSettings:
+        description: 'Use special settings: not available in forks'
+        required: false
+        default: false
+        type: boolean
       UseLastRepositoryBuildJNet:
         description: 'Use latest NuGet packages from JNet'
         required: false
@@ -208,6 +213,7 @@ jobs:
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
 
       - name: Prepare other files
+        if: ${{ inputs.UseSpecialSettings == true }}
         shell: cmd
         run: |
           7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }}
