@@ -22,7 +22,6 @@
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.KNet.Consumer;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
 using MASES.KNet.Streams.Processor;
@@ -207,6 +206,25 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
         }
 
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, int cycle = 0)
+        {
+            const int maxCycle = 10;
+            const int waitTime = 100;
+            try
+            {
+                return keyValueStore?.All();
+            }
+            catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
+            {
+                if (isse.Message.Contains("the stream thread is STARTING, not RUNNING") || cycle > maxCycle)
+                {
+                    Thread.Sleep(waitTime);
+                    return GetIterator(keyValueStore, cycle++);
+                }
+                throw new InvalidOperationException($"Failed to retrieve {nameof(KeyValueIterator<,,,>)} after {maxCycle * waitTime} ms", isse);
+            }
+        }
+
         /// <inheritdoc/>
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
@@ -214,7 +232,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, GetIterator(_keyValueStore), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
