@@ -447,6 +447,45 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!], waitingTime);
                         if (index == 2) return;
+                        // the states are defined as 
+                        // CREATED
+                        // ERROR
+                        // NOT_RUNNING
+                        // PENDING_ERROR
+                        // PENDING_SHUTDOWN
+                        // REBALANCING
+                        // RUNNING
+                        //
+                        // with following transitions
+                        //
+                        //                +--------------+
+                        //        +<----- | Created (0)  |
+                        //        |       +-----+--------+
+                        //        |             |
+                        //        |             v
+                        //        |       +----+--+------+
+                        //        |       | Re-          |
+                        //        +<----- | Balancing (1)| -------->+
+                        //        |       +-----+-+------+          |
+                        //        |             | ^                 |
+                        //        |             v |                 |
+                        //        |       +--------------+          v
+                        //        |       | Running (2)  | -------->+
+                        //        |       +------+-------+          |
+                        //        |              |                  |
+                        //        |              v                  |
+                        //        |       +------+-------+     +----+-------+
+                        //        +-----> | Pending      |     | Pending    |
+                        //                | Shutdown (3) |     | Error (5)  |
+                        //                +------+-------+     +-----+------+
+                        //                       |                   |
+                        //                       v                   v
+                        //                +------+-------+     +-----+--------+
+                        //                | Not          |     | Error (6)    |
+                        //                | Running (4)  |     +--------------+
+                        //                +--------------+
+                        //
+
                         if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED
                             || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
                         {
@@ -458,9 +497,23 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                 continue;
                             }
                         }
-                        else // exit external wait thread 
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_ERROR
+                                 || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN
+                                 || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
+                        {
+                            throw new InvalidOperationException($"Cannot continue since streams is in {_currentState} state");
+                        }
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING)
+                        {
+                            throw new InvalidOperationException($"It is impossible that after start the streams is in {_currentState} state");
+                        }
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
                         {
                             return;
+                        }
+                        else // exit external wait thread 
+                        {
+                            throw new InvalidOperationException($"Impossible condition since every possible state was checked except {_currentState} state");
                         }
                     }
                 }
