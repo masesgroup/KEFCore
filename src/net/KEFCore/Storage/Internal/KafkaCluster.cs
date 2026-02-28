@@ -561,7 +561,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        var ctSource = new CancellationTokenSource();
+        using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
         var result = Task.WhenAll(tasks);
         result.Wait();
