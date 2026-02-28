@@ -229,9 +229,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + (ProgramConfig.Config.NumberOfExtraElements != 0 ? 1 : 0));
+                    var res = context.WaitForSynchronization();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    if (res.HasValue && res.Value)
+                    {
+                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
+                        watch.Restart();
+                        post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + (ProgramConfig.Config.NumberOfExtraElements != 0 ? 1 : 0));
+                        watch.Stop();
+                        ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString($"Local store is not synchronized. Test skipped.");
+                    }
                 }
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }

@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         context.SaveChanges();
                         watch.Stop();
                         ProgramConfig.ReportString($"Elapsed SaveChanges: {watch.Elapsed}");
+                    }
+                }
+
+                if (ProgramConfig.Config.LoadApplicationData)
+                {
+                    var localWatch = Stopwatch.StartNew();
+                    var res = context.WaitForSynchronization();
+                    localWatch.Stop();
+                    if (res.HasValue && res.Value)
+                    {
+                        ProgramConfig.ReportString($"Local store synchronized in {localWatch.ElapsedMilliseconds} ms.");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString($"Local store is not synchronized. Test skipped.");
                     }
                 }
 
