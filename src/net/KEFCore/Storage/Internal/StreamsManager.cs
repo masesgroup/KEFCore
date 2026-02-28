@@ -232,8 +232,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
-                Console.WriteLine(exception); // <- added to understand what is raised really
-                Console.WriteLine(exception?.InnerException); // <- added to understand what is raised really
+                Console.WriteLine($"StreamsUncaughtExceptionHandler reports Exception: {exception}"); // <- added to understand what is raised really
+                Console.WriteLine($"StreamsUncaughtExceptionHandler reports InnerException: {exception?.InnerException}"); // <- added to understand what is raised really
 
                 _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
                 if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException 
