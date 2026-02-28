@@ -44,6 +44,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KafkaCluster : IKafkaCluster
 {
     private readonly KafkaOptionsExtension _options;
+    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger;
     private readonly IKafkaTableFactory _tableFactory;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly IValueGeneratorSelector _valueGeneratorSelector;
@@ -59,6 +60,7 @@ public class KafkaCluster : IKafkaCluster
     /// Dfault initializer
     /// </summary>
     public KafkaCluster(KafkaOptionsExtension options,
+        IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
         IKafkaTableFactory tableFactory,
         IComplexTypeConverterFactory complexTypeConverterFactory,
         IValueGeneratorSelector valueGeneratorSelector,
@@ -66,6 +68,7 @@ public class KafkaCluster : IKafkaCluster
         IModel designModel)
     {
         _options = options;
+        _infrastructureLogger = infrastructureLogger;
         _tableFactory = tableFactory;
         _complexTypeConverterFactory = complexTypeConverterFactory;
         _valueGeneratorSelector = valueGeneratorSelector;
@@ -101,6 +104,8 @@ public class KafkaCluster : IKafkaCluster
     }
     /// <inheritdoc/>
     public virtual string ClusterId => _options.ClusterId;
+    /// <inheritdoc/>
+    public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => _infrastructureLogger;
     /// <inheritdoc/>
     public virtual KafkaOptionsExtension Options => _options;
     /// <inheritdoc/>

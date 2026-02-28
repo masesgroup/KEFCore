@@ -30,7 +30,7 @@ public interface IKafkaClusterCache
     /// <summary>
     /// Create new or get a previously allocated <see cref="IKafkaCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
-    IKafkaCluster CreateCluster(KafkaOptionsExtension options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
+    IKafkaCluster CreateCluster(KafkaOptionsExtension options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
     /// <summary>
     /// Gets an <see cref="IKafkaCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
