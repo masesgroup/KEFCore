@@ -244,22 +244,36 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 #endif
         }
 
-        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, int cycle = 0)
+        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore)
         {
-            const int maxCycle = 10;
+            const int maxCycle = 100;
             const int waitTime = 100;
+            int cycle = 0;
+            try
+            {
+                return GetIterator(keyValueStore, waitTime, maxCycle, ref cycle);
+            }
+            catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
+            {
+                throw new InvalidOperationException($"Failed to retrieve {nameof(Org.Apache.Kafka.Streams.State.KeyValueIterator<,>)} after {cycle * waitTime} ms", isse);
+            }
+        }
+
+        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, int waitTime, int maxCycle, ref int currentCycle)
+        {
             try
             {
                 return keyValueStore?.All();
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
             {
-                if (isse.Message.Contains("the stream thread is STARTING, not RUNNING") || cycle > maxCycle)
+                if (isse.Message.Contains(", not RUNNING") && currentCycle < maxCycle)
                 {
                     Thread.Sleep(waitTime);
-                    return GetIterator(keyValueStore, cycle++);
+                    currentCycle++;
+                    return GetIterator(keyValueStore, waitTime, maxCycle, ref currentCycle);
                 }
-                throw new InvalidOperationException($"Failed to retrieve {nameof(Org.Apache.Kafka.Streams.State.KeyValueIterator<,>)} after {maxCycle * waitTime} ms", isse);
+                throw;
             }
         }
 
