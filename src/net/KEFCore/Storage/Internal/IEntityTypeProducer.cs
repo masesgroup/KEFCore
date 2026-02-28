@@ -37,9 +37,10 @@ public interface IEntityTypeProducer : IDisposable
     /// <summary>
     /// Stores an <see cref="IEnumerable{IKafkaRowBag}"/>
     /// </summary>
+    /// <param name="futures">The <see cref="Future{V}"/> with <<see cref="RecordMetadata"/> generated from <see cref="Commit(List{Future{RecordMetadata}}, IEnumerable{IKafkaRowBag})"/></param>
     /// <param name="records">The <see cref="IEnumerable{IKafkaRowBag}"/> to be stored</param>
     /// <returns></returns>
-    IEnumerable<Future<RecordMetadata>> Commit(IEnumerable<IKafkaRowBag> records);
+    void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records);
     /// <summary>
     /// The current <see cref="ValueBuffer"/>s
     /// </summary>

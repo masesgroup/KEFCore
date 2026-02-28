@@ -61,7 +61,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
         CancellationToken cancellationToken = default)
         => cancellationToken.IsCancellationRequested
             ? Task.FromCanceled<int>(cancellationToken)
-            : Task.FromResult(_cluster.ExecuteTransaction(entries, _updateLogger));
+            : _cluster.ExecuteTransactionAsync(entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseDeleted()
         => _cluster.EnsureDeleted(_updateLogger);
