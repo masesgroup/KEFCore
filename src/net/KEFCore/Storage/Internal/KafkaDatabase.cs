@@ -35,6 +35,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
     public KafkaDatabase(
         DatabaseDependencies dependencies,
         IKafkaClusterCache clusterCache,
+        IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
         IValueGeneratorSelector valueGeneratorSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
@@ -43,7 +44,7 @@ public class KafkaDatabase : Database, IKafkaDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.CreateCluster(options, valueGeneratorSelector, updateAdapterFactory, designTimeModel.Model);
+        _cluster = _clusterCache.CreateCluster(options, infrastructureLogger, valueGeneratorSelector, updateAdapterFactory, designTimeModel.Model);
         _updateLogger = updateLogger;
     }
     /// <inheritdoc/>
@@ -58,20 +59,14 @@ public class KafkaDatabase : Database, IKafkaDatabase
     /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
-        CancellationToken cancellationToken = default)
-        => cancellationToken.IsCancellationRequested
-            ? Task.FromCanceled<int>(cancellationToken)
-            : _cluster.ExecuteTransactionAsync(entries, _updateLogger, cancellationToken);
+        CancellationToken cancellationToken = default) => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
+                                                                                                    : _cluster.ExecuteTransactionAsync(entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseDeleted()
-        => _cluster.EnsureDeleted(_updateLogger);
+    public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(_updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseCreated()
-        => _cluster.EnsureCreated(_updateLogger);
+    public virtual bool EnsureDatabaseCreated() => _cluster.EnsureCreated(_updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseConnected()
-        => _cluster.EnsureConnected(_updateLogger);
+    public virtual bool EnsureDatabaseConnected() => _cluster.EnsureConnected(_updateLogger);
     /// <inheritdoc/>
-    public virtual bool? EnsureDatabaseSynchronized(long timeout)
-        => _cluster.EnsureSynchronized(timeout);
+    public virtual bool? EnsureDatabaseSynchronized(long timeout) => _cluster.EnsureSynchronized(timeout);
 }

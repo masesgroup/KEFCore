@@ -37,6 +37,10 @@ public interface IKafkaCluster : IDisposable
     /// The <see cref="KafkaOptionsExtension"/>
     /// </summary>
     KafkaOptionsExtension Options { get; }
+    /// <summary> 
+    /// The <see cref="IDiagnosticsLogger{TLoggerCategory}"/> to be used to log info within the provider
+    /// </summary>
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
     /// <summary>
     /// Returns the <see cref="IValueGeneratorSelector"/> instance
     /// </summary>

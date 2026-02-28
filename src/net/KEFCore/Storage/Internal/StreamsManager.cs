@@ -235,14 +235,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _errorHandler ??= new(this, (_This, exception) =>
             {
                 _resultException = exception;
+                _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", _resultException);
                 _exceptionSet.Set();
                 return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
             _stateListener ??= new(this, (_This, newState, oldState) =>
             {
-                _currentState = newState;
-                if (_currentState == null) { throw new InvalidOperationException("New state cannot be null."); }
+                _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
+                _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
 #if DEBUG_PERFORMANCE
                 KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif

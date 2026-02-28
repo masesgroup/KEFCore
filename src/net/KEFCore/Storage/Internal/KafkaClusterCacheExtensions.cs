@@ -27,9 +27,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public static class KafkaClusterCacheExtensions
 {
-    /// <inheritdoc cref="IKafkaClusterCache.CreateCluster(KafkaOptionsExtension, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)"/>
-    public static IKafkaCluster CreateCluster(this IKafkaClusterCache storeCache, IDbContextOptions options, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => storeCache.CreateCluster(options.Extensions.OfType<KafkaOptionsExtension>().First(), valueGeneratorSelector, updateAdapterFactory, designModel);
+    /// <inheritdoc cref="IKafkaClusterCache.CreateCluster(KafkaOptionsExtension, IDiagnosticsLogger{DbLoggerCategory.Infrastructure}, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)"/>
+    public static IKafkaCluster CreateCluster(this IKafkaClusterCache storeCache, IDbContextOptions options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
+        => storeCache.CreateCluster(options.Extensions.OfType<KafkaOptionsExtension>().First(), infrastructureLogger, valueGeneratorSelector, updateAdapterFactory, designModel);
     /// <inheritdoc cref="IKafkaClusterCache.GetCluster(KafkaOptionsExtension)"/>
     public static IKafkaCluster GetCluster(this IKafkaClusterCache storeCache, IDbContextOptions options)
         => storeCache.GetCluster(options.Extensions.OfType<KafkaOptionsExtension>().First());
