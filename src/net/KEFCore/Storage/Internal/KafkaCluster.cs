@@ -157,26 +157,30 @@ public class KafkaCluster : IKafkaCluster
     {
         var coll = ResetStream();
 
-        DeleteTopicsResult result = default;
-        KafkaFuture<Java.Lang.Void> future = default;
+
         try
         {
-            result = _kafkaAdminClient?.DeleteTopics(coll);
-            future = result?.All();
-            future?.Get();
-        }
-        catch (ExecutionException ex)
-        {
-            if (ex.InnerException is UnknownTopicOrPartitionException)
+            DeleteTopicsResult result = default;
+            KafkaFuture<Java.Lang.Void> future = default;
+            try
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
-#endif
+                result = _kafkaAdminClient?.DeleteTopics(coll);
+                future = result?.All();
+                future?.Get();
             }
-            else if (ex.InnerException != null) throw ex.InnerException;
-            else throw;
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+            finally { future?.Dispose(); result?.Dispose(); }
         }
-        finally { future?.Dispose(); result?.Dispose(); }
+        catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
+        {
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString(utpe.Message);
+#endif
+        }
 
         if (_tables == null)
         {
