@@ -213,7 +213,7 @@ jobs:
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
 
       - name: Prepare other files
-        if: ${{ inputs.UseSpecialSettings == true }}
+        #if: ${{ inputs.UseSpecialSettings == true }}
         shell: cmd
         run: |
           7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }}
@@ -340,7 +340,7 @@ jobs:
 
       - name: Execute ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}

@@ -124,6 +124,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                    watch.Restart();
+                    var res = context.WaitForSynchronization();
+                    watch.Stop();
+                    if (res.HasValue && res.Value)
+                    {
+                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString($"Local store is not synchronized.");
+                    }
                 }
 
                 if (ProgramConfig.Config.UseModelBuilder)
@@ -235,7 +246,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     {
                         ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
                         watch.Restart();
-                        post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + (ProgramConfig.Config.NumberOfExtraElements != 0 ? 1 : 0));
+                        post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1);
                         watch.Stop();
                         ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
                     }
