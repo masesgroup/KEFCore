@@ -117,6 +117,8 @@ public class KafkaCluster : IKafkaCluster
 
     ArrayList<Java.Lang.String> ResetStream()
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ResetStream");
+
         var coll = new ArrayList<Java.Lang.String>();
         var topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in _designModel.GetEntityTypes())
@@ -134,8 +136,11 @@ public class KafkaCluster : IKafkaCluster
             coll.Add(topic);
         }
 
+        _infrastructureLogger.Logger.LogInformation("Identfied for model {Model} the following topics {Topics}", _designModel, string.Join(", ", topics));
+
         if (!Options.UseCompactedReplicator)
         {
+            _infrastructureLogger.Logger.LogInformation("Requesting Streams reset for {Application} with topics {Topics}", Options.ApplicationId, string.Join(", ", topics));
             try
             {
                 StreamsResetter.ResetApplicationForced(Options.BootstrapServers, Options.ApplicationId, topics);
@@ -153,6 +158,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureDeleted");
         var coll = ResetStream();
 
         try
@@ -189,10 +195,12 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
         var coll = ResetStream();
 
         try
         {
+            _infrastructureLogger.Logger.LogInformation("Trying to identify information of topics from the cluster.");
             DescribeTopicsResult result = default;
             KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
             DescribeTopicsOptions describeTopicsOptions = new();
@@ -303,6 +311,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool? EnsureSynchronized(long timeout)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureSynchronized with {Timeout}", timeout);
         var remainingTimeout = timeout;
         bool?[] bools = new bool?[_tables.Count];
         Stopwatch stopwatch = new();
@@ -345,6 +354,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
             return CreateTopicForEntity(et, 0);
@@ -410,36 +420,58 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
     {
-        Java.Lang.String topicName = entityType.TopicName(Options);
+        _infrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity}", entityType.Name);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
-        var coll = Collections.Singleton(topicName);
-        DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
-        using var future = describeTopicsResult.AllTopicNames();
-        var result = future.Get();
-        foreach (var item in result.EntrySet())
-        {
-            if (item.Key.Equals(topicName))
-            {
-                HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
-                foreach (var partition in item.Value.Partitions())
-                {
-                    var partitionIndex = partition.Partition();
-                    TopicPartition topicPartition = new(topicName, partitionIndex);
-                    hashMap.Put(topicPartition, OffsetSpec.Latest());
-                }
 
-                var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
-                using var offsetResultFuture = listOffsetResult.All();
-                var offsetResult = offsetResultFuture.Get();
-                foreach (var offsetResultItem in offsetResult.EntrySet())
+        try
+        {
+            try
+            {
+                Java.Lang.String topicName = entityType.TopicName(Options);
+                var coll = Collections.Singleton(topicName);
+                DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+                using var future = describeTopicsResult.AllTopicNames();
+                var result = future.Get();
+                foreach (var item in result.EntrySet())
                 {
-                    if (offsetResultItem.Key.Topic().Equals(topicName))
+                    if (item.Key.Equals(topicName))
                     {
-                        dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                        HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
+                        foreach (var partition in item.Value.Partitions())
+                        {
+                            var partitionIndex = partition.Partition();
+                            TopicPartition topicPartition = new(topicName, partitionIndex);
+                            hashMap.Put(topicPartition, OffsetSpec.Latest());
+                        }
+
+                        var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                        using var offsetResultFuture = listOffsetResult.All();
+                        var offsetResult = offsetResultFuture.Get();
+                        foreach (var offsetResultItem in offsetResult.EntrySet())
+                        {
+                            if (offsetResultItem.Key.Topic().Equals(topicName))
+                            {
+                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                            }
+                        }
+                        break;
                     }
                 }
-                break;
             }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException is UnknownTopicOrPartitionException)
+                {
+                    throw ex.InnerException;
+                }
+                else if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+        }
+        catch (UnknownTopicOrPartitionException ex)
+        {
+            _infrastructureLogger.Logger.LogInformation(ex.Message);
+            throw; // just to understand the problem
         }
         return dictionary;
     }
@@ -447,6 +479,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffers for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -560,6 +593,8 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransaction");
+
         using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
         var result = Task.WhenAll(tasks);
@@ -584,6 +619,8 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public async Task<int> ExecuteTransactionAsync(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransactionAsync");
+
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, cancellationToken);
 
         try
