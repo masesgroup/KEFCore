@@ -55,8 +55,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
     readonly Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag> _createRowBag;
 
-    //private readonly IProperty[] _properties;
-    //private readonly IComplexProperty[]? _complexProperties;
     /// <summary>
     /// Default initializer
     /// </summary>

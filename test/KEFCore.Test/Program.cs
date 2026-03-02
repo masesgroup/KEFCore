@@ -108,6 +108,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                    watch.Restart();
+                    var res = context.WaitForSynchronization();
+                    watch.Stop();
+                    if (res.HasValue && res.Value)
+                    {
+                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString($"Local store is not synchronized.");
+                    }
                 }
 
                 if (ProgramConfig.Config.UseModelBuilder)
@@ -166,11 +177,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
 
                     watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
                     for (int i = ProgramConfig.Config.NumberOfElements; i < ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements; i++)
                     {
                         context.Add(new Blog
@@ -193,6 +199,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+                    watch.Restart();
+                    var res = context.WaitForSynchronization();
+                    watch.Stop();
+                    if (res.HasValue && res.Value)
+                    {
+                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
+                    }
+                    else
+                    {
+                        ProgramConfig.ReportString($"Local store is not synchronized.");
+                    }
 
                     var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
                     watch.Restart();

@@ -56,7 +56,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, System.Exception exception, Func<TState, System.Exception, string> formatter)
         {
-            Console.WriteLine($"[{logLevel}] {_category}: {formatter(state, exception)}");
+            Console.WriteLine($"[{logLevel}] {DateTime.Now:HH::mm::ss:ffff} {_category}: {formatter(state, exception)}");
         }
     }
 

@@ -115,12 +115,12 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => _complexTypeConverterFactory;
 
-    ArrayList<Java.Lang.String> ResetStream()
+    ArrayList<Java.Lang.String> ResetStream(out System.Collections.Generic.IList<string> topics)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking ResetStream");
 
         var coll = new ArrayList<Java.Lang.String>();
-        var topics = new System.Collections.Generic.List<string>();
+        topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in _designModel.GetEntityTypes())
         {
             string topic = entityType.TopicName(Options);
@@ -159,7 +159,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking EnsureDeleted");
-        var coll = ResetStream();
+        var coll = ResetStream(out var topics);
 
         try
         {
@@ -180,7 +180,7 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
         {
-            _infrastructureLogger.Logger.LogDebug(utpe.Message);
+            _infrastructureLogger.Logger.LogError("EnsureDeleted reports the following {Error}", utpe.Message);
         }
 
         if (_tables == null)
@@ -196,7 +196,7 @@ public class KafkaCluster : IKafkaCluster
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
-        var coll = ResetStream();
+        var coll = ResetStream(out var topics);
 
         try
         {
@@ -354,21 +354,19 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity {Entity}", entityType.Name);
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
-            return CreateTopicForEntity(et, 0);
+            return CreateTopicForEntity(et, 100, 100, 0);
         });
     }
 
-    private string CreateTopicForEntity(IEntityType entityType, int cycle)
+    private string CreateTopicForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic> coll = default;
-        CreateTopicsResult result = default;
-        KafkaFuture<Java.Lang.Void> future = default;
+
         try
         {
             var requestedPartitions = entityType.NumPartitions(Options);
@@ -380,6 +378,9 @@ public class KafkaCluster : IKafkaCluster
                 throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
             }
 
+            Set<NewTopic> coll = default;
+            CreateTopicsResult result = default;
+            KafkaFuture<Java.Lang.Void> future = default;
             NewTopic topic = default;
             Map<Java.Lang.String, Java.Lang.String> map = default;
             try
@@ -401,26 +402,26 @@ public class KafkaCluster : IKafkaCluster
                 if (ex.InnerException != null) throw ex.InnerException;
                 throw;
             }
-            finally { map?.Dispose(); topic?.Dispose(); }
+            finally { map?.Dispose(); topic?.Dispose(); future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
         }
         catch (TopicExistsException ex)
         {
+            if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing CreateTopicForEntity on {entityType.Name} after {cycle * waitTime}");
             if (ex.Message.Contains("deletion"))
             {
-                Thread.Sleep(1000); // wait a while to complete topic deletion and try again
-                return CreateTopicForEntity(entityType, cycle++);
+                _infrastructureLogger.Logger.LogInformation("Invoke again CreateTopicForEntity for {Entity} at attempt {Cycle} since server reported {Error}", entityType.Name, cycle, ex.Message);
+                Thread.Sleep(waitTime); // wait a while before the server completes topic deletion and try again
+                return CreateTopicForEntity(entityType, waitTime, maxCycles, cycle++);
             }
         }
-        finally { future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
 
         return topicName;
     }
 
-
     /// <inheritdoc/>
-    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity}", entityType.Name);
+        _infrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
 
         try
@@ -460,22 +461,24 @@ public class KafkaCluster : IKafkaCluster
             }
             catch (ExecutionException ex)
             {
-                if (ex.InnerException is UnknownTopicOrPartitionException)
-                {
-                    throw ex.InnerException;
-                }
-                else if (ex.InnerException != null) throw ex.InnerException;
+                if (ex.InnerException != null) throw ex.InnerException;
                 else throw;
             }
         }
         catch (UnknownTopicOrPartitionException ex)
         {
-            _infrastructureLogger.Logger.LogError("LatestOffsetForEntity reports unexpected {Message}", ex.Message);
-#if THROW_ON_STRANGE_PROBLEMS
-            throw; // just to understand the problemù
-#endif
+            if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing LatestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
+            _infrastructureLogger.Logger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
+            return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
         return dictionary;
+    }
+
+    /// <inheritdoc/>
+    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    {
+        return LatestOffsetForEntity(entityType, 100, 10, 0);
     }
 
     /// <inheritdoc/>
