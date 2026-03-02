@@ -23,7 +23,9 @@
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Common;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Globalization;
@@ -53,8 +55,6 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
     readonly Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag> _createRowBag;
 
-    //private readonly IProperty[] _properties;
-    //private readonly IComplexProperty[]? _complexProperties;
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -63,9 +63,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         IEntityType entityType,
         ILoggingOptions loggingOptions)
     {
-#if DEBUG_PERFORMANCE
-		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable Creating new KafkaTable for {entityType.Name}");
-#endif
+        cluster.InfrastructureLogger.Logger.LogDebug("KafkaTable Creating new KafkaTable for {Name}", entityType.Name);
         Cluster = cluster;
         _tableAssociatedTopicName = cluster.CreateTopicForEntity(entityType);
         _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
@@ -109,9 +107,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-#if DEBUG_PERFORMANCE
-		KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaTable::Dispose for {EntityType.Name}");
-#endif
+        Cluster.InfrastructureLogger.Logger.LogDebug("KafkaTable::Dispose for {Name}", EntityType.Name);
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>

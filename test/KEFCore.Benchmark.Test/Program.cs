@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +103,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         context.SaveChanges();
                         watch.Stop();
                         ProgramConfig.ReportString($"Elapsed SaveChanges: {watch.Elapsed}");
+                        watch.Restart();
+                        var res = context.WaitForSynchronization();
+                        watch.Stop();
+                        if (res.HasValue && res.Value)
+                        {
+                            ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
+                        }
+                        else
+                        {
+                            ProgramConfig.ReportString($"Local store is not synchronized.");
+                        }
                     }
                 }
 
@@ -223,7 +233,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
     }
 
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : TestContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }

@@ -90,9 +90,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-#if DEBUG_PERFORMANCE
-        KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
-#endif
+        _infrastructureLogger.Logger.LogDebug("Disposing KafkaCluster");
         if (_tables != null)
         {
             foreach (var item in _tables.Values)
@@ -117,10 +115,12 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => _complexTypeConverterFactory;
 
-    ArrayList<Java.Lang.String> ResetStream()
+    ArrayList<Java.Lang.String> ResetStream(out System.Collections.Generic.IList<string> topics)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ResetStream");
+
         var coll = new ArrayList<Java.Lang.String>();
-        var topics = new System.Collections.Generic.List<string>();
+        topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in _designModel.GetEntityTypes())
         {
             string topic = entityType.TopicName(Options);
@@ -136,8 +136,11 @@ public class KafkaCluster : IKafkaCluster
             coll.Add(topic);
         }
 
+        _infrastructureLogger.Logger.LogInformation("Identfied for model {Model} the following topics {Topics}", _designModel, string.Join(", ", topics));
+
         if (!Options.UseCompactedReplicator)
         {
+            _infrastructureLogger.Logger.LogInformation("Requesting Streams reset for {Application} with topics {Topics}", Options.ApplicationId, string.Join(", ", topics));
             try
             {
                 StreamsResetter.ResetApplicationForced(Options.BootstrapServers, Options.ApplicationId, topics);
@@ -155,28 +158,30 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        var coll = ResetStream();
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureDeleted");
+        var coll = ResetStream(out var topics);
 
-        DeleteTopicsResult result = default;
-        KafkaFuture<Java.Lang.Void> future = default;
         try
         {
-            result = _kafkaAdminClient?.DeleteTopics(coll);
-            future = result?.All();
-            future?.Get();
-        }
-        catch (ExecutionException ex)
-        {
-            if (ex.InnerException is UnknownTopicOrPartitionException)
+            DeleteTopicsResult result = default;
+            KafkaFuture<Java.Lang.Void> future = default;
+            try
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
-#endif
+                result = _kafkaAdminClient?.DeleteTopics(coll);
+                future = result?.All();
+                future?.Get();
             }
-            else if (ex.InnerException != null) throw ex.InnerException;
-            else throw;
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+            finally { future?.Dispose(); result?.Dispose(); }
         }
-        finally { future?.Dispose(); result?.Dispose(); }
+        catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
+        {
+            _infrastructureLogger.Logger.LogError("EnsureDeleted reports the following {Error}", utpe.Message);
+        }
 
         if (_tables == null)
         {
@@ -190,62 +195,65 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        var coll = ResetStream();
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
+        var coll = ResetStream(out var topics);
 
-        DescribeTopicsResult result = default;
-        KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
-        DescribeTopicsOptions describeTopicsOptions = new();
-        describeTopicsOptions.IncludeAuthorizedOperations(true);
         try
         {
-            result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
-            future = result?.AllTopicNames();
-            foreach (var item in future.Get().EntrySet())
+            _infrastructureLogger.Logger.LogInformation("Trying to identify information of topics from the cluster.");
+            DescribeTopicsResult result = default;
+            KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
+            DescribeTopicsOptions describeTopicsOptions = new();
+            describeTopicsOptions.IncludeAuthorizedOperations(true);
+            try
             {
-                if (item.Value.IsInternal())
+                result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
+                future = result?.AllTopicNames();
+                foreach (var item in future.Get().EntrySet())
                 {
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} is internal");
-#endif
-                    continue;
-                }
-                var partitionsData = item.Value.Partitions();
-                var numPartition = partitionsData.Size();
-                if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
-                {
-                    throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-                }
+                    if (item.Value.IsInternal())
+                    {
+                        _infrastructureLogger.Logger.LogDebug("Topic {Key} is internal", item.Key);
+                        continue;
+                    }
+                    var partitionsData = item.Value.Partitions();
+                    var numPartition = partitionsData.Size();
+                    if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
+                    {
+                        throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+                    }
 
-                bool write = false;
-                bool read = false;
+                    bool write = false;
+                    bool read = false;
 
-                foreach (var operation in item.Value.AuthorizedOperations())
-                {
-                    if (operation == AclOperation.WRITE) write = true;
-                    if (operation == AclOperation.READ) read = true;
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
-#endif
+                    foreach (var operation in item.Value.AuthorizedOperations())
+                    {
+                        if (operation == AclOperation.WRITE) write = true;
+                        if (operation == AclOperation.READ) read = true;
+                        _infrastructureLogger.Logger.LogDebug("Topic {Key} supports {Name}", item.Key, operation.Name());
+                    }
+                    if (Options.ReadOnlyMode)
+                    {
+                        if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                    }
+                    else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
                 }
-                if (Options.ReadOnlyMode)
-                {
-                    if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
-                }
-                else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
             }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException is UnknownTopicOrPartitionException)
+                {
+                    throw ex.InnerException;
+                }
+                else if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+            finally { future?.Dispose(); result?.Dispose(); }
         }
-        catch (ExecutionException ex)
+        catch (UnknownTopicOrPartitionException ex)
         {
-            if (ex.InnerException is UnknownTopicOrPartitionException)
-            {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
-#endif
-            }
-            else if (ex.InnerException != null) throw ex.InnerException;
-            else throw;
+            _infrastructureLogger.Logger.LogDebug(ex.Message);
         }
-        finally { future?.Dispose(); result?.Dispose(); }
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -280,19 +288,13 @@ public class KafkaCluster : IKafkaCluster
                 }
                 catch
                 {
-                    updateLogger.Logger.Log(LogLevel.Error, "Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Failed to execute synchronization within a timeout of {Options.DefaultSynchronizationTimeout} for cluster id {Options.ClusterId}");
-#endif
+                    _infrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
                     throw;
                 }
                 finally
                 {
                     stopwatch.Stop();
-                    updateLogger.Logger.Log(LogLevel.Information, "Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Synchronization of {Options.ApplicationId} with cluster id {Options.ClusterId} done in {stopwatch.Elapsed}");
-#endif
+                    _infrastructureLogger.Logger.LogDebug("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
                 }
             }
 
@@ -309,6 +311,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool? EnsureSynchronized(long timeout)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureSynchronized with {Timeout}", timeout);
         var remainingTimeout = timeout;
         bool?[] bools = new bool?[_tables.Count];
         Stopwatch stopwatch = new();
@@ -351,20 +354,19 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
-            return CreateTopicForEntity(et, 0);
+            return CreateTopicForEntity(et, 100, 100, 0);
         });
     }
 
-    private string CreateTopicForEntity(IEntityType entityType, int cycle)
+    private string CreateTopicForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        if (cycle >= 10) throw new System.TimeoutException($"Timeout occurred executing CreateTable on {entityType.Name}");
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
 
         var topicName = entityType.TopicName(Options);
-        Set<NewTopic> coll = default;
-        CreateTopicsResult result = default;
-        KafkaFuture<Java.Lang.Void> future = default;
+
         try
         {
             var requestedPartitions = entityType.NumPartitions(Options);
@@ -376,6 +378,9 @@ public class KafkaCluster : IKafkaCluster
                 throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
             }
 
+            Set<NewTopic> coll = default;
+            CreateTopicsResult result = default;
+            KafkaFuture<Java.Lang.Void> future = default;
             NewTopic topic = default;
             Map<Java.Lang.String, Java.Lang.String> map = default;
             try
@@ -397,62 +402,89 @@ public class KafkaCluster : IKafkaCluster
                 if (ex.InnerException != null) throw ex.InnerException;
                 throw;
             }
-            finally { map?.Dispose(); topic?.Dispose(); }
+            finally { map?.Dispose(); topic?.Dispose(); future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
         }
         catch (TopicExistsException ex)
         {
+            if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing CreateTopicForEntity on {entityType.Name} after {cycle * waitTime}");
             if (ex.Message.Contains("deletion"))
             {
-                Thread.Sleep(1000); // wait a while to complete topic deletion and try again
-                return CreateTopicForEntity(entityType, cycle++);
+                _infrastructureLogger.Logger.LogInformation("Invoke again CreateTopicForEntity for {Entity} at attempt {Cycle} since server reported {Error}", entityType.Name, cycle, ex.Message);
+                Thread.Sleep(waitTime); // wait a while before the server completes topic deletion and try again
+                return CreateTopicForEntity(entityType, waitTime, maxCycles, cycle++);
             }
         }
-        finally { future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
 
         return topicName;
     }
 
-
     /// <inheritdoc/>
-    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        Java.Lang.String topicName = entityType.TopicName(Options);
+        _infrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
-        var coll = Collections.Singleton(topicName);
-        DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
-        using var future = describeTopicsResult.AllTopicNames();
-        var result = future.Get();
-        foreach (var item in result.EntrySet())
-        {
-            if (item.Key.Equals(topicName))
-            {
-                HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
-                foreach (var partition in item.Value.Partitions())
-                {
-                    var partitionIndex = partition.Partition();
-                    TopicPartition topicPartition = new(topicName, partitionIndex);
-                    hashMap.Put(topicPartition, OffsetSpec.Latest());
-                }
 
-                var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
-                using var offsetResultFuture = listOffsetResult.All();
-                var offsetResult = offsetResultFuture.Get();
-                foreach (var offsetResultItem in offsetResult.EntrySet())
+        try
+        {
+            try
+            {
+                Java.Lang.String topicName = entityType.TopicName(Options);
+                var coll = Collections.Singleton(topicName);
+                DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+                using var future = describeTopicsResult.AllTopicNames();
+                var result = future.Get();
+                foreach (var item in result.EntrySet())
                 {
-                    if (offsetResultItem.Key.Topic().Equals(topicName))
+                    if (item.Key.Equals(topicName))
                     {
-                        dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                        HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
+                        foreach (var partition in item.Value.Partitions())
+                        {
+                            var partitionIndex = partition.Partition();
+                            TopicPartition topicPartition = new(topicName, partitionIndex);
+                            hashMap.Put(topicPartition, OffsetSpec.Latest());
+                        }
+
+                        var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                        using var offsetResultFuture = listOffsetResult.All();
+                        var offsetResult = offsetResultFuture.Get();
+                        foreach (var offsetResultItem in offsetResult.EntrySet())
+                        {
+                            if (offsetResultItem.Key.Topic().Equals(topicName))
+                            {
+                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                            }
+                        }
+                        break;
                     }
                 }
-                break;
             }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+        }
+        catch (UnknownTopicOrPartitionException ex)
+        {
+            if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing LatestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
+            _infrastructureLogger.Logger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
+            return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
         return dictionary;
     }
 
     /// <inheritdoc/>
+    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
+    {
+        return LatestOffsetForEntity(entityType, 100, 10, 0);
+    }
+
+    /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffers for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -460,22 +492,22 @@ public class KafkaCluster : IKafkaCluster
         {
             tableSw.Start();
 #endif
-        EnsureTable(entityType);
+            EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-        var key = _useNameMatching ? (object)entityType.Name : entityType;
-        if (_tables != null && _tables.TryGetValue(key, out var table))
-        {
-            return table.ValueBuffers;
-        }
-        throw new InvalidOperationException("No table available");
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.ValueBuffers;
+            }
+            throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally
         {
             valueBufferSw.Stop();
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -566,6 +598,8 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransaction");
+
         using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
         var result = Task.WhenAll(tasks);
@@ -590,6 +624,8 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public async Task<int> ExecuteTransactionAsync(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransactionAsync");
+
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, cancellationToken);
 
         try
@@ -615,9 +651,7 @@ public class KafkaCluster : IKafkaCluster
             var key = _useNameMatching ? (object)currentEntityType.Name : currentEntityType;
             _ = _tables.GetOrAdd(key, (k) =>
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
-#endif
+                _infrastructureLogger.Logger.LogInformation("KafkaCluster::EnsureTable creating table for {Name}", entityType.Name);
                 return _tableFactory.Create(this, currentEntityType);
             });
         }

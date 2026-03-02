@@ -90,7 +90,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
             public readonly IDictionary<int, long> LatestLocalKnownOffset = new ConcurrentDictionary<int, long>();
 
-            public void UpdateCurrentRemoteKnownOffset(int partition, long offset)
+            public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
                 lock (CurrentRemoteKnownOffset)
                 {
@@ -105,13 +105,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
             }
 
-            public void UpdateCurrentRemoteKnownOffset(IDictionary<int, long> keyValuePairs)
+            public void UpdateCurrentRemoteKnownPartitionOffset(IDictionary<int, long> keyValuePairs)
             {
                 var lastKnownPartitions = keyValuePairs.Keys.ToList();
 
-                foreach (var kv in keyValuePairs)
+                lock (CurrentRemoteKnownOffset)
                 {
-                    lock (CurrentRemoteKnownOffset)
+                    foreach (var kv in keyValuePairs)
                     {
                         if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
                         {
@@ -123,12 +123,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         }
                         lastKnownPartitions.Remove(kv.Key);
                     }
-                }
-                if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
-                {
-                    foreach (var item in lastKnownPartitions)
+
+                    if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
                     {
-                        CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                        foreach (var item in lastKnownPartitions)
+                        {
+                            CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                        }
                     }
                 }
             }
@@ -169,7 +170,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly AutoResetEvent _dataReceived;
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _stateChanged;
-        private readonly AutoResetEvent _exceptionSet;
 
         private readonly IKafkaCluster _kafkaCluster;
         private StreamsConfigBuilder _streamsConfig;
@@ -230,13 +230,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _dataReceived = new(false);
             _resetEvent = new(false);
             _stateChanged = new(false);
-            _exceptionSet = new(false);
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
-                _resultException = exception;
-                _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", _resultException);
-                _exceptionSet.Set();
+                _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
+                if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException
+                    && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
+                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
+                    return StreamThreadExceptionResponse.REPLACE_THREAD;
+                }
                 return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
@@ -244,9 +248,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
                 _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             });
         }
@@ -265,7 +266,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
         public required Action<TStream,
                                KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
-                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
+                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers
+        { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Pause { get; set; }
         public required Action<TStream> Resume { get; set; }
@@ -424,7 +426,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _dataReceived?.Reset();
             _resetEvent?.Reset();
             _stateChanged?.Reset();
-            _exceptionSet?.Reset();
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
@@ -433,26 +434,78 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 try
                 {
                     _resetEvent?.Set();
-                    var index = WaitHandle.WaitAny([_stateChanged!, _exceptionSet!]);
+                    var index = WaitHandle.WaitAny([_stateChanged!]);
                     if (index == 1) return;
                     while (true)
                     {
-                        index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!, _exceptionSet!], waitingTime);
+                        index = WaitHandle.WaitAny([_stateChanged!, _dataReceived!], waitingTime);
                         if (index == 2) return;
+                        // the states are defined as 
+                        // CREATED
+                        // ERROR
+                        // NOT_RUNNING
+                        // PENDING_ERROR
+                        // PENDING_SHUTDOWN
+                        // REBALANCING
+                        // RUNNING
+                        //
+                        // with following transitions
+                        //
+                        //                +--------------+
+                        //        +<----- | Created (0)  |
+                        //        |       +-----+--------+
+                        //        |             |
+                        //        |             v
+                        //        |       +----+--+------+
+                        //        |       | Re-          |
+                        //        +<----- | Balancing (1)| -------->+
+                        //        |       +-----+-+------+          |
+                        //        |             | ^                 |
+                        //        |             v |                 |
+                        //        |       +--------------+          v
+                        //        |       | Running (2)  | -------->+
+                        //        |       +------+-------+          |
+                        //        |              |                  |
+                        //        |              v                  |
+                        //        |       +------+-------+     +----+-------+
+                        //        +-----> | Pending      |     | Pending    |
+                        //                | Shutdown (3) |     | Error (5)  |
+                        //                +------+-------+     +-----+------+
+                        //                       |                   |
+                        //                       v                   v
+                        //                +------+-------+     +-----+--------+
+                        //                | Not          |     | Error (6)    |
+                        //                | Running (4)  |     +--------------+
+                        //                +--------------+
+                        //
+
                         if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.CREATED
                             || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
-#if DEBUG_PERFORMANCE
-                                KNet.Internal.DebugPerformanceHelper.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
-#endif
+                                _kafkaCluster.InfrastructureLogger.Logger.LogInformation("State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
                                 continue;
                             }
                         }
-                        else // exit external wait thread 
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_ERROR
+                                 || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN
+                                 || _currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
                         {
+                            throw new InvalidOperationException($"Cannot continue since streams is in {_currentState} state.");
+                        }
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING)
+                        {
+                            throw new InvalidOperationException($"It is impossible that the streams is in {_currentState} state after the start was requested.");
+                        }
+                        else if (_currentState == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
+                        {
+                            // exit gracefully external wait thread 
                             return;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Impossible condition since every possible state was checked except {_currentState} state.");
                         }
                     }
                 }
@@ -484,7 +537,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (_managedEntities.TryGetValue(entity, out var innerEntity) &&
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
-                storage.UpdateCurrentRemoteKnownOffset(partition, offset);
+                storage.UpdateCurrentRemoteKnownPartitionOffset(partition, offset);
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
@@ -502,7 +555,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
                 var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
-                storage.UpdateCurrentRemoteKnownOffset(currentKnownOffsets);
+                storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _dataFromStream.IsEmpty; // and all data are processed
             }
@@ -529,7 +582,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _dataReceived?.Dispose();
             _resetEvent?.Dispose();
-            _exceptionSet?.Dispose();
             _stateChanged?.Dispose();
 
             _errorHandler?.Dispose();
