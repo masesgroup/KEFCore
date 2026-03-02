@@ -18,7 +18,6 @@
 
 // #define DEBUG_PERFORMANCE
 
-using Javax.Naming;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
@@ -29,7 +28,6 @@ using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
-using Microsoft.Extensions.Options;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 

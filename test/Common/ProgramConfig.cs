@@ -41,7 +41,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.LogTo(Console.WriteLine);
+            optionsBuilder.LogTo(Console.WriteLine, [DbLoggerCategory.Infrastructure.Name]);
         }
     }
 

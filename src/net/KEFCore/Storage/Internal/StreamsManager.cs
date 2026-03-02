@@ -247,9 +247,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
                 _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"StateListener oldState: {oldState} newState: {newState} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
-#endif
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             });
         }
@@ -485,9 +482,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
-#if DEBUG_PERFORMANCE
-                                KNet.Internal.DebugPerformanceHelper.ReportString($"State: {_currentState} No handle set within {waitingTime} ms");
-#endif
+                                _kafkaCluster.InfrastructureLogger.Logger.LogInformation("State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
                                 continue;
                             }
                         }

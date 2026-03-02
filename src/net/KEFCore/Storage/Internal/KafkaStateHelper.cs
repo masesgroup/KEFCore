@@ -25,7 +25,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KafkaStateHelper
     {
-        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -37,22 +37,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             if (container is null) 
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} removed (tombstone) try delete");
-#endif
+                logger.Logger.LogDebug("Record with key {key} removed (tombstone) try delete", key);
                 // maybe a record removed (tombstone) and it is still in kafka, try a delete
-                ManageDeleteInternal(adapter, ikey, keyValues);
+                ManageDeleteInternal(logger, adapter, ikey, keyValues);
             } 
             else
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"Record with key {key} added");
-#endif
-                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
+                logger.Logger.LogDebug("Record with key {key} added", key);
+                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
             }
         }
 
-        public static void ManageAdded<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -63,17 +59,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 keyValues = [key];
             }
 
-            ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
+            ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory));
         }
 
-        static void ManageAddedInternal(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues)
+        static void ManageAddedInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues)
         {
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry == null)
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record not available, adding");
-#endif
+                logger.Logger.LogDebug("ManageAddedInternal: Record not available, adding");
                 var properties = entityType.GetValueGeneratingProperties();
                 foreach (var item in properties)
                 {
@@ -94,14 +88,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             else
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageAddedInternal: Record available, try update");
-#endif
-                ManageUpdateInternal(valueGeneratorSelector, entry, propertyValues);
+                logger.Logger.LogDebug("ManageAddedInternal: Record available, try update");
+                ManageUpdateInternal(logger, valueGeneratorSelector, entry, propertyValues);
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -117,21 +109,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var properties = container.GetProperties(converterFactory);
             if (entry != null)
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} exist, update");
-#endif
-                ManageUpdateInternal(valueGeneratorSelector, entry, properties);
+                logger.Logger.LogDebug("ManageUpdate: Record with key {key} exist, update", key);
+                ManageUpdateInternal(logger, valueGeneratorSelector, entry, properties);
             }
             else
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record with key {key} does not exists, add");
-#endif
-                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
+                logger.Logger.LogDebug("ManageUpdate: Record with key {key} does not exists, add", key);
+                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -146,21 +134,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var properties = container.GetProperties(converterFactory);
             if (entry != null)
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record exists, update");
-#endif
-                ManageUpdateInternal(valueGeneratorSelector, entry, properties);
+                logger.Logger.LogDebug("ManageUpdate: Record exists, update");
+                ManageUpdateInternal(logger, valueGeneratorSelector, entry, properties);
             }
             else
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdate: Record does not exists, add");
-#endif
-                ManageAddedInternal(valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
+                logger.Logger.LogDebug("ManageUpdate: Record does not exists, add");
+                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties);
             }
         }
 
-        public static void ManageUpdateInternal(IValueGeneratorSelector valueGeneratorSelector, IUpdateEntry entry, IDictionary<string, object?> propertyValues)
+        public static void ManageUpdateInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IUpdateEntry entry, IDictionary<string, object?> propertyValues)
         {
             bool changed = false;
             foreach (var item in propertyValues)
@@ -174,9 +158,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     entry.SetOriginalValue(prop, item.Value);
                 }
             }
-#if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"ManageUpdateInternal: Record changed={changed}");
-#endif
+            logger.Logger.LogDebug("ManageUpdateInternal: Record changed={changed}", changed);
             if (changed)
             {
                 entry.EntityState = EntityState.Modified;
@@ -184,21 +166,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageDelete<TKey>(IUpdateAdapterFactory factory, IKey ikey, TKey key)
+        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IKey ikey, TKey key)
             where TKey : notnull
         {
             if (key is not object?[] keyValues)
             {
                 keyValues = [key];
             }
-#if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"ManageDelete: Record {key} try delete");
-#endif
+            logger.Logger.LogDebug("ManageDelete: Record {key} try delete", key);
             var adapter = factory.Create();
-            ManageDeleteInternal(adapter, ikey, keyValues);
+            ManageDeleteInternal(logger, adapter, ikey, keyValues);
         }
 
-        public static void ManageDelete<TKey>(IUpdateAdapter adapter, IKey ikey, TKey key)
+        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapter adapter, IKey ikey, TKey key)
             where TKey : notnull
         {
             if (key is not object?[] keyValues)
@@ -206,31 +186,27 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 keyValues = [key];
             }
 
-            ManageDeleteInternal(adapter, ikey, keyValues);
+            ManageDeleteInternal(logger, adapter, ikey, keyValues);
         }
 
-        public static void ManageDeleteInternal(IUpdateAdapter adapter, IKey ikey, object?[] keyValues)
+        public static void ManageDeleteInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapter adapter, IKey ikey, object?[] keyValues)
         {
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry != null && entry.EntityState != EntityState.Deleted)
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageDeleteInternal: Record exists, delete with cascade");
-#endif
+                logger.Logger.LogDebug("ManageDeleteInternal: Record exists, delete with cascade");
                 adapter.CascadeDelete(entry);
                 //adapter.DetectChanges();
             }
         }
 
-        public static void ManageFind(IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? propertyValues)
+        public static void ManageFind(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? propertyValues)
         {
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
             if (entry == null)
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"ManageFind: Record does not exist exists, add in state as Unchanged");
-#endif
+                logger.Logger.LogDebug("ManageFind: Record does not exist exists, add in state as Unchanged");
                 var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
                 // the key does not exist
                 var newEntry = adapter.CreateEntry(propertyValues!, entity2!);
