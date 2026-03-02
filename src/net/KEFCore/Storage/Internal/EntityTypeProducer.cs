@@ -279,6 +279,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
+            _kafkaProducer.SetCallback(_producerCallback);
             _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory)
                                                           : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
@@ -397,8 +398,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-                    var kafkaRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers);
-                    future = _kafkaProducer?.Produce(kafkaRecord, _producerCallback)!;
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
                     futures?.Add(future);
                 }
 #endif
@@ -423,6 +423,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else
         {
+            _kafkaProducer?.SetCallback(null);
+            _producerCallback?.Dispose();
             _kafkaProducer?.Dispose();
             _streamData?.Dispose();
         }
