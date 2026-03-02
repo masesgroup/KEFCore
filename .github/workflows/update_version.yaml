@@ -52,7 +52,7 @@ jobs:
           branch-suffix: short-commit-hash
           add-paths: src/*.*
           commit-message: Update version from ${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }} to ${{ inputs.NewVersion }}${{ inputs.PreReleaseNewVersion }}
-          title: Update version from ${{ inputs.CurrentVersion }} to ${{ inputs.NewVersion }}
+          title: Update version from ${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }} to ${{ inputs.NewVersion }}${{ inputs.PreReleaseNewVersion }}
           body: |
             Automated changes by GitHub action fix #254
           reviewers: masesdevelopers
