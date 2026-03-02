@@ -26,6 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,12 +37,43 @@ using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
+    public class DebugOutputLoggerProvider : ILoggerProvider
+    {
+        public ILogger CreateLogger(string categoryName) => new DebugOutputLogger(categoryName);
+        public void Dispose() { }
+    }
+
+    public class DebugOutputLogger(string category) : ILogger
+    {
+        private readonly string _category = category;
+        private readonly LogLevel _minLogLevel = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information : LogLevel.Debug;
+
+        public IDisposable BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public bool IsEnabled(LogLevel logLevel) =>
+            logLevel >= _minLogLevel &&
+            _category == DbLoggerCategory.Infrastructure.Name;
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, System.Exception exception, Func<TState, System.Exception, string> formatter)
+        {
+            Console.WriteLine($"[{logLevel}] {_category}: {formatter(state, exception)}");
+        }
+    }
+
     public class TestContext : KafkaDbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableServiceProviderCaching(false);
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.SetMinimumLevel(LogLevel.Debug)
+                       .AddProvider(new DebugOutputLoggerProvider());
+            });
+
+            optionsBuilder.UseLoggerFactory(loggerFactory);
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.LogTo(Console.WriteLine, [DbLoggerCategory.Infrastructure.Name]);
         }
     }
 

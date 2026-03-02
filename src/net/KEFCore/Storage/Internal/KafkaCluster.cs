@@ -470,8 +470,10 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (UnknownTopicOrPartitionException ex)
         {
-            _infrastructureLogger.Logger.LogInformation(ex.Message);
-            throw; // just to understand the problem
+            _infrastructureLogger.Logger.LogError("LatestOffsetForEntity reports unexpected {Message}", ex.Message);
+#if THROW_ON_STRANGE_PROBLEMS
+            throw; // just to understand the problemù
+#endif
         }
         return dictionary;
     }

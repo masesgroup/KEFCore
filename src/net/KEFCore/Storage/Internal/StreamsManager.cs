@@ -90,7 +90,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
             public readonly IDictionary<int, long> LatestLocalKnownOffset = new ConcurrentDictionary<int, long>();
 
-            public void UpdateCurrentRemoteKnownOffset(int partition, long offset)
+            public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
                 lock (CurrentRemoteKnownOffset)
                 {
@@ -105,13 +105,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
             }
 
-            public void UpdateCurrentRemoteKnownOffset(IDictionary<int, long> keyValuePairs)
+            public void UpdateCurrentRemoteKnownPartitionOffset(IDictionary<int, long> keyValuePairs)
             {
                 var lastKnownPartitions = keyValuePairs.Keys.ToList();
 
-                foreach (var kv in keyValuePairs)
+                lock (CurrentRemoteKnownOffset)
                 {
-                    lock (CurrentRemoteKnownOffset)
+                    foreach (var kv in keyValuePairs)
                     {
                         if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
                         {
@@ -123,12 +123,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         }
                         lastKnownPartitions.Remove(kv.Key);
                     }
-                }
-                if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
-                {
-                    foreach (var item in lastKnownPartitions)
+
+                    if (lastKnownPartitions.Count != 0) // if old stored partition are no more managed...
                     {
-                        CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                        foreach (var item in lastKnownPartitions)
+                        {
+                            CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                        }
                     }
                 }
             }
@@ -233,10 +234,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _errorHandler ??= new(this, (_This, exception) =>
             {
                 _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
-                if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException 
+                if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}", 
+                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
                                                                            nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
                     return StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
@@ -265,7 +266,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public required Func<TTopology, StreamsConfigBuilder, TStream> CreateStreams { get; set; }
         public required Action<TStream,
                                KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
-                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers { get; set; }
+                               KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers
+        { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Pause { get; set; }
         public required Action<TStream> Resume { get; set; }
@@ -535,7 +537,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (_managedEntities.TryGetValue(entity, out var innerEntity) &&
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
-                storage.UpdateCurrentRemoteKnownOffset(partition, offset);
+                storage.UpdateCurrentRemoteKnownPartitionOffset(partition, offset);
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
@@ -553,7 +555,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
                 var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
-                storage.UpdateCurrentRemoteKnownOffset(currentKnownOffsets);
+                storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _dataFromStream.IsEmpty; // and all data are processed
             }

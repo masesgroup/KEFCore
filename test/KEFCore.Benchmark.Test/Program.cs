@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;

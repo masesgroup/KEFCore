@@ -39,6 +39,7 @@
 	</ItemGroup>
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<DefineConstants>$(DefineConstants);THROW_ON_STRANGE_PROBLEMS</DefineConstants>
 	</PropertyGroup>
 	
 	<ItemGroup>
