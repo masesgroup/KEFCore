@@ -42,16 +42,16 @@ jobs:
         with:
           fetch-depth: '1'
 
-      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}.0${{ inputs.PreReleaseCurrentVersion }}</Version>', '<Version>${{ inputs.NewVersion }}.0inputs.PreReleaseNewVersion }}</V</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
-      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}inputs.PreReleaseNewVersion }}</V') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj
-      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}inputs.PreReleaseNewVersion }}</V') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj
+      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}.0${{ inputs.PreReleaseCurrentVersion }}</Version>', '<Version>${{ inputs.NewVersion }}.0${{ inputs.PreReleaseNewVersion }}</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
+      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}${{ inputs.PreReleaseNewVersion }}') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj
+      - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj).Replace('${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }}', '${{ inputs.NewVersion }}${{ inputs.PreReleaseNewVersion }}') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreAppWithEvents\kefcoreAppWithEvents.csproj
       
       - name: Request a PR to commit changes
         uses: peter-evans/create-pull-request@v8
         with:
           branch-suffix: short-commit-hash
           add-paths: src/*.*
-          commit-message: Update version from ${{ inputs.CurrentVersion }} to ${{ inputs.NewVersion }}
+          commit-message: Update version from ${{ inputs.CurrentVersion }}${{ inputs.PreReleaseCurrentVersion }} to ${{ inputs.NewVersion }}${{ inputs.PreReleaseNewVersion }}
           title: Update version from ${{ inputs.CurrentVersion }} to ${{ inputs.NewVersion }}
           body: |
             Automated changes by GitHub action fix #254
