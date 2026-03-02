@@ -25,6 +25,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,6 +36,15 @@ using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
+    public class TestContext : KafkaDbContext
+    {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.LogTo(Console.WriteLine);
+        }
+    }
+
     public class ProgramConfig
     {
         public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "4G" : "2G";

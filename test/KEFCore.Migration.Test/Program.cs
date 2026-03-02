@@ -179,7 +179,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         }
     }
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : TestContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }

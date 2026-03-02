@@ -90,9 +90,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-#if DEBUG_PERFORMANCE
-        KNet.Internal.DebugPerformanceHelper.ReportString($"Disposing KafkaCluster");
-#endif
+        _infrastructureLogger.Logger.LogDebug("Disposing KafkaCluster");
         if (_tables != null)
         {
             foreach (var item in _tables.Values)
@@ -157,7 +155,6 @@ public class KafkaCluster : IKafkaCluster
     {
         var coll = ResetStream();
 
-
         try
         {
             DeleteTopicsResult result = default;
@@ -177,9 +174,7 @@ public class KafkaCluster : IKafkaCluster
         }
         catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
         {
-#if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString(utpe.Message);
-#endif
+            _infrastructureLogger.Logger.LogDebug(utpe.Message);
         }
 
         if (_tables == null)
@@ -196,60 +191,61 @@ public class KafkaCluster : IKafkaCluster
     {
         var coll = ResetStream();
 
-        DescribeTopicsResult result = default;
-        KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
-        DescribeTopicsOptions describeTopicsOptions = new();
-        describeTopicsOptions.IncludeAuthorizedOperations(true);
         try
         {
-            result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
-            future = result?.AllTopicNames();
-            foreach (var item in future.Get().EntrySet())
+            DescribeTopicsResult result = default;
+            KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
+            DescribeTopicsOptions describeTopicsOptions = new();
+            describeTopicsOptions.IncludeAuthorizedOperations(true);
+            try
             {
-                if (item.Value.IsInternal())
+                result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
+                future = result?.AllTopicNames();
+                foreach (var item in future.Get().EntrySet())
                 {
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} is internal");
-#endif
-                    continue;
-                }
-                var partitionsData = item.Value.Partitions();
-                var numPartition = partitionsData.Size();
-                if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
-                {
-                    throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-                }
+                    if (item.Value.IsInternal())
+                    {
+                        _infrastructureLogger.Logger.LogDebug("Topic {Key} is internal", item.Key);
+                        continue;
+                    }
+                    var partitionsData = item.Value.Partitions();
+                    var numPartition = partitionsData.Size();
+                    if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
+                    {
+                        throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
+                    }
 
-                bool write = false;
-                bool read = false;
+                    bool write = false;
+                    bool read = false;
 
-                foreach (var operation in item.Value.AuthorizedOperations())
-                {
-                    if (operation == AclOperation.WRITE) write = true;
-                    if (operation == AclOperation.READ) read = true;
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Topic {item.Key} supports {operation.Name()}");
-#endif
+                    foreach (var operation in item.Value.AuthorizedOperations())
+                    {
+                        if (operation == AclOperation.WRITE) write = true;
+                        if (operation == AclOperation.READ) read = true;
+                        _infrastructureLogger.Logger.LogDebug("Topic {Key} supports {Name}", item.Key, operation.Name());
+                    }
+                    if (Options.ReadOnlyMode)
+                    {
+                        if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                    }
+                    else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
                 }
-                if (Options.ReadOnlyMode)
-                {
-                    if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
-                }
-                else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
             }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException is UnknownTopicOrPartitionException)
+                {
+                    throw ex.InnerException;
+                }
+                else if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
+            finally { future?.Dispose(); result?.Dispose(); }
         }
-        catch (ExecutionException ex)
+        catch (UnknownTopicOrPartitionException ex)
         {
-            if (ex.InnerException is UnknownTopicOrPartitionException)
-            {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString(ex.InnerException.Message);
-#endif
-            }
-            else if (ex.InnerException != null) throw ex.InnerException;
-            else throw;
+            _infrastructureLogger.Logger.LogDebug(ex.Message);
         }
-        finally { future?.Dispose(); result?.Dispose(); }
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -284,19 +280,13 @@ public class KafkaCluster : IKafkaCluster
                 }
                 catch
                 {
-                    updateLogger.Logger.Log(LogLevel.Error, "Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Failed to execute synchronization within a timeout of {Options.DefaultSynchronizationTimeout} for cluster id {Options.ClusterId}");
-#endif
+                    _infrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", Options.DefaultSynchronizationTimeout, Options.ClusterId);
                     throw;
                 }
                 finally
                 {
                     stopwatch.Stop();
-                    updateLogger.Logger.Log(LogLevel.Information, "Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
-#if DEBUG_PERFORMANCE
-                    KNet.Internal.DebugPerformanceHelper.ReportString($"Synchronization of {Options.ApplicationId} with cluster id {Options.ClusterId} done in {stopwatch.Elapsed}");
-#endif
+                    _infrastructureLogger.Logger.LogDebug("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
                 }
             }
 
@@ -464,22 +454,22 @@ public class KafkaCluster : IKafkaCluster
         {
             tableSw.Start();
 #endif
-        EnsureTable(entityType);
+            EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-        var key = _useNameMatching ? (object)entityType.Name : entityType;
-        if (_tables != null && _tables.TryGetValue(key, out var table))
-        {
-            return table.ValueBuffers;
-        }
-        throw new InvalidOperationException("No table available");
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.ValueBuffers;
+            }
+            throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally
         {
             valueBufferSw.Stop();
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -619,9 +609,7 @@ public class KafkaCluster : IKafkaCluster
             var key = _useNameMatching ? (object)currentEntityType.Name : currentEntityType;
             _ = _tables.GetOrAdd(key, (k) =>
             {
-#if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaCluster::EnsureTable creating table for {entityType.Name}");
-#endif
+                _infrastructureLogger.Logger.LogInformation("KafkaCluster::EnsureTable creating table for {Name}", entityType.Name);
                 return _tableFactory.Create(this, currentEntityType);
             });
         }

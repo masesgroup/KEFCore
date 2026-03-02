@@ -271,7 +271,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
         }
     }
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : TestContext
     {
         public DbSet<BlogComplex> Blogs { get; set; }
         public DbSet<PostComplex> Posts { get; set; }
