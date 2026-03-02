@@ -67,28 +67,28 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             ClrType = tName.ClrType?.ToAssemblyQualified()!
         };
         _innerMessage.Data.Clear();
-        foreach (var item in properties)
+        for (int i = 0; i < properties.Length; i++)
         {
-            int index = item.GetIndex();
+            var item = properties[i];
             var _type = NativeTypeMapper.GetValue(item.ClrType!);
             var pRecord = new PropertyDataRecord
             {
                 PropertyName = item.Name,
                 ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : string.Empty,
-                Value = new GenericValue(_type, ref propertyValues[index]!)
+                Value = new GenericValue(_type, ref propertyValues[i]!)
             };
             _innerMessage.Data.Add(pRecord);
         }
         if (complexProperties != null && complexPropertyValues != null)
         {
-            foreach (var item in complexProperties)
+            for (int i = 0; i < complexProperties.Length; i++)
             {
-                int index = item.GetIndex();
+                var item = complexProperties[i];
                 var pRecord = new PropertyDataRecord
                 {
                     PropertyName = item.Name,
                     ClrType = item.ClrType?.ToAssemblyQualified(),
-                    Value = new GenericValue((NativeTypeMapper.ManagedTypes.ComplexType, false), ref complexPropertyValues[index]!, item, complexTypeFactory)
+                    Value = new GenericValue((NativeTypeMapper.ManagedTypes.ComplexType, false), ref complexPropertyValues[i]!, item, complexTypeFactory)
                 };
                 _innerMessage.Data.Add(pRecord);
             }
