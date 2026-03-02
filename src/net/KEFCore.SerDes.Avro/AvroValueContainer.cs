@@ -53,34 +53,34 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
         Data = [];
-        foreach (var item in properties)
+        for (int i = 0; i < properties.Length; i++)
         {
-            int index = item.GetIndex();
+            var item = properties[i];
             (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType!);
-            BuildPropertyValue(item, _type.Item1, _type.Item2, ref propertyValues[index]!);
+            BuildPropertyValue(item, _type.Item1, _type.Item2, ref propertyValues[i]!);
             var pRecord = new PropertyDataRecord
             {
                 ManagedType = (int)_type.Item1,
                 SupportNull = _type.Item2,
-                PropertyName = item.Name,
+                PropertyName = properties[i].Name,
                 ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? item.ClrType?.ToAssemblyQualified() : null,
-                Value = propertyValues[index]
+                Value = propertyValues[i]
             };
             Data.Add(pRecord);
         }
         if (complexProperties != null && complexPropertyValues != null)
         {
-            foreach (var item in complexProperties)
+            for (int i = 0; i < complexProperties.Length; i++)
             {
-                int index = item.GetIndex();
-                BuildPropertyValue(item, NativeTypeMapper.ManagedTypes.ComplexType, false, ref complexPropertyValues[index]!, complexTypeFactory);
+                var item = complexProperties[i];
+                BuildPropertyValue(item, NativeTypeMapper.ManagedTypes.ComplexType, false, ref complexPropertyValues[i]!, complexTypeFactory);
                 var pRecord = new PropertyDataRecord
                 {
                     ManagedType = (int)NativeTypeMapper.ManagedTypes.ComplexType,
                     SupportNull = false,
                     PropertyName = item.Name,
                     ClrType = item.ClrType?.ToAssemblyQualified(),
-                    Value = complexPropertyValues[index]
+                    Value = complexPropertyValues[i]
                 };
                 Data.Add(pRecord);
             }

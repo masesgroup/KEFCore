@@ -20,7 +20,6 @@
 
 #nullable enable
 
-using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
