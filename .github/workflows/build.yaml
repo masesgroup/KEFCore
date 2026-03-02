@@ -216,7 +216,7 @@ jobs:
         if: ${{ inputs.UseSpecialSettings == true }}
         shell: cmd
         run: |
-          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }}
+          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
           7z x ${{ github.workspace }}\bin\source.info -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
 
       - name: Save KEFCore net8.0 bin in cache
