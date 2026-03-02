@@ -103,6 +103,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         return _streamsManager;
     }
 
+    private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
     private readonly IKey _primaryKey;
     private readonly IProperty[] _properties;
@@ -113,8 +114,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IEntityType entityType, IKey primaryKey, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory)
+    public KNetStreamsRetriever(IKafkaCluster cluster, IEntityType entityType, IKey primaryKey, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory)
     {
+        _cluster = cluster;
         _entityType = entityType;
         _primaryKey = primaryKey;
         _properties = properties;
@@ -182,7 +184,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KafkaStateHelper.ManageAdded(valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KafkaStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
@@ -217,6 +219,40 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #endif
         }
 
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, CancellationToken cancellationToken = default)
+        {
+            const int maxCycle = 100;
+            const int waitTime = 100;
+            int cycle = 0;
+            try
+            {
+                return GetIterator(keyValueStore, waitTime, maxCycle, ref cycle, cancellationToken);
+            }
+            catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
+            {
+                throw new InvalidOperationException($"Failed to retrieve {nameof(KeyValueIterator<,,,>)} after {cycle * waitTime} ms", isse);
+            }
+        }
+
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, int waitTime, int maxCycle, ref int currentCycle, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                return keyValueStore?.All();
+            }
+            catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
+            {
+                if (isse.Message.Contains(", not RUNNING") && currentCycle < maxCycle)
+                {
+                    Thread.Sleep(waitTime);
+                    currentCycle++;
+                    return GetIterator(keyValueStore, waitTime, maxCycle, ref currentCycle, cancellationToken);
+                }
+                throw;
+            }
+        }
+
         /// <inheritdoc/>
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
@@ -224,7 +260,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _keyValueStore?.All(), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, GetIterator(_keyValueStore), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -238,7 +274,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting async KafkaEnumerator for {_entityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _keyValueStore?.All(), _useEnumeratorWithPrefetch, true);
+            return new KafkaEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, GetIterator(_keyValueStore, cancellationToken), _useEnumeratorWithPrefetch, true, cancellationToken);
         }
     }
 
@@ -253,6 +289,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         private readonly KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? _keyValueIterator = null;
         private readonly IEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _enumerator = null;
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
+        private readonly CancellationToken _cancellationToken = default;
 
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
@@ -265,7 +302,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
         int _cycles = 0;
 #endif
 
-        public KafkaEnumerator(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync)
+        public KafkaEnumerator(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? keyValueIterator, bool useEnumeratorWithPrefetch, bool isAsync, CancellationToken cancellationToken = default)
         {
             _entityType = entityType;
             _properties = properties;
@@ -275,6 +312,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
             if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator();
+            _cancellationToken = cancellationToken;
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -392,6 +430,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 
         public async ValueTask<bool> MoveNextAsync()
         {
+            _cancellationToken.ThrowIfCancellationRequested();
 #if DEBUG_PERFORMANCE
             try
             {

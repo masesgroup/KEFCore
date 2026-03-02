@@ -12,6 +12,11 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      UseSpecialSettings:
+        description: 'Use special settings: not available in forks'
+        required: false
+        default: false
+        type: boolean
       UseLastRepositoryBuildJNet:
         description: 'Use latest NuGet packages from JNet'
         required: false
@@ -193,7 +198,7 @@ jobs:
         shell: cmd
         run: dir .\bin\*nupkg
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: KEFCoreNuGet
           path: .\bin\*nupkg
@@ -206,6 +211,13 @@ jobs:
           Copy-Item .github\workflows\configuration\* -Destination bin\net8.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
+
+      - name: Prepare other files
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
+          7z x ${{ github.workspace }}\bin\source.info -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
 
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v5
@@ -328,20 +340,20 @@ jobs:
 
       - name: Execute ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: coredumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/coredump.*
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -446,7 +458,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -473,7 +485,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -500,7 +512,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -527,7 +539,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -554,7 +566,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -581,7 +593,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -611,7 +623,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
         with:
           if-no-files-found: ignore
@@ -641,7 +653,7 @@ jobs:
         shell: cmd
         run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -649,21 +661,21 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: CrashDumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: .\CrashDumpsDir\*
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: Coredumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/coredump.*
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
@@ -760,7 +772,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -772,7 +784,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -784,7 +796,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -796,7 +808,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -808,7 +820,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -820,7 +832,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -833,7 +845,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
         with:
           if-no-files-found: ignore
@@ -849,7 +861,7 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
         with:
           if-no-files-found: ignore
@@ -857,14 +869,14 @@ jobs:
           path: ${{ github.workspace }}/logfiles/
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: Coredumps_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/coredump.*
           retention-days: 7
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore
           name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
