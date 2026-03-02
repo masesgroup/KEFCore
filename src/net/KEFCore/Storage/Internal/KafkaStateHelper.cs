@@ -16,8 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-//#define DEBUG_PERFORMANCE
-
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 

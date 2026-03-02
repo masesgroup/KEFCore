@@ -68,7 +68,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(LogLevel.Debug)
+                builder.SetMinimumLevel(Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information : LogLevel.Debug)
                        .AddProvider(new DebugOutputLoggerProvider());
             });
 
