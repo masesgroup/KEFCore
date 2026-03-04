@@ -164,6 +164,20 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
+            if (item.Value.KindCase == GenericValue.KindOneofCase.ComplextypeValue) continue;
+            item.Value.GetContent(null, complexTypeFactory: complexTypeFactory, ref value!);
+            props.Add(item.PropertyName, value);
+        }
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+    }
+    /// <inheritdoc/>
+    public IDictionary<string, object?> GetComplexProperties(IComplexTypeConverterFactory? complexTypeFactory)
+    {
+        object? value = null;
+        Dictionary<string, object?> props = [];
+        foreach (var item in _innerMessage.Data)
+        {
+            if (item.Value.KindCase != GenericValue.KindOneofCase.ComplextypeValue) continue;
             item.Value.GetContent(null, complexTypeFactory: complexTypeFactory, ref value!);
             props.Add(item.PropertyName, value);
         }

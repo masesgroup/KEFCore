@@ -159,11 +159,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
         public decimal Percentage { get; set; }
         [Required]
         public TaxInfoExtended TaxInfoExtended { get; set; }
+        [Required]
+        public TaxInfoExtended TaxInfoExtended2 { get; set; }
         public int ExtraValue { get; set; } // used to check index consistency since the method GetIndex of IComplexProperty is zero-based 
     }
 
     [ComplexType]
     public class TaxInfoExtended
+    {
+        public int CodeExtended { get; set; }
+        public decimal PercentageExtended { get; set; }
+        [Required]
+        public NestedTaxInfoExtended NestedTaxInfoExtended { get; set; }
+    }
+
+    [ComplexType]
+    public class NestedTaxInfoExtended
     {
         public int CodeExtended { get; set; }
         public decimal PercentageExtended { get; set; }

@@ -203,16 +203,18 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         return true;
     }
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
     {
         var v = GetV(key);
         if (v == null)
         {
             properties = default!;
+            complexProperties = default!;
             return false;
         }
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
         properties = entityTypeData?.GetProperties(_complexTypeConverterFactory)!;
+        complexProperties = entityTypeData?.GetComplexProperties(_complexTypeConverterFactory)!;
         return true;
     }
 

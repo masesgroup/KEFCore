@@ -292,6 +292,20 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         object? result = null!;
         foreach (var item in Data)
         {
+            if (item.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType) continue;
+            ConvertInnerData(item, ref result, complexTypeFactory: complexTypeFactory);
+            props.Add(item.PropertyName, result);
+        }
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+    }
+
+    public IDictionary<string, object?> GetComplexProperties(IComplexTypeConverterFactory? complexTypeFactory)
+    {
+        Dictionary<string, object?> props = new();
+        object? result = null!;
+        foreach (var item in Data)
+        {
+            if (item.ManagedType != (int)NativeTypeMapper.ManagedTypes.ComplexType) continue;
             ConvertInnerData(item, ref result, complexTypeFactory: complexTypeFactory);
             props.Add(item.PropertyName, result);
         }

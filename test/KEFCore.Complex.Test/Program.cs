@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 {
@@ -101,6 +102,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     {
                                         CodeExtended = (int)i * 3,
                                         PercentageExtended = i / 3,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i*4,
+                                            PercentageExtended = i / 4
+                                        }
+                                    },
+                                    TaxInfoExtended2 = new TaxInfoExtended()
+                                    {
+                                        CodeExtended = (int)i * 5,
+                                        PercentageExtended = i / 5,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
                                     }
                                 }
                             },
@@ -146,6 +162,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     var pageObject = selector.SingleOrDefault();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
+                }
+                
+                if (!context.ManageEvents)
+                {
+                    Thread.Sleep(5000);
                 }
 
                 watch.Restart();
