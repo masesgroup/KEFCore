@@ -104,7 +104,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                         PercentageExtended = i / 3,
                                         NestedTaxInfoExtended = new NestedTaxInfoExtended()
                                         {
-                                            CodeExtended = (int)i*4,
+                                            CodeExtended = (int)i * 4,
                                             PercentageExtended = i / 4
                                         }
                                     },
@@ -163,7 +163,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
                 }
-                
+
                 if (!context.ManageEvents)
                 {
                     Thread.Sleep(5000);
@@ -225,6 +225,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
+                            PricingInfo = new Pricing()
+                            {
+                                Tax = new TaxInfo()
+                                {
+                                    TaxInfoExtended = new TaxInfoExtended()
+                                    {
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                    },
+                                    TaxInfoExtended2 = new TaxInfoExtended()
+                                    {
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                    }
+                                }
+                            },
                             ComplexPosts =
                             [
                                 new()
