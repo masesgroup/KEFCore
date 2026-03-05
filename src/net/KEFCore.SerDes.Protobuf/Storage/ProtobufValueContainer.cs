@@ -129,20 +129,69 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
+            IProperty[]? flattenedProperties = [.. tName.GetFlattenedProperties()];
+            allPropertyValues = new object[flattenedProperties!.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            for (int i = 0; i < _innerMessage.Data.Count; i++)
+            if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
             {
-                var item = _innerMessage.Data[i];
-                if (item == null) continue;
-                IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
-                    ? tName.FindComplexProperty(item.PropertyName!)
-                    : tName.FindProperty(item.PropertyName!);
-                if (prop == null) continue; // a property was removed from the schema 
-                item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
+                for (int i = 0; i < _innerMessage.Data.Count; i++)
+                {
+                    var item = _innerMessage.Data[i];
+                    if (item == null) continue;
+                    IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(item.PropertyName!)
+                        : tName.FindProperty(item.PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema 
+                    item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
+                }
+            }
+            else
+            {
+                Dictionary<IPropertyBase, object> propertiesInfo = new();
+                Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
+                for (int i = 0; i < _innerMessage.Data.Count; i++)
+                {
+                    var item = _innerMessage.Data[i];
+                    if (item == null) continue;
+                    IPropertyBase? prop = item.Value.ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(item.PropertyName!)
+                        : tName.FindProperty(item.PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema
+                    object input = null!;
+                    item.Value.GetContent(prop, complexTypeFactory, ref input!);
+                    if (prop is IComplexProperty complexProperty)
+                    {
+                        complexPropertiesInfo.Add(complexProperty, input);
+                    }
+                    else
+                    {
+                        propertiesInfo.Add(prop, input);
+                    }
+                }
+
+                for (int i = 0; i < flattenedProperties.Length; i++)
+                {
+                    var property = flattenedProperties[i];
+                    if (property.DeclaringType is not IEntityType entityType)
+                    {
+                        if (property.DeclaringType is IComplexType complexType)
+                        {
+                            var obj = complexPropertiesInfo[complexType.ComplexProperty];
+                            var propAccessor = complexType.ClrType.GetProperty(property.Name);
+                            if (propAccessor != null)
+                            {
+                                allPropertyValues[property.GetIndex()] = propAccessor.GetValue(obj)!;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        allPropertyValues[property.GetIndex()] = propertiesInfo[property];
+                    }
+                }
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

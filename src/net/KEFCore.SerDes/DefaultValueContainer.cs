@@ -280,7 +280,8 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
+            IProperty[]? flattenedProperties = [.. tName.GetFlattenedProperties()];
+            allPropertyValues = new object[flattenedProperties!.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
@@ -296,17 +297,67 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
             else
             {
-                for (int i = 0; i < Properties.Length; i++)
+                if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
                 {
-                    IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
-                        ? tName.FindComplexProperty(Properties[i].PropertyName!)
-                        : tName.FindProperty(Properties[i].PropertyName!);
-                    if (prop == null) continue; // a property was removed from the schema
-                    allPropertyValues[i] = Properties[i]?.Value!;
-                    if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
-                        complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                    for (int i = 0; i < Properties.Length; i++)
                     {
-                        complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
+                        IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                            ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                            : tName.FindProperty(Properties[i].PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema
+                        allPropertyValues[i] = Properties[i]?.Value!;
+                        if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                            complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                        {
+                            complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
+                        }
+                    }
+                }
+                else
+                {
+                    Dictionary<IPropertyBase, object> propertiesInfo = new();
+                    Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
+                    for (int i = 0; i < Properties.Length; i++)
+                    {
+                        IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                            ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                            : tName.FindProperty(Properties[i].PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema
+                        if (prop is IComplexProperty complexProperty)
+                        {
+                            var input = Properties[i]?.Value!;
+                            if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                                complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                            {
+                                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
+                            }
+                            complexPropertiesInfo.Add(complexProperty, input!);
+                        }
+                        else
+                        {
+                            propertiesInfo.Add(prop, Properties[i]?.Value!);
+                        }
+                    }
+
+                    for (int i = 0; i < flattenedProperties.Length; i++)
+                    {
+                        var property = flattenedProperties[i];
+                        if (property.DeclaringType is not IEntityType entityType)
+                        {
+                            if (property.DeclaringType is IComplexType complexType)
+                            {
+                                var obj = complexPropertiesInfo[complexType.ComplexProperty];
+                                var propAccessor = complexType.ClrType.GetProperty(property.Name);
+                                if (propAccessor != null)
+                                {
+                                    allPropertyValues[property.GetIndex()] = propAccessor.GetValue(obj)!;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            allPropertyValues[property.GetIndex()] = propertiesInfo[property];
+                        }
                     }
                 }
             }
