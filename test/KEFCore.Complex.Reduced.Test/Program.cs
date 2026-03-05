@@ -111,9 +111,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 try
                 {
                     watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 1);
+                    blog = context.Blogs!.Single(b => b.BlogId == 10);
                     watch.Stop();
                     var code = blog.TaxInfoExtended.CodeExtended;
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
+
+                try
+                {
+                    watch.Restart();
+                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended > 1).Count();
+                    watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
