@@ -50,6 +50,7 @@ public interface IKafkaStreamsRetriever<TKey> : IDisposable where TKey : notnull
     /// </summary>
     /// <param name="key">The key to retrieve</param>
     /// <param name="properties">A <see cref="IDictionary{TKey, TValue}"/> containing the property name and associated value, or <see langword="null"/> otherwise</param>
+    /// <param name="complexProperties">A <see cref="IDictionary{TKey, TValue}"/> containing the complex property name and associated value, or <see langword="null"/> otherwise</param>
     /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
-    bool TryGetProperties(TKey key, out IDictionary<string, object?> properties);
+    bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties);
 }

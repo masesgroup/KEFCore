@@ -250,8 +250,12 @@ public class KafkaDbContext : DbContext
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTimeMs"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(long waitTimeMs = Timeout.Infinite)
     {
+        var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
+        var database = serviceProvider.GetService<IKafkaDatabase>();
+
+        if (database == null) return true;
+
         if (waitTimeMs != Timeout.Infinite && waitTimeMs <= 0) throw new ArgumentException($"Timeout can be the default or shall be greater than 0", nameof(waitTimeMs));
-        var database = this.GetService<IKafkaDatabase>();
         return database.EnsureDatabaseSynchronized(waitTimeMs);
     }
 
