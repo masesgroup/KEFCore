@@ -125,7 +125,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
     }
 
     [Owned]
-    [Table("TaxInfo", Schema = "ComplexTest")]
+    [Table("TaxInfo", Schema = "ReducedComplexTest")]
     public class TaxInfo
     {
         public int TaxInfoId { get; set; }
