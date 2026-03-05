@@ -106,6 +106,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
         public string Url { get; set; }
         public int Rating { get; set; }
 
+        public TaxInfo TaxInfo { get; set; }
+
         [Required]
         public TaxInfoExtended TaxInfoExtended { get; set; }
 
@@ -120,6 +122,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
     {
         public int CodeExtended { get; set; }
         public decimal PercentageExtended { get; set; }
+    }
+
+    [Owned]
+    [Table("TaxInfo", Schema = "ComplexTest")]
+    public class TaxInfo
+    {
+        public int TaxInfoId { get; set; }
+        public char Code { get; set; }
+        public decimal Percentage { get; set; }
     }
 
     public class TaxInfoExtendedConverter : IComplexTypeConverter

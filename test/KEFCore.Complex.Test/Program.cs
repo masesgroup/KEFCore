@@ -166,6 +166,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     Thread.Sleep(5000);
                 }
 
+                BlogComplex blog = null;
+                try
+                {
+                    watch.Restart();
+                    blog = context.Blogs!.Single(b => b.BlogId == 10);
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
+
                 watch.Restart();
                 var post = context.Posts.Single(b => b.BlogId == 2);
                 watch.Stop();
@@ -188,7 +201,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 watch.Stop();
                 ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
-                BlogComplex blog = null;
                 try
                 {
                     watch.Restart();
