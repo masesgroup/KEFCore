@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -45,19 +46,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                 using var context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
+                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
+
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
                     ProgramConfig.ReportString("Process EnsureDeleted");
                     context.Database.EnsureDeleted();
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
+                }
+
+                if (context.Database.EnsureCreated())
+                {
+                    ProgramConfig.ReportString("EnsureCreated created database");
+                }
+                else
+                {
+                    ProgramConfig.ReportString("EnsureCreated does not created database");
                 }
 
                 testWatcher.Start();
@@ -206,7 +210,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(DatabaseName);
             }
             else
             {

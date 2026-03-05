@@ -168,16 +168,18 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     }
 
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
     {
         var v = GetTValue(key);
         if (v == null)
         {
             properties = default!;
+            complexProperties = default!;
             return false;
         }
 
         properties = v?.GetProperties(_complexTypeConverterFactory)!;
+        complexProperties = v?.GetComplexProperties(_complexTypeConverterFactory)!;
         return true;
     }
 

@@ -351,4 +351,28 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
+
+    /// <summary>
+    /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
+    /// </summary>
+    /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
+    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
+    public IDictionary<string, object?> GetComplexProperties(IComplexTypeConverterFactory? complexTypeFactory)
+    {
+        Dictionary<string, object?> props = [];
+        if (Data == null && Properties == null) { return props; }
+
+        object? value;
+        foreach (var item in Properties!)
+        {
+            if (item.ManagedType != NativeTypeMapper.ManagedTypes.ComplexType || complexTypeFactory == null) continue;
+            value = item.Value!;
+            if (complexTypeFactory.TryGet(item.ClrType!, out IComplexTypeConverter? complexTypeHook))
+            {
+                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
+            }
+            props.Add(item.PropertyName!, value);
+        }
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+    }
 }

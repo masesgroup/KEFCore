@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 {
@@ -46,10 +47,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (!ProgramConfig.Config.UseInMemoryProvider)
-                {
-                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
-                }
+                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
@@ -101,6 +99,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     {
                                         CodeExtended = (int)i * 3,
                                         PercentageExtended = i / 3,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 4,
+                                            PercentageExtended = i / 4
+                                        }
+                                    },
+                                    TaxInfoExtended2 = new TaxInfoExtended()
+                                    {
+                                        CodeExtended = (int)i * 5,
+                                        PercentageExtended = i / 5,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
                                     }
                                 }
                             },
@@ -146,6 +159,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     var pageObject = selector.SingleOrDefault();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
+                }
+
+                if (!context.ManageEvents)
+                {
+                    Thread.Sleep(5000);
                 }
 
                 watch.Restart();
@@ -204,6 +222,32 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
                             BooleanValue = i % 2 == 0,
+                            PricingInfo = new Pricing()
+                            {
+                                Tax = new TaxInfo()
+                                {
+                                    TaxInfoExtended = new TaxInfoExtended()
+                                    {
+                                        CodeExtended = (int)i * 3,
+                                        PercentageExtended = i / 3,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 4,
+                                            PercentageExtended = i / 4
+                                        }
+                                    },
+                                    TaxInfoExtended2 = new TaxInfoExtended()
+                                    {
+                                        CodeExtended = (int)i * 5,
+                                        PercentageExtended = i / 5,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
+                                    }
+                                }
+                            },
                             ComplexPosts =
                             [
                                 new()
@@ -279,7 +323,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(DatabaseName);
             }
             else
             {
