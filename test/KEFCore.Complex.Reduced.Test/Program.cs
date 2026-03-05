@@ -24,7 +24,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Complex
+namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
 {
     partial class Program
     {

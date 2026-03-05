@@ -2,11 +2,11 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Complex</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Complex</RootNamespace>
-		<Title>EntityFrameworkCore KNet Complex Test</Title>
-		<Description>EntityFrameworkCore KNet Test.Complex</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Test.Complex</Product>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.ReducedComplex</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.ReducedComplex</RootNamespace>
+		<Title>EntityFrameworkCore KNet ReducedComplex Test</Title>
+		<Description>EntityFrameworkCore KNet Test.ReducedComplex</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.ReducedComplex</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
