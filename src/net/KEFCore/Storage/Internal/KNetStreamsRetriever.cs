@@ -39,17 +39,17 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<EventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
+    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
-        private readonly Action<EventChange> _pushChanges = pushChanges;
+        private readonly Action<FreshEventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
         private readonly IEntityType _entityType = entityType;
         private readonly IKey _primaryKey = primaryKey;
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke(new EventChange(_manager, _entityType, _primaryKey, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, _primaryKey, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
             return Record.DateTime;
         }
     }
@@ -77,9 +77,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = (enqueuer, manager, entity, key, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity, key),
-            CreateConsumed = (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
-            CreateMaterialized = Materialized<TKey, TValue, TJVMKey, TJVMValue>.As,
+            CreateTimestampExtractor = static (enqueuer, manager, entity, key, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity, key),
+            CreateConsumed = static (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
+            CreateMaterialized = static (supplier) => Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
             CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized)
                                                                                                   : builder.Table(topicName, materialized),
@@ -90,6 +90,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 streams.SetUncaughtExceptionHandler(errorHandler);
                 streams.SetStateListener(stateListener);
             },
+            GetStoredData = static (streams, storageId, _) => GetStoredData(streams, storageId),
             Start = static (streams) => streams.Start(),
             Pause = static (streams) => streams.Pause(),
             Resume = static (streams) => streams.Resume(),
@@ -184,6 +185,16 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     {
         var input = (Tuple<TKey, TValue>)data;
         KafkaStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+    }
+
+    static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
+    {
+        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+
+        foreach (var item in keyValueStore?.All())
+        {
+            yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+        }
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
