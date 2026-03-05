@@ -228,11 +228,23 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                 {
                                     TaxInfoExtended = new TaxInfoExtended()
                                     {
+                                        CodeExtended = (int)i * 3,
+                                        PercentageExtended = i / 3,
                                         NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 4,
+                                            PercentageExtended = i / 4
+                                        }
                                     },
                                     TaxInfoExtended2 = new TaxInfoExtended()
                                     {
+                                        CodeExtended = (int)i * 5,
+                                        PercentageExtended = i / 5,
                                         NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
                                     }
                                 }
                             },
