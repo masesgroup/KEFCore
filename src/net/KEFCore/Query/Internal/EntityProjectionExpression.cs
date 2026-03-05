@@ -112,7 +112,15 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
     {
         if (property.DeclaringType is not IEntityType entityType)
         {
-            if (EntityType != property.DeclaringType)
+            if (property.DeclaringType is IComplexType complexType)
+            {
+                if (EntityType != complexType.ContainingEntityType)
+                {
+                    throw new InvalidOperationException(
+                        KafkaStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
+                }
+            }
+            else if (EntityType != property.DeclaringType)
             {
                 throw new InvalidOperationException(
                     KafkaStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
