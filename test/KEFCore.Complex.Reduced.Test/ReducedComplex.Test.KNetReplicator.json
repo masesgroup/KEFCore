@@ -1,0 +1,7 @@
+{
+  "DatabaseName": "TestDBReducedComplex",
+  "UseCompactedReplicator": true,
+  "BootstrapServers": "192.168.1.114:9092",
+  "NumberOfElements": 10,
+  "NumberOfExtraElements": 1
+}

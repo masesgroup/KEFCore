@@ -47,10 +47,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (!ProgramConfig.Config.UseInMemoryProvider)
-                {
-                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
-                }
+                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
@@ -314,7 +311,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(DatabaseName);
             }
             else
             {

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Complex</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Complex</RootNamespace>
+		<Title>EntityFrameworkCore KNet Complex Test</Title>
+		<Description>EntityFrameworkCore KNet Test.Complex</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Complex</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="ReducedComplexTest.Avro.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ReducedComplexTest.Avro.KNetStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ReducedComplexTest.KNetStreams.Raw.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ReducedComplexTest.Protobuf.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ReducedComplexTest.Protobuf.KNetStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ReducedComplex.Test.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

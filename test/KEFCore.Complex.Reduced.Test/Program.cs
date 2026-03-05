@@ -17,20 +17,17 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 {
     partial class Program
     {
-        static BloggingContext context = null;
-
         static void Main(string[] args)
         {
             ProgramConfig.LoadConfig(args);
@@ -39,6 +36,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
         static void ExecuteTests()
         {
+            BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
 
@@ -46,21 +44,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             {
                 globalWatcher.Start();
                 context = new BloggingContext();
+
                 ProgramConfig.Config.ApplyOnContext(context);
 
                 context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
-
-                if (ProgramConfig.Config.ManageEvents)
-                {
-                    context.ChangeTracker.Tracked += (sender, e) =>
-                    {
-
-                    };
-                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
-                    {
-
-                    };
-                }
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
@@ -69,7 +56,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
                 }
 
-                if (context.Database.EnsureCreated())
+                if (context.Database.EnsureCreated()) // call always for initialization
                 {
                     ProgramConfig.ReportString("EnsureCreated created database");
                 }
@@ -83,20 +70,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Start();
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
+                    for (uint i = 0; i < ProgramConfig.Config.NumberOfElements; i++)
                     {
-                        context.Add(new Blog
+                        context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts =
-                            [
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            ],
-                            Rating = i,
+                            TaxInfoExtended = new TaxInfoExtended()
+                            {
+                                CodeExtended = (int)i * 3,
+                                PercentageExtended = i / 3
+                            },                 
+                            Rating = (int)i,
                         });
                     }
                     watch.Stop();
@@ -118,46 +102,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     }
                 }
 
-                if (ProgramConfig.Config.UseModelBuilder)
+                if (!context.ManageEvents)
                 {
-                    watch.Restart();
-                    var selector = (from op in context.Blogs
-                                    join pg in context.Posts on op.BlogId equals pg.BlogId
-                                    where pg.BlogId == op.BlogId
-                                    select new { pg, op });
-                    var pageObject = selector.FirstOrDefault();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
+                    Thread.Sleep(5000);
                 }
 
-                watch.Restart();
-                var post = context.Posts.Single(b => b.BlogId == 2);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
-                try
-                {
-                    watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 1);
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
-                }
-                catch
-                {
-                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
-                }
-
-                watch.Restart();
-                var all = context.Posts.All((o) => true);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
-
-                Blog blog = null;
+                BlogComplex blog = null;
                 try
                 {
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
+                    var code = blog.TaxInfoExtended.CodeExtended;
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
@@ -168,24 +124,25 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Restart();
-                    context.Remove(post);
                     context.Remove(blog);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
 
                     watch.Restart();
+                    context.SaveChanges();
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+                    watch.Restart();
                     for (int i = ProgramConfig.Config.NumberOfElements; i < ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements; i++)
                     {
-                        context.Add(new Blog
+                        context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
+                            TaxInfoExtended = new TaxInfoExtended()
                             {
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
+                                CodeExtended = (int)i * 3,
+                                PercentageExtended = i / 3
                             },
                             Rating = i,
                         });
@@ -196,26 +153,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
-                    var res = context.WaitForSynchronization();
-                    watch.Stop();
-                    if (res.HasValue && res.Value)
-                    {
-                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString($"Local store is not synchronized.");
-                    }
-
-                    var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
-                    watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == position);
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
-                var value = context.Blogs.AsQueryable().ToQueryString();
+
+                try
+                {
+                    watch.Restart();
+                    blog = context.Blogs!.Single(b => b.BlogId == 101);
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
             }
             catch (Exception ex)
             {
@@ -233,8 +183,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     public class BloggingContext : TestContext
     {
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<BlogComplex> Blogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -252,7 +201,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
-            modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+            modelBuilder.Entity<BlogComplex>().HasKey(c => new { c.BlogId, c.Rating });
         }
     }
 }
