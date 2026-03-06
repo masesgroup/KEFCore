@@ -259,6 +259,24 @@ public class KafkaDbContext : DbContext
         return database.EnsureDatabaseSynchronized(waitTimeMs);
     }
 
+    /// <summary>
+    /// Resets the Apache Kafka streams application in use
+    /// </summary>
+    /// <remarks>Use this method with cautions</remarks>
+    public void ResetStreams()
+    {
+        var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
+        var clusterCache = serviceProvider.GetService<IKafkaClusterCache>();
+        var options = serviceProvider.GetService<IDbContextOptions>();
+
+        if (clusterCache == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IKafkaClusterCache)} service");
+        if (options == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IDbContextOptions)} service");
+
+        var cluster = clusterCache.GetCluster(options);
+
+        cluster?.ResetStreams();
+    }
+
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

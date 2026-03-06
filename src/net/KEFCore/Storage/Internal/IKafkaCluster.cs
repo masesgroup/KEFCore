@@ -58,6 +58,10 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }
     /// <summary>
+    /// Resets the Apache Kafka streams application associated to this <see cref="IKafkaCluster"/> instance
+    /// </summary>
+    void ResetStreams();
+    /// <summary>
     /// Execute the <see cref="IKafkaDatabase.EnsureDatabaseDeleted"/>
     /// </summary>
     bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
