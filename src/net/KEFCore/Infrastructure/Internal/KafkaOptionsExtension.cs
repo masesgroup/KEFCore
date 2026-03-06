@@ -551,17 +551,19 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     /// <inheritdoc/>
     public void Initialize(IDbContextOptions options)
     {
-        throw new NotImplementedException();
+        var kafkaOptions = options.FindExtension<KafkaOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+
+        if (kafkaOptions?.ClusterId != ClusterId)
+        {
+            throw new InvalidOperationException(
+                $"Cannot reuse internal service provider: ClusterId mismatch " +
+                $"(expected '{ClusterId}', got '{kafkaOptions?.ClusterId}')");
+        }
     }
 
-    private sealed class ExtensionInfo : DbContextOptionsExtensionInfo
+    private sealed class ExtensionInfo(IDbContextOptionsExtension extension) : DbContextOptionsExtensionInfo(extension)
     {
         private string? _logFragment;
-
-        public ExtensionInfo(IDbContextOptionsExtension extension)
-            : base(extension)
-        {
-        }
 
         private new KafkaOptionsExtension Extension
             => (KafkaOptionsExtension)base.Extension;
@@ -577,8 +579,30 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
                 {
                     var builder = new System.Text.StringBuilder();
 
-                    builder.Append("DataBaseName=").Append(Extension._topicPrefix).Append(' ');
-
+                    builder.Append("KeySerDesSelectorType=").Append(Extension._keySerDesSelectorType).Append(' ');
+                    builder.Append("ValueSerDesSelectorType=").Append(Extension._valueSerDesSelectorType).Append(' ');
+                    builder.Append("ValueContainerType=").Append(Extension._valueContainerType).Append(' ');
+                    builder.Append("UseNameMatching=").Append(Extension._useNameMatching).Append(' ');
+                    builder.Append("TopicPrefix=").Append(Extension._topicPrefix).Append(' ');
+                    builder.Append("ApplicationId=").Append(Extension._applicationId).Append(' ');
+                    builder.Append("BootstrapServers=").Append(Extension._bootstrapServers).Append(' ');
+                    builder.Append("UseDeletePolicyForTopic=").Append(Extension._useDeletePolicyForTopic).Append(' ');
+                    builder.Append("UseCompactedReplicator=").Append(Extension._useCompactedReplicator).Append(' ');
+                    builder.Append("UseKNetStreams=").Append(Extension._useKNetStreams).Append(' ');
+                    builder.Append("UseGlobalTable=").Append(Extension._useGlobalTable).Append(' ');
+                    builder.Append("UsePersistentStorage=").Append(Extension._usePersistentStorage).Append(' ');
+                    builder.Append("UseEnumeratorWithPrefetch=").Append(Extension._useEnumeratorWithPrefetch).Append(' ');
+                    builder.Append("UseByteBufferDataTransfer=").Append(Extension._useByteBufferDataTransfer).Append(' ');
+                    builder.Append("DefaultNumPartitions=").Append(Extension._defaultNumPartitions).Append(' ');
+                    builder.Append("DefaultReplicationFactor=").Append(Extension._defaultReplicationFactor).Append(' ');
+                    builder.Append("DefaultConsumerInstances=").Append(Extension._defaultConsumerInstances).Append(' ');
+                    builder.Append("ConsumerConfigBuilder=").Append(Extension._consumerConfigBuilder?.ToString()).Append(' ');
+                    builder.Append("ProducerConfigBuilder=").Append(Extension._producerConfigBuilder?.ToString()).Append(' ');
+                    builder.Append("StreamsConfigBuilder=").Append(Extension._streamsConfigBuilder?.ToString()).Append(' ');
+                    builder.Append("TopicConfigBuilder=").Append(Extension._topicConfigBuilder?.ToString()).Append(' ');
+                    builder.Append("ManageEvents=").Append(Extension._manageEvents).Append(' ');
+                    builder.Append("ReadOnlyMode=").Append(Extension._readOnlyMode).Append(' ');
+                    builder.Append("DefaultSynchronizationTimeout=").Append(Extension._defaultSynchronizationTimeout).Append(' ');
                     _logFragment = builder.ToString();
                 }
 
@@ -587,14 +611,14 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         }
 
         public override int GetServiceProviderHashCode()
-            => Extension._bootstrapServers?.GetHashCode() ?? 0;
+            => Extension.ClusterId?.GetHashCode() ?? 0;
 
         public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other)
             => other is ExtensionInfo otherInfo
-                && Extension._bootstrapServers == otherInfo.Extension._bootstrapServers;
+                && Extension.ClusterId == otherInfo.Extension.ClusterId;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
-            => debugInfo["KafkaDatabase:BootstrapServers"]
-                = (Extension._bootstrapServers?.GetHashCode() ?? 0).ToString(CultureInfo.InvariantCulture);
+            => debugInfo["KafkaDatabase:ClusterId"]
+                = (Extension.ClusterId?.GetHashCode() ?? 0).ToString(CultureInfo.InvariantCulture);
     }
 }
