@@ -20,7 +20,7 @@ on:
       ExecuteOnLargerJDKSet:
         description: 'Executes tests on more JDK'
         required: false
-        default: false
+        default: true
         type: boolean
       UseSpecialSettings:
         description: 'Use special settings: not available in forks'

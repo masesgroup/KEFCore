@@ -214,7 +214,7 @@ jobs:
 
   # prepare matrix info
   prepare_matrix_data:
-    needs: build
+    needs: build_windows
     runs-on: ubuntu-latest
     outputs:
       matrix_jdk_vendor: ${{ steps.set-jdk-version.outputs.matrix_jdk_vendor || steps.set-jdk-version-ext.outputs.matrix_jdk_vendor }}
