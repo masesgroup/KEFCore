@@ -1,6 +1,6 @@
 {
   "UseAvro": true,
-  "DatabaseName": "TestDBBenchmarkAvro",
+  "TopicPrefix": "TestDBBenchmarkAvro",
   "UseKNetStreams": false,
   "BootstrapServers": "192.168.0.101:9092",
   "NumberOfExecutions": 10

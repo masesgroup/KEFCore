@@ -74,33 +74,32 @@ public static class KafkaDbContextOptionsExtensions
     /// </remarks>
     /// <param name="optionsBuilder">The builder being used to configure the context.</param>
     /// <param name="applicationId">
-    ///     The name of the application will use <paramref name="databaseName"/>. This allows the scope of the Apache Kafka cluster to be controlled
-    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
-    /// </param>
-    /// <param name="databaseName">
-    ///     The name of the Apache Kafka cluster. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     The name of the application will use <paramref name="topicPrefix"/>. This allows the scope of the Apache Kafka cluster to be controlled
     ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="bootstrapServers">
     ///     The bootstrap servers of the Kafka cluster.
+    /// </param>
+    /// <param name="topicPrefix">
+    ///     The name of the Apache Kafka cluster. This allows the scope of the Apache Kafka cluster to be controlled
+    ///     independently of the context. The Apache Kafka cluster is shared anywhere the same name is used.
     /// </param>
     /// <param name="kafkaOptionsAction">An optional action to allow additional Kafka specific configuration.</param>
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder UseKafkaCluster(
         this DbContextOptionsBuilder optionsBuilder,
         string? applicationId,
-        string databaseName,
         string bootstrapServers,
+        string topicPrefix,
         Action<KafkaDbContextOptionsBuilder>? kafkaOptionsAction = null)
     {
         Check.NotNull(optionsBuilder, nameof(optionsBuilder));
-        Check.NotEmpty(databaseName, nameof(databaseName));
         Check.NotEmpty(bootstrapServers, nameof(bootstrapServers));
 
         var extension = optionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
             ?? new KafkaOptionsExtension();
 
-        extension = extension.WithApplicationId(applicationId).WithDatabaseName(databaseName).WithBootstrapServers(bootstrapServers);
+        extension = extension.WithApplicationId(applicationId).WithBootstrapServers(bootstrapServers).WithTopicPrefix(topicPrefix);
 
         ConfigureWarnings(optionsBuilder);
 

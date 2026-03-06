@@ -18,7 +18,6 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -41,8 +40,8 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     Type? ValueContainerType { get; }
     /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
     bool UseNameMatching { get; }
-    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
-    string? DatabaseName { get; }
+    /// <inheritdoc cref="KafkaDbContext.TopicPrefix"/>
+    string? TopicPrefix { get; }
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     string? ApplicationId { get; }
     /// <inheritdoc cref="KafkaDbContext.BootstrapServers"/>

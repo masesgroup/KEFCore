@@ -201,7 +201,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
             }
             else
             {

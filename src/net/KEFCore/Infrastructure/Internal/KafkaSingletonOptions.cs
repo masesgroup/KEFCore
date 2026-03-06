@@ -41,7 +41,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             ValueSerDesSelectorType = kafkaOptions.ValueSerDesSelectorType;
             ValueContainerType = kafkaOptions.ValueContainerType;
             UseNameMatching = kafkaOptions.UseNameMatching;
-            DatabaseName = kafkaOptions.DatabaseName;
+            TopicPrefix = kafkaOptions.TopicPrefix;
             ApplicationId = kafkaOptions.ApplicationId;
             BootstrapServers = kafkaOptions.BootstrapServers;
             UseDeletePolicyForTopic = kafkaOptions.UseDeletePolicyForTopic;
@@ -86,7 +86,7 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseNameMatching { get; private set; }
     /// <inheritdoc/>
-    public virtual string? DatabaseName { get; private set; }
+    public virtual string? TopicPrefix { get; private set; }
     /// <inheritdoc/>
     public virtual string? ApplicationId { get; private set; }
     /// <inheritdoc/>
