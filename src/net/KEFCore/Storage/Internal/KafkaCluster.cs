@@ -115,9 +115,9 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => _complexTypeConverterFactory;
 
-    ArrayList<Java.Lang.String> ResetStream(out System.Collections.Generic.IList<string> topics)
+    ArrayList<Java.Lang.String> TopicsFromModel(out System.Collections.Generic.IList<string> topics)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking ResetStream");
+        _infrastructureLogger.Logger.LogDebug("Invoking TopicsFromModel");
 
         var coll = new ArrayList<Java.Lang.String>();
         topics = new System.Collections.Generic.List<string>();
@@ -136,7 +136,14 @@ public class KafkaCluster : IKafkaCluster
             coll.Add(topic);
         }
 
-        _infrastructureLogger.Logger.LogInformation("Identfied for model {Model} the following topics {Topics}", _designModel, string.Join(", ", topics));
+        _infrastructureLogger.Logger.LogDebug("Identified from model {Model} the following topics {Topics}", _designModel, string.Join(", ", topics));
+
+        return coll;
+    }
+
+    void ResetStream(System.Collections.Generic.IList<string> topics)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking ResetStream");
 
         if (!Options.UseCompactedReplicator)
         {
@@ -151,15 +158,21 @@ public class KafkaCluster : IKafkaCluster
                 throw;
             }
         }
+    }
 
-        return coll;
+    /// <inheritdoc/>
+    public void ResetStreams()
+    {
+        _ = TopicsFromModel(out var topics);
+        ResetStream(topics);
     }
 
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking EnsureDeleted");
-        var coll = ResetStream(out var topics);
+        var coll = TopicsFromModel(out var topics);
+        ResetStream(topics);
 
         try
         {
@@ -196,7 +209,11 @@ public class KafkaCluster : IKafkaCluster
     public virtual bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
-        var coll = ResetStream(out var topics);
+        var coll = TopicsFromModel(out var topics);
+        if (!Options.UsePersistentStorage)
+        {
+            ResetStream(topics);
+        }
 
         try
         {
@@ -492,16 +509,16 @@ public class KafkaCluster : IKafkaCluster
         {
             tableSw.Start();
 #endif
-            EnsureTable(entityType);
+        EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
-            if (_tables != null && _tables.TryGetValue(key, out var table))
-            {
-                return table.ValueBuffers;
-            }
-            throw new InvalidOperationException("No table available");
+        var key = _useNameMatching ? (object)entityType.Name : entityType;
+        if (_tables != null && _tables.TryGetValue(key, out var table))
+        {
+            return table.ValueBuffers;
+        }
+        throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally
