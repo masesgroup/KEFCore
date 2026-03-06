@@ -26,6 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.KNet.Common;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
@@ -299,15 +300,12 @@ public class KafkaCluster : IKafkaCluster
             Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
                         ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
                         : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
-            Options.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
 
-            Map<Java.Lang.String, Java.Lang.String> map = Options.TopicConfig.ToMap();
-
-            return CreateTopicForEntity(et, topicName, requestedPartitions, requestedReplicationFactor, map, 100, 100, 0);
+            return CreateTopicForEntity(et, topicName, requestedPartitions, requestedReplicationFactor, Options.TopicConfig.ToMap(), 100, 100, 0);
         });
     }
 
-    private string CreateTopicForEntity(IEntityType entityType, string topicName, int requestedPartitions, int requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> map, int waitTime, int maxCycles, int cycle)
+    private string CreateTopicForEntity(IEntityType entityType, string topicName, int requestedPartitions, short requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> map, int waitTime, int maxCycles, int cycle)
     {
         _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
         try

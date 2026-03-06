@@ -81,7 +81,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             finally { future?.Dispose(); result?.Dispose(); }
         }
 
-        public void CreateTopic(string topicName, int requestedPartitions, int requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
+        public void CreateTopic(string topicName, int requestedPartitions, short requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
             Set<NewTopic> coll = default;
             CreateTopicsResult result = default;
@@ -89,7 +89,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             NewTopic topic = default;
             try
             {
-                topic = new NewTopic(topicName, requestedPartitions, requestedReplicationFactor);
+                topic = new NewTopic((Java.Lang.String)topicName, requestedPartitions, requestedReplicationFactor);
                 topic.Configs(options);
                 coll = Collections.Singleton(topic);
                 result = _kafkaAdminClient?.CreateTopics(coll);

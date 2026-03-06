@@ -38,6 +38,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingletonOptions
 {
+    private string _clusterId = null!;
     private Type _keySerDesSelectorType = DefaultKEFCoreSerDes.DefaultKeySerialization;
     private Type _valueSerDesSelectorType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     private Type _valueContainerType = DefaultKEFCoreSerDes.DefaultValueContainer;
@@ -107,7 +108,18 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     /// <summary>
     /// Internal property
     /// </summary>
-    public virtual string ClusterId => KafkaClusterAdmin.Create(_bootstrapServers).ClusterId ?? _bootstrapServers!;
+    public virtual string ClusterId
+    {
+        get
+        {
+            lock(this)
+            {
+                _clusterId ??= KafkaClusterAdmin.Create(_bootstrapServers).ClusterId;
+                if (_clusterId == null) throw new InvalidOperationException($"ClusterId currently not available from {_bootstrapServers}");
+                return _clusterId;
+            }
+        }
+    }
     /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
     public virtual Type KeySerDesSelectorType => _keySerDesSelectorType;
     /// <inheritdoc cref="KafkaDbContext.ValueSerDesSelectorType"/>

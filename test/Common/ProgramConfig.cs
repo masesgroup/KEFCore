@@ -116,6 +116,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 streamConfig = StreamsConfigBuilder.Create();
                 streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+                context.TopicConfig = KafkaDbContext.DefaultTopicConfig;
+                context.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
             }
 
             context.TopicPrefix = databaseName;
