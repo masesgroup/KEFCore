@@ -26,6 +26,7 @@ using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
+using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -213,12 +214,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
                         using var offsetResultFuture = listOffsetResult.All();
                         var offsetResult = offsetResultFuture.Get();
-                        foreach (var offsetResultItem in offsetResult.EntrySet())
+                        foreach (var offsetResultItem in offsetResult.EntrySet()
+                            .Where(o => o.Key.Topic().Equals(topicName)))
                         {
-                            if (offsetResultItem.Key.Topic().Equals(topicName))
-                            {
-                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
-                            }
+                            dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
                         }
                         break;
                     }
