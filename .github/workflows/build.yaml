@@ -12,6 +12,16 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      ExecuteOnMoreOSes:
+        description: 'Test on more OSes'
+        required: false
+        default: false
+        type: boolean
+      ExecuteOnLargerJDKSet:
+        description: 'Executes tests on more JDK'
+        required: false
+        default: false
+        type: boolean
       UseSpecialSettings:
         description: 'Use special settings: not available in forks'
         required: false
@@ -127,6 +137,8 @@ jobs:
       id-token: write
     uses: ./.github/workflows/build_common.yaml
     with:
+      ExecuteOnMoreOSes: ${{ github.event_name == 'schedule' }}
+      ExecuteOnLargerJDKSet: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true
       UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
       EnableWindowsTests: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}

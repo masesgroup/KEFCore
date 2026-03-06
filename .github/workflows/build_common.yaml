@@ -7,6 +7,16 @@ name: Common build workflow
 on:
   workflow_call:
     inputs:
+      ExecuteOnMoreOSes:
+        description: 'Executes tests on more Oses'
+        required: false
+        default: false
+        type: boolean
+      ExecuteOnLargerJDKSet:
+        description: 'Executes tests on more JDK'
+        required: false
+        default: false
+        type: boolean
       EnableLinuxTests:
         description: 'Enable tests in Linux'
         required: false
@@ -201,10 +211,45 @@ jobs:
           enableCrossOsArchive: true
           path: ./bin/net10.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net10.0_bin_${{ github.sha }}
- 
+
+  # prepare matrix info
+  prepare_matrix_data:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      matrix_jdk_vendor: ${{ steps.set-jdk-version.outputs.matrix_jdk_vendor || steps.set-jdk-version-ext.outputs.matrix_jdk_vendor }}
+      matrix_win_os: ${{ steps.set-matrix-win-os.outputs.matrix_win || steps.set-matrix-win-os-ext.outputs.matrix_win }}
+      matrix_linux_os: ${{ steps.set-matrix-linux-os.outputs.matrix_linux || steps.set-matrix-linux-os-ext.outputs.matrix_linux }}
+      matrix_mac_os: ${{ steps.set-matrix-mac-os.outputs.matrix_mac || steps.set-matrix-mac-os-ext.outputs.matrix_mac }}
+    steps:
+      - id: set-jdk-version
+        if: ${{ inputs.ExecuteOnLargerJDKSet == false }}
+        run: echo "matrix_jdk_vendor=[ 'temurin' ]" >> $GITHUB_OUTPUT
+      - id: set-jdk-version-ext
+        if: ${{ inputs.ExecuteOnLargerJDKSet == true }}
+        run: echo "matrix_jdk_vendor=[ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]" >> $GITHUB_OUTPUT
+      - id: set-matrix-win-os
+        if: ${{ inputs.ExecuteOnMoreOSes == false }}
+        run: echo "matrix_win=[ 'windows-2025' ]" >> $GITHUB_OUTPUT
+      - id: set-matrix-win-os-ext
+        if: ${{ inputs.ExecuteOnMoreOSes == true }}
+        run: echo "matrix_win=[ 'windows-2022', 'windows-2025', 'windows-11-arm' ]" >> $GITHUB_OUTPUT
+      - id: set-matrix-linux-os
+        if: ${{ inputs.ExecuteOnMoreOSes == false }}
+        run: echo "matrix_linux=['ubuntu-24.04']" >> $GITHUB_OUTPUT
+      - id: set-matrix-linux-os-ext
+        if: ${{ inputs.ExecuteOnMoreOSes == true }}
+        run: echo "matrix_linux=[ 'ubuntu-22.04', 'ubuntu-22.04-arm', 'ubuntu-24.04', 'ubuntu-24.04-arm' ]" >> $GITHUB_OUTPUT
+      - id: set-matrix-mac-os
+        if: ${{ inputs.ExecuteOnMoreOSes == false }}
+        run: echo "matrix_mac=[ 'macos-15' ]" >> $GITHUB_OUTPUT
+      - id: set-matrix-mac-os-ext
+        if: ${{ inputs.ExecuteOnMoreOSes == true }}
+        run: echo "matrix_mac=[ 'macos-14', 'macos-15', 'macos-26' ]" >> $GITHUB_OUTPUT
+
   execute_tests_linux:
     if: ${{ inputs.EnableLinuxTests == true }}
-    needs: build_windows
+    needs: prepare_matrix_data
     services:
       kafka:
         # Private registry image
@@ -222,9 +267,9 @@ jobs:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'ubuntu-latest' ]
+        os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_linux_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
-        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
+        jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
@@ -325,14 +370,14 @@ jobs:
          
   execute_tests_windows:
     if: ${{ inputs.EnableWindowsTests == true }}
-    needs: build_windows
+    needs: prepare_matrix_data
     strategy:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'windows-2022' ]
+        os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_win_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
-        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
+        jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
@@ -648,14 +693,14 @@ jobs:
 
   execute_tests_macos:
     if: ${{ inputs.EnableWindowsTests == true }}
-    needs: build_windows
+    needs: prepare_matrix_data
     strategy:
       fail-fast: false
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro' ]
-        os: [ 'macos-14' ]
+        os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_mac_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
-        jdk_vendor: [ 'temurin', 'zulu', 'microsoft', 'corretto', 'oracle' ]
+        jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
         
     runs-on: ${{ matrix.os }}
