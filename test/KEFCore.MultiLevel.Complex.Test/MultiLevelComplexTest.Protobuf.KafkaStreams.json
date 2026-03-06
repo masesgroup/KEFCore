@@ -1,0 +1,7 @@
+{
+  "UseProtobuf": true,
+  "DatabaseName": "TestDBComplexProtobuf",
+  "UseKNetStreams": false,
+  "BootstrapServers": "192.168.1.114:9092",
+  "NumberOfExecutions": 10
+}

@@ -17,14 +17,14 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Complex
+namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
 {
     partial class Program
     {
@@ -98,12 +98,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     TaxInfoExtended = new TaxInfoExtended()
                                     {
                                         CodeExtended = (int)i * 3,
-                                        PercentageExtended = i / 3
+                                        PercentageExtended = i / 3,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 4,
+                                            PercentageExtended = i / 4
+                                        }
                                     },
                                     TaxInfoExtended2 = new TaxInfoExtended()
                                     {
                                         CodeExtended = (int)i * 5,
-                                        PercentageExtended = i / 5
+                                        PercentageExtended = i / 5,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
                                     }
                                 }
                             },
@@ -231,12 +241,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                                     TaxInfoExtended = new TaxInfoExtended()
                                     {
                                         CodeExtended = (int)i * 3,
-                                        PercentageExtended = i / 3
+                                        PercentageExtended = i / 3,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 4,
+                                            PercentageExtended = i / 4
+                                        }
                                     },
                                     TaxInfoExtended2 = new TaxInfoExtended()
                                     {
                                         CodeExtended = (int)i * 5,
-                                        PercentageExtended = i / 5
+                                        PercentageExtended = i / 5,
+                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
+                                        {
+                                            CodeExtended = (int)i * 7,
+                                            PercentageExtended = i / 7
+                                        }
                                     }
                                 }
                             },
