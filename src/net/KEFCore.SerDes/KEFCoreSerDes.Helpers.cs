@@ -472,7 +472,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
 
             var ccType = typeof(LocalEntityExtractor<,,,,,>);
             var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, typeof(byte[]), typeof(byte[]), fullKeySerializer, fullValueContainerSerializer);
-            var methodInfo = extractorType.GetMethod("GetEntity");
+            var methodInfo = extractorType.GetMethod(nameof(LocalEntityExtractor<,,,,,>.GetEntity));
             var extractor = Activator.CreateInstance(extractorType);
             return methodInfo?.Invoke(extractor, new object[] { topic, recordKey, recordValue, throwUnmatch })!;
         }
