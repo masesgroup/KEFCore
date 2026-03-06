@@ -130,7 +130,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void CheckTopics(Collection<Java.Lang.String> coll, bool readOnlyMode, bool manageEvents, bool useCompactedReplicator,  IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
+        public void CheckTopics(Collection<Java.Lang.String> coll, bool readOnlyMode, bool manageEvents, bool useCompactedReplicator, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (item.Key.Equals(topicName))
                     {
-                        HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
+                        HashMap<TopicPartition, OffsetSpec> hashMap = new();
                         foreach (var partition in item.Value.Partitions())
                         {
                             var partitionIndex = partition.Partition();
@@ -214,10 +214,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
                         using var offsetResultFuture = listOffsetResult.All();
                         var offsetResult = offsetResultFuture.Get();
-                        foreach (var offsetResultItem in offsetResult.EntrySet()
-                            .Where(o => o.Key.Topic().Equals(topicName)))
+                        foreach (var offsetResultItem in offsetResult.EntrySet())
                         {
-                            dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                            if (offsetResultItem.Key.Topic().Equals(topicName))
+                            {
+                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                            }
                         }
                         break;
                     }
