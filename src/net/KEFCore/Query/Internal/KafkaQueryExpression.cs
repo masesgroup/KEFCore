@@ -75,7 +75,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         ServerQueryExpression = new KafkaTableExpression(entityType);
         var propertyExpressionsMap = new Dictionary<IProperty, MethodCallExpression>();
         var selectorExpressions = new List<Expression>();
-        foreach (var property in entityType.GetAllBaseTypesInclusive().SelectMany(et => et.GetDeclaredProperties()))
+        foreach (var property in entityType.GetAllBaseTypesInclusive().SelectMany(et => et.GetFlattenedProperties()))
         {
             var propertyExpression = CreateReadValueExpression(property.ClrType, property.GetIndex(), property);
             selectorExpressions.Add(propertyExpression);
@@ -1175,9 +1175,9 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
     private static IEnumerable<IProperty> GetAllPropertiesInHierarchy(EntityProjectionExpression entityProjectionExpression)
 #if NET8_0
         => entityProjectionExpression.EntityType.GetAllBaseTypes().Concat(entityProjectionExpression.EntityType.GetDerivedTypesInclusive())
-            .SelectMany(t => t.GetDeclaredProperties());
+            .SelectMany(t => t.GetFlattenedProperties());
 #else
-        => entityProjectionExpression.EntityType.GetPropertiesInHierarchy();
+        => entityProjectionExpression.EntityType.GetFlattenedPropertiesInHierarchy();
 #endif
 
     private static IPropertyBase? InferPropertyFromInner(Expression expression)

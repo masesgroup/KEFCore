@@ -17,14 +17,14 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Test.Common;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Complex
+namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
 {
     partial class Program
     {
@@ -75,58 +75,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            BooleanValue = i % 2 == 0,
-                            NullableBooleanValue = i % 3 == 0 ? null : i % 2 == 0,
-                            PricingInfo = new Pricing()
+                            TaxInfoExtended = new TaxInfoExtended()
                             {
-                                Discounts =
-                                [
-                                    new()
-                                    {
-                                        Validity = new DateRange()
-                                        {
-                                            CurrentDiff = i,
-                                            Min = DateTime.UtcNow.Subtract(TimeSpan.FromHours(i)),
-                                            Max = DateTime.Now.AddHours(i),
-                                        }
-                                    }
-                                ],
-                                Tax = new TaxInfo()
-                                {
-                                    Code = char.ConvertFromUtf32((int)i)[0],
-                                    Percentage = i / 2,
-                                    TaxInfoExtended = new TaxInfoExtended()
-                                    {
-                                        CodeExtended = (int)i * 3,
-                                        PercentageExtended = i / 3,
-                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
-                                        {
-                                            CodeExtended = (int)i * 4,
-                                            PercentageExtended = i / 4
-                                        }
-                                    },
-                                    TaxInfoExtended2 = new TaxInfoExtended()
-                                    {
-                                        CodeExtended = (int)i * 5,
-                                        PercentageExtended = i / 5,
-                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
-                                        {
-                                            CodeExtended = (int)i * 7,
-                                            PercentageExtended = i / 7
-                                        }
-                                    }
-                                }
-                            },
-                            ComplexPosts =
-                            [
-                                new()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString(),
-                                    CreationTime = DateTimeOffset.Now,
-                                    Identifier = Guid.NewGuid()
-                                }
-                            ],
+                                CodeExtended = (int)i * 3,
+                                PercentageExtended = i / 3
+                            },                 
                             Rating = (int)i,
                         });
                     }
@@ -149,18 +102,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     }
                 }
 
-                if (ProgramConfig.Config.UseModelBuilder)
-                {
-                    watch.Restart();
-                    var selector = (from op in context.Blogs
-                                    join pg in context.Posts on op.BlogId equals pg.BlogId
-                                    where pg.BlogId == op.BlogId
-                                    select new { pg, op });
-                    var pageObject = selector.SingleOrDefault();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
-                }
-
                 if (!context.ManageEvents)
                 {
                     Thread.Sleep(5000);
@@ -172,6 +113,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 10);
                     watch.Stop();
+                    var code = blog.TaxInfoExtended.CodeExtended;
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
@@ -179,34 +121,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
 
-                watch.Restart();
-                var post = context.Posts.Single(b => b.BlogId == 2);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
                 try
                 {
                     watch.Restart();
-                    post = context.Posts.Single(b => b.BlogId == 100);
+                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended > 1).Count();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {post}");
-                }
-                catch
-                {
-                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
-                }
-
-                watch.Restart();
-                var all = context.Posts.All((o) => true);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
-
-                try
-                {
-                    watch.Restart();
-                    blog = context.Blogs!.Single(b => b.BlogId == 1);
-                    watch.Stop();
-                    var code = blog.PricingInfo.Tax.TaxInfoExtended.CodeExtended;
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
@@ -217,7 +136,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Restart();
-                    context.Remove(post);
                     context.Remove(blog);
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
@@ -233,43 +151,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         context.Add(new BlogComplex
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            BooleanValue = i % 2 == 0,
-                            PricingInfo = new Pricing()
+                            TaxInfoExtended = new TaxInfoExtended()
                             {
-                                Tax = new TaxInfo()
-                                {
-                                    TaxInfoExtended = new TaxInfoExtended()
-                                    {
-                                        CodeExtended = (int)i * 3,
-                                        PercentageExtended = i / 3,
-                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
-                                        {
-                                            CodeExtended = (int)i * 4,
-                                            PercentageExtended = i / 4
-                                        }
-                                    },
-                                    TaxInfoExtended2 = new TaxInfoExtended()
-                                    {
-                                        CodeExtended = (int)i * 5,
-                                        PercentageExtended = i / 5,
-                                        NestedTaxInfoExtended = new NestedTaxInfoExtended()
-                                        {
-                                            CodeExtended = (int)i * 7,
-                                            PercentageExtended = i / 7
-                                        }
-                                    }
-                                }
+                                CodeExtended = (int)i * 3,
+                                PercentageExtended = i / 3
                             },
-                            ComplexPosts =
-                            [
-                                new()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString(),
-                                    CreationTime = DateTime.UtcNow,
-                                    Identifier = Guid.NewGuid()
-                                }
-                            ],
                             Rating = i,
                         });
                     }
@@ -292,25 +178,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 {
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
-                if (ProgramConfig.Config.LoadApplicationData)
-                {
-                    watch.Restart();
-                    var res = context.WaitForSynchronization();
-                    watch.Stop();
-                    if (res.HasValue && res.Value)
-                    {
-                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
-                        watch.Restart();
-                        post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1);
-                        watch.Stop();
-                        ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString($"Local store is not synchronized. Test skipped.");
-                    }
-                }
-                var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)
             {
@@ -329,7 +196,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
     public class BloggingContext : TestContext
     {
         public DbSet<BlogComplex> Blogs { get; set; }
-        public DbSet<PostComplex> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

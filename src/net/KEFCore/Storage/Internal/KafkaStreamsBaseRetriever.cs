@@ -45,14 +45,14 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 {
     class KafkaStreamsBaseRetrieverTimestampExtractor : TimestampExtractor
     {
-        private readonly Action<EventChange> _pushChanges;
+        private readonly Action<FreshEventChange> _pushChanges;
         private readonly IStreamsChangeManager _manager;
         private readonly IEntityType _entityType;
         private readonly IKey _primaryKey;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
 
-        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<EventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, object optional)
+        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, object optional)
         {
             _pushChanges = pushChanges;
             _manager = manager;
@@ -72,7 +72,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, record2.Key());
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, record2.Value());
 
-            _pushChanges.Invoke(new EventChange(_manager, _entityType, _primaryKey, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, _primaryKey, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
 
             return record.Timestamp();
         }
@@ -101,9 +101,9 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = (enqueuer, manager, entity, key, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, entity, key, optional),
-            CreateConsumed = (extractor) => Consumed<K, V>.With(extractor),
-            CreateMaterialized = Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As,
+            CreateTimestampExtractor = static (enqueuer, manager, entity, key, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, entity, key, optional),
+            CreateConsumed = static (extractor) => Consumed<K, V>.With(extractor),
+            CreateMaterialized = static (supplier) => Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
             CreateTable = static (builder, topicName, consumed, materialized) => consumed != null ? builder.Table(topicName, consumed, materialized)
                                                                                                   : builder.Table(topicName, materialized),
@@ -118,6 +118,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 streams.SetUncaughtExceptionHandler(errorHandler);
                 streams.SetStateListener(stateListener);
             },
+            GetStoredData = static (streams, storageId, optional) => GetStoredData(streams, storageId, optional),
             Start = static (streams) => streams.Start(),
             Pause = static (streams) => streams.Pause(),
             Resume = static (streams) => streams.Resume(),
@@ -199,16 +200,18 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
         return true;
     }
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
     {
         var v = GetV(key);
         if (v == null)
         {
             properties = default!;
+            complexProperties = default!;
             return false;
         }
         var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
         properties = entityTypeData?.GetProperties(_complexTypeConverterFactory)!;
+        complexProperties = entityTypeData?.GetComplexProperties(_complexTypeConverterFactory)!;
         return true;
     }
 
@@ -216,6 +219,22 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     {
         var input = (Tuple<TKey, TValue>)data;
         KafkaStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+    }
+
+    static IEnumerable<StoredEventChange> GetStoredData(KafkaStreams streams, string storageId, object optional)
+    {
+        var serdes = (Tuple<ISerDes<TKey, K>, ISerDes<TValue, V>>)optional;
+        ISerDes<TKey, K> keySerdes = serdes.Item1;
+        ISerDes<TValue, V> valueSerdes = serdes.Item2;
+
+        ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        var iterator = keyValueStore?.All();
+        while (iterator!.HasNext())
+        {
+            using KeyValue<K, V> kv = iterator.Next();
+            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+            yield return new StoredEventChange(new Tuple<TKey, TValue>( keySerdes.Deserialize(null, kvSupport.Key), valueSerdes.Deserialize(null, kvSupport.Value)));
+        }
     }
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>
@@ -328,7 +347,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
                 {
                     _currentSw.Start();
 #endif
-                    return _current;
+                return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally

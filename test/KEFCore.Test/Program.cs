@@ -48,10 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                if (!ProgramConfig.Config.UseInMemoryProvider)
-                {
-                    context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
-                }
+                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
 
                 if (ProgramConfig.Config.ManageEvents)
                 {
@@ -243,7 +240,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(DatabaseName);
             }
             else
             {

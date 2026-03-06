@@ -314,9 +314,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
         if (_streamData != null)
         {
-            if (_streamData.TryGetProperties(key, out var properties))
+            if (_streamData.TryGetProperties(key, out var properties, out var complexProperties))
             {
-                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties);
+                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
         }
@@ -325,7 +325,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 IDictionary<string, object?>? properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
-                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties);
+                IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_complexTypeConverterFactory)!;
+                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
         }
@@ -333,21 +334,23 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties)
+    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
     {
         if (_streamData != null)
         {
-            return _streamData.TryGetProperties(key, out properties);
+            return _streamData.TryGetProperties(key, out properties, out complexProperties);
         }
         else if (_kafkaCompactedReplicator != null)
         {
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
+                complexProperties = valueContainer?.GetComplexProperties(_complexTypeConverterFactory)!;
                 return true;
             }
 
             properties = default!;
+            complexProperties = default!;
             return false;
         }
 

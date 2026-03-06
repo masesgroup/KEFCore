@@ -30,13 +30,18 @@ using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal readonly struct EventChange(IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, int partition, long offset, object data)
+    internal readonly struct FreshEventChange(IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, int partition, long offset, object data)
     {
         public readonly IStreamsChangeManager Manager = manager;
         public readonly IEntityType EntityType = entityType;
         public readonly IKey PrimaryKey = primaryKey;
         public readonly int Partition = partition;
         public readonly long Offset = offset;
+        public readonly object Data = data;
+    }
+
+    internal readonly struct StoredEventChange(object data)
+    {
         public readonly object Data = data;
     }
 
@@ -77,10 +82,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         where TGlobalKTable : class
         where TKTable : class
     {
-        readonly struct StreamsAssociatedData(TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed,
+        readonly struct StreamsAssociatedData(string storageId, object optional, IStreamsChangeManager changeManager,
+                                              TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed,
                                               TMaterialized materialized, TGlobalKTable globalTable, TKTable table,
                                               IDictionary<int, long> creationKnownOffset) : IDisposable
         {
+            public readonly string StorageId = storageId;
+            public readonly object Optional = optional;
+            public readonly IStreamsChangeManager ChangeManager = changeManager;
             public readonly TStoreSupplier StoreSupplier = storeSupplier;
             public readonly TConsumed Consumed = consumed;
             public readonly TTimestampExtractor TimestampExtractor = extractor;
@@ -154,14 +163,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 return bools.All((o) => o == true);
             }
 
+            public void PushLocalStoredData(IValueGeneratorSelector selector, IUpdateAdapter adpater, IEntityType entity, IKey primaryKey, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
+            {
+                foreach (var item in factory(streams, StorageId, Optional))
+                {
+                    ChangeManager.ManageChange(selector, adpater, entity, primaryKey, item.Data);
+                }
+            }
+
             public readonly void Dispose()
             {
                 TimestampExtractor?.Dispose();
             }
         }
 
-        // enqueues changes
-        private readonly ConcurrentQueue<EventChange> _dataFromStream = new();
+        // enqueues changes from cluster when are send
+        private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
+        // enqueues changes from cluster when are send
+        private readonly ConcurrentQueue<FreshEventChange> _locallyStoredData = new();
         // this dictionary controls the entities
         private readonly System.Collections.Generic.Dictionary<IEntityType, IEntityType> _managedEntities = new(EntityTypeFullNameComparer.Instance);
         // while this one is used to retain the allocated object to avoid their finalization before the streams is completly finalized
@@ -220,7 +239,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             if (_manageEvents)
             {
-                _thread = new System.Threading.Thread(EventChangePusher)
+                _thread = new System.Threading.Thread(FreshEventChangePusher)
                 {
                     IsBackground = true
                 };
@@ -257,7 +276,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
         public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
-        public required Func<Action<EventChange>, IStreamsChangeManager, IEntityType, IKey, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
+        public required Func<Action<FreshEventChange>, IStreamsChangeManager, IEntityType, IKey, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
         public required Func<TTimestampExtractor, TConsumed> CreateConsumed { get; set; }
         public required Func<TStoreSupplier, TMaterialized> CreateMaterialized { get; set; }
         public required Func<TStreamBuilder, string, TMaterialized, TGlobalKTable> CreateGlobalTable { get; set; }
@@ -268,6 +287,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                KEFCoreStreamsUncaughtExceptionHandler<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>,
                                KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>>> SetHandlers
         { get; set; }
+        public required Func<TStream, string, object, IEnumerable<StoredEventChange>> GetStoredData { get; set; }
         public required Action<TStream> Start { get; set; }
         public required Action<TStream> Pause { get; set; }
         public required Action<TStream> Resume { get; set; }
@@ -296,7 +316,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     if (_manageEvents)
                     {
                         IKey key1 = entityType1.FindPrimaryKey();
-                        timestampExtractor = CreateTimestampExtractor(EventChangeReceiver, changeManager, entityType1, key1, optional);
+                        timestampExtractor = CreateTimestampExtractor(FreshEventChangeReceiver, changeManager, entityType1, key1, optional);
                         consumed = CreateConsumed(timestampExtractor);
                     }
                     var materialized = CreateMaterialized(storeSupplier);
@@ -312,7 +332,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     }
                     var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entityType);
                     _managedEntities.Add(entityType, entityType1);
-                    _storagesForEntities.Add(entityType1, new StreamsAssociatedData(storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets));
+                    _storagesForEntities.Add(entityType1, new StreamsAssociatedData(storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets));
 
                     if (CheckState())
                     {
@@ -324,22 +344,25 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             return storageId;
         }
 
-        private void EventChangeReceiver(EventChange data)
+        private void FreshEventChangeReceiver(FreshEventChange data)
         {
             _storagesForEntities[data.EntityType].LatestLocalKnownOffset[data.Partition] = data.Offset;
-            _dataFromStream.Enqueue(data);
+            _freshDataFromCluster.Enqueue(data);
         }
 
-        private void EventChangePusher()
+        long canExecute = 1;
+
+        private void FreshEventChangePusher()
         {
             while (true)
             {
                 do
                 {
-                    if (!_dataFromStream.TryDequeue(out var current)) break;
+                    if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
+                    if (!_freshDataFromCluster.TryDequeue(out var current)) break;
                     current.Manager.ManageChange(_kafkaCluster.ValueGeneratorSelector, _updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
                 }
-                while (!_dataFromStream.IsEmpty);
+                while (!_freshDataFromCluster.IsEmpty);
                 System.Threading.Thread.Sleep(10);
             }
         }
@@ -414,6 +437,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     SetHandlers(_streams, _errorHandler!, _stateListener!);
                     StartTopology(_streams);
                     _started = true;
+                    if (_usePersistentStorage)
+                    {
+                        try
+                        {
+                            Interlocked.Increment(ref canExecute);
+                            foreach (var item in _managedEntities)
+                            {
+                                if (_storagesForEntities.TryGetValue(item.Value, out var storage))
+                                {
+                                    storage.PushLocalStoredData(_kafkaCluster.ValueGeneratorSelector, _updateAdapter, item.Value, item.Value.FindPrimaryKey(), _streams, GetStoredData);
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            Interlocked.Decrement(ref canExecute);
+                        }
+                    }
                 }
             }
         }
@@ -557,7 +598,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
                 storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
-                       && _dataFromStream.IsEmpty; // and all data are processed
+                       && _freshDataFromCluster.IsEmpty; // and all data are processed
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }

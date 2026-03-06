@@ -70,6 +70,20 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
                 else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }
 
+            foreach (var property in valueContainer.GetComplexProperties(null)) // to be added complex entity manager
+            {
+                var propInfo = entityType.GetProperty(property.Key);
+                if (propInfo != null)
+                {
+                    if (propInfo.CanWrite)
+                    {
+                        propInfo.SetValue(newEntity, property.Value);
+                    }
+                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
+                }
+                else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+            }
+
             return newEntity!;
 
         }
