@@ -40,15 +40,17 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     /// <summary>
     /// Initialize a new instance of <see cref="AvroValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="AvroValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implmenting instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
-    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
-    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="AvroValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="valueContainerData">The <see cref="IValueContainerData"/> containing the information to prepare an instance of <see cref="AvroValueContainer{TKey}"/></param>
     /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="AvroValueContainer{TKey}"/></remarks>
-    public AvroValueContainer(IEntityType tName, IProperty[]? properties, object?[] propertyValues, IComplexProperty[]? complexProperties = null, object?[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public AvroValueContainer(IValueContainerData valueContainerData, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
+        var tName = valueContainerData.EntityType;
+        var properties = valueContainerData.Properties;
+        var propertyValues = valueContainerData.PropertyValues;
+        var complexProperties = valueContainerData.ComplexProperties;
+        var complexPropertyValues = valueContainerData.ComplexPropertyValues;
+
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
@@ -122,7 +124,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 if (complexTypeFactory != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
                 {
                     complexTypeHook?.Convert(PreferredConversionType.Binary, ref inputValue);
-                } 
+                }
                 break;
             default: break; // no op
         }
@@ -244,9 +246,14 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
     }
 
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
+    public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
+        var tName = metadata.EntityType;
+        var properties = metadata.Properties;
         properties ??= [.. tName.GetProperties()];
+        var flattenedProperties = metadata.FlattenedProperties;
+        flattenedProperties ??= [.. tName.GetFlattenedProperties()];
+        var complexProperties = metadata.ComplexProperties;
 #if DEBUG_PERFORMANCE
         Stopwatch fullSw = new Stopwatch();
         Stopwatch newSw = new Stopwatch();
@@ -259,18 +266,64 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            allPropertyValues = new object[properties.Length + (complexProperties != null ? complexProperties.Length : 0)];
+            allPropertyValues = new object[flattenedProperties!.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            for (int i = 0; i < Data.Count; i++)
+            if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
             {
-                IPropertyBase? prop = Data[i].ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
-                    ? tName.FindComplexProperty(Data[i].PropertyName!)
-                    : tName.FindProperty(Data[i].PropertyName!);
-                if (prop == null) continue; // a property was removed from the schema 
-                ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
+                for (int i = 0; i < Data.Count; i++)
+                {
+                    IPropertyBase? prop = Data[i].ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                        ? tName.FindComplexProperty(Data[i].PropertyName!)
+                        : tName.FindProperty(Data[i].PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema 
+                    ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
+                }
+            }
+            else
+            {
+                Dictionary<IPropertyBase, object> propertiesInfo = new();
+                Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
+                for (int i = 0; i < Data.Count; i++)
+                {
+                    IPropertyBase? prop = Data[i].ManagedType == (int)NativeTypeMapper.ManagedTypes.ComplexType
+                         ? tName.FindComplexProperty(Data[i].PropertyName!)
+                         : tName.FindProperty(Data[i].PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema
+                    object input = null!;
+                    ConvertInnerData(Data[i], ref input!, prop, complexTypeFactory);
+                    if (prop is IComplexProperty complexProperty)
+                    {
+                        complexPropertiesInfo.Add(complexProperty, input);
+                    }
+                    else
+                    {
+                        propertiesInfo.Add(prop, input);
+                    }
+                }
+
+                for (int i = 0; i < flattenedProperties.Length; i++)
+                {
+                    var property = flattenedProperties[i];
+                    if (property.DeclaringType is not IEntityType entityType)
+                    {
+                        if (property.DeclaringType is IComplexType complexType)
+                        {
+                            var obj = complexPropertiesInfo[complexType.ComplexProperty];
+                            var propAccessor = complexType.ClrType.GetProperty(property.Name);
+                            if (propAccessor != null)
+                            {
+                                allPropertyValues[property.GetIndex()] = propAccessor.GetValue(obj)!;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        allPropertyValues[property.GetIndex()] = propertiesInfo[property];
+                    }
+                }
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

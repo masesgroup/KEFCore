@@ -27,24 +27,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKafkaRowBag
+public interface IKafkaRowBag : IValueContainerData
 {
-    /// <summary>
-    /// The <see cref="IEntityType"/> with changes
-    /// </summary>
-    IEntityType EntityType { get; }
-    /// <summary>
-    /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
-    /// </summary>
-    IProperty[] Properties { get; }
-    /// <summary>
-    /// The <see cref="IComplexProperty"/> associated to <see cref="EntityType"/>
-    /// </summary>
-    IComplexProperty[]? ComplexProperties { get; }
-    /// <summary>
-    /// The <see cref="EntityState"/> associated to <see cref="EntityType"/>
-    /// </summary>
-    EntityState EntityState { get; }
     /// <summary>
     /// The topic data will be stored
     /// </summary>
@@ -59,7 +43,7 @@ public interface IKafkaRowBag
     /// </summary>
     /// <typeparam name="TKey">The key type</typeparam>
     /// <typeparam name="TValueContainer">The <see cref="IValueContainer{T}"/> containing the converted data</typeparam>
-    TValueContainer? GetValue<TKey, TValueContainer>(Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
+    TValueContainer? GetValue<TKey, TValueContainer>(Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
         where TKey : notnull
         where TValueContainer : IValueContainer<TKey>;
 }

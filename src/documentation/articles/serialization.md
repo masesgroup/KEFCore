@@ -144,11 +144,7 @@ A custom **ValueContainer** class must contains enough information and shall fol
 - must implements the [`IValueContainer<T>` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs)
 - must be a generic type
 - must have at least a default constructor and a constructor which accept six parameters in this order:
-  1. `IEntityType` -> the Entity will be serialized
-  2. `IProperty[]?` -> the properties associated to the Entity at point 1
-  3. `object[]` -> an array of values associated on each property at point 2
-  4. `IComplexProperty[]?` -> an optional array of properties associated to the Entity at point 1 which represents the Complex properties
-  5. `object[]?` -> an optional array of values associated on each property at point 4
+  1. `IValueContainerData` -> the reference containing support information and data
   6. `IComplexTypeConverterFactory?` -> an optional reference to the factory where the instance will retrieve specialized serializer, see [Complex type serialization](#complex-type-serialization)
 
 An example snippet is the follow:
@@ -159,17 +155,12 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// <summary>
     /// Initialize a new instance of <see cref="CustomValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="CustomValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="CustomValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
-    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
-    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="CustomValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="valueContainerData">The <see cref="IValueContainerData"/> containing the information to prepare an instance of <see cref="DefaultValueContainer{TKey}"/></param>
     /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="CustomValueContainer{TKey}"/></remarks>
-    public CustomValueContainer(IEntityType tName, IProperty[]? properties, object[] propertyValues, IComplexProperty[]? complexProperties = null, object[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public CustomValueContainer(IValueContainerData valueContainerData, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
-        properties ??= [.. tName.GetProperties()];
-
+        // add specific logic
     }
 
     /// <summary>
@@ -183,12 +174,10 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// <summary>
     /// Returns back the raw data associated to the Entity contained in <see cref="IValueContainer{T}"/> instance
     /// </summary>
-    /// <param name="tName">The requesting <see cref="IEntityType"/> to get the data back, can <see langword="null"/> if not available</param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
-    /// <param name="allPropertyValues">The array of object to be filled in with the data stored in the <see cref="IValueContainer{T}"/> instance for both <paramref name="properties"/> and <paramref name="complexProperties"/></param>
+    /// <param name="metadata">The requesting <see cref="IValueContainerMetadata"/> to get the data back, can <see langword="null"/> if not available</param>
+    /// <param name="allPropertyValues">The array of object to be filled in with the data stored in the <see cref="IValueContainer{T}"/> instance for <paramref name="metadata"/></param>
     /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
-    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
+    public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }

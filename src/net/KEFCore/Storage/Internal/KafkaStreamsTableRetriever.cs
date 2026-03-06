@@ -32,8 +32,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKafkaCluster cluster, IEntityType entityType, IKey primaryKey, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes)
-    : KafkaStreamsBaseRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, primaryKey, properties, complexProperties, complexTypeConverterFactory, keySerdes, valueSerdes)
+public sealed class KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKafkaCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, TJVMKey> keySerdes, ISerDes<TValueContainer, TJVMValueContainer> valueSerdes)
+    : KafkaStreamsBaseRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, metadata, primaryKey, complexTypeConverterFactory, keySerdes, valueSerdes)
     where TKey : notnull
     where TValueContainer : IValueContainer<TKey>
 {

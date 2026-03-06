@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex</RootNamespace>
+		<Title>EntityFrameworkCore KNet MultiLevel Complex Test</Title>
+		<Description>EntityFrameworkCore KNet Test.MultiLevelComplex</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="MultiLevelComplexTest.Avro.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="MultiLevelComplexTest.Avro.KNetStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="MultiLevelComplexTest.KNetStreams.Raw.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="MultiLevelComplexTest.Protobuf.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="MultiLevelComplexTest.Protobuf.KNetStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="MultiLevelComplexTest.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

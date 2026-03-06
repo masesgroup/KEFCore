@@ -31,47 +31,33 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// Default initializer
 /// </remarks>
 public class KafkaRowBag<TKey>(IUpdateEntry entry, string topicName, TKey key,
-                               IProperty[] properties, object?[]? propertyValues,
+                               IProperty[] properties, IProperty[] flattenedProperties, object?[]? flattenedPropertyValues,
                                IComplexProperty[]? complexProperties, object?[]? complexPropertyValues) : IKafkaRowBag
     where TKey : notnull
 {
     readonly TKey _key = key;
 
-    /// <summary>
-    /// The <see cref="IEntityType"/> with changes
-    /// </summary>
+    /// <inheritdoc/>
     public IEntityType EntityType { get; } = entry.EntityType;
-    /// <summary>
-    /// The <see cref="IProperty"/> associated to <see cref="EntityType"/>
-    /// </summary>
+    /// <inheritdoc/>
     public IProperty[] Properties { get; } = properties;
-    /// <summary>
-    /// The <see cref="IComplexProperty"/> associated to <see cref="EntityType"/>
-    /// </summary>
+    /// <inheritdoc/>
+    public IProperty[] FlattenedProperties { get; } = flattenedProperties;
+    /// <inheritdoc/>
     public IComplexProperty[]? ComplexProperties { get; } = complexProperties;
-    /// <summary>
-    /// The <see cref="EntityState"/> associated to <see cref="EntityType"/>
-    /// </summary>
+    /// <inheritdoc/>
     public EntityState EntityState { get; } = entry.EntityState;
     /// <inheritdoc/>
     public string AssociatedTopicName { get; } = topicName;
-    /// <summary>
-    /// The Key
-    /// </summary>
+    /// <inheritdoc/>
+    public object?[] PropertyValues { get; } = flattenedPropertyValues!;
+    /// <inheritdoc/>
+    public object?[]? ComplexPropertyValues { get; } = complexPropertyValues;
+    /// <inheritdoc/>
     public TKeyLocal GetKey<TKeyLocal>() where TKeyLocal : notnull => (TKeyLocal)(object)_key;
-    /// <summary>
-    /// The Value
-    /// </summary>
-    public TValueContainer? GetValue<TKeyLocal, TValueContainer>(Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
+    /// <inheritdoc/>
+    public TValueContainer? GetValue<TKeyLocal, TValueContainer>(Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> creator, IComplexTypeConverterFactory complexTypeConverterFactory)
         where TKeyLocal : notnull
         where TValueContainer : IValueContainer<TKeyLocal>
-        => EntityState == EntityState.Deleted ? default : (TValueContainer)creator(EntityType, Properties, PropertyValues, ComplexProperties, ComplexPropertyValues, complexTypeConverterFactory);
-    /// <summary>
-    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="Properties"/>
-    /// </summary>
-    public object?[] PropertyValues { get; } = propertyValues!;
-    /// <summary>
-    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="ComplexProperties"/>
-    /// </summary>
-    public object?[]? ComplexPropertyValues { get; } = complexPropertyValues;
+        => EntityState == EntityState.Deleted ? default : creator(this, complexTypeConverterFactory);
 }
