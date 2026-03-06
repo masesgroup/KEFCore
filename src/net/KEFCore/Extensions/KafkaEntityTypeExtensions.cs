@@ -79,7 +79,7 @@ public static class KafkaEntityTypeExtensions
     /// </summary>
     public static string TopicName(this IEntityType entityType, KafkaOptionsExtension options)
     {
-        return TopicName(entityType, options.DatabaseName);
+        return TopicName(entityType, options.TopicPrefix);
     }
     /// <summary>
     /// Creates the topic name

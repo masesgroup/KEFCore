@@ -1,6 +1,6 @@
 {
   "BootstrapServers": "192.168.1.114:9092",
-  "DatabaseName": "TestDBWithEvents",
+  "TopicPrefix": "TestDBWithEvents",
   "NumberOfElements": 10,
   "ManageEvents": true
 }

@@ -145,7 +145,7 @@ public class KafkaDbContext : DbContext
     /// <summary>
     /// Database name means whe prefix of the topics associated to the instance of <see cref="KafkaDbContext"/>
     /// </summary>
-    public virtual string? DatabaseName { get; set; }
+    public virtual string? TopicPrefix { get; set; }
     /// <summary>
     /// Default number of partitions associated to each topic
     /// </summary>
@@ -287,9 +287,8 @@ public class KafkaDbContext : DbContext
         }
 
         if (string.IsNullOrWhiteSpace(BootstrapServers)) throw new ArgumentException("Cannot be null or empty", nameof(BootstrapServers));
-        if (string.IsNullOrWhiteSpace(DatabaseName)) throw new ArgumentException("Cannot be null or empty", nameof(DatabaseName));
 
-        optionsBuilder.UseKafkaCluster(ApplicationId, DatabaseName, BootstrapServers, (o) =>
+        optionsBuilder.UseKafkaCluster(ApplicationId, BootstrapServers, TopicPrefix!, (o) =>
         {
             if (ManageEvents 
                 && !(UseCompactedReplicator || UseGlobalTable) 

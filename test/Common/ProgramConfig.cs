@@ -94,8 +94,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseByteBufferDataTransfer { get; set; } = true;
         public bool PreserveStreamsAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
-        public string DatabaseName { get; set; } = "TestDB";
-        public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
+        public string TopicPrefix { get; set; } = "TestDB";
+        public string TopicPrefixWithModel { get; set; } = "TestDBWithModel";
         public string ApplicationId { get; set; } = "TestApplication";
         public bool DeleteApplicationData { get; set; } = true;
         public bool LoadApplicationData { get; set; } = true;
@@ -109,7 +109,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
         public void ApplyOnContext(KafkaDbContext context)
         {
-            var databaseName = UseModelBuilder ? DatabaseNameWithModel : DatabaseName;
+            var databaseName = UseModelBuilder ? TopicPrefixWithModel : TopicPrefix;
 
             StreamsConfigBuilder streamConfig = null;
             if (!UseInMemoryProvider)
@@ -118,7 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
             }
 
-            context.DatabaseName = databaseName;
+            context.TopicPrefix = databaseName;
             context.StreamsConfig = streamConfig;
             context.BootstrapServers = BootstrapServers;
             context.ApplicationId = ApplicationId;

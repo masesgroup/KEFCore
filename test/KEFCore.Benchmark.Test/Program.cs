@@ -242,7 +242,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
             }
             else
             {

@@ -1,6 +1,6 @@
 {
   "UseProtobuf": true,
-  "DatabaseName": "TestDBComplexProtobuf",
+  "TopicPrefix": "TestDBComplexProtobuf",
   "BootstrapServers": "192.168.1.114:9092",
   "NumberOfExecutions": 10
 }

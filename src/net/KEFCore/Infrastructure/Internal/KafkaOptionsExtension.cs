@@ -44,7 +44,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private Type _valueSerDesSelectorType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     private Type _valueContainerType = DefaultKEFCoreSerDes.DefaultValueContainer;
     private bool _useNameMatching = true;
-    private string? _databaseName;
+    private string? _topicPrefix;
     private string? _applicationId;
     private string? _bootstrapServers;
     private bool _useDeletePolicyForTopic = false;
@@ -81,7 +81,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _valueSerDesSelectorType = copyFrom._valueSerDesSelectorType;
         _valueContainerType = copyFrom._valueContainerType;
         _useNameMatching = copyFrom._useNameMatching;
-        _databaseName = copyFrom._databaseName;
+        _topicPrefix = copyFrom._topicPrefix;
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
         _useDeletePolicyForTopic = copyFrom._useDeletePolicyForTopic;
@@ -118,8 +118,8 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual Type ValueContainerType => _valueContainerType;
     /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
     public virtual bool UseNameMatching => _useNameMatching;
-    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
-    public virtual string DatabaseName => _databaseName!;
+    /// <inheritdoc cref="KafkaDbContext.TopicPrefix"/>
+    public virtual string TopicPrefix => _topicPrefix!;
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
     public virtual string ApplicationId => _applicationId!;
     /// <inheritdoc cref="KafkaDbContext.BootstrapServers"/>
@@ -203,12 +203,12 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
 
         return clone;
     }
-    /// <inheritdoc cref="KafkaDbContext.DatabaseName"/>
-    public virtual KafkaOptionsExtension WithDatabaseName(string databaseName)
+    /// <inheritdoc cref="KafkaDbContext.TopicPrefix"/>
+    public virtual KafkaOptionsExtension WithTopicPrefix(string topicPrefix)
     {
         var clone = Clone();
 
-        clone._databaseName = databaseName;
+        clone._topicPrefix = topicPrefix;
 
         return clone;
     }
@@ -529,11 +529,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
-        var kafkaOptions = options.FindExtension<KafkaOptionsExtension>();
-
-        if (kafkaOptions == null) throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
-
-        if (string.IsNullOrEmpty(kafkaOptions.DatabaseName)) throw new ArgumentException("It is manadatory", "DatabaseName");
+        var kafkaOptions = options.FindExtension<KafkaOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
         if (!UseCompactedReplicator && string.IsNullOrEmpty(ApplicationId))
         {
             throw new ArgumentException("Cannot be null or empty when Streams based backend is in use.", nameof(ApplicationId));
@@ -569,7 +565,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
                 {
                     var builder = new System.Text.StringBuilder();
 
-                    builder.Append("DataBaseName=").Append(Extension._databaseName).Append(' ');
+                    builder.Append("DataBaseName=").Append(Extension._topicPrefix).Append(' ');
 
                     _logFragment = builder.ToString();
                 }

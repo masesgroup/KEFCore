@@ -1,5 +1,5 @@
 {
-  "DatabaseName": "TestDBBenchmark",
+  "TopicPrefix": "TestDBBenchmark",
   "UseInMemoryProvider": true,
   "NumberOfExecutions": 10
 }
