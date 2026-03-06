@@ -21,6 +21,7 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -207,15 +208,17 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// <summary>
     /// Initialize a new instance of <see cref="DefaultValueContainer{TKey}"/>
     /// </summary>
-    /// <param name="tName">The <see cref="IEntityType"/> requesting the <see cref="DefaultValueContainer{TKey}"/> for <paramref name="propertyValues"/></param>
-    /// <param name="properties">The set of <see cref="IProperty"/> deducted from <see cref="IEntityType.GetProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> shall deduct it</param>
-    /// <param name="propertyValues">The indexed data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/> associated to <paramref name="properties"/></param>
-    /// <param name="complexProperties">The set of <see cref="IComplexProperty"/> deducted from <see cref="ITypeBase.GetComplexProperties"/>, if <see langword="null"/> the implementing instance of <see cref="IValueContainer{T}"/> does not process them</param>
-    /// <param name="complexPropertyValues">The indexed data, built from EFCore, to be stored in the <see cref="DefaultValueContainer{TKey}"/> associated to <paramref name="complexProperties"/></param>
+    /// <param name="valueContainerData">The <see cref="IValueContainerData"/> containing the information to prepare an instance of <see cref="DefaultValueContainer{TKey}"/></param>
     /// <param name="complexTypeFactory">The instance of <see cref="IComplexTypeConverterFactory"/> will manage strong type conversion</param>
     /// <remarks>This constructor is mandatory and it is used from KEFCore to request a <see cref="DefaultValueContainer{TKey}"/></remarks>
-    public DefaultValueContainer(IEntityType tName, IProperty[]? properties, object?[] propertyValues, IComplexProperty[]? complexProperties = null, object?[]? complexPropertyValues = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public DefaultValueContainer(IValueContainerData valueContainerData, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
+        var tName = valueContainerData.EntityType;
+        var properties = valueContainerData.Properties;
+        var propertyValues = valueContainerData.PropertyValues;
+        var complexProperties = valueContainerData.ComplexProperties;
+        var complexPropertyValues = valueContainerData.ComplexPropertyValues;
+
         properties ??= [.. tName.GetProperties()];
         EntityName = tName.Name;
         ClrType = tName.ClrType?.ToAssemblyQualified()!;
@@ -265,9 +268,14 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// </summary>
     public PropertyData[]? Properties { get; set; }
     /// <inheritdoc/>
-    public void GetData(IEntityType tName, IProperty[]? properties, IComplexProperty[]? complexProperties, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
+    public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
+        var tName = metadata.EntityType;
+        var properties = metadata.Properties;
         properties ??= [.. tName.GetProperties()];
+        var flattenedProperties = metadata.FlattenedProperties;
+        flattenedProperties ??= [.. tName.GetFlattenedProperties()];
+        var complexProperties = metadata.ComplexProperties;
 #if DEBUG_PERFORMANCE
         Stopwatch fullSw = new Stopwatch();
         Stopwatch newSw = new Stopwatch();
@@ -280,7 +288,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #if DEBUG_PERFORMANCE
             newSw.Start();
 #endif
-            IProperty[]? flattenedProperties = [.. tName.GetFlattenedProperties()];
+
             allPropertyValues = new object[flattenedProperties!.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
@@ -290,7 +298,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             {
                 foreach (var item in Data!)
                 {
-                    var prop = tName.FindProperty(item.Value?.PropertyName!);
+                    var prop = metadata.EntityType.FindProperty(item.Value?.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema 
                     allPropertyValues[item.Key] = item.Value?.Value!;
                 }

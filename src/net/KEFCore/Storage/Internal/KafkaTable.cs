@@ -23,9 +23,7 @@
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Globalization;
@@ -44,16 +42,15 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     private readonly IKey? _primaryKey;
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly ILoggingOptions _loggingOptions;
-    private readonly IList<(int, ValueConverter)>? _valueConverters;
-    private readonly IList<(int, ValueComparer)>? _valueComparers;
 
     readonly IEntityTypeProducer<TKey> _producer;
     private readonly string _tableAssociatedTopicName;
 
     private readonly ConcurrentDictionary<IEntityType, IProperty[]> _propertiesCache = new();
+    private readonly ConcurrentDictionary<IEntityType, IProperty[]> _flattenedPropertiesCache = new();
     private readonly ConcurrentDictionary<IEntityType, IComplexProperty[]> _complexPropertiesCache = new();
 
-    readonly Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag> _createRowBag;
+    readonly Func<IUpdateEntry, string, TKey, IProperty[], IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag> _createRowBag;
 
     /// <summary>
     /// Default initializer
@@ -71,37 +68,19 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
 
-        foreach (var property in entityType.GetProperties())
-        {
-            var converter = property.GetValueConverter()
-                ?? property.FindTypeMapping()?.Converter;
-
-            if (converter != null)
-            {
-                _valueConverters ??= [];
-                _valueConverters.Add((property.GetIndex(), converter));
-            }
-
-            var comparer = property.GetKeyValueComparer();
-            if (!comparer.IsDefault())
-            {
-                _valueComparers ??= [];
-                _valueComparers.Add((property.GetIndex(), comparer));
-            }
-        }
-
         var ctor = typeof(KafkaRowBag<TKey>).GetConstructors().First(); // ([typeof(IUpdateEntry), typeof(string), typeof(TKey), typeof(IProperty[]), typeof(object?[]), typeof(IComplexProperty[]), typeof(object?[])])!;
         var param1 = Expression.Parameter(typeof(IUpdateEntry));
         var param2 = Expression.Parameter(typeof(string));
         var param3 = Expression.Parameter(typeof(TKey));
         var param4 = Expression.Parameter(typeof(IProperty[]));
-        var param5 = Expression.Parameter(typeof(object?[]));
-        var param6 = Expression.Parameter(typeof(IComplexProperty[]));
-        var param7 = Expression.Parameter(typeof(object?[]));
+        var param5 = Expression.Parameter(typeof(IProperty[]));
+        var param6 = Expression.Parameter(typeof(object?[]));
+        var param7 = Expression.Parameter(typeof(IComplexProperty[]));
+        var param8 = Expression.Parameter(typeof(object?[]));
 
-        _createRowBag = Expression.Lambda<Func<IUpdateEntry, string, TKey, IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag>>(
-                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7),
-                                    param1, param2, param3, param4, param5, param6, param7)
+        _createRowBag = Expression.Lambda<Func<IUpdateEntry, string, TKey, IProperty[], IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKafkaRowBag>>(
+                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7,param8),
+                                    param1, param2, param3, param4, param5, param6, param7, param8)
                         .Compile();
     }
     /// <inheritdoc/>
@@ -142,17 +121,18 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         else
         {
             var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
             var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
 
-            var propertyValues = new object?[properties.Length];
+            var propertyValues = new object?[flattenedProperties.Length];
             var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
             var nullabilityErrors = new List<IProperty>();
-            for (int index = 0; index < properties.Length; index++)
+            for (int index = 0; index < flattenedProperties.Length; index++)
             {
-                var propertyValue = SnapshotValue(properties[index], properties[index].GetKeyValueComparer(), entry);
+                var propertyValue = SnapshotValue(flattenedProperties[index], flattenedProperties[index].GetKeyValueComparer(), entry);
 
                 propertyValues[index] = propertyValue;
-                KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(properties[index], propertyValue, nullabilityErrors);
+                KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(flattenedProperties[index], propertyValue, nullabilityErrors);
             }
 
             if (nullabilityErrors.Count > 0)
@@ -167,7 +147,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                     complexPropertyValues![index] = entry.GetCurrentValue(complexProperties[index]);
                 }
             }
-            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, flattenedProperties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>
@@ -181,12 +161,13 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         else
         {
             var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
             var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
 
-            for (var index = 0; index < properties.Length; index++)
+            for (var index = 0; index < flattenedProperties.Length; index++)
             {
-                IsConcurrencyConflict(entry, properties[index], valueBuffer[index], concurrencyConflicts);
+                IsConcurrencyConflict(entry, flattenedProperties[index], valueBuffer[index], concurrencyConflicts);
             }
 
             if (concurrencyConflicts.Count > 0)
@@ -194,7 +175,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
                 ThrowUpdateConcurrencyException(entry, concurrencyConflicts);
             }
 
-            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, null, complexProperties, null);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, flattenedProperties, null, complexProperties, null);
         }
     }
 
@@ -240,27 +221,28 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         else
         {
             var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
             var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
 
-            var comparers = GetKeyComparers(properties);
-            var propertyValues = new object?[properties.Length];
+            var comparers = GetKeyComparers(flattenedProperties);
+            var propertyValues = new object?[flattenedProperties.Length];
             var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
             var nullabilityErrors = new List<IProperty>();
-            for (int index = 0; index < properties.Length; index++)
+            for (int index = 0; index < flattenedProperties.Length; index++)
             {
-                if (IsConcurrencyConflict(entry, properties[index], data[index], concurrencyConflicts))
+                if (IsConcurrencyConflict(entry, flattenedProperties[index], data[index], concurrencyConflicts))
                 {
                     continue;
                 }
 
-                if (KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(properties[index], data[index], nullabilityErrors))
+                if (KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.HasNullabilityError(flattenedProperties[index], data[index], nullabilityErrors))
                 {
                     continue;
                 }
 
-                propertyValues[index] = entry.IsModified(properties[index])
-                    ? SnapshotValue(properties[index], comparers[index], entry)
+                propertyValues[index] = entry.IsModified(flattenedProperties[index])
+                    ? SnapshotValue(flattenedProperties[index], comparers[index], entry)
                     : data[index];
             }
 
@@ -276,13 +258,13 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
 
             if (complexProperties != null)
             {
-                for (int index = 0; index < properties.Length + complexProperties.Length; index++)
+                for (int index = 0; index < complexProperties.Length; index++)
                 {
                     complexPropertyValues![index] = entry.GetCurrentValue(complexProperties[index]); // just put current value since complex types are not tracked
                 }
             }
 
-            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, propertyValues, complexProperties, complexPropertyValues);
+            return _createRowBag(entry, _tableAssociatedTopicName, key, properties, flattenedProperties, propertyValues, complexProperties, complexPropertyValues);
         }
     }
     /// <inheritdoc/>

@@ -53,12 +53,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private static IStreamsManager? _streamsManager;
 
-    private readonly Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
+    private readonly Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
     private readonly IKafkaCluster _cluster;
     private readonly IEntityType _entityType;
-    private readonly IProperty[] _properties;
-    private readonly IComplexProperty[]? _complexProperties;
+    private readonly IValueContainerMetadata _entityMetadata;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly IKey? _primaryKey;
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
@@ -75,11 +74,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly EntityTypeProducerCallback? _producerCallback;
 
     #region KNetCompactedReplicatorEnumerable
-    class KNetCompactedReplicatorEnumerable(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
+    class KNetCompactedReplicatorEnumerable(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator) : IEnumerable<ValueBuffer>
     {
-        readonly IEntityType _entityType = entityType;
-        readonly IProperty[] _properties = properties;
-        readonly IComplexProperty[]? _complexProperties = complexProperties;
+        readonly IValueContainerMetadata _entityMetadata = entityMetadata;
         readonly IComplexTypeConverterFactory _complexTypeConverterFactory = complexTypeConverterFactory;
         readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator = kafkaCompactedReplicator;
 
@@ -91,17 +88,13 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             Stopwatch _currentSw = new Stopwatch();
             Stopwatch _valueBufferSw = new Stopwatch();
 #endif
-            readonly IEntityType _entityType;
-            readonly IProperty[] _properties;
-            readonly IComplexProperty[]? _complexProperties;
+            readonly IValueContainerMetadata _entityMetadata;
             readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
             readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
             readonly IEnumerator<KeyValuePair<TKey, TValueContainer>>? _enumerator;
-            public KNetCompactedReplicatorEnumerator(IEntityType entityType, IProperty[] properties, IComplexProperty[]? complexProperties, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator)
+            public KNetCompactedReplicatorEnumerator(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? kafkaCompactedReplicator)
             {
-                _entityType = entityType;
-                _properties = properties;
-                _complexProperties = complexProperties;
+                _entityMetadata = entityMetadata;
                 _complexTypeConverterFactory = complexTypeConverterFactory;
                 _kafkaCompactedReplicator = kafkaCompactedReplicator;
 #if DEBUG_PERFORMANCE
@@ -110,7 +103,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 if (!_kafkaCompactedReplicator!.SyncWait()) throw new InvalidOperationException($"Failed to synchronize with {_kafkaCompactedReplicator.StateName}");
 #if DEBUG_PERFORMANCE
                 sw.Stop();
-                KNet.Internal.DebugPerformanceHelper.ReportString($"KNetCompactedReplicatorEnumerator SyncWait for {_entityType.Name} tooks {sw.Elapsed}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KNetCompactedReplicatorEnumerator SyncWait for {_entityMetadata.EntityType.Name} tooks {sw.Elapsed}");
 #endif
                 _enumerator = _kafkaCompactedReplicator?.GetEnumerator();
             }
@@ -165,7 +158,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         _valueBufferSw.Start();
 #endif
                         object[] propertyValues = null!;
-                        _enumerator.Current.Value.GetData(_entityType, _properties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
+                        _enumerator.Current.Value.GetData(_entityMetadata, ref propertyValues, _complexTypeConverterFactory);
 #if DEBUG_PERFORMANCE
                         _valueBufferSw.Stop();
 #endif
@@ -197,7 +190,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
         public IEnumerator<ValueBuffer> GetEnumerator()
         {
-            return new KNetCompactedReplicatorEnumerator(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _kafkaCompactedReplicator);
+            return new KNetCompactedReplicatorEnumerator(_entityMetadata, _complexTypeConverterFactory, _kafkaCompactedReplicator);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -217,24 +210,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _entityType = entityType;
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
-        _properties = [.. _entityType.GetProperties()];
-        _complexProperties = [.. _entityType.GetComplexProperties()];
+        _entityMetadata = new ValueContainerMetadata(_entityType,
+                                                     [.. _entityType.GetProperties()],
+                                                     [.. _entityType.GetFlattenedProperties()],
+                                                     [.. _entityType.GetComplexProperties()]);
         _complexTypeConverterFactory = cluster.ComplexTypeConverterFactory;
         _cluster = cluster;
         _useCompactedReplicator = _cluster.Options.UseCompactedReplicator;
 
         var tTValueContainer = typeof(TValueContainer);
-        var ctor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 6);
-        var param1 = Expression.Parameter(typeof(IEntityType));
-        var param2 = Expression.Parameter(typeof(IProperty[]));
-        var param3 = Expression.Parameter(typeof(object?[]));
-        var param4 = Expression.Parameter(typeof(IComplexProperty[]));
-        var param5 = Expression.Parameter(typeof(object?[]));
-        var param6 = Expression.Parameter(typeof(IComplexTypeConverterFactory));
+        var ctor = tTValueContainer.GetConstructors().Single(ci => ci.GetParameters().Length == 2);
+        var param1 = Expression.Parameter(typeof(IValueContainerData));
+        var param2 = Expression.Parameter(typeof(IComplexTypeConverterFactory));
 
-        _createValueContainer = Expression.Lambda<Func<IEntityType, IProperty[]?, object?[], IComplexProperty[]?, object?[]?, IComplexTypeConverterFactory?, TValueContainer>>(
-                                           Expression.New(ctor, param1, param2, param3, param4, param5, param6),
-                                           param1, param2, param3, param4, param5, param6)
+        _createValueContainer = Expression.Lambda<Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer>>(
+                                           Expression.New(ctor, param1, param2),
+                                           param1, param2)
                                 .Compile();
 
         var keySelector = _cluster.Options.SerDesSelectorForKey(_entityType) as ISerDesSelector<TKey>;
@@ -280,8 +271,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _kafkaProducer.SetCallback(_producerCallback);
-            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory)
-                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, entityType, _primaryKey, _properties, _complexProperties, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
+            _streamData = _cluster.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, _entityMetadata, _primaryKey, _complexTypeConverterFactory)
+                                                          : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_cluster, _entityMetadata, _primaryKey, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -304,7 +295,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
                 object[] propertyValues = null!;
-                valueContainer?.GetData(_entityType, _properties, _complexProperties, ref propertyValues, _complexTypeConverterFactory);
+                valueContainer?.GetData(_entityMetadata, ref propertyValues, _complexTypeConverterFactory);
                 valueBuffer = new ValueBuffer(propertyValues);
                 return true;
             }
@@ -437,7 +428,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         get
         {
             if (_streamData != null) return _streamData.GetValueBuffers();
-            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityType, _properties, _complexProperties, _complexTypeConverterFactory, _kafkaCompactedReplicator);
+            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _kafkaCompactedReplicator);
             else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
         }
     }
