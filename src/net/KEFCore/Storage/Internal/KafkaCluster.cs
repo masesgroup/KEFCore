@@ -26,11 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.KNet.Admin;
-using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common;
-using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
 
@@ -51,8 +47,7 @@ public class KafkaCluster : IKafkaCluster
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
     private readonly bool _useNameMatching;
-    private readonly Admin _kafkaAdminClient = null;
-    private readonly Properties _bootstrapProperties;
+    private readonly KafkaClusterAdmin _kafkaAdminClient = null;
 
     private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable> _tables;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
@@ -76,16 +71,7 @@ public class KafkaCluster : IKafkaCluster
         _designModel = designModel;
         _useNameMatching = options.UseNameMatching;
 
-        _bootstrapProperties = AdminClientConfigBuilder.Create().WithBootstrapServers(Options.BootstrapServers).ToProperties();
-        try
-        {
-            _kafkaAdminClient = Admin.Create(_bootstrapProperties);
-        }
-        catch (ExecutionException ex)
-        {
-            if (ex.InnerException != null) throw ex.InnerException;
-            throw;
-        }
+        _kafkaAdminClient = KafkaClusterAdmin.Create(Options.BootstrapServers);
     }
     /// <inheritdoc/>
     public virtual void Dispose()
@@ -174,27 +160,7 @@ public class KafkaCluster : IKafkaCluster
         var coll = TopicsFromModel(out var topics);
         ResetStream(topics);
 
-        try
-        {
-            DeleteTopicsResult result = default;
-            KafkaFuture<Java.Lang.Void> future = default;
-            try
-            {
-                result = _kafkaAdminClient?.DeleteTopics(coll);
-                future = result?.All();
-                future?.Get();
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException != null) throw ex.InnerException;
-                else throw;
-            }
-            finally { future?.Dispose(); result?.Dispose(); }
-        }
-        catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
-        {
-            _infrastructureLogger.Logger.LogError("EnsureDeleted reports the following {Error}", utpe.Message);
-        }
+        _kafkaAdminClient.DeleteTopics(coll, _infrastructureLogger);
 
         if (_tables == null)
         {
@@ -215,62 +181,7 @@ public class KafkaCluster : IKafkaCluster
             ResetStream(topics);
         }
 
-        try
-        {
-            _infrastructureLogger.Logger.LogInformation("Trying to identify information of topics from the cluster.");
-            DescribeTopicsResult result = default;
-            KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
-            DescribeTopicsOptions describeTopicsOptions = new();
-            describeTopicsOptions.IncludeAuthorizedOperations(true);
-            try
-            {
-                result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
-                future = result?.AllTopicNames();
-                foreach (var item in future.Get().EntrySet())
-                {
-                    if (item.Value.IsInternal())
-                    {
-                        _infrastructureLogger.Logger.LogDebug("Topic {Key} is internal", item.Key);
-                        continue;
-                    }
-                    var partitionsData = item.Value.Partitions();
-                    var numPartition = partitionsData.Size();
-                    if (Options.ManageEvents && !Options.UseCompactedReplicator && numPartition > 1)
-                    {
-                        throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-                    }
-
-                    bool write = false;
-                    bool read = false;
-
-                    foreach (var operation in item.Value.AuthorizedOperations())
-                    {
-                        if (operation == AclOperation.WRITE) write = true;
-                        if (operation == AclOperation.READ) read = true;
-                        _infrastructureLogger.Logger.LogDebug("Topic {Key} supports {Name}", item.Key, operation.Name());
-                    }
-                    if (Options.ReadOnlyMode)
-                    {
-                        if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
-                    }
-                    else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
-                }
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException is UnknownTopicOrPartitionException)
-                {
-                    throw ex.InnerException;
-                }
-                else if (ex.InnerException != null) throw ex.InnerException;
-                else throw;
-            }
-            finally { future?.Dispose(); result?.Dispose(); }
-        }
-        catch (UnknownTopicOrPartitionException ex)
-        {
-            _infrastructureLogger.Logger.LogDebug(ex.Message);
-        }
+        _kafkaAdminClient.CheckTopics(coll, Options.ReadOnlyMode, Options.ManageEvents, Options.UseCompactedReplicator, _infrastructureLogger);
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -374,20 +285,10 @@ public class KafkaCluster : IKafkaCluster
         _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
-            return CreateTopicForEntity(et, 100, 100, 0);
-        });
-    }
-
-    private string CreateTopicForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
-    {
-        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
-
-        var topicName = entityType.TopicName(Options);
-
-        try
-        {
+            var topicName = entityType.TopicName(Options);
             var requestedPartitions = entityType.NumPartitions(Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(Options);
+
             if (Options.ManageEvents
                 && !Options.UseCompactedReplicator
                 && requestedPartitions > 1)
@@ -395,31 +296,23 @@ public class KafkaCluster : IKafkaCluster
                 throw new InvalidOperationException($"{nameof(KafkaDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KafkaDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
             }
 
-            Set<NewTopic> coll = default;
-            CreateTopicsResult result = default;
-            KafkaFuture<Java.Lang.Void> future = default;
-            NewTopic topic = default;
-            Map<Java.Lang.String, Java.Lang.String> map = default;
-            try
-            {
-                topic = new NewTopic(topicName, requestedPartitions, requestedReplicationFactor);
-                Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
-                                                    ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
-                                                    : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
-                Options.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
-                map = Options.TopicConfig.ToMap();
-                topic.Configs(map);
-                coll = Collections.Singleton(topic);
-                result = _kafkaAdminClient?.CreateTopics(coll);
-                future = result?.All();
-                future?.Get();
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException != null) throw ex.InnerException;
-                throw;
-            }
-            finally { map?.Dispose(); topic?.Dispose(); future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
+            Options.TopicConfig.CleanupPolicy = Options.UseDeletePolicyForTopic
+                        ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
+                        : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
+            Options.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
+
+            Map<Java.Lang.String, Java.Lang.String> map = Options.TopicConfig.ToMap();
+
+            return CreateTopicForEntity(et, topicName, requestedPartitions, requestedReplicationFactor, map, 100, 100, 0);
+        });
+    }
+
+    private string CreateTopicForEntity(IEntityType entityType, string topicName, int requestedPartitions, int requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> map, int waitTime, int maxCycles, int cycle)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
+        try
+        {
+            _kafkaAdminClient.CreateTopic(topicName, requestedPartitions, requestedReplicationFactor, map, _infrastructureLogger);
         }
         catch (TopicExistsException ex)
         {
@@ -428,7 +321,7 @@ public class KafkaCluster : IKafkaCluster
             {
                 _infrastructureLogger.Logger.LogInformation("Invoke again CreateTopicForEntity for {Entity} at attempt {Cycle} since server reported {Error}", entityType.Name, cycle, ex.Message);
                 Thread.Sleep(waitTime); // wait a while before the server completes topic deletion and try again
-                return CreateTopicForEntity(entityType, waitTime, maxCycles, cycle++);
+                return CreateTopicForEntity(entityType, topicName, requestedPartitions, requestedReplicationFactor, map, waitTime, maxCycles, cycle++);
             }
         }
 
@@ -443,44 +336,7 @@ public class KafkaCluster : IKafkaCluster
 
         try
         {
-            try
-            {
-                Java.Lang.String topicName = entityType.TopicName(Options);
-                var coll = Collections.Singleton(topicName);
-                DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
-                using var future = describeTopicsResult.AllTopicNames();
-                var result = future.Get();
-                foreach (var item in result.EntrySet())
-                {
-                    if (item.Key.Equals(topicName))
-                    {
-                        HashMap<TopicPartition, OffsetSpec> hashMap = new HashMap<TopicPartition, OffsetSpec>();
-                        foreach (var partition in item.Value.Partitions())
-                        {
-                            var partitionIndex = partition.Partition();
-                            TopicPartition topicPartition = new(topicName, partitionIndex);
-                            hashMap.Put(topicPartition, OffsetSpec.Latest());
-                        }
-
-                        var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
-                        using var offsetResultFuture = listOffsetResult.All();
-                        var offsetResult = offsetResultFuture.Get();
-                        foreach (var offsetResultItem in offsetResult.EntrySet())
-                        {
-                            if (offsetResultItem.Key.Topic().Equals(topicName))
-                            {
-                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException != null) throw ex.InnerException;
-                else throw;
-            }
+            _kafkaAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
         }
         catch (UnknownTopicOrPartitionException ex)
         {
@@ -509,16 +365,16 @@ public class KafkaCluster : IKafkaCluster
         {
             tableSw.Start();
 #endif
-        EnsureTable(entityType);
+            EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-        var key = _useNameMatching ? (object)entityType.Name : entityType;
-        if (_tables != null && _tables.TryGetValue(key, out var table))
-        {
-            return table.ValueBuffers;
-        }
-        throw new InvalidOperationException("No table available");
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.ValueBuffers;
+            }
+            throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally

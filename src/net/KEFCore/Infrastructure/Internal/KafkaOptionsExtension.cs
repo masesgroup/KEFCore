@@ -21,13 +21,11 @@
 using Java.Lang;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
-using MASES.EntityFrameworkCore.KNet.Storage;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
-using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
 
@@ -109,7 +107,7 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     /// <summary>
     /// Internal property
     /// </summary>
-    public virtual string ClusterId => _bootstrapServers!;
+    public virtual string ClusterId => KafkaClusterAdmin.Create(_bootstrapServers).ClusterId ?? _bootstrapServers!;
     /// <inheritdoc cref="KafkaDbContext.KeySerDesSelectorType"/>
     public virtual Type KeySerDesSelectorType => _keySerDesSelectorType;
     /// <inheritdoc cref="KafkaDbContext.ValueSerDesSelectorType"/>
