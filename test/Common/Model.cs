@@ -122,8 +122,62 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
     [ComplexType]
     public class TaxInfoExtended
     {
+        public TaxInfoExtended()
+        {
+        }
+
+        public TaxInfoExtended(string str)
+        {
+            try
+            {
+                var values = str.Split("_");
+                CodeExtended = int.Parse(values[0]);
+                PercentageExtended = decimal.Parse(values[1]);
+                NestedTaxInfoExtended = new NestedTaxInfoExtended(values[2]);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
+            }
+        }
+
         public int CodeExtended { get; set; }
         public decimal PercentageExtended { get; set; }
+        [Required]
+        public NestedTaxInfoExtended NestedTaxInfoExtended { get; set; }
+        public override string ToString()
+        {
+            return $"{CodeExtended}_{PercentageExtended}_{NestedTaxInfoExtended}";
+        }
+    }
+
+    [ComplexType]
+    public class NestedTaxInfoExtended
+    {
+        public NestedTaxInfoExtended()
+        {
+        }
+
+        public NestedTaxInfoExtended(string str)
+        {
+            try
+            {
+                var values = str.Split("$");
+                CodeExtended = int.Parse(values[0]);
+                PercentageExtended = decimal.Parse(values[1]);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
+            }
+        }
+
+        public int CodeExtended { get; set; }
+        public decimal PercentageExtended { get; set; }
+        public override string ToString()
+        {
+            return $"{CodeExtended}${PercentageExtended}";
+        }
     }
 
     [Owned]
@@ -145,7 +199,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
         {
             if (input is TaxInfoExtended taxInfoExtended)
             {
-                input = $"{taxInfoExtended.CodeExtended}_{taxInfoExtended.PercentageExtended}";
+                input = taxInfoExtended.ToString();
                 return true;
             }
             return false;
@@ -155,23 +209,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
         {
             if (input is string str)
             {
-                try
-                {
-                    var values = str.Split("_");
-                    var tie = new TaxInfoExtended
-                    {
-                        CodeExtended = int.Parse(values[0]),
-                        PercentageExtended = decimal.Parse(values[1])
-                    };
-                    input = tie;
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}");
-                    input = new TaxInfoExtended();
-                    return true;
-                }
+                input = new TaxInfoExtended(str);
+                return true;
             }
             return false;
         }
