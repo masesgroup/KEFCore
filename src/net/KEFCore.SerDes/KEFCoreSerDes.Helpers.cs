@@ -99,10 +99,11 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// Fills <paramref name="allPropertyValues"/> using information in <paramref name="propertiesInfo"/> and <paramref name="complexPropertiesInfo"/> base on <paramref name="flattenedProperties"/>
         /// </summary>
         /// <param name="flattenedProperties">The <see cref="IProperty"/> from the <see cref="ITypeBase.GetFlattenedProperties"/></param>
+        /// <param name="rootType">The root <see cref="IEntityType"/></param>
         /// <param name="propertiesInfo">The data associated to the base properties</param>
         /// <param name="complexPropertiesInfo">The data associated to the first level complex properties</param>
         /// <param name="allPropertyValues">All data to be returned</param>
-        public static void FillFlattened(this IProperty[] flattenedProperties, IDictionary<IPropertyBase, object> propertiesInfo, IDictionary<IComplexProperty, object> complexPropertiesInfo, ref object[] allPropertyValues)
+        public static void FillFlattened(this IProperty[] flattenedProperties, IEntityType rootType, IDictionary<IPropertyBase, object> propertiesInfo, IDictionary<IComplexProperty, object> complexPropertiesInfo, ref object[] allPropertyValues)
         {
             for (int i = 0; i < flattenedProperties.Length; i++)
             {
@@ -111,7 +112,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                 {
                     if (property.DeclaringType is IComplexType complexType)
                     {
-                        if (complexType.ComplexProperty.DeclaringType == tName) // <- first level
+                        if (complexType.ComplexProperty.DeclaringType == rootType) // <- first level
                         {
                             var obj = complexPropertiesInfo[complexType.ComplexProperty];
                             var propAccessor = complexType.ClrType.GetProperty(property.Name);
@@ -123,7 +124,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                         else
                         {
                             System.Collections.Generic.List<IComplexProperty> traversedProperties = [];
-                            var complexRoot = FindRootProperty(tName, complexType, traversedProperties);
+                            var complexRoot = FindRootProperty(rootType, complexType, traversedProperties);
                             var obj = complexPropertiesInfo[complexRoot];
                             allPropertyValues[property.GetIndex()] = FindValueRecursive(obj, complexRoot.ComplexType, traversedProperties, property);
                         }
@@ -138,7 +139,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
 
         static IComplexProperty FindRootProperty(ITypeBase root, IComplexType complexType, System.Collections.Generic.IList<IComplexProperty> traversedProperties)
         {
-            if (complexType.ComplexProperty.DeclaringType == tName)
+            if (complexType.ComplexProperty.DeclaringType == root)
             {
                 return complexType.ComplexProperty;
             }
@@ -161,7 +162,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                     value = propAccessor.GetValue(value)!;
                     if (item.ComplexType == destination.DeclaringType)
                     {
-                        propAccessor = item.c.GetProperty(destination.Name);
+                        propAccessor = item.ClrType.GetProperty(destination.Name);
                         if (propAccessor != null)
                         {
                             return propAccessor.GetValue(value)!;

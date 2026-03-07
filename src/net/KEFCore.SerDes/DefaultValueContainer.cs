@@ -346,7 +346,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                         }
                     }
 
-                    flattenedProperties.FillFlattened(propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
+                    flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
                 }
             }
 #if DEBUG_PERFORMANCE
