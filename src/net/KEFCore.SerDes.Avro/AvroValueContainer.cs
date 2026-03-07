@@ -304,26 +304,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     }
                 }
 
-                for (int i = 0; i < flattenedProperties.Length; i++)
-                {
-                    var property = flattenedProperties[i];
-                    if (property.DeclaringType is not IEntityType entityType)
-                    {
-                        if (property.DeclaringType is IComplexType complexType)
-                        {
-                            var obj = complexPropertiesInfo[complexType.ComplexProperty];
-                            var propAccessor = complexType.ClrType.GetProperty(property.Name);
-                            if (propAccessor != null)
-                            {
-                                allPropertyValues[property.GetIndex()] = propAccessor.GetValue(obj)!;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        allPropertyValues[property.GetIndex()] = propertiesInfo[property];
-                    }
-                }
+                flattenedProperties.FillFlattened(propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

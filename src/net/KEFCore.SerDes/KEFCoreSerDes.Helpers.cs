@@ -91,6 +91,95 @@ const bool perf = false;
 namespace MASES.EntityFrameworkCore.KNet.Serialization
 {
     /// <summary>
+    /// Extension methods for flattened properties preparation
+    /// </summary>
+    public static class ComplexTypeExtension
+    {
+        /// <summary>
+        /// Fills <paramref name="allPropertyValues"/> using information in <paramref name="propertiesInfo"/> and <paramref name="complexPropertiesInfo"/> base on <paramref name="flattenedProperties"/>
+        /// </summary>
+        /// <param name="flattenedProperties">The <see cref="IProperty"/> from the <see cref="ITypeBase.GetFlattenedProperties"/></param>
+        /// <param name="propertiesInfo">The data associated to the base properties</param>
+        /// <param name="complexPropertiesInfo">The data associated to the first level complex properties</param>
+        /// <param name="allPropertyValues">All data to be returned</param>
+        public static void FillFlattened(this IProperty[] flattenedProperties, IDictionary<IPropertyBase, object> propertiesInfo, IDictionary<IComplexProperty, object> complexPropertiesInfo, ref object[] allPropertyValues)
+        {
+            for (int i = 0; i < flattenedProperties.Length; i++)
+            {
+                var property = flattenedProperties[i];
+                if (property.DeclaringType is not IEntityType entityType)
+                {
+                    if (property.DeclaringType is IComplexType complexType)
+                    {
+                        if (complexType.ComplexProperty.DeclaringType == tName) // <- first level
+                        {
+                            var obj = complexPropertiesInfo[complexType.ComplexProperty];
+                            var propAccessor = complexType.ClrType.GetProperty(property.Name);
+                            if (propAccessor != null)
+                            {
+                                allPropertyValues[property.GetIndex()] = propAccessor.GetValue(obj)!;
+                            }
+                        }
+                        else
+                        {
+                            System.Collections.Generic.List<IComplexProperty> traversedProperties = [];
+                            var complexRoot = FindRootProperty(tName, complexType, traversedProperties);
+                            var obj = complexPropertiesInfo[complexRoot];
+                            allPropertyValues[property.GetIndex()] = FindValueRecursive(obj, complexRoot.ComplexType, traversedProperties, property);
+                        }
+                    }
+                }
+                else
+                {
+                    allPropertyValues[property.GetIndex()] = propertiesInfo[property];
+                }
+            }
+        }
+
+        static IComplexProperty FindRootProperty(ITypeBase root, IComplexType complexType, System.Collections.Generic.IList<IComplexProperty> traversedProperties)
+        {
+            if (complexType.ComplexProperty.DeclaringType == tName)
+            {
+                return complexType.ComplexProperty;
+            }
+            else
+            {
+                traversedProperties.Add(complexType.ComplexProperty);
+                return FindRootProperty(root, complexType.ComplexProperty.DeclaringType as IComplexType, traversedProperties);
+            }
+        }
+
+        static object FindValueRecursive(object complexRootValue, IComplexType complexRootType, System.Collections.Generic.IList<IComplexProperty> traversedProperties, IProperty destination)
+        {
+            object value = complexRootValue;
+            Type type = complexRootType.ClrType;
+            foreach (var item in traversedProperties)
+            {
+                var propAccessor = type.GetProperty(item.Name);
+                if (propAccessor != null)
+                {
+                    value = propAccessor.GetValue(value)!;
+                    if (item.ComplexType == destination.DeclaringType)
+                    {
+                        propAccessor = item.c.GetProperty(destination.Name);
+                        if (propAccessor != null)
+                        {
+                            return propAccessor.GetValue(value)!;
+                        }
+                        return null!;
+                    }
+                    type = item.ClrType;
+                }
+                else throw new InvalidOperationException($"Cannot find PropertyInfo on {item}");
+            }
+            return null!;
+        }
+
+
+    }
+
+
+    /// <summary>
     /// An helper class used to manage native and special types in serialization
     /// </summary>
     public static class NativeTypeMapper

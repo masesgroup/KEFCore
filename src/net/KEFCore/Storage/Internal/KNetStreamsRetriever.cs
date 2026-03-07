@@ -412,7 +412,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _moveNextSw.Stop();
                 if (_cycles == 0)
                 {
-                    throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator - No data returned from {_keyValueIterator}");
                 }
             }
 #endif
@@ -480,7 +480,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 _moveNextSw.Stop();
                 if (_cycles == 0)
                 {
-                    throw new InvalidOperationException($"KafkaEnumerator - No data returned from {_keyValueIterator}");
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator - No data returned from {_keyValueIterator}");
                 }
             }
 #endif
