@@ -48,8 +48,8 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
         private ParameterExpression? _valueBufferParameter;
 
         private readonly Dictionary<Expression, ParameterExpression> _mapping = new();
-        private readonly List<ParameterExpression> _variables = new();
-        private readonly List<Expression> _expressions = new();
+        private readonly List<ParameterExpression> _variables = [];
+        private readonly List<Expression> _expressions = [];
         private readonly Dictionary<ParameterExpression, Dictionary<IProperty, int>> _materializationContextBindings = new();
 
         public ShaperExpressionProcessingExpressionVisitor(
@@ -238,7 +238,7 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor
                     = queryExpression.GetProjection(projectionBindingExpression).GetConstantValue<Dictionary<IProperty, int>>();
 
                 var updatedExpression = newExpression.Update(
-                    new[] { Constant(ValueBuffer.Empty), newExpression.Arguments[1] });
+                    [Constant(ValueBuffer.Empty), newExpression.Arguments[1]]);
 
                 return MakeBinary(ExpressionType.Assign, binaryExpression.Left, updatedExpression);
             }

@@ -123,6 +123,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return base.VisitMethodCall(methodCallExpression);
     }
+
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -401,8 +402,8 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
             var original2 = resultSelector.Parameters[1];
 
             var newResultSelectorBody = new ReplacingExpressionVisitor(
-                new Expression[] { original1, original2 },
-                new[] { groupByShaper.KeySelector, groupByShaper }).Visit(resultSelector.Body);
+                [original1, original2],
+                [groupByShaper.KeySelector, groupByShaper]).Visit(resultSelector.Body);
 
             newResultSelectorBody = ExpandSharedTypeEntities(kafkaQueryExpression, newResultSelectorBody);
             var newShaper = _projectionBindingExpressionVisitor.Translate(kafkaQueryExpression, newResultSelectorBody);
@@ -1164,20 +1165,13 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     private Expression ExpandSharedTypeEntities(KafkaQueryExpression queryExpression, Expression lambdaBody)
         => _weakEntityExpandingExpressionVisitor.Expand(queryExpression, lambdaBody);
 
-    private sealed class SharedTypeEntityExpandingExpressionVisitor : ExpressionVisitor
+    private sealed class SharedTypeEntityExpandingExpressionVisitor(KafkaExpressionTranslatingExpressionVisitor expressionTranslator)
+        : ExpressionVisitor
     {
-        private readonly KafkaExpressionTranslatingExpressionVisitor _expressionTranslator;
-
-        private KafkaQueryExpression _queryExpression;
-
-        public SharedTypeEntityExpandingExpressionVisitor(KafkaExpressionTranslatingExpressionVisitor expressionTranslator)
-        {
-            _expressionTranslator = expressionTranslator;
-            _queryExpression = null!;
-        }
+        private KafkaQueryExpression _queryExpression = null!;
 
         public string? TranslationErrorDetails
-            => _expressionTranslator.TranslationErrorDetails;
+            => expressionTranslator.TranslationErrorDetails;
 
         public Expression Expand(KafkaQueryExpression queryExpression, Expression lambdaBody)
         {
@@ -1213,7 +1207,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                 source = Visit(source);
 
                 return TryExpand(source, MemberIdentity.Create(navigationName))
-                    ?? methodCallExpression.Update(null!, new[] { source, methodCallExpression.Arguments[1] });
+                    ?? methodCallExpression.Update(null!, [source, methodCallExpression.Arguments[1]]);
             }
 
             return base.VisitMethodCall(methodCallExpression);
@@ -1305,7 +1299,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                         keyComparison)
                     : keyComparison;
 
-                var correlationPredicate = _expressionTranslator.Translate(predicate)!;
+                var correlationPredicate = expressionTranslator.Translate(predicate)!;
                 innerQueryExpression.UpdateServerQueryExpression(
                     Expression.Call(
                         EnumerableMethods.Where.MakeGenericMethod(innerQueryExpression.CurrentParameter.Type),
@@ -1347,9 +1341,9 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
                     innerKey = Expression.New(AnonymousObject.AnonymousObjectCtor, innerKey);
                 }
 
-                var outerKeySelector = Expression.Lambda(_expressionTranslator.Translate(outerKey)!, _queryExpression.CurrentParameter);
+                var outerKeySelector = Expression.Lambda(expressionTranslator.Translate(outerKey)!, _queryExpression.CurrentParameter);
                 var innerKeySelector = Expression.Lambda(
-                    _expressionTranslator.Translate(innerKey)!, innerQueryExpression.CurrentParameter);
+                    expressionTranslator.Translate(innerKey)!, innerQueryExpression.CurrentParameter);
                 (outerKeySelector, innerKeySelector) = AlignKeySelectorTypes(outerKeySelector, innerKeySelector);
                 innerShaper = _queryExpression.AddNavigationToWeakEntityType(
                     entityProjectionExpression, navigation, innerQueryExpression, outerKeySelector, innerKeySelector);
@@ -1370,7 +1364,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         var replacement2 = AccessField(transparentIdentifierType, transparentIdentifierParameter, "Inner");
         var newResultSelector = Expression.Lambda(
             new ReplacingExpressionVisitor(
-                    new[] { original1, original2 }, new[] { replacement1, replacement2 })
+                    [original1, original2], [replacement1, replacement2])
                 .Visit(resultSelector.Body),
             transparentIdentifierParameter);
 
