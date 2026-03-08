@@ -169,9 +169,7 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
                 KafkaStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
         }
 
-        return _navigationExpressionsCache.TryGetValue(navigation, out var expression)
-            ? expression
-            : null;
+        return _navigationExpressionsCache.GetValueOrDefault(navigation);
     }
 
     /// <summary>

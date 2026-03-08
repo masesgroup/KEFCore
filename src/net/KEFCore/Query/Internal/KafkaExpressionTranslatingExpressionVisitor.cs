@@ -784,7 +784,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             @object = left;
-            arguments = new[] { right };
+            arguments = [right];
         }
         else if (method.Name == nameof(object.Equals)
                  && methodCallExpression.Object == null
@@ -822,7 +822,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 return QueryCompilationContext.NotTranslatedExpression;
             }
 
-            arguments = new[] { left, right };
+            arguments = [left, right];
         }
         else if (method.IsGenericMethod
                  && method.GetGenericMethodDefinition().Equals(EnumerableMethods.Contains))
@@ -844,7 +844,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 return QueryCompilationContext.NotTranslatedExpression;
             }
 
-            arguments = new[] { enumerable, item };
+            arguments = [enumerable, item];
         }
         else if (methodCallExpression.Arguments.Count == 1
                  && method.IsContainsMethod())
@@ -867,7 +867,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             }
 
             @object = enumerable;
-            arguments = new[] { item };
+            arguments = [item];
         }
         else
         {
@@ -1239,7 +1239,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         var valueBufferVariable = Expression.Variable(typeof(ValueBuffer));
         var readExpression = valueBufferVariable.CreateValueBufferReadValueExpression(type, index: 0, property: null);
         return Expression.Block(
-            variables: new[] { valueBufferVariable },
+            variables: [valueBufferVariable],
             Expression.Assign(valueBufferVariable, serverQuery),
             Expression.Condition(
                 Expression.MakeMemberAccess(valueBufferVariable, ValueBufferIsEmpty),
@@ -1386,10 +1386,10 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return false;
         }
 
-        if (IsNullConstantExpression(left)
-            || IsNullConstantExpression(right))
+        if (left is ConstantExpression { Value: null }
+            || right is ConstantExpression { Value: null })
         {
-            var nonNullEntityReference = (IsNullConstantExpression(left) ? rightEntityReference : leftEntityReference)!;
+            var nonNullEntityReference = (left is ConstantExpression { Value: null } ? rightEntityReference : leftEntityReference)!;
             var entityType1 = (IEntityType)nonNullEntityReference.StructuralType;
             var primaryKeyProperties1 = entityType1.FindPrimaryKey()?.Properties;
             if (primaryKeyProperties1 == null)
@@ -1497,8 +1497,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 return _queryCompilationContext.RegisterRuntimeParameter(newParameterName, lambda);
 
             case MemberInitExpression memberInitExpression
-                when memberInitExpression.Bindings.SingleOrDefault(mb => mb.Member.Name == property.Name) is MemberAssignment 
-                   memberAssignment:
+                when memberInitExpression.Bindings.SingleOrDefault(mb => mb.Member.Name == property.Name) is MemberAssignment
+                    memberAssignment:
                 return memberAssignment.Expression.Type.IsNullableType()
                     ? memberAssignment.Expression
                     : Expression.Convert(memberAssignment.Expression, property.ClrType.MakeNullable());
@@ -1532,7 +1532,7 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         IProperty property)
     {
 #if NET10_0
-        if (context.Parameters[baseParameterName] is not IEnumerable<TEntity> baseListParameter)
+        if (!(context.Parameters[baseParameterName] is IEnumerable<TEntity> baseListParameter))
         {
             return null;
         }
@@ -1567,8 +1567,8 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
             case MemberInitExpression memberInitExpression:
                 return CanEvaluate(memberInitExpression.NewExpression)
-                    && memberInitExpression.Bindings.All(
-                        mb => mb is MemberAssignment memberAssignment && CanEvaluate(memberAssignment.Expression));
+                    && memberInitExpression.Bindings.All(mb
+                        => mb is MemberAssignment memberAssignment && CanEvaluate(memberAssignment.Expression));
 
             default:
                 return false;
@@ -1606,9 +1606,6 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
                     ? unaryExpression.Operand
                     : expression;
     }
-
-    private static bool IsNullConstantExpression(Expression expression)
-        => expression is ConstantExpression { Value: null };
 
     [DebuggerStepThrough]
     private static bool TranslationFailed(Expression? original, Expression? translation)
