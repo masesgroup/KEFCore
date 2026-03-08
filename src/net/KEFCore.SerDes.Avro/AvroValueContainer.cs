@@ -304,7 +304,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                     }
                 }
 
-                flattenedProperties.FillFlattened(propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
+                flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

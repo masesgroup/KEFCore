@@ -156,7 +156,7 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
         var key = CreateKey(entry);
         if (!_producer.TryGetValueBuffer(key, out var valueBuffer))
         {
-            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), new[] { entry });
+            throw new DbUpdateConcurrencyException(KafkaStrings.UpdateConcurrencyException(key), [entry]);
         }
         else
         {
