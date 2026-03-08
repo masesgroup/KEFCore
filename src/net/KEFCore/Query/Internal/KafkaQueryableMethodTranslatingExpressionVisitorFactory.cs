@@ -37,9 +37,7 @@ public class KafkaQueryableMethodTranslatingExpressionVisitorFactory : IQueryabl
     /// </summary>
     public KafkaQueryableMethodTranslatingExpressionVisitorFactory(
         QueryableMethodTranslatingExpressionVisitorDependencies dependencies)
-    {
-        Dependencies = dependencies;
-    }
+        => Dependencies = dependencies;
 
     /// <summary>
     ///     Dependencies for this service.

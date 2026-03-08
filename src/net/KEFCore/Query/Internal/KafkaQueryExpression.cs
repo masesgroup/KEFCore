@@ -52,8 +52,8 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
     private CloningExpressionVisitor? _cloningExpressionVisitor;
 
     private Dictionary<ProjectionMember, Expression> _projectionMapping = new();
-    private readonly List<Expression> _clientProjections = new();
-    private readonly List<Expression> _projectionMappingExpressions = new();
+    private readonly List<Expression> _clientProjections = [];
+    private readonly List<Expression> _projectionMappingExpressions = [];
 
     private KafkaQueryExpression(
         Expression serverQueryExpression,
@@ -481,24 +481,25 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
             throw new InvalidOperationException(KafkaStrings.DefaultIfEmptyAppliedAfterProjection);
         }
 
-        var projectionMapping = new Dictionary<ProjectionMember, Expression>();
-        foreach (var (projectionMember, expression) in _projectionMapping)
-        {
-            projectionMapping[projectionMember] = expression is EntityProjectionExpression entityProjectionExpression
-                ? MakeEntityProjectionNullable(entityProjectionExpression)
-                : MakeReadValueNullable(expression);
-        }
-
-        _projectionMapping = projectionMapping;
-        var projectionMappingExpressions = _projectionMappingExpressions.Select(e => MakeReadValueNullable(e)).ToList();
-        _projectionMappingExpressions.Clear();
-        _projectionMappingExpressions.AddRange(projectionMappingExpressions);
-        _groupingParameter = null;
-
         ServerQueryExpression = Call(
             EnumerableMethods.DefaultIfEmptyWithArgument.MakeGenericMethod(typeof(ValueBuffer)),
             ServerQueryExpression,
             Constant(new ValueBuffer(Enumerable.Repeat((object?)null, _projectionMappingExpressions.Count).ToArray())));
+
+        ReplaceProjection(
+            _projectionMapping.ToDictionary(
+                kv => kv.Key,
+                kv => kv.Value switch
+                {
+                    EntityProjectionExpression p => MakeEntityProjectionNullable(p),
+
+                    var p when !p.Type.IsNullableType()
+                        => Coalesce(
+                            MakeReadValueNullable(p),
+                            p.Type.GetDefaultValueConstant()),
+
+                    var p => p
+                }));
     }
 
     /// <summary>
@@ -684,8 +685,8 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         var outerParameter = Parameter(typeof(ValueBuffer), "outer");
         var innerParameter = Parameter(typeof(ValueBuffer), "inner");
         var replacingVisitor = new ReplacingExpressionVisitor(
-            new Expression[] { CurrentParameter, innerQueryExpression.CurrentParameter },
-            new Expression[] { outerParameter, innerParameter });
+            [CurrentParameter, innerQueryExpression.CurrentParameter],
+            [outerParameter, innerParameter]);
 
         var selectorExpressions = _projectionMappingExpressions.Select(e => replacingVisitor.Visit(e)).ToList();
         var outerIndex = selectorExpressions.Count;
@@ -929,8 +930,8 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
         var outerParameter = Parameter(typeof(ValueBuffer), "outer");
         var innerParameter = Parameter(typeof(ValueBuffer), "inner");
         var replacingVisitor = new ReplacingExpressionVisitor(
-            new Expression[] { CurrentParameter, innerQueryExpression.CurrentParameter },
-            new Expression[] { outerParameter, innerParameter });
+            [CurrentParameter, innerQueryExpression.CurrentParameter],
+            [outerParameter, innerParameter]);
         int outerIndex;
 
         if (outerClientEval)
@@ -1132,7 +1133,7 @@ public partial class KafkaQueryExpression : Expression, IPrintableExpression
 
         return New(
             transparentIdentifierType.GetTypeInfo().DeclaredConstructors.Single(),
-            new[] { outerShaperExpression, innerShaperExpression }, outerMemberInfo, innerMemberInfo);
+            [outerShaperExpression, innerShaperExpression], outerMemberInfo, innerMemberInfo);
 
         static Expression MakeNullable(Expression expression, bool nullable)
             => nullable

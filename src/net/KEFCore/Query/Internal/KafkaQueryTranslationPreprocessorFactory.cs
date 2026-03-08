@@ -37,9 +37,7 @@ public class KafkaQueryTranslationPreprocessorFactory : IQueryTranslationPreproc
     /// </summary>
     public KafkaQueryTranslationPreprocessorFactory(
         QueryTranslationPreprocessorDependencies dependencies)
-    {
-        Dependencies = dependencies;
-    }
+        => Dependencies = dependencies;
 
     /// <summary>
     ///     Dependencies for this service.

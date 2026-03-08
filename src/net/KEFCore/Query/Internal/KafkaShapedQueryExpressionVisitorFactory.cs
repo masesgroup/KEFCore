@@ -37,9 +37,7 @@ public class KafkaShapedQueryCompilingExpressionVisitorFactory : IShapedQueryCom
     /// </summary>
     public KafkaShapedQueryCompilingExpressionVisitorFactory(
         ShapedQueryCompilingExpressionVisitorDependencies dependencies)
-    {
-        Dependencies = dependencies;
-    }
+        => Dependencies = dependencies;
 
     /// <summary>
     ///     Dependencies for this service.
