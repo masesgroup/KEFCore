@@ -19,12 +19,12 @@
 *  Refer to LICENSE for more information.
 */
 
+using JetBrains.Annotations;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using JetBrains.Annotations;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
@@ -1147,6 +1147,13 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         return result;
     }
 
+    private static IEnumerable<IProperty> GetAllPropertiesInHierarchy(IEntityType entityType)
+#if NET8_0
+        => entityType.GetAllBaseTypes().Concat(entityType.GetDerivedTypesInclusive()).SelectMany(t => t.GetFlattenedProperties());
+#else
+        => entityType.GetFlattenedPropertiesInHierarchy();
+#endif
+
     private Expression? TryBindMember(Expression? source, MemberIdentity member, Type type)
     {
         if (source is not StructuralTypeReferenceExpression typeReference)
@@ -1154,15 +1161,24 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             return null;
         }
 
-        var entityType = typeReference.StructuralType;
+        var structuralType = typeReference.StructuralType;
 
-        var property = member.MemberInfo != null
-            ? entityType.FindProperty(member.MemberInfo)
-            : entityType.FindProperty(member.Name!);
+        var regularProperty = member.MemberInfo != null
+            ? structuralType.FindProperty(member.MemberInfo)
+            : structuralType.FindProperty(member.Name!);
 
-        if (property != null)
+        if (regularProperty != null)
         {
-            return BindProperty(typeReference, property, type);
+           return BindProperty(typeReference, regularProperty, type);
+        }
+
+        var complexProperty = member.MemberInfo != null
+            ? structuralType.FindComplexProperty(member.MemberInfo)
+            : structuralType.FindComplexProperty(member.Name!);
+
+        if (complexProperty != null)
+        {
+            return BindComplexProperty(typeReference, complexProperty);
         }
 
         AddTranslationErrorDetails(
@@ -1211,6 +1227,42 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
         }
 
         return null;
+    }
+
+    private Expression? BindComplexProperty(
+    StructuralTypeReferenceExpression typeReference,
+    IComplexProperty complexProperty)
+    {
+        KafkaComplexTypeProjectionExpression complexProjection;
+
+        if (typeReference.ComplexProjection != null)
+        {
+            // già dentro un ComplexType — scendi di un livello
+            complexProjection = typeReference.ComplexProjection
+                                             .BindComplexProperty(complexProperty);
+        }
+        else if (typeReference.Parameter != null)
+        {
+            // root entity — stessa logica di BindProperty
+            var valueBufferExpression = Visit(typeReference.Parameter.ValueBufferExpression);
+            if (valueBufferExpression == QueryCompilationContext.NotTranslatedExpression)
+                return null;
+
+            complexProjection = ((EntityProjectionExpression)valueBufferExpression)
+                                    .BindComplexProperty(complexProperty);
+        }
+        else if (typeReference.Subquery != null)
+        {
+            // subquery — non supportato per ComplexType
+            return QueryCompilationContext.NotTranslatedExpression;
+        }
+        else
+        {
+            return null;
+        }
+
+        return new StructuralTypeReferenceExpression(
+            typeReference, complexProperty, complexProjection);
     }
 
     private static Expression ProcessSingleResultScalar(
@@ -1745,9 +1797,22 @@ public class KafkaExpressionTranslatingExpressionVisitor : ExpressionVisitor
             StructuralType = type;
         }
 
+        // NUOVO: costruttore per ComplexType
+        public StructuralTypeReferenceExpression(
+            StructuralTypeReferenceExpression parent,
+            IComplexProperty complexProperty,
+            KafkaComplexTypeProjectionExpression complexProjection)
+        {
+            Parameter = parent.Parameter;
+            Subquery = parent.Subquery;
+            StructuralType = complexProperty.ComplexType;
+            ComplexProjection = complexProjection;
+        }
+
         public new StructuralTypeShaperExpression? Parameter { get; }
         public ShapedQueryExpression? Subquery { get; }
         public ITypeBase StructuralType { get; }
+        public KafkaComplexTypeProjectionExpression? ComplexProjection { get; } // NUOVO
 
         public override Type Type
             => StructuralType.ClrType;

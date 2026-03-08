@@ -29,9 +29,17 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityProjectionExpression : Expression, IPrintableExpression
+/// <remarks>
+///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+///     any release. You should only use it directly in your code with extreme caution and knowing that
+///     doing so can result in application failures when updating to a new Entity Framework Core release.
+/// </remarks>
+public class EntityProjectionExpression(
+    IEntityType entityType,
+    IReadOnlyDictionary<IProperty, MethodCallExpression> readExpressionMap) : Expression, IPrintableExpression
 {
-    private readonly IReadOnlyDictionary<IProperty, MethodCallExpression> _readExpressionMap;
+    private readonly IReadOnlyDictionary<IProperty, MethodCallExpression> _readExpressionMap = readExpressionMap;
     private readonly Dictionary<INavigation, StructuralTypeShaperExpression> _navigationExpressionsCache = new();
 
     /// <summary>
@@ -40,21 +48,7 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public EntityProjectionExpression(
-        IEntityType entityType,
-        IReadOnlyDictionary<IProperty, MethodCallExpression> readExpressionMap)
-    {
-        EntityType = entityType;
-        _readExpressionMap = readExpressionMap;
-    }
-
-    /// <summary>
-    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-    ///     any release. You should only use it directly in your code with extreme caution and knowing that
-    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
-    /// </summary>
-    public virtual IEntityType EntityType { get; }
+    public virtual IEntityType EntityType { get; } = entityType;
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -134,6 +128,24 @@ public class EntityProjectionExpression : Expression, IPrintableExpression
         }
 
         return _readExpressionMap[property];
+    }
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
+    public virtual KafkaComplexTypeProjectionExpression BindComplexProperty(IComplexProperty complexProperty)
+    {
+        if (EntityType != complexProperty.DeclaringType
+            && !EntityType.IsAssignableFrom(complexProperty.DeclaringType as IEntityType))
+        {
+            throw new InvalidOperationException(
+                KafkaStrings.UnableToBindMemberToEntityProjection(
+                    "complexProperty", complexProperty.Name, EntityType.DisplayName()));
+        }
+
+        return new KafkaComplexTypeProjectionExpression(complexProperty, _readExpressionMap);
     }
 
     /// <summary>
