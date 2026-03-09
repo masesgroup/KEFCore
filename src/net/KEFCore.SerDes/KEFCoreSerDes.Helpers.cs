@@ -169,13 +169,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         {
             return JsonSerializer.Deserialize(data.ToStream(), type, DefautJsonOptions)!;
         }
-        static JsonSupport _key = new();
+        static readonly JsonSupport _key = new();
         /// <summary>
         /// <see cref="JsonSupport"/> istance for keys
         /// </summary>
         public static JsonSupport Key => _key;
 
-        static JsonSupport _valueContainer = new();
+        static readonly JsonSupport _valueContainer = new();
         /// <summary>
         /// <see cref="JsonSupport"/> istance for <see cref="IValueContainer{T}"/> instances
         /// </summary>
