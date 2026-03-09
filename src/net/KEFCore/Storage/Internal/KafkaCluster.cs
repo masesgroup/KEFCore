@@ -335,7 +335,7 @@ public class KafkaCluster : IKafkaCluster
 
         try
         {
-            _kafkaAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
+            return _kafkaAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
         }
         catch (UnknownTopicOrPartitionException ex)
         {
@@ -344,7 +344,6 @@ public class KafkaCluster : IKafkaCluster
             Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
             return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
-        return dictionary;
     }
 
     /// <inheritdoc/>
@@ -470,7 +469,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransaction");
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransaction for {number} entries", entries.Count);
 
         using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
@@ -496,7 +495,7 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public async Task<int> ExecuteTransactionAsync(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransactionAsync");
+        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
 
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, cancellationToken);
 
