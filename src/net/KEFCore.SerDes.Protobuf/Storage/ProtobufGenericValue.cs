@@ -187,9 +187,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             else if (_type.Item1 == WellKnownManagedTypes.ComplexType)
             {
                 IComplexTypeConverter? complexTypeHook = null;
-                if (complexTypeFactory != null && complexTypeFactory.TryGet(property, out complexTypeHook))
-                {
-                }
+                complexTypeFactory?.TryGet(property, out complexTypeHook);
                 if (complexTypeHook == null || !complexTypeHook.Convert(PreferredConversionType.Text, ref input!))
                 {
                     input = JsonSupport.ValueContainer.Serialize(property!.ClrType, input!);

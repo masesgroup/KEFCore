@@ -241,10 +241,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 var item = complexProperties[i];
                 var type = WellKnownManagedTypes.ComplexType;
                 IComplexTypeConverter? complexTypeHook = null;
-                if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out complexTypeHook))
-                {
-                }
-
+                complexTypeFactory?.TryGet(complexProperties[i], out complexTypeHook);
                 if (complexTypeHook == null || !complexTypeHook.Convert(PreferredConversionType.Text, ref complexPropertyValues[i]!))
                 {
                     complexPropertyValues[i] = JsonSupport.ValueContainer.Serialize(item.ClrType, complexPropertyValues[i]!);
