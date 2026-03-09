@@ -124,7 +124,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 break;
             case WellKnownManagedTypes.ComplexType:
                 IComplexTypeConverter? complexTypeHook = null;
-                complexTypeFactory?.TryGet(property, out var complexTypeHook);
+                complexTypeFactory?.TryGet(property, out complexTypeHook);
                 if (complexTypeHook == null || !complexTypeHook.Convert(PreferredConversionType.Text, ref inputValue!))
                 {
                     inputValue = JsonSupport.ValueContainer.Serialize(property!.ClrType, inputValue!);
