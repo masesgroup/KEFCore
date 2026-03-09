@@ -12,6 +12,11 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      EnableDebugLogging:
+        description: 'Enable debug logs in tests'
+        required: false
+        default: false
+        type: boolean
       ExecuteOnMoreOSes:
         description: 'Test on more OSes'
         required: false
@@ -137,6 +142,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/build_common.yaml
     with:
+      EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       ExecuteOnMoreOSes: ${{ github.event_name == 'schedule' }}
       ExecuteOnLargerJDKSet: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true
