@@ -163,9 +163,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 if (!Equals(item.Value, currentValue)) // if received data introduced a null value while current value is not null or received data is different from current value
                 {
                     changed = true;
+                    logger.Logger.LogDebug("ManageUpdateInternal: Entry {entry} Property {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
                     entry.SetOriginalValue(prop, item.Value);
                 }
             }
+            bool changedComplex = false;
             foreach (var item in complexPropertyValues)
             {
                 var prop = entry.EntityType.FindComplexProperty(item.Key!);
@@ -173,12 +175,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var currentValue = entry.GetCurrentValue(prop);
                 if (!Equals(item.Value, currentValue)) // if received data introduced a null value while current value is not null or received data is different from current value
                 {
-                    changed = true;
+                    changedComplex = true;
+                    logger.Logger.LogDebug("ManageUpdateInternal: Entry {entry} ComplexProperty {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
                     entry.ToEntityEntry().ComplexProperty(prop).CurrentValue = item.Value;
                 }
             }
-            logger.Logger.LogDebug("ManageUpdateInternal: Record changed={changed}", changed);
-            if (changed)
+            if (changed || changedComplex)
             {
                 entry.EntityState = EntityState.Modified;
                 //adapter.DetectChanges();
