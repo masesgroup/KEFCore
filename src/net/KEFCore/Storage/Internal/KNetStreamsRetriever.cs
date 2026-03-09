@@ -174,8 +174,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             return false;
         }
 
-        properties = v?.GetProperties(_complexTypeConverterFactory)!;
-        complexProperties = v?.GetComplexProperties(_complexTypeConverterFactory)!;
+        properties = v?.GetProperties(_metadata.EntityType)!;
+        complexProperties = v?.GetComplexProperties(_metadata.EntityType, _complexTypeConverterFactory)!;
         return true;
     }
 

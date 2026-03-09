@@ -40,7 +40,7 @@ public class PropertyData : IJsonOnDeserialized
     {
         if (Value is JsonElement elem)
         {
-            if (ManagedType == null || ManagedType == NativeTypeMapper.ManagedTypes.Undefined)
+            if (ManagedType == null || ManagedType == WellKnownManagedTypes.Undefined)
             {
                 switch (elem.ValueKind)
                 {
@@ -110,20 +110,20 @@ public class PropertyData : IJsonOnDeserialized
                 {
                     case JsonValueKind.String:
                         Value = elem.GetString()!;
-                        if (ManagedType != NativeTypeMapper.ManagedTypes.String)
+                        if (ManagedType != WellKnownManagedTypes.String)
                         {
                             switch (ManagedType.Value)
                             {
-                                case NativeTypeMapper.ManagedTypes.Guid:
+                                case WellKnownManagedTypes.Guid:
                                     Value = elem.GetGuid();
                                     break;
-                                case NativeTypeMapper.ManagedTypes.DateTime:
+                                case WellKnownManagedTypes.DateTime:
                                     Value = elem.GetDateTime();
                                     break;
-                                case NativeTypeMapper.ManagedTypes.DateTimeOffset:
+                                case WellKnownManagedTypes.DateTimeOffset:
                                     Value = elem.GetDateTimeOffset();
                                     break;
-                                case NativeTypeMapper.ManagedTypes.ComplexType: break;
+                                case WellKnownManagedTypes.ComplexType: break;
                                 default:
                                     try
                                     {
@@ -151,7 +151,7 @@ public class PropertyData : IJsonOnDeserialized
                         Value = null;
                         break;
                     case JsonValueKind.Object:
-                        if (ManagedType == NativeTypeMapper.ManagedTypes.ComplexType)
+                        if (ManagedType == WellKnownManagedTypes.ComplexType)
                         {
                             break;
                         }
@@ -175,11 +175,11 @@ public class PropertyData : IJsonOnDeserialized
     /// </summary>
     public string? PropertyName { get; set; }
     /// <summary>
-    /// The <see cref="NativeTypeMapper.ManagedTypes"/> value of the <see cref="ClrType"/>
+    /// The <see cref="WellKnownManagedTypes"/> value of the <see cref="ClrType"/>
     /// </summary>
-    public NativeTypeMapper.ManagedTypes? ManagedType { get; set; }
+    public WellKnownManagedTypes? ManagedType { get; set; }
     /// <summary>
-    /// <see langword="true"/> if <see cref="NativeTypeMapper.ManagedTypes"/> value of the <see cref="ClrType"/> supports <see langword="null"/>
+    /// <see langword="true"/> if <see cref="WellKnownManagedTypes"/> value of the <see cref="ClrType"/> supports <see langword="null"/>
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool SupportNull { get; set; }
@@ -224,13 +224,13 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         Properties = new PropertyData[properties.Length + (complexProperties != null && complexPropertyValues != null ? complexProperties.Length : 0)];
         for (int i = 0; i < properties.Length; i++)
         {
-            (NativeTypeMapper.ManagedTypes, bool) _type = NativeTypeMapper.GetValue(properties[i].ClrType);
+            (WellKnownManagedTypes, bool) _type = NativeTypeMapper.GetValue(properties[i].ClrType);
             Properties[i] = new PropertyData
             {
                 ManagedType = _type.Item1,
                 SupportNull = _type.Item2,
                 PropertyName = properties[i].Name,
-                ClrType = _type.Item1 == NativeTypeMapper.ManagedTypes.Undefined ? properties[i].ClrType?.ToAssemblyQualified() : null,
+                ClrType = _type.Item1 == WellKnownManagedTypes.Undefined ? properties[i].ClrType?.ToAssemblyQualified() : null,
                 Value = propertyValues[i]
             };
         }
@@ -238,18 +238,27 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         {
             for (int i = 0; i < complexProperties.Length; i++)
             {
+                var item = complexProperties[i];
+                var type = WellKnownManagedTypes.ComplexType;
+                IComplexTypeConverter? complexTypeHook = null;
+                if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out complexTypeHook))
+                {
+                }
+
+                if (complexTypeHook == null || !complexTypeHook.Convert(PreferredConversionType.Text, ref complexPropertyValues[i]!))
+                {
+                    complexPropertyValues[i] = JsonSupport.ValueContainer.Serialize(item.ClrType, complexPropertyValues[i]!);
+                    type = WellKnownManagedTypes.ComplexTypeAsJson;
+                }
+
                 Properties[i + properties.Length] = new PropertyData
                 {
-                    ManagedType = NativeTypeMapper.ManagedTypes.ComplexType,
+                    ManagedType = type,
                     SupportNull = false,
                     PropertyName = complexProperties[i].Name,
                     ClrType = complexProperties[i].ClrType?.ToAssemblyQualified(),
+                    Value = complexPropertyValues[i]
                 };
-                if (complexTypeFactory != null && complexTypeFactory.TryGet(complexProperties[i], out var complexTypeHook))
-                {
-                    complexTypeHook?.Convert(PreferredConversionType.Text, ref complexPropertyValues[i]!);
-                }
-                Properties[i + properties.Length].Value = complexPropertyValues[i];
             }
         }
     }
@@ -308,16 +317,22 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 {
                     for (int i = 0; i < Properties.Length; i++)
                     {
-                        IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                        IPropertyBase? prop = (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
+                                               || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson)
                             ? tName.FindComplexProperty(Properties[i].PropertyName!)
                             : tName.FindProperty(Properties[i].PropertyName!);
                         if (prop == null) continue; // a property was removed from the schema
                         allPropertyValues[i] = Properties[i]?.Value!;
-                        if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                        if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && allPropertyValues[i] is string str)
+                        {
+                            allPropertyValues[i] = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
+                        }
+                        else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
                             complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
                         {
                             complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
                         }
+                        else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
                     }
                 }
                 else
@@ -326,18 +341,24 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                     Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
                     for (int i = 0; i < Properties.Length; i++)
                     {
-                        IPropertyBase? prop = Properties[i].ManagedType == NativeTypeMapper.ManagedTypes.ComplexType
+                        IPropertyBase? prop = (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
+                                               || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson)
                             ? tName.FindComplexProperty(Properties[i].PropertyName!)
                             : tName.FindProperty(Properties[i].PropertyName!);
                         if (prop == null) continue; // a property was removed from the schema
                         if (prop is IComplexProperty complexProperty)
                         {
                             var input = Properties[i]?.Value!;
-                            if (Properties[i]?.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
+                            if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && input is string str)
+                            {
+                                input = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
+                            }
+                            else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
                                 complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
                             {
                                 complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
                             }
+                            else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
                             complexPropertiesInfo.Add(complexProperty, input!);
                         }
                         else
@@ -363,7 +384,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
 #endif
     }
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IComplexTypeConverterFactory? complexTypeFactory)
+    public IDictionary<string, object?> GetProperties(IEntityType? entityType)
     {
         Dictionary<string, object?> props = [];
         if (Data == null && Properties == null) { return props; }
@@ -381,22 +402,15 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         foreach (var item in Properties!)
         {
             value = item.Value!;
-            if (item.ManagedType == NativeTypeMapper.ManagedTypes.ComplexType &&
-                complexTypeFactory != null && complexTypeFactory.TryGet(item.ClrType!, out var complexTypeHook))
-            {
-                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
-            }
+            if (item.ManagedType == WellKnownManagedTypes.ComplexType
+                || item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson) continue;
             props.Add(item.PropertyName!, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
     }
 
-    /// <summary>
-    /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
-    /// </summary>
-    /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
-    /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    public IDictionary<string, object?> GetComplexProperties(IComplexTypeConverterFactory? complexTypeFactory)
+    /// <inheritdoc/>
+    public IDictionary<string, object?> GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
     {
         Dictionary<string, object?> props = [];
         if (Data == null && Properties == null) { return props; }
@@ -404,12 +418,19 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         object? value;
         foreach (var item in Properties!)
         {
-            if (item.ManagedType != NativeTypeMapper.ManagedTypes.ComplexType || complexTypeFactory == null) continue;
+            if (item.ManagedType != WellKnownManagedTypes.ComplexType
+                || item.ManagedType != WellKnownManagedTypes.ComplexTypeAsJson) continue;
             value = item.Value!;
-            if (complexTypeFactory.TryGet(item.ClrType!, out IComplexTypeConverter? complexTypeHook))
+            Type propertyType = entityType?.FindComplexProperty(item.PropertyName!)?.ClrType! ?? Type.GetType(item.ClrType!)!;
+            if (item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && value is string str)
+            {
+                value = JsonSupport.ValueContainer.Deserialize(propertyType, str);
+            }
+            else if (complexTypeFactory != null && complexTypeFactory.TryGet(propertyType, out IComplexTypeConverter? complexTypeHook))
             {
                 complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
             }
+            else throw new InvalidCastException($"Cannot manage record value {value}.");
             props.Add(item.PropertyName!, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);

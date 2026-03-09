@@ -42,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             else
             {
                 logger.Logger.LogDebug("Record with key {key} added", key);
-                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory), container.GetComplexProperties(converterFactory));
+                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(entityType), container.GetComplexProperties(entityType, converterFactory));
             }
         }
 
@@ -57,7 +57,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 keyValues = [key];
             }
 
-            ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(converterFactory), container.GetComplexProperties(converterFactory));
+            ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(entityType), container.GetComplexProperties(entityType, converterFactory));
         }
 
         static void ManageAddedInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues, IDictionary<string, object?> complexPropertyValues)
@@ -112,8 +112,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties(converterFactory);
-            var complexProperties = container.GetComplexProperties(converterFactory);
+            var properties = container.GetProperties(entityType);
+            var complexProperties = container.GetComplexProperties(entityType, converterFactory);
             if (entry != null)
             {
                 logger.Logger.LogDebug("ManageUpdate: Record with key {key} exist, update", key);
@@ -138,8 +138,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
 
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties(converterFactory);
-            var complexProperties = container.GetComplexProperties(converterFactory);
+            var properties = container.GetProperties(entityType);
+            var complexProperties = container.GetComplexProperties(entityType, converterFactory);
             if (entry != null)
             {
                 logger.Logger.LogDebug("ManageUpdate: Record exists, update");

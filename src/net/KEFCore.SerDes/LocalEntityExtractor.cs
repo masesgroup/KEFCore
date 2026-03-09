@@ -40,11 +40,17 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
 
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
+    private readonly IComplexTypeConverterFactory? _complexTypeFactory;
 
     public LocalEntityExtractor()
     {
         _keySerdes = _keySerdeses.GetOrAdd((typeof(TKeySerDesSelectorType), typeof(TJVMKey)), (o) => { return new TKeySerDesSelectorType().NewSerDes<TJVMKey>(); });
         _valueSerdes = _valueSerdeses.GetOrAdd((typeof(TValueContainerSerDesSelectorType), typeof(TValueContainer)), (o) => { return new TValueContainerSerDesSelectorType().NewSerDes<TJVMValueContainer>(); });
+    }
+
+    public LocalEntityExtractor(IComplexTypeConverterFactory? complexTypeFactory) : base()
+    {
+        _complexTypeFactory = complexTypeFactory;
     }
 
     public object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch)
@@ -56,7 +62,7 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
         if (entityType != null)
         {
             var newEntity = Activator.CreateInstance(entityType!);
-            foreach (var property in valueContainer.GetProperties(null)) // to be added complex entity manager
+            foreach (var property in valueContainer.GetProperties(null))
             {
                 var propInfo = entityType.GetProperty(property.Key);
                 if (propInfo != null)
@@ -70,7 +76,7 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
                 else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }
 
-            foreach (var property in valueContainer.GetComplexProperties(null)) // to be added complex entity manager
+            foreach (var property in valueContainer.GetComplexProperties(null, _complexTypeFactory))
             {
                 var propInfo = entityType.GetProperty(property.Key);
                 if (propInfo != null)

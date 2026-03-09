@@ -324,8 +324,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
-                IDictionary<string, object?>? properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
-                IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_complexTypeConverterFactory)!;
+                IDictionary<string, object?>? properties = valueContainer?.GetProperties(_entityType)!;
+                IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_entityType, _complexTypeConverterFactory)!;
                 KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
@@ -344,8 +344,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_kafkaCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
-                properties = valueContainer?.GetProperties(_complexTypeConverterFactory)!;
-                complexProperties = valueContainer?.GetComplexProperties(_complexTypeConverterFactory)!;
+                properties = valueContainer?.GetProperties(_entityType)!;
+                complexProperties = valueContainer?.GetComplexProperties(_entityType, _complexTypeConverterFactory)!;
                 return true;
             }
 

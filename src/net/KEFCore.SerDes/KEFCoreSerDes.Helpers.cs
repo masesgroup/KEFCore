@@ -18,6 +18,7 @@
 
 #nullable enable
 
+using Java.Nio;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.JCOBridge.C2JBridge;
@@ -27,6 +28,8 @@ using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Common.Serialization;
 using System.Collections.Concurrent;
 using System.Text;
+using System.Text.Json;
+using static MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes;
 
 namespace MASES.EntityFrameworkCore.KNet.Internal
 {
@@ -38,7 +41,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 #if DEBUG_PERFORMANCE
         const bool perf = true;
         /// <summary>
-        /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(IEntityType, IProperty[], IComplexProperty[], ref object[], Serialization.IComplexTypeConverterFactory?)"/>
+        /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(Serialization.IValueContainerMetadata, ref object[], Serialization.IComplexTypeConverterFactory?)"/>
         /// </summary>
         public static bool TraceEntityTypeDataStorageGetData = false;
         /// <summary>
@@ -90,6 +93,95 @@ const bool perf = false;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization
 {
+    /// <summary>
+    /// An helper class to centralize management of every Json conversion for <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes"/> 
+    /// or any other serialization sub-system which needs Jon conversion (typically when there isn't any <see cref="IComplexTypeConverter"/> available in <see cref="IComplexTypeConverterFactory"/> instance)
+    /// </summary>
+    public class JsonSupport
+    {
+        /// <summary>
+        /// The <see cref="JsonSerializerOptions"/> used for serialization/deserialization of <see cref="Key{T}"/>
+        /// </summary>
+        public static readonly JsonSerializerOptions? DefautJsonOptions = new();
+        /// <inheritdoc cref="JsonSerializer.Serialize(object, Type, JsonSerializerOptions?)"/>
+        public string Serialize(Type type, object data)
+        {
+            return JsonSerializer.Serialize(data, type, DefautJsonOptions);
+        }
+        /// <inheritdoc cref="JsonSerializer.Serialize{TValue}(TValue, JsonSerializerOptions?)"/>
+        public string Serialize<TData>(TData data)
+        {
+            return JsonSerializer.Serialize(data, DefautJsonOptions);
+        }
+        /// <inheritdoc cref="JsonSerializer.Serialize{TValue}(TValue, JsonSerializerOptions?)"/>
+        public byte[] SerializeAsBytes<TData>(TData data)
+        {
+            var jsonStr = JsonSerializer.Serialize(data, DefautJsonOptions);
+            return Encoding.UTF8.GetBytes(jsonStr);
+        }
+        /// <inheritdoc cref="JsonSerializer.Serialize(object, Type, JsonSerializerOptions?)"/>
+        public byte[] SerializeAsBytes(Type type, object data)
+        {
+            var jsonStr = JsonSerializer.Serialize(data, type, DefautJsonOptions);
+            return Encoding.UTF8.GetBytes(jsonStr);
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize{TValue}(ReadOnlySpan{byte}, JsonSerializerOptions?)"/>
+        public TData Deserialize<TData>(byte[] data)
+        {
+            return JsonSerializer.Deserialize<TData>(data, DefautJsonOptions)!;
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize{TValue}(string, JsonSerializerOptions?)"/>
+        public TData Deserialize<TData>(string data)
+        {
+            return JsonSerializer.Deserialize<TData>(data, DefautJsonOptions)!;
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize(ReadOnlySpan{byte}, Type, JsonSerializerOptions?)"/>
+        public object Deserialize(Type type, byte[] data)
+        {
+            return JsonSerializer.Deserialize(data, type, DefautJsonOptions)!;
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize(string, Type, JsonSerializerOptions?)"/>
+        public object Deserialize(Type type, string data)
+        {
+            return JsonSerializer.Deserialize(data, type, DefautJsonOptions)!;
+        }
+        /// <inheritdoc cref="JsonSerializer.Serialize{TValue}(Stream, TValue, JsonSerializerOptions?)"/>
+        public byte[] SerializeAsByteBuffer<TData>(TData data)
+        {
+            var ms = new MemoryStream();
+            JsonSerializer.Serialize(ms, data, DefautJsonOptions);
+            return ByteBuffer.From(ms);
+        }
+        /// <inheritdoc cref="JsonSerializer.Serialize(Stream, object?, Type, JsonSerializerOptions?)"/>
+        public byte[] SerializeAsByteBuffer(Type type, object data)
+        {
+            var ms = new MemoryStream();
+            JsonSerializer.Serialize(ms, data, type, DefautJsonOptions);
+            return ByteBuffer.From(ms);
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, JsonSerializerOptions?)"/>
+        public TData Deserialize<TData>(ByteBuffer data)
+        {
+            return JsonSerializer.Deserialize<TData>(data.ToStream(), DefautJsonOptions)!;
+        }
+        /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, Type, JsonSerializerOptions?)"/>
+        public object Deserialize(Type type, ByteBuffer data)
+        {
+            return JsonSerializer.Deserialize(data.ToStream(), type, DefautJsonOptions)!;
+        }
+        static JsonSupport _key = new();
+        /// <summary>
+        /// <see cref="JsonSupport"/> istance for keys
+        /// </summary>
+        public static JsonSupport Key => _key;
+
+        static JsonSupport _valueContainer = new();
+        /// <summary>
+        /// <see cref="JsonSupport"/> istance for <see cref="IValueContainer{T}"/> instances
+        /// </summary>
+        public static JsonSupport ValueContainer => _valueContainer;
+    }
+
     /// <summary>
     /// Extension methods for flattened properties preparation
     /// </summary>
@@ -175,18 +267,106 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             }
             return null!;
         }
-
-
     }
 
+    /// <summary>
+    /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
+    /// </summary>
+    public enum WellKnownManagedTypes
+    {
+        /// <summary>
+        /// Not defined or not found
+        /// </summary>
+        Undefined,
+        /// <summary>
+        /// <see cref="string"/>
+        /// </summary>
+        String,
+        /// <summary>
+        /// <see cref="Guid"/>
+        /// </summary>
+        Guid,
+        /// <summary>
+        /// <see cref="DateTime"/>
+        /// </summary>
+        DateTime,
+        /// <summary>
+        /// <see cref="DateTimeOffset"/>
+        /// </summary>
+        DateTimeOffset,
+        /// <summary>
+        /// <see cref="bool"/>
+        /// </summary>
+        Bool,
+        /// <summary>
+        /// <see cref="char"/>
+        /// </summary>
+        Char,
+        /// <summary>
+        /// <see cref="sbyte"/>
+        /// </summary>
+        SByte,
+        /// <summary>
+        /// <see cref="byte"/>
+        /// </summary>
+        Byte,
+        /// <summary>
+        /// <see cref="short"/>
+        /// </summary>
+        Short,
+        /// <summary>
+        /// <see cref="ushort"/>
+        /// </summary>
+        UShort,
+        /// <summary>
+        /// <see cref="int"/>
+        /// </summary>
+        Int,
+        /// <summary>
+        /// <see cref="uint"/>
+        /// </summary>
+        UInt,
+        /// <summary>
+        /// <see cref="long"/>
+        /// </summary>
+        Long,
+        /// <summary>
+        /// <see cref="ulong"/>
+        /// </summary>
+        ULong,
+        /// <summary>
+        /// <see cref="double"/>
+        /// </summary>
+        Double,
+        /// <summary>
+        /// <see cref="float"/>
+        /// </summary>
+        Float,
+        /// <summary>
+        /// <see cref="decimal"/>
+        /// </summary>
+        Decimal,
+        /// <summary>
+        /// Represent a generic array of <see cref="byte"/>
+        /// </summary>
+        Bytes,
+        /// <summary>
+        /// Defines a property as <see cref="IComplexType"/>
+        /// </summary>
+        ComplexType = 0x10000000,
+        /// <summary>
+        /// Defines a property as <see cref="IComplexType"/> converted into Json since it is missing its <see cref="IComplexTypeConverter"/>
+        /// </summary>
+        ComplexTypeAsJson = 0x20000000,
+    }
 
     /// <summary>
     /// An helper class used to manage native and special types in serialization
     /// </summary>
     public static class NativeTypeMapper
     {
-        static readonly ConcurrentDictionary<Type, (ManagedTypes, bool)> dict = new();
-        static readonly ConcurrentDictionary<(ManagedTypes, bool), Type> reverseDict = new();
+        static readonly ConcurrentDictionary<Type, (WellKnownManagedTypes, bool)> dict = new();
+        static readonly ConcurrentDictionary<(WellKnownManagedTypes, bool), Type> reverseDict = new();
         readonly static Type StringType = typeof(string);
         readonly static Type GuidType = typeof(Guid);
         readonly static Type NullableGuidType = typeof(Guid?);
@@ -222,164 +402,77 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         readonly static Type NullableDecimalType = typeof(decimal?);
         readonly static Type BytesType = typeof(byte[]);
 
-        /// <summary>
-        /// List of <see cref="Type"/> managed from <see cref="PropertyData"/>
-        /// </summary>
-        public enum ManagedTypes
-        {
-            /// <summary>
-            /// Not defined or not found
-            /// </summary>
-            Undefined,
-            /// <summary>
-            /// <see cref="string"/>
-            /// </summary>
-            String,
-            /// <summary>
-            /// <see cref="Guid"/>
-            /// </summary>
-            Guid,
-            /// <summary>
-            /// <see cref="DateTime"/>
-            /// </summary>
-            DateTime,
-            /// <summary>
-            /// <see cref="DateTimeOffset"/>
-            /// </summary>
-            DateTimeOffset,
-            /// <summary>
-            /// <see cref="bool"/>
-            /// </summary>
-            Bool,
-            /// <summary>
-            /// <see cref="char"/>
-            /// </summary>
-            Char,
-            /// <summary>
-            /// <see cref="sbyte"/>
-            /// </summary>
-            SByte,
-            /// <summary>
-            /// <see cref="byte"/>
-            /// </summary>
-            Byte,
-            /// <summary>
-            /// <see cref="short"/>
-            /// </summary>
-            Short,
-            /// <summary>
-            /// <see cref="ushort"/>
-            /// </summary>
-            UShort,
-            /// <summary>
-            /// <see cref="int"/>
-            /// </summary>
-            Int,
-            /// <summary>
-            /// <see cref="uint"/>
-            /// </summary>
-            UInt,
-            /// <summary>
-            /// <see cref="long"/>
-            /// </summary>
-            Long,
-            /// <summary>
-            /// <see cref="ulong"/>
-            /// </summary>
-            ULong,
-            /// <summary>
-            /// <see cref="double"/>
-            /// </summary>
-            Double,
-            /// <summary>
-            /// <see cref="float"/>
-            /// </summary>
-            Float,
-            /// <summary>
-            /// <see cref="decimal"/>
-            /// </summary>
-            Decimal,
-            /// <summary>
-            /// Represent a generic array of <see cref="byte"/>
-            /// </summary>
-            Bytes,
-            /// <summary>
-            /// Defines a property as <see cref="IComplexType"/>
-            /// </summary>
-            ComplexType = 0x10000000,
-        }
-
         static NativeTypeMapper()
         {
-            dict.TryAdd(StringType, (ManagedTypes.String, true)); reverseDict.TryAdd((ManagedTypes.String, true), StringType);
+            dict.TryAdd(StringType, (WellKnownManagedTypes.String, true)); reverseDict.TryAdd((WellKnownManagedTypes.String, true), StringType);
 
-            dict.TryAdd(GuidType, (ManagedTypes.Guid, false)); reverseDict.TryAdd((ManagedTypes.Guid, false), GuidType);
-            dict.TryAdd(NullableGuidType, (ManagedTypes.Guid, true)); reverseDict.TryAdd((ManagedTypes.Guid, true), NullableGuidType);
+            dict.TryAdd(GuidType, (WellKnownManagedTypes.Guid, false)); reverseDict.TryAdd((WellKnownManagedTypes.Guid, false), GuidType);
+            dict.TryAdd(NullableGuidType, (WellKnownManagedTypes.Guid, true)); reverseDict.TryAdd((WellKnownManagedTypes.Guid, true), NullableGuidType);
 
-            dict.TryAdd(DateTimeType, (ManagedTypes.DateTime, false)); reverseDict.TryAdd((ManagedTypes.DateTime, false), DateTimeType);
-            dict.TryAdd(NullableDateTimeType, (ManagedTypes.DateTime, true)); reverseDict.TryAdd((ManagedTypes.DateTime, true), NullableDateTimeType);
+            dict.TryAdd(DateTimeType, (WellKnownManagedTypes.DateTime, false)); reverseDict.TryAdd((WellKnownManagedTypes.DateTime, false), DateTimeType);
+            dict.TryAdd(NullableDateTimeType, (WellKnownManagedTypes.DateTime, true)); reverseDict.TryAdd((WellKnownManagedTypes.DateTime, true), NullableDateTimeType);
 
-            dict.TryAdd(DateTimeOffsetType, (ManagedTypes.DateTimeOffset, false)); reverseDict.TryAdd((ManagedTypes.DateTimeOffset, false), DateTimeOffsetType);
-            dict.TryAdd(NullableDateTimeOffsetType, (ManagedTypes.DateTimeOffset, true)); reverseDict.TryAdd((ManagedTypes.DateTimeOffset, true), NullableDateTimeOffsetType);
+            dict.TryAdd(DateTimeOffsetType, (WellKnownManagedTypes.DateTimeOffset, false)); reverseDict.TryAdd((WellKnownManagedTypes.DateTimeOffset, false), DateTimeOffsetType);
+            dict.TryAdd(NullableDateTimeOffsetType, (WellKnownManagedTypes.DateTimeOffset, true)); reverseDict.TryAdd((WellKnownManagedTypes.DateTimeOffset, true), NullableDateTimeOffsetType);
 
-            dict.TryAdd(BoolType, (ManagedTypes.Bool, false)); reverseDict.TryAdd((ManagedTypes.Bool, false), BoolType);
-            dict.TryAdd(NullableBoolType, (ManagedTypes.Bool, true)); reverseDict.TryAdd((ManagedTypes.Bool, true), NullableBoolType);
+            dict.TryAdd(BoolType, (WellKnownManagedTypes.Bool, false)); reverseDict.TryAdd((WellKnownManagedTypes.Bool, false), BoolType);
+            dict.TryAdd(NullableBoolType, (WellKnownManagedTypes.Bool, true)); reverseDict.TryAdd((WellKnownManagedTypes.Bool, true), NullableBoolType);
 
-            dict.TryAdd(CharType, (ManagedTypes.Char, false)); reverseDict.TryAdd((ManagedTypes.Char, false), CharType);
-            dict.TryAdd(NullableCharType, (ManagedTypes.Char, true)); reverseDict.TryAdd((ManagedTypes.Char, true), NullableCharType);
+            dict.TryAdd(CharType, (WellKnownManagedTypes.Char, false)); reverseDict.TryAdd((WellKnownManagedTypes.Char, false), CharType);
+            dict.TryAdd(NullableCharType, (WellKnownManagedTypes.Char, true)); reverseDict.TryAdd((WellKnownManagedTypes.Char, true), NullableCharType);
 
-            dict.TryAdd(SByteType, (ManagedTypes.SByte, false)); reverseDict.TryAdd((ManagedTypes.SByte, false), SByteType);
-            dict.TryAdd(NullableSByteType, (ManagedTypes.SByte, true)); reverseDict.TryAdd((ManagedTypes.SByte, true), NullableSByteType);
+            dict.TryAdd(SByteType, (WellKnownManagedTypes.SByte, false)); reverseDict.TryAdd((WellKnownManagedTypes.SByte, false), SByteType);
+            dict.TryAdd(NullableSByteType, (WellKnownManagedTypes.SByte, true)); reverseDict.TryAdd((WellKnownManagedTypes.SByte, true), NullableSByteType);
 
-            dict.TryAdd(ByteType, (ManagedTypes.Byte, false)); reverseDict.TryAdd((ManagedTypes.Byte, false), ByteType);
-            dict.TryAdd(NullableByteType, (ManagedTypes.Byte, true)); reverseDict.TryAdd((ManagedTypes.Byte, true), NullableByteType);
+            dict.TryAdd(ByteType, (WellKnownManagedTypes.Byte, false)); reverseDict.TryAdd((WellKnownManagedTypes.Byte, false), ByteType);
+            dict.TryAdd(NullableByteType, (WellKnownManagedTypes.Byte, true)); reverseDict.TryAdd((WellKnownManagedTypes.Byte, true), NullableByteType);
 
-            dict.TryAdd(ShortType, (ManagedTypes.Short, false)); reverseDict.TryAdd((ManagedTypes.Short, false), ShortType);
-            dict.TryAdd(NullableShortType, (ManagedTypes.Short, true)); reverseDict.TryAdd((ManagedTypes.Short, true), NullableShortType);
+            dict.TryAdd(ShortType, (WellKnownManagedTypes.Short, false)); reverseDict.TryAdd((WellKnownManagedTypes.Short, false), ShortType);
+            dict.TryAdd(NullableShortType, (WellKnownManagedTypes.Short, true)); reverseDict.TryAdd((WellKnownManagedTypes.Short, true), NullableShortType);
 
-            dict.TryAdd(UShortType, (ManagedTypes.UShort, false)); reverseDict.TryAdd((ManagedTypes.UShort, false), UShortType);
-            dict.TryAdd(NullableUShortType, (ManagedTypes.UShort, true)); reverseDict.TryAdd((ManagedTypes.UShort, true), NullableUShortType);
+            dict.TryAdd(UShortType, (WellKnownManagedTypes.UShort, false)); reverseDict.TryAdd((WellKnownManagedTypes.UShort, false), UShortType);
+            dict.TryAdd(NullableUShortType, (WellKnownManagedTypes.UShort, true)); reverseDict.TryAdd((WellKnownManagedTypes.UShort, true), NullableUShortType);
 
-            dict.TryAdd(IntType, (ManagedTypes.Int, false)); reverseDict.TryAdd((ManagedTypes.Int, false), IntType);
-            dict.TryAdd(NullableIntType, (ManagedTypes.Int, true)); reverseDict.TryAdd((ManagedTypes.Int, true), NullableIntType);
+            dict.TryAdd(IntType, (WellKnownManagedTypes.Int, false)); reverseDict.TryAdd((WellKnownManagedTypes.Int, false), IntType);
+            dict.TryAdd(NullableIntType, (WellKnownManagedTypes.Int, true)); reverseDict.TryAdd((WellKnownManagedTypes.Int, true), NullableIntType);
 
-            dict.TryAdd(UIntType, (ManagedTypes.UInt, false)); reverseDict.TryAdd((ManagedTypes.UInt, false), UIntType);
-            dict.TryAdd(NullableUIntType, (ManagedTypes.UInt, true)); reverseDict.TryAdd((ManagedTypes.UInt, true), NullableUIntType);
+            dict.TryAdd(UIntType, (WellKnownManagedTypes.UInt, false)); reverseDict.TryAdd((WellKnownManagedTypes.UInt, false), UIntType);
+            dict.TryAdd(NullableUIntType, (WellKnownManagedTypes.UInt, true)); reverseDict.TryAdd((WellKnownManagedTypes.UInt, true), NullableUIntType);
 
-            dict.TryAdd(LongType, (ManagedTypes.Long, false)); reverseDict.TryAdd((ManagedTypes.Long, false), LongType);
-            dict.TryAdd(NullableLongType, (ManagedTypes.Long, true)); reverseDict.TryAdd((ManagedTypes.Long, true), NullableLongType);
+            dict.TryAdd(LongType, (WellKnownManagedTypes.Long, false)); reverseDict.TryAdd((WellKnownManagedTypes.Long, false), LongType);
+            dict.TryAdd(NullableLongType, (WellKnownManagedTypes.Long, true)); reverseDict.TryAdd((WellKnownManagedTypes.Long, true), NullableLongType);
 
-            dict.TryAdd(ULongType, (ManagedTypes.ULong, false)); reverseDict.TryAdd((ManagedTypes.ULong, false), ULongType);
-            dict.TryAdd(NullableULongType, (ManagedTypes.ULong, true)); reverseDict.TryAdd((ManagedTypes.ULong, true), NullableULongType);
+            dict.TryAdd(ULongType, (WellKnownManagedTypes.ULong, false)); reverseDict.TryAdd((WellKnownManagedTypes.ULong, false), ULongType);
+            dict.TryAdd(NullableULongType, (WellKnownManagedTypes.ULong, true)); reverseDict.TryAdd((WellKnownManagedTypes.ULong, true), NullableULongType);
 
-            dict.TryAdd(DoubleType, (ManagedTypes.Double, false)); reverseDict.TryAdd((ManagedTypes.Double, false), DoubleType);
-            dict.TryAdd(NullableDoubleType, (ManagedTypes.Double, true)); reverseDict.TryAdd((ManagedTypes.Double, true), NullableDoubleType);
+            dict.TryAdd(DoubleType, (WellKnownManagedTypes.Double, false)); reverseDict.TryAdd((WellKnownManagedTypes.Double, false), DoubleType);
+            dict.TryAdd(NullableDoubleType, (WellKnownManagedTypes.Double, true)); reverseDict.TryAdd((WellKnownManagedTypes.Double, true), NullableDoubleType);
 
-            dict.TryAdd(FloatType, (ManagedTypes.Float, false)); reverseDict.TryAdd((ManagedTypes.Float, false), FloatType);
-            dict.TryAdd(NullableFloatType, (ManagedTypes.Float, true)); reverseDict.TryAdd((ManagedTypes.Float, true), NullableFloatType);
+            dict.TryAdd(FloatType, (WellKnownManagedTypes.Float, false)); reverseDict.TryAdd((WellKnownManagedTypes.Float, false), FloatType);
+            dict.TryAdd(NullableFloatType, (WellKnownManagedTypes.Float, true)); reverseDict.TryAdd((WellKnownManagedTypes.Float, true), NullableFloatType);
 
-            dict.TryAdd(DecimalType, (ManagedTypes.Decimal, false)); reverseDict.TryAdd((ManagedTypes.Decimal, false), DecimalType);
-            dict.TryAdd(NullableDecimalType, (ManagedTypes.Decimal, true)); reverseDict.TryAdd((ManagedTypes.Decimal, true), NullableDecimalType);
+            dict.TryAdd(DecimalType, (WellKnownManagedTypes.Decimal, false)); reverseDict.TryAdd((WellKnownManagedTypes.Decimal, false), DecimalType);
+            dict.TryAdd(NullableDecimalType, (WellKnownManagedTypes.Decimal, true)); reverseDict.TryAdd((WellKnownManagedTypes.Decimal, true), NullableDecimalType);
 
-            dict.TryAdd(BytesType, (ManagedTypes.Bytes, true)); reverseDict.TryAdd((ManagedTypes.Bytes, true), BytesType);
+            dict.TryAdd(BytesType, (WellKnownManagedTypes.Bytes, true)); reverseDict.TryAdd((WellKnownManagedTypes.Bytes, true), BytesType);
         }
 
         /// <summary>
-        /// Returns a <see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> indicating if the types supports <see cref="Nullable"/>
+        /// Returns a <see cref="Tuple{T1, T2}"/> of <see cref="WellKnownManagedTypes"/> with a <see cref="bool"/> indicating if the types supports <see cref="Nullable"/>
         /// </summary>
         /// <param name="type">The <see cref="Type"/> to check</param>
-        /// <returns>A <see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> if <paramref name="type"/> is mapped otherwise returns <see cref="ManagedTypes.Undefined"/> and <see langword="false"/> for <see cref="Nullable"/> support</returns>
-        public static (ManagedTypes, bool) GetValue(Type? type)
+        /// <returns>A <see cref="Tuple{T1, T2}"/> of <see cref="WellKnownManagedTypes"/> with a <see cref="bool"/> if <paramref name="type"/> is mapped otherwise returns <see cref="WellKnownManagedTypes.Undefined"/> and <see langword="false"/> for <see cref="Nullable"/> support</returns>
+        public static (WellKnownManagedTypes, bool) GetValue(Type? type)
         {
-            if (type == null || !dict.TryGetValue(type, out (ManagedTypes, bool) result)) { result = (ManagedTypes.Undefined, false); }
+            if (type == null || !dict.TryGetValue(type, out (WellKnownManagedTypes, bool) result)) { result = (WellKnownManagedTypes.Undefined, false); }
             return result;
         }
         /// <summary>
         /// Returns a <see cref="Type"/> mapped from the <paramref name="type"/> in input
         /// </summary>
-        /// <param name="type"><see cref="Tuple{T1, T2}"/> of <see cref="ManagedTypes"/> with a <see cref="bool"/> indicating if the type needs support for <see cref="Nullable"/></param>
+        /// <param name="type"><see cref="Tuple{T1, T2}"/> of <see cref="WellKnownManagedTypes"/> with a <see cref="bool"/> indicating if the type needs support for <see cref="Nullable"/></param>
         /// <returns>A <see cref="Type"/> associated to the <paramref name="type"/> in input, otherwise <see langword="null"/></returns>
-        public static Type GetValue((ManagedTypes, bool) type)
+        public static Type GetValue((WellKnownManagedTypes, bool) type)
         {
             if (!reverseDict.TryGetValue(type, out Type? result)) { result = null!; }
             return result;

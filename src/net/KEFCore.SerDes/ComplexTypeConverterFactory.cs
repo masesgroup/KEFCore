@@ -59,22 +59,22 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         }
 
         /// <inheritdoc/>
-        public bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter? converter)
+        public bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter converter)
         {
             ArgumentNullException.ThrowIfNull(complexProperty);
-            return _converters.TryGetValue(complexProperty?.ClrType!, out converter);
+            return _converters.TryGetValue(complexProperty?.ClrType!, out converter!);
         }
         /// <inheritdoc/>
-        public bool TryGet(Type complexPropertyType, out IComplexTypeConverter? converter)
+        public bool TryGet(Type complexPropertyType, out IComplexTypeConverter converter)
         {
             ArgumentNullException.ThrowIfNull(complexPropertyType);
-            return _converters.TryGetValue(complexPropertyType!, out converter);
+            return _converters.TryGetValue(complexPropertyType!, out converter!);
         }
         /// <inheritdoc/>
-        public bool TryGet(string complexPropertyType, out IComplexTypeConverter? converter)
+        public bool TryGet(string complexPropertyType, out IComplexTypeConverter converter)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(complexPropertyType);
-            return _converters.TryGetValue(Type.GetType(complexPropertyType, true)!, out converter);
+            return _converters.TryGetValue(Type.GetType(complexPropertyType, true)!, out converter!);
         }
     }
 }

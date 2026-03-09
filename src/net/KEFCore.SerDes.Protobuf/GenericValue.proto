@@ -92,10 +92,12 @@ message GenericValue {
     string decimal_value = 18;
     // Represents a generic byte[] value.
     bytes bytes_value = 19;
-    // Represents a decimal value.
+    // Represents a Complex type value.
     ComplexType complextype_value = 20;
+    // Represents a Complex type value as string.
+    ComplexType complextypeasstring_value = 21;
   }
-  int32 ManagedType = 21;
-  bool SupportNull = 22;
+  int32 ManagedType = 22;
+  bool SupportNull = 23;
 }
 // [END messages]
