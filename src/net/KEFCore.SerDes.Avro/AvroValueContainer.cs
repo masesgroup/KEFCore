@@ -60,7 +60,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         {
             var item = properties[i];
             (WellKnownManagedTypes, bool) _type = NativeTypeMapper.GetValue(item.ClrType!);
-            BuildPropertyValue(item,  _type.Item2, ref _type.Item1, ref propertyValues[i]!);
+            BuildPropertyValue(item, _type.Item2, ref _type.Item1, ref propertyValues[i]!);
             var pRecord = new PropertyDataRecord
             {
                 ManagedType = (int)_type.Item1,
@@ -77,7 +77,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             {
                 var item = complexProperties[i];
                 var type = WellKnownManagedTypes.ComplexType;
-                BuildPropertyValue(item, false, ref type, ref complexPropertyValues[i]!,  complexTypeFactory);
+                BuildPropertyValue(item, false, ref type, ref complexPropertyValues[i]!, complexTypeFactory);
                 var pRecord = new PropertyDataRecord
                 {
                     ManagedType = (int)type,
@@ -301,10 +301,10 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
             {
                 for (int i = 0; i < Data.Count; i++)
                 {
-                    IPropertyBase? prop = (Data[i].ManagedType == (int)WellKnownManagedTypes.ComplexType 
-                                           || Data[i].ManagedType == (int)WellKnownManagedTypes.ComplexTypeAsJson)
-                        ? tName.FindComplexProperty(Data[i].PropertyName!)
-                        : tName.FindProperty(Data[i].PropertyName!);
+                    if (Data[i].ManagedType == (int)WellKnownManagedTypes.ComplexType
+                        || Data[i].ManagedType == (int)WellKnownManagedTypes.ComplexTypeAsJson) continue;
+
+                    IPropertyBase? prop = tName.FindProperty(Data[i].PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema 
                     ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
                 }
@@ -369,7 +369,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         object? result = null!;
         foreach (var item in Data)
         {
-            if (item.ManagedType != (int)WellKnownManagedTypes.ComplexType 
+            if (item.ManagedType != (int)WellKnownManagedTypes.ComplexType
                 && item.ManagedType != (int)WellKnownManagedTypes.ComplexTypeAsJson) continue;
             IPropertyBase property = entityType?.FindComplexProperty(item.PropertyName!)!;
             ConvertInnerData(item, ref result, property, complexTypeFactory);

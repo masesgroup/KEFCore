@@ -317,22 +317,12 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 {
                     for (int i = 0; i < Properties.Length; i++)
                     {
-                        IPropertyBase? prop = (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
-                                               || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson)
-                            ? tName.FindComplexProperty(Properties[i].PropertyName!)
-                            : tName.FindProperty(Properties[i].PropertyName!);
+                        if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
+                            || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson) continue;
+
+                        IPropertyBase? prop = tName.FindProperty(Properties[i].PropertyName!);
                         if (prop == null) continue; // a property was removed from the schema
                         allPropertyValues[i] = Properties[i]?.Value!;
-                        if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && allPropertyValues[i] is string str)
-                        {
-                            allPropertyValues[i] = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
-                        }
-                        else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
-                            complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
-                        {
-                            complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref allPropertyValues[i]!);
-                        }
-                        else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
                     }
                 }
                 else
