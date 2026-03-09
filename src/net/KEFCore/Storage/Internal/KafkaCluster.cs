@@ -235,6 +235,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
+        _infrastructureLogger.Logger.LogDebug("Invoking EnsureConnected");
         return true;
     }
     /// <inheritdoc/>
@@ -451,7 +452,7 @@ public class KafkaCluster : IKafkaCluster
         System.Collections.Generic.List<Future<RecordMetadata>> futures = [];
         foreach (var tableData in dataInTransaction)
         {
-            tableData.Key.Commit(null, tableData.Value);
+            tableData.Key.Commit(futures, tableData.Value);
         }
 
         return futures.Select(obj => Task.Run(() =>
