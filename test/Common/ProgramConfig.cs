@@ -46,7 +46,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
     public class DebugOutputLogger(string category) : ILogger
     {
         private readonly string _category = category;
-        private readonly LogLevel _minLogLevel = !ProgramConfig.Config.ForceDebugLog && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+        private readonly LogLevel _minLogLevel = !ProgramConfig.Config.ForceDebugLog 
+                                                 && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+                                                                                                                 : LogLevel.Debug; 
  
         public IDisposable BeginScope<TState>(TState state) where TState : notnull => null;
 
@@ -68,8 +70,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
-                                                                                                                                            : LogLevel.Debug)
+                builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog 
+                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+                                                                                                        : LogLevel.Debug)
                        .AddProvider(new DebugOutputLoggerProvider());
             });
 
