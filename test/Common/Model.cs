@@ -469,6 +469,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
         {
             return $"{CodeExtended}_{PercentageExtended}_{NestedTaxInfoExtended}";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj is TaxInfoExtended no)
+            {
+                return no.CodeExtended == CodeExtended
+                       && no.PercentageExtended == PercentageExtended
+                       && no.NestedTaxInfoExtended.Equals(NestedTaxInfoExtended);
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CodeExtended, PercentageExtended, NestedTaxInfoExtended);
+        }
     }
 
     [ComplexType]
@@ -497,6 +511,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
         public override string ToString()
         {
             return $"{CodeExtended}${PercentageExtended}";
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is NestedTaxInfoExtended no)
+            {
+                return no.CodeExtended == CodeExtended 
+                       && no.PercentageExtended == PercentageExtended;
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CodeExtended, PercentageExtended);
         }
     }
 
