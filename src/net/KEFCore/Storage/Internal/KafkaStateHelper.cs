@@ -90,7 +90,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     }
                 }
                 newEntry.EntityState = EntityState.Unchanged;
-                //adapter.DetectChanges();
             }
             else
             {
@@ -183,7 +182,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (changed || changedComplex)
             {
                 entry.EntityState = EntityState.Modified;
-                //adapter.DetectChanges();
             }
         }
 
@@ -217,7 +215,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 logger.Logger.LogDebug("ManageDeleteInternal: Record exists, delete with cascade");
                 adapter.CascadeDelete(entry);
-                //adapter.DetectChanges();
             }
         }
 
@@ -240,7 +237,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     }
                 }
                 newEntry.EntityState = EntityState.Unchanged;
-                //adapter.DetectChanges();
             }
         }
     }
