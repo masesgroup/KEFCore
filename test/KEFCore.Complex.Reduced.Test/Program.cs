@@ -129,7 +129,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                 try
                 {
                     watch.Restart();
-                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended > 1).Count();
+                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended >= 1).Count();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
@@ -201,18 +201,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
     public class BloggingContext : TestContext
     {
         public DbSet<BlogComplex> Blogs { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (ProgramConfig.Config.UseInMemoryProvider)
-            {
-                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
-            }
-            else
-            {
-                base.OnConfiguring(optionsBuilder);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

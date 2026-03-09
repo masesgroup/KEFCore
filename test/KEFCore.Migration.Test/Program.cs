@@ -187,18 +187,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (ProgramConfig.Config.UseInMemoryProvider)
-            {
-                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
-            }
-            else
-            {
-                base.OnConfiguring(optionsBuilder);
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             if (!ProgramConfig.Config.UseModelBuilder) return;
