@@ -29,8 +29,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             "dG8iUQoIRGF0ZXRpbWUSMgoOZGF0ZXRpbWVfdmFsdWUYASABKAsyGi5nb29n",
             "bGUucHJvdG9idWYuVGltZXN0YW1wEhEKCXV0Y192YWx1ZRgCIAEoCCJbCgtD",
             "b21wbGV4VHlwZRIWCgxzdHJpbmdfdmFsdWUYASABKAlIABIVCgtieXRlc192",
-            "YWx1ZRgCIAEoDEgAEhUKDWNscnR5cGVfdmFsdWUYAyABKAlCBgoEa2luZCL7",
-            "BAoMR2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUu",
+            "YWx1ZRgCIAEoDEgAEhUKDWNscnR5cGVfdmFsdWUYAyABKAlCBgoEa2luZCK2",
+            "BQoMR2VuZXJpY1ZhbHVlEjAKCm51bGxfdmFsdWUYASABKA4yGi5nb29nbGUu",
             "cHJvdG9idWYuTnVsbFZhbHVlSAASFAoKYm9vbF92YWx1ZRgCIAEoCEgAEhQK",
             "CmNoYXJfdmFsdWUYAyABKAlIABIUCgpieXRlX3ZhbHVlGAQgASgNSAASFQoL",
             "c2J5dGVfdmFsdWUYBSABKAVIABIVCgtzaG9ydF92YWx1ZRgGIAEoBUgAEhYK",
@@ -43,17 +43,18 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             "ZRgRIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIABIXCg1kZWNp",
             "bWFsX3ZhbHVlGBIgASgJSAASFQoLYnl0ZXNfdmFsdWUYEyABKAxIABIxChFj",
             "b21wbGV4dHlwZV92YWx1ZRgUIAEoCzIULnN0b3JhZ2UuQ29tcGxleFR5cGVI",
-            "ABITCgtNYW5hZ2VkVHlwZRgVIAEoBRITCgtTdXBwb3J0TnVsbBgWIAEoCEIG",
-            "CgRraW5kQocBCjVtYXNlcy5lbnRpdHlmcmFtZXdvcmtjb3JlLmtuZXQuc2Vy",
-            "aWFsaXphdGlvbi5wcm90b2J1ZkIMR2VuZXJpY1ZhbHVlUAGqAj1NQVNFUy5F",
-            "bnRpdHlGcmFtZXdvcmtDb3JlLktOZXQuU2VyaWFsaXphdGlvbi5Qcm90b2J1",
-            "Zi5TdG9yYWdlYgZwcm90bzM="));
+            "ABI5Chljb21wbGV4dHlwZWFzc3RyaW5nX3ZhbHVlGBUgASgLMhQuc3RvcmFn",
+            "ZS5Db21wbGV4VHlwZUgAEhMKC01hbmFnZWRUeXBlGBYgASgFEhMKC1N1cHBv",
+            "cnROdWxsGBcgASgIQgYKBGtpbmRChwEKNW1hc2VzLmVudGl0eWZyYW1ld29y",
+            "a2NvcmUua25ldC5zZXJpYWxpemF0aW9uLnByb3RvYnVmQgxHZW5lcmljVmFs",
+            "dWVQAaoCPU1BU0VTLkVudGl0eUZyYW1ld29ya0NvcmUuS05ldC5TZXJpYWxp",
+            "emF0aW9uLlByb3RvYnVmLlN0b3JhZ2ViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.Datetime.Parser, new[]{ "DatetimeValue", "UtcValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType.Parser, new[]{ "StringValue", "BytesValue", "ClrtypeValue" }, new[]{ "Kind" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "BytesValue", "ComplextypeValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue), global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.GenericValue.Parser, new[]{ "NullValue", "BoolValue", "CharValue", "ByteValue", "SbyteValue", "ShortValue", "UshortValue", "IntValue", "UintValue", "LongValue", "UlongValue", "FloatValue", "DoubleValue", "StringValue", "GuidValue", "DatetimeValue", "DatetimeoffsetValue", "DecimalValue", "BytesValue", "ComplextypeValue", "ComplextypeasstringValue", "ManagedType", "SupportNull" }, new[]{ "Kind" }, null, null, null)
           }));
     }
     #endregion
@@ -762,6 +763,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         case KindOneofCase.ComplextypeValue:
           ComplextypeValue = other.ComplextypeValue.Clone();
           break;
+        case KindOneofCase.ComplextypeasstringValue:
+          ComplextypeasstringValue = other.ComplextypeasstringValue.Clone();
+          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1299,7 +1303,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     /// <summary>Field number for the "complextype_value" field.</summary>
     public const int ComplextypeValueFieldNumber = 20;
     /// <summary>
-    /// Represents a decimal value.
+    /// Represents a Complex type value.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1311,8 +1315,23 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
     }
 
+    /// <summary>Field number for the "complextypeasstring_value" field.</summary>
+    public const int ComplextypeasstringValueFieldNumber = 21;
+    /// <summary>
+    /// Represents a Complex type value as string.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType ComplextypeasstringValue {
+      get { return kindCase_ == KindOneofCase.ComplextypeasstringValue ? (global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType) kind_ : null; }
+      set {
+        kind_ = value;
+        kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.ComplextypeasstringValue;
+      }
+    }
+
     /// <summary>Field number for the "ManagedType" field.</summary>
-    public const int ManagedTypeFieldNumber = 21;
+    public const int ManagedTypeFieldNumber = 22;
     private int managedType_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1324,7 +1343,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
     }
 
     /// <summary>Field number for the "SupportNull" field.</summary>
-    public const int SupportNullFieldNumber = 22;
+    public const int SupportNullFieldNumber = 23;
     private bool supportNull_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1359,6 +1378,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       DecimalValue = 18,
       BytesValue = 19,
       ComplextypeValue = 20,
+      ComplextypeasstringValue = 21,
     }
     private KindOneofCase kindCase_ = KindOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1409,6 +1429,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (DecimalValue != other.DecimalValue) return false;
       if (BytesValue != other.BytesValue) return false;
       if (!object.Equals(ComplextypeValue, other.ComplextypeValue)) return false;
+      if (!object.Equals(ComplextypeasstringValue, other.ComplextypeasstringValue)) return false;
       if (ManagedType != other.ManagedType) return false;
       if (SupportNull != other.SupportNull) return false;
       if (KindCase != other.KindCase) return false;
@@ -1439,6 +1460,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       if (HasDecimalValue) hash ^= DecimalValue.GetHashCode();
       if (HasBytesValue) hash ^= BytesValue.GetHashCode();
       if (kindCase_ == KindOneofCase.ComplextypeValue) hash ^= ComplextypeValue.GetHashCode();
+      if (kindCase_ == KindOneofCase.ComplextypeasstringValue) hash ^= ComplextypeasstringValue.GetHashCode();
       if (ManagedType != 0) hash ^= ManagedType.GetHashCode();
       if (SupportNull != false) hash ^= SupportNull.GetHashCode();
       hash ^= (int) kindCase_;
@@ -1540,12 +1562,16 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(162, 1);
         output.WriteMessage(ComplextypeValue);
       }
+      if (kindCase_ == KindOneofCase.ComplextypeasstringValue) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(ComplextypeasstringValue);
+      }
       if (ManagedType != 0) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(176, 1);
         output.WriteInt32(ManagedType);
       }
       if (SupportNull != false) {
-        output.WriteRawTag(176, 1);
+        output.WriteRawTag(184, 1);
         output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
@@ -1638,12 +1664,16 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
         output.WriteRawTag(162, 1);
         output.WriteMessage(ComplextypeValue);
       }
+      if (kindCase_ == KindOneofCase.ComplextypeasstringValue) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(ComplextypeasstringValue);
+      }
       if (ManagedType != 0) {
-        output.WriteRawTag(168, 1);
+        output.WriteRawTag(176, 1);
         output.WriteInt32(ManagedType);
       }
       if (SupportNull != false) {
-        output.WriteRawTag(176, 1);
+        output.WriteRawTag(184, 1);
         output.WriteBool(SupportNull);
       }
       if (_unknownFields != null) {
@@ -1715,6 +1745,9 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
       }
       if (kindCase_ == KindOneofCase.ComplextypeValue) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(ComplextypeValue);
+      }
+      if (kindCase_ == KindOneofCase.ComplextypeasstringValue) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ComplextypeasstringValue);
       }
       if (ManagedType != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(ManagedType);
@@ -1809,6 +1842,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             ComplextypeValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
           }
           ComplextypeValue.MergeFrom(other.ComplextypeValue);
+          break;
+        case KindOneofCase.ComplextypeasstringValue:
+          if (ComplextypeasstringValue == null) {
+            ComplextypeasstringValue = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+          }
+          ComplextypeasstringValue.MergeFrom(other.ComplextypeasstringValue);
           break;
       }
 
@@ -1927,11 +1966,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             ComplextypeValue = subBuilder;
             break;
           }
-          case 168: {
-            ManagedType = input.ReadInt32();
+          case 170: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+            if (kindCase_ == KindOneofCase.ComplextypeasstringValue) {
+              subBuilder.MergeFrom(ComplextypeasstringValue);
+            }
+            input.ReadMessage(subBuilder);
+            ComplextypeasstringValue = subBuilder;
             break;
           }
           case 176: {
+            ManagedType = input.ReadInt32();
+            break;
+          }
+          case 184: {
             SupportNull = input.ReadBool();
             break;
           }
@@ -2050,11 +2098,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage {
             ComplextypeValue = subBuilder;
             break;
           }
-          case 168: {
-            ManagedType = input.ReadInt32();
+          case 170: {
+            global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType subBuilder = new global::MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage.ComplexType();
+            if (kindCase_ == KindOneofCase.ComplextypeasstringValue) {
+              subBuilder.MergeFrom(ComplextypeasstringValue);
+            }
+            input.ReadMessage(subBuilder);
+            ComplextypeasstringValue = subBuilder;
             break;
           }
           case 176: {
+            ManagedType = input.ReadInt32();
+            break;
+          }
+          case 184: {
             SupportNull = input.ReadBool();
             break;
           }

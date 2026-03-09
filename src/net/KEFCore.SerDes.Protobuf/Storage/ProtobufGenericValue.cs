@@ -20,7 +20,6 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using MASES.KNet.Serialization;
 using System.Globalization;
-using static MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
 {
@@ -52,56 +51,36 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// <summary>
         /// Initialize a <see cref="ComplexType"/> with <paramref name="input"/>
         /// </summary>
-        /// <param name="property">The <see cref="IPropertyBase"/> to be converted</param>
+        /// <param name="type"></param>
         /// <param name="input">The generic object to be stored</param>
-        /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> used for conversion</param>
-        public ComplexType(IPropertyBase? property, ref object? input, IComplexTypeConverterFactory? complexTypeFactory = null)
+        public ComplexType(System.Type type, object? input)
         {
-            ClrtypeValue = input?.GetType()?.ToAssemblyQualified();
-            if (complexTypeFactory != null
-                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
-                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
+            ClrtypeValue = type?.ToAssemblyQualified();
+
+            if (input is string str)
             {
-                if (complexTypeHook!.Convert(PreferredConversionType.Binary, ref input))
-                {
-                    if (input is string str)
-                    {
-                        StringValue = str;
-                    }
-                    else if (input is byte[] bArray)
-                    {
-                        BytesValue = ByteString.CopyFrom(bArray);
-                    }
-                    else throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[].");
-                }
-                else throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {input} for {ClrtypeValue}.");
+                StringValue = str;
             }
-            else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance: complexTypeFactory is {complexTypeFactory}.");
+            else if (input is byte[] bArray)
+            {
+                BytesValue = ByteString.CopyFrom(bArray);
+            }
+            else throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[].");
         }
         /// <summary>
         /// Returns a the converted object
         /// </summary>
+        /// <param name="clrType">The string representing <see cref="System.Type"/></param>
         /// <param name="result">The object stored in <see cref="ComplexType"/></param>
-        /// <param name="property">The <see cref="IPropertyBase"/> to be converted</param>
-        /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> used for conversion</param>
-        public void GetContent(ref object? result, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+        public void GetContent(out string clrType, ref object? result)
         {
+            clrType = ClrtypeValue;
             result = KindCase switch
             {
                 KindOneofCase.StringValue => StringValue,
                 KindOneofCase.BytesValue => BytesValue.Memory,
                 _ => throw new InvalidOperationException("Protobuf ComplexType can manage only converted values expressed as string or byte[]."),
             };
-            if (complexTypeFactory != null
-                && (property != null ? complexTypeFactory.TryGet(property, out var complexTypeHook)
-                                     : complexTypeFactory.TryGet(ClrtypeValue, out complexTypeHook)))
-            {
-                if (!complexTypeHook!.ConvertBack(PreferredConversionType.Binary, ref result))
-                {
-                    throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {result} for {ClrtypeValue}.");
-                }
-            }
-            else throw new InvalidOperationException($"Protobuf ComplexType cannot manage {ClrtypeValue} without a proper {nameof(IComplexTypeConverter)} instance.");
         }
     }
 
@@ -124,7 +103,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
         /// <param name="property">The <see cref="IPropertyBase"/> describing the type</param>
         /// <param name="complexTypeFactory"><see cref="IComplexTypeConverterFactory"/> to use for conversions</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public GenericValue((ManagedTypes, bool) _type, ref object? input, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
+        public GenericValue((WellKnownManagedTypes, bool) _type, ref object? input, IPropertyBase? property = null, IComplexTypeConverterFactory? complexTypeFactory = null)
         {
             ManagedType = (int)_type.Item1;
             SupportNull = _type.Item2;
@@ -205,9 +184,17 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             {
                 BytesValue = ByteString.CopyFrom(bytes);
             }
-            else if (_type.Item1 == NativeTypeMapper.ManagedTypes.ComplexType)
+            else if (_type.Item1 == WellKnownManagedTypes.ComplexType)
             {
-                ComplextypeValue = new ComplexType(property, ref input, complexTypeFactory);
+                IComplexTypeConverter? complexTypeHook = null;
+                complexTypeFactory?.TryGet(property, out complexTypeHook);
+                if (complexTypeHook == null || !complexTypeHook.Convert(PreferredConversionType.Text, ref input!))
+                {
+                    input = JsonSupport.ValueContainer.Serialize(property!.ClrType, input!);
+                    ManagedType = (int)WellKnownManagedTypes.ComplexTypeAsJson;
+                }
+
+                ComplextypeValue = new ComplexType(property!.ClrType, input);
             }
             else throw new InvalidOperationException($"{input.GetType()} is not managed.");
         }
@@ -219,8 +206,6 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
             switch (KindCase)
             {
                 case KindOneofCase.None:
-                    result = null!;
-                    break;
                 case KindOneofCase.NullValue:
                     result = null!;
                     break;
@@ -279,7 +264,36 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage
                     result = BytesValue.Memory;
                     break;
                 case KindOneofCase.ComplextypeValue:
-                    ComplextypeValue.GetContent(ref result, property, complexTypeFactory);
+                    {
+                        ComplextypeValue.GetContent(out var clrType, ref result);
+                        if (complexTypeFactory != null)
+                        {
+                            bool converted = true;
+                            if (property != null && complexTypeFactory.TryGet(property, out var complexTypeHook))
+                            {
+                                converted = complexTypeHook.ConvertBack(PreferredConversionType.Binary, ref result!);
+                            }
+                            else if (complexTypeFactory.TryGet(clrType, out complexTypeHook))
+                            {
+                                converted = complexTypeHook.ConvertBack(PreferredConversionType.Binary, ref result!);
+                            }
+                            else throw new InvalidCastException($"Cannot manage record value {result} as {clrType}.");
+
+                            if (!converted) throw new InvalidOperationException($"Protobuf ComplexType {nameof(IComplexTypeConverter)} instance refused to manage input {result} for {clrType} type.");
+                        }
+                        else throw new InvalidOperationException($"Protobuf ComplexType cannot manage input {result} for type {clrType} without a proper {nameof(IComplexTypeConverterFactory)} instance.");
+                    }
+                    break;
+                case KindOneofCase.ComplextypeasstringValue:
+                    {
+                        ComplextypeasstringValue.GetContent(out var clrType, ref result);
+                        if (result is string str)
+                        {
+                            System.Type type = property?.ClrType ?? System.Type.GetType(clrType)!;
+                            result = JsonSupport.ValueContainer.Deserialize(type, str);
+                        }
+                        else throw new InvalidCastException($"Cannot convert record value {result} into string.");
+                    }
                     break;
                 default: throw new InvalidOperationException($"KindCase {KindCase} is not managed.");
             }

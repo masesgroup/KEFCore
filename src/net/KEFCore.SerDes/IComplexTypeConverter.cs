@@ -72,7 +72,7 @@ public interface IComplexTypeConverter : IComplexTypeConverterLogging
     /// <remarks>The <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer{TKey}"/> by default uses POCO serialization so it does not need to implement the method and can return <see langword="false"/>.</remarks>
     bool Convert(PreferredConversionType conversionType, ref object? data);
     /// <summary>
-    /// The method is used from <see cref="IValueContainer{T}.GetData(IEntityType, IProperty[], IComplexProperty[], ref object[], IComplexTypeConverterFactory?)"/> and <see cref="IValueContainer{T}.GetProperties"/> to manage <see cref="IComplexProperty"/> that does not have an autonomous conversion
+    /// The method is used from <see cref="IValueContainer{T}.GetData(IValueContainerMetadata, ref object[], IComplexTypeConverterFactory?)"/> and <see cref="IValueContainer{T}.GetProperties"/> to manage <see cref="IComplexProperty"/> that does not have an autonomous conversion
     /// </summary>
     /// <param name="conversionType">The preferred conversion can be applied, however the <see cref="IComplexTypeConverter"/> can decide autonomously</param>
     /// <param name="data">The input data coming from serialization to be converted back, the converted value shall return on the same reference</param>

@@ -47,19 +47,19 @@ public interface IComplexTypeConverterFactory
     /// <param name="complexProperty">The <see cref="IComplexProperty"/> to be converted</param>
     /// <param name="converter">The <see cref="IComplexTypeConverter"/> associated to <paramref name="complexProperty"/></param>
     /// <returns><see langword="true"/> if the <see cref="IComplexTypeConverter"/> was found otherwise <see langword="false"/></returns>
-    bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter? converter);
+    bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter converter);
     /// <summary>
     /// The method is used from constructor of <see cref="IValueContainer{T}"/> to retrieve <see cref="IComplexTypeConverter"/> associated to <paramref name="complexPropertyType"/>
     /// </summary>
     /// <param name="complexPropertyType">The CLR <see cref="Type"/> of the <see cref="IComplexProperty"/> to be converted</param>
     /// <param name="converter">The <see cref="IComplexTypeConverter"/> associated to <paramref name="complexPropertyType"/></param>
     /// <returns><see langword="true"/> if the <see cref="IComplexTypeConverter"/> was found otherwise <see langword="false"/></returns>
-    bool TryGet(Type complexPropertyType, out IComplexTypeConverter? converter);
+    bool TryGet(Type complexPropertyType, out IComplexTypeConverter converter);
     /// <summary>
     /// The method is used from constructor of <see cref="IValueContainer{T}"/> to retrieve <see cref="IComplexTypeConverter"/> associated to <paramref name="complexPropertyType"/>
     /// </summary>
     /// <param name="complexPropertyType">The CLR <see cref="Type"/> of the <see cref="IComplexProperty"/> to be converted</param>
     /// <param name="converter">The <see cref="IComplexTypeConverter"/> associated to <paramref name="complexPropertyType"/></param>
     /// <returns><see langword="true"/> if the <see cref="IComplexTypeConverter"/> was found otherwise <see langword="false"/></returns>
-    bool TryGet(string complexPropertyType, out IComplexTypeConverter? converter);
+    bool TryGet(string complexPropertyType, out IComplexTypeConverter converter);
 }

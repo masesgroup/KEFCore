@@ -23,7 +23,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Common.Header;
 using System.Text;
-using System.Text.Json;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
@@ -92,7 +91,7 @@ public static class DefaultKEFCoreSerDes
             readonly byte[] keySerDesName;
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(TData).FullName!);
             readonly ISerDesRaw<TData> _defaultSerDes = default!;
-            readonly JsonSerializerOptions? _options = null;
+
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -108,13 +107,6 @@ public static class DefaultKEFCoreSerDes
                 else if (!typeof(TData).IsArray)
                 {
                     throw new InvalidOperationException($"{typeof(JsonRaw<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
-                }
-                else
-                {
-                    _options = new JsonSerializerOptions()
-                    {
-                        WriteIndented = false,
-                    };
                 }
             }
 
@@ -133,8 +125,7 @@ public static class DefaultKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data);
-                return Encoding.UTF8.GetBytes(jsonStr);
+                return JsonSupport.Key.SerializeAsBytes(data);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, byte[] data)
@@ -147,7 +138,7 @@ public static class DefaultKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null || data.Length == 0) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
+                return JsonSupport.Key.Deserialize<TData>(data);
             }
         }
 
@@ -160,7 +151,6 @@ public static class DefaultKEFCoreSerDes
             readonly byte[] keySerDesName;
             readonly byte[] keyTypeName = Encoding.UTF8.GetBytes(typeof(TData).FullName!);
             readonly ISerDesBuffered<TData> _defaultSerDes = default!;
-            readonly JsonSerializerOptions? _options = null;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -176,13 +166,6 @@ public static class DefaultKEFCoreSerDes
                 else if (!typeof(TData).IsArray)
                 {
                     throw new InvalidOperationException($"{typeof(JsonBuffered<>).ToAssemblyQualified()} cannot manage {typeof(TData).Name}, override or build a new serializer");
-                }
-                else
-                {
-                    _options = new JsonSerializerOptions()
-                    {
-                        WriteIndented = false,
-                    };
                 }
             }
 
@@ -201,9 +184,7 @@ public static class DefaultKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                var ms = new MemoryStream();
-                System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);
-                return ByteBuffer.From(ms);
+                return JsonSupport.Key.SerializeAsByteBuffer(data);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, ByteBuffer data)
@@ -216,10 +197,10 @@ public static class DefaultKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data.ToStream(), _options)!;
+                return JsonSupport.Key.Deserialize<TData>(data);
             }
         }
-    } 
+    }
 
     /// <summary>
     /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
@@ -260,7 +241,7 @@ public static class DefaultKEFCoreSerDes
         ISerDesRaw<T> ISerDesSelector<T>.NewByteArraySerDes() => NewByteArraySerDes();
         /// <inheritdoc cref="ISerDesSelector{T}.NewByteBufferSerDes"/>
         ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
-    
+
         /// <summary>
         /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
@@ -269,7 +250,6 @@ public static class DefaultKEFCoreSerDes
         {
             readonly byte[] valueContainerSerDesName;
             readonly byte[] valueContainerName = null!;
-            readonly System.Text.Json.JsonSerializerOptions _options;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -287,10 +267,6 @@ public static class DefaultKEFCoreSerDes
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
                         valueContainerName = Encoding.UTF8.GetBytes(t.ToAssemblyQualified());
-                        _options = new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.General)
-                        {
-                            WriteIndented = false,
-                        };
                         return;
                     }
                     else throw new ArgumentException($"{typeof(TData).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -311,8 +287,7 @@ public static class DefaultKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                var jsonStr = System.Text.Json.JsonSerializer.Serialize<TData>(data, _options);
-                return Encoding.UTF8.GetBytes(jsonStr);
+                return JsonSupport.ValueContainer.SerializeAsBytes(data);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, byte[] data)
@@ -323,7 +298,7 @@ public static class DefaultKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
             {
                 if (data == null || data.Length == 0) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data, _options)!;
+                return JsonSupport.ValueContainer.Deserialize<TData>(data);
             }
         }
 
@@ -335,7 +310,6 @@ public static class DefaultKEFCoreSerDes
         {
             readonly byte[] valueContainerSerDesName;
             readonly byte[] valueContainerName = null!;
-            readonly System.Text.Json.JsonSerializerOptions _options;
             /// <inheritdoc/>
             public override bool UseHeaders => true;
             /// <summary>
@@ -353,10 +327,6 @@ public static class DefaultKEFCoreSerDes
                     if (t.GetInterface(typeof(IValueContainer<>).Name) != null)
                     {
                         valueContainerName = Encoding.UTF8.GetBytes(t.ToAssemblyQualified());
-                        _options = new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.General)
-                        {
-                            WriteIndented = false,
-                        };
                         return;
                     }
                     else throw new ArgumentException($"{typeof(TData).Name} does not implement IValueContainer<> and cannot be used because it is not a valid ValueContainer type");
@@ -377,9 +347,7 @@ public static class DefaultKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                var ms = new MemoryStream();
-                System.Text.Json.JsonSerializer.Serialize<TData>(ms, data, _options);
-                return ByteBuffer.From(ms);
+                return JsonSupport.ValueContainer.SerializeAsByteBuffer(data);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, ByteBuffer data)
@@ -390,7 +358,7 @@ public static class DefaultKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                return System.Text.Json.JsonSerializer.Deserialize<TData>(data.ToStream(), _options)!;
+                return JsonSupport.ValueContainer.Deserialize<TData>(data);
             }
         }
     }

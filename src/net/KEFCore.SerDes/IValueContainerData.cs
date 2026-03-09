@@ -1,0 +1,41 @@
+/*
+*  Copyright (c) 2022-2026 MASES s.r.l.
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*  http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*
+*  Refer to LICENSE for more information.
+*/
+
+#nullable enable
+
+namespace MASES.EntityFrameworkCore.KNet.Serialization;
+
+/// <summary>
+/// Contains the data associated to a single data change
+/// </summary>
+public interface IValueContainerData : IValueContainerMetadata
+{
+    /// <summary>
+    /// The <see cref="Microsoft.EntityFrameworkCore.EntityState"/> associated to <see cref="IValueContainerMetadata.EntityType"/>
+    /// </summary>
+    EntityState EntityState { get; }
+    /// <summary>
+    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="IValueContainerMetadata.FlattenedProperties"/>
+    /// </summary>
+    /// <remarks>Values are indexed and the first values are associated to <see cref="IValueContainerMetadata.Properties"/> too</remarks>
+    object?[] PropertyValues { get; }
+    /// <summary>
+    /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="IValueContainerMetadata.ComplexProperties"/>
+    /// </summary>
+    object?[]? ComplexPropertyValues { get; }
+}

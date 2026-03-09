@@ -40,7 +40,7 @@ public class EntityProjectionExpression(
     IReadOnlyDictionary<IProperty, MethodCallExpression> readExpressionMap) : Expression, IPrintableExpression
 {
     private readonly IReadOnlyDictionary<IProperty, MethodCallExpression> _readExpressionMap = readExpressionMap;
-    private readonly Dictionary<INavigation, StructuralTypeShaperExpression> _navigationExpressionsCache = new();
+    private readonly Dictionary<INavigation, StructuralTypeShaperExpression> _navigationExpressionsCache = [];
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
