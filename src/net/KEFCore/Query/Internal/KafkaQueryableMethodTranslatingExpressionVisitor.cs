@@ -651,13 +651,53 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
         LambdaExpression? predicate,
         Type returnType,
         bool returnDefault)
-        => TranslateSingleResultOperator(
-            source,
-            predicate,
-            returnType,
+    {
+        var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
+
+        if (predicate != null)
+        {
+            var newSource = TranslateWhere(source, predicate);
+            if (newSource == null) return null;
+            source = newSource;
+            kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
+        }
+
+        switch (kafkaQueryExpression.ServerQueryExpression)
+        {
+            case KafkaTableExpression tableExpression:
+                kafkaQueryExpression.UpdateServerQueryExpression(
+                    new KafkaReverseTableExpression(tableExpression.EntityType));
+                break;
+
+            case KafkaRangeTableExpression range:
+                kafkaQueryExpression.UpdateServerQueryExpression(
+                    new KafkaReverseRangeTableExpression(
+                        range.EntityType,
+                        rangeStart: range.RangeEnd,
+                        rangeEnd: range.RangeStart));
+                break;
+
+            case KafkaSingleKeyTableExpression:
+                break;
+
+            default:
+                kafkaQueryExpression.UpdateServerQueryExpression(
+                    Expression.Call(
+                        EnumerableMethods.Reverse.MakeGenericMethod(
+                            kafkaQueryExpression.CurrentParameter.Type),
+                        kafkaQueryExpression.ServerQueryExpression));
+                break;
+        }
+
+        kafkaQueryExpression.ConvertToSingleResult(
             returnDefault
-                ? EnumerableMethods.LastOrDefaultWithoutPredicate
-                : EnumerableMethods.LastWithoutPredicate);
+                ? EnumerableMethods.FirstOrDefaultWithoutPredicate
+                : EnumerableMethods.FirstWithoutPredicate);
+
+        return returnType != source.ShaperExpression.Type
+            ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, returnType))
+            : source;
+    }
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1102,6 +1142,48 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
     protected override ShapedQueryExpression? TranslateWhere(ShapedQueryExpression source, LambdaExpression predicate)
     {
         var kafkaQueryExpression = (KafkaQueryExpression)source.QueryExpression;
+
+        if (kafkaQueryExpression.ServerQueryExpression is KafkaTableExpression tableExpression)
+        {
+            var translatedPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
+            if (translatedPredicate != null)
+            {
+                if (TryExtractPrimaryKeyLookup(
+                        tableExpression.EntityType,
+                        translatedPredicate,
+                        out var keyExpressions))
+                {
+                    kafkaQueryExpression.UpdateServerQueryExpression(
+                        new KafkaSingleKeyTableExpression(
+                            tableExpression.EntityType, keyExpressions!));
+                    return source;
+                }
+
+                if (TryExtractKeyRange(
+                        tableExpression.EntityType,
+                        translatedPredicate,
+                        out var rangeStart,
+                        out var rangeEnd))
+                {
+                    kafkaQueryExpression.UpdateServerQueryExpression(
+                        new KafkaRangeTableExpression(
+                            tableExpression.EntityType, rangeStart, rangeEnd));
+                    return source;
+                }
+
+                kafkaQueryExpression.UpdateServerQueryExpression(
+                    Expression.Call(
+                        EnumerableMethods.Where.MakeGenericMethod(
+                            kafkaQueryExpression.CurrentParameter.Type),
+                        kafkaQueryExpression.ServerQueryExpression,
+                        translatedPredicate));
+
+                return source;
+            }
+
+            return null;
+        }
+
         var newPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
         if (newPredicate == null)
         {
@@ -1118,6 +1200,177 @@ public class KafkaQueryableMethodTranslatingExpressionVisitor : QueryableMethodT
 
         return source;
     }
+
+    private static bool TryExtractPrimaryKeyLookup(
+    IEntityType entityType,
+    LambdaExpression translatedPredicate,
+    out IReadOnlyList<Expression>? keyExpressions)
+    {
+        keyExpressions = null;
+        var pk = entityType.FindPrimaryKey();
+        if (pk == null) return false;
+
+        var equalities = new Dictionary<IProperty, Expression>();
+        if (!TryDecomposeEqualities(translatedPredicate.Body, equalities))
+            return false;
+
+        if (!pk.Properties.All(p => equalities.ContainsKey(p)))
+            return false;
+
+        keyExpressions = pk.Properties
+            .Select(p => equalities[p])
+            .ToList();
+
+        return true;
+    }
+
+    private static bool TryExtractKeyRange(
+        IEntityType entityType,
+        LambdaExpression translatedPredicate,
+        out IReadOnlyList<Expression>? rangeStart,
+        out IReadOnlyList<Expression>? rangeEnd)
+    {
+        rangeStart = null;
+        rangeEnd = null;
+
+        var pk = entityType.FindPrimaryKey();
+
+        if (pk == null || pk.Properties.Count != 1) return false;
+
+        var pkProperty = pk.Properties[0];
+        var startExprs = new Dictionary<IProperty, Expression>();
+        var endExprs = new Dictionary<IProperty, Expression>();
+
+        if (!TryDecomposeRanges(translatedPredicate.Body, startExprs, endExprs))
+            return false;
+
+        if (!startExprs.ContainsKey(pkProperty) && !endExprs.ContainsKey(pkProperty))
+            return false;
+
+        rangeStart = startExprs.TryGetValue(pkProperty, out Expression? value)
+            ? [value]
+            : null;
+
+        rangeEnd = endExprs.TryGetValue(pkProperty, out Expression? value1)
+            ? [value1]
+            : null;
+
+        return true;
+    }
+
+    private static bool TryDecomposeEqualities(
+        Expression expression,
+        Dictionary<IProperty, Expression> equalities)
+    {
+        if (expression is BinaryExpression { NodeType: ExpressionType.AndAlso } and)
+            return TryDecomposeEqualities(and.Left, equalities)
+                && TryDecomposeEqualities(and.Right, equalities);
+
+        if (expression is BinaryExpression { NodeType: ExpressionType.Equal } eq)
+        {
+            var property = TryGetProperty(eq.Left);
+            if (property != null)
+            {
+                equalities[property] = StripConvert(eq.Right);
+                return true;
+            }
+
+            property = TryGetProperty(eq.Right);
+            if (property != null)
+            {
+                equalities[property] = StripConvert(eq.Left);
+                return true;
+            }
+        }
+
+        if (expression is MethodCallExpression
+            {
+                Method.Name: nameof(object.Equals),
+                Arguments.Count: 2
+            } mc
+            && typeof(ValueComparer).IsAssignableFrom(mc.Method.DeclaringType))
+        {
+            var property = TryGetProperty(mc.Arguments[0])
+                        ?? TryGetProperty(mc.Arguments[1]);
+            if (property != null)
+            {
+                var value = TryGetProperty(mc.Arguments[0]) != null
+                    ? mc.Arguments[1]
+                    : mc.Arguments[0];
+                equalities[property] = StripConvert(value);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryDecomposeRanges(
+        Expression expression,
+        Dictionary<IProperty, Expression> startExprs,
+        Dictionary<IProperty, Expression> endExprs)
+    {
+        if (expression is BinaryExpression { NodeType: ExpressionType.AndAlso } and)
+            return TryDecomposeRanges(and.Left, startExprs, endExprs)
+                && TryDecomposeRanges(and.Right, startExprs, endExprs);
+
+        if (expression is BinaryExpression binary)
+        {
+            var leftProp = TryGetProperty(binary.Left);
+            var rightProp = TryGetProperty(binary.Right);
+
+            switch (binary.NodeType)
+            {
+                case ExpressionType.GreaterThanOrEqual when leftProp != null:
+                    startExprs[leftProp] = StripConvert(binary.Right);
+                    return true;
+
+                case ExpressionType.GreaterThan when leftProp != null:
+                    startExprs[leftProp] = StripConvert(binary.Right);
+                    return true;
+
+                case ExpressionType.LessThanOrEqual when leftProp != null:
+                    endExprs[leftProp] = StripConvert(binary.Right);
+                    return true;
+
+                case ExpressionType.LessThan when leftProp != null:
+                    endExprs[leftProp] = StripConvert(binary.Right);
+                    return true;
+
+                case ExpressionType.GreaterThanOrEqual when rightProp != null:
+                    endExprs[rightProp] = StripConvert(binary.Left);
+                    return true;
+
+                case ExpressionType.LessThanOrEqual when rightProp != null:
+                    startExprs[rightProp] = StripConvert(binary.Left);
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static IProperty? TryGetProperty(Expression expression)
+    {
+        expression = StripConvert(expression);
+
+        if (expression is MethodCallExpression { Method.IsGenericMethod: true } mc
+            && mc.Method.GetGenericMethodDefinition()
+               == ExpressionExtensions.ValueBufferTryReadValueMethod)
+        {
+            return mc.Arguments[2].GetConstantValue<IProperty>();
+        }
+
+        return null;
+    }
+
+    private static Expression StripConvert(Expression expression)
+        => expression is UnaryExpression
+        {
+            NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked
+        } unary
+            ? StripConvert(unary.Operand)
+            : expression;
 
     private Expression? TranslateExpression(Expression expression, bool preserveType = false)
     {

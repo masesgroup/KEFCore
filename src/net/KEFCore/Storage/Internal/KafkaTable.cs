@@ -103,7 +103,15 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     public virtual void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records) => _producer.Commit(futures, records);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> ValueBuffers => _producer.ValueBuffers;
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers() => _producer.GetValueBuffers();
+    /// <inheritdoc/>
+    public virtual ValueBuffer? GetValueBuffer(object?[]? keyValues) => _producer.GetValueBuffer(keyValues);
+    /// <inheritdoc/>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersRange(rangeStart, rangeEnd);
+    /// <inheritdoc/>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse() => _producer.GetValueBuffersReverse();
+    /// <inheritdoc/>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(rangeStart, rangeEnd);
     /// <inheritdoc/>
     public void Start() => _producer.Start();
 

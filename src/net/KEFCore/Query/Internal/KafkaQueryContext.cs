@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using Org.Apache.Kafka.Common;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// <summary>
@@ -25,24 +26,61 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaQueryContext : QueryContext
+/// <remarks>
+/// Default initializer
+/// </remarks>
+public class KafkaQueryContext(QueryContextDependencies dependencies, IKafkaCluster cluster) : QueryContext(dependencies)
 {
-    private readonly IKafkaCluster _cluster;
     /// <summary>
     /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/>
     /// </summary>
-    /// <param name="entityType"></param>
-    /// <returns></returns>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
-        return _cluster.GetValueBuffers(entityType);
+        return cluster.GetValueBuffers(entityType);
     }
     /// <summary>
-    /// Default initializer
+    /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> with <paramref name="keyValues"/>
     /// </summary>
-    public KafkaQueryContext(QueryContextDependencies dependencies, IKafkaCluster cluster)
-        : base(dependencies)
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="keyValues">The key values</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffer(IEntityType entityType, object?[] keyValues)
     {
-        _cluster = cluster;
+        var result = cluster.GetValueBuffer(entityType, keyValues);
+        return result.HasValue ? [result.Value] : [];
     }
+    /// <summary>
+    /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> in the range between <paramref name="rangeStart"/> and <paramref name="rangeEnd"/>
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(
+        IEntityType entityType,
+        object?[]? rangeStart,
+        object?[]? rangeEnd)
+        => cluster.GetValueBuffersRange(entityType, rangeStart, rangeEnd);
+
+    /// <summary>
+    /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> in reverse order
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType)
+        => cluster.GetValueBuffersReverse(entityType);
+    /// <summary>
+    /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> in the reverse range between <paramref name="rangeStart"/> and <paramref name="rangeEnd"/>
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(
+        IEntityType entityType,
+        object?[]? rangeStart, 
+        object?[]? rangeEnd)
+        => cluster.GetValueBuffersReverseRange(entityType, rangeStart, rangeEnd);
 }

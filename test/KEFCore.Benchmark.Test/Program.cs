@@ -90,14 +90,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             context.Add(new Blog
                             {
                                 Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                                Posts = new List<Post>()
-                                {
+                                Posts =
+                                [
                                     new Post()
                                     {
                                         Title = "title",
                                         Content = i.ToString()
                                     }
-                                },
+                                ],
                                 Rating = i,
                             });
                         }
@@ -170,12 +170,27 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes[6] = watch.Elapsed;
+                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+
+                        watch.Restart();
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes[7] = watch.Elapsed;
+                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+
+
+                        watch.Restart();
                         var selector = (from op in context.Blogs
                                         join pg in context.Posts on op.BlogId equals pg.BlogId
                                         where pg.BlogId == op.BlogId
                                         select new { pg, op });
                         watch.Stop();
-                        _tests[execution].QueryTimes[6] = watch.Elapsed;
+                        _tests[execution].QueryTimes[8] = watch.Elapsed;
                         var result = selector.ToList();
                         ProgramConfig.ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
 
@@ -185,11 +200,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                                          where op.Rating >= 100
                                          select new { pg, op });
                         watch.Stop();
-                        _tests[execution].QueryTimes[7] = watch.Elapsed;
-                        var result2 = selector.ToList();
+                        _tests[execution].QueryTimes[9] = watch.Elapsed;
+                        var result2 = selector2.ToList();
                         ProgramConfig.ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
                         singleTestWatch.Stop();
-                        _tests[execution].QueryTimes[8] = singleTestWatch.Elapsed;
+                        _tests[execution].QueryTimes[10] = singleTestWatch.Elapsed;
+
                         ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
                     }
                 }

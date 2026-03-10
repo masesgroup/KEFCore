@@ -33,6 +33,25 @@ public interface IKafkaStreamsRetriever<TKey> : IDisposable where TKey : notnull
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffers();
     /// <summary>
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKafkaStreamsRetriever{TKey}"/> instance
+    /// </summary>
+    /// <param name="rangeStart">The start key</param>
+    /// <param name="rangeEnd">The end key</param>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersRange(TKey rangeStart, TKey rangeEnd);
+    /// <summary>
+    /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKafkaStreamsRetriever{TKey}"/> instance
+    /// </summary>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersReverse();
+    /// <summary>
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKafkaStreamsRetriever{TKey}"/> instance
+    /// </summary>
+    /// <param name="rangeStart">The start key</param>
+    /// <param name="rangeEnd">The end key</param>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(TKey rangeStart, TKey rangeEnd);
+    /// <summary>
     /// Check if a <paramref name="key"/> exist
     /// </summary>
     /// <param name="key">The key to check for existence</param>

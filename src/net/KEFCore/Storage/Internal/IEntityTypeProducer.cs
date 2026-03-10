@@ -42,9 +42,35 @@ public interface IEntityTypeProducer : IDisposable
     /// <returns></returns>
     void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records);
     /// <summary>
-    /// The current <see cref="ValueBuffer"/>s
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
-    IEnumerable<ValueBuffer> ValueBuffers { get; }
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffers();
+    /// <summary>
+    /// Retrieve an<see cref="ValueBuffer"/> associated to <paramref name="keyValues"/>
+    /// </summary>
+    /// <param name="keyValues">The key</param>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    ValueBuffer? GetValueBuffer(object?[]? keyValues);
+    /// <summary>
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
+    /// </summary>
+    /// <param name="rangeStart">The start key</param>
+    /// <param name="rangeEnd">The end key</param>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd);
+    /// <summary>
+    /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/>
+    /// </summary>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersReverse();
+    /// <summary>
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
+    /// </summary>
+    /// <param name="rangeStart">The start key</param>
+    /// <param name="rangeEnd">The end key</param>
+    /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>
