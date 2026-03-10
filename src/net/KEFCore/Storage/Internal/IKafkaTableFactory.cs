@@ -31,14 +31,14 @@ public interface IKafkaTableFactory
     /// <param name="cluster"></param>
     /// <param name="entityType"></param>
     /// <returns></returns>
-    IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType);
+    IKafkaTable Create(IKafkaCluster cluster, string topicName, IEntityType entityType);
     /// <summary>
     /// Returns a <see cref="IKafkaTable"/>
     /// </summary>
     /// <param name="cluster"></param>
-    /// <param name="entityType"></param>
+    /// <param name="topicName"></param>
     /// <returns></returns>
-    IKafkaTable Get(IKafkaCluster cluster, IEntityType entityType);
+    IKafkaTable Get(IKafkaCluster cluster, string topicName);
     /// <summary>
     /// Returns a <see cref="IKafkaTable"/>
     /// </summary>

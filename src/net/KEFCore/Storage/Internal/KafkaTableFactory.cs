@@ -37,18 +37,18 @@ public class KafkaTableFactory(
     private readonly ILoggingOptions _loggingOptions = loggingOptions;
     private readonly IKafkaSingletonOptions _options = options;
 
-    private readonly ConcurrentDictionary<(IKafkaCluster Cluster, Type EntityType), IKafkaTable> _factories = new();
+    private readonly ConcurrentDictionary<(IKafkaCluster Cluster, string topicName), IKafkaTable> _factories = new();
 
     /// <inheritdoc/>
-    public virtual IKafkaTable Create(IKafkaCluster cluster, IEntityType entityType)
-        => _factories.GetOrAdd((cluster, entityType.ClrType), e => CreateTable(cluster, entityType)());
+    public virtual IKafkaTable Create(IKafkaCluster cluster, string topicName, IEntityType entityType)
+        => _factories.GetOrAdd((cluster, topicName), e => CreateTable(cluster, entityType)());
 
     /// <inheritdoc/>
-    public virtual IKafkaTable Get(IKafkaCluster cluster, IEntityType entityType)
+    public virtual IKafkaTable Get(IKafkaCluster cluster, string topicName)
     {
-        if (!_factories.TryGetValue((cluster, entityType.ClrType), out var table))
+        if (!_factories.TryGetValue((cluster, topicName), out var table))
         {
-            throw new InvalidOperationException($"{entityType} on ClusterId {cluster.ClusterId} not registered yet.");
+            throw new InvalidOperationException($"Topic name {topicName} on ClusterId {cluster.ClusterId} not registered yet.");
         }
         return table;
     }
@@ -70,24 +70,24 @@ public class KafkaTableFactory(
         if (table != null)
         {
             table.Dispose();
-            _factories.TryRemove((table.Cluster, table.EntityType.ClrType), out _);
+            _factories.TryRemove((table.Cluster, table.AssociatedTopicName), out _);
         }
     }
 
-    private Func<IKafkaTable> CreateTable(IKafkaCluster Cluster, IEntityType EntityType)
+    private Func<IKafkaTable> CreateTable(IKafkaCluster cluster, IEntityType entityType)
         => (Func<IKafkaTable>)typeof(KafkaTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
-            .MakeGenericMethod(EntityType.FindPrimaryKey()!.GetKeyType(),
-                               _options.ValueContainerType(EntityType),
-                               _options.JVMKeyType(EntityType),
-                               _options.JVMValueContainerType(EntityType))
-            .Invoke(null, [Cluster, EntityType, _loggingOptions])!;
+            .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(),
+                               _options.ValueContainerType(entityType),
+                               _options.JVMKeyType(entityType),
+                               _options.JVMValueContainerType(entityType))
+            .Invoke(null, [cluster, entityType, _loggingOptions])!;
 
     private static Func<IKafkaTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(
-        IKafkaCluster Cluster,
-        IEntityType EntityType,
+        IKafkaCluster cluster,
+        IEntityType entityType,
         ILoggingOptions loggingOptions)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(Cluster, EntityType, loggingOptions);
+        => () => new KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, loggingOptions);
 }

@@ -40,7 +40,6 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
             KeySerDesSelectorType = kafkaOptions.KeySerDesSelectorType;
             ValueSerDesSelectorType = kafkaOptions.ValueSerDesSelectorType;
             ValueContainerType = kafkaOptions.ValueContainerType;
-            UseNameMatching = kafkaOptions.UseNameMatching;
             TopicPrefix = kafkaOptions.TopicPrefix;
             ApplicationId = kafkaOptions.ApplicationId;
             BootstrapServers = kafkaOptions.BootstrapServers;
@@ -83,8 +82,6 @@ public class KafkaSingletonOptions : IKafkaSingletonOptions
     public virtual Type? ValueSerDesSelectorType { get; private set; }
     /// <inheritdoc/>
     public virtual Type? ValueContainerType { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool UseNameMatching { get; private set; }
     /// <inheritdoc/>
     public virtual string? TopicPrefix { get; private set; }
     /// <inheritdoc/>

@@ -11,7 +11,6 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key
   - **ValueSerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value
   - **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka™ record value
-  - **UseNameMatching**: set to **false** to avoid Entity matching based on Name
   - **BootstrapServers**: the server hosting the broker of Apache Kafka™
   - **ApplicationId**: the application identifier used to identify the context
   - **TopicPrefix**: the optional user defined name which is used to prepend every Topic which belongs to the application
