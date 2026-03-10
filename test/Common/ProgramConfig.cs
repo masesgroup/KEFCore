@@ -46,8 +46,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
     public class DebugOutputLogger(string category) : ILogger
     {
         private readonly string _category = category;
-        private readonly LogLevel _minLogLevel = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information : LogLevel.Debug;
-
+        private readonly LogLevel _minLogLevel = !ProgramConfig.Config.ForceDebugLog 
+                                                 && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+                                                                                                                 : LogLevel.Debug; 
+ 
         public IDisposable BeginScope<TState>(TState state) where TState : notnull => null;
 
         public bool IsEnabled(LogLevel logLevel) =>
@@ -68,12 +70,22 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information : LogLevel.Debug)
+                builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog 
+                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+                                                                                                        : LogLevel.Debug)
                        .AddProvider(new DebugOutputLoggerProvider());
             });
 
             optionsBuilder.UseLoggerFactory(loggerFactory);
-            base.OnConfiguring(optionsBuilder);
+
+            if (ProgramConfig.Config.UseInMemoryProvider)
+            {
+                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
+            }
+            else
+            {
+                base.OnConfiguring(optionsBuilder);
+            }
         }
     }
 
@@ -106,6 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfExtraElements { get; set; } = 100;
         public bool ManageEvents { get; set; } = true;
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
+        public bool ForceDebugLog { get; set; } = false;
 
         public void ApplyOnContext(KafkaDbContext context)
         {

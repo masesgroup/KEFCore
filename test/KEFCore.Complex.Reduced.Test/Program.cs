@@ -56,17 +56,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
                 }
 
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 if (context.Database.EnsureCreated()) // call always for initialization
                 {
-                    ProgramConfig.ReportString("EnsureCreated created database");
+                    watch.Stop();
+                    ProgramConfig.ReportString($"EnsureCreated created database in {watch.ElapsedMilliseconds} ms");
                 }
                 else
                 {
-                    ProgramConfig.ReportString("EnsureCreated does not created database");
+                    watch.Stop();
+                    ProgramConfig.ReportString($"EnsureCreated does not created database in {watch.ElapsedMilliseconds} ms");
                 }
+                watch.Start();
 
                 testWatcher.Start();
-                Stopwatch watch = new Stopwatch();
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Start();
@@ -129,7 +133,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                 try
                 {
                     watch.Restart();
-                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended > 1).Count();
+                    int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended >= 1).Count();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
@@ -201,18 +205,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
     public class BloggingContext : TestContext
     {
         public DbSet<BlogComplex> Blogs { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (ProgramConfig.Config.UseInMemoryProvider)
-            {
-                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
-            }
-            else
-            {
-                base.OnConfiguring(optionsBuilder);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -12,6 +12,11 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      EnableDebugLogging:
+        description: 'Enable debug logs in tests'
+        required: false
+        default: false
+        type: boolean
       ExecuteOnMoreOSes:
         description: 'Test on more OSes'
         required: false
@@ -112,6 +117,11 @@ jobs:
                 echo "run_build=true" >> $GITHUB_OUTPUT
                 break
               fi
+              if [[ $added_modified_file == ".github/workflows/build_common.yaml"* ]]; then
+                echo "$added_modified_file is myself."
+                echo "run_build=true" >> $GITHUB_OUTPUT
+                break
+              fi
               if [[ $added_modified_file == "src/net/"* ]]; then
                 echo "$added_modified_file file is under the directory 'src/'."
                 echo "run_build=true" >> $GITHUB_OUTPUT
@@ -137,6 +147,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/build_common.yaml
     with:
+      EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       ExecuteOnMoreOSes: ${{ github.event_name == 'schedule' }}
       ExecuteOnLargerJDKSet: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true

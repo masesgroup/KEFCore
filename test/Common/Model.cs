@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Org.W3c.Dom.Ls;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -291,7 +292,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     }
 
     [ComplexType]
-    public class TaxInfoExtended
+    public class TaxInfoExtended : IEquatable<TaxInfoExtended>
     {
         public TaxInfoExtended()
         {
@@ -313,9 +314,28 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
 
         public int CodeExtended { get; set; }
         public decimal PercentageExtended { get; set; }
+
         public override string ToString()
         {
             return $"{CodeExtended}_{PercentageExtended}";
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is TaxInfoExtended no)
+            {
+                return Equals(no);
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CodeExtended, PercentageExtended);
+        }
+
+        public bool Equals(TaxInfoExtended other)
+        {
+            return other.CodeExtended == CodeExtended
+                   && other.PercentageExtended == PercentageExtended;
         }
     }
 
@@ -440,7 +460,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
     }
 
     [ComplexType]
-    public class TaxInfoExtended
+    public class TaxInfoExtended : IEquatable<TaxInfoExtended>
     {
         public TaxInfoExtended()
         {
@@ -469,10 +489,29 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
         {
             return $"{CodeExtended}_{PercentageExtended}_{NestedTaxInfoExtended}";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj is TaxInfoExtended no)
+            {
+                return Equals(no);
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CodeExtended, PercentageExtended, NestedTaxInfoExtended);
+        }
+
+        public bool Equals(TaxInfoExtended other)
+        {
+            return other.CodeExtended == CodeExtended
+                   && other.PercentageExtended == PercentageExtended
+                   && other.NestedTaxInfoExtended.Equals(NestedTaxInfoExtended);
+        }
     }
 
     [ComplexType]
-    public class NestedTaxInfoExtended
+    public class NestedTaxInfoExtended : IEquatable<NestedTaxInfoExtended>
     {
         public NestedTaxInfoExtended()
         {
@@ -497,6 +536,24 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
         public override string ToString()
         {
             return $"{CodeExtended}${PercentageExtended}";
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is NestedTaxInfoExtended no)
+            {
+                return Equals(no);
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CodeExtended, PercentageExtended);
+        }
+
+        public bool Equals(NestedTaxInfoExtended other)
+        {
+            return other.CodeExtended == CodeExtended
+                   && other.PercentageExtended == PercentageExtended;
         }
     }
 
