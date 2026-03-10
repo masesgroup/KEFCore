@@ -26,12 +26,13 @@ using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
-using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KafkaClusterAdmin : IDisposable
     {
+        static internal bool DisableClusterInvocation = false; // used only to activate an external model builder
+
         readonly string _clusterId;
         private readonly Admin? _kafkaAdminClient = null;
         private readonly Properties _bootstrapProperties;
@@ -43,6 +44,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         KafkaClusterAdmin(string bootstrapServers)
         {
+            if (DisableClusterInvocation) { _clusterId = "FakeClusterId"; return; }
+
             _bootstrapProperties = AdminClientConfigBuilder.Create().WithBootstrapServers(bootstrapServers).ToProperties();
             try
             {

@@ -19,10 +19,12 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 
 /// <summary>
-///     A builder for building conventions for th Kafka provider.
+///     A builder for building conventions for the KEFCore provider.
 /// </summary>
 /// <remarks>
 ///     <para>
@@ -34,7 +36,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///     </para>
 ///     <para>
 ///         See <see href="https://aka.ms/efcore-docs-conventions">Model building conventions</see>, and
-///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+///         <see href="https://github.com/masesgroup/KEFCore">The EF Core KNet database provider</see> for more information and examples.
 ///     </para>
 /// </remarks>
 /// <remarks>
@@ -54,7 +56,7 @@ public class KafkaConventionSetBuilder(ProviderConventionSetBuilderDependencies 
     }
 
     /// <summary>
-    ///     Call this method to build a <see cref="ConventionSet" /> for the Kafka provider when using
+    ///     Call this method to build a <see cref="ConventionSet" /> for the KEFCore provider when using
     ///     the <see cref="ModelBuilder" /> outside of <see cref="DbContext.OnModelCreating" />.
     /// </summary>
     /// <remarks>
@@ -64,13 +66,19 @@ public class KafkaConventionSetBuilder(ProviderConventionSetBuilderDependencies 
     /// <returns>The convention set.</returns>
     public static ConventionSet Build()
     {
-        using var serviceScope = CreateServiceScope();
-        using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
-        return ConventionSet.CreateConventionSet(context);
+        try
+        {
+            KafkaClusterAdmin.DisableClusterInvocation = true;
+
+            using var serviceScope = CreateServiceScope();
+            using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
+            return ConventionSet.CreateConventionSet(context);
+        }
+        finally { KafkaClusterAdmin.DisableClusterInvocation = false; }
     }
 
     /// <summary>
-    ///     Call this method to build a <see cref="ModelBuilder" /> for SQLite outside of <see cref="DbContext.OnModelCreating" />.
+    ///     Call this method to build a <see cref="ModelBuilder" /> for KEFCore outside of <see cref="DbContext.OnModelCreating" />.
     /// </summary>
     /// <remarks>
     ///     Note that it is unusual to use this method. Consider using <see cref="DbContext" /> in the normal way instead.
@@ -78,9 +86,15 @@ public class KafkaConventionSetBuilder(ProviderConventionSetBuilderDependencies 
     /// <returns>The convention set.</returns>
     public static ModelBuilder CreateModelBuilder()
     {
-        using var serviceScope = CreateServiceScope();
-        using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
-        return new ModelBuilder(ConventionSet.CreateConventionSet(context), context.GetService<ModelDependencies>());
+        try
+        {
+            KafkaClusterAdmin.DisableClusterInvocation = true;
+
+            using var serviceScope = CreateServiceScope();
+            using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
+            return new ModelBuilder(ConventionSet.CreateConventionSet(context), context.GetService<ModelDependencies>());
+        }
+        finally { KafkaClusterAdmin.DisableClusterInvocation = false; }
     }
 
     private static IServiceScope CreateServiceScope()
