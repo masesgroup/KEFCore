@@ -143,6 +143,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
             }
 
+            public void UpdateLatestLocalKnownOffset(int partition, long offset)
+            {
+                LatestLocalKnownOffset[partition] = offset;
+            }
+
             public bool IsSynchronized()
             {
                 bool[] bools;
@@ -346,7 +351,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private void FreshEventChangeReceiver(FreshEventChange data)
         {
-            _storagesForEntities[data.EntityType].LatestLocalKnownOffset[data.Partition] = data.Offset;
+            _storagesForEntities[data.EntityType].UpdateLatestLocalKnownOffset(data.Partition, data.Offset);
             _freshDataFromCluster.Enqueue(data);
         }
 
