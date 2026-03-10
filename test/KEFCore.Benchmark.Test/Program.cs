@@ -28,15 +28,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 {
     partial class Program
     {
-        struct ExecutionData
+        readonly struct ExecutionData(int executionIndex)
         {
-            public ExecutionData(int executionIndex)
-            {
-                ExecutionIndex = executionIndex;
-                QueryTimes = [];
-            }
-            public int ExecutionIndex;
-            public List<TimeSpan> QueryTimes;
+            public readonly int ExecutionIndex = executionIndex;
+            public readonly List<TimeSpan> QueryTimes = [];
         }
 
         static void Main(string[] args)
@@ -66,7 +61,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         ProgramConfig.ReportString("EnsureDeleted deleted database");
                     }
 
-                    Stopwatch watch = new Stopwatch();
+                    Stopwatch watch = new();
                     watch.Start();
                     if (context.Database.EnsureCreated()) // call always for initialization
                     {
@@ -182,7 +177,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
                         ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
-
                         watch.Restart();
                         int count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
 
@@ -245,11 +239,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
                     TimeSpan[] total = new TimeSpan[testDone];
                     for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
-                    for (int i = 0; i < _tests.Count; i++)
+                    for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
                     {
                         var item = _tests[i].QueryTimes;
 
-                        for (int testId = 0; testId < ProgramConfig.Config.NumberOfExecutions; testId++)
+                        for (int testId = 0; testId < testDone; testId++)
                         {
                             max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
                             min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
