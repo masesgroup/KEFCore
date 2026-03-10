@@ -284,7 +284,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
+        _infrastructureLogger.Logger.LogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
             var topicName = entityType.TopicName(Options);
@@ -469,7 +469,7 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransaction for {number} entries", entries.Count);
+        _infrastructureLogger.Logger.LogInformation("Invoking ExecuteTransaction for {number} entries", entries.Count);
 
         using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, ctSource.Token);
@@ -495,7 +495,7 @@ public class KafkaCluster : IKafkaCluster
     /// </summary>
     public async Task<int> ExecuteTransactionAsync(System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
-        _infrastructureLogger.Logger.LogDebug("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
+        _infrastructureLogger.Logger.LogInformation("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
 
         var tasks = ExecuteTransaction(entries, updateLogger, out var rowsAffected, cancellationToken);
 
