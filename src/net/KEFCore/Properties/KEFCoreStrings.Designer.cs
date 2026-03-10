@@ -58,7 +58,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             => GetString("NonComposedGroupByNotSupported");
 
         /// <summary>
-        ///     There is no query string because the Kafka provider does not use a string-based query language.
+        ///     There is no query string because the KEFCore provider does not use a string-based query language.
         /// </summary>
         public static string NoQueryStrings
             => GetString("NoQueryStrings");
@@ -144,7 +144,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             = new ResourceManager("MASES.EntityFrameworkCore.KNet.Properties.KEFCoreStrings", typeof(KEFCoreResources).Assembly);
 
         /// <summary>
-        ///     Saved {count} entities to Kafka store.
+        ///     Saved {count} entities to KEFCore store.
         /// </summary>
         public static EventDefinition<int> LogSavedChanges(IDiagnosticsLogger logger)
         {
@@ -156,12 +156,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                     logger,
                     static logger => new EventDefinition<int>(
                         logger.Options,
-                        KafkaEventId.ChangesSaved,
+                        KEFCoreEventId.ChangesSaved,
                         LogLevel.Information,
-                        "KafkaEventId.ChangesSaved",
+                        "KEFCoreEventId.ChangesSaved",
                         level => LoggerMessage.Define<int>(
                             level,
-                            KafkaEventId.ChangesSaved,
+                            KEFCoreEventId.ChangesSaved,
                             _resourceManager.GetString("LogSavedChanges")!)));
             }
 
@@ -169,7 +169,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         }
 
         /// <summary>
-        ///     Transactions are not supported by the Kafka store. See http://go.microsoft.com/fwlink/?LinkId=800142
+        ///     Transactions are not supported by the KEFCore store. See http://go.microsoft.com/fwlink/?LinkId=800142
         /// </summary>
         public static EventDefinition LogTransactionsNotSupported(IDiagnosticsLogger logger)
         {
@@ -181,12 +181,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                     logger,
                     static logger => new EventDefinition(
                         logger.Options,
-                        KafkaEventId.TransactionIgnoredWarning,
+                        KEFCoreEventId.TransactionIgnoredWarning,
                         LogLevel.Warning,
-                        "KafkaEventId.TransactionIgnoredWarning",
+                        "KEFCoreEventId.TransactionIgnoredWarning",
                         level => LoggerMessage.Define(
                             level,
-                            KafkaEventId.TransactionIgnoredWarning,
+                            KEFCoreEventId.TransactionIgnoredWarning,
                             _resourceManager.GetString("LogTransactionsNotSupported")!)));
             }
 
