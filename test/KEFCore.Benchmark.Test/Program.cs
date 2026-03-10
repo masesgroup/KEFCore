@@ -184,6 +184,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
 
                         watch.Restart();
+                        int count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        ProgramConfig.ReportString($"First execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
+
+                        watch.Restart();
+                        count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        ProgramConfig.ReportString($"Second execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
+
+                        watch.Restart();
                         var selector = (from op in context.Blogs
                                         join pg in context.Posts on op.BlogId equals pg.BlogId
                                         where pg.BlogId == op.BlogId
