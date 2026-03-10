@@ -46,6 +46,10 @@ public interface IKafkaTable : IEntityTypeProducer, IKafkaTableEntityFinder
     /// </summary>
     IKafkaCluster Cluster { get; }
     /// <summary>
+    /// The topic associated to this <see cref="IKafkaTable"/>
+    /// </summary>
+    string AssociatedTopicName { get; }
+    /// <summary>
     /// Creates a new row
     /// </summary>
     IKafkaRowBag Create(IUpdateEntry entry);

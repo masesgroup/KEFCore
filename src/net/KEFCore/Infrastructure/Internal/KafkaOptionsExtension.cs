@@ -44,7 +44,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     private Type _keySerDesSelectorType = DefaultKEFCoreSerDes.DefaultKeySerialization;
     private Type _valueSerDesSelectorType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     private Type _valueContainerType = DefaultKEFCoreSerDes.DefaultValueContainer;
-    private bool _useNameMatching = true;
     private string? _topicPrefix;
     private string? _applicationId;
     private string? _bootstrapServers;
@@ -81,7 +80,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         _keySerDesSelectorType = copyFrom._keySerDesSelectorType;
         _valueSerDesSelectorType = copyFrom._valueSerDesSelectorType;
         _valueContainerType = copyFrom._valueContainerType;
-        _useNameMatching = copyFrom._useNameMatching;
         _topicPrefix = copyFrom._topicPrefix;
         _applicationId = copyFrom._applicationId;
         _bootstrapServers = copyFrom._bootstrapServers;
@@ -128,8 +126,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
     public virtual Type ValueSerDesSelectorType => _valueSerDesSelectorType;
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType => _valueContainerType;
-    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
-    public virtual bool UseNameMatching => _useNameMatching;
     /// <inheritdoc cref="KafkaDbContext.TopicPrefix"/>
     public virtual string TopicPrefix => _topicPrefix!;
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>
@@ -203,15 +199,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
         var clone = Clone();
 
         clone._valueContainerType = serializationType;
-
-        return clone;
-    }
-    /// <inheritdoc cref="KafkaDbContext.OnChangeEvent"/>
-    public virtual KafkaOptionsExtension WithUseNameMatching(bool useNameMatching = true)
-    {
-        var clone = Clone();
-
-        clone._useNameMatching = useNameMatching;
 
         return clone;
     }
@@ -582,7 +569,6 @@ public class KafkaOptionsExtension : IDbContextOptionsExtension, IKafkaSingleton
                     builder.Append("KeySerDesSelectorType=").Append(Extension._keySerDesSelectorType).Append(' ');
                     builder.Append("ValueSerDesSelectorType=").Append(Extension._valueSerDesSelectorType).Append(' ');
                     builder.Append("ValueContainerType=").Append(Extension._valueContainerType).Append(' ');
-                    builder.Append("UseNameMatching=").Append(Extension._useNameMatching).Append(' ');
                     builder.Append("TopicPrefix=").Append(Extension._topicPrefix).Append(' ');
                     builder.Append("ApplicationId=").Append(Extension._applicationId).Append(' ');
                     builder.Append("BootstrapServers=").Append(Extension._bootstrapServers).Append(' ');

@@ -38,8 +38,6 @@ public interface IKafkaSingletonOptions : ISingletonOptions
     Type? ValueSerDesSelectorType { get; }
     /// <inheritdoc cref="KafkaDbContext.ValueContainerType"/>
     Type? ValueContainerType { get; }
-    /// <inheritdoc cref="KafkaDbContext.UseNameMatching"/>
-    bool UseNameMatching { get; }
     /// <inheritdoc cref="KafkaDbContext.TopicPrefix"/>
     string? TopicPrefix { get; }
     /// <inheritdoc cref="KafkaDbContext.ApplicationId"/>

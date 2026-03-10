@@ -297,7 +297,6 @@ public class KafkaDbContext : DbContext
                 throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
             }
 
-            o.WithUseNameMatching(UseNameMatching);
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);

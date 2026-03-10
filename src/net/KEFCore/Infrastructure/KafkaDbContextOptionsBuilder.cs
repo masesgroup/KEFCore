@@ -130,27 +130,6 @@ public class KafkaDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder
     }
 
     /// <summary>
-    ///     Enables name matching on <see cref="IEntityType"/> instead of <see cref="Type"/> matching
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="useNameMatching">If <see langword="true" />, it is used name matching.</param>
-    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KafkaDbContextOptionsBuilder WithUseNameMatching(bool useNameMatching = true)
-    {
-        var extension = OptionsBuilder.Options.FindExtension<KafkaOptionsExtension>()
-            ?? new KafkaOptionsExtension();
-
-        extension = extension.WithUseNameMatching(useNameMatching);
-
-        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
-
-        return this;
-    }
-
-    /// <summary>
     ///     Enables <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when the topic is created the first time
     /// </summary>
     /// <remarks>

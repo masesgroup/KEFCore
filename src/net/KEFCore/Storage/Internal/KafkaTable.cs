@@ -98,6 +98,8 @@ public class KafkaTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IK
     /// <inheritdoc/>
     public virtual IKafkaCluster Cluster { get; }
     /// <inheritdoc/>
+    public virtual string AssociatedTopicName => _tableAssociatedTopicName;
+    /// <inheritdoc/>
     public virtual IEntityType EntityType => _producer.EntityType;
 
     /// <inheritdoc/>

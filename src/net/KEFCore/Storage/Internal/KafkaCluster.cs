@@ -47,10 +47,9 @@ public class KafkaCluster : IKafkaCluster
     private readonly IValueGeneratorSelector _valueGeneratorSelector;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
-    private readonly bool _useNameMatching;
     private readonly KafkaClusterAdmin _kafkaAdminClient = null;
 
-    private System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable> _tables;
+    private System.Collections.Concurrent.ConcurrentDictionary<string, IKafkaTable> _tables;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
     /// <summary>
     /// Dfault initializer
@@ -70,7 +69,6 @@ public class KafkaCluster : IKafkaCluster
         _valueGeneratorSelector = valueGeneratorSelector;
         _updateAdapterFactory = updateAdapterFactory;
         _designModel = designModel;
-        _useNameMatching = options.UseNameMatching;
 
         _kafkaAdminClient = KafkaClusterAdmin.Create(Options.BootstrapServers);
     }
@@ -188,7 +186,7 @@ public class KafkaCluster : IKafkaCluster
         if (valuesSeeded)
         {
             System.Collections.Generic.List<IKafkaTable> tables = new();
-            _tables = new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
+            _tables = new System.Collections.Concurrent.ConcurrentDictionary<string, IKafkaTable>();
 
             var updateAdapter = _updateAdapterFactory.CreateStandalone();
             var entries = new System.Collections.Generic.List<IUpdateEntry>();
@@ -278,15 +276,15 @@ public class KafkaCluster : IKafkaCluster
     /// <inheritdoc/>
     public IKafkaTable GetTable(IEntityType entityType)
     {
-        return _tableFactory.Get(this, entityType);
+        return _tableFactory.Get(this, entityType.TopicName(Options));
     }
 
     /// <inheritdoc/>
     public virtual string CreateTopicForEntity(IEntityType entityType)
     {
-        _infrastructureLogger.Logger.LogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
+            _infrastructureLogger.Logger.LogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
             var topicName = entityType.TopicName(Options);
             var requestedPartitions = entityType.NumPartitions(Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(Options);
@@ -367,7 +365,7 @@ public class KafkaCluster : IKafkaCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            var key = entityType.TopicName(Options);
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffers();
@@ -397,7 +395,7 @@ public class KafkaCluster : IKafkaCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            var key = entityType.TopicName(Options);
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffer(keyValues);
@@ -427,7 +425,7 @@ public class KafkaCluster : IKafkaCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            var key = entityType.TopicName(Options);
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersRange(rangeStart, rangeEnd);
@@ -457,7 +455,7 @@ public class KafkaCluster : IKafkaCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            var key = entityType.TopicName(Options);
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersReverse();
@@ -488,7 +486,7 @@ public class KafkaCluster : IKafkaCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            var key = entityType.TopicName(Options);
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersReverseRange(rangeStart, rangeEnd);
@@ -635,19 +633,19 @@ public class KafkaCluster : IKafkaCluster
     // Must be called from inside the lock
     private IKafkaTable EnsureTable(IEntityType entityType)
     {
-        _tables ??= new System.Collections.Concurrent.ConcurrentDictionary<object, IKafkaTable>();
+        _tables ??= new System.Collections.Concurrent.ConcurrentDictionary<string, IKafkaTable>();
 
         var entityTypes = entityType.GetAllBaseTypesInclusive();
         foreach (var currentEntityType in entityTypes)
         {
-            var key = _useNameMatching ? (object)currentEntityType.Name : currentEntityType;
+            var key = currentEntityType.TopicName(Options);
             _ = _tables.GetOrAdd(key, (k) =>
             {
                 _infrastructureLogger.Logger.LogInformation("KafkaCluster::EnsureTable creating table for {Name}", entityType.Name);
-                return _tableFactory.Create(this, currentEntityType);
+                return _tableFactory.Create(this, k, currentEntityType);
             });
         }
 
-        return _tables[_useNameMatching ? entityType.Name : entityType];
+        return _tables[entityType.TopicName(Options)];
     }
 }

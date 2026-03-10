@@ -66,8 +66,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableServiceProviderCaching(false);
-
             var loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog 
