@@ -45,10 +45,10 @@ public class DefiningQueryRewritingConvention(ProviderConventionSetBuilderDepend
     {
         foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
         {
-            var definingQuery = entityType.GetKafkaQuery();
+            var definingQuery = entityType.GetKEFCoreQuery();
             if (definingQuery != null)
             {
-                entityType.SetKafkaQuery((LambdaExpression)DbSetAccessRewriter.Rewrite(modelBuilder.Metadata, definingQuery));
+                entityType.SetKEFCoreQuery((LambdaExpression)DbSetAccessRewriter.Rewrite(modelBuilder.Metadata, definingQuery));
             }
         }
     }

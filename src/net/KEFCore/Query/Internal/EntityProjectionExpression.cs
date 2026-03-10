@@ -79,7 +79,7 @@ public class EntityProjectionExpression(
         if (!derivedType.GetAllBaseTypes().Contains(EntityType))
         {
             throw new InvalidOperationException(
-                KafkaStrings.InvalidDerivedTypeInEntityProjection(
+                KEFCoreStrings.InvalidDerivedTypeInEntityProjection(
                     derivedType.DisplayName(), EntityType.DisplayName()));
         }
 
@@ -111,20 +111,20 @@ public class EntityProjectionExpression(
                 if (EntityType != complexType.ContainingEntityType)
                 {
                     throw new InvalidOperationException(
-                        KafkaStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
+                        KEFCoreStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
                 }
             }
             else if (EntityType != property.DeclaringType)
             {
                 throw new InvalidOperationException(
-                    KafkaStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
+                    KEFCoreStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
             }
         }
         else if (!EntityType.IsAssignableFrom(entityType)
                  && !entityType.IsAssignableFrom(EntityType))
         {
             throw new InvalidOperationException(
-                KafkaStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
+                KEFCoreStrings.UnableToBindMemberToEntityProjection("property", property.Name, EntityType.DisplayName()));
         }
 
         return _readExpressionMap[property];
@@ -135,17 +135,17 @@ public class EntityProjectionExpression(
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public virtual KafkaComplexTypeProjectionExpression BindComplexProperty(IComplexProperty complexProperty)
+    public virtual KEFCoreComplexTypeProjectionExpression BindComplexProperty(IComplexProperty complexProperty)
     {
         if (EntityType != complexProperty.DeclaringType
             && !EntityType.IsAssignableFrom(complexProperty.DeclaringType as IEntityType))
         {
             throw new InvalidOperationException(
-                KafkaStrings.UnableToBindMemberToEntityProjection(
+                KEFCoreStrings.UnableToBindMemberToEntityProjection(
                     "complexProperty", complexProperty.Name, EntityType.DisplayName()));
         }
 
-        return new KafkaComplexTypeProjectionExpression(complexProperty, _readExpressionMap);
+        return new KEFCoreComplexTypeProjectionExpression(complexProperty, _readExpressionMap);
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ public class EntityProjectionExpression(
             && !navigation.DeclaringEntityType.IsAssignableFrom(EntityType))
         {
             throw new InvalidOperationException(
-                KafkaStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
+                KEFCoreStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
         }
 
         _navigationExpressionsCache[navigation] = shaper;
@@ -178,7 +178,7 @@ public class EntityProjectionExpression(
             && !navigation.DeclaringEntityType.IsAssignableFrom(EntityType))
         {
             throw new InvalidOperationException(
-                KafkaStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
+                KEFCoreStrings.UnableToBindMemberToEntityProjection("navigation", navigation.Name, EntityType.DisplayName()));
         }
 
         return _navigationExpressionsCache.GetValueOrDefault(navigation);

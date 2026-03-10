@@ -35,7 +35,7 @@ public class EntityTypeProducers
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>
     /// </summary>
-    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKafkaCluster cluster)
+    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKEFCoreCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
     {
@@ -54,7 +54,7 @@ public class EntityTypeProducers
         producer.Dispose();
     }
 
-    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKafkaCluster cluster)
+    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKEFCoreCluster cluster)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
         => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);

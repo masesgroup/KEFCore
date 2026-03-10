@@ -62,7 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         }
     }
 
-    public class TestContext : KafkaDbContext
+    public class TestContext : KEFCoreDbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -118,7 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
         public bool ForceDebugLog { get; set; } = false;
 
-        public void ApplyOnContext(KafkaDbContext context)
+        public void ApplyOnContext(KEFCoreDbContext context)
         {
             var databaseName = UseModelBuilder ? TopicPrefixWithModel : TopicPrefix;
 
@@ -127,7 +127,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 streamConfig = StreamsConfigBuilder.Create();
                 streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
-                context.TopicConfig = KafkaDbContext.DefaultTopicConfig;
+                context.TopicConfig = KEFCoreDbContext.DefaultTopicConfig;
                 context.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
             }
 

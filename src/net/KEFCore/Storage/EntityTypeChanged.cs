@@ -20,7 +20,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage;
 /// <summary>
-/// The event data informing about changes on an <see cref="IEntityType"/> using the <see cref="KafkaDbContext.OnChangeEvent"/> event handler
+/// The event data informing about changes on an <see cref="IEntityType"/> using the <see cref="KEFCoreDbContext.OnChangeEvent"/> event handler
 /// </summary>
 [Obsolete("Replaced with events attached to ChangeTracker")]
 public readonly struct EntityTypeChanged

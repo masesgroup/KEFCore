@@ -69,7 +69,7 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
         }
     }
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : KEFCoreDbContext
     {
         // uncomment for persistent storage
         // public override bool UsePersistentStorage { get; set; } = true;

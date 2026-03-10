@@ -66,7 +66,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <param name="offset">The offset received</param>
         void PartitionOffsetWritten(IEntityType entity, int partition, long offset);
         /// <summary>
-        /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+        /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
         /// </summary>
         bool? EnsureSynchronized(IEntityType entity, long timeout);
     }
@@ -195,7 +195,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _stateChanged;
 
-        private readonly IKafkaCluster _kafkaCluster;
+        private readonly IKEFCoreCluster _kefcoreCluster;
         private StreamsConfigBuilder _streamsConfig;
         private TStreamBuilder _builder;
         private TTopology _topology;
@@ -232,15 +232,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             MASES.KNet.Streams.StreamsBuilder.OverrideProperties = PropertyUpdate;
         }
 
-        public StreamsManager(IKafkaCluster kafkaCluster, IEntityType entityType)
+        public StreamsManager(IKEFCoreCluster kefcoreCluster, IEntityType entityType)
         {
-            _kafkaCluster = kafkaCluster;
-            _updateAdapter = kafkaCluster.UpdateAdapterFactory.Create();
-            _streamsConfig ??= kafkaCluster.Options.StreamsOptions(entityType);
-            _usePersistentStorage = _kafkaCluster.Options.UsePersistentStorage;
-            _useEnumeratorWithPrefetch = _kafkaCluster.Options.UseEnumeratorWithPrefetch;
-            _useGlobalTable = _kafkaCluster.Options.UseGlobalTable;
-            _manageEvents = _kafkaCluster.Options.ManageEvents;
+            _kefcoreCluster = kefcoreCluster;
+            _updateAdapter = kefcoreCluster.UpdateAdapterFactory.Create();
+            _streamsConfig ??= kefcoreCluster.Options.StreamsOptions(entityType);
+            _usePersistentStorage = _kefcoreCluster.Options.UsePersistentStorage;
+            _useEnumeratorWithPrefetch = _kefcoreCluster.Options.UseEnumeratorWithPrefetch;
+            _useGlobalTable = _kefcoreCluster.Options.UseGlobalTable;
+            _manageEvents = _kefcoreCluster.Options.ManageEvents;
 
             if (_manageEvents)
             {
@@ -257,11 +257,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
-                _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
+                _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
                 if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _kafkaCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
+                    _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
                                                                            nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
                     return StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
@@ -271,7 +271,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _stateListener ??= new(this, (_This, newState, oldState) =>
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
-                _kafkaCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
+                _kefcoreCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             });
         }
@@ -305,9 +305,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
-            var topicName = entityType.TopicName(_kafkaCluster.Options);
+            var topicName = entityType.TopicName(_kefcoreCluster.Options);
 
-            string storageId = entityType.StorageIdForTable(_kafkaCluster.Options);
+            string storageId = entityType.StorageIdForTable(_kefcoreCluster.Options);
             storageId = _usePersistentStorage ? storageId : System.Diagnostics.Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
             lock (_managedEntities)
@@ -335,7 +335,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         table = CreateTable(_builder!, topicName, consumed, materialized);
                     }
-                    var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entityType);
+                    var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entityType);
                     _managedEntities.Add(entityType, entityType1);
                     _storagesForEntities.Add(entityType1, new StreamsAssociatedData(storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets));
 
@@ -365,7 +365,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
                     if (!_freshDataFromCluster.TryDequeue(out var current)) break;
-                    current.Manager.ManageChange(_kafkaCluster.ValueGeneratorSelector, _updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
+                    current.Manager.ManageChange(_kefcoreCluster.ValueGeneratorSelector, _updateAdapter, current.EntityType, current.PrimaryKey, current.Data);
                 }
                 while (!_freshDataFromCluster.IsEmpty);
                 System.Threading.Thread.Sleep(10);
@@ -451,7 +451,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             {
                                 if (_storagesForEntities.TryGetValue(item.Value, out var storage))
                                 {
-                                    storage.PushLocalStoredData(_kafkaCluster.ValueGeneratorSelector, _updateAdapter, item.Value, item.Value.FindPrimaryKey(), _streams, GetStoredData);
+                                    storage.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _updateAdapter, item.Value, item.Value.FindPrimaryKey(), _streams, GetStoredData);
                                 }
                             }
                         }
@@ -530,7 +530,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
-                                _kafkaCluster.InfrastructureLogger.Logger.LogInformation("State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
+                                _kefcoreCluster.InfrastructureLogger.Logger.LogInformation("State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
                                 continue;
                             }
                         }
@@ -600,7 +600,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (_managedEntities.TryGetValue(entity, out var innerEntity) &&
                 _storagesForEntities.TryGetValue(innerEntity, out var storage))
             {
-                var currentKnownOffsets = _kafkaCluster.LatestOffsetForEntity(entity);
+                var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entity);
                 storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _freshDataFromCluster.IsEmpty; // and all data are processed

@@ -39,7 +39,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetriever<TKey>, IStreamsChangeManager
+public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -94,7 +94,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <param name="cluster"></param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public static IStreamsManager Create(IKafkaCluster cluster, IEntityType entity)
+    public static IStreamsManager Create(IKEFCoreCluster cluster, IEntityType entity)
     {
         _streamsManager ??= new(cluster, entity)
         {
@@ -133,7 +133,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
 
     private static Properties? _properties = null;
 
-    private readonly IKafkaCluster _cluster;
+    private readonly IKEFCoreCluster _cluster;
     private readonly IValueContainerMetadata _metadata;
     private readonly IKey _primaryKey;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -144,7 +144,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IKafkaCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
+    public KafkaStreamsBaseRetriever(IKEFCoreCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
     {
         _cluster = cluster;
         _metadata = metadata;
@@ -236,7 +236,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
     void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KafkaStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KafkaStreams streams, string storageId, object optional)

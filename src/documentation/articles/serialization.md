@@ -307,12 +307,12 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
 
 ### How to use custom types 
 
-`KafkaDbContext` contains three properties can be used to override the default types:
+`KEFCoreDbContext` contains three properties can be used to override the default types:
 - **KeySerializationType**: set the value of the **Key SerDes** type in the form `CustomSerDes<>`
 - **ValueSerializationType**: set the value of the **ValueContainer SerDes** type in the form `CustomSerDes<>`
 - **ValueContainerType**: set the value of the **ValueContainer** type in the form `CustomValueContainer<>`
 
-> **IMPORTANT NOTE**: the type applied in the previous properties of `KafkaDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
+> **IMPORTANT NOTE**: the type applied in the previous properties of `KEFCoreDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
 
 ## **Avro** serialization
 
@@ -434,7 +434,7 @@ The extension converted this schema into code to speedup the exection of seriali
 
 ### How to use Avro 
 
-`KafkaDbContext` contains three properties can be used to override the default types:
+`KEFCoreDbContext` contains three properties can be used to override the default types:
 - **KeySerializationType**: set this value to `AvroKEFCoreSerDes.Key.BinaryRaw<>` or `AvroKEFCoreSerDes.Key.JsonRaw<>` or use `AvroKEFCoreSerDes.DefaultKeySerialization` (defaults to `AvroKEFCoreSerDes.Key.BinaryRaw<>`), both types automatically manages simple or complex Primary Key
 - **ValueSerializationType**: set this value to `AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>` or `AvroKEFCoreSerDes.ValueContainer.JsonRaw<>` or use `AvroKEFCoreSerDes.DefaultValueContainerSerialization` (defaults to `AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>`)
 - **ValueContainerType**: set this value to `AvroValueContainerRaw<>` or use `AvroKEFCoreSerDes.DefaultValueContainer`
@@ -617,7 +617,7 @@ The extension converted this schema into code to speedup the exection of seriali
 
 ### How to use Protobuf 
 
-`KafkaDbContext` contains three properties can be used to override the default types:
+`KEFCoreDbContext` contains three properties can be used to override the default types:
 - **KeySerializationType**: set this value to `ProtobufKEFCoreSerDes.Key.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultKeySerialization`, the type automatically manages simple or complex Primary Key
 - **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainerSerialization`
 - **ValueContainerType**: set this value to `ProtobufValueContainerRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainer`
@@ -705,7 +705,7 @@ An user can build an external library and can register the custom converters wit
   context.GetService<IComplexTypeConverterFactory>();
   factory.Register(converter);
   ```
-- using the methods available in [`KakfaDbContext`](kafkadbcontext.md)
+- using the methods available in [`KEFCoreDbContext`](kefcoredbcontext.md)
 
 ### How to declare a complex property
 

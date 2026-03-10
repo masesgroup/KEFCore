@@ -48,7 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         }
     }
 
-    public class BloggingContext : KafkaDbContext { }
+    public class BloggingContext : KEFCoreDbContext { }
 
     public class Blog
     {
@@ -70,7 +70,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 ```
 
-The previous code follows the example of https://learn.microsoft.com/ef/core/. See [KEFCore usage](usage.md) and [KafkaDbContext](kafkadbcontext.md) to find more information.
+The previous code follows the example of https://learn.microsoft.com/ef/core/. See [KEFCore usage](usage.md) and [KEFCoreDbContext](kefcoredbcontext.md) to find more information.
 
 - Build the project
 

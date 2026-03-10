@@ -78,17 +78,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Properties\KafkaStrings.Designer.tt">
+		<None Update="Properties\KEFCoreStrings.Designer.tt">
 			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>KafkaStrings.Designer.cs</LastGenOutput>
+			<LastGenOutput>KEFCoreStrings.Designer.cs</LastGenOutput>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Properties\KafkaStrings.Designer.cs">
+		<Compile Update="Properties\KEFCoreStrings.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
-			<DependentUpon>KafkaStrings.Designer.tt</DependentUpon>
+			<DependentUpon>KEFCoreStrings.Designer.tt</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
@@ -97,7 +97,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Update="Properties\KafkaStrings.resx">
+		<EmbeddedResource Update="Properties\KEFCoreStrings.resx">
 			<CustomToolNamespace>MASES.EntityFrameworkCore.KNet.Internal</CustomToolNamespace>
 		</EmbeddedResource>
 	</ItemGroup>

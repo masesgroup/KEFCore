@@ -35,12 +35,12 @@ public interface IEntityTypeProducer : IDisposable
     /// </summary>
     IEntityType EntityType { get; }
     /// <summary>
-    /// Stores an <see cref="IEnumerable{IKafkaRowBag}"/>
+    /// Stores an <see cref="IEnumerable{IKEFCoreRowBag}"/>
     /// </summary>
-    /// <param name="futures">The <see cref="Future{V}"/> with <<see cref="RecordMetadata"/> generated from <see cref="Commit(List{Future{RecordMetadata}}, IEnumerable{IKafkaRowBag})"/></param>
-    /// <param name="records">The <see cref="IEnumerable{IKafkaRowBag}"/> to be stored</param>
+    /// <param name="futures">The <see cref="Future{V}"/> with <see cref="RecordMetadata"/> generated from <see cref="Commit(IList{Future{RecordMetadata}}?, IEnumerable{IKEFCoreRowBag})"/></param>
+    /// <param name="records">The <see cref="IEnumerable{IKEFCoreRowBag}"/> to be stored</param>
     /// <returns></returns>
-    void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records);
+    void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records);
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
@@ -76,7 +76,7 @@ public interface IEntityTypeProducer : IDisposable
     /// </summary>
     void Start();
     /// <summary>
-    /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+    /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>
     bool? EnsureSynchronized(long timeout);
 }

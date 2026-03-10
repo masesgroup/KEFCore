@@ -1,0 +1,524 @@
+/*
+*  Copyright (c) 2022-2026 MASES s.r.l.
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*  http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*
+*  Refer to LICENSE for more information.
+*/
+
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Storage;
+using MASES.KNet.Common;
+using MASES.KNet.Consumer;
+using MASES.KNet.Producer;
+using MASES.KNet.Replicator;
+using MASES.KNet.Streams;
+using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Common.Config;
+using Org.Apache.Kafka.Streams;
+using System.ComponentModel;
+
+namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
+
+/// <summary>
+///     Allows Kafka specific configuration to be performed on <see cref="DbContextOptions" />.
+/// </summary>
+/// <remarks>
+///     <para>
+///         Instances of this class are returned from a call to
+///         <see
+///             cref="KEFCoreDbContextOptionsExtensions.UseKEFCore(DbContextOptionsBuilder, string, string, Action{KEFCoreDbContextOptionsBuilder}?)" />
+///         and it is not designed to be directly constructed in your application code.
+///     </para>
+///     <para>
+///         See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+///         <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+///     </para>
+/// </remarks>
+/// <remarks>
+///     Initializes a new instance of the <see cref="KEFCoreDbContextOptionsBuilder" /> class.
+/// </remarks>
+/// <param name="optionsBuilder">The options builder.</param>
+public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder) : IKEFCoreDbContextOptionsBuilderInfrastructure
+{
+    /// <summary>
+    ///     Clones the configuration in this builder.
+    /// </summary>
+    /// <returns>The cloned configuration.</returns>
+    protected virtual DbContextOptionsBuilder OptionsBuilder { get; } = optionsBuilder;
+
+    /// <inheritdoc />
+    DbContextOptionsBuilder IKEFCoreDbContextOptionsBuilderInfrastructure.OptionsBuilder => OptionsBuilder;
+
+    /// <summary>
+    ///     Define the external serialization <see cref="Type"/> for key
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithKeySerDesSelectorType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithKeySerDesSelectorType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Define the external serialization <see cref="Type"/> for value
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithValueSerDesSelectorType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithValueSerDesSelectorType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Define the external <see cref="Type"/> which contains the values
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="serializationType">The <see cref="Type"/> implementing the serialization model.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithValueContainerType(Type serializationType)
+    {
+        if (!serializationType.IsGenericTypeDefinition) throw new InvalidOperationException($"{serializationType.Name} shall be a generic type and shall be defined using \"<>\"");
+
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithValueContainerType(serializationType);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Enables <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when the topic is created the first time
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useDeletePolicyForTopic">If <see langword="true" />, then will be used <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when the topic is created the first time.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUseDeletePolicyForTopic(useDeletePolicyForTopic);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Enables use of <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useCompactedReplicator">If <see langword="true" /> then <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> will be used instead of Apache Kafka Streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    [Obsolete("Option will be removed soon")]
+    public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCompactedReplicator = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithCompactedReplicator(useCompactedReplicator);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Enables use of KNet version of Apache Kafka Streams
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useKNetStreams">If <see langword="true" /> then KNet version of Apache Kafka Streams will be used instead of standard Apache Kafka Streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUseKNetStreams(bool useKNetStreams = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUseKNetStreams(useKNetStreams);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine based on Streams (i.e. <see cref="KEFCoreDbContext.UseCompactedReplicator"/> is <see langword="false"/>) 
+    ///     will use <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true"/>)
+    ///     instead of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true"/>) to manage local storage of information.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useGlobalTable">If <see langword="true" /> then <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true" />.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUseGlobalTable(bool useGlobalTable = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUseGlobalTable(useGlobalTable);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
+    /// </summary>
+    /// <remarks>
+    ///     Used only if <see cref="KEFCoreDbContext.UseCompactedReplicator"/> is <see langword="false"/> and <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true"/>,  not available in EFCore 6.
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="usePersistentStorage">If <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUsePersistentStorage(bool usePersistentStorage = false)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUsePersistentStorage(usePersistentStorage);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution
+    /// </summary>
+    /// <remarks>
+    ///     Used only if <see cref="KEFCoreDbContext.UseCompactedReplicator"/> is <see langword="false"/> and <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useEnumeratorWithPrefetch">If <see langword="true" />, prefetch in enumeration will be used.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUseEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUseEnumeratorWithPrefetch(useEnumeratorWithPrefetch);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithUseByteBufferDataTransfer(useByteBufferDataTransfer);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Defines the default number of partitions to use when a new topic is created
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultNumPartitions">The default number of partitions to use when a new topic is created.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithDefaultNumPartitions(int defaultNumPartitions = 1)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithDefaultNumPartitions(defaultNumPartitions);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Defines the default number of consumer instances to be used in conjunction with <see cref="WithCompactedReplicator(bool)"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultConsumerInstances">The default number of consumer instances to be used in conjunction with <see cref="WithCompactedReplicator(bool)"/></param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithDefaultConsumerInstances(int? defaultConsumerInstances = null)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithDefaultConsumerInstances(defaultConsumerInstances);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Defines the default replication factor to use when a new topic is created
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultReplicationFactor">The default replication factor to use when a new topic is created.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithDefaultReplicationFactor(short defaultReplicationFactor = 1)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithDefaultReplicationFactor(defaultReplicationFactor);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KNetCompactedReplicator{TKey, TValue}"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="consumerConfigBuilder">The <see cref="ConsumerConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithConsumerConfig(consumerConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KafkaProducer"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="producerConfigBuilder">The <see cref="ProducerConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithProducerConfig(producerConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Set properties of <see cref="KafkaStreams"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="streamsConfigBuilder">The <see cref="StreamsConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStreamsConfig(streamsConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set properties of <see cref="TopicConfig"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="topicConfig">The <see cref="TopicConfigBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithTopicConfig(TopicConfigBuilder topicConfig)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithTopicConfig(topicConfig);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting this property to <see langword="true"/> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.WRITE"/> and <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.READ"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="manageEvents"><see langword="true"/> if the engine shall reject any write operation</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithManageEvents(bool manageEvents)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithManageEvents(manageEvents);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="readOnlyMode"><see langword="true"/> to receive events from the engine on <see cref="DbContext.ChangeTracker"/></param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithReadOnlyMode(bool readOnlyMode)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithReadOnlyMode(readOnlyMode);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
+    ///      Setting <see cref="KEFCoreDbContext.DefaultSynchronizationTimeout"/> to <see langword="0"/> the synchronization will be disabled
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="defaultSynchronizationTimeout">The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithDefaultSynchronizationTimeout(long defaultSynchronizationTimeout)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithDefaultSynchronizationTimeout(defaultSynchronizationTimeout);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+
+    #region Hidden System.Object members
+
+    /// <summary>
+    ///     Returns a string that represents the current object.
+    /// </summary>
+    /// <returns>A string that represents the current object.</returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override string? ToString()
+        => base.ToString();
+
+    /// <summary>
+    ///     Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns><see langword="true" /> if the specified object is equal to the current object; otherwise, <see langword="false" />.</returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object? obj)
+        => base.Equals(obj);
+
+    /// <summary>
+    ///     Serves as the default hash function.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode()
+        => base.GetHashCode();
+
+    #endregion
+}

@@ -201,7 +201,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
         }
     }
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : KEFCoreDbContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
