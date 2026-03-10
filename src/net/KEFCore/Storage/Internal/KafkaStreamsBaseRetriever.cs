@@ -301,6 +301,9 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKafkaStreamsRetrie
             const int maxCycle = 100;
             const int waitTime = 100;
             int cycle = 0;
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString($"GetIterator isReverse={isReverse} - useRange={useRange}" + (useRange ? $" rangeStart={rangeStart} - rangeEnd={rangeEnd}" : string.Empty));
+#endif
             try
             {
                 return GetIterator(keyValueStore, isReverse, useRange, rangeStart, rangeEnd, waitTime, maxCycle, ref cycle);
