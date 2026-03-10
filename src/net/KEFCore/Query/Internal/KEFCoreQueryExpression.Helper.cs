@@ -172,21 +172,21 @@ public partial class KEFCoreQueryExpression
         [return: NotNullIfNotNull(nameof(expression))]
         public override Expression? Visit(Expression? expression)
         {
-            if (expression is KEFCoreQueryExpression kafkaQueryExpression)
+            if (expression is KEFCoreQueryExpression kefcoreQueryExpression)
             {
                 var clonedKafkaQueryExpression = new KEFCoreQueryExpression(
-                    kafkaQueryExpression.ServerQueryExpression, kafkaQueryExpression._valueBufferParameter)
+                    kefcoreQueryExpression.ServerQueryExpression, kefcoreQueryExpression._valueBufferParameter)
                 {
-                    _groupingParameter = kafkaQueryExpression._groupingParameter,
-                    _singleResultMethodInfo = kafkaQueryExpression._singleResultMethodInfo,
-                    _scalarServerQuery = kafkaQueryExpression._scalarServerQuery
+                    _groupingParameter = kefcoreQueryExpression._groupingParameter,
+                    _singleResultMethodInfo = kefcoreQueryExpression._singleResultMethodInfo,
+                    _scalarServerQuery = kefcoreQueryExpression._scalarServerQuery
                 };
 
                 clonedKafkaQueryExpression._clientProjections.AddRange(
-                    kafkaQueryExpression._clientProjections.Select(e => Visit(e)));
+                    kefcoreQueryExpression._clientProjections.Select(e => Visit(e)));
                 clonedKafkaQueryExpression._projectionMappingExpressions.AddRange(
-                    kafkaQueryExpression._projectionMappingExpressions);
-                foreach (var (projectionMember, value) in kafkaQueryExpression._projectionMapping)
+                    kefcoreQueryExpression._projectionMappingExpressions);
+                foreach (var (projectionMember, value) in kefcoreQueryExpression._projectionMapping)
                 {
                     clonedKafkaQueryExpression._projectionMapping[projectionMember] = Visit(value);
                 }

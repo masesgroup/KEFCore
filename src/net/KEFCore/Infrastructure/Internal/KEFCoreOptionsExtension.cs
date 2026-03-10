@@ -528,23 +528,23 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
-        var kafkaOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
         if (!UseCompactedReplicator && string.IsNullOrEmpty(ApplicationId))
         {
             throw new ArgumentException("Cannot be null or empty when Streams based backend is in use.", nameof(ApplicationId));
         }
-        if (string.IsNullOrEmpty(kafkaOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
+        if (string.IsNullOrEmpty(kefcoreOptions.BootstrapServers)) throw new ArgumentException("It is manadatory", "BootstrapServers");
     }
     /// <inheritdoc/>
     public void Initialize(IDbContextOptions options)
     {
-        var kafkaOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
 
-        if (kafkaOptions?.ClusterId != ClusterId)
+        if (kefcoreOptions?.ClusterId != ClusterId)
         {
             throw new InvalidOperationException(
                 $"Cannot reuse internal service provider: ClusterId mismatch " +
-                $"(expected '{ClusterId}', got '{kafkaOptions?.ClusterId}')");
+                $"(expected '{ClusterId}', got '{kefcoreOptions?.ClusterId}')");
         }
     }
 

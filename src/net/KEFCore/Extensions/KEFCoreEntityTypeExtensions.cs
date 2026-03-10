@@ -44,26 +44,26 @@ public static class KEFCoreEntityTypeExtensions
     ///     Sets the LINQ query used as the default source for queries of this type.
     /// </summary>
     /// <param name="entityType">The entity type.</param>
-    /// <param name="kafkaQuery">The LINQ query used as the default source.</param>
+    /// <param name="kefcoreQuery">The LINQ query used as the default source.</param>
     public static void SetKEFCoreQuery(
         this IMutableEntityType entityType,
-        LambdaExpression? kafkaQuery)
+        LambdaExpression? kefcoreQuery)
         => entityType
-            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kafkaQuery);
+            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kefcoreQuery);
 
     /// <summary>
     ///     Sets the LINQ query used as the default source for queries of this type.
     /// </summary>
     /// <param name="entityType">The entity type.</param>
-    /// <param name="kafkaQuery">The LINQ query used as the default source.</param>
+    /// <param name="kefcoreQuery">The LINQ query used as the default source.</param>
     /// <param name="fromDataAnnotation">Indicates whether the configuration was specified using a data annotation.</param>
     /// <returns>The configured entity type.</returns>
     public static LambdaExpression? SetKEFCoreQuery(
         this IConventionEntityType entityType,
-        LambdaExpression? kafkaQuery,
+        LambdaExpression? kefcoreQuery,
         bool fromDataAnnotation = false)
         => (LambdaExpression?)entityType
-            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kafkaQuery, fromDataAnnotation)
+            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kefcoreQuery, fromDataAnnotation)
             ?.Value;
 
     /// <summary>

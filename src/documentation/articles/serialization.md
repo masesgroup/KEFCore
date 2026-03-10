@@ -705,7 +705,7 @@ An user can build an external library and can register the custom converters wit
   context.GetService<IComplexTypeConverterFactory>();
   factory.Register(converter);
   ```
-- using the methods available in [`KakfaDbContext`](kafkadbcontext.md)
+- using the methods available in [`KEFCoreDbContext`](kefcoredbcontext.md)
 
 ### How to declare a complex property
 

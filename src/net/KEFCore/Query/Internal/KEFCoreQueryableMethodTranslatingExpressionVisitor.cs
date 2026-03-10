@@ -165,20 +165,20 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         source = newSource;
 
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (source.ShaperExpression is GroupByShaperExpression)
         {
-            kafkaQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
+            kefcoreQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
         }
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Not(
                 Expression.Call(
-                    EnumerableMethods.AnyWithoutPredicate.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                    kafkaQueryExpression.ServerQueryExpression)));
+                    EnumerableMethods.AnyWithoutPredicate.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                    kefcoreQueryExpression.ServerQueryExpression)));
 
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
+        return source.UpdateShaperExpression(Expression.Convert(kefcoreQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
 
     /// <summary>
@@ -200,19 +200,19 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             source = newSource;
         }
 
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (source.ShaperExpression is GroupByShaperExpression)
         {
-            kafkaQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
+            kefcoreQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
         }
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.AnyWithoutPredicate.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression));
+                EnumerableMethods.AnyWithoutPredicate.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression));
 
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(bool)));
+        return source.UpdateShaperExpression(Expression.Convert(kefcoreQueryExpression.GetSingleScalarProjection(), typeof(bool)));
     }
 
     /// <summary>
@@ -282,19 +282,19 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             source = newSource;
         }
 
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (source.ShaperExpression is GroupByShaperExpression)
         {
-            kafkaQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
+            kefcoreQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
         }
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.CountWithoutPredicate.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression));
+                EnumerableMethods.CountWithoutPredicate.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression));
 
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(int)));
+        return source.UpdateShaperExpression(Expression.Convert(kefcoreQueryExpression.GetSingleScalarProjection(), typeof(int)));
     }
 
     /// <summary>
@@ -384,14 +384,14 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         var translatedKey = TranslateGroupingKey(remappedKeySelector);
         if (translatedKey != null)
         {
-            var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+            var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
             var defaultElementSelector = elementSelector == null || elementSelector.Body == elementSelector.Parameters[0];
             if (!defaultElementSelector)
             {
                 source = TranslateSelect(source, elementSelector!);
             }
 
-            var groupByShaper = kafkaQueryExpression.ApplyGrouping(translatedKey, source.ShaperExpression, defaultElementSelector);
+            var groupByShaper = kefcoreQueryExpression.ApplyGrouping(translatedKey, source.ShaperExpression, defaultElementSelector);
 
             if (resultSelector == null)
             {
@@ -405,8 +405,8 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                 [original1, original2],
                 [groupByShaper.KeySelector, groupByShaper]).Visit(resultSelector.Body);
 
-            newResultSelectorBody = ExpandSharedTypeEntities(kafkaQueryExpression, newResultSelectorBody);
-            var newShaper = _projectionBindingExpressionVisitor.Translate(kafkaQueryExpression, newResultSelectorBody);
+            newResultSelectorBody = ExpandSharedTypeEntities(kefcoreQueryExpression, newResultSelectorBody);
+            var newShaper = _projectionBindingExpressionVisitor.Translate(kefcoreQueryExpression, newResultSelectorBody);
 
             return source.UpdateShaperExpression(newShaper);
         }
@@ -652,25 +652,25 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         Type returnType,
         bool returnDefault)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (predicate != null)
         {
             var newSource = TranslateWhere(source, predicate);
             if (newSource == null) return null;
             source = newSource;
-            kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+            kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
         }
 
-        switch (kafkaQueryExpression.ServerQueryExpression)
+        switch (kefcoreQueryExpression.ServerQueryExpression)
         {
             case KEFCoreTableExpression tableExpression:
-                kafkaQueryExpression.UpdateServerQueryExpression(
+                kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseTableExpression(tableExpression.EntityType));
                 break;
 
             case KEFCoreRangeTableExpression range:
-                kafkaQueryExpression.UpdateServerQueryExpression(
+                kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseRangeTableExpression(
                         range.EntityType,
                         rangeStart: range.RangeEnd,
@@ -681,15 +681,15 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                 break;
 
             default:
-                kafkaQueryExpression.UpdateServerQueryExpression(
+                kefcoreQueryExpression.UpdateServerQueryExpression(
                     Expression.Call(
                         EnumerableMethods.Reverse.MakeGenericMethod(
-                            kafkaQueryExpression.CurrentParameter.Type),
-                        kafkaQueryExpression.ServerQueryExpression));
+                            kefcoreQueryExpression.CurrentParameter.Type),
+                        kefcoreQueryExpression.ServerQueryExpression));
                 break;
         }
 
-        kafkaQueryExpression.ConvertToSingleResult(
+        kefcoreQueryExpression.ConvertToSingleResult(
             returnDefault
                 ? EnumerableMethods.FirstOrDefaultWithoutPredicate
                 : EnumerableMethods.FirstWithoutPredicate);
@@ -770,20 +770,20 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             source = newSource;
         }
 
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (source.ShaperExpression is GroupByShaperExpression)
         {
-            kafkaQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
+            kefcoreQueryExpression.ReplaceProjection(new Dictionary<ProjectionMember, Expression>());
         }
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
                 EnumerableMethods.LongCountWithoutPredicate.MakeGenericMethod(
-                    kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression));
+                    kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression));
 
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), typeof(long)));
+        return source.UpdateShaperExpression(Expression.Convert(kefcoreQueryExpression.GetSingleScalarProjection(), typeof(long)));
     }
 
     /// <summary>
@@ -840,15 +840,15 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             }
 
             var derivedType = entityType.GetDerivedTypes().Single(et => et.ClrType == resultType);
-            var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+            var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
             var projectionBindingExpression = (ProjectionBindingExpression)shaper.ValueBufferExpression;
             var projectionMember = projectionBindingExpression.ProjectionMember;
             Check.DebugAssert(new ProjectionMember().Equals(projectionMember), "Invalid ProjectionMember when processing OfType");
 
             var entityProjectionExpression =
-                (EntityProjectionExpression)kafkaQueryExpression.GetProjection(projectionBindingExpression);
-            kafkaQueryExpression.ReplaceProjection(
+                (EntityProjectionExpression)kefcoreQueryExpression.GetProjection(projectionBindingExpression);
+            kefcoreQueryExpression.ReplaceProjection(
                 new Dictionary<ProjectionMember, Expression>
                 {
                     { projectionMember, entityProjectionExpression.UpdateEntityType(derivedType) }
@@ -871,7 +871,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         LambdaExpression keySelector,
         bool ascending)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         var newKeySelector = TranslateLambdaExpression(source, keySelector);
         if (newKeySelector == null)
@@ -882,10 +882,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         keySelector = newKeySelector;
 
         var orderBy = ascending ? EnumerableMethods.OrderBy : EnumerableMethods.OrderByDescending;
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                orderBy.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type, keySelector.ReturnType),
-                kafkaQueryExpression.ServerQueryExpression,
+                orderBy.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type, keySelector.ReturnType),
+                kefcoreQueryExpression.ServerQueryExpression,
                 keySelector));
 
         return source;
@@ -899,12 +899,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     /// </summary>
     protected override ShapedQueryExpression? TranslateReverse(ShapedQueryExpression source)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.Reverse.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression));
+                EnumerableMethods.Reverse.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression));
 
         return source;
     }
@@ -1023,7 +1023,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     /// </summary>
     protected override ShapedQueryExpression? TranslateSkip(ShapedQueryExpression source, Expression count)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
         var newCount = TranslateExpression(count);
         if (newCount == null)
         {
@@ -1032,10 +1032,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         count = newCount;
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.Skip.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression,
+                EnumerableMethods.Skip.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression,
                 count));
 
         return source;
@@ -1067,7 +1067,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     /// </summary>
     protected override ShapedQueryExpression? TranslateTake(ShapedQueryExpression source, Expression count)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
         var newCount = TranslateExpression(count);
         if (newCount == null)
         {
@@ -1076,10 +1076,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         count = newCount;
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.Take.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression,
+                EnumerableMethods.Take.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression,
                 count));
 
         return source;
@@ -1105,7 +1105,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         LambdaExpression keySelector,
         bool ascending)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
         var newKeySelector = TranslateLambdaExpression(source, keySelector);
         if (newKeySelector == null)
         {
@@ -1114,11 +1114,11 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         keySelector = newKeySelector;
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
                 (ascending ? EnumerableMethods.ThenBy : EnumerableMethods.ThenByDescending)
-                .MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type, keySelector.ReturnType),
-                kafkaQueryExpression.ServerQueryExpression,
+                .MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type, keySelector.ReturnType),
+                kefcoreQueryExpression.ServerQueryExpression,
                 keySelector));
 
         return source;
@@ -1141,9 +1141,9 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     /// </summary>
     protected override ShapedQueryExpression? TranslateWhere(ShapedQueryExpression source, LambdaExpression predicate)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
-        if (kafkaQueryExpression.ServerQueryExpression is KEFCoreTableExpression tableExpression)
+        if (kefcoreQueryExpression.ServerQueryExpression is KEFCoreTableExpression tableExpression)
         {
             var translatedPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
             if (translatedPredicate != null)
@@ -1153,7 +1153,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                         translatedPredicate,
                         out var keyExpressions))
                 {
-                    kafkaQueryExpression.UpdateServerQueryExpression(
+                    kefcoreQueryExpression.UpdateServerQueryExpression(
                         new KEFCoreSingleKeyTableExpression(
                             tableExpression.EntityType, keyExpressions!));
                     return source;
@@ -1165,17 +1165,17 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                         out var rangeStart,
                         out var rangeEnd))
                 {
-                    kafkaQueryExpression.UpdateServerQueryExpression(
+                    kefcoreQueryExpression.UpdateServerQueryExpression(
                         new KEFCoreRangeTableExpression(
                             tableExpression.EntityType, rangeStart, rangeEnd));
                     return source;
                 }
 
-                kafkaQueryExpression.UpdateServerQueryExpression(
+                kefcoreQueryExpression.UpdateServerQueryExpression(
                     Expression.Call(
                         EnumerableMethods.Where.MakeGenericMethod(
-                            kafkaQueryExpression.CurrentParameter.Type),
-                        kafkaQueryExpression.ServerQueryExpression,
+                            kefcoreQueryExpression.CurrentParameter.Type),
+                        kefcoreQueryExpression.ServerQueryExpression,
                         translatedPredicate));
 
                 return source;
@@ -1192,10 +1192,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         predicate = newPredicate;
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
+        kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
-                EnumerableMethods.Where.MakeGenericMethod(kafkaQueryExpression.CurrentParameter.Type),
-                kafkaQueryExpression.ServerQueryExpression,
+                EnumerableMethods.Where.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
+                kefcoreQueryExpression.ServerQueryExpression,
                 predicate));
 
         return source;
@@ -1636,15 +1636,15 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         string methodName,
         Type returnType)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         selector = selector == null
             || selector.Body == selector.Parameters[0]
                 ? Expression.Lambda(
-                    kafkaQueryExpression.GetProjection(
+                    kefcoreQueryExpression.GetProjection(
                         new ProjectionBindingExpression(
-                            kafkaQueryExpression, new ProjectionMember(), returnType)),
-                    kafkaQueryExpression.CurrentParameter)
+                            kefcoreQueryExpression, new ProjectionMember(), returnType)),
+                    kefcoreQueryExpression.CurrentParameter)
                 : TranslateLambdaExpression(source, selector, preserveType: true);
 
         if (selector == null
@@ -1658,10 +1658,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             ? method.MakeGenericMethod(typeof(ValueBuffer), selector.ReturnType)
             : method.MakeGenericMethod(typeof(ValueBuffer));
 
-        kafkaQueryExpression.UpdateServerQueryExpression(
-            Expression.Call(method, kafkaQueryExpression.ServerQueryExpression, selector));
+        kefcoreQueryExpression.UpdateServerQueryExpression(
+            Expression.Call(method, kefcoreQueryExpression.ServerQueryExpression, selector));
 
-        return source.UpdateShaperExpression(Expression.Convert(kafkaQueryExpression.GetSingleScalarProjection(), returnType));
+        return source.UpdateShaperExpression(Expression.Convert(kefcoreQueryExpression.GetSingleScalarProjection(), returnType));
 
         MethodInfo GetMethod()
             => methodName switch
@@ -1680,7 +1680,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         Type returnType,
         MethodInfo method)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
 
         if (predicate != null)
         {
@@ -1693,7 +1693,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             source = newSource;
         }
 
-        kafkaQueryExpression.ConvertToSingleResult(method);
+        kefcoreQueryExpression.ConvertToSingleResult(method);
 
         return source.ShaperExpression.Type != returnType
             ? source.UpdateShaperExpression(Expression.Convert(source.ShaperExpression, returnType))
@@ -1705,10 +1705,10 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         ShapedQueryExpression source1,
         ShapedQueryExpression source2)
     {
-        var kafkaQueryExpression1 = (KEFCoreQueryExpression)source1.QueryExpression;
-        var kafkaQueryExpression2 = (KEFCoreQueryExpression)source2.QueryExpression;
+        var kefcoreQueryExpression1 = (KEFCoreQueryExpression)source1.QueryExpression;
+        var kefcoreQueryExpression2 = (KEFCoreQueryExpression)source2.QueryExpression;
 
-        kafkaQueryExpression1.ApplySetOperation(setOperationMethodInfo, kafkaQueryExpression2);
+        kefcoreQueryExpression1.ApplySetOperation(setOperationMethodInfo, kefcoreQueryExpression2);
 
         if (setOperationMethodInfo.Equals(EnumerableMethods.Except))
         {

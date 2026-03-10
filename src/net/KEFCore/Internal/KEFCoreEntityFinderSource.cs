@@ -33,9 +33,9 @@ namespace MASES.EntityFrameworkCore.KNet.Internal;
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Not found any other way to override the find behavior from a provider.")]
-public class KEFCoreEntityFinderSource(IKEFCoreClusterCache kafkaClusterCache) : IEntityFinderSource
+public class KEFCoreEntityFinderSource(IKEFCoreClusterCache kefcoreClusterCache) : IEntityFinderSource
 {
-    private readonly IKEFCoreClusterCache _kafkaClusterCache = kafkaClusterCache;
+    private readonly IKEFCoreClusterCache _kefcoreClusterCache = kefcoreClusterCache;
     private readonly ConcurrentDictionary<Type, Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKEFCoreClusterCache, IEntityFinder>> _cache = new();
 
     /// <summary>
@@ -53,7 +53,7 @@ public class KEFCoreEntityFinderSource(IKEFCoreClusterCache kafkaClusterCache) :
             type.ClrType,
             t => (Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKEFCoreClusterCache, IEntityFinder >)
                 typeof(KEFCoreEntityFinderSource).GetMethod(nameof(CreateConstructor), BindingFlags.NonPublic | BindingFlags.Static)!
-                    .MakeGenericMethod(t).Invoke(null, null)!)(stateManager, setSource, setCache, type, _kafkaClusterCache);
+                    .MakeGenericMethod(t).Invoke(null, null)!)(stateManager, setSource, setCache, type, _kefcoreClusterCache);
 
     private static Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKEFCoreClusterCache, IEntityFinder> CreateConstructor<TEntity>()
         where TEntity : class

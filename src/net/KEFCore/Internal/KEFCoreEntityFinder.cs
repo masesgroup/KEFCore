@@ -32,14 +32,14 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         private readonly IDbSetSource _setSource;
         private readonly IDbSetCache _setCache;
         private readonly IEntityType _entityType;
-        private readonly IKEFCoreClusterCache _kafkaClusterCache;
+        private readonly IKEFCoreClusterCache _kefcoreClusterCache;
         private readonly IKEFCoreCluster _cluster;
-        private readonly IKEFCoreTableEntityFinder _kafkaTableEntityFinder;
+        private readonly IKEFCoreTableEntityFinder _kefcoreTableEntityFinder;
         private readonly IKey _primaryKey;
         private readonly Type _primaryKeyType;
         private readonly int _primaryKeyPropertiesCount;
 
-        public KEFCoreEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType, IKEFCoreClusterCache kafkaClusterCache)
+        public KEFCoreEntityFinder(IStateManager stateManager, IDbSetSource setSource, IDbSetCache setCache, IEntityType entityType, IKEFCoreClusterCache kefcoreClusterCache)
         {
             _internalEntityFinderTEntity = new EntityFinder<TEntity>(stateManager, setSource, setCache, entityType);
             _internalEntityFinder = _internalEntityFinderTEntity as IEntityFinder;
@@ -47,11 +47,11 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             _setSource = setSource;
             _setCache = setCache;
             _entityType = entityType;
-            _kafkaClusterCache = kafkaClusterCache;
+            _kefcoreClusterCache = kefcoreClusterCache;
 
             IDbContextOptions options = ((DbContext)_setCache).GetService<IDbContextOptions>();
-            _cluster = _kafkaClusterCache.GetCluster(options);
-            _kafkaTableEntityFinder = _cluster.GetTable(entityType) as IKEFCoreTableEntityFinder;
+            _cluster = _kefcoreClusterCache.GetCluster(options);
+            _kefcoreTableEntityFinder = _cluster.GetTable(entityType) as IKEFCoreTableEntityFinder;
 
             _primaryKey = entityType.FindPrimaryKey()!;
             _primaryKeyPropertiesCount = _primaryKey.Properties.Count;
@@ -79,7 +79,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         private TEntity? FindLocal(object[] keyValues)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(keyValues);
+            _kefcoreTableEntityFinder.FindAndAddOnTracker(keyValues);
             return _internalEntityFinderTEntity.Find(keyValues);
         }
 
@@ -170,7 +170,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         ValueTask<TEntity?> FindAsyncLocal(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
+            _kefcoreTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
             return _internalEntityFinderTEntity.FindAsync(processedKeyValues, cancellationToken);
         }
 
@@ -198,7 +198,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 
         ValueTask<object?> FindAsyncLocalIEntityFinder(object[] processedKeyValues, CancellationToken cancellationToken = default)
         {
-            _kafkaTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
+            _kefcoreTableEntityFinder.FindAndAddOnTracker(processedKeyValues);
             return _internalEntityFinder.FindAsync(processedKeyValues, cancellationToken);
         }
 

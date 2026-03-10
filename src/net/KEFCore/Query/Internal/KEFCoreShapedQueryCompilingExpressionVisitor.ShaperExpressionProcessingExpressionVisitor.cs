@@ -43,7 +43,7 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
         private static readonly MethodInfo CollectionAccessorAddMethodInfo
             = typeof(IClrCollectionAccessor).GetTypeInfo().GetDeclaredMethod(nameof(IClrCollectionAccessor.Add))!;
 
-        private readonly KEFCoreShapedQueryCompilingExpressionVisitor _kafkaShapedQueryCompilingExpressionVisitor;
+        private readonly KEFCoreShapedQueryCompilingExpressionVisitor _kefcoreShapedQueryCompilingExpressionVisitor;
         private readonly bool _tracking;
         private ParameterExpression? _valueBufferParameter;
 
@@ -53,20 +53,20 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
         private readonly Dictionary<ParameterExpression, Dictionary<IProperty, int>> _materializationContextBindings = new();
 
         public ShaperExpressionProcessingExpressionVisitor(
-            KEFCoreShapedQueryCompilingExpressionVisitor kafkaShapedQueryCompilingExpressionVisitor,
-            KEFCoreQueryExpression kafkaQueryExpression,
+            KEFCoreShapedQueryCompilingExpressionVisitor kefcoreShapedQueryCompilingExpressionVisitor,
+            KEFCoreQueryExpression kefcoreQueryExpression,
             bool tracking)
         {
-            _kafkaShapedQueryCompilingExpressionVisitor = kafkaShapedQueryCompilingExpressionVisitor;
-            _valueBufferParameter = kafkaQueryExpression.CurrentParameter;
+            _kefcoreShapedQueryCompilingExpressionVisitor = kefcoreShapedQueryCompilingExpressionVisitor;
+            _valueBufferParameter = kefcoreQueryExpression.CurrentParameter;
             _tracking = tracking;
         }
 
         private ShaperExpressionProcessingExpressionVisitor(
-            KEFCoreShapedQueryCompilingExpressionVisitor kafkaShapedQueryCompilingExpressionVisitor,
+            KEFCoreShapedQueryCompilingExpressionVisitor kefcoreShapedQueryCompilingExpressionVisitor,
             bool tracking)
         {
-            _kafkaShapedQueryCompilingExpressionVisitor = kafkaShapedQueryCompilingExpressionVisitor;
+            _kefcoreShapedQueryCompilingExpressionVisitor = kefcoreShapedQueryCompilingExpressionVisitor;
             _tracking = tracking;
         }
 
@@ -95,10 +95,10 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
                         _variables.Add(variable);
 #if NET10_0
                             var innerShaper =
-                            _kafkaShapedQueryCompilingExpressionVisitor.InjectStructuralTypeMaterializers(shaper);
+                            _kefcoreShapedQueryCompilingExpressionVisitor.InjectStructuralTypeMaterializers(shaper);
 #else
                             var innerShaper =
-                            _kafkaShapedQueryCompilingExpressionVisitor.InjectEntityMaterializers(shaper);
+                            _kefcoreShapedQueryCompilingExpressionVisitor.InjectEntityMaterializers(shaper);
 #endif
                             innerShaper = Visit(innerShaper);
                         _expressions.Add(Assign(variable, innerShaper));
@@ -148,7 +148,7 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
                     {
                         var collectionResultShaperExpression = (CollectionResultShaperExpression)includeExpression.NavigationExpression;
                         var shaperLambda = new ShaperExpressionProcessingExpressionVisitor(
-                                _kafkaShapedQueryCompilingExpressionVisitor, _tracking)
+                                _kefcoreShapedQueryCompilingExpressionVisitor, _tracking)
                             .ProcessShaper(collectionResultShaperExpression.InnerShaper);
                         _expressions.Add(
                             Call(
@@ -195,7 +195,7 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
                     var collectionType = collectionAccessor?.CollectionType ?? collectionResultShaperExpression.Type;
                     var elementType = collectionResultShaperExpression.ElementType;
                     var shaperLambda = new ShaperExpressionProcessingExpressionVisitor(
-                            _kafkaShapedQueryCompilingExpressionVisitor, _tracking)
+                            _kefcoreShapedQueryCompilingExpressionVisitor, _tracking)
                         .ProcessShaper(collectionResultShaperExpression.InnerShaper);
 
                     return Call(
@@ -209,7 +209,7 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
                 case SingleResultShaperExpression singleResultShaperExpression:
                 {
                     var shaperLambda = new ShaperExpressionProcessingExpressionVisitor(
-                            _kafkaShapedQueryCompilingExpressionVisitor, _tracking)
+                            _kefcoreShapedQueryCompilingExpressionVisitor, _tracking)
                         .ProcessShaper(singleResultShaperExpression.InnerShaper);
 
                     return Call(

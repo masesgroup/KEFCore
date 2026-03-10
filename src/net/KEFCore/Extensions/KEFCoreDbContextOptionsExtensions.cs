@@ -47,16 +47,16 @@ public static class KEFCoreDbContextOptionsExtensions
     /// <param name="bootstrapServers">
     ///     The bootstrap servers of the Kafka cluster.
     /// </param>
-    /// <param name="kafkaOptionsAction">An optional action to allow additional Apache Kafka cluster specific configuration.</param>
+    /// <param name="kefcoreOptionsAction">An optional action to allow additional Apache Kafka cluster specific configuration.</param>
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder<TContext> UseKEFCore<TContext>(
         this DbContextOptionsBuilder<TContext> optionsBuilder,
         string applicationId,
         string bootstrapServers,
-        Action<KEFCoreDbContextOptionsBuilder>? kafkaOptionsAction = null)
+        Action<KEFCoreDbContextOptionsBuilder>? kefcoreOptionsAction = null)
         where TContext : DbContext
         => (DbContextOptionsBuilder<TContext>)UseKEFCore(
-            (DbContextOptionsBuilder)optionsBuilder, applicationId, bootstrapServers, kafkaOptionsAction);
+            (DbContextOptionsBuilder)optionsBuilder, applicationId, bootstrapServers, kefcoreOptionsAction);
 
     /// <summary>
     ///     Configures the context to connect to a named Apache Kafka cluster.
@@ -75,13 +75,13 @@ public static class KEFCoreDbContextOptionsExtensions
     /// <param name="bootstrapServers">
     ///     The bootstrap servers of the Kafka cluster.
     /// </param>
-    /// <param name="kafkaOptionsAction">An optional action to allow additional Kafka specific configuration.</param>
+    /// <param name="kefcoreOptionsAction">An optional action to allow additional Kafka specific configuration.</param>
     /// <returns>The options builder so that further configuration can be chained.</returns>
     public static DbContextOptionsBuilder UseKEFCore(
         this DbContextOptionsBuilder optionsBuilder,
         string? applicationId,
         string bootstrapServers,
-        Action<KEFCoreDbContextOptionsBuilder>? kafkaOptionsAction = null)
+        Action<KEFCoreDbContextOptionsBuilder>? kefcoreOptionsAction = null)
     {
         Check.NotNull(optionsBuilder, nameof(optionsBuilder));
         Check.NotEmpty(bootstrapServers, nameof(bootstrapServers));
@@ -95,7 +95,7 @@ public static class KEFCoreDbContextOptionsExtensions
 
         ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(extension);
 
-        kafkaOptionsAction?.Invoke(new KEFCoreDbContextOptionsBuilder(optionsBuilder));
+        kefcoreOptionsAction?.Invoke(new KEFCoreDbContextOptionsBuilder(optionsBuilder));
 
         return optionsBuilder;
     }

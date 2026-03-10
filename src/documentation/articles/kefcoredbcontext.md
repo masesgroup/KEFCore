@@ -1,13 +1,13 @@
 ---
-title: KafkaDbContext
-_description: Describe what is and how use KafkaDbContext class from Entity Framework Core provider for Apache Kafka™
+title: KEFCoreDbContext
+_description: Describe what is and how use KEFCoreDbContext class from Entity Framework Core provider for Apache Kafka™
 ---
 
-# KEFCore: KafkaDbContext
+# KEFCore: KEFCoreDbContext
 
-`KafkaDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/):
-- `KafkaDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
-- `KafkaDbContext` defines the following properties:
+`KEFCoreDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/):
+- `KEFCoreDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
+- `KEFCoreDbContext` defines the following properties:
   - **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key
   - **ValueSerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value
   - **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka™ record value
@@ -33,15 +33,15 @@ _description: Describe what is and how use KafkaDbContext class from Entity Fram
   - **DefaultSynchronizationTimeout**: The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster. Setting this property to 0 the synchronization will be disabled
   - **OnChangeEvent**: handler to receive change events from back-end
 
-## How to use `KafkaDbContext` class
+## How to use `KEFCoreDbContext` class
 
-The most simple example of usage can be found in [KEFCore usage](usage.md). By default, `KafkaDbContext` automatically manages `OnConfiguring` method of `DbContext`:
-- `KafkaDbContext` checks the mandatory options like **BootstrapServers** and **DbName**
-- `KafkaDbContext` setup the options needed to use an Apache Kafka™ cluster:
-  - ~~default `ConsumerConfig` can be overridden using **ConsumerConfig** property of `KafkaDbContext`~~
-  - default `ProducerConfig` can be overridden using **ProducerConfig** property of `KafkaDbContext`
-  - default `StreamsConfig` can be overridden using **StreamsConfig** property of `KafkaDbContext`
-  - default `TopicConfig` can be overridden using **TopicConfig** property of `KafkaDbContext`
+The most simple example of usage can be found in [KEFCore usage](usage.md). By default, `KEFCoreDbContext` automatically manages `OnConfiguring` method of `DbContext`:
+- `KEFCoreDbContext` checks the mandatory options like **BootstrapServers** and **DbName**
+- `KEFCoreDbContext` setup the options needed to use an Apache Kafka™ cluster:
+  - ~~default `ConsumerConfig` can be overridden using **ConsumerConfig** property of `KEFCoreDbContext`~~
+  - default `ProducerConfig` can be overridden using **ProducerConfig** property of `KEFCoreDbContext`
+  - default `StreamsConfig` can be overridden using **StreamsConfig** property of `KEFCoreDbContext`
+  - default `TopicConfig` can be overridden using **TopicConfig** property of `KEFCoreDbContext`
 
 ### Default **ConsumerConfig**
 

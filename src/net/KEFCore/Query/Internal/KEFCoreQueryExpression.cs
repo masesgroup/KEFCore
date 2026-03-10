@@ -293,12 +293,12 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
                         break;
                     }
 
-                    case KEFCoreQueryExpression kafkaQueryExpression:
+                    case KEFCoreQueryExpression kefcoreQueryExpression:
                     {
-                        var singleResult = kafkaQueryExpression._scalarServerQuery
-                            || kafkaQueryExpression._singleResultMethodInfo != null;
-                        kafkaQueryExpression.ApplyProjection();
-                        var serverQuery = kafkaQueryExpression.ServerQueryExpression;
+                        var singleResult = kefcoreQueryExpression._scalarServerQuery
+                            || kefcoreQueryExpression._singleResultMethodInfo != null;
+                        kefcoreQueryExpression.ApplyProjection();
+                        var serverQuery = kefcoreQueryExpression.ServerQueryExpression;
                         if (singleResult)
                         {
                             serverQuery = ((LambdaExpression)((NewExpression)serverQuery).Arguments[0]).Body;

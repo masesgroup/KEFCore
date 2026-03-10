@@ -1214,14 +1214,14 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
         if (typeReference.Subquery != null)
         {
             var entityShaper = (StructuralTypeShaperExpression)typeReference.Subquery.ShaperExpression;
-            var kafkaQueryExpression = (KEFCoreQueryExpression)typeReference.Subquery.QueryExpression;
+            var kefcoreQueryExpression = (KEFCoreQueryExpression)typeReference.Subquery.QueryExpression;
             var projectionBindingExpression = (ProjectionBindingExpression)entityShaper.ValueBufferExpression;
-            var entityProjectionExpression = (EntityProjectionExpression)kafkaQueryExpression.GetProjection(
+            var entityProjectionExpression = (EntityProjectionExpression)kefcoreQueryExpression.GetProjection(
                 projectionBindingExpression);
             var readValueExpression = entityProjectionExpression.BindProperty(property);
 
             return ProcessSingleResultScalar(
-                kafkaQueryExpression,
+                kefcoreQueryExpression,
                 readValueExpression,
                 type);
         }
@@ -1266,21 +1266,21 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
     }
 
     private static Expression ProcessSingleResultScalar(
-        KEFCoreQueryExpression kafkaQueryExpression,
+        KEFCoreQueryExpression kefcoreQueryExpression,
         Expression readValueExpression,
         Type type)
     {
-        if (kafkaQueryExpression.ServerQueryExpression is not NewExpression)
+        if (kefcoreQueryExpression.ServerQueryExpression is not NewExpression)
         {
             // The terminating operator is not applied
             // It is of FirstOrDefault kind
             // So we change to single column projection and then apply it.
-            kafkaQueryExpression.ReplaceProjection(
+            kefcoreQueryExpression.ReplaceProjection(
                 new Dictionary<ProjectionMember, Expression> { { new ProjectionMember(), readValueExpression } });
-            kafkaQueryExpression.ApplyProjection();
+            kefcoreQueryExpression.ApplyProjection();
         }
 
-        var serverQuery = kafkaQueryExpression.ServerQueryExpression;
+        var serverQuery = kefcoreQueryExpression.ServerQueryExpression;
         serverQuery = ((LambdaExpression)((NewExpression)serverQuery).Arguments[0]).Body;
         if (serverQuery is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpression
             && unaryExpression.Type == typeof(object))

@@ -46,10 +46,10 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
     {
         return extensionExpression switch
         {
-            KEFCoreTableExpression kafkaTableExpression => Call(
+            KEFCoreTableExpression kefcoreTableExpression => Call(
                                 TableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
-                                Constant(kafkaTableExpression.EntityType)),
+                                Constant(kefcoreTableExpression.EntityType)),
             KEFCoreSingleKeyTableExpression singleKey => Call(
                                 SingleKeyTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
@@ -93,13 +93,13 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
     /// </summary>
     protected override Expression VisitShapedQuery(ShapedQueryExpression shapedQueryExpression)
     {
-        var kafkaQueryExpression = (KEFCoreQueryExpression)shapedQueryExpression.QueryExpression;
-        kafkaQueryExpression.ApplyProjection();
+        var kefcoreQueryExpression = (KEFCoreQueryExpression)shapedQueryExpression.QueryExpression;
+        kefcoreQueryExpression.ApplyProjection();
 
         var shaperExpression = new ShaperExpressionProcessingExpressionVisitor(
-                this, kafkaQueryExpression, QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
+                this, kefcoreQueryExpression, QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
             .ProcessShaper(shapedQueryExpression.ShaperExpression);
-        var innerEnumerable = Visit(kafkaQueryExpression.ServerQueryExpression);
+        var innerEnumerable = Visit(kefcoreQueryExpression.ServerQueryExpression);
 
         return New(
             typeof(QueryingEnumerable<>).MakeGenericType(shaperExpression.ReturnType).GetConstructors()[0],

@@ -20,5 +20,5 @@
   href: roadmap.md
 - name: Current state
   href: currentstate.md
-- name: KafkaDbContext
-  href: kafkadbcontext.md
+- name: KEFCoreDbContext
+  href: kefcoredbcontext.md

@@ -46,7 +46,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     private readonly IValueGeneratorSelector _valueGeneratorSelector;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IModel _designModel;
-    private readonly KEFCoreClusterAdmin _kafkaAdminClient = null;
+    private readonly KEFCoreClusterAdmin _kefcoreAdminClient = null;
 
     private System.Collections.Concurrent.ConcurrentDictionary<string, IKEFCoreTable> _tables;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
@@ -69,7 +69,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         _updateAdapterFactory = updateAdapterFactory;
         _designModel = designModel;
 
-        _kafkaAdminClient = KEFCoreClusterAdmin.Create(Options.BootstrapServers);
+        _kefcoreAdminClient = KEFCoreClusterAdmin.Create(Options.BootstrapServers);
     }
     /// <inheritdoc/>
     public virtual void Dispose()
@@ -158,7 +158,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         var coll = TopicsFromModel(out var topics);
         ResetStream(topics);
 
-        _kafkaAdminClient.DeleteTopics(coll, _infrastructureLogger);
+        _kefcoreAdminClient.DeleteTopics(coll, _infrastructureLogger);
 
         if (_tables == null)
         {
@@ -179,7 +179,7 @@ public class KEFCoreCluster : IKEFCoreCluster
             ResetStream(topics);
         }
 
-        _kafkaAdminClient.CheckTopics(coll, Options.ReadOnlyMode, Options.ManageEvents, Options.UseCompactedReplicator, _infrastructureLogger);
+        _kefcoreAdminClient.CheckTopics(coll, Options.ReadOnlyMode, Options.ManageEvents, Options.UseCompactedReplicator, _infrastructureLogger);
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -308,7 +308,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         _infrastructureLogger.Logger.LogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
         try
         {
-            _kafkaAdminClient.CreateTopic(topicName, requestedPartitions, requestedReplicationFactor, map, _infrastructureLogger);
+            _kefcoreAdminClient.CreateTopic(topicName, requestedPartitions, requestedReplicationFactor, map, _infrastructureLogger);
         }
         catch (TopicExistsException ex)
         {
@@ -332,7 +332,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 
         try
         {
-            return _kafkaAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
+            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
         }
         catch (UnknownTopicOrPartitionException ex)
         {

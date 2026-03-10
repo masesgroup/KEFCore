@@ -33,42 +33,42 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual void Initialize(IDbContextOptions options)
     {
-        var kafkaOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
 
-        if (kafkaOptions != null)
+        if (kefcoreOptions != null)
         {
-            KeySerDesSelectorType = kafkaOptions.KeySerDesSelectorType;
-            ValueSerDesSelectorType = kafkaOptions.ValueSerDesSelectorType;
-            ValueContainerType = kafkaOptions.ValueContainerType;
-            TopicPrefix = kafkaOptions.TopicPrefix;
-            ApplicationId = kafkaOptions.ApplicationId;
-            BootstrapServers = kafkaOptions.BootstrapServers;
-            UseDeletePolicyForTopic = kafkaOptions.UseDeletePolicyForTopic;
-            UseCompactedReplicator = kafkaOptions.UseCompactedReplicator;
-            UseKNetStreams = kafkaOptions.UseKNetStreams;
-            UseGlobalTable = kafkaOptions.UseGlobalTable;
-            UsePersistentStorage = kafkaOptions.UsePersistentStorage;
-            UseEnumeratorWithPrefetch = kafkaOptions.UseEnumeratorWithPrefetch;
-            UseByteBufferDataTransfer = kafkaOptions.UseByteBufferDataTransfer;
-            DefaultNumPartitions = kafkaOptions.DefaultNumPartitions;
-            DefaultConsumerInstances = kafkaOptions.DefaultConsumerInstances;
-            DefaultReplicationFactor = kafkaOptions.DefaultReplicationFactor;
-            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kafkaOptions.ConsumerConfig);
-            ProducerConfig = ProducerConfigBuilder.CreateFrom(kafkaOptions.ProducerConfig);
-            StreamsConfig = StreamsConfigBuilder.CreateFrom(kafkaOptions.StreamsConfig);
-            TopicConfig = TopicConfigBuilder.CreateFrom(kafkaOptions.TopicConfig);
-            ManageEvents = kafkaOptions.ManageEvents;
-            ReadOnlyMode = kafkaOptions.ReadOnlyMode;
-            DefaultSynchronizationTimeout = kafkaOptions.DefaultSynchronizationTimeout;
+            KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
+            ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
+            ValueContainerType = kefcoreOptions.ValueContainerType;
+            TopicPrefix = kefcoreOptions.TopicPrefix;
+            ApplicationId = kefcoreOptions.ApplicationId;
+            BootstrapServers = kefcoreOptions.BootstrapServers;
+            UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
+            UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
+            UseKNetStreams = kefcoreOptions.UseKNetStreams;
+            UseGlobalTable = kefcoreOptions.UseGlobalTable;
+            UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
+            UseEnumeratorWithPrefetch = kefcoreOptions.UseEnumeratorWithPrefetch;
+            UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
+            DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
+            DefaultConsumerInstances = kefcoreOptions.DefaultConsumerInstances;
+            DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
+            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kefcoreOptions.ConsumerConfig);
+            ProducerConfig = ProducerConfigBuilder.CreateFrom(kefcoreOptions.ProducerConfig);
+            StreamsConfig = StreamsConfigBuilder.CreateFrom(kefcoreOptions.StreamsConfig);
+            TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
+            ManageEvents = kefcoreOptions.ManageEvents;
+            ReadOnlyMode = kefcoreOptions.ReadOnlyMode;
+            DefaultSynchronizationTimeout = kefcoreOptions.DefaultSynchronizationTimeout;
         }
     }
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
-        var kafkaOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
 
-        if (kafkaOptions != null
-            && BootstrapServers != kafkaOptions.BootstrapServers)
+        if (kefcoreOptions != null
+            && BootstrapServers != kefcoreOptions.BootstrapServers)
         {
             throw new InvalidOperationException(
                 CoreStrings.SingletonOptionChanged(
