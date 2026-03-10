@@ -26,7 +26,7 @@ namespace MASES.EntityFrameworkCore.KNet.Standalone.Model.Test
     {
         static void Main(string[] args)
         {
-            var builder = KafkaConventionSetBuilder.CreateModelBuilder();
+            var builder = KEFCoreConventionSetBuilder.CreateModelBuilder();
 
             builder.Entity<BlogComplex>();
 

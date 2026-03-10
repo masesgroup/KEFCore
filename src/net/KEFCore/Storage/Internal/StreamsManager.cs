@@ -66,7 +66,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <param name="offset">The offset received</param>
         void PartitionOffsetWritten(IEntityType entity, int partition, long offset);
         /// <summary>
-        /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+        /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
         /// </summary>
         bool? EnsureSynchronized(IEntityType entity, long timeout);
     }
@@ -195,7 +195,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _stateChanged;
 
-        private readonly IKafkaCluster _kafkaCluster;
+        private readonly IKEFCoreCluster _kafkaCluster;
         private StreamsConfigBuilder _streamsConfig;
         private TStreamBuilder _builder;
         private TTopology _topology;
@@ -232,7 +232,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             MASES.KNet.Streams.StreamsBuilder.OverrideProperties = PropertyUpdate;
         }
 
-        public StreamsManager(IKafkaCluster kafkaCluster, IEntityType entityType)
+        public StreamsManager(IKEFCoreCluster kafkaCluster, IEntityType entityType)
         {
             _kafkaCluster = kafkaCluster;
             _updateAdapter = kafkaCluster.UpdateAdapterFactory.Create();

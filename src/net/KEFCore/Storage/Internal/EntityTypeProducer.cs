@@ -55,7 +55,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private readonly Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
-    private readonly IKafkaCluster _cluster;
+    private readonly IKEFCoreCluster _cluster;
     private readonly IEntityType _entityType;
     private readonly IValueContainerMetadata _entityMetadata;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -63,7 +63,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaCompactedReplicator;
     private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
-    private readonly IKafkaStreamsRetriever<TKey>? _streamData;
+    private readonly IKEFCoreStreamsRetriever<TKey>? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
@@ -202,7 +202,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <summary>
     /// Default initializer
     /// </summary>
-    public EntityTypeProducer(IEntityType entityType, IKafkaCluster cluster)
+    public EntityTypeProducer(IEntityType entityType, IKEFCoreCluster cluster)
     {
 #if DEBUG_PERFORMANCE
         KNet.Internal.DebugPerformanceHelper.ReportString($"Creating new EntityTypeProducer for {entityType.Name}");
@@ -316,7 +316,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_streamData.TryGetProperties(key, out var properties, out var complexProperties))
             {
-                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
+                KEFCoreStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
         }
@@ -326,7 +326,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 IDictionary<string, object?>? properties = valueContainer?.GetProperties(_entityType)!;
                 IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_entityType, _complexTypeConverterFactory)!;
-                KafkaStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
+                KEFCoreStateHelper.ManageFind(_cluster.InfrastructureLogger, _cluster.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
         }
@@ -360,7 +360,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
     /// <inheritdoc/>
-    public void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKafkaRowBag> records)
+    public void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records)
     {
         if (_useCompactedReplicator)
         {
@@ -503,7 +503,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <summary>
-    /// Verify if local instance is synchronized with the <see cref="IKafkaCluster"/> instance
+    /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>
     public bool? EnsureSynchronized(long timeout)
     {
@@ -531,16 +531,16 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageAdded(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageUpdate(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        KEFCoreStateHelper.ManageUpdate(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
     private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KafkaStateHelper.ManageDelete(_cluster.InfrastructureLogger, _updateAdapter!, _primaryKeyForChanges!, arg2.Key);
+        KEFCoreStateHelper.ManageDelete(_cluster.InfrastructureLogger, _updateAdapter!, _primaryKeyForChanges!, arg2.Key);
     }
 }
