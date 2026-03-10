@@ -61,7 +61,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 ///         is discovered by convention, you can override the <see cref="DbContext.OnModelCreating(ModelBuilder)" /> method.
 ///     </para>
 ///     <para>
-///         See <see href="https://masesgroup.github.io/KEFCore/articles/kafkadbcontext.html">KafkaDbContext configuration and initialization</see>,
+///         See <see href="https://masesgroup.github.io/KEFCore/articles/kefcoredbcontext.html">KEFCoreDbContext configuration and initialization</see>,
 ///         <see href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</see>,
 ///         <see href="https://aka.ms/efcore-docs-query">Querying data with EF Core</see>,
 ///         <see href="https://aka.ms/efcore-docs-change-tracking">Changing tracking</see>, and
