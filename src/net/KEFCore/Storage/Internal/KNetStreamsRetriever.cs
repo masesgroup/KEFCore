@@ -130,7 +130,25 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, false);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(TKey rangeStart, TKey rangeEnd)
+    {
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, false, rangeStart, rangeEnd);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse()
+    {
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, true);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(TKey rangeStart, TKey rangeEnd)
+    {
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, true, rangeStart, rangeEnd);
     }
 
     TValue GetTValue(TKey key)
@@ -198,29 +216,49 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;
+        private readonly bool _isReverse;
+        private readonly bool _useRange = false;
+        private readonly TKey? _rangeStart;
+        private readonly TKey? _rangeEnd;
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
         private readonly ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore = null;
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch, bool isReverse)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+            _isReverse = isReverse;
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
 #endif
         }
 
-        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, CancellationToken cancellationToken = default)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch, bool isReverse, TKey? rangeStart, TKey? rangeEnd)
+        {
+            _metadata = metadata;
+            _complexTypeConverterFactory = complexTypeConverterFactory;
+            _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+            _isReverse = isReverse;
+            _useRange = true;
+            _rangeStart = rangeStart;
+            _rangeEnd = rangeEnd;
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
+#endif
+        }
+
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, bool isReverse, bool useRange, TKey? rangeStart, TKey? rangeEnd, CancellationToken cancellationToken = default)
         {
             const int maxCycle = 100;
             const int waitTime = 100;
             int cycle = 0;
             try
             {
-                return GetIterator(keyValueStore, waitTime, maxCycle, ref cycle, cancellationToken);
+                return GetIterator(keyValueStore, isReverse, useRange, rangeStart, rangeEnd, waitTime, maxCycle, ref cycle, cancellationToken);
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
             {
@@ -228,12 +266,15 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
             }
         }
 
-        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, int waitTime, int maxCycle, ref int currentCycle, CancellationToken cancellationToken = default)
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, bool isReverse, bool useRange, TKey? rangeStart, TKey? rangeEnd, int waitTime, int maxCycle, ref int currentCycle, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                return keyValueStore?.All();
+                return !useRange ? (isReverse ? keyValueStore?.ReverseAll 
+                                              : keyValueStore?.All())
+                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!) 
+                                              : keyValueStore?.Range(rangeStart!, rangeEnd!));
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
             {
@@ -241,7 +282,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
                 {
                     Thread.Sleep(waitTime);
                     currentCycle++;
-                    return GetIterator(keyValueStore, waitTime, maxCycle, ref currentCycle, cancellationToken);
+                    return GetIterator(keyValueStore, isReverse, useRange, rangeStart, rangeEnd, waitTime, maxCycle, ref currentCycle, cancellationToken);
                 }
                 throw;
             }
@@ -254,7 +295,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _rangeStart, _rangeEnd), _useEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -268,7 +309,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKafkaStre
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting async KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, cancellationToken), _useEnumeratorWithPrefetch, true, cancellationToken);
+            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _rangeStart, _rangeEnd, cancellationToken), _useEnumeratorWithPrefetch, true, cancellationToken);
         }
     }
 

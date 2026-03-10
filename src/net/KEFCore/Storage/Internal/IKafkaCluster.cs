@@ -96,6 +96,22 @@ public interface IKafkaCluster : IDisposable
     /// </summary>
     IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
     /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> for a specified key
+    /// </summary>
+    ValueBuffer? GetValueBuffer(IEntityType entityType, object?[] keyValues);
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> in a range of keys
+    /// </summary>
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> in reverse order
+    /// </summary>
+    IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType);
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> in a range of keys
+    /// </summary>
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
+    /// <summary>
     /// Executes a transaction
     /// </summary>
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);

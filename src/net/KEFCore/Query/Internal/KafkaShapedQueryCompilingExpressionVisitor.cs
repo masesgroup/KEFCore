@@ -23,25 +23,18 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 
 using static Expression;
 
-public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCompilingExpressionVisitor
+/// <summary>
+///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+///     any release. You should only use it directly in your code with extreme caution and knowing that
+///     doing so can result in application failures when updating to a new Entity Framework Core release.
+/// </summary>
+public partial class KafkaShapedQueryCompilingExpressionVisitor(
+    ShapedQueryCompilingExpressionVisitorDependencies dependencies,
+    QueryCompilationContext queryCompilationContext) : ShapedQueryCompilingExpressionVisitor(dependencies, queryCompilationContext)
 {
-    private readonly Type _contextType;
-    private readonly bool _threadSafetyChecksEnabled;
-
-    /// <summary>
-    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
-    ///     any release. You should only use it directly in your code with extreme caution and knowing that
-    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
-    /// </summary>
-    public KafkaShapedQueryCompilingExpressionVisitor(
-        ShapedQueryCompilingExpressionVisitorDependencies dependencies,
-        QueryCompilationContext queryCompilationContext)
-        : base(dependencies, queryCompilationContext)
-    {
-        _contextType = queryCompilationContext.ContextType;
-        _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
-    }
+    private readonly Type _contextType = queryCompilationContext.ContextType;
+    private readonly bool _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -51,17 +44,46 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
     /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
-        switch (extensionExpression)
+        return extensionExpression switch
         {
-            case KafkaTableExpression kafkaTableExpression:
-                return Call(
-                    TableMethodInfo,
-                    QueryCompilationContext.QueryContextParameter,
-                    Constant(kafkaTableExpression.EntityType));
-        }
-
-        return base.VisitExtension(extensionExpression);
+            KafkaTableExpression kafkaTableExpression => Call(
+                                TableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(kafkaTableExpression.EntityType)),
+            KafkaSingleKeyTableExpression singleKey => Call(
+                                SingleKeyTableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(singleKey.EntityType),
+                                NewArrayInit(
+                                    typeof(object),
+                                    singleKey.KeyExpressions.Select(e =>
+                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e))),
+            KafkaRangeTableExpression range => Call(
+                                RangeTableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(range.EntityType),
+                                BuildNullableObjectArray(range.RangeStart),
+                                BuildNullableObjectArray(range.RangeEnd)),
+            KafkaReverseTableExpression reverse => Call(
+                                ReverseTableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(reverse.EntityType)),
+            KafkaReverseRangeTableExpression reverseRange => Call(
+                                ReverseRangeTableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(reverseRange.EntityType),
+                                BuildNullableObjectArray(reverseRange.RangeStart),
+                                BuildNullableObjectArray(reverseRange.RangeEnd)),
+            _ => base.VisitExtension(extensionExpression),
+        };
     }
+
+    private static Expression BuildNullableObjectArray(IReadOnlyList<Expression>? exprs)
+    => exprs == null
+        ? Constant(null, typeof(object[]))
+        : NewArrayInit(
+            typeof(object),
+            exprs.Select(e => e.Type.IsValueType ? Convert(e, typeof(object)) : e));
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -93,8 +115,45 @@ public partial class KafkaShapedQueryCompilingExpressionVisitor : ShapedQueryCom
     private static readonly MethodInfo TableMethodInfo
         = typeof(KafkaShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(Table))!;
 
+    private static readonly MethodInfo SingleKeyTableMethodInfo
+        = typeof(KafkaShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(SingleKeyTable))!;
+
+    private static readonly MethodInfo RangeTableMethodInfo
+        = typeof(KafkaShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(RangeTable))!;
+
+    private static readonly MethodInfo ReverseTableMethodInfo
+        = typeof(KafkaShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(ReverseTable))!;
+
+    private static readonly MethodInfo ReverseRangeTableMethodInfo
+        = typeof(KafkaShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(ReverseRangeTable))!;
+
     private static IEnumerable<ValueBuffer> Table(
         QueryContext queryContext,
         IEntityType entityType)
         => ((KafkaQueryContext)queryContext).GetValueBuffers(entityType);
+
+    private static IEnumerable<ValueBuffer> SingleKeyTable(
+        QueryContext queryContext,
+        IEntityType entityType,
+        object?[] keyValues)
+        => ((KafkaQueryContext)queryContext).GetValueBuffer(entityType, keyValues);
+
+    private static IEnumerable<ValueBuffer> RangeTable(
+        QueryContext queryContext,
+        IEntityType entityType,
+        object?[]? rangeStart,
+        object?[]? rangeEnd)
+        => ((KafkaQueryContext)queryContext).GetValueBuffersRange(entityType, rangeStart, rangeEnd);
+
+    private static IEnumerable<ValueBuffer> ReverseTable(
+        QueryContext queryContext,
+        IEntityType entityType)
+        => ((KafkaQueryContext)queryContext).GetValueBuffersReverse(entityType);
+
+    private static IEnumerable<ValueBuffer> ReverseRangeTable(
+        QueryContext queryContext,
+        IEntityType entityType,
+        object?[]? rangeStart,
+        object?[]? rangeEnd)
+        => ((KafkaQueryContext)queryContext).GetValueBuffersReverseRange(entityType, rangeStart, rangeEnd);
 }

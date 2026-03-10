@@ -426,14 +426,58 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _valueSerdes?.Dispose();
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> ValueBuffers
+    public IEnumerable<ValueBuffer> GetValueBuffers()
     {
-        get
+        if (_streamData != null) return _streamData.GetValueBuffers();
+        else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _kafkaCompactedReplicator);
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public ValueBuffer? GetValueBuffer(object?[]? keyValues)
+    {
+        if (keyValues == null) return null;
+        TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+        if (key == null) return null;
+        if (_streamData != null)
         {
-            if (_streamData != null) return _streamData.GetValueBuffers();
-            else if (_kafkaCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _kafkaCompactedReplicator);
-            else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+            return _streamData.TryGetValue(key, out var valueBuffer) ? valueBuffer : null;
         }
+        else if (_kafkaCompactedReplicator != null)
+        {
+            return TryGetValueBuffer(key, out var buffer) ? buffer : null;
+        }
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd)
+    {
+        if (_streamData != null)
+        {
+            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
+            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
+            return _streamData.GetValueBuffersRange(start, end);
+        }
+        else if (_kafkaCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse()
+    {
+        if (_streamData != null) return _streamData.GetValueBuffersReverse();
+        else if (_kafkaCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse iteration");
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
+    }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd)
+    {
+        if (_streamData != null)
+        {
+            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
+            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
+            return _streamData.GetValueBuffersReverseRange(start, end);
+        }
+        else if (_kafkaCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
+        else throw new InvalidOperationException("Missing _kafkaCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
     public void Start()

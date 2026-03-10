@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 /*
 *  Copyright (c) 2022-2026 MASES s.r.l.
 *
@@ -33,7 +30,9 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </remarks>
-public class KafkaTableExpression(IEntityType entityType) : Expression, IPrintableExpression
+public class KafkaSingleKeyTableExpression(
+    IEntityType entityType,
+    IReadOnlyList<Expression> keyExpressions) : Expression, IPrintableExpression
 {
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -41,26 +40,28 @@ public class KafkaTableExpression(IEntityType entityType) : Expression, IPrintab
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public override Type Type
-        => typeof(IEnumerable<ValueBuffer>);
-
+    public IEntityType EntityType { get; } = entityType;
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public virtual IEntityType EntityType { get; } = entityType;
-
+    public IReadOnlyList<Expression> KeyExpressions { get; } = keyExpressions;
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public sealed override ExpressionType NodeType
-        => ExpressionType.Extension;
-
+    public override Type Type => typeof(IEnumerable<ValueBuffer>);
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
+    public override ExpressionType NodeType => ExpressionType.Extension;
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -68,8 +69,15 @@ public class KafkaTableExpression(IEntityType entityType) : Expression, IPrintab
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     protected override Expression VisitChildren(ExpressionVisitor visitor)
-        => this;
+    {
+        var newKeys = KeyExpressions
+            .Select(k => visitor.Visit(k))
+            .ToList();
 
+        return newKeys.SequenceEqual(KeyExpressions)
+            ? this
+            : new KafkaSingleKeyTableExpression(EntityType, newKeys);
+    }
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -77,5 +85,6 @@ public class KafkaTableExpression(IEntityType entityType) : Expression, IPrintab
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)
-        => expressionPrinter.Append(nameof(KafkaTableExpression) + ": Entity: " + EntityType.DisplayName());
+        => expressionPrinter.Append(nameof(KafkaSingleKeyTableExpression) + ": Entity: " + EntityType.DisplayName() 
+                                                                          + ": KeyExpressions: " + KeyExpressions.ToString());
 }

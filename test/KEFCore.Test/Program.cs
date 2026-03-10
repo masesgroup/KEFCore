@@ -69,7 +69,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
                 }
 
-                Stopwatch watch = new Stopwatch();
+                Stopwatch watch = new();
                 watch.Start();
                 if (context.Database.EnsureCreated()) // call always for initialization
                 {
@@ -169,6 +169,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
 
+                try
+                {
+                    watch.Restart();
+                    int count = context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1).Count();
+                    watch.Stop();
+                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
+
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Restart();
@@ -183,14 +195,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         context.Add(new Blog
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
+                            Posts =
+                            [
                                 new Post()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }

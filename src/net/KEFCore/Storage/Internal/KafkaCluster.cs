@@ -223,7 +223,7 @@ public class KafkaCluster : IKafkaCluster
                 finally
                 {
                     stopwatch.Stop();
-                    _infrastructureLogger.Logger.LogDebug("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
+                    _infrastructureLogger.Logger.LogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", Options.ApplicationId, Options.ClusterId, stopwatch.Elapsed);
                 }
             }
 
@@ -370,7 +370,7 @@ public class KafkaCluster : IKafkaCluster
             var key = _useNameMatching ? (object)entityType.Name : entityType;
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
-                return table.ValueBuffers;
+                return table.GetValueBuffers();
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -379,6 +379,127 @@ public class KafkaCluster : IKafkaCluster
         {
             valueBufferSw.Stop();
             _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
+    }
+    /// <inheritdoc/>
+    public ValueBuffer? GetValueBuffer(IEntityType entityType, object[] keyValues)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffer for {Entity}", entityType.Name);
+#if DEBUG_PERFORMANCE
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
+#endif
+            EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+            valueBufferSw.Start();
+#endif
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.GetValueBuffer(keyValues);
+            }
+            throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
+        finally
+        {
+            valueBufferSw.Stop();
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffer for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
+    }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IEntityType entityType, object[] rangeStart, object[] rangeEnd)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersRange for {Entity}", entityType.Name);
+#if DEBUG_PERFORMANCE
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
+#endif
+            EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+            valueBufferSw.Start();
+#endif
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.GetValueBuffersRange(rangeStart, rangeEnd);
+            }
+            throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
+        finally
+        {
+            valueBufferSw.Stop();
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
+    }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersReverse for {Entity}", entityType.Name);
+#if DEBUG_PERFORMANCE
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
+#endif
+            EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+            valueBufferSw.Start();
+#endif
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.GetValueBuffersReverse();
+            }
+            throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
+        finally
+        {
+            valueBufferSw.Stop();
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersReverse for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IEntityType entityType, object[] rangeStart, object[] rangeEnd)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersReverseRange for {Entity}", entityType.Name);
+#if DEBUG_PERFORMANCE
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
+#endif
+            EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+            valueBufferSw.Start();
+#endif
+            var key = _useNameMatching ? (object)entityType.Name : entityType;
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.GetValueBuffersReverseRange(rangeStart, rangeEnd);
+            }
+            throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
+        finally
+        {
+            valueBufferSw.Stop();
+            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersReverseRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
