@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KEFCore.Complex.Reduced.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KEFCore.MultiLevel.Complex.Test", "KEFCore.MultiLevel.Complex.Test\KEFCore.MultiLevel.Complex.Test.csproj", "{06F28526-9056-44DC-07D8-2EAB8EF88798}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KEFCore.Standalone.Model.Test", "KEFCore.Standalone.Model.Test\KEFCore.Standalone.Model.Test.csproj", "{7D4D5E75-D8D6-C66F-B399-87E17944B555}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{06F28526-9056-44DC-07D8-2EAB8EF88798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F28526-9056-44DC-07D8-2EAB8EF88798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F28526-9056-44DC-07D8-2EAB8EF88798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4D5E75-D8D6-C66F-B399-87E17944B555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4D5E75-D8D6-C66F-B399-87E17944B555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4D5E75-D8D6-C66F-B399-87E17944B555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4D5E75-D8D6-C66F-B399-87E17944B555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +138,7 @@ Global
 		{4B8BF643-F78D-B26D-A7EE-E8685B15D00F} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 		{7B0D35D1-6275-B72F-DE16-8B42AACAB1F4} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 		{06F28526-9056-44DC-07D8-2EAB8EF88798} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
+		{7D4D5E75-D8D6-C66F-B399-87E17944B555} = {4A0AD520-9BC4-4F92-893B-6F92BBC35BFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36C294ED-9ECE-42AA-8273-31E008749AF3}
