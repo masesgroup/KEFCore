@@ -570,7 +570,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                 : (CreateAnonymousObject(leftExpressions), CreateAnonymousObject(rightExpressions))
             : (null, null);
 
-        // Kafka joins need to use AnonymousObject to perform correct key comparison for server side joins
+        // KEFCore joins need to use AnonymousObject to perform correct key comparison for server side joins
         static Expression CreateAnonymousObject(List<Expression> expressions)
             => Expression.New(
                 AnonymousObject.AnonymousObjectCtor,

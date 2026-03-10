@@ -130,18 +130,18 @@
     <value>The specified entity type '{derivedType}' is not derived from '{entityType}'.</value>
   </data>
   <data name="LogSavedChanges" xml:space="preserve">
-    <value>Saved {count} entities to Kafka store.</value>
-    <comment>Information KafkaEventId.ChangesSaved int</comment>
+    <value>Saved {count} entities to KEFCore store.</value>
+    <comment>Information KEFCoreEventId.ChangesSaved int</comment>
   </data>
   <data name="LogTransactionsNotSupported" xml:space="preserve">
-    <value>Transactions are not supported by the Kafka store. See http://go.microsoft.com/fwlink/?LinkId=800142</value>
-    <comment>Warning KafkaEventId.TransactionIgnoredWarning</comment>
+    <value>Transactions are not supported by the KEFCore store. See http://go.microsoft.com/fwlink/?LinkId=800142</value>
+    <comment>Warning KEFCoreEventId.TransactionIgnoredWarning</comment>
   </data>
   <data name="NonComposedGroupByNotSupported" xml:space="preserve">
     <value>A 'GroupBy' operation which is not composed into aggregate or projection of elements is not supported.</value>
   </data>
   <data name="NoQueryStrings" xml:space="preserve">
-    <value>There is no query string because the Kafka provider does not use a string-based query language.</value>
+    <value>There is no query string because the KEFCore provider does not use a string-based query language.</value>
   </data>
   <data name="NullabilityErrorException" xml:space="preserve">
     <value>Required properties '{requiredProperties}' are missing for the instance of entity type '{entityType}'. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the entity key value.</value>

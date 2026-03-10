@@ -258,9 +258,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 _updateAdapter = _cluster.UpdateAdapterFactory.Create();
                 _entityTypeForChanges = _updateAdapter.Model.FindEntityType(_entityType.ClrType)!;
                 _primaryKeyForChanges = _entityTypeForChanges.FindPrimaryKey()!;
-                _knetCompactedReplicator.OnRemoteAdd += KafkaCompactedReplicator_OnRemoteAdd;
-                _knetCompactedReplicator.OnRemoteUpdate += KafkaCompactedReplicator_OnRemoteUpdate;
-                _knetCompactedReplicator.OnRemoteRemove += KafkaCompactedReplicator_OnRemoteRemove;
+                _knetCompactedReplicator.OnRemoteAdd += KNetCompactedReplicator_OnRemoteAdd;
+                _knetCompactedReplicator.OnRemoteUpdate += KNetCompactedReplicator_OnRemoteUpdate;
+                _knetCompactedReplicator.OnRemoteRemove += KNetCompactedReplicator_OnRemoteRemove;
             }
         }
         else
@@ -409,9 +409,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_cluster.Options.ManageEvents)
             {
-                _knetCompactedReplicator.OnRemoteAdd -= KafkaCompactedReplicator_OnRemoteAdd;
-                _knetCompactedReplicator.OnRemoteUpdate -= KafkaCompactedReplicator_OnRemoteUpdate;
-                _knetCompactedReplicator.OnRemoteRemove -= KafkaCompactedReplicator_OnRemoteRemove;
+                _knetCompactedReplicator.OnRemoteAdd -= KNetCompactedReplicator_OnRemoteAdd;
+                _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
+                _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
             }
             _knetCompactedReplicator?.Dispose();
         }
@@ -529,17 +529,17 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
 
-    private void KafkaCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KNetCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
-    private void KafkaCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KNetCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         KEFCoreStateHelper.ManageUpdate(_cluster.InfrastructureLogger, _cluster.ValueGeneratorSelector, _cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
     }
 
-    private void KafkaCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
+    private void KNetCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
         KEFCoreStateHelper.ManageDelete(_cluster.InfrastructureLogger, _updateAdapter!, _primaryKeyForChanges!, arg2.Key);
     }

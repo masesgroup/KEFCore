@@ -74,9 +74,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 #else
                     ValueGenerator? valueGenerator = valueGeneratorSelector?.Select(item, entityType);
 #endif
-                    if (valueGenerator is IKEFCoreValueGenerator iKafkaGenerator)
+                    if (valueGenerator is IKEFCoreValueGenerator iKEFCoreGenerator)
                     {
-                        iKafkaGenerator.Bump(keyValues);
+                        iKEFCoreGenerator.Bump(keyValues);
                     }
                 }
                 // the key does not exist

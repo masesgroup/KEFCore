@@ -612,15 +612,15 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
             keySelector,
             selector);
 
-        var clonedKafkaQueryExpression = Clone();
-        clonedKafkaQueryExpression.UpdateServerQueryExpression(_groupingParameter);
-        clonedKafkaQueryExpression._groupingParameter = null;
+        var clonedKEFCoreQueryExpression = Clone();
+        clonedKEFCoreQueryExpression.UpdateServerQueryExpression(_groupingParameter);
+        clonedKEFCoreQueryExpression._groupingParameter = null;
 
         return new GroupByShaperExpression(
             groupingKey,
             new ShapedQueryExpression(
-                clonedKafkaQueryExpression,
-                new QueryExpressionReplacingExpressionVisitor(this, clonedKafkaQueryExpression).Visit(shaperExpression)));
+                clonedKEFCoreQueryExpression,
+                new QueryExpressionReplacingExpressionVisitor(this, clonedKEFCoreQueryExpression).Visit(shaperExpression)));
     }
 
     /// <summary>
@@ -741,11 +741,11 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
     /// </summary>
     public virtual ShapedQueryExpression Clone(Expression shaperExpression)
     {
-        var clonedKafkaQueryExpression = Clone();
+        var clonedKEFCoreQueryExpression = Clone();
 
         return new ShapedQueryExpression(
-            clonedKafkaQueryExpression,
-            new QueryExpressionReplacingExpressionVisitor(this, clonedKafkaQueryExpression).Visit(shaperExpression));
+            clonedKEFCoreQueryExpression,
+            new QueryExpressionReplacingExpressionVisitor(this, clonedKEFCoreQueryExpression).Visit(shaperExpression));
     }
 
     /// <summary>

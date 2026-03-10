@@ -174,7 +174,7 @@ public partial class KEFCoreQueryExpression
         {
             if (expression is KEFCoreQueryExpression kefcoreQueryExpression)
             {
-                var clonedKafkaQueryExpression = new KEFCoreQueryExpression(
+                var clonedKEFCoreQueryExpression = new KEFCoreQueryExpression(
                     kefcoreQueryExpression.ServerQueryExpression, kefcoreQueryExpression._valueBufferParameter)
                 {
                     _groupingParameter = kefcoreQueryExpression._groupingParameter,
@@ -182,16 +182,16 @@ public partial class KEFCoreQueryExpression
                     _scalarServerQuery = kefcoreQueryExpression._scalarServerQuery
                 };
 
-                clonedKafkaQueryExpression._clientProjections.AddRange(
+                clonedKEFCoreQueryExpression._clientProjections.AddRange(
                     kefcoreQueryExpression._clientProjections.Select(e => Visit(e)));
-                clonedKafkaQueryExpression._projectionMappingExpressions.AddRange(
+                clonedKEFCoreQueryExpression._projectionMappingExpressions.AddRange(
                     kefcoreQueryExpression._projectionMappingExpressions);
                 foreach (var (projectionMember, value) in kefcoreQueryExpression._projectionMapping)
                 {
-                    clonedKafkaQueryExpression._projectionMapping[projectionMember] = Visit(value);
+                    clonedKEFCoreQueryExpression._projectionMapping[projectionMember] = Visit(value);
                 }
 
-                return clonedKafkaQueryExpression;
+                return clonedKEFCoreQueryExpression;
             }
 
             if (expression is EntityProjectionExpression entityProjectionExpression)

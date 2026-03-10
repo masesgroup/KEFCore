@@ -156,12 +156,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                     logger,
                     static logger => new EventDefinition<int>(
                         logger.Options,
-                        KEFCoreEventId.ChangesSaved,
+                        KafkaEventId.ChangesSaved,
                         LogLevel.Information,
                         "KafkaEventId.ChangesSaved",
                         level => LoggerMessage.Define<int>(
                             level,
-                            KEFCoreEventId.ChangesSaved,
+                            KafkaEventId.ChangesSaved,
                             _resourceManager.GetString("LogSavedChanges")!)));
             }
 
@@ -181,12 +181,12 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
                     logger,
                     static logger => new EventDefinition(
                         logger.Options,
-                        KEFCoreEventId.TransactionIgnoredWarning,
+                        KafkaEventId.TransactionIgnoredWarning,
                         LogLevel.Warning,
                         "KafkaEventId.TransactionIgnoredWarning",
                         level => LoggerMessage.Define(
                             level,
-                            KEFCoreEventId.TransactionIgnoredWarning,
+                            KafkaEventId.TransactionIgnoredWarning,
                             _resourceManager.GetString("LogTransactionsNotSupported")!)));
             }
 

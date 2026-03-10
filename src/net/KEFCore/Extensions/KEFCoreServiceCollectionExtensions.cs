@@ -74,7 +74,7 @@ public static class KEFCoreServiceCollectionExtensions
                     .TryAddSingleton<IKEFCoreClusterCache, KEFCoreClusterCache>()
                     .TryAddSingleton<IKEFCoreTableFactory, KEFCoreTableFactory>()
                     .TryAddSingleton<IComplexTypeConverterFactory, ComplexTypeConverterFactory>()
-                    .TryAddScoped<IKEFCoreDatabase, KafkaDatabase>());
+                    .TryAddScoped<IKEFCoreDatabase, KEFCoreDatabase>());
 
         builder.TryAddCoreServices();
 

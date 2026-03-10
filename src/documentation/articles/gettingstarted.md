@@ -48,7 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         }
     }
 
-    public class BloggingContext : KafkaDbContext { }
+    public class BloggingContext : KEFCoreDbContext { }
 
     public class Blog
     {

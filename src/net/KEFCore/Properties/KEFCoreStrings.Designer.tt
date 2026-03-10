@@ -1,6 +1,6 @@
 <#
     Session["ResourceFile"] = "KEFCoreStrings.resx";
-    Session["LoggingDefinitionsClass"] = "Diagnostics.Internal.KafkaLoggingDefinitions";
+    Session["LoggingDefinitionsClass"] = "Diagnostics.Internal.KEFCoreLoggingDefinitions";
 #>
 <#@ template hostspecific="true" #>
 <#@ assembly name="Microsoft.VisualStudio.Interop" #>

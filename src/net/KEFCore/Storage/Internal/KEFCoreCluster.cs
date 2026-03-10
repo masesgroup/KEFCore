@@ -74,7 +74,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        _infrastructureLogger.Logger.LogDebug("Disposing KafkaCluster");
+        _infrastructureLogger.Logger.LogDebug("Disposing KEFCoreCluster");
         if (_tables != null)
         {
             foreach (var item in _tables.Values)
@@ -375,7 +375,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -405,7 +405,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffer for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffer for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -435,7 +435,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -465,7 +465,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersReverse for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverse for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -496,7 +496,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KafkaCluster::GetValueBuffersReverseRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverseRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -640,7 +640,7 @@ public class KEFCoreCluster : IKEFCoreCluster
             var key = currentEntityType.TopicName(Options);
             _ = _tables.GetOrAdd(key, (k) =>
             {
-                _infrastructureLogger.Logger.LogInformation("KafkaCluster::EnsureTable creating table for {Name}", entityType.Name);
+                _infrastructureLogger.Logger.LogInformation("KEFCoreCluster::EnsureTable creating table for {Name}", entityType.Name);
                 return _tableFactory.Create(this, k, currentEntityType);
             });
         }

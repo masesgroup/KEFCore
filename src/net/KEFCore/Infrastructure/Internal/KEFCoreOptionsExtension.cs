@@ -528,7 +528,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
-        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException($"Cannot find an instance of {nameof(KEFCoreOptionsExtension)}");
         if (!UseCompactedReplicator && string.IsNullOrEmpty(ApplicationId))
         {
             throw new ArgumentException("Cannot be null or empty when Streams based backend is in use.", nameof(ApplicationId));
@@ -538,7 +538,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc/>
     public void Initialize(IDbContextOptions options)
     {
-        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException("Cannot find an instance of KafkaOptionsExtension");
+        var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>() ?? throw new InvalidOperationException($"Cannot find an instance of {nameof(KEFCoreOptionsExtension)}");
 
         if (kefcoreOptions?.ClusterId != ClusterId)
         {
@@ -604,7 +604,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                 && Extension.ClusterId == otherInfo.Extension.ClusterId;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
-            => debugInfo["KafkaDatabase:ClusterId"]
+            => debugInfo["KEFCore:ClusterId"]
                 = (Extension.ClusterId?.GetHashCode() ?? 0).ToString(CultureInfo.InvariantCulture);
     }
 }

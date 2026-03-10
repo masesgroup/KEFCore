@@ -18,7 +18,7 @@
 
 using Microsoft.EntityFrameworkCore.Design.Internal;
 
-[assembly: DesignTimeProviderServices("MASES.EntityFrameworkCore.KNet.Design.Internal.KafkaDesignTimeServices")]
+[assembly: DesignTimeProviderServices("MASES.EntityFrameworkCore.KNet.Design.Internal.KEFCoreDesignTimeServices")]
 
 namespace MASES.EntityFrameworkCore.KNet.Design.Internal;
 /// <summary>

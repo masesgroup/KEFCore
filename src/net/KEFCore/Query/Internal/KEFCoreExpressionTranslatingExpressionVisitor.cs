@@ -83,8 +83,8 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
     private static readonly MethodInfo RandomNextDoubleMethodInfo = typeof(Random).GetRuntimeMethod(
         nameof(Random.NextDouble), Type.EmptyTypes)!;
 
-    private static readonly MethodInfo KafkaLikeMethodInfo =
-        typeof(KEFCoreExpressionTranslatingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(KafkaLike))!;
+    private static readonly MethodInfo KEFCoreLikeMethodInfo =
+        typeof(KEFCoreExpressionTranslatingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(KEFCoreLike))!;
 
     private static readonly MethodInfo GetTypeMethodInfo = typeof(object).GetTypeInfo().GetDeclaredMethod(nameof(GetType))!;
 
@@ -749,7 +749,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
                 visitedArguments[i - 1] = argument;
             }
 
-            return Expression.Call(KafkaLikeMethodInfo, visitedArguments);
+            return Expression.Call(KEFCoreLikeMethodInfo, visitedArguments);
         }
 
         if (methodCallExpression.Method == RandomMethodInfo)
@@ -1664,7 +1664,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
         => original != null
             && (translation == QueryCompilationContext.NotTranslatedExpression || translation is StructuralTypeReferenceExpression);
 
-    private static bool KafkaLike(string matchExpression, string pattern, string escapeCharacter)
+    private static bool KEFCoreLike(string matchExpression, string pattern, string escapeCharacter)
     {
         //TODO: this fixes https://github.com/aspnet/EntityFramework/issues/8656 by insisting that
         // the "escape character" is a string but just using the first character of that string,
