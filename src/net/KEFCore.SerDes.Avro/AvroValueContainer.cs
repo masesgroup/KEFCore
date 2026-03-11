@@ -363,7 +363,7 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         object? result = null!;
         foreach (var item in Data)
         {
-            if (!NativeTypeMapper.IsComplex(item[i].ManagedType)) continue;
+            if (!NativeTypeMapper.IsComplex(item.ManagedType)) continue;
             IPropertyBase property = entityType?.FindComplexProperty(item.PropertyName!)!;
             ConvertInnerData(item, ref result, property, complexTypeFactory);
             props.Add(item.PropertyName, result);
