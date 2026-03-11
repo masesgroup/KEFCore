@@ -62,7 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             }
         }
 #else
-const bool perf = false;
+        const bool perf = false;
 #endif
         /// <summary>
         /// Reports if the library was compiled to reports performance information
@@ -71,7 +71,7 @@ const bool perf = false;
 #if DEBUG_PERFORMANCE
         static bool _enableKEFCoreTracing = true;
 #else
-    static bool _enableKEFCoreTracing = false;
+        static bool _enableKEFCoreTracing = false;
 #endif
         /// <summary>
         /// Set to <see langword="true"/> to enable tracing of KEFCore
@@ -476,6 +476,25 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         {
             if (!reverseDict.TryGetValue(type, out Type? result)) { result = null!; }
             return result;
+        }
+        /// <summary>
+        /// Returns <see langword="true"/> if <paramref name="wellKnownManagedType"/> represent a complex type
+        /// </summary>
+        /// <param name="wellKnownManagedType">The <see cref="WellKnownManagedTypes"/> to check</param>
+        /// <returns><see langword="true"/> if <paramref name="wellKnownManagedType"/> is <see cref="WellKnownManagedTypes.ComplexType"/> or <see cref="WellKnownManagedTypes.ComplexTypeAsJson"/></returns>
+        public static bool IsComplex(WellKnownManagedTypes? wellKnownManagedType)
+        {
+            return wellKnownManagedType == WellKnownManagedTypes.ComplexType
+                   || wellKnownManagedType == WellKnownManagedTypes.ComplexTypeAsJson;
+        }
+        /// <summary>
+        /// Returns <see langword="true"/> if <paramref name="wellKnownManagedType"/> represent a complex type
+        /// </summary>
+        /// <param name="wellKnownManagedType">The <see cref="WellKnownManagedTypes"/> to check</param>
+        /// <returns><see langword="true"/> if <paramref name="wellKnownManagedType"/> is <see cref="WellKnownManagedTypes.ComplexType"/> or <see cref="WellKnownManagedTypes.ComplexTypeAsJson"/></returns>
+        public static bool IsComplex(int? wellKnownManagedType)
+        {
+            return wellKnownManagedType.HasValue && IsComplex((WellKnownManagedTypes)wellKnownManagedType.Value);
         }
     }
 
