@@ -301,6 +301,7 @@ public class KEFCoreDbContext : DbContext
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
+            o.WithTopicPrefix(TopicPrefix);
             o.WithUsePersistentStorage(UsePersistentStorage);
             o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
             o.WithUseByteBufferDataTransfer(UseByteBufferDataTransfer);

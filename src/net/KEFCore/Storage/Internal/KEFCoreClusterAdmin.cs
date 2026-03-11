@@ -34,7 +34,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         static internal bool DisableClusterInvocation = false; // used only to activate an external model builder
 
         readonly string _clusterId;
-        private readonly Admin? _kafkaAdminClient = null;
+        private readonly Admin _kafkaAdminClient = null;
         private readonly Properties _bootstrapProperties;
 
         public static KEFCoreClusterAdmin Create(string bootstrapServers)

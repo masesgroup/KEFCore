@@ -138,7 +138,7 @@ public class EntityProjectionExpression(
     public virtual KEFCoreComplexTypeProjectionExpression BindComplexProperty(IComplexProperty complexProperty)
     {
         if (EntityType != complexProperty.DeclaringType
-            && !EntityType.IsAssignableFrom(complexProperty.DeclaringType as IEntityType))
+            && !EntityType.IsAssignableFrom(complexProperty.DeclaringType))
         {
             throw new InvalidOperationException(
                 KEFCoreStrings.UnableToBindMemberToEntityProjection(

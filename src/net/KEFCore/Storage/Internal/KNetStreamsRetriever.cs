@@ -207,7 +207,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     {
         ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
 
-        foreach (var item in keyValueStore?.All())
+        foreach (var item in keyValueStore!.All())
         {
             yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
         }
