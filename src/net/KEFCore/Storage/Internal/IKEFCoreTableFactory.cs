@@ -29,6 +29,7 @@ public interface IKEFCoreTableFactory
     /// Allocate a new <see cref="IKEFCoreTable"/>
     /// </summary>
     /// <param name="cluster"></param>
+    /// <param name="topicName"></param>
     /// <param name="entityType"></param>
     /// <returns></returns>
     IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType);

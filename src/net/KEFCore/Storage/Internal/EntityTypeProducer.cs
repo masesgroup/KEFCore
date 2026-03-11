@@ -453,8 +453,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
-            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
+            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
             return _streamData.GetValueBuffersRange(start, end);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
@@ -472,8 +472,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
-            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
+            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
             return _streamData.GetValueBuffersReverseRange(start, end);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
