@@ -148,8 +148,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
                 {
                     var item = _innerMessage.Data[i];
                     if (item == null) continue;
-                    if (item.Value.ManagedType == (int)WellKnownManagedTypes.ComplexType
-                        || item.Value.ManagedType == (int)WellKnownManagedTypes.ComplexTypeAsJson) continue;
+                    if (NativeTypeMapper.IsComplex(item.Value.ManagedType)) continue;
                     IPropertyBase? prop = tName.FindProperty(item.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema 
                     item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
@@ -163,8 +162,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
                 {
                     var item = _innerMessage.Data[i];
                     if (item == null) continue;
-                    IPropertyBase? prop = (item.Value.ManagedType == (int)WellKnownManagedTypes.ComplexType
-                                           || item.Value.ManagedType == (int)WellKnownManagedTypes.ComplexTypeAsJson)
+                    IPropertyBase? prop = (NativeTypeMapper.IsComplex(item.Value.ManagedType))
                         ? tName.FindComplexProperty(item.PropertyName!)
                         : tName.FindProperty(item.PropertyName!);
                     if (prop == null) continue; // a property was removed from the schema
@@ -202,8 +200,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
-            if (item.Value.KindCase == GenericValue.KindOneofCase.ComplextypeValue
-                || item.Value.KindCase == GenericValue.KindOneofCase.ComplextypeasstringValue) continue;
+            if (NativeTypeMapper.IsComplex(item.Value.ManagedType)) continue;
             IPropertyBase property = entityType?.FindProperty(item.PropertyName!)!;
             item.Value.GetContent(property, null, ref value!);
             props.Add(item.PropertyName, value);
@@ -217,8 +214,7 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
         Dictionary<string, object?> props = [];
         foreach (var item in _innerMessage.Data)
         {
-            if (item.Value.KindCase != GenericValue.KindOneofCase.ComplextypeValue
-                && item.Value.KindCase != GenericValue.KindOneofCase.ComplextypeasstringValue) continue;
+            if (!NativeTypeMapper.IsComplex(item.Value.ManagedType)) continue;
             IPropertyBase property = entityType?.FindComplexProperty(item.PropertyName!)!;
             item.Value.GetContent(property, complexTypeFactory: complexTypeFactory, ref value!);
             props.Add(item.PropertyName, value);

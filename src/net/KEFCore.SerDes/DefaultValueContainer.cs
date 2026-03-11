@@ -314,8 +314,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                 {
                     for (int i = 0; i < Properties.Length; i++)
                     {
-                        if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
-                            || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson) continue;
+                        if (NativeTypeMapper.IsComplex(Properties[i].ManagedType)) continue;
 
                         IPropertyBase? prop = tName.FindProperty(Properties[i].PropertyName!);
                         if (prop == null) continue; // a property was removed from the schema
@@ -328,8 +327,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
                     Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
                     for (int i = 0; i < Properties.Length; i++)
                     {
-                        IPropertyBase? prop = (Properties[i].ManagedType == WellKnownManagedTypes.ComplexType
-                                               || Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson)
+                        IPropertyBase? prop = NativeTypeMapper.IsComplex(Properties[i].ManagedType)
                             ? tName.FindComplexProperty(Properties[i].PropertyName!)
                             : tName.FindProperty(Properties[i].PropertyName!);
                         if (prop == null) continue; // a property was removed from the schema
@@ -389,8 +387,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         foreach (var item in Properties!)
         {
             value = item.Value!;
-            if (item.ManagedType == WellKnownManagedTypes.ComplexType
-                || item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson) continue;
+            if (NativeTypeMapper.IsComplex(item.ManagedType)) continue;
             props.Add(item.PropertyName!, value);
         }
         return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
@@ -405,8 +402,7 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         object? value;
         foreach (var item in Properties!)
         {
-            if (item.ManagedType != WellKnownManagedTypes.ComplexType
-                || item.ManagedType != WellKnownManagedTypes.ComplexTypeAsJson) continue;
+            if (!NativeTypeMapper.IsComplex(item.ManagedType)) continue;
             value = item.Value!;
             Type propertyType = entityType?.FindComplexProperty(item.PropertyName!)?.ClrType! ?? Type.GetType(item.ClrType!)!;
             if (item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && value is string str)
