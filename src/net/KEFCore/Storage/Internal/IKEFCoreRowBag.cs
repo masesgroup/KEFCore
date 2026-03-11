@@ -30,6 +30,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public interface IKEFCoreRowBag : IValueContainerData
 {
     /// <summary>
+    /// The <see cref="Microsoft.EntityFrameworkCore.EntityState"/> associated to the <see cref="IValueContainerMetadata.EntityType"/>
+    /// </summary>
+    EntityState EntityState { get; }
+    /// <summary>
     /// The topic data will be stored
     /// </summary>
     string AssociatedTopicName { get; }
