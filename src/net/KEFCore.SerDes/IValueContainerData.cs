@@ -26,10 +26,6 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization;
 public interface IValueContainerData : IValueContainerMetadata
 {
     /// <summary>
-    /// The <see cref="Microsoft.EntityFrameworkCore.EntityState"/> associated to <see cref="IValueContainerMetadata.EntityType"/>
-    /// </summary>
-    EntityState EntityState { get; }
-    /// <summary>
     /// The <see cref="ValueBuffer"/> containing all indexed values of the <see cref="IValueContainerMetadata.FlattenedProperties"/>
     /// </summary>
     /// <remarks>Values are indexed and the first values are associated to <see cref="IValueContainerMetadata.Properties"/> too</remarks>

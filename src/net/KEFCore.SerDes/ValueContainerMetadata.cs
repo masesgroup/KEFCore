@@ -27,15 +27,15 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization;
 /// <param name="Properties"><see cref="IValueContainerMetadata.Properties"/></param>
 /// <param name="FlattenedProperties"><see cref="IValueContainerMetadata.FlattenedProperties"/></param>
 /// <param name="ComplexProperties"><see cref="IValueContainerMetadata.ComplexProperties"/></param>
-public record ValueContainerMetadata(IEntityType EntityType, IProperty[] Properties = null, IProperty[] FlattenedProperties = null, IComplexProperty[]? ComplexProperties = null) 
+public record ValueContainerMetadata(IEntityType EntityType, IProperty[]? Properties = null, IProperty[]? FlattenedProperties = null, IComplexProperty[]? ComplexProperties = null) 
     : IValueContainerMetadata
 {
     /// <inheritdoc/>
     public IEntityType EntityType { get; init; } = EntityType;
     /// <inheritdoc/>
-    public IProperty[] Properties { get; init; } = Properties ?? EntityType.GetProperties().ToArray();
+    public IProperty[] Properties { get; init; } = Properties ?? [.. EntityType.GetProperties()];
     /// <inheritdoc/>
-    public IProperty[] FlattenedProperties { get; init; } = FlattenedProperties ?? EntityType.GetFlattenedProperties().ToArray();
+    public IProperty[] FlattenedProperties { get; init; } = FlattenedProperties ?? [.. EntityType.GetFlattenedProperties()];
     /// <inheritdoc/>
-    public IComplexProperty[]? ComplexProperties { get; init; } = ComplexProperties ?? EntityType.GetComplexProperties().ToArray();
+    public IComplexProperty[]? ComplexProperties { get; init; } = ComplexProperties ?? [.. EntityType.GetComplexProperties()];
 }

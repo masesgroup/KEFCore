@@ -36,7 +36,6 @@ public class KEFCoreRowBag<TKey>(IUpdateEntry entry, string topicName, TKey key,
     where TKey : notnull
 {
     readonly TKey _key = key;
-
     /// <inheritdoc/>
     public IEntityType EntityType { get; } = entry.EntityType;
     /// <inheritdoc/>
