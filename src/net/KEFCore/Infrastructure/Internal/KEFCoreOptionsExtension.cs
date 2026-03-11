@@ -203,7 +203,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         return clone;
     }
     /// <inheritdoc cref="KEFCoreDbContext.TopicPrefix"/>
-    public virtual KEFCoreOptionsExtension WithTopicPrefix(string topicPrefix)
+    public virtual KEFCoreOptionsExtension WithTopicPrefix(string? topicPrefix)
     {
         var clone = Clone();
 

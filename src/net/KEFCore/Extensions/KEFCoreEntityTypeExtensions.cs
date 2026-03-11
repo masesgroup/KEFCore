@@ -84,7 +84,7 @@ public static class KEFCoreEntityTypeExtensions
     /// <summary>
     /// Creates the topic name
     /// </summary>
-    public static string TopicName(this IEntityType entityType, string databaseName)
+    public static string TopicName(this IEntityType entityType, string? topicPrefix = null)
     {
         var schema = entityType.Name;
         var table = entityType.ClrType.GetCustomAttribute<TableAttribute>();
@@ -92,7 +92,7 @@ public static class KEFCoreEntityTypeExtensions
         {
             schema = table.Schema != null ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
         }
-        return $"{databaseName}.{schema}";
+        return string.IsNullOrWhiteSpace(topicPrefix) ? schema : $"{topicPrefix}.{schema}";
     }
     /// <summary>
     /// Creates the storage id
