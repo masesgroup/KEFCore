@@ -741,14 +741,35 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     protected override ShapedQueryExpression? TranslateRightJoin(
-        ShapedQueryExpression outer, 
-        ShapedQueryExpression inner, 
-        LambdaExpression outerKeySelector, 
-        LambdaExpression innerKeySelector, 
+        ShapedQueryExpression outer,
+        ShapedQueryExpression inner,
+        LambdaExpression outerKeySelector,
+        LambdaExpression innerKeySelector,
         LambdaExpression resultSelector)
     {
-#warning to be rewieved
-        return null;
+        var (newInnerKeySelector, newOuterKeySelector) = ProcessJoinKeySelector(
+            inner, outer, innerKeySelector, outerKeySelector);
+
+        if (newOuterKeySelector == null || newInnerKeySelector == null)
+            return null;
+
+        (outerKeySelector, innerKeySelector) = (newOuterKeySelector, newInnerKeySelector);
+
+        var innerShaperExpression = ((KEFCoreQueryExpression)inner.QueryExpression).AddLeftJoin(
+            (KEFCoreQueryExpression)outer.QueryExpression,
+            innerKeySelector,
+            outerKeySelector,
+            inner.ShaperExpression,
+            outer.ShaperExpression);
+
+        inner = inner.UpdateShaperExpression(innerShaperExpression);
+
+        var reversedResultSelector = Expression.Lambda(
+            resultSelector.Body,
+            resultSelector.Parameters[0],
+            resultSelector.Parameters[1]);
+
+        return TranslateTwoParameterSelector(inner, reversedResultSelector);
     }
 #endif
     /// <summary>
