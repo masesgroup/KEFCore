@@ -134,7 +134,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    using MemoryStream memStream = new();
+                    using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
                     var container = new AvroKeyContainer();
                     if (data is object[] dataArray)
@@ -156,9 +156,9 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
                     if (data == null || data.Length == 0) return default!;
 
-                    using MemoryStream memStream = new(data);
+                    using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryDecoder decoder = new(memStream);
-                    AvroKeyContainer t = new AvroKeyContainer();
+                    AvroKeyContainer t = new();
                     t = SpecificReader.Read(t!, decoder);
                     return (TData)(object)(t.PrimaryKey.ToArray());
                 }
@@ -208,7 +208,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = new();
+                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
                     var container = new AvroKeyContainer();
                     if (data is object[] dataArray)
@@ -321,7 +321,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    using MemoryStream memStream = new();
+                    using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
@@ -390,7 +390,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = new();
+                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
@@ -509,7 +509,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    using MemoryStream memStream = new();
+                    using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
                     return memStream.ToArray();
@@ -579,7 +579,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = new();
+                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
                     return ByteBuffer.From(memStream);
@@ -689,7 +689,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    using MemoryStream memStream = new();
+                    using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
@@ -760,7 +760,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = new();
+                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();

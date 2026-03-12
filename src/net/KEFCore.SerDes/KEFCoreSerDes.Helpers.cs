@@ -24,12 +24,12 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Consumer;
 using MASES.KNet.Serialization;
+using Microsoft.IO;
 using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Common.Serialization;
 using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json;
-using static MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes;
 
 namespace MASES.EntityFrameworkCore.KNet.Internal
 {
@@ -94,15 +94,126 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
 namespace MASES.EntityFrameworkCore.KNet.Serialization
 {
     /// <summary>
+    /// An helper class to centralize management of every <see cref="ByteBuffer"/> conversion for <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes"/> 
+    /// or any other serialization sub-system which needs <see cref="ByteBuffer"/> transport
+    /// </summary>
+    public static class RecyclableMemoryStreamSupport
+    {
+        static readonly ConcurrentDictionary<string, RecyclableMemoryStream> _storer = new();
+        static RecyclableMemoryStreamManager _manager;
+
+        static bool _enable;
+        static RecyclableMemoryStreamManager.Options _options;
+
+        static long _streamId = 0;
+        static RecyclableMemoryStreamSupport()
+        {
+#if DEBUG
+            _enable = true;
+#endif
+            _options = new RecyclableMemoryStreamManager.Options()
+            {
+                BlockSize = 1024,
+                LargeBufferMultiple = 1024 * 1024,
+                MaximumBufferSize = 16 * 1024 * 1024,
+                GenerateCallStacks = true,
+                AggressiveBufferReturn = true,
+                MaximumLargePoolFreeBytes = 16 * 1024 * 1024 * 4,
+                MaximumSmallPoolFreeBytes = 100 * 1024,
+            };
+
+            _manager = CreateRecyclableMemoryStreamManager(_options);
+        }
+
+        static RecyclableMemoryStreamManager CreateRecyclableMemoryStreamManager(RecyclableMemoryStreamManager.Options options)
+        {
+            var manager = new RecyclableMemoryStreamManager(options);
+            manager.StreamDoubleDisposed += RecyclableMemoryStreamManager_StreamDoubleDisposed;
+            manager.StreamDisposed += RecyclableMemoryStreamManager_StreamDisposed;
+            return manager;
+        }
+
+        static RecyclableMemoryStreamManager ReCreateRecyclableMemoryStreamManager(RecyclableMemoryStreamManager.Options options)
+        {
+            if (_manager != null)
+            {
+                _manager.StreamDoubleDisposed -= RecyclableMemoryStreamManager_StreamDoubleDisposed;
+                _manager.StreamDisposed -= RecyclableMemoryStreamManager_StreamDisposed;
+            }
+            return CreateRecyclableMemoryStreamManager(options);
+        }
+
+        private static void RecyclableMemoryStreamManager_StreamDisposed(object? sender, RecyclableMemoryStreamManager.StreamDisposedEventArgs e)
+        {
+            _storer.TryRemove(e.Tag!, out _);
+        }
+
+        private static void RecyclableMemoryStreamManager_StreamDoubleDisposed(object? sender, RecyclableMemoryStreamManager.StreamDoubleDisposedEventArgs e)
+        {
+#if !DEBUG
+            Console.WriteLine($"Stream {e.Tag} disposed twice.");
+#else
+            Console.WriteLine($"Stream {e.Tag} disposed twice:");
+            Console.WriteLine($"First callstack is {e.DisposeStack1}");
+            Console.WriteLine($"Second callstack is {e.DisposeStack2}");
+            Console.WriteLine($"Originally allocated from {e.AllocationStack}");
+#endif
+        }
+        /// <summary>
+        /// Set to <see langword="true"/> to enable, or <see langword="false"/> to disable, the usage of <see cref="RecyclableMemoryStream"/>
+        /// </summary>
+        /// <param name="enable"><see langword="true"/> to enable <see cref="RecyclableMemoryStream"/> support with optional <paramref name="options"/></param>
+        /// <param name="options">The <see cref="RecyclableMemoryStreamManager.Options"/> options to use</param>
+        public static void SetEnable(bool enable, RecyclableMemoryStreamManager.Options? options = null)
+        {
+            _enable = enable;
+            if (_enable)
+            {
+                _options = options ?? new RecyclableMemoryStreamManager.Options()
+                {
+                    BlockSize = 1024,
+                    LargeBufferMultiple = 1024 * 1024,
+                    MaximumBufferSize = 16 * 1024 * 1024,
+#if DEBUG
+                    GenerateCallStacks = true,
+#endif
+                    AggressiveBufferReturn = true,
+                    MaximumLargePoolFreeBytes = 16 * 1024 * 1024 * 4,
+                    MaximumSmallPoolFreeBytes = 100 * 1024,
+                };
+                lock (_options)
+                {
+                    while (!_storer.IsEmpty) Thread.Sleep(1);                   // wait the queue of current RecyclableMemoryStreamManager is empty, then
+                    _manager = ReCreateRecyclableMemoryStreamManager(_options); // recreate it
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="MemoryStream"/> which is an implementation  of <see cref="RecyclableMemoryStream"/>
+        /// </summary>
+        /// <returns>The allocated <see cref="MemoryStream"/></returns>
+        public static MemoryStream Rent()
+        {
+            if (!_enable) return new MemoryStream();
+
+            var tag = Interlocked.Increment(ref _streamId).ToString();
+            var stream = _manager.GetStream(tag);
+            _storer.TryAdd(tag, stream);
+            return stream;
+        }
+    }
+
+    /// <summary>
     /// An helper class to centralize management of every Json conversion for <see cref="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes"/> 
-    /// or any other serialization sub-system which needs Jon conversion (typically when there isn't any <see cref="IComplexTypeConverter"/> available in <see cref="IComplexTypeConverterFactory"/> instance)
+    /// or any other serialization sub-system which needs Json conversion (typically when there isn't any <see cref="IComplexTypeConverter"/> available in <see cref="IComplexTypeConverterFactory"/> instance)
     /// </summary>
     public class JsonSupport
     {
         /// <summary>
         /// The <see cref="JsonSerializerOptions"/> used for serialization/deserialization of <see cref="Key{T}"/>
         /// </summary>
-        public static readonly JsonSerializerOptions? DefautJsonOptions = new();
+        public readonly JsonSerializerOptions? DefautJsonOptions = new();
         /// <inheritdoc cref="JsonSerializer.Serialize(object, Type, JsonSerializerOptions?)"/>
         public string Serialize(Type type, object data)
         {
@@ -148,14 +259,14 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <inheritdoc cref="JsonSerializer.Serialize{TValue}(Stream, TValue, JsonSerializerOptions?)"/>
         public byte[] SerializeAsByteBuffer<TData>(TData data)
         {
-            var ms = new MemoryStream();
+            MemoryStream ms = RecyclableMemoryStreamSupport.Rent();
             JsonSerializer.Serialize(ms, data, DefautJsonOptions);
             return ByteBuffer.From(ms);
         }
         /// <inheritdoc cref="JsonSerializer.Serialize(Stream, object?, Type, JsonSerializerOptions?)"/>
         public byte[] SerializeAsByteBuffer(Type type, object data)
         {
-            var ms = new MemoryStream();
+            MemoryStream ms = RecyclableMemoryStreamSupport.Rent();
             JsonSerializer.Serialize(ms, data, type, DefautJsonOptions);
             return ByteBuffer.From(ms);
         }
