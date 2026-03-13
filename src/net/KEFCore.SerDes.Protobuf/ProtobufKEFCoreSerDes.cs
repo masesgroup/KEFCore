@@ -131,7 +131,7 @@ public static class ProtobufKEFCoreSerDes
                     keyContainer = new KeyContainer(dataArray);
                 }
 
-                using MemoryStream stream = new();
+                using MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
                 keyContainer.WriteTo(stream);
                 return stream.ToArray();
             }
@@ -201,7 +201,7 @@ public static class ProtobufKEFCoreSerDes
                     keyContainer = new KeyContainer(dataArray);
                 }
 
-                using MemoryStream stream = new();
+                using MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
                 keyContainer.WriteTo(stream);
                 return stream.ToArray();
             }
@@ -309,7 +309,7 @@ public static class ProtobufKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                using MemoryStream stream = new();
+                using MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
                 data.WriteTo(stream);
                 return stream.ToArray();
             }
@@ -372,7 +372,7 @@ public static class ProtobufKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                MemoryStream stream = new();
+                MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
                 data.WriteTo(stream);
                 return ByteBuffer.From(stream);
             }
