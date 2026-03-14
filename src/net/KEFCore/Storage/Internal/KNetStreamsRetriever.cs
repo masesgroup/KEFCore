@@ -274,9 +274,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                return !useRange ? (isReverse ? keyValueStore?.ReverseAll 
+                return !useRange ? (isReverse ? keyValueStore?.ReverseAll()
                                               : keyValueStore?.All())
-                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!) 
+                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!)
                                               : keyValueStore?.Range(rangeStart!, rangeEnd!));
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
