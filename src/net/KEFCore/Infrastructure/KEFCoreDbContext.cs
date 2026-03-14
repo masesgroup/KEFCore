@@ -227,6 +227,27 @@ public class KEFCoreDbContext : DbContext
     /// <remarks>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <see cref="DefaultSynchronizationTimeout"/> when <see cref="DatabaseFacade.EnsureCreated"/> of <see cref="DbContext.Database"/> is invoked.</remarks>
     public virtual long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
     /// <summary>
+    ///  Setting this property to <see langword="true"/> to enable prefix scan in engine
+    /// </summary>
+    public virtual bool UseStorePrefixScan { get; set; } = false;
+    /// <summary>
+    ///  Setting this property to <see langword="true"/> to enable single key look-up in engine
+    /// </summary>
+    public virtual bool UseStoreSingleKeyLookup { get; set; } = false;
+    /// <summary>
+    ///  Setting this property to <see langword="true"/> to enable key range look-up in engine
+    /// </summary>
+    public virtual bool UseStoreKeyRange { get; set; } = false;
+    /// <summary>
+    ///  Setting this property to <see langword="true"/> to enable reverse look-up in engine
+    /// </summary>
+    public virtual bool UseStoreReverse { get; set; } = false;
+    /// <summary>
+    ///  Setting this property to <see langword="true"/> to enable reverse key range look-up in engine
+    /// </summary>
+    public virtual bool UseStoreReverseKeyRange { get; set; } = false;
+
+    /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
     /// </summary>
     /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
@@ -312,6 +333,11 @@ public class KEFCoreDbContext : DbContext
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             o.WithManageEvents(ManageEvents);
             o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);
+            o.WithStorePrefixScan(UseStorePrefixScan);
+            o.WithStoreSingleKeyLookup(UseStoreSingleKeyLookup);
+            o.WithStoreKeyRange(UseStoreKeyRange);
+            o.WithStoreReverse(UseStoreReverse);
+            o.WithStoreReverseKeyRange(UseStoreReverseKeyRange);
             if (KeySerDesSelectorType != null) o.WithKeySerDesSelectorType(KeySerDesSelectorType);
             if (ValueSerDesSelectorType != null) o.WithValueSerDesSelectorType(ValueSerDesSelectorType);
             if (ValueContainerType != null) o.WithValueContainerType(ValueContainerType);

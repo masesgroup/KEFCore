@@ -169,9 +169,11 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(TKey rangeStart, TKey rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, false, rangeStart, rangeEnd);
+        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, false, start, end);
     }
 
     /// <inheritdoc/>
@@ -181,9 +183,18 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(TKey rangeStart, TKey rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, true, rangeStart, rangeEnd);
+        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, true, start, end);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
+    {
+        TKey? prefix = (TKey)keyValueFactory.CreateFromKeyValues(prefixValues!)!;
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, prefix);
     }
 
     V GetV(TKey key)
@@ -257,10 +268,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>
     {
+        private readonly bool _withPrefix;
         private readonly bool _isReverse;
         private readonly bool _useRange = false;
         private readonly K? _rangeStart;
         private readonly K? _rangeEnd;
+        private readonly K? _prefix;
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
         private readonly ISerDes<TKey, K> _keySerdes;
@@ -296,7 +309,27 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
 #endif
         }
 
-        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, bool isReverse, bool useRange, K? rangeStart, K? rangeEnd)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId, TKey? prefix)
+        {
+            _metadata = metadata;
+            _complexTypeConverterFactory = complexTypeConverterFactory;
+            _keySerdes = keySerdes;
+            _valueSerdes = valueSerdes;
+            _withPrefix = true;
+            _prefix = _keySerdes.Serialize(null, prefix!);
+            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+#if DEBUG_PERFORMANCE
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
+#endif
+        }
+
+        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, 
+                                                                                  bool isReverse, 
+                                                                                  bool useRange, 
+                                                                                  bool withPrefix, 
+                                                                                  K? rangeStart, 
+                                                                                  K? rangeEnd, 
+                                                                                  K? prefix)
         {
             const int maxCycle = 100;
             const int waitTime = 100;
@@ -306,7 +339,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
 #endif
             try
             {
-                return GetIterator(keyValueStore, isReverse, useRange, rangeStart, rangeEnd, waitTime, maxCycle, ref cycle);
+                return GetIterator(keyValueStore, isReverse, useRange, withPrefix, rangeStart, rangeEnd, prefix, waitTime, maxCycle, ref cycle);
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
             {
@@ -314,14 +347,28 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
             }
         }
 
-        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, bool isReverse, bool useRange, K? rangeStart, K? rangeEnd, int waitTime, int maxCycle, ref int currentCycle)
+        static Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? GetIterator(ReadOnlyKeyValueStore<K, V>? keyValueStore, 
+                                                                                  bool isReverse, 
+                                                                                  bool useRange, 
+                                                                                  bool withPrefix,
+                                                                                  K? rangeStart, 
+                                                                                  K? rangeEnd, 
+                                                                                  K? prefix, 
+                                                                                  int waitTime, int maxCycle, ref int currentCycle)
         {
             try
             {
-                return !useRange ? (isReverse ? keyValueStore?.ReverseAll()
-                                              : keyValueStore?.All())
-                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!)
-                                              : keyValueStore?.Range(rangeStart!, rangeEnd!));
+                if (withPrefix)
+                {
+                    throw new NotImplementedException("PrefixScan is not implemented yer");
+                }
+                else
+                {
+                    return !useRange ? (isReverse ? keyValueStore?.ReverseAll()
+                                                  : keyValueStore?.All())
+                                     : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!)
+                                                  : keyValueStore?.Range(rangeStart!, rangeEnd!));
+                }
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
             {
@@ -329,7 +376,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
                 {
                     Thread.Sleep(waitTime);
                     currentCycle++;
-                    return GetIterator(keyValueStore, isReverse, useRange, rangeStart, rangeEnd, waitTime, maxCycle, ref currentCycle);
+                    return GetIterator(keyValueStore, isReverse, useRange, withPrefix, rangeStart, rangeEnd, prefix, waitTime, maxCycle, ref currentCycle);
                 }
                 throw;
             }
@@ -342,7 +389,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for { _metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetIterator(_keyValueStore, _isReverse, _useRange, _rangeStart, _rangeEnd));
+            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetIterator(_keyValueStore, _isReverse, _useRange, _withPrefix, _rangeStart, _rangeEnd, _prefix));
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

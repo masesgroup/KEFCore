@@ -501,6 +501,39 @@ public class KEFCoreCluster : IKEFCoreCluster
 #endif
     }
 
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
+    /// </summary>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object[] prefixValues)
+    {
+        _infrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersByPrefix for {Entity}", entityType.Name);
+#if DEBUG_PERFORMANCE
+        Stopwatch tableSw = new();
+        Stopwatch valueBufferSw = new();
+        try
+        {
+            tableSw.Start();
+#endif
+        EnsureTable(entityType);
+#if DEBUG_PERFORMANCE
+            valueBufferSw.Start();
+#endif
+        var key = entityType.TopicName(Options);
+        if (_tables != null && _tables.TryGetValue(key, out var table))
+        {
+            return table.GetValueBuffersByPrefix(prefixValues);
+        }
+        throw new InvalidOperationException("No table available");
+#if DEBUG_PERFORMANCE
+        }
+        finally
+        {
+            valueBufferSw.Stop();
+            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersByPrefix for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+        }
+#endif
+    }
+
     int PrepareTransaction(IDictionary<IKEFCoreTable, System.Collections.Generic.IList<IKEFCoreRowBag>> dataInTransaction,
                            System.Collections.Generic.IList<IUpdateEntry> entries,
                            IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)

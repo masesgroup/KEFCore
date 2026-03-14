@@ -74,7 +74,15 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
                                 Constant(reverseRange.EntityType),
                                 BuildNullableObjectArray(reverseRange.RangeStart),
                                 BuildNullableObjectArray(reverseRange.RangeEnd)),
-            _ => base.VisitExtension(extensionExpression),
+            KEFCorePrefixScanTableExpression prefix => Call(
+                                PrefixScanTableMethodInfo,
+                                QueryCompilationContext.QueryContextParameter,
+                                Constant(prefix.EntityType),
+                                NewArrayInit(
+                                    typeof(object),
+                                    prefix.PrefixExpressions.Select(e =>
+                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e))),
+                                _ => base.VisitExtension(extensionExpression),
         };
     }
 
@@ -126,6 +134,15 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
 
     private static readonly MethodInfo ReverseRangeTableMethodInfo
         = typeof(KEFCoreShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(ReverseRangeTable))!;
+
+    private static readonly MethodInfo PrefixScanTableMethodInfo
+    = typeof(KEFCoreShapedQueryCompilingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(PrefixScanTable))!;
+
+    private static IEnumerable<ValueBuffer> PrefixScanTable(
+        QueryContext queryContext,
+        IEntityType entityType,
+        object?[] prefixValues)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffersByPrefix(entityType, prefixValues);
 
     private static IEnumerable<ValueBuffer> Table(
         QueryContext queryContext,

@@ -111,6 +111,10 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
+    /// </summary>
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object?[] prefixValues);
+    /// <summary>
     /// Executes a transaction
     /// </summary>
     int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
