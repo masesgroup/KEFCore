@@ -115,6 +115,8 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(rangeStart, rangeEnd);
     /// <inheritdoc/>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(prefixValues);
+    /// <inheritdoc/>
     public void Start() => _producer.Start();
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => [.. properties.Select(p => p.GetKeyValueComparer())];

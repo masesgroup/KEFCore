@@ -513,6 +513,110 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
         return this;
     }
 
+    /// <summary>
+    ///      Setting the value to <see langword="true"/> will enable prefix scan in engine
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useStorePrefixScan">Set to <see langword="true"/> to enable prefix scan in engine based Apache Kafka™ streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStorePrefixScan(bool useStorePrefixScan)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStorePrefixScan(useStorePrefixScan);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting the value to <see langword="true"/> will enable single key look-up
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useStoreSingleKeyLookup">Set to <see langword="true"/> to enable single key look-up in engine based Apache Kafka™ streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStoreSingleKeyLookup(bool useStoreSingleKeyLookup)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStoreSingleKeyLookup(useStoreSingleKeyLookup);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting the value to <see langword="true"/> will enable key range look-up
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useStoreKeyRange">Set to <see langword="true"/> to enable single key range look-up in engine based Apache Kafka™ streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStoreKeyRange(bool useStoreKeyRange)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStoreKeyRange(useStoreKeyRange);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting the value to <see langword="true"/> will enable reverse look-up
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useStoreReverse">Set to <see langword="true"/> to enable reverse look-up in engine based Apache Kafka™ streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStoreReverse(bool useStoreReverse)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStoreReverse(useStoreReverse);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Setting the value to <see langword="true"/> will enable reverse key range look-up
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useStoreReverseKeyRange">Set to <see langword="true"/> to enable reverse key range look-up in engine based Apache Kafka™ streams.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithStoreReverseKeyRange(bool useStoreReverseKeyRange)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithStoreReverseKeyRange(useStoreReverseKeyRange);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
 
     #region Hidden System.Object members
 

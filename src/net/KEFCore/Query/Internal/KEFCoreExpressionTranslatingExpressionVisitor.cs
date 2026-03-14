@@ -83,7 +83,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
     private static readonly MethodInfo RandomNextDoubleMethodInfo = typeof(Random).GetRuntimeMethod(
         nameof(Random.NextDouble), Type.EmptyTypes)!;
 
-    private static readonly MethodInfo KEFCoreLikeMethodInfo =
+    internal static readonly MethodInfo KEFCoreLikeMethodInfo =
         typeof(KEFCoreExpressionTranslatingExpressionVisitor).GetTypeInfo().GetDeclaredMethod(nameof(KEFCoreLike))!;
 
     private static readonly MethodInfo GetTypeMethodInfo = typeof(object).GetTypeInfo().GetDeclaredMethod(nameof(GetType))!;

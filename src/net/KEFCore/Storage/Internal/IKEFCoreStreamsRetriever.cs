@@ -35,10 +35,11 @@ public interface IKEFCoreStreamsRetriever<TKey> : IDisposable where TKey : notnu
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
     /// </summary>
+    /// <param name="keyValueFactory">The key converter</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersRange(TKey rangeStart, TKey rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
     /// </summary>
@@ -47,10 +48,18 @@ public interface IKEFCoreStreamsRetriever<TKey> : IDisposable where TKey : notnu
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
     /// </summary>
+    /// <param name="keyValueFactory">The key converter</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(TKey rangeStart, TKey rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd);
+    /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
+    /// </summary>
+    /// <param name="keyValueFactory">The key converter</param>
+    /// <param name="prefixValues">The prefix</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues);
     /// <summary>
     /// Check if a <paramref name="key"/> exist
     /// </summary>

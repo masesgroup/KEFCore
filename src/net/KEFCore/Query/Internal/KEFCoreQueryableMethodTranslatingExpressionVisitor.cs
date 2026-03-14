@@ -19,7 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
-using Microsoft.EntityFrameworkCore.Query;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
 namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
@@ -37,6 +37,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     private readonly KEFCoreProjectionBindingExpressionVisitor _projectionBindingExpressionVisitor;
     private readonly IModel _model;
 
+    private readonly bool _useStorePrefixScan;
+    private readonly bool _useStoreSingleKeyLookup;
+    private readonly bool _useStoreKeyRange; 
+    private readonly bool _useStoreReverse;
+    private readonly bool _useStoreReverseKeyRange;
+
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -52,6 +58,13 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         _weakEntityExpandingExpressionVisitor = new SharedTypeEntityExpandingExpressionVisitor(_expressionTranslator);
         _projectionBindingExpressionVisitor = new KEFCoreProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = queryCompilationContext.Model;
+
+        var kafkaOptions = queryCompilationContext.ContextOptions.FindExtension<KEFCoreOptionsExtension>();
+        _useStoreSingleKeyLookup = kafkaOptions?.UseStoreSingleKeyLookup ?? true;
+        _useStoreKeyRange = kafkaOptions?.UseStoreKeyRange ?? true;
+        _useStorePrefixScan = kafkaOptions?.UseStorePrefixScan ?? false;
+        _useStoreReverse = kafkaOptions?.UseStoreReverse ?? true;
+        _useStoreReverseKeyRange = kafkaOptions?.UseStoreReverseKeyRange ?? true;
     }
 
     /// <summary>
@@ -68,6 +81,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         _weakEntityExpandingExpressionVisitor = new SharedTypeEntityExpandingExpressionVisitor(_expressionTranslator);
         _projectionBindingExpressionVisitor = new KEFCoreProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = parentVisitor._model;
+
+        _useStoreSingleKeyLookup = parentVisitor._useStoreSingleKeyLookup;
+        _useStoreKeyRange = parentVisitor._useStoreKeyRange;
+        _useStorePrefixScan = parentVisitor._useStorePrefixScan;
+        _useStoreReverse = parentVisitor._useStoreReverse;
+        _useStoreReverseKeyRange = parentVisitor._useStoreReverseKeyRange;
     }
 
     /// <summary>
@@ -664,12 +683,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         switch (kefcoreQueryExpression.ServerQueryExpression)
         {
-            case KEFCoreTableExpression tableExpression:
+            case KEFCoreTableExpression tableExpression when _useStoreReverse:
                 kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseTableExpression(tableExpression.EntityType));
                 break;
 
-            case KEFCoreRangeTableExpression range:
+            case KEFCoreRangeTableExpression range when _useStoreReverseKeyRange:
                 kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseRangeTableExpression(
                         range.EntityType,
@@ -1163,13 +1182,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     protected override ShapedQueryExpression? TranslateWhere(ShapedQueryExpression source, LambdaExpression predicate)
     {
         var kefcoreQueryExpression = (KEFCoreQueryExpression)source.QueryExpression;
-
         if (kefcoreQueryExpression.ServerQueryExpression is KEFCoreTableExpression tableExpression)
         {
             var translatedPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
             if (translatedPredicate != null)
             {
-                if (TryExtractPrimaryKeyLookup(
+                if (_useStoreSingleKeyLookup && TryExtractPrimaryKeyLookup(
                         tableExpression.EntityType,
                         translatedPredicate,
                         out var keyExpressions))
@@ -1180,7 +1198,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                     return source;
                 }
 
-                if (TryExtractKeyRange(
+                if (_useStoreKeyRange && TryExtractKeyRange(
                         tableExpression.EntityType,
                         translatedPredicate,
                         out var rangeStart,
@@ -1192,40 +1210,142 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                     return source;
                 }
 
+                if (_useStorePrefixScan && TryExtractPrefixScan(
+                        tableExpression.EntityType,
+                        translatedPredicate,
+                        out var prefixProperties,
+                        out var prefixExpressions))
+                {
+                    kefcoreQueryExpression.UpdateServerQueryExpression(
+                        new KEFCorePrefixScanTableExpression(
+                            tableExpression.EntityType, prefixProperties!, prefixExpressions!));
+
+                    return source;
+                }
+
                 kefcoreQueryExpression.UpdateServerQueryExpression(
                     Expression.Call(
                         EnumerableMethods.Where.MakeGenericMethod(
                             kefcoreQueryExpression.CurrentParameter.Type),
                         kefcoreQueryExpression.ServerQueryExpression,
                         translatedPredicate));
-
                 return source;
             }
-
             return null;
         }
 
         var newPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
         if (newPredicate == null)
-        {
             return null;
-        }
 
         predicate = newPredicate;
-
         kefcoreQueryExpression.UpdateServerQueryExpression(
             Expression.Call(
                 EnumerableMethods.Where.MakeGenericMethod(kefcoreQueryExpression.CurrentParameter.Type),
                 kefcoreQueryExpression.ServerQueryExpression,
                 predicate));
-
         return source;
     }
 
+    private static bool TryExtractPrefixScan(
+        IEntityType entityType,
+        LambdaExpression translatedPredicate,
+        out IReadOnlyList<IProperty>? prefixProperties,
+        out IReadOnlyList<Expression>? prefixExpressions)
+    {
+        prefixProperties = null;
+        prefixExpressions = null;
+
+        var pk = entityType.FindPrimaryKey();
+        if (pk == null) return false;
+
+        if (pk.Properties.Count >= 2)
+        {
+            var equalities = new Dictionary<IProperty, Expression>();
+            if (TryDecomposeEqualities(translatedPredicate.Body, equalities))
+            {
+                var matchedPrefix = new List<IProperty>();
+                var matchedExpressions = new List<Expression>();
+                foreach (var pkProp in pk.Properties)
+                {
+                    if (!equalities.ContainsKey(pkProp)) break;
+                    matchedPrefix.Add(pkProp);
+                    matchedExpressions.Add(equalities[pkProp]);
+                }
+
+                if (matchedPrefix.Count > 0 && matchedPrefix.Count < pk.Properties.Count)
+                {
+                    prefixProperties = matchedPrefix;
+                    prefixExpressions = matchedExpressions;
+                    return true;
+                }
+            }
+        }
+
+        if (TryExtractLikePrefixScan(entityType, pk, translatedPredicate.Body,
+                out prefixProperties, out prefixExpressions))
+            return true;
+
+        return false;
+    }
+
+    private static bool TryExtractLikePrefixScan(
+        IEntityType entityType,
+        IKey pk,
+        Expression body,
+        out IReadOnlyList<IProperty>? prefixProperties,
+        out IReadOnlyList<Expression>? prefixExpressions)
+    {
+        prefixProperties = null;
+        prefixExpressions = null;
+
+        if (body is not MethodCallExpression
+            {
+                Arguments.Count: 3
+            } likeCall
+            || likeCall.Method != KEFCoreExpressionTranslatingExpressionVisitor.KEFCoreLikeMethodInfo)
+            return false;
+
+        var matchProperty = TryGetProperty(likeCall.Arguments[0]);
+        if (matchProperty == null
+            || matchProperty.ClrType != typeof(string)
+            || !pk.Properties.Contains(matchProperty))
+            return false;
+
+        var patternExpr = likeCall.Arguments[1];
+
+        if (patternExpr is ConstantExpression { Value: string pattern })
+        {
+            if (!IsPurePrefixPattern(pattern, out var prefix))
+                return false;
+
+            prefixProperties = [matchProperty];
+            prefixExpressions = [Expression.Constant(prefix, typeof(string))];
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsPurePrefixPattern(string pattern, out string prefix)
+    {
+        prefix = string.Empty;
+
+        if (string.IsNullOrEmpty(pattern) || !pattern.EndsWith('%'))
+            return false;
+
+        var body = pattern[..^1];
+        if (body.Contains('%') || body.Contains('_'))
+            return false;
+
+        prefix = body;
+        return !string.IsNullOrEmpty(prefix);
+    }
+
     private static bool TryExtractPrimaryKeyLookup(
-    IEntityType entityType,
-    LambdaExpression translatedPredicate,
-    out IReadOnlyList<Expression>? keyExpressions)
+        IEntityType entityType,
+        LambdaExpression translatedPredicate,
+        out IReadOnlyList<Expression>? keyExpressions)
     {
         keyExpressions = null;
         var pk = entityType.FindPrimaryKey();

@@ -453,9 +453,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart!)!;
-            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-            return _streamData.GetValueBuffersRange(start, end);
+            return _streamData.GetValueBuffersRange(_keyValueFactory, rangeStart, rangeEnd);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
@@ -472,13 +470,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            TKey? start = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart!)!;
-            TKey? end = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-            return _streamData.GetValueBuffersReverseRange(start, end);
+            return _streamData.GetValueBuffersReverseRange(_keyValueFactory, rangeStart, rangeEnd);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues)
+    {
+        if (_streamData != null)
+        {
+            return _streamData.GetValueBuffersByPrefix(_keyValueFactory, prefixValues);
+        }
+        else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support prefix iteration");
+        else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
+    }
+
     /// <inheritdoc/>
     public void Start()
     {

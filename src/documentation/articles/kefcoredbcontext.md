@@ -31,6 +31,11 @@ _description: Describe what is and how use KEFCoreDbContext class from Entity Fr
   - **ManageEvents**: Setting this property to true (default) the backend emits events on ChangeTracker
   - **ReadOnlyMode**: Setting this property to true (default is false) if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights AclOperation.WRITE and AclOperation.READ
   - **DefaultSynchronizationTimeout**: The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster. Setting this property to 0 the synchronization will be disabled
+  - **UseStorePrefixScan**: Set this property to true to enable prefix scan in engine, default is false
+  - **UseStoreSingleKeyLookup**: Set this property to true to enable single key look-up in engine, default is true
+  - **UseStoreKeyRange**: Set this property to true to enable key range look-up in engine, default is true
+  - **UseStoreReverse**: Set this property to true to enable reverse look-up in engine, default is true
+  - **UseStoreReverseKeyRange**: Set this property to true to reverse key range look-up in engine, default is true
 
 ## How to use `KEFCoreDbContext` class
 
