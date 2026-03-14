@@ -227,12 +227,6 @@ public class KEFCoreDbContext : DbContext
     /// <remarks>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <see cref="DefaultSynchronizationTimeout"/> when <see cref="DatabaseFacade.EnsureCreated"/> of <see cref="DbContext.Database"/> is invoked.</remarks>
     public virtual long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
     /// <summary>
-    /// The optional handler to be used to receive notification when the back-end triggers a data change.
-    /// </summary>
-    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
-    [Obsolete("Replaced with events attached to ChangeTracker, use ManageEvents to enable them.", true)] 
-    public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
-    /// <summary>
     /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka™ backend
     /// </summary>
     /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka™ backend</param>
