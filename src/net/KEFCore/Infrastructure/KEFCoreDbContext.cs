@@ -233,19 +233,19 @@ public class KEFCoreDbContext : DbContext
     /// <summary>
     ///  Setting this property to <see langword="true"/> to enable single key look-up in engine
     /// </summary>
-    public virtual bool UseStoreSingleKeyLookup { get; set; } = false;
+    public virtual bool UseStoreSingleKeyLookup { get; set; } = true;
     /// <summary>
     ///  Setting this property to <see langword="true"/> to enable key range look-up in engine
     /// </summary>
-    public virtual bool UseStoreKeyRange { get; set; } = false;
+    public virtual bool UseStoreKeyRange { get; set; } = true;
     /// <summary>
     ///  Setting this property to <see langword="true"/> to enable reverse look-up in engine
     /// </summary>
-    public virtual bool UseStoreReverse { get; set; } = false;
+    public virtual bool UseStoreReverse { get; set; } = true;
     /// <summary>
     ///  Setting this property to <see langword="true"/> to enable reverse key range look-up in engine
     /// </summary>
-    public virtual bool UseStoreReverseKeyRange { get; set; } = false;
+    public virtual bool UseStoreReverseKeyRange { get; set; } = true;
 
     /// <summary>
     /// The optional handler to be used to receive notification when the back-end triggers a data change.
