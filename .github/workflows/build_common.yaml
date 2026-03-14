@@ -472,7 +472,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -501,7 +501,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -530,7 +530,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -559,7 +559,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -588,7 +588,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -617,7 +617,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -630,7 +630,6 @@ jobs:
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          dir ${{ github.workspace }}
           Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
@@ -649,7 +648,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
@@ -663,7 +662,6 @@ jobs:
         if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          dir ${{ github.workspace }}
           Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
@@ -681,7 +679,7 @@ jobs:
         shell: cmd
         run: |
           taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
-          timeout /t 3 /nobreak >nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
