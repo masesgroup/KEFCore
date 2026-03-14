@@ -469,8 +469,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -496,8 +495,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -523,8 +521,7 @@ jobs:
       
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -550,8 +547,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -577,8 +573,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -604,8 +599,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -634,8 +628,7 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ inputs.UseKNetCompactedReplicator == true }}  
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
@@ -664,8 +657,7 @@ jobs:
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
-        shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*knet*' -and $_.Name -ne 'powershell.exe' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
