@@ -36,7 +36,6 @@ _description: Describe what is and how use KEFCoreDbContext class from Entity Fr
   - **UseStoreKeyRange**: Set this property to true to enable key range look-up in engine, default is true
   - **UseStoreReverse**: Set this property to true to enable reverse look-up in engine, default is true
   - **UseStoreReverseKeyRange**: Set this property to true to reverse key range look-up in engine, default is true
-  - **OnChangeEvent**: handler to receive change events from back-end
 
 ## How to use `KEFCoreDbContext` class
 

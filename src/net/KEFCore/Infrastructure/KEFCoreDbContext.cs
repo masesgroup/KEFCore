@@ -248,12 +248,6 @@ public class KEFCoreDbContext : DbContext
     public virtual bool UseStoreReverseKeyRange { get; set; } = true;
 
     /// <summary>
-    /// The optional handler to be used to receive notification when the back-end triggers a data change.
-    /// </summary>
-    /// <remarks>Works if <see cref="UseCompactedReplicator"/> is <see langword="true"/>. Replaced with <see cref="ManageEvents"/></remarks>
-    [Obsolete("Replaced with events attached to ChangeTracker, use ManageEvents to enable them.", true)] 
-    public virtual Action<EntityTypeChanged>? OnChangeEvent { get; set; } = null;
-    /// <summary>
     /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka™ backend
     /// </summary>
     /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka™ backend</param>
