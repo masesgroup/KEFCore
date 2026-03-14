@@ -27,6 +27,16 @@ on:
         required: false
         default: true
         type: boolean
+      ExecuteOnWindows:
+        description: 'Executes tests on Windows'
+        required: false
+        default: false
+        type: boolean
+      ExecuteOnMacOS:
+        description: 'Executes tests on MacOS'
+        required: false
+        default: false
+        type: boolean
       UseSpecialSettings:
         description: 'Use special settings: not available in forks'
         required: false
@@ -86,6 +96,10 @@ on:
 
   schedule:
     - cron: "0 4 * * 6"
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}'
+  cancel-in-progress: true
 
 # This workflow contains two jobs called "check_changes", "build_windows"
 jobs:
@@ -152,8 +166,8 @@ jobs:
       ExecuteOnLargerJDKSet: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true
       UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
-      EnableWindowsTests: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
-      EnableMacOSTests: ${{ github.event_name == 'schedule' }}
+      EnableWindowsTests: ${{ inputs.ExecuteOnWindows || github.ref_name == 'master' || github.event_name == 'schedule' }}
+      EnableMacOSTests: ${{ inputs.ExecuteOnMacOS || github.event_name == 'schedule' }}
       UseLastRepositoryBuildJNet: ${{ inputs.UseLastRepositoryBuildJNet || false }}
       UseLastRepositoryBuildKNet: ${{ inputs.UseLastRepositoryBuildKNet || false }}
       UseKNetCompactedReplicator: ${{ inputs.UseKNetCompactedReplicator || false }}

@@ -211,7 +211,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
     public class JsonSupport
     {
         /// <summary>
-        /// The <see cref="JsonSerializerOptions"/> used for serialization/deserialization of <see cref="Key{T}"/>
+        /// The <see cref="JsonSerializerOptions"/> used for serialization/deserialization
         /// </summary>
         public readonly JsonSerializerOptions? DefautJsonOptions = new();
         /// <inheritdoc cref="JsonSerializer.Serialize(object, Type, JsonSerializerOptions?)"/>

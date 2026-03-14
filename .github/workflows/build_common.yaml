@@ -91,7 +91,7 @@ on:
         required: true
 
 concurrency:
-  group: '${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}'
+  group: '${{ github.workflow }}-child-${{ github.event.pull_request.number || github.ref }}'
   cancel-in-progress: true
 
 # This workflow contains two jobs called "check_changes", "build_windows"
@@ -258,7 +258,7 @@ jobs:
     services:
       kafka:
         # Private registry image
-        image: ghcr.io/masesgroup/knet:V3.2.0.0 # to be changed with official version when will be available
+        image: ghcr.io/masesgroup/knet:V3.2.1.0 # to be changed with official version when will be available
         credentials:
           username: ${{ secrets.actor }}
           password: ${{ secrets.GITHUB_TOKEN_INHERITED }}
@@ -453,7 +453,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.2.0
+        run: dotnet tool update -g MASES.KNetCLI --version 3.2.1
 
       - name: Prepare log files folder
         shell: pwsh
@@ -470,7 +470,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -497,7 +499,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -524,7 +528,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -551,7 +557,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -578,7 +586,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -605,7 +615,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -618,7 +630,6 @@ jobs:
       - name: Cleanup Kafka for ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          dir ${{ github.workspace }}
           Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
@@ -635,7 +646,9 @@ jobs:
         if: ${{ inputs.UseKNetCompactedReplicator == true }}  
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
@@ -649,7 +662,6 @@ jobs:
         if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: |
-          dir ${{ github.workspace }}
           Remove-Item -Path "${{ github.workspace }}\logfiles\*" -Recurse -Force
           Remove-Item -Path "${{ github.workspace }}\kraft-combined-logs\*" -Recurse -Force
 
@@ -665,7 +677,9 @@ jobs:
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
         shell: cmd
-        run: wmic process where (commandline like "%%knet%%" and not name="wmic.exe") delete
+        run: |
+          taskkill /F /FI "IMAGENAME ne powershell.exe" /FI "WINDOWTITLE eq *knet*" 2>nul
+          ping 127.0.0.1 -n 4 >nul
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -772,7 +786,7 @@ jobs:
         
       - name: Download latest published version of KNetCLI
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
-        run: dotnet tool update -g MASES.KNetCLI --version 3.2.0
+        run: dotnet tool update -g MASES.KNetCLI --version 3.2.1
 
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties

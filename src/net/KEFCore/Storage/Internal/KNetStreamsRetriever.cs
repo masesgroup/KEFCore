@@ -232,7 +232,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             _isReverse = isReverse;
 #if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
         }
 
@@ -247,7 +247,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _rangeStart = rangeStart;
             _rangeEnd = rangeEnd;
 #if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries}");
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
         }
 
@@ -274,9 +274,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                return !useRange ? (isReverse ? keyValueStore?.ReverseAll 
+                return !useRange ? (isReverse ? keyValueStore?.ReverseAll()
                                               : keyValueStore?.All())
-                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!) 
+                                 : (isReverse ? keyValueStore?.ReverseRange(rangeStart!, rangeEnd!)
                                               : keyValueStore?.Range(rangeStart!, rangeEnd!));
             }
             catch (Org.Apache.Kafka.Streams.Errors.InvalidStateStoreException isse)
