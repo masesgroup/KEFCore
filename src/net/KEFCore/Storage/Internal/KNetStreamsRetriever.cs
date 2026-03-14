@@ -277,13 +277,13 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #endif
         }
 
-        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore, 
-                                                                               bool isReverse, 
-                                                                               bool useRange, 
+        static KeyValueIterator<TKey, TValue, TJVMKey, TJVMValue>? GetIterator(ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore,
+                                                                               bool isReverse,
+                                                                               bool useRange,
                                                                                bool withPrefix,
                                                                                TKey? rangeStart,
-                                                                               TKey? rangeEnd, 
-                                                                               TKey? prefix, 
+                                                                               TKey? rangeEnd,
+                                                                               TKey? prefix,
                                                                                CancellationToken cancellationToken = default)
         {
             const int maxCycle = 100;
@@ -400,7 +400,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                 {
                     _currentSw.Start();
 #endif
-                return _current;
+                    return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally
@@ -510,53 +510,53 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             {
                 _moveNextSw.Start();
 #endif
-            bool hasNext = false;
-            TValue? value = default;
+                bool hasNext = false;
+                TValue? value = default;
 
-            do
-            {
-                hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
-                if (hasNext)
+                do
                 {
+                    hasNext = await (_asyncEnumerator == null ? new ValueTask<bool>(false) : _asyncEnumerator.MoveNextAsync());
+                    if (hasNext)
+                    {
 #if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
                         _cycles++;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Start();
 #endif
 #endif
-                    KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                    value = kv != null ? kv.Value : default;
+                        value = kv != null ? kv.Value : default;
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                    if (value == null) continue;
-                    hasNext = true;
+                        if (value == null) continue;
+                        hasNext = true;
+                    }
+                    break;
                 }
-                break;
-            }
-            while (true);
+                while (true);
 
-            if (hasNext)
-            {
+                if (hasNext)
+                {
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Start();
 #endif
-                object[] propertyValues = null!;
-                value?.GetData(_metadata, ref propertyValues, _complexTypeConverterFactory);
+                    object[] propertyValues = null!;
+                    value?.GetData(_metadata, ref propertyValues, _complexTypeConverterFactory);
 #if DEBUG_PERFORMANCE
                     _valueBufferSw.Stop();
 #endif
-                _current = new ValueBuffer(propertyValues);
-            }
-            else
-            {
-                _current = ValueBuffer.Empty;
-            }
-            return await ValueTask.FromResult(hasNext);
+                    _current = new ValueBuffer(propertyValues);
+                }
+                else
+                {
+                    _current = ValueBuffer.Empty;
+                }
+                return await ValueTask.FromResult(hasNext);
 #if DEBUG_PERFORMANCE
             }
             finally

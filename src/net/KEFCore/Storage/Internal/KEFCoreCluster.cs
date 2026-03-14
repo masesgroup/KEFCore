@@ -514,16 +514,16 @@ public class KEFCoreCluster : IKEFCoreCluster
         {
             tableSw.Start();
 #endif
-        EnsureTable(entityType);
+            EnsureTable(entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-        var key = entityType.TopicName(Options);
-        if (_tables != null && _tables.TryGetValue(key, out var table))
-        {
-            return table.GetValueBuffersByPrefix(prefixValues);
-        }
-        throw new InvalidOperationException("No table available");
+            var key = entityType.TopicName(Options);
+            if (_tables != null && _tables.TryGetValue(key, out var table))
+            {
+                return table.GetValueBuffersByPrefix(prefixValues);
+            }
+            throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
         }
         finally
