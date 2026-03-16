@@ -1268,9 +1268,9 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                 var matchedExpressions = new List<Expression>();
                 foreach (var pkProp in pk.Properties)
                 {
-                    if (!equalities.ContainsKey(pkProp)) break;
+                    if (!equalities.TryGetValue(pkProp, out var equalityExpression)) break;
                     matchedPrefix.Add(pkProp);
-                    matchedExpressions.Add(equalities[pkProp]);
+                    matchedExpressions.Add(equalityExpression);
                 }
 
                 if (matchedPrefix.Count > 0 && matchedPrefix.Count < pk.Properties.Count)
