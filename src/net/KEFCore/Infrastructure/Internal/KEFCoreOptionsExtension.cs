@@ -39,31 +39,8 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingletonOptions
 {
     private readonly object _clusterIdLock = new();
-
     private string _clusterId = null!;
-    private Type _keySerDesSelectorType = DefaultKEFCoreSerDes.DefaultKeySerialization;
-    private Type _valueSerDesSelectorType = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
-    private Type _valueContainerType = DefaultKEFCoreSerDes.DefaultValueContainer;
-    private string? _topicPrefix;
-    private string? _applicationId;
-    private string? _bootstrapServers;
-    private bool _useDeletePolicyForTopic = false;
-    private bool _useCompactedReplicator = false;
-    private bool _useKNetStreams = true;
-    private bool _useGlobalTable = false;
-    private bool _usePersistentStorage = false;
-    private bool _useEnumeratorWithPrefetch = true;
-    private bool _useByteBufferDataTransfer = false;
-    private int _defaultNumPartitions = 1;
-    private int? _defaultConsumerInstances = null;
-    private short _defaultReplicationFactor = 1;
-    private ConsumerConfigBuilder? _consumerConfigBuilder;
-    private ProducerConfigBuilder? _producerConfigBuilder;
-    private StreamsConfigBuilder? _streamsConfigBuilder;
-    private TopicConfigBuilder? _topicConfigBuilder;
-    private bool _manageEvents = false;
-    private bool _readOnlyMode = false;
-    private long _defaultSynchronizationTimeout = Timeout.Infinite;
+
     private DbContextOptionsExtensionInfo? _info;
 
     /// <summary>
@@ -77,29 +54,34 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// </summary>
     protected KEFCoreOptionsExtension(KEFCoreOptionsExtension copyFrom)
     {
-        _keySerDesSelectorType = copyFrom._keySerDesSelectorType;
-        _valueSerDesSelectorType = copyFrom._valueSerDesSelectorType;
-        _valueContainerType = copyFrom._valueContainerType;
-        _topicPrefix = copyFrom._topicPrefix;
-        _applicationId = copyFrom._applicationId;
-        _bootstrapServers = copyFrom._bootstrapServers;
-        _useDeletePolicyForTopic = copyFrom._useDeletePolicyForTopic;
-        _useCompactedReplicator = copyFrom._useCompactedReplicator;
-        _useKNetStreams = copyFrom._useKNetStreams;
-        _useGlobalTable = copyFrom._useGlobalTable;
-        _usePersistentStorage = copyFrom._usePersistentStorage;
-        _useEnumeratorWithPrefetch = copyFrom._useEnumeratorWithPrefetch;
-        _useByteBufferDataTransfer = copyFrom._useByteBufferDataTransfer;
-        _defaultNumPartitions = copyFrom._defaultNumPartitions;
-        _defaultConsumerInstances = copyFrom._defaultConsumerInstances;
-        _defaultReplicationFactor = copyFrom._defaultReplicationFactor;
-        _consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(copyFrom._consumerConfigBuilder);
-        _producerConfigBuilder = ProducerConfigBuilder.CreateFrom(copyFrom._producerConfigBuilder);
-        _streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(copyFrom._streamsConfigBuilder);
-        _topicConfigBuilder = TopicConfigBuilder.CreateFrom(copyFrom._topicConfigBuilder);
-        _manageEvents = copyFrom._manageEvents;
-        _readOnlyMode = copyFrom._readOnlyMode;
-        _defaultSynchronizationTimeout = copyFrom._defaultSynchronizationTimeout;
+        KeySerDesSelectorType = copyFrom.KeySerDesSelectorType;
+        ValueSerDesSelectorType = copyFrom.ValueSerDesSelectorType;
+        ValueContainerType = copyFrom.ValueContainerType;
+        TopicPrefix = copyFrom.TopicPrefix;
+        ApplicationId = copyFrom.ApplicationId;
+        BootstrapServers = copyFrom.BootstrapServers;
+        UseDeletePolicyForTopic = copyFrom.UseDeletePolicyForTopic;
+        UseCompactedReplicator = copyFrom.UseCompactedReplicator;
+        UseKNetStreams = copyFrom.UseKNetStreams;
+        UseGlobalTable = copyFrom.UseGlobalTable;
+        UsePersistentStorage = copyFrom.UsePersistentStorage;
+        UseEnumeratorWithPrefetch = copyFrom.UseEnumeratorWithPrefetch;
+        UseByteBufferDataTransfer = copyFrom.UseByteBufferDataTransfer;
+        DefaultNumPartitions = copyFrom.DefaultNumPartitions;
+        DefaultConsumerInstances = copyFrom.DefaultConsumerInstances;
+        DefaultReplicationFactor = copyFrom.DefaultReplicationFactor;
+        ConsumerConfig = ConsumerConfigBuilder.CreateFrom(copyFrom.ConsumerConfig);
+        ProducerConfig = ProducerConfigBuilder.CreateFrom(copyFrom.ProducerConfig);
+        StreamsConfig = StreamsConfigBuilder.CreateFrom(copyFrom.StreamsConfig);
+        TopicConfig = TopicConfigBuilder.CreateFrom(copyFrom.TopicConfig);
+        ManageEvents = copyFrom.ManageEvents;
+        ReadOnlyMode = copyFrom.ReadOnlyMode;
+        DefaultSynchronizationTimeout = copyFrom.DefaultSynchronizationTimeout;
+        UseStorePrefixScan = copyFrom.UseStorePrefixScan;
+        UseStoreSingleKeyLookup = copyFrom.UseStoreSingleKeyLookup;
+        UseStoreKeyRange = copyFrom.UseStoreKeyRange;
+        UseStoreReverse = copyFrom.UseStoreReverse;
+        UseStoreReverseKeyRange = copyFrom.UseStoreReverseKeyRange;
     }
     /// <inheritdoc/>
     public virtual DbContextOptionsExtensionInfo Info => _info ??= new ExtensionInfo(this);
@@ -114,60 +96,70 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         {
             lock (_clusterIdLock)
             {
-                _clusterId ??= KEFCoreClusterAdmin.Create(_bootstrapServers).ClusterId;
-                if (_clusterId == null) throw new InvalidOperationException($"ClusterId currently not available from {_bootstrapServers}");
+                _clusterId ??= KEFCoreClusterAdmin.Create(BootstrapServers).ClusterId;
+                if (_clusterId == null) throw new InvalidOperationException($"ClusterId currently not available from {BootstrapServers}");
                 return _clusterId;
             }
         }
     }
     /// <inheritdoc cref="KEFCoreDbContext.KeySerDesSelectorType"/>
-    public virtual Type KeySerDesSelectorType => _keySerDesSelectorType;
+    public virtual Type KeySerDesSelectorType { get; set; } = DefaultKEFCoreSerDes.DefaultKeySerialization;
     /// <inheritdoc cref="KEFCoreDbContext.ValueSerDesSelectorType"/>
-    public virtual Type ValueSerDesSelectorType => _valueSerDesSelectorType;
+    public virtual Type ValueSerDesSelectorType { get; set; } = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     /// <inheritdoc cref="KEFCoreDbContext.ValueContainerType"/>
-    public virtual Type ValueContainerType => _valueContainerType;
+    public virtual Type ValueContainerType { get; set; } = DefaultKEFCoreSerDes.DefaultValueContainer;
     /// <inheritdoc cref="KEFCoreDbContext.TopicPrefix"/>
-    public virtual string TopicPrefix => _topicPrefix!;
+    public virtual string? TopicPrefix { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
-    public virtual string ApplicationId => _applicationId!;
+    public virtual string? ApplicationId { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>
-    public virtual string BootstrapServers => _bootstrapServers!;
+    public virtual string? BootstrapServers { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
-    public virtual bool UseDeletePolicyForTopic => _useDeletePolicyForTopic;
+    public virtual bool UseDeletePolicyForTopic { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
-    public virtual bool UseCompactedReplicator => _useCompactedReplicator;
+    public virtual bool UseCompactedReplicator { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
-    public virtual bool UseKNetStreams => _useKNetStreams;
+    public virtual bool UseKNetStreams { get; set; } = true;
     /// <inheritdoc cref="KEFCoreDbContext.UseGlobalTable"/>
-    public virtual bool UseGlobalTable => _useGlobalTable;
+    public virtual bool UseGlobalTable { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
-    public virtual bool UsePersistentStorage => _usePersistentStorage;
+    public virtual bool UsePersistentStorage { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
-    public virtual bool UseByteBufferDataTransfer => _useByteBufferDataTransfer;
+    public virtual bool UseByteBufferDataTransfer { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.UseEnumeratorWithPrefetch"/>
-    public virtual bool UseEnumeratorWithPrefetch => _useEnumeratorWithPrefetch;
+    public virtual bool UseEnumeratorWithPrefetch { get; set; } = true;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultNumPartitions"/>
-    public virtual int DefaultNumPartitions => _defaultNumPartitions;
+    public virtual int DefaultNumPartitions { get; set; } = 1;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultConsumerInstances"/>
-    public virtual int? DefaultConsumerInstances => _defaultConsumerInstances;
+    public virtual int? DefaultConsumerInstances { get; set; } = null;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultReplicationFactor"/>
-    public virtual short DefaultReplicationFactor => _defaultReplicationFactor;
+    public virtual short DefaultReplicationFactor { get; set; } = 1;
     /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
-    public virtual ConsumerConfigBuilder ConsumerConfig => _consumerConfigBuilder!;
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
-    public virtual ProducerConfigBuilder ProducerConfig => _producerConfigBuilder!;
+    public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
-    public virtual StreamsConfigBuilder StreamsConfig => _streamsConfigBuilder!;
+    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.TopicConfig"/>
-    public virtual TopicConfigBuilder TopicConfig => _topicConfigBuilder!;
+    public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
-    public virtual bool ManageEvents => _manageEvents!;
+    public virtual bool ManageEvents { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.ReadOnlyMode"/>
-    public virtual bool ReadOnlyMode => _readOnlyMode!;
+    public virtual bool ReadOnlyMode { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultSynchronizationTimeout"/>
-    public virtual long DefaultSynchronizationTimeout => _defaultSynchronizationTimeout!;
+    public virtual long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
+    /// <inheritdoc cref="KEFCoreDbContext.UseStorePrefixScan"/>
+    public virtual bool UseStorePrefixScan { get; set; } = false;
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreSingleKeyLookup"/>
+    public virtual bool UseStoreSingleKeyLookup { get; private set; } = true;
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreKeyRange"/>
+    public virtual bool UseStoreKeyRange { get; private set; } = true;
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreReverse"/>
+    public virtual bool UseStoreReverse { get; private set; } = true;
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreReverseKeyRange"/>
+    public virtual bool UseStoreReverseKeyRange { get; private set; } = true;
 
-    int IKEFCoreSingletonOptions.DefaultReplicationFactor => _defaultReplicationFactor;
+    int IKEFCoreSingletonOptions.DefaultReplicationFactor => DefaultReplicationFactor;
 
     /// <inheritdoc cref="KEFCoreDbContext.KeySerDesSelectorType"/>
     public virtual KEFCoreOptionsExtension WithKeySerDesSelectorType(Type serializationType)
@@ -176,7 +168,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
 
         var clone = Clone();
 
-        clone._keySerDesSelectorType = serializationType;
+        clone.KeySerDesSelectorType = serializationType;
 
         return clone;
     }
@@ -187,7 +179,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
 
         var clone = Clone();
 
-        clone._valueSerDesSelectorType = serializationType;
+        clone.ValueSerDesSelectorType = serializationType;
 
         return clone;
     }
@@ -198,7 +190,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
 
         var clone = Clone();
 
-        clone._valueContainerType = serializationType;
+        clone.ValueContainerType = serializationType;
 
         return clone;
     }
@@ -207,7 +199,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._topicPrefix = topicPrefix;
+        clone.TopicPrefix = topicPrefix;
 
         return clone;
     }
@@ -216,7 +208,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._applicationId = applicationId;
+        clone.ApplicationId = applicationId;
 
         return clone;
     }
@@ -225,7 +217,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._bootstrapServers = bootstrapServers;
+        clone.BootstrapServers = bootstrapServers;
 
         return clone;
     }
@@ -234,7 +226,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useDeletePolicyForTopic = useDeletePolicyForTopic;
+        clone.UseDeletePolicyForTopic = useDeletePolicyForTopic;
 
         return clone;
     }
@@ -244,7 +236,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useCompactedReplicator = useCompactedReplicator;
+        clone.UseCompactedReplicator = useCompactedReplicator;
 
         return clone;
     }
@@ -253,7 +245,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useKNetStreams = useKNetStreams;
+        clone.UseKNetStreams = useKNetStreams;
 
         return clone;
     }
@@ -262,7 +254,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useGlobalTable = useGlobalTable;
+        clone.UseGlobalTable = useGlobalTable;
 
         return clone;
     }
@@ -271,7 +263,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._usePersistentStorage = usePersistentStorage;
+        clone.UsePersistentStorage = usePersistentStorage;
 
         return clone;
     }
@@ -280,7 +272,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+        clone.UseEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
 
         return clone;
     }
@@ -289,7 +281,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._useByteBufferDataTransfer = useByteBufferDataTransfer;
+        clone.UseByteBufferDataTransfer = useByteBufferDataTransfer;
 
         return clone;
     }
@@ -298,7 +290,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._defaultNumPartitions = defaultNumPartitions;
+        clone.DefaultNumPartitions = defaultNumPartitions;
 
         return clone;
     }
@@ -307,7 +299,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._defaultConsumerInstances = defaultConsumerInstances;
+        clone.DefaultConsumerInstances = defaultConsumerInstances;
 
         return clone;
     }
@@ -316,7 +308,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._defaultReplicationFactor = defaultReplicationFactor;
+        clone.DefaultReplicationFactor = defaultReplicationFactor;
 
         return clone;
     }
@@ -325,7 +317,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._consumerConfigBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
+        clone.ConsumerConfig = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
 
         return clone;
     }
@@ -334,7 +326,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._producerConfigBuilder = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
+        clone.ProducerConfig = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
 
         return clone;
     }
@@ -343,7 +335,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._streamsConfigBuilder = StreamsConfigBuilder.CreateFrom(streamsConfigBuilder);
+        clone.StreamsConfig = StreamsConfigBuilder.CreateFrom(streamsConfigBuilder);
 
         return clone;
     }
@@ -352,7 +344,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._topicConfigBuilder = TopicConfigBuilder.CreateFrom(topicConfigBuilder);
+        clone.TopicConfig = TopicConfigBuilder.CreateFrom(topicConfigBuilder);
 
         return clone;
     }
@@ -362,7 +354,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._manageEvents = manageEvents;
+        clone.ManageEvents = manageEvents;
 
         return clone;
     }
@@ -372,7 +364,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._readOnlyMode = readOnlyMode;
+        clone.ReadOnlyMode = readOnlyMode;
 
         return clone;
     }
@@ -382,18 +374,59 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
 
-        clone._defaultSynchronizationTimeout = defaultSynchronizationTimeout;
+        clone.DefaultSynchronizationTimeout = defaultSynchronizationTimeout;
 
         return clone;
     }
+
+    /// <inheritdoc cref="KEFCoreDbContext.UseStorePrefixScan"/>
+    public virtual KEFCoreOptionsExtension WithStorePrefixScan(bool enabled = true)
+    {
+        var clone = Clone();
+        clone.UseStorePrefixScan = enabled;
+        return clone;
+    }
+
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreSingleKeyLookup"/>
+    public virtual KEFCoreOptionsExtension WithStoreSingleKeyLookup(bool enabled = true)
+    {
+        var clone = Clone();
+        clone.UseStoreSingleKeyLookup = enabled;
+        return clone;
+    }
+
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreKeyRange"/>
+    public virtual KEFCoreOptionsExtension WithStoreKeyRange(bool enabled = true)
+    {
+        var clone = Clone();
+        clone.UseStoreKeyRange = enabled;
+        return clone;
+    }
+
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreReverse"/>
+    public virtual KEFCoreOptionsExtension WithStoreReverse(bool enabled = true)
+    {
+        var clone = Clone();
+        clone.UseStoreReverse = enabled;
+        return clone;
+    }
+
+    /// <inheritdoc cref="KEFCoreDbContext.UseStoreReverseKeyRange"/>
+    public virtual KEFCoreOptionsExtension WithStoreReverseKeyRange(bool enabled = true)
+    {
+        var clone = Clone();
+        clone.UseStoreReverseKeyRange = enabled;
+        return clone;
+    }
+
 
     /// <summary>
     /// Build <see cref="StreamsConfigBuilder"/> from options
     /// </summary>
     public virtual StreamsConfigBuilder StreamsOptions(IEntityType entityType)
     {
-        _streamsConfigBuilder ??= new();
-        StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(_streamsConfigBuilder);
+        StreamsConfig ??= new();
+        StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(StreamsConfig);
 
         builder.KeySerDesSelector = KeySerDesSelectorType;
         builder.ValueSerDesSelector = ValueSerDesSelectorType;
@@ -446,7 +479,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// </summary>
     public virtual Properties StreamsOptions(string applicationId)
     {
-        Properties props = _streamsConfigBuilder ?? new();
+        Properties props = StreamsConfig ?? new();
         if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
         {
             props.Remove(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG);
@@ -480,7 +513,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// </summary>
     public virtual ProducerConfigBuilder ProducerOptionsBuilder()
     {
-        ProducerConfigBuilder props = _producerConfigBuilder ?? new();
+        ProducerConfigBuilder props = ProducerConfig ?? new();
         props.BootstrapServers = BootstrapServers;
         props.Acks = ProducerConfigBuilder.AcksTypes.All;
         props.Retries = 0;
@@ -492,7 +525,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// </summary>
     public virtual Properties ProducerOptions()
     {
-        Properties props = _producerConfigBuilder ?? new();
+        Properties props = ProducerConfig ?? new();
         if (props.ContainsKey(Org.Apache.Kafka.Clients.Producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG))
         {
             props.Remove(Org.Apache.Kafka.Clients.Producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG);
@@ -566,29 +599,34 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                 {
                     var builder = new System.Text.StringBuilder();
 
-                    builder.Append("KeySerDesSelectorType=").Append(Extension._keySerDesSelectorType).Append(' ');
-                    builder.Append("ValueSerDesSelectorType=").Append(Extension._valueSerDesSelectorType).Append(' ');
-                    builder.Append("ValueContainerType=").Append(Extension._valueContainerType).Append(' ');
-                    builder.Append("TopicPrefix=").Append(Extension._topicPrefix).Append(' ');
-                    builder.Append("ApplicationId=").Append(Extension._applicationId).Append(' ');
-                    builder.Append("BootstrapServers=").Append(Extension._bootstrapServers).Append(' ');
-                    builder.Append("UseDeletePolicyForTopic=").Append(Extension._useDeletePolicyForTopic).Append(' ');
-                    builder.Append("UseCompactedReplicator=").Append(Extension._useCompactedReplicator).Append(' ');
-                    builder.Append("UseKNetStreams=").Append(Extension._useKNetStreams).Append(' ');
-                    builder.Append("UseGlobalTable=").Append(Extension._useGlobalTable).Append(' ');
-                    builder.Append("UsePersistentStorage=").Append(Extension._usePersistentStorage).Append(' ');
-                    builder.Append("UseEnumeratorWithPrefetch=").Append(Extension._useEnumeratorWithPrefetch).Append(' ');
-                    builder.Append("UseByteBufferDataTransfer=").Append(Extension._useByteBufferDataTransfer).Append(' ');
-                    builder.Append("DefaultNumPartitions=").Append(Extension._defaultNumPartitions).Append(' ');
-                    builder.Append("DefaultReplicationFactor=").Append(Extension._defaultReplicationFactor).Append(' ');
-                    builder.Append("DefaultConsumerInstances=").Append(Extension._defaultConsumerInstances).Append(' ');
-                    builder.Append("ConsumerConfigBuilder=").Append(Extension._consumerConfigBuilder?.ToString()).Append(' ');
-                    builder.Append("ProducerConfigBuilder=").Append(Extension._producerConfigBuilder?.ToString()).Append(' ');
-                    builder.Append("StreamsConfigBuilder=").Append(Extension._streamsConfigBuilder?.ToString()).Append(' ');
-                    builder.Append("TopicConfigBuilder=").Append(Extension._topicConfigBuilder?.ToString()).Append(' ');
-                    builder.Append("ManageEvents=").Append(Extension._manageEvents).Append(' ');
-                    builder.Append("ReadOnlyMode=").Append(Extension._readOnlyMode).Append(' ');
-                    builder.Append("DefaultSynchronizationTimeout=").Append(Extension._defaultSynchronizationTimeout).Append(' ');
+                    builder.Append("KeySerDesSelectorType=").Append(Extension.KeySerDesSelectorType).Append(' ');
+                    builder.Append("ValueSerDesSelectorType=").Append(Extension.ValueSerDesSelectorType).Append(' ');
+                    builder.Append("ValueContainerType=").Append(Extension.ValueContainerType).Append(' ');
+                    builder.Append("TopicPrefix=").Append(Extension.TopicPrefix).Append(' ');
+                    builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
+                    builder.Append("BootstrapServers=").Append(Extension.BootstrapServers).Append(' ');
+                    builder.Append("UseDeletePolicyForTopic=").Append(Extension.UseDeletePolicyForTopic).Append(' ');
+                    builder.Append("UseCompactedReplicator=").Append(Extension.UseCompactedReplicator).Append(' ');
+                    builder.Append("UseKNetStreams=").Append(Extension.UseKNetStreams).Append(' ');
+                    builder.Append("UseGlobalTable=").Append(Extension.UseGlobalTable).Append(' ');
+                    builder.Append("UsePersistentStorage=").Append(Extension.UsePersistentStorage).Append(' ');
+                    builder.Append("UseEnumeratorWithPrefetch=").Append(Extension.UseEnumeratorWithPrefetch).Append(' ');
+                    builder.Append("UseByteBufferDataTransfer=").Append(Extension.UseByteBufferDataTransfer).Append(' ');
+                    builder.Append("DefaultNumPartitions=").Append(Extension.DefaultNumPartitions).Append(' ');
+                    builder.Append("DefaultReplicationFactor=").Append(Extension.DefaultReplicationFactor).Append(' ');
+                    builder.Append("DefaultConsumerInstances=").Append(Extension.DefaultConsumerInstances).Append(' ');
+                    builder.Append("ConsumerConfig=").Append(Extension.ConsumerConfig?.ToString()).Append(' ');
+                    builder.Append("ProducerConfig=").Append(Extension.ProducerConfig?.ToString()).Append(' ');
+                    builder.Append("StreamsConfig=").Append(Extension.StreamsConfig?.ToString()).Append(' ');
+                    builder.Append("TopicConfig=").Append(Extension.TopicConfig?.ToString()).Append(' ');
+                    builder.Append("ManageEvents=").Append(Extension.ManageEvents).Append(' ');
+                    builder.Append("ReadOnlyMode=").Append(Extension.ReadOnlyMode).Append(' ');
+                    builder.Append("DefaultSynchronizationTimeout=").Append(Extension.DefaultSynchronizationTimeout).Append(' ');
+                    builder.Append("UseStorePrefixScan=").Append(Extension.UseStorePrefixScan).Append(' ');
+                    builder.Append("UseStoreSingleKeyLookup=").Append(Extension.UseStoreSingleKeyLookup).Append(' ');
+                    builder.Append("UseStoreKeyRange=").Append(Extension.UseStoreKeyRange).Append(' ');
+                    builder.Append("UseStoreReverse=").Append(Extension.UseStoreReverse).Append(' ');
+                    builder.Append("UseStoreReverseKeyRange=").Append(Extension.UseStoreReverseKeyRange).Append(' ');
                     _logFragment = builder.ToString();
                 }
 

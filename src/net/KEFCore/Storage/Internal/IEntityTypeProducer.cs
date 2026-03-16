@@ -72,6 +72,12 @@ public interface IEntityTypeProducer : IDisposable
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
+    /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
+    /// </summary>
+    /// <param name="prefixValues">The prefix</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues);
+    /// <summary>
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>
     void Start();

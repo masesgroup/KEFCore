@@ -30,10 +30,10 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </remarks>
-public class KEFCoreReverseRangeTableExpression(
+public class KEFCorePrefixScanTableExpression(
     IEntityType entityType,
-    IReadOnlyList<Expression>? rangeStart,
-    IReadOnlyList<Expression>? rangeEnd) : Expression, IPrintableExpression
+    IReadOnlyList<IProperty> prefixProperties,
+    IReadOnlyList<Expression> prefixExpressions) : Expression, IPrintableExpression
 {
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -48,14 +48,14 @@ public class KEFCoreReverseRangeTableExpression(
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public IReadOnlyList<Expression>? RangeStart { get; } = rangeStart;
+    public IReadOnlyList<IProperty> PrefixProperties { get; } = prefixProperties;
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public IReadOnlyList<Expression>? RangeEnd { get; } = rangeEnd;
+    public IReadOnlyList<Expression> PrefixExpressions { get; } = prefixExpressions;
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -77,7 +77,7 @@ public class KEFCoreReverseRangeTableExpression(
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
     void IPrintableExpression.Print(ExpressionPrinter expressionPrinter)
-        => expressionPrinter.Append(nameof(KEFCoreSingleKeyTableExpression) + ": Entity: " + EntityType.DisplayName()
-                                                                          + ": RangeStart: " + RangeStart?.ToString()
-                                                                          + ": RangeEnd: " + RangeEnd?.ToString());
+        => expressionPrinter.Append(nameof(KEFCoreTableExpression) + ": Entity: " + EntityType.DisplayName()
+                                                                   + ": PrefixProperties: " + PrefixProperties
+                                                                   + ": PrefixExpressions: " + PrefixExpressions);
 }
