@@ -117,7 +117,7 @@ jobs:
       - name: Create modified file list
         id: get_changed_files
         if: ${{ github.event_name == 'push' }}
-        uses: masesgroup/retrieve-changed-files@v3
+        uses: masesgroup/retrieve-changed-files@v4
         with:
           format: 'csv'
       - name: Check modified file list
