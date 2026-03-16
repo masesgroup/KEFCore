@@ -95,8 +95,24 @@
 Classes
 </h3>
     <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.ComplexTypeConverterFactory.html">ComplexTypeConverterFactory</a></dt>
+      <dd><p>Thread-safe implementation of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.ComplexTypeExtension.html">ComplexTypeExtension</a></dt>
+      <dd><p>Extension methods for flattened properties preparation</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.html">EntityExtractor</a></dt>
       <dd><p>This is an helper class to extract data information from Kafka Records stored in topics</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.html">JsonSupport</a></dt>
+      <dd><p>An helper class to centralize management of every Json conversion for <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html">DefaultKEFCoreSerDes</a>
+or any other serialization sub-system which needs Json conversion (typically when there isn't any <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> available in <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> instance)</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -104,9 +120,50 @@ Classes
       <dd><p>An helper class used to manage native and special types in serialization</p>
 </dd>
     </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.RecyclableMemoryStreamSupport.html">RecyclableMemoryStreamSupport</a></dt>
+      <dd><p>An helper class to centralize management of every <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> conversion for <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html">DefaultKEFCoreSerDes</a>
+or any other serialization sub-system which needs <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> transport</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.html">ValueContainerData</a></dt>
+      <dd><p>Implementation of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerData.html">IValueContainerData</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerMetadata.html">ValueContainerMetadata</a></dt>
+      <dd><p>Implements <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a></p>
+</dd>
+    </dl>
     <h3 id="interfaces">
 Interfaces
 </h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></dt>
+      <dd><p>The interface shall be implemented and used from any external converter which neeeds to interact with serialization sub-system to manage <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+      <dd><p>The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterLogging.html">IComplexTypeConverterLogging</a></dt>
+      <dd><p>The interface adds support to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> for logging behavior</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerData.html">IValueContainerData</a></dt>
+      <dd><p>Contains the data associated to a single data change</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a></dt>
+      <dd><p>Contains the metadata associated to a single data change</p>
+</dd>
+    </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a></dt>
       <dd><p>This is the main interface a class must implement to be a ValueContainer. More info <a href="https://masesgroup.github.io/KEFCore/articles/serialization.html">here</a></p>
@@ -116,7 +173,12 @@ Interfaces
 Enums
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a></dt>
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.PreferredConversionType.html">PreferredConversionType</a></dt>
+      <dd><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.PreferredConversionType.html">PreferredConversionType</a> defines the preferred conversion the underlying serializer expected</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a></dt>
       <dd><p>List of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> managed from <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html">PropertyData</a></p>
 </dd>
     </dl>

@@ -163,7 +163,7 @@ Class PropertyData  <a class="header-action link-secondary" title="View source" 
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ClrType">
   ClrType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L177"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L189"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The full name of the CLR <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>, null for well-known types</p>
@@ -196,15 +196,15 @@ public string? ClrType { get; set; }</code></pre>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ManagedType" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.ManagedType">
   ManagedType
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L169"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L180"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a> value of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType">ClrType</a></p>
+  <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> value of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType">ClrType</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NativeTypeMapper.ManagedTypes? ManagedType { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public WellKnownManagedTypes? ManagedType { get; set; }</code></pre>
   </div>
 
 
@@ -213,7 +213,7 @@ public string? ClrType { get; set; }</code></pre>
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html">NativeTypeMapper</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">ManagedTypes</a>?</dt>
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a>?</dt>
     <dd></dd>
   </dl>
 
@@ -228,7 +228,7 @@ public string? ClrType { get; set; }</code></pre>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_PropertyName" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.PropertyName">
   PropertyName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L165"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L176"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The value associated to the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlypropertybase.name">Name</a></p>
@@ -260,15 +260,16 @@ public string? ClrType { get; set; }</code></pre>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_SupportNull" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.SupportNull">
   SupportNull
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L173"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L184"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a> value of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType">ClrType</a> supports <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a></p>
+  <div class="markdown level1 summary"><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> value of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.html#MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_ClrType">ClrType</a> supports <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool SupportNull { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+public bool SupportNull { get; set; }</code></pre>
   </div>
 
 
@@ -292,7 +293,7 @@ public string? ClrType { get; set; }</code></pre>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_Json_Storage_PropertyData_Value" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.PropertyData.Value">
   Value
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L182"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/DefaultValueContainer.cs/#L194"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The raw value associated to the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a></p>

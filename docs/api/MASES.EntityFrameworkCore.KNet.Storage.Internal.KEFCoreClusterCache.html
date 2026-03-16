@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Class KEFCoreClusterCache | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class KEFCoreClusterCache | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache" class="text-break">
+Class KEFCoreClusterCache  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.html">Storage</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.html">Internal</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class KEFCoreClusterCache : IKEFCoreClusterCache</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">KEFCoreClusterCache</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache.html">IKEFCoreClusterCache</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCacheExtensions.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCacheExtensions_CreateCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_Microsoft_EntityFrameworkCore_Update_IUpdateAdapterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_">KEFCoreClusterCacheExtensions.CreateCluster(IKEFCoreClusterCache, IDbContextOptions, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt;, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCacheExtensions.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCacheExtensions_GetCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_">KEFCoreClusterCacheExtensions.GetCluster(IKEFCoreClusterCache, IDbContextOptions)</a>
+  </div>
+  </dd></dl>
+
+
+
+  <h2 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Default initializer</p>
+</div>
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.#ctor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
+  KEFCoreClusterCache(IKEFCoreTableFactory, IComplexTypeConverterFactory)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IComplexTypeConverterFactory complexTypeConverterFactory)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>tableFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.html">IKEFCoreTableFactory</a></dt>
+    <dd></dd>
+    <dt><code>complexTypeConverterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default initializer</p>
+</div>
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_CreateCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.CreateCluster*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_CreateCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_Microsoft_EntityFrameworkCore_Update_IUpdateAdapterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.CreateCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Infrastructure},Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,Microsoft.EntityFrameworkCore.Update.IUpdateAdapterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  CreateCluster(KEFCoreOptionsExtension, IDiagnosticsLogger&lt;Infrastructure&gt;, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Create new or get a previously allocated <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance associated to the <code class="paramref">options</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
+    <dd></dd>
+    <dt><code>infrastructureLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.infrastructure">Infrastructure</a>&gt;</dt>
+    <dd></dd>
+    <dt><code>valueGeneratorSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a></dt>
+    <dd></dd>
+    <dt><code>updateAdapterFactory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateadapterfactory">IUpdateAdapterFactory</a></dt>
+    <dd></dd>
+    <dt><code>designModel</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.Dispose*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)">
+  Dispose(IKEFCoreCluster)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Dispose an <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> referenced from <code class="paramref">cluster</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Dispose(IKEFCoreCluster cluster)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_GetCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.GetCluster*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_GetCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.GetCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
+  GetCluster(KEFCoreOptionsExtension)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance associated to the <code class="paramref">options</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L33" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

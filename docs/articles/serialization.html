@@ -192,6 +192,7 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
 <li>float?</li>
 <li>decimal</li>
 <li>decimal?</li>
+<li>byte[]</li>
 </ul>
 <h2 id="code-and-user-override">Code and user override</h2>
 <p>The code is based on three elements shall be available to <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> in order to work:</p>
@@ -219,11 +220,10 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
 <ul>
 <li>must implements the <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs"><code>IValueContainer&lt;T&gt;</code> interface</a></li>
 <li>must be a generic type</li>
-<li>must have at least a default constructor and a constructor which accept three parameters in this order:
+<li>must have at least a default constructor and a constructor which accept six parameters in this order:
 <ol>
-<li><code>IEntityType</code></li>
-<li><code>IProperty[]?</code></li>
-<li><code>object[]</code></li>
+<li><code>IValueContainerData</code> -&gt; the reference containing support information and data</li>
+<li><code>IComplexTypeConverterFactory?</code> -&gt; an optional reference to the factory where the instance will retrieve specialized serializer, see <a href="#complex-type-serialization">Complex type serialization</a></li>
 </ol>
 </li>
 </ul>
@@ -233,14 +233,12 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
     /// &lt;summary&gt;
     /// Initialize a new instance of &lt;see cref=&quot;CustomValueContainer{TKey}&quot;/&gt;
     /// &lt;/summary&gt;
-    /// &lt;param name=&quot;tName&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; requesting the ValueContainer for &lt;paramref name=&quot;rData&quot;/&gt;&lt;/param&gt;
-    /// &lt;param name=&quot;properties&quot;&gt;The set of &lt;see cref=&quot;IProperty&quot;/&gt; deducted from &lt;see cref=&quot;IEntityType.GetProperties&quot;/&gt;, if &lt;see langword=&quot;null&quot;/&gt; the implmenting instance of &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; shall deduct it&lt;/param&gt;
-    /// &lt;param name=&quot;rData&quot;&gt;The data, built from EFCore, to be stored in the ValueContainer&lt;/param&gt;
-    /// &lt;remarks&gt;This constructor is mandatory and it is used from KEFCore to request a ValueContainer&lt;/remarks&gt;
-    public CustomValueContainer(IEntityType tName, IProperty[]? properties, object[] rData)
+    /// &lt;param name=&quot;valueContainerData&quot;&gt;The &lt;see cref=&quot;IValueContainerData&quot;/&gt; containing the information to prepare an instance of &lt;see cref=&quot;DefaultValueContainer{TKey}&quot;/&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;complexTypeFactory&quot;&gt;The instance of &lt;see cref=&quot;IComplexTypeConverterFactory&quot;/&gt; will manage strong type conversion&lt;/param&gt;
+    /// &lt;remarks&gt;This constructor is mandatory and it is used from KEFCore to request a &lt;see cref=&quot;CustomValueContainer{TKey}&quot;/&gt;&lt;/remarks&gt;
+    public CustomValueContainer(IValueContainerData valueContainerData, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
-        properties ??= [.. tName.GetProperties()];
-
+        // add specific logic
     }
 
     /// &lt;summary&gt;
@@ -250,22 +248,33 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
     /// &lt;summary&gt;
     /// The CLR &lt;see cref=&quot;Type&quot;/&gt; of &lt;see cref=&quot;IEntityType&quot;/&gt;
     /// &lt;/summary&gt;
-    string ClrType { get; set; }
+    public string ClrType { get; set; }
     /// &lt;summary&gt;
     /// Returns back the raw data associated to the Entity contained in &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance
     /// &lt;/summary&gt;
-    /// &lt;param name=&quot;tName&quot;&gt;The requesting &lt;see cref=&quot;IEntityType&quot;/&gt; to get the data back, can &lt;see langword=&quot;null&quot;/&gt; if not available&lt;/param&gt;
-    /// &lt;param name=&quot;properties&quot;&gt;The set of &lt;see cref=&quot;IProperty&quot;/&gt; deducted from &lt;see cref=&quot;IEntityType.GetProperties&quot;/&gt;, if &lt;see langword=&quot;null&quot;/&gt; the implmenting instance of &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; shall deduct it&lt;/param&gt;
-    /// &lt;param name=&quot;array&quot;&gt;The array of object to be filled in with the data stored in the ValueContainer&lt;/param&gt;
-    void GetData(IEntityType tName, IProperty[]? properties, ref object[] array)
+    /// &lt;param name=&quot;metadata&quot;&gt;The requesting &lt;see cref=&quot;IValueContainerMetadata&quot;/&gt; to get the data back, can &lt;see langword=&quot;null&quot;/&gt; if not available&lt;/param&gt;
+    /// &lt;param name=&quot;allPropertyValues&quot;&gt;The array of object to be filled in with the data stored in the &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance for &lt;paramref name=&quot;metadata&quot;/&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;complexTypeFactory&quot;&gt;The optional &lt;see cref=&quot;IComplexTypeConverterFactory&quot;/&gt; instance to manage conversion of &lt;see cref=&quot;IComplexType&quot;/&gt;&lt;/param&gt;
+    public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }
     /// &lt;summary&gt;
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// &lt;/summary&gt;
-    /// &lt;returns&gt;A dictionary of properties (PropertyName, Value) filled in with the data stored in the ValueContainer&lt;/returns&gt;
-    public IReadOnlyDictionary&lt;string, object&gt; GetProperties()
+    /// &lt;param name=&quot;entityType&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; can be used to retrieve metadata, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
+    /// &lt;returns&gt;A dictionary of properties (PropertyName, Value) filled in with the data stored in the &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance&lt;/returns&gt;
+    public IDictionary&lt;string, object?&gt; GetProperties(IEntityType? entityType)
+    {
+        // add specific logic
+    }
+    /// &lt;summary&gt;
+    /// Returns back a dictionary of complex properties (PropertyName, Value) associated to the Entity
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;entityType&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; can be used to retrieve metadata, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
+    /// &lt;param name=&quot;complexTypeFactory&quot;&gt;The optional &lt;see cref=&quot;IComplexTypeConverterFactory&quot;/&gt; instance to manage conversion of &lt;see cref=&quot;IComplexType&quot;/&gt;&lt;/param&gt;
+    /// &lt;returns&gt;A dictionary of properties (PropertyName, Value) filled in with the data stored in the &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance&lt;/returns&gt;
+    public IDictionary&lt;string, object?&gt; GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }
@@ -369,14 +378,14 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
 }
 </code></pre>
 <h3 id="how-to-use-custom-types">How to use custom types</h3>
-<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<p><code>KEFCoreDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
 <li><strong>KeySerializationType</strong>: set the value of the <strong>Key SerDes</strong> type in the form <code>CustomSerDes&lt;&gt;</code></li>
 <li><strong>ValueSerializationType</strong>: set the value of the <strong>ValueContainer SerDes</strong> type in the form <code>CustomSerDes&lt;&gt;</code></li>
 <li><strong>ValueContainerType</strong>: set the value of the <strong>ValueContainer</strong> type in the form <code>CustomValueContainer&lt;&gt;</code></li>
 </ul>
 <blockquote>
-<p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KafkaDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> will apply the right generic type when needed.</p>
+<p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KEFCoreDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> will apply the right generic type when needed.</p>
 </blockquote>
 <h2 id="avro-serialization"><strong>Avro</strong> serialization</h2>
 <p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a> an user can choose two different Avro serializers:
@@ -495,7 +504,7 @@ The engine comes with two different encoders</p>
 </ul>
 <p>The extension converted this schema into code to speedup the exection of serialization/deserialization operations.</p>
 <h3 id="how-to-use-avro">How to use Avro</h3>
-<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<p><code>KEFCoreDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
 <li><strong>KeySerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code> or <code>AvroKEFCoreSerDes.Key.JsonRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultKeySerialization</code> (defaults to <code>AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code>), both types automatically manages simple or complex Primary Key</li>
 <li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.JsonRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code>)</li>
@@ -669,7 +678,7 @@ message ValueContainer {
 </ul>
 <p>The extension converted this schema into code to speedup the exection of serialization/deserialization operations.</p>
 <h3 id="how-to-use-protobuf">How to use Protobuf</h3>
-<p><code>KafkaDbContext</code> contains three properties can be used to override the default types:</p>
+<p><code>KEFCoreDbContext</code> contains three properties can be used to override the default types:</p>
 <ul>
 <li><strong>KeySerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.Key.BinaryRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultKeySerialization</code>, the type automatically manages simple or complex Primary Key</li>
 <li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
@@ -689,6 +698,151 @@ message ValueContainer {
 	// execute stuff here
 }
 </code></pre>
+<h2 id="complex-type-serialization">Complex type serialization</h2>
+<p>Some types can be marked as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a> and EF Core will manage them differently from other types associated to the model.
+An instance of EF Core using classic database provider will create, depends on the implementation, some extra columns to manage the content of each property of the CLR type marked as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a>.
+KEFCore works in a different way since the content stored in Kafka contains the serializable information of the Entity plus the references to other types in the model.
+KEFCore is based on the serializer described above and the new behavior supports conversion of ComplexType using two distinct behavior:</p>
+<ol>
+<li>Enabling the default serialization based on Json format the complex type are threated as POCO object and the sub-system leave the responsability to the .NET Json serializer</li>
+<li>Each type declared as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a> can have its own converter which manages the specific object using specialized classes implementing <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs"><code>IComplexTypeConverter</code> interface</a></li>
+</ol>
+<p>The <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs"><code>IComplexTypeConverter</code> interface</a> is very simple:</p>
+<pre><code class="lang-C#">public enum PreferredConversionType
+{
+    /// &lt;summary&gt;
+    /// The preferred conversion expect a &lt;see cref=&quot;string&quot;/&gt;, generally requested from text based serializers like Json
+    /// &lt;/summary&gt;
+    Text,
+    /// &lt;summary&gt;
+    /// The preferred conversion expect a &lt;see cref=&quot;byte&quot;/&gt; array, generally requested from binary based serializers like AVRO/Protobuf
+    /// &lt;/summary&gt;
+    Binary
+}
+
+/// &lt;summary&gt;
+/// The interface adds support to &lt;see cref=&quot;IComplexTypeConverter&quot;/&gt; for logging behavior
+/// &lt;/summary&gt;
+public interface IComplexTypeConverterLogging
+{
+    IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; Logging { get; }
+    void Register(IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; logging);
+}
+
+/// &lt;summary&gt;
+/// The interface shall be implemented and used from any external converter which neeeds to interact with serialization sub-system to manage &lt;see cref=&quot;IComplexProperty&quot;/&gt;
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;The implementation of &lt;see cref=&quot;Convert(PreferredConversionType, ref object?)&quot;/&gt; and &lt;see cref=&quot;ConvertBack(PreferredConversionType, ref object?)&quot;/&gt; shall be thread-safe and the class shall have at least a default initializer&lt;/remarks&gt;
+public interface IComplexTypeConverter : IComplexTypeConverterLogging
+{
+    /// &lt;summary&gt;
+    /// The set of &lt;see cref=&quot;Type&quot;/&gt; supported from the converter
+    /// &lt;/summary&gt;
+    IEnumerable&lt;Type&gt; SupportedClrTypes { get; }
+    bool Convert(PreferredConversionType conversionType, ref object? data);
+    bool ConvertBack(PreferredConversionType conversionType, ref object? data);
+}
+
+</code></pre>
+<p>A single instance can support multiple <code>Type</code>s (this is the type declared as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a>) and exposes two methods:</p>
+<ul>
+<li><code>Convert</code>: converts EF Core types declared as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a> to something manageable from the underlying serializer, so the final output can be one of the type declared in <a href="#default-managed-types">Default managed types</a></li>
+<li><code>ConvertBack</code>: converts back something manageable from the underlying serializer (i.e. one of the type declared in <a href="#default-managed-types">Default managed types</a>) to an EF Core types declared as <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a></li>
+</ul>
+<div class="TIP">
+<h5>Tip</h5>
+<p>For implementers: the parameter is passed with <code>ref</code> keyword to avoid an excessive memory pressure and the converted value shall replace the received input.</p>
+</div>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>The implementation of <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs"><code>IComplexTypeConverter</code> interface</a> shall be thread-safe.</p>
+</div>
+<p>An user can build an external library and can register the custom converters within the system using the singleton service implementing <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs"><code>IComplexTypeConverterFactory</code> interface</a>:</p>
+<ul>
+<li><p>using <code>GetService</code>:</p>
+<pre><code class="lang-C#">var context = new KakfaDbContext();
+context.GetService&lt;IComplexTypeConverterFactory&gt;();
+factory.Register(converter);
+</code></pre>
+</li>
+<li><p>using the methods available in <a href="kefcoredbcontext.html"><code>KEFCoreDbContext</code></a></p>
+</li>
+</ul>
+<h3 id="how-to-declare-a-complex-property">How to declare a complex property</h3>
+<p>Some good examples comes from <a href="https://www.learnentityframeworkcore.com/model/complex-type">https://www.learnentityframeworkcore.com/model/complex-type</a>.
+An user can choose two different approaches:</p>
+<ul>
+<li><p>if the user is declaring its own model the <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.complextypeattribute">ComplexType</a> is a good choice:</p>
+<pre><code class="lang-C#">[Table(&quot;TaxInfo&quot;, Schema = &quot;ComplexTest&quot;)]
+public class TaxInfo
+{
+    public int TaxInfoId { get; set; }
+    public char Code { get; set; }
+    public decimal Percentage { get; set; }
+    [Required]
+    public TaxInfoExtended TaxInfoExtended { get; set; }
+    public int ExtraValue { get; set; } // used to check index consistency since the method GetIndex of IComplexProperty is zero-based 
+}
+
+[ComplexType]
+public class TaxInfoExtended
+{
+    public int Code { get; set; }
+    public decimal Percentage { get; set; }
+}
+</code></pre>
+</li>
+<li><p>however many time this kind of classes are defined in assemblies outside the control of the user (as requested from <a href="https://github.com/masesgroup/KEFCore/issues/445">https://github.com/masesgroup/KEFCore/issues/445</a> the OPC-UA types are defined in specific assemblies) and EF Core offers the way to declare them programmatically:</p>
+<pre><code class="lang-C#">protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;TaxInfo&gt;(x =&gt; { x.ComplexProperty(y =&gt; y.TaxInfoExtended, y =&gt; { y.IsRequired(); }); });
+    base.OnModelCreating(modelBuilder);
+}
+</code></pre>
+</li>
+</ul>
+<p>If the user is using the Json serialization there is no problem with the type, but with AVRO and Protobuf the type cannot be managed. A serializer shall be defined and registered:</p>
+<pre><code class="lang-C#">public class TaxInfoExtendedConverter : IComplexTypeConverter
+{
+    public IEnumerable&lt;Type&gt; SupportedClrTypes =&gt; [typeof(TaxInfoExtended)];
+
+    public bool Convert(PreferredConversionType conversionType, ref object input)
+    {
+        if (input is TaxInfoExtended taxInfoExtended)
+        {
+            input = $&quot;{taxInfoExtended.CodeExtended}_{taxInfoExtended.PercentageExtended}&quot;;
+            return true;
+        }
+        return false;
+    }
+
+    public bool ConvertBack(PreferredConversionType conversionType, ref object input)
+    {
+        if (input is string str)
+        {
+            try
+            {
+                var values = str.Split(&quot;_&quot;);
+                var tie = new TaxInfoExtended
+                {
+                    CodeExtended = int.Parse(values[0]),
+                    PercentageExtended = decimal.Parse(values[1])
+                };
+                input = tie;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($&quot;TaxInfoExtendedConverter.ConvertBack failed for input '{str}': {ex}&quot;);
+                input = new TaxInfoExtended();
+                return true;
+            }
+        }
+        return false;
+    }
+}
+</code></pre>
+<p>The previous in only an example which converts, and converts back, <code>TaxInfoExtended</code> using a string which can be managed from underlying sub-system.</p>
 
 </article>
 

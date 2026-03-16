@@ -183,7 +183,7 @@ The behavior is intrinsic and does not need any extra call to the back-end.</p>
 <li>Blog belongs to the topic named [DatabaseName].Simple.Blog</li>
 <li>Post belongs to the topic named [DatabaseName].Simple.Post</li>
 </ul>
-<p>where DatabaseName is the property defined from <code>BloggingContext</code> see <a href="kafkadbcontext.html">KafkaDbContext</a>.</p>
+<p>where DatabaseName is the property defined from <code>BloggingContext</code> see <a href="kafkadbcontext.md">KafkaDbContext</a>.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
 <p>The entities Blog and Post are decorated with <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a>, if the attribute is missing the topic name becomes different and use the <a href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name"><strong>Name</strong></a> property of the Entity which belongs to the namespace defining it:</p>

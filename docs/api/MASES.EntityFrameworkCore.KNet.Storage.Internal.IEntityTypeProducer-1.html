@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1" class="text-break">
-Interface IEntityTypeProducer&lt;TKey&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L55"><i class="bi bi-code-slash"></i></a>
+Interface IEntityTypeProducer&lt;TKey&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L96"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -126,10 +126,31 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_EntityType">IEntityTypeProducer.EntityType</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_Commit_System_Collections_Generic_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKafkaRowBag__">IEntityTypeProducer.Commit(IEnumerable&lt;IKafkaRowBag&gt;)</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_Commit_System_Collections_Generic_IList_Java_Util_Concurrent_Future_Org_Apache_Kafka_Clients_Producer_RecordMetadata___System_Collections_Generic_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreRowBag__">IEntityTypeProducer.Commit(IList&lt;Future&lt;RecordMetadata&gt;&gt;, IEnumerable&lt;IKEFCoreRowBag&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_ValueBuffers">IEntityTypeProducer.ValueBuffers</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffers">IEntityTypeProducer.GetValueBuffers()</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffer_System_Object___">IEntityTypeProducer.GetValueBuffer(object[])</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersRange_System_Object___System_Object___">IEntityTypeProducer.GetValueBuffersRange(object[], object[])</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersReverse">IEntityTypeProducer.GetValueBuffersReverse()</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersReverseRange_System_Object___System_Object___">IEntityTypeProducer.GetValueBuffersReverseRange(object[], object[])</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersByPrefix_System_Object___">IEntityTypeProducer.GetValueBuffersByPrefix(object[])</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_Start">IEntityTypeProducer.Start()</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_EnsureSynchronized_System_Int64_">IEntityTypeProducer.EnsureSynchronized(long)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable.dispose">IDisposable.Dispose()</a>
@@ -149,10 +170,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_Exist__0_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.Exist(`0)">
   Exist(TKey)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L103"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Che if a <code class="paramref">key</code> exist</p>
+  <div class="markdown level1 summary"><p>Check if a <code class="paramref">key</code> exist</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -163,7 +184,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>key</code> <span class="xref">TKey</span></dt>
-    <dd><p>The key to check for existance</p>
+    <dd><p>The key to check for existence</p>
 </dd>
   </dl>
 
@@ -184,11 +205,44 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryAddKey_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryAddKey*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)">
-  TryGetValue(TKey, out ValueBuffer)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryAddKey_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryAddKey(System.Object[])">
+  TryAddKey(object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Try add a new item based on the values associated to the <code class="paramref">keyValues</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void TryAddKey(object[] keyValues)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>keyValues</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
+    <dd><p>The key values to manage</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValueBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValueBuffer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_1_TryGetValueBuffer__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer`1.TryGetValueBuffer(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)">
+  TryGetValueBuffer(TKey, out ValueBuffer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L110"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the values associated to the <code class="paramref">key</code></p>
@@ -196,7 +250,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">bool TryGetValue(TKey key, out ValueBuffer valueBuffer)</code></pre>
+    <pre><code class="lang-csharp hljs">bool TryGetValueBuffer(TKey key, out ValueBuffer valueBuffer)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -230,7 +284,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L55" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L96" class="edit-link">Edit this page</a>
         </div>
 
 
