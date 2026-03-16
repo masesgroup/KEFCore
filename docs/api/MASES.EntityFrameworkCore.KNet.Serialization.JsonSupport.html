@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Class JsonSupport | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class JsonSupport | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="An helper class to centralize management of every Json conversion for  or any other serialization sub-system which needs Json conversion (typically when there isn&#39;t any  available in  instance)">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport" class="text-break">
+Class JsonSupport  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L211"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.html">Serialization</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.Serialization.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>An helper class to centralize management of every Json conversion for <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.html">DefaultKEFCoreSerDes</a>
+or any other serialization sub-system which needs Json conversion (typically when there isn't any <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> available in <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> instance)</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class JsonSupport</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">JsonSupport</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_DefautJsonOptions" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.DefautJsonOptions">
+  DefautJsonOptions
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L216"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions">JsonSerializerOptions</a> used for serialization/deserialization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly JsonSerializerOptions? DefautJsonOptions</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions">JsonSerializerOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Key_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Key*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Key" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Key">
+  Key
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L287"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.html">JsonSupport</a> istance for keys</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonSupport Key { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.html">JsonSupport</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_ValueContainer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.ValueContainer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_ValueContainer" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.ValueContainer">
+  ValueContainer
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L293"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.html">JsonSupport</a> istance for <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> instances</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static JsonSupport ValueContainer { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.html">JsonSupport</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_System_Type_Java_Nio_ByteBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize(System.Type,Java.Nio.ByteBuffer)">
+  Deserialize(Type, ByteBuffer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L279"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the UTF-8 encoded text representing a single JSON value into a <code class="paramref">returnType</code>.
+The Stream will be read to completion.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Deserialize(Type type, ByteBuffer data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>A <code class="paramref">returnType</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">utf8Json</code> or <code class="paramref">returnType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid, the <code class="paramref">returnType</code> is not compatible with the JSON, or there is remaining data in the Stream.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter">JsonConverter</a> for <code class="paramref">returnType</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_System_Type_System_Byte___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize(System.Type,System.Byte[])">
+  Deserialize(Type, byte[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L250"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Parses the UTF-8 encoded text representing a single JSON value into an instance of a specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Deserialize(Type type, byte[] data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>A <code class="paramref">returnType</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">returnType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid.</p>
+<p>-or-</p>
+<p><code class="typeparamref">returnType</code> is not compatible with the JSON.</p>
+<p>-or-</p>
+<p>There is remaining data in the span beyond a single JSON value.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="paramref">returnType</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_System_Type_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize(System.Type,System.String)">
+  Deserialize(Type, string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L255"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Parses the text representing a single JSON value into an instance of a specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Deserialize(Type type, string data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>A <code class="paramref">returnType</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">json</code> or <code class="paramref">returnType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid.</p>
+<p>-or-</p>
+<p><code class="typeparamref">TValue</code> is not compatible with the JSON.</p>
+<p>-or-</p>
+<p>There is remaining data in the string beyond a single JSON value.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="paramref">returnType</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize__1_Java_Nio_ByteBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize``1(Java.Nio.ByteBuffer)">
+  Deserialize&lt;TData&gt;(ByteBuffer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L274"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Reads the UTF-8 encoded text representing a single JSON value into a <code class="typeparamref">TValue</code>.
+The Stream will be read to completion.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TData Deserialize&lt;TData&gt;(ByteBuffer data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TData</span></dt>
+    <dd><p>A <code class="typeparamref">TValue</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">utf8Json</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid, <code class="typeparamref">TValue</code> is not compatible with the JSON, or there is remaining data in the Stream.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter">JsonConverter</a> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize__1_System_Byte___" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize``1(System.Byte[])">
+  Deserialize&lt;TData&gt;(byte[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L240"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Parses the UTF-8 encoded text representing a single JSON value into an instance of the type specified by a generic type parameter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TData Deserialize&lt;TData&gt;(byte[] data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TData</span></dt>
+    <dd><p>A <code class="typeparamref">TValue</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid.</p>
+<p>-or-</p>
+<p><code class="typeparamref">TValue</code> is not compatible with the JSON.</p>
+<p>-or-</p>
+<p>There is remaining data in the span beyond a single JSON value.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Deserialize__1_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Deserialize``1(System.String)">
+  Deserialize&lt;TData&gt;(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L245"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Parses the text representing a single JSON value into an instance of the type specified by a generic type parameter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TData Deserialize&lt;TData&gt;(string data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TData</span></dt>
+    <dd><p>A <code class="typeparamref">TValue</code> representation of the JSON value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">json</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonexception">JsonException</a></dt>
+    <dd><p>The JSON is invalid.</p>
+<p>-or-</p>
+<p><code class="typeparamref">TValue</code> is not compatible with the JSON.</p>
+<p>-or-</p>
+<p>There is remaining data in the string beyond a single JSON value.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Serialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Serialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Serialize_System_Type_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Serialize(System.Type,System.Object)">
+  Serialize(Type, object)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L218"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the value of a specified type into a JSON string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Serialize(Type type, object data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The JSON string representation of the value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">inputType</code> is not compatible with <code class="paramref">value</code>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">inputType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="paramref">inputType</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsByteBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsByteBuffer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsByteBuffer_System_Type_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsByteBuffer(System.Type,System.Object)">
+  SerializeAsByteBuffer(Type, object)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L267"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the provided value to UTF-8 encoded JSON text and write it to the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] SerializeAsByteBuffer(Type type, object data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">inputType</code> is not compatible with <code class="paramref">value</code>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">utf8Json</code> or <code class="paramref">inputType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter">JsonConverter</a> for <code class="paramref">inputType</code>  or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsByteBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsByteBuffer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsByteBuffer__1___0_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsByteBuffer``1(``0)">
+  SerializeAsByteBuffer&lt;TData&gt;(TData)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L260"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the provided value to UTF-8 encoded JSON text and write it to the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] SerializeAsByteBuffer&lt;TData&gt;(TData data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <span class="xref">TData</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">utf8Json</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.serialization.jsonconverter">JsonConverter</a> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsBytes_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsBytes*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsBytes_System_Type_System_Object_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsBytes(System.Type,System.Object)">
+  SerializeAsBytes(Type, object)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L234"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the value of a specified type into a JSON string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] SerializeAsBytes(Type type, object data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The JSON string representation of the value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></dt>
+    <dd><p><code class="paramref">inputType</code> is not compatible with <code class="paramref">value</code>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">inputType</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="paramref">inputType</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsBytes_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsBytes*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_SerializeAsBytes__1___0_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.SerializeAsBytes``1(``0)">
+  SerializeAsBytes&lt;TData&gt;(TData)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L228"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the value of a type specified by a generic type parameter into a JSON string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] SerializeAsBytes&lt;TData&gt;(TData data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <span class="xref">TData</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>A JSON string representation of the value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Serialize_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Serialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_JsonSupport_Serialize__1___0_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.JsonSupport.Serialize``1(``0)">
+  Serialize&lt;TData&gt;(TData)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L223"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts the value of a type specified by a generic type parameter into a JSON string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Serialize&lt;TData&gt;(TData data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <span class="xref">TData</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>A JSON string representation of the value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TData</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></dt>
+    <dd><p>There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"></see> for <code class="typeparamref">TValue</code> or its serializable members.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L211" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

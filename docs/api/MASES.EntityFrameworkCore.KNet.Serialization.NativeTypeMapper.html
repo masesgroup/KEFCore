@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper" class="text-break">
-Class NativeTypeMapper  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L36"><i class="bi bi-code-slash"></i></a>
+Class NativeTypeMapper  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L477"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,15 +157,15 @@ Class NativeTypeMapper  <a class="header-action link-secondary" title="View sour
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.Type)">
   GetValue(Type?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L211"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L576"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> indicating if the types supports <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a></p>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> indicating if the types supports <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static (NativeTypeMapper.ManagedTypes, bool) GetValue(Type? type)</code></pre>
+    <pre><code class="lang-csharp hljs">public static (WellKnownManagedTypes, bool) GetValue(Type? type)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -177,8 +177,8 @@ Class NativeTypeMapper  <a class="header-action link-secondary" title="View sour
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt>(<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html">NativeTypeMapper</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">ManagedTypes</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>)</dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> if <code class="paramref">type</code> is mapped otherwise returns <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_Undefined">Undefined</a> and <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> for <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a> support</p>
+    <dt>(<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>)</dt>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> if <code class="paramref">type</code> is mapped otherwise returns <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_Undefined">Undefined</a> and <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> for <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a> support</p>
 </dd>
   </dl>
 
@@ -194,9 +194,9 @@ Class NativeTypeMapper  <a class="header-action link-secondary" title="View sour
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_System_ValueTuple_MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_ManagedTypes_System_Boolean__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes,System.Boolean})">
-  GetValue((ManagedTypes, bool))
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L221"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_GetValue_System_ValueTuple_MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_System_Boolean__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.GetValue(System.ValueTuple{MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes,System.Boolean})">
+  GetValue((WellKnownManagedTypes, bool))
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L586"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> mapped from the <code class="paramref">type</code> in input</p>
@@ -204,13 +204,13 @@ Class NativeTypeMapper  <a class="header-action link-secondary" title="View sour
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Type GetValue((NativeTypeMapper.ManagedTypes, bool) type)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Type GetValue((WellKnownManagedTypes, bool) type)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>type</code> (<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.html">NativeTypeMapper</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">ManagedTypes</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>)</dt>
-    <dd><p><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.ManagedTypes.html">NativeTypeMapper.ManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> indicating if the type needs support for <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a></p>
+    <dt><code>type</code> (<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>)</dt>
+    <dd><p><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.tuple-2">Tuple&lt;T1, T2&gt;</a> of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> with a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a> indicating if the type needs support for <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.nullable">Nullable</a></p>
 </dd>
   </dl>
 
@@ -231,11 +231,89 @@ Class NativeTypeMapper  <a class="header-action link-secondary" title="View sour
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_IsComplex_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.IsComplex*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_IsComplex_System_Nullable_MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.IsComplex(System.Nullable{MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes})">
+  IsComplex(WellKnownManagedTypes?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L596"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <code class="paramref">wellKnownManagedType</code> represent a complex type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsComplex(WellKnownManagedTypes? wellKnownManagedType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>wellKnownManagedType</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a>?</dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> to check</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <code class="paramref">wellKnownManagedType</code> is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_ComplexType">ComplexType</a> or <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_ComplexTypeAsJson">ComplexTypeAsJson</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_IsComplex_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.IsComplex*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_NativeTypeMapper_IsComplex_System_Nullable_System_Int32__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.NativeTypeMapper.IsComplex(System.Nullable{System.Int32})">
+  IsComplex(int?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L606"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <code class="paramref">wellKnownManagedType</code> represent a complex type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsComplex(int? wellKnownManagedType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>wellKnownManagedType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html">WellKnownManagedTypes</a> to check</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if <code class="paramref">wellKnownManagedType</code> is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_ComplexType">ComplexType</a> or <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.WellKnownManagedTypes.html#MASES_EntityFrameworkCore_KNet_Serialization_WellKnownManagedTypes_ComplexTypeAsJson">ComplexTypeAsJson</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L36" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L477" class="edit-link">Edit this page</a>
         </div>
 
 

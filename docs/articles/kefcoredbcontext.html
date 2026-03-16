@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>KEFCoreDbContext | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="KEFCoreDbContext | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="Describe what is and how use KEFCoreDbContext class from Entity Framework Core provider for Apache Kafka™">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/kefcoredbcontext.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="kefcore-kefcoredbcontext">KEFCore: KEFCoreDbContext</h1>
+
+<p><code>KEFCoreDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>:</p>
+<ul>
+<li><code>KEFCoreDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
+<li><code>KEFCoreDbContext</code> defines the following properties:
+<ul>
+<li><strong>KeySerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key</li>
+<li><strong>ValueSerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value</li>
+<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka™ record value</li>
+<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka™</li>
+<li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
+<li><strong>TopicPrefix</strong>: the optional user defined name which is used to prepend every Topic which belongs to the application</li>
+<li><del><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</del></li>
+<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka™</li>
+<li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
+<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persistent storage between multiple application startup</li>
+<li><strong>UseEnumeratorWithPrefetch</strong>: set to <strong>true</strong> to prefer enumerator instances able to do a prefetch on data speeding up execution, used if <strong>UseKNetStreams</strong> is <strong>true</strong> and <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
+<li><strong>UseByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <see cref="Java.Nio.ByteBuffer"></see> data exchange in serializer instances</li>
+<li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a></li>
+<li><del><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka™ Streams to manage data to or from topics</del></li>
+<li><strong>UseKNetStreams</strong>: Setting this property to true the KNet version of Apache Kafka™ Streams is used instead of standard Apache Kafka™ Streams, the property is used if <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
+<li><strong>UseGlobalTable</strong>: Setting this property to true the engine based on Streams (i.e. <strong>UseCompactedReplicator</strong> is false will use <code>Org.Apache.Kafka.Streams.Kstream.GlobalKTable</code> (<code>MASES.KNet.Streams.Kstream.GlobalKTable</code> if <strong>UseKNetStreams</strong> is true) instead of <code>Org.Apache.Kafka.Streams.Kstream.KTable</code> (<code>MASES.KNet.Streams.Kstream.KTable</code> if <strong>UseKNetStreams</strong> is true) to manage local storage of information.</li>
+<li><del><strong>ConsumerConfig</strong>: parameters to use for Producer</del></li>
+<li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
+<li><strong>StreamsConfig</strong>: parameters to use for Apche Kafka™ Streams application</li>
+<li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity</li>
+<li><strong>ManageEvents</strong>: Setting this property to true (default) the backend emits events on ChangeTracker</li>
+<li><strong>ReadOnlyMode</strong>: Setting this property to true (default is false) if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights AclOperation.WRITE and AclOperation.READ</li>
+<li><strong>DefaultSynchronizationTimeout</strong>: The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster. Setting this property to 0 the synchronization will be disabled</li>
+<li><strong>UseStorePrefixScan</strong>: Set this property to true to enable prefix scan in engine, default is false</li>
+<li><strong>UseStoreSingleKeyLookup</strong>: Set this property to true to enable single key look-up in engine, default is true</li>
+<li><strong>UseStoreKeyRange</strong>: Set this property to true to enable key range look-up in engine, default is true</li>
+<li><strong>UseStoreReverse</strong>: Set this property to true to enable reverse look-up in engine, default is true</li>
+<li><strong>UseStoreReverseKeyRange</strong>: Set this property to true to reverse key range look-up in engine, default is true</li>
+</ul>
+</li>
+</ul>
+<h2 id="how-to-use-kefcoredbcontext-class">How to use <code>KEFCoreDbContext</code> class</h2>
+<p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KEFCoreDbContext</code> automatically manages <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
+<ul>
+<li><code>KEFCoreDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
+<li><code>KEFCoreDbContext</code> setup the options needed to use an Apache Kafka™ cluster:
+<ul>
+<li><del>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KEFCoreDbContext</code></del></li>
+<li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property of <code>KEFCoreDbContext</code></li>
+<li>default <code>StreamsConfig</code> can be overridden using <strong>StreamsConfig</strong> property of <code>KEFCoreDbContext</code></li>
+<li>default <code>TopicConfig</code> can be overridden using <strong>TopicConfig</strong> property of <code>KEFCoreDbContext</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="default-consumerconfig">Default <strong>ConsumerConfig</strong></h3>
+<p>Over the <a href="https://kafka.apache.org/documentation/#consumerconfigs">Apache Kafka™ defaults</a> it applies:</p>
+<ul>
+<li>EnableAutoCommit is <strong>true</strong></li>
+<li>AutoOffsetReset set to <strong>EARLIEST</strong></li>
+<li>AllowAutoCreateTopics set to <strong>false</strong></li>
+</ul>
+<h3 id="default-producerconfig">Default <strong>ProducerConfig</strong></h3>
+<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#producerconfigs">Apache Kafka™ defaults</a></p>
+<h3 id="default-streamsconfig">Default <strong>StreamsConfig</strong></h3>
+<p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#streamsconfigs">Apache Kafka™ defaults</a></p>
+<h3 id="default-topicconfig">Default <strong>TopicConfig</strong></h3>
+<p>Over the <a href="https://kafka.apache.org/documentation/#topicconfigs">Apache Kafka™ defaults</a> it applies:</p>
+<ul>
+<li>DeleteRetentionMs set to 100 ms</li>
+<li>MinCleanableDirtyRatio set to 0.01</li>
+<li>SegmentMs set to 100 ms</li>
+<li>RetentionBytes set to 1073741824 bytes (1 Gb)</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/kefcoredbcontext.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

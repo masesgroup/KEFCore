@@ -101,7 +101,7 @@ Class BloggingContext  <a class="header-action link-secondary" title="View sourc
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class BloggingContext : KafkaDbContext, IInfrastructure&lt;IServiceProvider&gt;, IDbContextDependencies, IDbSetCache, IDbContextPoolable, IResettableService, IDisposable, IAsyncDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public class BloggingContext : KEFCoreDbContext, IInfrastructure&lt;IServiceProvider&gt;, IDbContextDependencies, IDbSetCache, IDbContextPoolable, IResettableService, IDisposable, IAsyncDisposable</code></pre>
   </div>
 
 
@@ -112,7 +112,7 @@ Class BloggingContext  <a class="header-action link-secondary" title="View sourc
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext">DbContext</a></div>
-      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html">KafkaDbContext</a></div>
+      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html">KEFCoreDbContext</a></div>
       <div><span class="xref">BloggingContext</span></div>
     </dd>
   </dl>
@@ -135,88 +135,124 @@ Class BloggingContext  <a class="header-action link-secondary" title="View sourc
     <dt>Inherited Members</dt>
     <dd>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_IsPerformanceVersion">KafkaDbContext.IsPerformanceVersion</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultConsumerConfig">KEFCoreDbContext.DefaultConsumerConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_EnableKEFCoreTracing">KafkaDbContext.EnableKEFCoreTracing</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultProducerConfig">KEFCoreDbContext.DefaultProducerConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerConfig">KafkaDbContext.DefaultConsumerConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultStreamsConfig">KEFCoreDbContext.DefaultStreamsConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultProducerConfig">KafkaDbContext.DefaultProducerConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultTopicConfig">KEFCoreDbContext.DefaultTopicConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultStreamsConfig">KafkaDbContext.DefaultStreamsConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_KeySerDesSelectorType">KEFCoreDbContext.KeySerDesSelectorType</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultTopicConfig">KafkaDbContext.DefaultTopicConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ValueSerDesSelectorType">KEFCoreDbContext.ValueSerDesSelectorType</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_KeySerDesSelectorType">KafkaDbContext.KeySerDesSelectorType</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ValueContainerType">KEFCoreDbContext.ValueContainerType</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ValueSerDesSelectorType">KafkaDbContext.ValueSerDesSelectorType</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseNameMatching">KEFCoreDbContext.UseNameMatching</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ValueContainerType">KafkaDbContext.ValueContainerType</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_BootstrapServers">KEFCoreDbContext.BootstrapServers</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseNameMatching">KafkaDbContext.UseNameMatching</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">KEFCoreDbContext.ApplicationId</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_BootstrapServers">KafkaDbContext.BootstrapServers</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_TopicPrefix">KEFCoreDbContext.TopicPrefix</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ApplicationId">KafkaDbContext.ApplicationId</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultNumPartitions">KEFCoreDbContext.DefaultNumPartitions</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DatabaseName">KafkaDbContext.DatabaseName</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultReplicationFactor">KEFCoreDbContext.DefaultReplicationFactor</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultNumPartitions">KafkaDbContext.DefaultNumPartitions</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultConsumerInstances">KEFCoreDbContext.DefaultConsumerInstances</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultReplicationFactor">KafkaDbContext.DefaultReplicationFactor</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UsePersistentStorage">KEFCoreDbContext.UsePersistentStorage</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_DefaultConsumerInstances">KafkaDbContext.DefaultConsumerInstances</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseEnumeratorWithPrefetch">KEFCoreDbContext.UseEnumeratorWithPrefetch</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UsePersistentStorage">KafkaDbContext.UsePersistentStorage</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseByteBufferDataTransfer">KEFCoreDbContext.UseByteBufferDataTransfer</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseEnumeratorWithPrefetch">KafkaDbContext.UseEnumeratorWithPrefetch</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseDeletePolicyForTopic">KEFCoreDbContext.UseDeletePolicyForTopic</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseByteBufferDataTransfer">KafkaDbContext.UseByteBufferDataTransfer</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">KEFCoreDbContext.UseCompactedReplicator</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseDeletePolicyForTopic">KafkaDbContext.UseDeletePolicyForTopic</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">KEFCoreDbContext.UseKNetStreams</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseCompactedReplicator">KafkaDbContext.UseCompactedReplicator</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">KEFCoreDbContext.UseGlobalTable</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_UseKNetStreams">KafkaDbContext.UseKNetStreams</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ConsumerConfig">KEFCoreDbContext.ConsumerConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ConsumerConfig">KafkaDbContext.ConsumerConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">KEFCoreDbContext.ProducerConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_ProducerConfig">KafkaDbContext.ProducerConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig">KEFCoreDbContext.StreamsConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_StreamsConfig">KafkaDbContext.StreamsConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_TopicConfig">KEFCoreDbContext.TopicConfig</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_TopicConfig">KafkaDbContext.TopicConfig</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ManageEvents">KEFCoreDbContext.ManageEvents</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnChangeEvent">KafkaDbContext.OnChangeEvent</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ReadOnlyMode">KEFCoreDbContext.ReadOnlyMode</a>
     </div>
     <div>
-      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KafkaDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KafkaDbContext_OnConfiguring_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_">KafkaDbContext.OnConfiguring(DbContextOptionsBuilder)</a>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">KEFCoreDbContext.DefaultSynchronizationTimeout</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseStorePrefixScan">KEFCoreDbContext.UseStorePrefixScan</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseStoreSingleKeyLookup">KEFCoreDbContext.UseStoreSingleKeyLookup</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseStoreKeyRange">KEFCoreDbContext.UseStoreKeyRange</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseStoreReverse">KEFCoreDbContext.UseStoreReverse</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseStoreReverseKeyRange">KEFCoreDbContext.UseStoreReverseKeyRange</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_WaitForSynchronization_System_TimeSpan_">KEFCoreDbContext.WaitForSynchronization(TimeSpan)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_WaitForSynchronization_System_Int64_">KEFCoreDbContext.WaitForSynchronization(long)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ResetStreams">KEFCoreDbContext.ResetStreams()</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_OnConfiguring_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_">KEFCoreDbContext.OnConfiguring(DbContextOptionsBuilder)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_RegisterComplexTypeConverter_System_Reflection_Assembly_">KEFCoreDbContext.RegisterComplexTypeConverter(Assembly)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_RegisterComplexTypeConverter_System_Type_">KEFCoreDbContext.RegisterComplexTypeConverter(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_RegisterComplexTypeConverter_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter_">KEFCoreDbContext.RegisterComplexTypeConverter(IComplexTypeConverter)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.set#microsoft-entityframeworkcore-dbcontext-set-1">DbContext.Set&lt;TEntity&gt;()</a>

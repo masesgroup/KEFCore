@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IComplexTypeConverterFactory | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IComplexTypeConverterFactory | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory" class="text-break">
+Interface IComplexTypeConverterFactory  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.html">Serialization</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.Serialization.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The interface shall be implemented and used from any external manager which neeeds to interact with serialization sub-system to managed <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a></p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IComplexTypeConverterFactory</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register(MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter)">
+  Register(IComplexTypeConverter)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Register a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Register(IComplexTypeConverter converter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>converter</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> with all <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> it manages (see <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html#MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter_SupportedClrTypes">SupportedClrTypes</a>)</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_System_Reflection_Assembly_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register(System.Reflection.Assembly)">
+  Register(Assembly)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Allocate and register all <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> in an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.reflection.assembly">Assembly</a> managing an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Register(Assembly convertersAssembly)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>convertersAssembly</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.reflection.assembly">Assembly</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.reflection.assembly">Assembly</a> containg the <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> will be used from <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html#MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_System_Type_">Register(Type)</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.Register(System.Type)">
+  Register(Type)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Allocate and register a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> managing an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Register(Type converterType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>converterType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> containing the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> will be used from <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html#MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Register_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter_">Register(IComplexTypeConverter)</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_Microsoft_EntityFrameworkCore_Metadata_IPropertyBase_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet(Microsoft.EntityFrameworkCore.Metadata.IPropertyBase,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter@)">
+  TryGet(IPropertyBase?, out IComplexTypeConverter)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The method is used from <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> to retrieve <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexProperty</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryGet(IPropertyBase? complexProperty, out IComplexTypeConverter converter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>complexProperty</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ipropertybase">IPropertyBase</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a> to be converted</p>
+</dd>
+    <dt><code>converter</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexProperty</code></p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> was found otherwise <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_System_String_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet(System.String,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter@)">
+  TryGet(string, out IComplexTypeConverter)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The method is used from constructor of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> to retrieve <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexPropertyType</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryGet(string complexPropertyType, out IComplexTypeConverter converter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>complexPropertyType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The CLR <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a> to be converted</p>
+</dd>
+    <dt><code>converter</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexPropertyType</code></p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> was found otherwise <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_TryGet_System_Type_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverter__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.TryGet(System.Type,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter@)">
+  TryGet(Type, out IComplexTypeConverter)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The method is used from constructor of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> to retrieve <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexPropertyType</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryGet(Type complexPropertyType, out IComplexTypeConverter converter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>complexPropertyType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd><p>The CLR <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> of the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a> to be converted</p>
+</dd>
+    <dt><code>converter</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> associated to <code class="paramref">complexPropertyType</code></p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> was found otherwise <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs/#L26" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

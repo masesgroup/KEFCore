@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Class KEFCoreSingletonOptions | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class KEFCoreSingletonOptions | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions" class="text-break">
+Class KEFCoreSingletonOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.html">Infrastructure</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.html">Internal</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions, ISingletonOptions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">KEFCoreSingletonOptions</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html">IKEFCoreSingletonOptions</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.isingletonoptions">ISingletonOptions</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+  <dl class="typelist extensionMethods">
+    <dt>Extension Methods</dt>
+    <dd>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_JVMKeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.JVMKeyType(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_JVMValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.JVMValueContainerType(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_KeyType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.KeyType(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_SerDesSelectorForKey_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.SerDesSelectorForKey(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_SerDesSelectorForValue_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.SerDesSelectorForValue(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_ValueContainerType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">KEFCoreDbContextOptionsExtensions.ValueContainerType(IKEFCoreSingletonOptions, IEntityType)</a>
+  </div>
+  </dd></dl>
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ApplicationId_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ApplicationId*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ApplicationId" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ApplicationId">
+  ApplicationId
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The application id associated to the application in use, shall be set if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string? ApplicationId { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ApplicationId_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
+If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_BootstrapServers_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.BootstrapServers*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_BootstrapServers" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.BootstrapServers">
+  BootstrapServers
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka™ cluster</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string? BootstrapServers { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ConsumerConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ConsumerConfig*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ConsumerConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ConsumerConfig">
+  ConsumerConfig
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L113"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a> used when <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ConsumerConfigBuilder? ConsumerConfig { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultConsumerInstances_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultConsumerInstances*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultConsumerInstances" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultConsumerInstances">
+  DefaultConsumerInstances
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default consumr instances used in conjunction with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int? DefaultConsumerInstances { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultNumPartitions_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultNumPartitions*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultNumPartitions" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultNumPartitions">
+  DefaultNumPartitions
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L107"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default number of partitions associated to each topic</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int DefaultNumPartitions { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultReplicationFactor_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultReplicationFactor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultReplicationFactor" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultReplicationFactor">
+  DefaultReplicationFactor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L111"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Default replication factor associated to each topic</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int DefaultReplicationFactor { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultSynchronizationTimeout_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultSynchronizationTimeout*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultSynchronizationTimeout" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.DefaultSynchronizationTimeout">
+  DefaultSynchronizationTimeout
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L125"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
+Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> to <code>0</code> the synchronization will be disabled</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long DefaultSynchronizationTimeout { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_DefaultSynchronizationTimeout_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> when <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.database">Database</a> is invoked.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_KeySerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.KeySerDesSelectorType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_KeySerDesSelectorType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.KeySerDesSelectorType">
+  KeySerDesSelectorType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for key serialization selection</p>
+<p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.html">DefaultKEFCoreSerDes.Key&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a>
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Type? KeySerDesSelectorType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ManageEvents_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ManageEvents*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ManageEvents" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ManageEvents">
+  ManageEvents
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L121"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine will emit events on <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.changetracker">ChangeTracker</a>, default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool ManageEvents { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ProducerConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ProducerConfig*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ProducerConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ProducerConfig">
+  ProducerConfig
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ProducerConfigBuilder? ProducerConfig { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ReadOnlyMode_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ReadOnlyMode*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ReadOnlyMode" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ReadOnlyMode">
+  ReadOnlyMode
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Acl.AclOperation.html#Org_Apache_Kafka_Common_Acl_AclOperation_WRITE">WRITE</a> and <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Acl.AclOperation.html#Org_Apache_Kafka_Common_Acl_AclOperation_READ">READ</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool ReadOnlyMode { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_StreamsConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.StreamsConfig*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_StreamsConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.StreamsConfig">
+  StreamsConfig
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig">StreamsConfig</a> used when <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual StreamsConfigBuilder? StreamsConfig { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.StreamsConfigBuilder.html">StreamsConfigBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_TopicConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.TopicConfig*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_TopicConfig" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.TopicConfig">
+  TopicConfig
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L119"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Common.TopicConfigBuilder.html">TopicConfigBuilder</a> used when topics shall be created</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopicConfigBuilder? TopicConfig { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Common.TopicConfigBuilder.html">TopicConfigBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_TopicPrefix_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.TopicPrefix*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_TopicPrefix" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.TopicPrefix">
+  TopicPrefix
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Database name means whe prefix of the topics associated to the instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html">KEFCoreDbContext</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string? TopicPrefix { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseByteBufferDataTransfer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseByteBufferDataTransfer" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseByteBufferDataTransfer">
+  UseByteBufferDataTransfer
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L105"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UseByteBufferDataTransfer { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseCompactedReplicator_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseCompactedReplicator*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseCompactedReplicator" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseCompactedReplicator">
+  UseCompactedReplicator
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka™ Streams</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Option will be removed soon&quot;)]
+public virtual bool UseCompactedReplicator { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseDeletePolicyForTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseDeletePolicyForTopic*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseDeletePolicyForTopic" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseDeletePolicyForTopic">
+  UseDeletePolicyForTopic
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Use <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> when a topic is created</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UseDeletePolicyForTopic { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseEnumeratorWithPrefetch_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseEnumeratorWithPrefetch*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseEnumeratorWithPrefetch" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseEnumeratorWithPrefetch">
+  UseEnumeratorWithPrefetch
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L103"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UseEnumeratorWithPrefetch { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseEnumeratorWithPrefetch_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Used only if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, not available in EFCore 6.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseGlobalTable_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseGlobalTable*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseGlobalTable" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseGlobalTable">
+  UseGlobalTable
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L99"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine based on Streams (i.e. <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>)
+will use <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.GlobalKTable-2.html">GlobalKTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.GlobalKTable-4.html">GlobalKTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
+instead of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>) to manage local storage of information.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UseGlobalTable { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseGlobalTable_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> is in contrast with <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ManageEvents">ManageEvents</a> that needs <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a>=<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> or a backend based on <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
+The behavior can be changed if the application based on KEFCore does not needs events (<a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ManageEvents">ManageEvents</a>=<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>) and/or there is a limitation using <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
+coming from other configuration parameters like <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a>: using the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> across the same cluster, the partitions of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
+are managed from multiple instances.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseKNetStreams_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseKNetStreams*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UseKNetStreams" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UseKNetStreams">
+  UseKNetStreams
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L97"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UseKNetStreams { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UsePersistentStorage_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UsePersistentStorage*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_UsePersistentStorage" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.UsePersistentStorage">
+  UsePersistentStorage
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka™ Streams is in use</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UsePersistentStorage { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ValueContainerType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ValueContainerType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ValueContainerType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ValueContainerType">
+  ValueContainerType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use as value container</p>
+<p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage.DefaultValueContainer-1.html">DefaultValueContainer&lt;TKey&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a>
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Type? ValueContainerType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ValueSerDesSelectorType_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ValueSerDesSelectorType*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ValueSerDesSelectorType" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ValueSerDesSelectorType">
+  ValueSerDesSelectorType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> to use for value serialization selection</p>
+<p>
+Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.html">DefaultKEFCoreSerDes.ValueContainer&lt;T&gt;</a>, any custom <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a> shall implement <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Serialization.ISerDesSelector-1.html">ISerDesSelector&lt;T&gt;</a>
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Type? ValueSerDesSelectorType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_Initialize_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.Initialize*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_Initialize_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.Initialize(Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions)">
+  Initialize(IDbContextOptions)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes the singleton options from the given <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Initialize(IDbContextOptions options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_Validate_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.Validate*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_Validate_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.Validate(Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions)">
+  Validate(IDbContextOptions)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L66"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Validates that the options in given <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a> have not
+changed when compared to the options already set here, and throws if they have.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Validate(IDbContextOptions options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>options</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L31" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
