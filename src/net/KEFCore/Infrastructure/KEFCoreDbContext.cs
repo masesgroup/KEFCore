@@ -196,6 +196,7 @@ public class KEFCoreDbContext : DbContext
     /// coming from other configuration parameters like <see cref="ApplicationId"/>: using the same <see cref="ApplicationId"/> across the same cluster, the partitions of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
     /// are managed from multiple instances.
     /// </remarks>
+    [Obsolete("ApplicationId must be unique per process — UseGlobalTable is no longer needed.")] 
     public virtual bool UseGlobalTable { get; set; } = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
