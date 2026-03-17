@@ -101,7 +101,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseCompactedReplicator { get; set; } = false;
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
-        public bool UseByteBufferDataTransfer { get; set; } = true;
+        public bool UseValueContainerByteBufferDataTransfer { get; set; } = true;
         public bool PreserveStreamsAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string TopicPrefix { get; set; } = "TestDB";
@@ -139,7 +139,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseCompactedReplicator = UseCompactedReplicator;
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
-            context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
+            context.UseValueContainerByteBufferDataTransfer = UseValueContainerByteBufferDataTransfer;
             context.ManageEvents = ManageEvents;
             context.DefaultSynchronizationTimeout = DefaultSynchronizationTimeout;
 

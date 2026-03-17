@@ -21,6 +21,7 @@
 #nullable enable
 
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;

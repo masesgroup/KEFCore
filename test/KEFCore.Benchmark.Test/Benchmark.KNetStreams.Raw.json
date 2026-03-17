@@ -1,7 +1,7 @@
 {
   "TopicPrefix": "TestDBBenchmark",
   "BootstrapServers": "192.168.1.114:9092",
-  "UseByteBufferDataTransfer": false,
+  "UseValueContainerByteBufferDataTransfer": false,
   "UseEnumeratorWithPrefetch": false,
   "NumberOfExecutions": 10
 }

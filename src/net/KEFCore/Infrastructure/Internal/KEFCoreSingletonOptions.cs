@@ -16,10 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Common;
-using MASES.KNet.Consumer;
-using MASES.KNet.Producer;
-using MASES.KNet.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -30,45 +28,46 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
 {
+    private string? _clusterId;
+
     /// <inheritdoc/>
     public virtual void Initialize(IDbContextOptions options)
     {
         var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        if (kefcoreOptions == null) return;
 
-        if (kefcoreOptions != null)
-        {
-            KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
-            ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
-            ValueContainerType = kefcoreOptions.ValueContainerType;
-            TopicPrefix = kefcoreOptions.TopicPrefix;
-            ApplicationId = kefcoreOptions.ApplicationId;
-            BootstrapServers = kefcoreOptions.BootstrapServers;
-            UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
-            UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
-            UseKNetStreams = kefcoreOptions.UseKNetStreams;
-            UseGlobalTable = kefcoreOptions.UseGlobalTable;
-            UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
-            UseEnumeratorWithPrefetch = kefcoreOptions.UseEnumeratorWithPrefetch;
-            UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
-            DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
-            DefaultConsumerInstances = kefcoreOptions.DefaultConsumerInstances;
-            DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
-            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kefcoreOptions.ConsumerConfig);
-            ProducerConfig = ProducerConfigBuilder.CreateFrom(kefcoreOptions.ProducerConfig);
-            StreamsConfig = StreamsConfigBuilder.CreateFrom(kefcoreOptions.StreamsConfig);
-            TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
-            ManageEvents = kefcoreOptions.ManageEvents;
-            ReadOnlyMode = kefcoreOptions.ReadOnlyMode;
-            DefaultSynchronizationTimeout = kefcoreOptions.DefaultSynchronizationTimeout;
-        }
+        _clusterId = kefcoreOptions.ClusterId;
+
+        KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
+        ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
+        ValueContainerType = kefcoreOptions.ValueContainerType;
+        BootstrapServers = kefcoreOptions.BootstrapServers;
+        UseKeyByteBufferDataTransfer = kefcoreOptions.UseKeyByteBufferDataTransfer;
+        UseValueContainerByteBufferDataTransfer = kefcoreOptions.UseValueContainerByteBufferDataTransfer;
+        UseKNetStreams = kefcoreOptions.UseKNetStreams;
+        UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
+        UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
+        // non-hash singleton (first-wins)
+        UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
+        DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
+        DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
+        TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
     }
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
         var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        if (kefcoreOptions == null) return;
 
-        if (kefcoreOptions != null
-            && BootstrapServers != kefcoreOptions.BootstrapServers)
+        if (kefcoreOptions.ClusterId != _clusterId
+            || kefcoreOptions.KeySerDesSelectorType != KeySerDesSelectorType
+            || kefcoreOptions.ValueSerDesSelectorType != ValueSerDesSelectorType
+            || kefcoreOptions.ValueContainerType != ValueContainerType
+            || kefcoreOptions.UseKeyByteBufferDataTransfer != UseKeyByteBufferDataTransfer
+            || kefcoreOptions.UseValueContainerByteBufferDataTransfer != UseValueContainerByteBufferDataTransfer
+            || kefcoreOptions.UseKNetStreams != UseKNetStreams
+            || kefcoreOptions.UsePersistentStorage != UsePersistentStorage
+            || kefcoreOptions.UseCompactedReplicator != UseCompactedReplicator)
         {
             throw new InvalidOperationException(
                 CoreStrings.SingletonOptionChanged(
@@ -83,44 +82,24 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual Type? ValueContainerType { get; private set; }
     /// <inheritdoc/>
-    public virtual string? TopicPrefix { get; private set; }
-    /// <inheritdoc/>
-    public virtual string? ApplicationId { get; private set; }
-    /// <inheritdoc/>
     public virtual string? BootstrapServers { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseDeletePolicyForTopic { get; private set; }
     /// <inheritdoc/>
-    [Obsolete("Option will be removed soon")] 
+    [Obsolete("Option will be removed soon")]
     public virtual bool UseCompactedReplicator { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseKNetStreams { get; private set; }
     /// <inheritdoc/>
-    public virtual bool UseGlobalTable { get; private set; }
-    /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
     /// <inheritdoc/>
-    public virtual bool UseEnumeratorWithPrefetch { get; private set; }
+    public virtual bool UseKeyByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
-    public virtual bool UseByteBufferDataTransfer { get; private set; }
+    public virtual bool UseValueContainerByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>
-    public virtual int? DefaultConsumerInstances { get; private set; }
-    /// <inheritdoc/>
     public virtual int DefaultReplicationFactor { get; private set; }
     /// <inheritdoc/>
-    public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
-    /// <inheritdoc/>
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool ManageEvents { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool ReadOnlyMode { get; private set; }
-    /// <inheritdoc/>
-    public virtual long DefaultSynchronizationTimeout { get; private set; }
 }

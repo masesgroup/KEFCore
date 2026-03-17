@@ -22,7 +22,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Serialization;
 using System.Collections.Concurrent;
 
-namespace MASES.EntityFrameworkCore.KNet;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     KEFCore specific extension methods for <see cref="DbContextOptionsBuilder" />.
@@ -126,13 +126,26 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static Type ValueContainerType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
-        return options.ValueContainerType?.MakeGenericType(KeyType(options, entityType))!;
+        return options.ValueContainerType?.MakeGenericType(options.KeyType(entityType))!;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
     /// </summary>
     public static Type JVMKeyType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
+        var selector = SerDesSelectorForKey(options, entityType);
+        if (options.UseKeyByteBufferDataTransfer)
+        {
+            if (selector == null || selector.ByteBufferSerDes == null)
+            {
+                throw new InvalidOperationException($"UseKeyByteBufferDataTransfer needs a serializer which supports it, current serializer is {options.KeySerDesSelectorType}");
+            }
+            return typeof(Java.Nio.ByteBuffer);
+        }
+        else if (selector == null || selector.ByteArraySerDes == null)
+        {
+            throw new InvalidOperationException($"Raw array data transfer needs a serializer which supports it, current serializer is {options.KeySerDesSelectorType}");
+        }
         return typeof(byte[]);
     }
     /// <summary>
@@ -141,7 +154,18 @@ public static class KEFCoreDbContextOptionsExtensions
     public static Type JVMValueContainerType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
         var selector = SerDesSelectorForValue(options, entityType);
-        if (options.UseByteBufferDataTransfer && selector != null && selector.ByteBufferSerDes != null) return typeof(Java.Nio.ByteBuffer);
+        if (options.UseValueContainerByteBufferDataTransfer)
+        {
+            if (selector == null || selector.ByteBufferSerDes == null)
+            {
+                throw new InvalidOperationException($"UseValueContainerByteBufferDataTransfer needs a serializer which supports it, current serializer is {options.ValueSerDesSelectorType}");
+            }
+            return typeof(Java.Nio.ByteBuffer);
+        }
+        else if (selector == null || selector.ByteArraySerDes == null)
+        {
+            throw new InvalidOperationException($"Byte array data transfer needs a serializer which supports it, current serializer is {options.ValueSerDesSelectorType}");
+        }
         return typeof(byte[]);
     }
 
@@ -154,7 +178,7 @@ public static class KEFCoreDbContextOptionsExtensions
     {
         return _keySerDesSelctors.GetOrAdd((options.KeySerDesSelectorType, entityType), (o) =>
         {
-            var selector = o.Item1?.MakeGenericType(KeyType(options, o.Item2))!;
+            var selector = o.Item1?.MakeGenericType(options.KeyType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }
@@ -168,7 +192,7 @@ public static class KEFCoreDbContextOptionsExtensions
     {
         return _valueContainerSerDesSelctors.GetOrAdd((options.ValueSerDesSelectorType, entityType), (o) =>
         {
-            var selector = o.Item1?.MakeGenericType(ValueContainerType(options, o.Item2))!;
+            var selector = o.Item1?.MakeGenericType(options.ValueContainerType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }

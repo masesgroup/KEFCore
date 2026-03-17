@@ -18,6 +18,7 @@
 
 // #define DEBUG_PERFORMANCE
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
@@ -157,6 +158,7 @@ public class KEFCoreDbContext : DbContext
     /// <summary>
     /// Default consumr instances used in conjunction with <see cref="UseCompactedReplicator"/>
     /// </summary>
+    [Obsolete("Option will be removed soon")] 
     public virtual int? DefaultConsumerInstances { get; set; } = null;
     /// <summary>
     /// Use persistent storage when Apache Kafka™ Streams is in use
@@ -168,9 +170,13 @@ public class KEFCoreDbContext : DbContext
     /// <remarks>Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6.</remarks>
     public virtual bool UseEnumeratorWithPrefetch { get; set; } = false;
     /// <summary>
-    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for the key
     /// </summary>
-    public virtual bool UseByteBufferDataTransfer { get; set; } = false;
+    public virtual bool UseKeyByteBufferDataTransfer { get; set; } = false;
+    /// <summary>
+    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for value buffer
+    /// </summary>
+    public virtual bool UseValueContainerByteBufferDataTransfer { get; set; } = false;
     /// <summary>
     /// Use <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when a topic is created
     /// </summary>
@@ -194,6 +200,7 @@ public class KEFCoreDbContext : DbContext
     /// coming from other configuration parameters like <see cref="ApplicationId"/>: using the same <see cref="ApplicationId"/> across the same cluster, the partitions of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
     /// are managed from multiple instances.
     /// </remarks>
+    [Obsolete("ApplicationId must be unique per process — UseGlobalTable is no longer needed.")] 
     public virtual bool UseGlobalTable { get; set; } = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
@@ -317,13 +324,14 @@ public class KEFCoreDbContext : DbContext
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithTopicPrefix(TopicPrefix);
-            o.WithUsePersistentStorage(UsePersistentStorage);
-            o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
-            o.WithUseByteBufferDataTransfer(UseByteBufferDataTransfer);
-            o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
+            o.WithPersistentStorage(UsePersistentStorage);
+            o.WithEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
+            o.WithKeyByteBufferDataTransfer(UseKeyByteBufferDataTransfer);
+            o.WithValueContainerByteBufferDataTransfer(UseValueContainerByteBufferDataTransfer);
+            o.WithDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
-            o.WithUseKNetStreams(UseKNetStreams);
-            o.WithUseGlobalTable(UseGlobalTable);
+            o.WithKNetStreams(UseKNetStreams);
+            o.WithGlobalTable(UseGlobalTable);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             o.WithManageEvents(ManageEvents);
             o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);

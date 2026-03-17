@@ -26,7 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 using System.ComponentModel;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     KEFCore specific extension methods for <see cref="IServiceCollection" />.
@@ -54,7 +54,7 @@ public static class KEFCoreServiceCollectionExtensions
     {
         var builder = new EntityFrameworkServicesBuilder(serviceCollection)
             .TryAdd<LoggingDefinitions, KEFCoreLoggingDefinitions>()
-            .TryAdd<EntityFrameworkCore.Internal.IEntityFinderSource, KEFCoreEntityFinderSource>()
+            .TryAdd<Microsoft.EntityFrameworkCore.Internal.IEntityFinderSource, KEFCoreEntityFinderSource>()
             .TryAdd<IDatabaseProvider, DatabaseProvider<KEFCoreOptionsExtension>>()
             .TryAdd<IValueGeneratorSelector, KEFCoreValueGeneratorSelector>()
             .TryAdd<IDatabase>(p => p.GetRequiredService<IKEFCoreDatabase>())

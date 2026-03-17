@@ -17,7 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using MASES.EntityFrameworkCore.KNet.Storage;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 ///     <para>
 ///         Instances of this class are returned from a call to
 ///         <see
-///             cref="KEFCoreDbContextOptionsExtensions.UseKEFCore(DbContextOptionsBuilder, string, string, Action{KEFCoreDbContextOptionsBuilder}?)" />
+///             cref="KEFCoreDbContextOptionsExtensions.UseKEFCore(DbContextOptionsBuilder, string?, string, Action{MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder}?)" />
 ///         and it is not designed to be directly constructed in your application code.
 ///     </para>
 ///     <para>
@@ -159,12 +159,12 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="useDeletePolicyForTopic">If <see langword="true" />, then will be used <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when the topic is created the first time.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
+    public virtual KEFCoreDbContextOptionsBuilder WithDeletePolicyForTopic(bool useDeletePolicyForTopic = false)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUseDeletePolicyForTopic(useDeletePolicyForTopic);
+        extension = extension.WithDeletePolicyForTopic(useDeletePolicyForTopic);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -202,12 +202,12 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="useKNetStreams">If <see langword="true" /> then KNet version of Apache Kafka Streams will be used instead of standard Apache Kafka Streams.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUseKNetStreams(bool useKNetStreams = false)
+    public virtual KEFCoreDbContextOptionsBuilder WithKNetStreams(bool useKNetStreams = false)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUseKNetStreams(useKNetStreams);
+        extension = extension.WithKNetStreams(useKNetStreams);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -225,12 +225,12 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="useGlobalTable">If <see langword="true" /> then <see cref="Org.Apache.Kafka.Streams.Kstream.GlobalKTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.GlobalKTable{K, V, TJVMK, TJVMV}"/> if <see cref="KEFCoreDbContext.UseKNetStreams"/> is <see langword="true" />.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUseGlobalTable(bool useGlobalTable = false)
+    public virtual KEFCoreDbContextOptionsBuilder WithGlobalTable(bool useGlobalTable = false)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUseGlobalTable(useGlobalTable);
+        extension = extension.WithGlobalTable(useGlobalTable);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -247,12 +247,12 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="usePersistentStorage">If <see langword="true"/> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUsePersistentStorage(bool usePersistentStorage = false)
+    public virtual KEFCoreDbContextOptionsBuilder WithPersistentStorage(bool usePersistentStorage = false)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUsePersistentStorage(usePersistentStorage);
+        extension = extension.WithPersistentStorage(usePersistentStorage);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -269,12 +269,12 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="useEnumeratorWithPrefetch">If <see langword="true" />, prefetch in enumeration will be used.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUseEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)
+    public virtual KEFCoreDbContextOptionsBuilder WithEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUseEnumeratorWithPrefetch(useEnumeratorWithPrefetch);
+        extension = extension.WithEnumeratorWithPrefetch(useEnumeratorWithPrefetch);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -282,20 +282,41 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     }
 
     /// <summary>
-    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for key
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="useByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred.</param>
+    /// <param name="useKeyByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred for key.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
+    public virtual KEFCoreDbContextOptionsBuilder WithKeyByteBufferDataTransfer(bool useKeyByteBufferDataTransfer = true)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithUseByteBufferDataTransfer(useByteBufferDataTransfer);
+        extension = extension.WithKeyByteBufferDataTransfer(useKeyByteBufferDataTransfer);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for value container
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useValueContainerByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred for value container.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithValueContainerByteBufferDataTransfer(bool useValueContainerByteBufferDataTransfer = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithValueContainerByteBufferDataTransfer(useValueContainerByteBufferDataTransfer);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
@@ -332,6 +353,7 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="defaultConsumerInstances">The default number of consumer instances to be used in conjunction with <see cref="WithCompactedReplicator(bool)"/></param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    [Obsolete("Option will be removed soon")]
     public virtual KEFCoreDbContextOptionsBuilder WithDefaultConsumerInstances(int? defaultConsumerInstances = null)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
@@ -374,6 +396,7 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     /// </remarks>
     /// <param name="consumerConfigBuilder">The <see cref="ConsumerConfigBuilder"/> where options are stored.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    [Obsolete("Option will be removed soon")]
     public virtual KEFCoreDbContextOptionsBuilder WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
