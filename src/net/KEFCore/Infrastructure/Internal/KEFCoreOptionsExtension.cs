@@ -61,7 +61,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         KeySerDesSelectorType = copyFrom.KeySerDesSelectorType;
         ValueSerDesSelectorType = copyFrom.ValueSerDesSelectorType;
         ValueContainerType = copyFrom.ValueContainerType;
-        UseByteBufferDataTransfer = copyFrom.UseByteBufferDataTransfer;
+        UseKeyByteBufferDataTransfer = copyFrom.UseKeyByteBufferDataTransfer;
+        UseValueContainerByteBufferDataTransfer = copyFrom.UseValueContainerByteBufferDataTransfer;
         BootstrapServers = copyFrom.BootstrapServers;
         UseKNetStreams = copyFrom.UseKNetStreams;
         UsePersistentStorage = copyFrom.UsePersistentStorage;
@@ -118,8 +119,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     public virtual Type ValueSerDesSelectorType { get; set; } = DefaultKEFCoreSerDes.DefaultValueContainerSerialization;
     /// <inheritdoc cref="KEFCoreDbContext.ValueContainerType"/>
     public virtual Type ValueContainerType { get; set; } = DefaultKEFCoreSerDes.DefaultValueContainer;
-    /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
-    public virtual bool UseByteBufferDataTransfer { get; set; } = false;
+    /// <inheritdoc cref="KEFCoreDbContext.UseKeyByteBufferDataTransfer"/>
+    public virtual bool UseKeyByteBufferDataTransfer { get; set; } = false;
+    /// <inheritdoc cref="KEFCoreDbContext.UseValueContainerByteBufferDataTransfer"/>
+    public virtual bool UseValueContainerByteBufferDataTransfer { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>
     public virtual string? BootstrapServers { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
@@ -137,7 +140,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     public virtual short DefaultReplicationFactor { get; set; } = 1;
     /// <inheritdoc cref="KEFCoreDbContext.TopicConfig"/>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
-    // explicit per il mismatch short/int nell'interfaccia
+    // explicit for mismatch short/int in the interface
     int IKEFCoreSingletonOptions.DefaultReplicationFactor => DefaultReplicationFactor;
 
     // ── Context-only options ──────────────────────────────────────────────
@@ -205,11 +208,18 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         clone.ValueContainerType = serializationType;
         return clone;
     }
-    /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
-    public virtual KEFCoreOptionsExtension WithByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
+    /// <inheritdoc cref="KEFCoreDbContext.UseKeyByteBufferDataTransfer"/>
+    public virtual KEFCoreOptionsExtension WithKeyByteBufferDataTransfer(bool useKeyByteBufferDataTransfer = true)
     {
         var clone = Clone();
-        clone.UseByteBufferDataTransfer = useByteBufferDataTransfer;
+        clone.UseKeyByteBufferDataTransfer = useKeyByteBufferDataTransfer;
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.UseValueContainerByteBufferDataTransfer"/>
+    public virtual KEFCoreOptionsExtension WithValueContainerByteBufferDataTransfer(bool useValueContainerByteBufferDataTransfer = true)
+    {
+        var clone = Clone();
+        clone.UseValueContainerByteBufferDataTransfer = useValueContainerByteBufferDataTransfer;
         return clone;
     }
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>
@@ -405,10 +415,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         string baSerdesName = Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.Serdes.ByteArraySerde>();
         string bbSerdesName = Class.ClassNameOf<MASES.KNet.Serialization.Serdes.ByteBufferSerde>();
 
-        builder.DefaultKeySerdeClass = this.JVMKeyType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
-                                                                                     : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
-        builder.DefaultValueSerdeClass = this.JVMValueContainerType(entityType) == typeof(byte[]) ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
-                                                                                                  : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
+        builder.DefaultKeySerdeClass = !UseKeyByteBufferDataTransfer ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
+                                                                     : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
+        builder.DefaultValueSerdeClass = !UseValueContainerByteBufferDataTransfer ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
+                                                                                  : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
         builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader)
                                                               : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
 
@@ -551,7 +561,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             || other.KeySerDesSelectorType != KeySerDesSelectorType
             || other.ValueSerDesSelectorType != ValueSerDesSelectorType
             || other.ValueContainerType != ValueContainerType
-            || other.UseByteBufferDataTransfer != UseByteBufferDataTransfer
+            || other.UseKeyByteBufferDataTransfer != UseKeyByteBufferDataTransfer
+            || other.UseValueContainerByteBufferDataTransfer != UseValueContainerByteBufferDataTransfer
             || other.UseKNetStreams != UseKNetStreams
             || other.UsePersistentStorage != UsePersistentStorage
             || other.UseCompactedReplicator != UseCompactedReplicator)
@@ -584,7 +595,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                     builder.Append("KeySerDesSelectorType=").Append(Extension.KeySerDesSelectorType).Append(' ');
                     builder.Append("ValueSerDesSelectorType=").Append(Extension.ValueSerDesSelectorType).Append(' ');
                     builder.Append("ValueContainerType=").Append(Extension.ValueContainerType).Append(' ');
-                    builder.Append("UseByteBufferDataTransfer=").Append(Extension.UseByteBufferDataTransfer).Append(' ');
+                    builder.Append("UseKeyByteBufferDataTransfer=").Append(Extension.UseKeyByteBufferDataTransfer).Append(' ');
+                    builder.Append("UseValueContainerByteBufferDataTransfer=").Append(Extension.UseValueContainerByteBufferDataTransfer).Append(' ');
                     builder.Append("BootstrapServers=").Append(Extension.BootstrapServers).Append(' ');
                     builder.Append("UseKNetStreams=").Append(Extension.UseKNetStreams).Append(' ');
                     builder.Append("UsePersistentStorage=").Append(Extension.UsePersistentStorage).Append(' ');
@@ -621,7 +633,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             hash.Add(Extension.KeySerDesSelectorType);
             hash.Add(Extension.ValueSerDesSelectorType);
             hash.Add(Extension.ValueContainerType);
-            hash.Add(Extension.UseByteBufferDataTransfer);
+            hash.Add(Extension.UseKeyByteBufferDataTransfer);
+            hash.Add(Extension.UseValueContainerByteBufferDataTransfer);
             hash.Add(Extension.UseKNetStreams);
             hash.Add(Extension.UsePersistentStorage);
             hash.Add(Extension.UseCompactedReplicator);
@@ -634,7 +647,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             && Extension.KeySerDesSelectorType == o.Extension.KeySerDesSelectorType
             && Extension.ValueSerDesSelectorType == o.Extension.ValueSerDesSelectorType
             && Extension.ValueContainerType == o.Extension.ValueContainerType
-            && Extension.UseByteBufferDataTransfer == o.Extension.UseByteBufferDataTransfer
+            && Extension.UseKeyByteBufferDataTransfer == o.Extension.UseKeyByteBufferDataTransfer
+            && Extension.UseValueContainerByteBufferDataTransfer == o.Extension.UseValueContainerByteBufferDataTransfer
             && Extension.UseKNetStreams == o.Extension.UseKNetStreams
             && Extension.UsePersistentStorage == o.Extension.UsePersistentStorage
             && Extension.UseCompactedReplicator == o.Extension.UseCompactedReplicator;

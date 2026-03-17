@@ -41,8 +41,10 @@ public interface IKEFCoreSingletonOptions : ISingletonOptions
     Type ValueSerDesSelectorType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ValueContainerType"/>
     Type ValueContainerType { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
-    bool UseByteBufferDataTransfer { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseKeyByteBufferDataTransfer"/>
+    bool UseKeyByteBufferDataTransfer { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseValueContainerByteBufferDataTransfer"/>
+    bool UseValueContainerByteBufferDataTransfer { get; }
 
     // ── Cluster — BootstrapServers used to resolve ClusterId (in hash) ────
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>

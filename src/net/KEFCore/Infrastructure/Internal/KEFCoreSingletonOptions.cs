@@ -36,14 +36,14 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
         var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
         if (kefcoreOptions == null) return;
 
-        // risolve e salva ClusterId una volta sola
         _clusterId = kefcoreOptions.ClusterId;
 
         KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
         ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
         ValueContainerType = kefcoreOptions.ValueContainerType;
-        BootstrapServers = kefcoreOptions.BootstrapServers;  // tenuto per reference/logging
-        UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
+        BootstrapServers = kefcoreOptions.BootstrapServers;
+        UseKeyByteBufferDataTransfer = kefcoreOptions.UseKeyByteBufferDataTransfer;
+        UseValueContainerByteBufferDataTransfer = kefcoreOptions.UseValueContainerByteBufferDataTransfer;
         UseKNetStreams = kefcoreOptions.UseKNetStreams;
         UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
         UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
@@ -63,7 +63,8 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
             || kefcoreOptions.KeySerDesSelectorType != KeySerDesSelectorType
             || kefcoreOptions.ValueSerDesSelectorType != ValueSerDesSelectorType
             || kefcoreOptions.ValueContainerType != ValueContainerType
-            || kefcoreOptions.UseByteBufferDataTransfer != UseByteBufferDataTransfer
+            || kefcoreOptions.UseKeyByteBufferDataTransfer != UseKeyByteBufferDataTransfer
+            || kefcoreOptions.UseValueContainerByteBufferDataTransfer != UseValueContainerByteBufferDataTransfer
             || kefcoreOptions.UseKNetStreams != UseKNetStreams
             || kefcoreOptions.UsePersistentStorage != UsePersistentStorage
             || kefcoreOptions.UseCompactedReplicator != UseCompactedReplicator)
@@ -92,7 +93,9 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
     /// <inheritdoc/>
-    public virtual bool UseByteBufferDataTransfer { get; private set; }
+    public virtual bool UseKeyByteBufferDataTransfer { get; private set; }
+    /// <inheritdoc/>
+    public virtual bool UseValueContainerByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>

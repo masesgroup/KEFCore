@@ -133,6 +133,19 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static Type JVMKeyType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
+        var selector = SerDesSelectorForKey(options, entityType);
+        if (options.UseKeyByteBufferDataTransfer)
+        {
+            if (selector == null || selector.ByteBufferSerDes == null)
+            {
+                throw new InvalidOperationException($"UseKeyByteBufferDataTransfer needs a serializer which supports it, current serializer is {options.KeySerDesSelectorType}");
+            }
+            return typeof(Java.Nio.ByteBuffer);
+        }
+        else if (selector == null || selector.ByteArraySerDes == null)
+        {
+            throw new InvalidOperationException($"Raw array data transfer needs a serializer which supports it, current serializer is {options.KeySerDesSelectorType}");
+        }
         return typeof(byte[]);
     }
     /// <summary>
@@ -141,7 +154,18 @@ public static class KEFCoreDbContextOptionsExtensions
     public static Type JVMValueContainerType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
         var selector = SerDesSelectorForValue(options, entityType);
-        if (options.UseByteBufferDataTransfer && selector != null && selector.ByteBufferSerDes != null) return typeof(Java.Nio.ByteBuffer);
+        if (options.UseValueContainerByteBufferDataTransfer)
+        {
+            if (selector == null || selector.ByteBufferSerDes == null)
+            {
+                throw new InvalidOperationException($"UseValueContainerByteBufferDataTransfer needs a serializer which supports it, current serializer is {options.ValueSerDesSelectorType}");
+            }
+            return typeof(Java.Nio.ByteBuffer);
+        }
+        else if (selector == null || selector.ByteArraySerDes == null)
+        {
+            throw new InvalidOperationException($"Byte array data transfer needs a serializer which supports it, current serializer is {options.ValueSerDesSelectorType}");
+        }
         return typeof(byte[]);
     }
 

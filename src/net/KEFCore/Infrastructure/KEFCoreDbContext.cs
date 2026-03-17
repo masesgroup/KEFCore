@@ -170,9 +170,13 @@ public class KEFCoreDbContext : DbContext
     /// <remarks>Used only if <see cref="UseCompactedReplicator"/> is <see langword="false"/> and <see cref="UseKNetStreams"/> is <see langword="true"/>, not available in EFCore 6.</remarks>
     public virtual bool UseEnumeratorWithPrefetch { get; set; } = false;
     /// <summary>
-    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for the key
     /// </summary>
-    public virtual bool UseByteBufferDataTransfer { get; set; } = false;
+    public virtual bool UseKeyByteBufferDataTransfer { get; set; } = false;
+    /// <summary>
+    /// Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for value buffer
+    /// </summary>
+    public virtual bool UseValueContainerByteBufferDataTransfer { get; set; } = false;
     /// <summary>
     /// Use <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when a topic is created
     /// </summary>
@@ -322,7 +326,8 @@ public class KEFCoreDbContext : DbContext
             o.WithTopicPrefix(TopicPrefix);
             o.WithPersistentStorage(UsePersistentStorage);
             o.WithEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
-            o.WithByteBufferDataTransfer(UseByteBufferDataTransfer);
+            o.WithKeyByteBufferDataTransfer(UseKeyByteBufferDataTransfer);
+            o.WithValueContainerByteBufferDataTransfer(UseValueContainerByteBufferDataTransfer);
             o.WithDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
             o.WithKNetStreams(UseKNetStreams);

@@ -282,20 +282,41 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     }
 
     /// <summary>
-    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for key
     /// </summary>
     /// <remarks>
     ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
     ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
     /// </remarks>
-    /// <param name="useByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred.</param>
+    /// <param name="useKeyByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred for key.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithByteBufferDataTransfer(bool useByteBufferDataTransfer = true)
+    public virtual KEFCoreDbContextOptionsBuilder WithKeyByteBufferDataTransfer(bool useKeyByteBufferDataTransfer = true)
     {
         var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
             ?? new KEFCoreOptionsExtension();
 
-        extension = extension.WithByteBufferDataTransfer(useByteBufferDataTransfer);
+        extension = extension.WithKeyByteBufferDataTransfer(useKeyByteBufferDataTransfer);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Setting this property to <see langword="true"/> the engine prefers to use <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for value container
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="useValueContainerByteBufferDataTransfer">If <see langword="true" />, <see cref="Java.Nio.ByteBuffer"/> data exchange will be preferred for value container.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithValueContainerByteBufferDataTransfer(bool useValueContainerByteBufferDataTransfer = true)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithValueContainerByteBufferDataTransfer(useValueContainerByteBufferDataTransfer);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 

@@ -19,7 +19,8 @@ _description: Describe what is and how use KEFCoreDbContext class from Entity Fr
   - **DefaultConsumerInstances**: the consumer instances to be allocated when UseCompactedReplicator is **true**
   - **UsePersistentStorage**: set to **true** to use a persistent storage between multiple application startup
   - **UseEnumeratorWithPrefetch**: set to **true** to prefer enumerator instances able to do a prefetch on data speeding up execution, used if **UseKNetStreams** is **true** and **UseCompactedReplicator** is **false**
-  - **UseByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances
+  - **UseKeyByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for keys
+  - **UseValueContainerByteBufferDataTransfer**: set to **true** to prefer <see cref="Java.Nio.ByteBuffer"/> data exchange in serializer instances for value container
   - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy)
   - ~~**UseCompactedReplicator**: Use `KNetCompactedReplicator` instead of Apache Kafka™ Streams to manage data to or from topics~~
   - **UseKNetStreams**: Setting this property to true the KNet version of Apache Kafka™ Streams is used instead of standard Apache Kafka™ Streams, the property is used if **UseCompactedReplicator** is **false**
