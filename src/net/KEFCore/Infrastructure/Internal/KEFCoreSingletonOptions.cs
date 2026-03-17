@@ -18,9 +18,6 @@
 
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Common;
-using MASES.KNet.Consumer;
-using MASES.KNet.Producer;
-using MASES.KNet.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -31,34 +28,45 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// </summary>
 public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
 {
+    private string? _clusterId;
+
     /// <inheritdoc/>
     public virtual void Initialize(IDbContextOptions options)
     {
         var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        if (kefcoreOptions == null) return;
 
-        if (kefcoreOptions != null)
-        {
-            KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
-            ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
-            ValueContainerType = kefcoreOptions.ValueContainerType;
-            BootstrapServers = kefcoreOptions.BootstrapServers;
-            UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
-            UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
-            UseKNetStreams = kefcoreOptions.UseKNetStreams;
-            UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
-            UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
-            DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
-            DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
-            TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
-        }
+        // risolve e salva ClusterId una volta sola
+        _clusterId = kefcoreOptions.ClusterId;
+
+        KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
+        ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
+        ValueContainerType = kefcoreOptions.ValueContainerType;
+        BootstrapServers = kefcoreOptions.BootstrapServers;  // tenuto per reference/logging
+        UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
+        UseKNetStreams = kefcoreOptions.UseKNetStreams;
+        UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
+        UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
+        // non-hash singleton (first-wins)
+        UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
+        DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
+        DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
+        TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
     }
     /// <inheritdoc/>
     public virtual void Validate(IDbContextOptions options)
     {
         var kefcoreOptions = options.FindExtension<KEFCoreOptionsExtension>();
+        if (kefcoreOptions == null) return;
 
-        if (kefcoreOptions != null
-            && BootstrapServers != kefcoreOptions.BootstrapServers)
+        if (kefcoreOptions.ClusterId != _clusterId
+            || kefcoreOptions.KeySerDesSelectorType != KeySerDesSelectorType
+            || kefcoreOptions.ValueSerDesSelectorType != ValueSerDesSelectorType
+            || kefcoreOptions.ValueContainerType != ValueContainerType
+            || kefcoreOptions.UseByteBufferDataTransfer != UseByteBufferDataTransfer
+            || kefcoreOptions.UseKNetStreams != UseKNetStreams
+            || kefcoreOptions.UsePersistentStorage != UsePersistentStorage
+            || kefcoreOptions.UseCompactedReplicator != UseCompactedReplicator)
         {
             throw new InvalidOperationException(
                 CoreStrings.SingletonOptionChanged(
@@ -77,7 +85,7 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseDeletePolicyForTopic { get; private set; }
     /// <inheritdoc/>
-    [Obsolete("Option will be removed soon")] 
+    [Obsolete("Option will be removed soon")]
     public virtual bool UseCompactedReplicator { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseKNetStreams { get; private set; }
