@@ -22,7 +22,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Serialization;
 using System.Collections.Concurrent;
 
-namespace MASES.EntityFrameworkCore.KNet;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     KEFCore specific extension methods for <see cref="DbContextOptionsBuilder" />.
@@ -126,7 +126,7 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static Type ValueContainerType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
-        return options.ValueContainerType?.MakeGenericType(KeyType(options, entityType))!;
+        return options.ValueContainerType?.MakeGenericType(options.KeyType(entityType))!;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
@@ -154,7 +154,7 @@ public static class KEFCoreDbContextOptionsExtensions
     {
         return _keySerDesSelctors.GetOrAdd((options.KeySerDesSelectorType, entityType), (o) =>
         {
-            var selector = o.Item1?.MakeGenericType(KeyType(options, o.Item2))!;
+            var selector = o.Item1?.MakeGenericType(options.KeyType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }
@@ -168,7 +168,7 @@ public static class KEFCoreDbContextOptionsExtensions
     {
         return _valueContainerSerDesSelctors.GetOrAdd((options.ValueSerDesSelectorType, entityType), (o) =>
         {
-            var selector = o.Item1?.MakeGenericType(ValueContainerType(options, o.Item2))!;
+            var selector = o.Item1?.MakeGenericType(options.ValueContainerType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;
         });
     }

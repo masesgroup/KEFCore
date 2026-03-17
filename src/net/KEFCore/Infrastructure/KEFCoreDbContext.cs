@@ -18,6 +18,7 @@
 
 // #define DEBUG_PERFORMANCE
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
@@ -157,6 +158,7 @@ public class KEFCoreDbContext : DbContext
     /// <summary>
     /// Default consumr instances used in conjunction with <see cref="UseCompactedReplicator"/>
     /// </summary>
+    [Obsolete("Option will be removed soon")] 
     public virtual int? DefaultConsumerInstances { get; set; } = null;
     /// <summary>
     /// Use persistent storage when Apache Kafka™ Streams is in use
@@ -317,13 +319,13 @@ public class KEFCoreDbContext : DbContext
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
             o.WithTopicPrefix(TopicPrefix);
-            o.WithUsePersistentStorage(UsePersistentStorage);
-            o.WithUseEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
-            o.WithUseByteBufferDataTransfer(UseByteBufferDataTransfer);
-            o.WithUseDeletePolicyForTopic(UseDeletePolicyForTopic);
+            o.WithPersistentStorage(UsePersistentStorage);
+            o.WithEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
+            o.WithByteBufferDataTransfer(UseByteBufferDataTransfer);
+            o.WithDeletePolicyForTopic(UseDeletePolicyForTopic);
             o.WithCompactedReplicator(UseCompactedReplicator);
-            o.WithUseKNetStreams(UseKNetStreams);
-            o.WithUseGlobalTable(UseGlobalTable);
+            o.WithKNetStreams(UseKNetStreams);
+            o.WithGlobalTable(UseGlobalTable);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
             o.WithManageEvents(ManageEvents);
             o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);

@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 
 [assembly: DesignTimeProviderServices("MASES.EntityFrameworkCore.KNet.Design.Internal.KEFCoreDesignTimeServices")]

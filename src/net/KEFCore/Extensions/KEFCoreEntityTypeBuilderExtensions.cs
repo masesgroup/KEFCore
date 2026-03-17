@@ -18,7 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 
-namespace MASES.EntityFrameworkCore.KNet;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     Extension methods for <see cref="EntityTypeBuilder" /> for the Kafka provider.

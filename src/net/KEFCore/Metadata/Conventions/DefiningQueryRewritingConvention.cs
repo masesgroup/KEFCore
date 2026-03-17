@@ -19,6 +19,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
+
 namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 
 /// <summary>

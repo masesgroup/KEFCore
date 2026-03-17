@@ -18,7 +18,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
-namespace MASES.EntityFrameworkCore.KNet;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     KEFCore specific extension methods for <see cref="DbContext.Database" />.

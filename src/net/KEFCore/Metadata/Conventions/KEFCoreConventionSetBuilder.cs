@@ -19,6 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;

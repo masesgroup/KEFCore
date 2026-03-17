@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -40,26 +41,15 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
             KeySerDesSelectorType = kefcoreOptions.KeySerDesSelectorType;
             ValueSerDesSelectorType = kefcoreOptions.ValueSerDesSelectorType;
             ValueContainerType = kefcoreOptions.ValueContainerType;
-            TopicPrefix = kefcoreOptions.TopicPrefix;
-            ApplicationId = kefcoreOptions.ApplicationId;
             BootstrapServers = kefcoreOptions.BootstrapServers;
             UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
             UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
             UseKNetStreams = kefcoreOptions.UseKNetStreams;
-            UseGlobalTable = kefcoreOptions.UseGlobalTable;
             UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
-            UseEnumeratorWithPrefetch = kefcoreOptions.UseEnumeratorWithPrefetch;
             UseByteBufferDataTransfer = kefcoreOptions.UseByteBufferDataTransfer;
             DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
-            DefaultConsumerInstances = kefcoreOptions.DefaultConsumerInstances;
             DefaultReplicationFactor = kefcoreOptions.DefaultReplicationFactor;
-            ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kefcoreOptions.ConsumerConfig);
-            ProducerConfig = ProducerConfigBuilder.CreateFrom(kefcoreOptions.ProducerConfig);
-            StreamsConfig = StreamsConfigBuilder.CreateFrom(kefcoreOptions.StreamsConfig);
             TopicConfig = TopicConfigBuilder.CreateFrom(kefcoreOptions.TopicConfig);
-            ManageEvents = kefcoreOptions.ManageEvents;
-            ReadOnlyMode = kefcoreOptions.ReadOnlyMode;
-            DefaultSynchronizationTimeout = kefcoreOptions.DefaultSynchronizationTimeout;
         }
     }
     /// <inheritdoc/>
@@ -83,10 +73,6 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual Type? ValueContainerType { get; private set; }
     /// <inheritdoc/>
-    public virtual string? TopicPrefix { get; private set; }
-    /// <inheritdoc/>
-    public virtual string? ApplicationId { get; private set; }
-    /// <inheritdoc/>
     public virtual string? BootstrapServers { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseDeletePolicyForTopic { get; private set; }
@@ -96,31 +82,13 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual bool UseKNetStreams { get; private set; }
     /// <inheritdoc/>
-    public virtual bool UseGlobalTable { get; private set; }
-    /// <inheritdoc/>
     public virtual bool UsePersistentStorage { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool UseEnumeratorWithPrefetch { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>
-    public virtual int? DefaultConsumerInstances { get; private set; }
-    /// <inheritdoc/>
     public virtual int DefaultReplicationFactor { get; private set; }
     /// <inheritdoc/>
-    public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
-    /// <inheritdoc/>
     public virtual TopicConfigBuilder? TopicConfig { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool ManageEvents { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool ReadOnlyMode { get; private set; }
-    /// <inheritdoc/>
-    public virtual long DefaultSynchronizationTimeout { get; private set; }
 }

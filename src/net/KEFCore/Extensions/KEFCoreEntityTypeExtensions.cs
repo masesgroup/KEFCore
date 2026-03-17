@@ -18,10 +18,9 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MASES.EntityFrameworkCore.KNet;
+namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
 /// <summary>
 ///     Extension methods for <see cref="IReadOnlyEntityType" /> for the Kafka provider.

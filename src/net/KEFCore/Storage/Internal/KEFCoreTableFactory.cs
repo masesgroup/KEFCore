@@ -17,6 +17,7 @@
 */
 
 using System.Collections.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 

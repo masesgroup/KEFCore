@@ -19,9 +19,6 @@
 #nullable enable
 
 using MASES.KNet.Common;
-using MASES.KNet.Consumer;
-using MASES.KNet.Producer;
-using MASES.KNet.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -30,53 +27,43 @@ namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
+/// <remarks>
+/// Options that affect the Service Provider (singleton-scoped).
+/// EF Core uses these to decide whether to reuse the cached SP.
+/// All contexts pointing to the same physical cluster share these.
+/// </remarks>
 public interface IKEFCoreSingletonOptions : ISingletonOptions
 {
+    // ── Serialization — in hash ───────────────────────────────────────────
     /// <inheritdoc cref="KEFCoreDbContext.KeySerDesSelectorType"/>
-    Type? KeySerDesSelectorType { get; }
+    Type KeySerDesSelectorType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ValueSerDesSelectorType"/>
-    Type? ValueSerDesSelectorType { get; }
+    Type ValueSerDesSelectorType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ValueContainerType"/>
-    Type? ValueContainerType { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.TopicPrefix"/>
-    string? TopicPrefix { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
-    string? ApplicationId { get; }
+    Type ValueContainerType { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
+    bool UseByteBufferDataTransfer { get; }
+
+    // ── Cluster — BootstrapServers used to resolve ClusterId (in hash) ────
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>
     string? BootstrapServers { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
-    bool UseDeletePolicyForTopic { get; }
+
+    // ── Backend architecture — in hash ────────────────────────────────────
+    /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
+    bool UseKNetStreams { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
+    bool UsePersistentStorage { get; }
     /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
     [Obsolete("Option will be removed soon")]
     bool UseCompactedReplicator { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
-    bool UseKNetStreams { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseGlobalTable"/>
-    bool UseGlobalTable { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
-    bool UsePersistentStorage { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseEnumeratorWithPrefetch"/>
-    bool UseEnumeratorWithPrefetch { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseByteBufferDataTransfer"/>
-    bool UseByteBufferDataTransfer { get; }
+
+    // ── Topic structure — NOT in hash (first-wins at topic creation) ──────
+    /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
+    bool UseDeletePolicyForTopic { get; }
     /// <inheritdoc cref="KEFCoreDbContext.DefaultNumPartitions"/>
     int DefaultNumPartitions { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.DefaultConsumerInstances"/>
-    int? DefaultConsumerInstances { get; }
     /// <inheritdoc cref="KEFCoreDbContext.DefaultReplicationFactor"/>
     int DefaultReplicationFactor { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
-    ConsumerConfigBuilder? ConsumerConfig { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
-    ProducerConfigBuilder? ProducerConfig { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
-    StreamsConfigBuilder? StreamsConfig { get; }
     /// <inheritdoc cref="KEFCoreDbContext.TopicConfig"/>
     TopicConfigBuilder? TopicConfig { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
-    bool ManageEvents { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.ReadOnlyMode"/>
-    bool ReadOnlyMode { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.DefaultSynchronizationTimeout"/>
-    long DefaultSynchronizationTimeout { get; }
 }

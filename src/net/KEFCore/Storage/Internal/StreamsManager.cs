@@ -22,6 +22,7 @@
 
 using Java.Lang;
 using Java.Util;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams;
 using System.Collections.Concurrent;
