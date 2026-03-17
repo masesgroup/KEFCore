@@ -57,4 +57,4 @@ jobs:
             Automated changes by GitHub action fix #254
           reviewers: masesdevelopers
           assignees: masesdevelopers
-          labels: enhancement
+          labels: enhancement, KEFCore, KEFCore SerDes, KEFCore Templates, .NET
