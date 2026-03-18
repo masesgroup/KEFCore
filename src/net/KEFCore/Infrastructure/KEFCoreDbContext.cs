@@ -33,7 +33,7 @@ using MASES.KNet.Streams;
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
 /// <summary>
-///     A <see cref="KEFCoreDbContext"/> instance represents a session with the Apache Kafka™ cluster and can be used to query and save
+///     A <see cref="KEFCoreDbContext"/> instance represents a session with the Apache Kafkaï¿½ cluster and can be used to query and save
 ///     instances of your entities. <see cref="KEFCoreDbContext"/> extends <see cref="DbContext"/> and it is a combination of the Unit Of Work and Repository patterns.
 /// </summary>
 /// <remarks>
@@ -134,14 +134,14 @@ public class KEFCoreDbContext : DbContext
     /// </summary>
     public virtual bool UseNameMatching { get; set; } = true;
     /// <summary>
-    /// The bootstrap servers of the Apache Kafka™ cluster
+    /// The bootstrap servers of the Apache Kafkaï¿½ cluster
     /// </summary>
     public virtual string? BootstrapServers { get; set; }
     /// <summary>
     /// The application id associated to the application in use, shall be set if <see cref="UseCompactedReplicator"/> is <see langword="false"/>
     /// </summary>
-    /// <remarks>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
-    /// If <see cref="UseGlobalTable"/> is <see langword="false"/> the partitions associated to each topic are shared across all instances with the same <see cref="ApplicationId"/> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</remarks>
+    /// <remarks>Choose the value carefully: upon restart its value is used to identify information on Apache Kafkaï¿½ cluster of previous running application.
+    /// If <see cref="UseGlobalTable"/> is <see langword="false"/> the partitions associated to each topic are shared across all instances with the same <see cref="ApplicationId"/> so be carefull to avoid other application consumes the data from Apache Kafkaï¿½ cluster and local stores does not contains the expected information.</remarks>
     public virtual string? ApplicationId { get; set; }
     /// <summary>
     /// Default number of partitions associated to each topic
@@ -157,7 +157,7 @@ public class KEFCoreDbContext : DbContext
     [Obsolete("Option will be removed soon")] 
     public virtual int? DefaultConsumerInstances { get; set; } = null;
     /// <summary>
-    /// Use persistent storage when Apache Kafka™ Streams is in use
+    /// Use persistent storage when Apache Kafkaï¿½ Streams is in use
     /// </summary>
     public virtual bool UsePersistentStorage { get; set; } = false;
     /// <summary>
@@ -178,12 +178,12 @@ public class KEFCoreDbContext : DbContext
     /// </summary>
     public bool UseDeletePolicyForTopic { get; set; } = false;
     /// <summary>
-    /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafka™ Streams
+    /// Use <see cref="MASES.KNet.Replicator.KNetCompactedReplicator{TKey, TValue}"/> instead of Apache Kafkaï¿½ Streams
     /// </summary>
     [Obsolete("Option will be removed soon")]
     public virtual bool UseCompactedReplicator { get; set; } = false;
     /// <summary>
-    /// Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams
+    /// Use KNet version of Apache Kafkaï¿½ Streams instead of standard Apache Kafkaï¿½ Streams
     /// </summary>
     public virtual bool UseKNetStreams { get; set; } = true;
     /// <summary>
@@ -196,7 +196,7 @@ public class KEFCoreDbContext : DbContext
     /// coming from other configuration parameters like <see cref="ApplicationId"/>: using the same <see cref="ApplicationId"/> across the same cluster, the partitions of <see cref="Org.Apache.Kafka.Streams.Kstream.KTable{K, V}"/> (<see cref="MASES.KNet.Streams.Kstream.KTable{K, V, TJVMK, TJVMV}"/> if <see cref="UseKNetStreams"/> is <see langword="true"/>)
     /// are managed from multiple instances.
     /// </remarks>
-    [Obsolete("ApplicationId must be unique per process — UseGlobalTable is no longer needed.")] 
+    [Obsolete("ApplicationId must be unique per process ï¿½ UseGlobalTable is no longer needed.")] 
     public virtual bool UseGlobalTable { get; set; } = false;
     /// <summary>
     /// The optional <see cref="ConsumerConfigBuilder"/> used when <see cref="UseCompactedReplicator"/> is <see langword="true"/>
@@ -224,10 +224,10 @@ public class KEFCoreDbContext : DbContext
     /// </summary>
     public virtual bool ReadOnlyMode { get; set; } = false;
     /// <summary>
-    /// The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
+    /// The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafkaï¿½ cluster.
     /// Setting <see cref="DefaultSynchronizationTimeout"/> to <see langword="0"/> the synchronization will be disabled
     /// </summary>
-    /// <remarks>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <see cref="DefaultSynchronizationTimeout"/> when <see cref="DatabaseFacade.EnsureCreated"/> of <see cref="DbContext.Database"/> is invoked.</remarks>
+    /// <remarks>The KEFCore provider try to synchronize with Apache Kafkaï¿½ cluster waiting at least <see cref="DefaultSynchronizationTimeout"/> when <see cref="DatabaseFacade.EnsureCreated"/> of <see cref="DbContext.Database"/> is invoked.</remarks>
     public virtual long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
     /// <summary>
     ///  Setting this property to <see langword="true"/> to enable prefix scan in engine
@@ -251,9 +251,9 @@ public class KEFCoreDbContext : DbContext
     public virtual bool UseStoreReverseKeyRange { get; set; } = true;
 
     /// <summary>
-    /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka™ backend
+    /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafkaï¿½ backend
     /// </summary>
-    /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka™ backend</param>
+    /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafkaï¿½ backend</param>
     /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTime"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(TimeSpan waitTime)
@@ -261,9 +261,9 @@ public class KEFCoreDbContext : DbContext
         return WaitForSynchronization((long)waitTime.TotalMilliseconds);
     }
     /// <summary>
-    /// Invoke the method to wait a timeout defined from <paramref name="waitTimeMs"/> for synchonization with Apache Kafka™ backend
+    /// Invoke the method to wait a timeout defined from <paramref name="waitTimeMs"/> for synchonization with Apache Kafkaï¿½ backend
     /// </summary>
-    /// <param name="waitTimeMs">The time expressed as milliseconds to wait for synchonization with Apache Kafka™ backend</param>
+    /// <param name="waitTimeMs">The time expressed as milliseconds to wait for synchonization with Apache Kafkaï¿½ backend</param>
     /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTimeMs"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(long waitTimeMs = Timeout.Infinite)

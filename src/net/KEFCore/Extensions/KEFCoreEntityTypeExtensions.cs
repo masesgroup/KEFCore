@@ -73,32 +73,27 @@ public static class KEFCoreEntityTypeExtensions
     public static ConfigurationSource? GetDefiningQueryConfigurationSource(this IConventionEntityType entityType)
         => entityType.FindAnnotation(KEFCoreAnnotationNames.DefiningQuery)?.GetConfigurationSource();
 
+
     /// <summary>
     /// Creates the topic name
     /// </summary>
-    public static string TopicName(this IEntityType entityType, KEFCoreOptionsExtension options)
-    {
-        return TopicName(entityType, options.TopicPrefix);
-    }
+    public static string GetKafkaTopicName(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicName)?.Value as string
+           ?? entityType.Name;  // fallback se convention non è stata applicata
+
     /// <summary>
     /// Creates the topic name
     /// </summary>
-    public static string TopicName(this IEntityType entityType, string? topicPrefix = null)
-    {
-        var schema = entityType.Name;
-        var table = entityType.ClrType.GetCustomAttribute<TableAttribute>();
-        if (table != null)
-        {
-            schema = table.Schema != null ? $"{table.Schema}.{table.Name}" : $"{table.Name}";
-        }
-        return string.IsNullOrWhiteSpace(topicPrefix) ? schema : $"{topicPrefix}.{schema}";
-    }
+    public static string TopicName(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicName)?.Value as string
+           ?? entityType.Name;
+
     /// <summary>
     /// Creates the storage id
     /// </summary>
-    public static string StorageIdForTable(this IEntityType entityType, KEFCoreOptionsExtension options)
+    public static string StorageIdForTable(this IEntityType entityType)
     {
-        return $"Table_{entityType.TopicName(options)}";
+        return $"Table_{entityType.TopicName()}";
     }
     /// <summary>
     /// Creates the application id
@@ -126,6 +121,7 @@ public static class KEFCoreEntityTypeExtensions
     /// <summary>
     /// Gets consumer instances
     /// </summary>
+    [Obsolete("Option will be removed soon")]
     public static int? ConsumerInstances(this IEntityType entityType, KEFCoreOptionsExtension options)
     {
         var consumerInstances = options.DefaultConsumerInstances;

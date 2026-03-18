@@ -36,11 +36,11 @@ public interface IKEFCoreSingletonOptions : ISingletonOptions
 {
     // ── Serialization — in hash ───────────────────────────────────────────
     /// <inheritdoc cref="KEFCoreDbContext.KeySerDesSelectorType"/>
-    Type KeySerDesSelectorType { get; }
+    Type? KeySerDesSelectorType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ValueSerDesSelectorType"/>
-    Type ValueSerDesSelectorType { get; }
+    Type? ValueSerDesSelectorType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ValueContainerType"/>
-    Type ValueContainerType { get; }
+    Type? ValueContainerType { get; }
     /// <inheritdoc cref="KEFCoreDbContext.UseKeyByteBufferDataTransfer"/>
     bool UseKeyByteBufferDataTransfer { get; }
     /// <inheritdoc cref="KEFCoreDbContext.UseValueContainerByteBufferDataTransfer"/>

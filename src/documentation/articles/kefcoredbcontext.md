@@ -13,7 +13,6 @@ _description: Describe what is and how use KEFCoreDbContext class from Entity Fr
   - **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka™ record value
   - **BootstrapServers**: the server hosting the broker of Apache Kafka™
   - **ApplicationId**: the application identifier used to identify the context
-  - **TopicPrefix**: the optional user defined name which is used to prepend every Topic which belongs to the application
   - ~~**DefaultNumPartitions**: the default number of partitions used when topics are created for each entity~~
   - **DefaultReplicationFactor**: the replication factor to use when data are stored in Apache Kafka™
   - **DefaultConsumerInstances**: the consumer instances to be allocated when UseCompactedReplicator is **true**

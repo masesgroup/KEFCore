@@ -130,27 +130,6 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
     }
 
     /// <summary>
-    ///     Define the prefix to be added to the topic name deducted from the model
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="topicPrefix">The prefix to be added to the topic name deducted from the model.</param>
-    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public virtual KEFCoreDbContextOptionsBuilder WithTopicPrefix(string? topicPrefix)
-    {
-        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
-            ?? new KEFCoreOptionsExtension();
-
-        extension = extension.WithTopicPrefix(topicPrefix);
-
-        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
-
-        return this;
-    }
-
-    /// <summary>
     ///     Enables <see href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</see> when the topic is created the first time
     /// </summary>
     /// <remarks>
