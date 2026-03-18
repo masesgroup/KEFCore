@@ -340,6 +340,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<BlogComplex>().HasKey(c => new { c.BlogId, c.Rating });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
