@@ -29,7 +29,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCoreCluster cluster) : QueryContext(dependencies)
+public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCoreCluster cluster, IKEFCoreDatabase database) : QueryContext(dependencies)
 {
     /// <summary>
     /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/>
@@ -38,7 +38,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType)
     {
-        return cluster.GetValueBuffers(entityType);
+        return cluster.GetValueBuffers(database, entityType);
     }
     /// <summary>
     /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> with <paramref name="keyValues"/>
@@ -48,7 +48,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffer(IEntityType entityType, object?[] keyValues)
     {
-        var result = cluster.GetValueBuffer(entityType, keyValues);
+        var result = cluster.GetValueBuffer(database, entityType, keyValues);
         return result.HasValue ? [result.Value] : [];
     }
     /// <summary>
@@ -62,7 +62,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         IEntityType entityType,
         object?[]? rangeStart,
         object?[]? rangeEnd)
-        => cluster.GetValueBuffersRange(entityType, rangeStart, rangeEnd);
+        => cluster.GetValueBuffersRange(database, entityType, rangeStart, rangeEnd);
 
     /// <summary>
     /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> in reverse order
@@ -70,7 +70,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType)
-        => cluster.GetValueBuffersReverse(entityType);
+        => cluster.GetValueBuffersReverse(database, entityType);
 
     /// <summary>
     /// Retrieve <see cref="ValueBuffer"/> for the specified <see cref="IEntityType"/> in the reverse range between <paramref name="rangeStart"/> and <paramref name="rangeEnd"/>
@@ -83,7 +83,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         IEntityType entityType,
         object?[]? rangeStart, 
         object?[]? rangeEnd)
-        => cluster.GetValueBuffersReverseRange(entityType, rangeStart, rangeEnd);
+        => cluster.GetValueBuffersReverseRange(database, entityType, rangeStart, rangeEnd);
 
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
@@ -92,5 +92,5 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     /// <param name="prefixValues">The prefix</param>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object?[] prefixValues)
-        => cluster.GetValueBuffersByPrefix(entityType, prefixValues);
+        => cluster.GetValueBuffersByPrefix(database, entityType, prefixValues);
 }

@@ -56,6 +56,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     public interface IStreamsManager
     {
         /// <summary>
+        /// Register an instance of <see cref="IKEFCoreDatabase"/>
+        /// </summary>
+        /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
+        void Register(IKEFCoreDatabase database);
+        /// <summary>
+        /// Unregister an instance of <see cref="IKEFCoreDatabase"/>
+        /// </summary>
+        /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
+        void Unregister(IKEFCoreDatabase database);
+        /// <summary>
         /// Creates and start the topology
         /// </summary>
         void CreateAndStartTopology();
@@ -233,11 +243,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             MASES.KNet.Streams.StreamsBuilder.OverrideProperties = PropertyUpdate;
         }
 
-        public StreamsManager(IKEFCoreCluster kefcoreCluster, IEntityType entityType)
+        public StreamsManager(IKEFCoreCluster kefcoreCluster)
         {
             _kefcoreCluster = kefcoreCluster;
             _updateAdapter = kefcoreCluster.UpdateAdapterFactory.Create();
-            _streamsConfig ??= kefcoreCluster.Options.StreamsOptions(entityType);
+            _streamsConfig ??= kefcoreCluster.Options.StreamsOptions();
             _usePersistentStorage = _kefcoreCluster.Options.UsePersistentStorage;
             _useEnumeratorWithPrefetch = _kefcoreCluster.Options.UseEnumeratorWithPrefetch;
             _useGlobalTable = _kefcoreCluster.Options.UseGlobalTable;
@@ -306,9 +316,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
-            var topicName = entityType.TopicName(_kefcoreCluster.Options);
+            var topicName = entityType.TopicName();
 
-            string storageId = entityType.StorageIdForTable(_kefcoreCluster.Options);
+            string storageId = entityType.StorageIdForTable();
             storageId = _usePersistentStorage ? storageId : System.Diagnostics.Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
             lock (_managedEntities)
@@ -429,6 +439,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 return wasRunning;
             }
+        }
+
+        public void Register(IKEFCoreDatabase database)
+        {
+
+
+
+        }
+
+        public void Unregister(IKEFCoreDatabase database)
+        {
+
         }
 
         bool _started = false;

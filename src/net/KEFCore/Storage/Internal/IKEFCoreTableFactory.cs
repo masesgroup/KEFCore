@@ -28,11 +28,11 @@ public interface IKEFCoreTableFactory
     /// <summary>
     /// Allocate a new <see cref="IKEFCoreTable"/>
     /// </summary>
-    /// <param name="cluster"></param>
+    /// <param name="database"></param>
     /// <param name="topicName"></param>
     /// <param name="entityType"></param>
     /// <returns></returns>
-    IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType);
+    IKEFCoreTable Create(IKEFCoreDatabase database, string topicName, IEntityType entityType);
     /// <summary>
     /// Returns a <see cref="IKEFCoreTable"/>
     /// </summary>

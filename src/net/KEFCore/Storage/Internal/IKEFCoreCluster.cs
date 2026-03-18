@@ -33,49 +33,43 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     string ClusterId { get; }
     /// <summary>
-    /// The <see cref="KEFCoreOptionsExtension"/>
-    /// </summary>
-    KEFCoreOptionsExtension Options { get; }
-    /// <summary> 
-    /// The <see cref="IDiagnosticsLogger{TLoggerCategory}"/> to be used to log info within the provider
-    /// </summary>
-    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
-    /// <summary>
-    /// Returns the <see cref="IValueGeneratorSelector"/> instance
-    /// </summary>
-    IValueGeneratorSelector ValueGeneratorSelector { get; }
-    /// <summary>
-    /// The associated <see cref="IModel"/>
-    /// </summary>
-    IModel Model { get; }
-    /// <summary>
-    /// The associated <see cref="IUpdateAdapterFactory"/>
-    /// </summary>
-    IUpdateAdapterFactory UpdateAdapterFactory { get; }
-    /// <summary>
     /// The global <see cref="IComplexTypeConverterFactory"/>
     /// </summary>
     IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }
     /// <summary>
+    /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be registered</param>
+    void Register(IKEFCoreDatabase database);
+    /// <summary>
+    /// Unregister a previously registered instance of <see cref="IKEFCoreDatabase"/> from an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be unregistered</param>
+    void Unregister(IKEFCoreDatabase database);
+    /// <summary>
     /// Resets the Apache Kafka streams application associated to this <see cref="IKEFCoreCluster"/> instance
     /// </summary>
-    void ResetStreams();
+    void ResetStreams(IKEFCoreDatabase database);
     /// <summary>
     /// Execute the <see cref="IKEFCoreDatabase.EnsureDatabaseDeleted"/>
     /// </summary>
-    bool EnsureDeleted(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureDeleted(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Execute the <see cref="IKEFCoreDatabase.EnsureDatabaseCreated"/>
     /// </summary>
-    bool EnsureCreated(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureCreated(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Execute the <see cref="IKEFCoreDatabase.EnsureDatabaseConnected"/>
     /// </summary>
-    bool EnsureConnected(IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    bool EnsureConnected(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>
-    bool? EnsureSynchronized(long timeout);
+    bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout);
+    /// <summary>
+    /// Retrieves the <see cref="IStreamsManager"/> associated to <see cref="IKEFCoreDatabase"/> in the instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    IStreamsManager GetStreamsManager(IKEFCoreDatabase database, Func<IKEFCoreDatabase, IStreamsManager> createFunc);
     /// <summary>
     /// Retrieves the <see cref="IKEFCoreTable"/> associated to <see cref="IEntityType"/> in the instance of <see cref="IKEFCoreCluster"/>
     /// </summary>
@@ -83,43 +77,43 @@ public interface IKEFCoreCluster : IDisposable
     /// <summary>
     /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
-    string CreateTopicForEntity(IEntityType entityType);
+    string CreateTopicForEntity(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
     /// Returns the latest offset for each partition associated to <paramref name="entityType"/>
     /// </summary>
     /// <param name="entityType">The <see cref="IEntityType"/> to check</param>
     /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the values</returns>
-    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType);
+    IDictionary<int, long> LatestOffsetForEntity(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/>
     /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType);
+    IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> for a specified key
     /// </summary>
-    ValueBuffer? GetValueBuffer(IEntityType entityType, object?[] keyValues);
+    ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object?[] keyValues);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> in a range of keys
     /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffersRange(IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> in reverse order
     /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType);
+    IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> in a range of keys
     /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
     /// </summary>
-    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object?[] prefixValues);
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object?[] prefixValues);
     /// <summary>
     /// Executes a transaction
     /// </summary>
-    int ExecuteTransaction(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
+    int ExecuteTransaction(IKEFCoreDatabase database, IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger);
     /// <summary>
     /// Executes a transaction in async
     /// </summary>
-    Task<int> ExecuteTransactionAsync(IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default);
+    Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default);
 }

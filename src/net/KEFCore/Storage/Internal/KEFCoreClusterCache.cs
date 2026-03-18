@@ -47,8 +47,8 @@ public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IComplexType
     }
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, infrastructureLogger, _tableFactory, _complexTypeConverterFactory, valueGeneratorSelector, updateAdapterFactory, designModel));
+    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options)
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, _tableFactory, _complexTypeConverterFactory));
 
     /// <inheritdoc/>
     public virtual void Dispose(IKEFCoreCluster cluster)

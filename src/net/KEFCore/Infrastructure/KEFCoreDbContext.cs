@@ -144,10 +144,6 @@ public class KEFCoreDbContext : DbContext
     /// If <see cref="UseGlobalTable"/> is <see langword="false"/> the partitions associated to each topic are shared across all instances with the same <see cref="ApplicationId"/> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</remarks>
     public virtual string? ApplicationId { get; set; }
     /// <summary>
-    /// Database name means whe prefix of the topics associated to the instance of <see cref="KEFCoreDbContext"/>
-    /// </summary>
-    public virtual string? TopicPrefix { get; set; }
-    /// <summary>
     /// Default number of partitions associated to each topic
     /// </summary>
     public virtual int DefaultNumPartitions { get; set; } = 1;
@@ -290,13 +286,15 @@ public class KEFCoreDbContext : DbContext
         var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
         var clusterCache = serviceProvider.GetService<IKEFCoreClusterCache>();
         var options = serviceProvider.GetService<IDbContextOptions>();
+        var database = serviceProvider.GetService<IKEFCoreDatabase>();
 
         if (clusterCache == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IKEFCoreClusterCache)} service");
         if (options == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IDbContextOptions)} service");
+        if (database == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IKEFCoreDatabase)} service");
 
         var cluster = clusterCache.GetCluster(options);
 
-        cluster?.ResetStreams();
+        cluster?.ResetStreams(database);
     }
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
@@ -323,7 +321,6 @@ public class KEFCoreDbContext : DbContext
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
-            o.WithTopicPrefix(TopicPrefix);
             o.WithPersistentStorage(UsePersistentStorage);
             o.WithEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
             o.WithKeyByteBufferDataTransfer(UseKeyByteBufferDataTransfer);

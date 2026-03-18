@@ -19,7 +19,6 @@
 #nullable enable
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.KNet.Serialization;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -35,11 +34,11 @@ public class EntityTypeProducers
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>
     /// </summary>
-    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKEFCoreCluster cluster)
+    public static IEntityTypeProducer Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKEFCoreDatabase database, IEntityType entityType)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
     {
-        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster));
+        return _producers.GetOrAdd(entityType, _ => CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType));
     }
 
     /// <summary>
@@ -54,8 +53,8 @@ public class EntityTypeProducers
         producer.Dispose();
     }
 
-    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IEntityType entityType, IKEFCoreCluster cluster)
+    static IEntityTypeProducer CreateProducerLocal<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(IKEFCoreDatabase database, IEntityType entityType)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
+        => new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
 }

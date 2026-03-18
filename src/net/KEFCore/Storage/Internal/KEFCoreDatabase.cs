@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -26,7 +28,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KEFCoreDatabase : Database, IKEFCoreDatabase
 {
     private readonly IKEFCoreClusterCache _clusterCache;
-
+    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger;
+    private readonly IValueGeneratorSelector _valueGeneratorSelector;
+    private readonly KEFCoreOptionsExtension _options;
+    private readonly IDesignTimeModel _designTimeModel;
+    private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IKEFCoreCluster _cluster;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
     /// <summary>
@@ -44,29 +50,55 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.CreateCluster(options, infrastructureLogger, valueGeneratorSelector, updateAdapterFactory, designTimeModel.Model);
+        _infrastructureLogger = infrastructureLogger;
+        _valueGeneratorSelector = valueGeneratorSelector;
+        _options = options.Extensions.OfType<KEFCoreOptionsExtension>().First();
+        _designTimeModel = designTimeModel;
+        _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
+        _cluster = _clusterCache.CreateCluster(_options);
+        _cluster.Register(this);
     }
     /// <inheritdoc/>
     public void Dispose()
     {
-        _clusterCache.Dispose(_cluster);
+        _cluster.Unregister(this);
     }
     /// <inheritdoc/>
     public virtual IKEFCoreCluster Cluster => _cluster;
+    /// <summary>
+    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
+    /// </summary>
+    public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => _infrastructureLogger;
+    /// <summary>
+    /// Reference to <see cref="IValueGeneratorSelector"/> received
+    /// </summary>
+    public virtual IValueGeneratorSelector ValueGeneratorSelector => _valueGeneratorSelector;
+    /// <summary>
+    /// Reference to <see cref="KEFCoreOptionsExtension"/> received
+    /// </summary>
+    public virtual KEFCoreOptionsExtension Options => _options;
+    /// <summary>
+    /// Reference to <see cref="IDesignTimeModel"/> received
+    /// </summary>
+    public virtual IDesignTimeModel DesignTimeModel => _designTimeModel;
+    /// <summary>
+    /// Reference to <see cref="IUpdateAdapterFactory"/> received
+    /// </summary>
+    public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
     /// <inheritdoc/>
-    public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(entries, _updateLogger);
+    public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(this, entries, _updateLogger);
     /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
         CancellationToken cancellationToken = default) => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
-                                                                                                    : _cluster.ExecuteTransactionAsync(entries, _updateLogger, cancellationToken);
+                                                                                                    : _cluster.ExecuteTransactionAsync(this, entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(_updateLogger);
+    public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseCreated() => _cluster.EnsureCreated(_updateLogger);
+    public virtual bool EnsureDatabaseCreated() => _cluster.EnsureCreated(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseConnected() => _cluster.EnsureConnected(_updateLogger);
+    public virtual bool EnsureDatabaseConnected() => _cluster.EnsureConnected(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool? EnsureDatabaseSynchronized(long timeout) => _cluster.EnsureSynchronized(timeout);
+    public virtual bool? EnsureDatabaseSynchronized(long timeout) => _cluster.EnsureSynchronized(this, timeout);
 }

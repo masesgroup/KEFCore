@@ -41,8 +41,8 @@ public class KEFCoreTableFactory(
     private readonly ConcurrentDictionary<(IKEFCoreCluster Cluster, string topicName), IKEFCoreTable> _factories = new();
 
     /// <inheritdoc/>
-    public virtual IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType)
-        => _factories.GetOrAdd((cluster, topicName), e => CreateTable(cluster, entityType)());
+    public virtual IKEFCoreTable Create(IKEFCoreDatabase database, string topicName, IEntityType entityType)
+        => _factories.GetOrAdd((database.Cluster, topicName), e => CreateTable(database, entityType)());
 
     /// <inheritdoc/>
     public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, string topicName)
@@ -71,24 +71,24 @@ public class KEFCoreTableFactory(
         if (table != null)
         {
             table.Dispose();
-            _factories.TryRemove((table.Cluster, table.AssociatedTopicName), out _);
+            _factories.TryRemove((table.Database.Cluster, table.AssociatedTopicName), out _);
         }
     }
 
-    private Func<IKEFCoreTable> CreateTable(IKEFCoreCluster cluster, IEntityType entityType)
+    private Func<IKEFCoreTable> CreateTable(IKEFCoreDatabase database, IEntityType entityType)
         => (Func<IKEFCoreTable>)typeof(KEFCoreTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
             .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(),
                                _options.ValueContainerType(entityType),
                                _options.JVMKeyType(entityType),
                                _options.JVMValueContainerType(entityType))
-            .Invoke(null, [cluster, entityType, _loggingOptions])!;
+            .Invoke(null, [database, entityType, _loggingOptions])!;
 
     private static Func<IKEFCoreTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(
-        IKEFCoreCluster cluster,
+        IKEFCoreDatabase database,
         IEntityType entityType,
         ILoggingOptions loggingOptions)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        => () => new KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, loggingOptions);
+        => () => new KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType, loggingOptions);
 }

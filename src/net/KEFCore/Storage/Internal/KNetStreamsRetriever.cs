@@ -68,11 +68,10 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     /// Creates an instance of <see cref="IStreamsManager"/>
     /// </summary>
     /// <param name="cluster"></param>
-    /// <param name="entity"></param>
     /// <returns></returns>
-    public static IStreamsManager Create(IKEFCoreCluster cluster, IEntityType entity)
+    public static IStreamsManager Create(IKEFCoreCluster cluster)
     {
-        _streamsManager ??= new(cluster, entity)
+        _streamsManager ??= new(cluster)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
@@ -103,7 +102,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         return _streamsManager;
     }
 
-    private readonly IKEFCoreCluster _cluster;
+    private readonly IKEFCoreDatabase _database;
     private readonly IValueContainerMetadata _metadata;
     private readonly IKey _primaryKey;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -112,9 +111,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IKEFCoreCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory)
+    public KNetStreamsRetriever(IKEFCoreDatabase database, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory)
     {
-        _cluster = cluster;
+        _database = database;
         _metadata = metadata;
         _primaryKey = primaryKey;
         _complexTypeConverterFactory = complexTypeConverterFactory;
@@ -211,7 +210,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(_database.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)

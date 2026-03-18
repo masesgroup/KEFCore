@@ -56,14 +56,14 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// Default initializer
     /// </summary>
     public KEFCoreTable(
-        IKEFCoreCluster cluster,
+        IKEFCoreDatabase database,
         IEntityType entityType,
         ILoggingOptions loggingOptions)
     {
-        cluster.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
-        Cluster = cluster;
-        _tableAssociatedTopicName = cluster.CreateTopicForEntity(entityType);
-        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
+        Database = database;
+        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
+        _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
+        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(Database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
@@ -86,7 +86,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        Cluster.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
+        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
         EntityTypeProducers.Dispose(_producer!);
     }
     /// <inheritdoc/>
@@ -96,7 +96,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     }
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster Cluster { get; }
+    public virtual IKEFCoreDatabase Database { get; }
     /// <inheritdoc/>
     public virtual string AssociatedTopicName => _tableAssociatedTopicName;
     /// <inheritdoc/>
