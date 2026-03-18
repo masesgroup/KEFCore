@@ -16,8 +16,7 @@ namespace MASES.EntityFrameworkCore.KNet.Templates
                 context = new BloggingContext()
                 {
                     BootstrapServers = "KAFKA-BROKER:9092",
-                    ApplicationId = "MyApplicationId",
-                    TopicPrefix = "MyDB",
+                    ApplicationId = "MyApplicationId"
                 };
                 // cleanup topics on Broker
                 context.Database.EnsureDeleted();

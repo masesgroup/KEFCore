@@ -39,7 +39,6 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// <param name="dependencies">Parameter object containing dependencies for this convention.</param>
 public class DefiningQueryRewritingConvention(ProviderConventionSetBuilderDependencies dependencies) : QueryFilterRewritingConvention(dependencies)
 {
-
     /// <inheritdoc />
     public override void ProcessModelFinalizing(
         IConventionModelBuilder modelBuilder,
