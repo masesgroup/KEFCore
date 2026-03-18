@@ -19,6 +19,9 @@
 #nullable enable
 
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
+using MASES.KNet.Producer;
+using MASES.KNet.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -51,13 +54,22 @@ public interface IKEFCoreSingletonOptions : ISingletonOptions
     string? BootstrapServers { get; }
 
     // ── Backend architecture — in hash ────────────────────────────────────
+    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
+    bool UseCompactedReplicator { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
+    [Obsolete("Option will be removed soon")]
+    ConsumerConfigBuilder? ConsumerConfig { get; }
     /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
     bool UseKNetStreams { get; }
     /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
     bool UsePersistentStorage { get; }
-    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
-    [Obsolete("Option will be removed soon")]
-    bool UseCompactedReplicator { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
+    string? ApplicationId { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
+    StreamsConfigBuilder? StreamsConfig { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
+    ProducerConfigBuilder? ProducerConfig { get; }
 
     // ── Topic structure — NOT in hash (first-wins at topic creation) ──────
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>

@@ -64,21 +64,21 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         UseKeyByteBufferDataTransfer = copyFrom.UseKeyByteBufferDataTransfer;
         UseValueContainerByteBufferDataTransfer = copyFrom.UseValueContainerByteBufferDataTransfer;
         BootstrapServers = copyFrom.BootstrapServers;
+        // obsolete
+        UseCompactedReplicator = copyFrom.UseCompactedReplicator;
+        ConsumerConfig = ConsumerConfigBuilder.CreateFrom(copyFrom.ConsumerConfig);
         UseKNetStreams = copyFrom.UseKNetStreams;
         UsePersistentStorage = copyFrom.UsePersistentStorage;
-        UseCompactedReplicator = copyFrom.UseCompactedReplicator;
+        ApplicationId = copyFrom.ApplicationId;
+        StreamsConfig = StreamsConfigBuilder.CreateFrom(copyFrom.StreamsConfig);
+        ProducerConfig = ProducerConfigBuilder.CreateFrom(copyFrom.ProducerConfig);
         UseDeletePolicyForTopic = copyFrom.UseDeletePolicyForTopic;
         DefaultNumPartitions = copyFrom.DefaultNumPartitions;
         DefaultReplicationFactor = copyFrom.DefaultReplicationFactor;
         TopicConfig = TopicConfigBuilder.CreateFrom(copyFrom.TopicConfig);
-        // obsolete
-        DefaultConsumerInstances = copyFrom.DefaultConsumerInstances;
-        ConsumerConfig = ConsumerConfigBuilder.CreateFrom(copyFrom.ConsumerConfig);
 
         // ── Context-only options ──────────────────────────────────────────
-        ApplicationId = copyFrom.ApplicationId;
-        ProducerConfig = ProducerConfigBuilder.CreateFrom(copyFrom.ProducerConfig);
-        StreamsConfig = StreamsConfigBuilder.CreateFrom(copyFrom.StreamsConfig);
+        DefaultConsumerInstances = copyFrom.DefaultConsumerInstances;
         ManageEvents = copyFrom.ManageEvents;
         ReadOnlyMode = copyFrom.ReadOnlyMode;
         DefaultSynchronizationTimeout = copyFrom.DefaultSynchronizationTimeout;
@@ -124,13 +124,22 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     public virtual bool UseValueContainerByteBufferDataTransfer { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.BootstrapServers"/>
     public virtual string? BootstrapServers { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual bool UseCompactedReplicator { get; set; } = false;
+    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
     public virtual bool UseKNetStreams { get; set; } = true;
     /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
     public virtual bool UsePersistentStorage { get; set; } = false;
-    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
-    [Obsolete("Option will be removed soon")]
-    public virtual bool UseCompactedReplicator { get; set; } = false;
+    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
+    public virtual string? ApplicationId { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
+    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
+    public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
     public virtual bool UseDeletePolicyForTopic { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultNumPartitions"/>
@@ -146,15 +155,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc cref="KEFCoreDbContext.DefaultConsumerInstances"/>
     [Obsolete("Option will be removed soon")]
     public virtual int? DefaultConsumerInstances { get; set; } = null;
-    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
-    [Obsolete("Option will be removed soon")]
-    public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
-    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
-    public virtual string? ApplicationId { get; set; }
-    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
-    public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
-    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
-    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
     public virtual bool ManageEvents { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.ReadOnlyMode"/>
@@ -226,6 +226,22 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         clone.BootstrapServers = bootstrapServers;
         return clone;
     }
+    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual KEFCoreOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
+    {
+        var clone = Clone();
+        clone.UseCompactedReplicator = useCompactedReplicator;
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual KEFCoreOptionsExtension WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
+    {
+        var clone = Clone();
+        clone.ConsumerConfig = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
+        return clone;
+    }
     /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
     public virtual KEFCoreOptionsExtension WithKNetStreams(bool useKNetStreams = true)
     {
@@ -240,12 +256,25 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         clone.UsePersistentStorage = usePersistentStorage;
         return clone;
     }
-    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
-    [Obsolete("Option will be removed soon")]
-    public virtual KEFCoreOptionsExtension WithCompactedReplicator(bool useCompactedReplicator = true)
+    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
+    public virtual KEFCoreOptionsExtension WithApplicationId(string? applicationId)
     {
         var clone = Clone();
-        clone.UseCompactedReplicator = useCompactedReplicator;
+        clone.ApplicationId = applicationId;
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
+    public virtual KEFCoreOptionsExtension WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
+    {
+        var clone = Clone();
+        clone.StreamsConfig = StreamsConfigBuilder.CreateFrom(streamsConfigBuilder);
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
+    public virtual KEFCoreOptionsExtension WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
+    {
+        var clone = Clone();
+        clone.ProducerConfig = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
         return clone;
     }
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
@@ -284,36 +313,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
         clone.DefaultConsumerInstances = defaultConsumerInstances;
-        return clone;
-    }
-    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
-    [Obsolete("Option will be removed soon")]
-    public virtual KEFCoreOptionsExtension WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)
-    {
-        var clone = Clone();
-        clone.ConsumerConfig = ConsumerConfigBuilder.CreateFrom(consumerConfigBuilder);
-        return clone;
-    }
-
-    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
-    public virtual KEFCoreOptionsExtension WithApplicationId(string? applicationId)
-    {
-        var clone = Clone();
-        clone.ApplicationId = applicationId;
-        return clone;
-    }
-    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
-    public virtual KEFCoreOptionsExtension WithProducerConfig(ProducerConfigBuilder producerConfigBuilder)
-    {
-        var clone = Clone();
-        clone.ProducerConfig = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
-        return clone;
-    }
-    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
-    public virtual KEFCoreOptionsExtension WithStreamsConfig(StreamsConfigBuilder streamsConfigBuilder)
-    {
-        var clone = Clone();
-        clone.StreamsConfig = StreamsConfigBuilder.CreateFrom(streamsConfigBuilder);
         return clone;
     }
     /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
@@ -553,9 +552,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             || other.ValueContainerType != ValueContainerType
             || other.UseKeyByteBufferDataTransfer != UseKeyByteBufferDataTransfer
             || other.UseValueContainerByteBufferDataTransfer != UseValueContainerByteBufferDataTransfer
+            || other.UseCompactedReplicator != UseCompactedReplicator
             || other.UseKNetStreams != UseKNetStreams
             || other.UsePersistentStorage != UsePersistentStorage
-            || other.UseCompactedReplicator != UseCompactedReplicator)
+            || other.ApplicationId != ApplicationId)
         {
             throw new InvalidOperationException(
                 "Cannot reuse internal service provider: singleton options mismatch.");
@@ -588,16 +588,19 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                     builder.Append("UseKeyByteBufferDataTransfer=").Append(Extension.UseKeyByteBufferDataTransfer).Append(' ');
                     builder.Append("UseValueContainerByteBufferDataTransfer=").Append(Extension.UseValueContainerByteBufferDataTransfer).Append(' ');
                     builder.Append("BootstrapServers=").Append(Extension.BootstrapServers).Append(' ');
+                    builder.Append("UseCompactedReplicator=").Append(Extension.UseCompactedReplicator).Append(' ');
+                    builder.Append("ConsumerConfig=").Append(Extension.ConsumerConfig?.ToString()).Append(' ');
                     builder.Append("UseKNetStreams=").Append(Extension.UseKNetStreams).Append(' ');
                     builder.Append("UsePersistentStorage=").Append(Extension.UsePersistentStorage).Append(' ');
-                    builder.Append("UseCompactedReplicator=").Append(Extension.UseCompactedReplicator).Append(' ');
+                    builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
+                    builder.Append("StreamsConfig=").Append(Extension.StreamsConfig).Append(' ');
+                    builder.Append("ProducerConfig=").Append(Extension.ProducerConfig).Append(' ');
                     builder.Append("UseDeletePolicyForTopic=").Append(Extension.UseDeletePolicyForTopic).Append(' ');
                     builder.Append("DefaultNumPartitions=").Append(Extension.DefaultNumPartitions).Append(' ');
                     builder.Append("DefaultReplicationFactor=").Append(Extension.DefaultReplicationFactor).Append(' ');
+                    builder.Append("TopicConfig=").Append(Extension.TopicConfig).Append(' ');
                     // context
                     builder.Append("DefaultConsumerInstances=").Append(Extension.DefaultConsumerInstances).Append(' ');
-                    builder.Append("ConsumerConfig=").Append(Extension.ConsumerConfig?.ToString()).Append(' ');
-                    builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
                     builder.Append("ManageEvents=").Append(Extension.ManageEvents).Append(' ');
                     builder.Append("ReadOnlyMode=").Append(Extension.ReadOnlyMode).Append(' ');
                     builder.Append("DefaultSynchronizationTimeout=").Append(Extension.DefaultSynchronizationTimeout).Append(' ');
@@ -624,9 +627,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             hash.Add(Extension.ValueContainerType);
             hash.Add(Extension.UseKeyByteBufferDataTransfer);
             hash.Add(Extension.UseValueContainerByteBufferDataTransfer);
+            hash.Add(Extension.UseCompactedReplicator);
             hash.Add(Extension.UseKNetStreams);
             hash.Add(Extension.UsePersistentStorage);
-            hash.Add(Extension.UseCompactedReplicator);
+            hash.Add(Extension.ApplicationId);
             return hash.ToHashCode();
         }
 
@@ -638,9 +642,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             && Extension.ValueContainerType == o.Extension.ValueContainerType
             && Extension.UseKeyByteBufferDataTransfer == o.Extension.UseKeyByteBufferDataTransfer
             && Extension.UseValueContainerByteBufferDataTransfer == o.Extension.UseValueContainerByteBufferDataTransfer
+            && Extension.UseCompactedReplicator == o.Extension.UseCompactedReplicator
             && Extension.UseKNetStreams == o.Extension.UseKNetStreams
             && Extension.UsePersistentStorage == o.Extension.UsePersistentStorage
-            && Extension.UseCompactedReplicator == o.Extension.UseCompactedReplicator;
+            && Extension.ApplicationId == o.Extension.ApplicationId;
 
         public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
         {
