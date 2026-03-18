@@ -306,9 +306,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             _builder ??= CreateStreamBuilder(_streamsConfig!);
 
-            var topicName = entityType.TopicName(_kefcoreCluster.Options);
+            var topicName = entityType.TopicName();
 
-            string storageId = entityType.StorageIdForTable(_kefcoreCluster.Options);
+            string storageId = entityType.StorageIdForTable();
             storageId = _usePersistentStorage ? storageId : System.Diagnostics.Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
             lock (_managedEntities)

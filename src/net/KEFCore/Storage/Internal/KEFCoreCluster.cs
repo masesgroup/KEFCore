@@ -108,7 +108,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in _designModel.GetEntityTypes())
         {
-            string topic = entityType.TopicName(Options);
+            string topic = entityType.TopicName();
             if (_topicForEntity.TryRemove(entityType, out string topicName))
             {
                 if (topicName != topic)
@@ -276,7 +276,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public IKEFCoreTable GetTable(IEntityType entityType)
     {
-        return _tableFactory.Get(this, entityType.TopicName(Options));
+        return _tableFactory.Get(this, entityType.TopicName());
     }
 
     /// <inheritdoc/>
@@ -285,7 +285,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
             _infrastructureLogger.Logger.LogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
-            var topicName = entityType.TopicName(Options);
+            var topicName = entityType.TopicName();
             var requestedPartitions = entityType.NumPartitions(Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(Options);
 
@@ -333,7 +333,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 
         try
         {
-            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.TopicName(Options));
+            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.TopicName());
         }
         catch (UnknownTopicOrPartitionException ex)
         {
@@ -365,7 +365,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffers();
@@ -395,7 +395,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffer(keyValues);
@@ -425,7 +425,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersRange(rangeStart, rangeEnd);
@@ -455,7 +455,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersReverse();
@@ -486,7 +486,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersReverseRange(rangeStart, rangeEnd);
@@ -519,7 +519,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName(Options);
+            var key = entityType.TopicName();
             if (_tables != null && _tables.TryGetValue(key, out var table))
             {
                 return table.GetValueBuffersByPrefix(prefixValues);
@@ -671,7 +671,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         var entityTypes = entityType.GetAllBaseTypesInclusive();
         foreach (var currentEntityType in entityTypes)
         {
-            var key = currentEntityType.TopicName(Options);
+            var key = currentEntityType.TopicName();
             _ = _tables.GetOrAdd(key, (k) =>
             {
                 _infrastructureLogger.Logger.LogInformation("KEFCoreCluster::EnsureTable creating table for {Name}", entityType.Name);
@@ -679,6 +679,6 @@ public class KEFCoreCluster : IKEFCoreCluster
             });
         }
 
-        return _tables[entityType.TopicName(Options)];
+        return _tables[entityType.TopicName()];
     }
 }

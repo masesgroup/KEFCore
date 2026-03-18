@@ -244,7 +244,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 UpdateMode = UpdateModeTypes.OnConsume,
                 BootstrapServers = _cluster.Options.BootstrapServers,
-                StateName = _entityType.TopicName(_cluster.Options),
+                StateName = _entityType.TopicName(),
                 Partitions = _entityType.NumPartitions(_cluster.Options),
                 ConsumerInstances = _entityType.ConsumerInstances(_cluster.Options),
                 ReplicationFactor = _entityType.ReplicationFactor(_cluster.Options),
