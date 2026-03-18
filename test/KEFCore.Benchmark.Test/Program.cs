@@ -272,6 +272,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

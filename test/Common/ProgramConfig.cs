@@ -18,6 +18,7 @@
 
 using Java.Lang;
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
@@ -26,6 +27,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -64,6 +66,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
     public class TestContext : KEFCoreDbContext
     {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.UseKafkaTopicPrefix(ProgramConfig.Config.UseModelBuilder ? ProgramConfig.Config.TopicPrefixWithModel
+                                                                                  : ProgramConfig.Config.TopicPrefix);
+            base.OnModelCreating(modelBuilder);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var loggerFactory = LoggerFactory.Create(builder =>
@@ -78,7 +87,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(TopicPrefix);
+                optionsBuilder.UseInMemoryDatabase("InMemory");
             }
             else
             {
@@ -131,7 +140,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 context.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
             }
 
-            context.TopicPrefix = databaseName;
             context.StreamsConfig = streamConfig;
             context.BootstrapServers = BootstrapServers;
             context.ApplicationId = ApplicationId;

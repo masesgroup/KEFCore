@@ -76,7 +76,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         ConsumerConfig = ConsumerConfigBuilder.CreateFrom(copyFrom.ConsumerConfig);
 
         // ── Context-only options ──────────────────────────────────────────
-        TopicPrefix = copyFrom.TopicPrefix;
         ApplicationId = copyFrom.ApplicationId;
         ProducerConfig = ProducerConfigBuilder.CreateFrom(copyFrom.ProducerConfig);
         StreamsConfig = StreamsConfigBuilder.CreateFrom(copyFrom.StreamsConfig);
@@ -150,8 +149,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
     [Obsolete("Option will be removed soon")]
     public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
-    /// <inheritdoc cref="KEFCoreDbContext.TopicPrefix"/>
-    public virtual string? TopicPrefix { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
     public virtual string? ApplicationId { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
@@ -298,13 +295,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         return clone;
     }
 
-    /// <inheritdoc cref="KEFCoreDbContext.TopicPrefix"/>
-    public virtual KEFCoreOptionsExtension WithTopicPrefix(string? topicPrefix)
-    {
-        var clone = Clone();
-        clone.TopicPrefix = topicPrefix;
-        return clone;
-    }
     /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
     public virtual KEFCoreOptionsExtension WithApplicationId(string? applicationId)
     {
@@ -401,7 +391,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <summary>
     /// Build <see cref="StreamsConfigBuilder"/> from options
     /// </summary>
-    public virtual StreamsConfigBuilder StreamsOptions(IEntityType entityType)
+    public virtual StreamsConfigBuilder StreamsOptions()
     {
         StreamsConfig ??= new();
         StreamsConfigBuilder builder = StreamsConfigBuilder.CreateFrom(StreamsConfig);
@@ -607,7 +597,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                     // context
                     builder.Append("DefaultConsumerInstances=").Append(Extension.DefaultConsumerInstances).Append(' ');
                     builder.Append("ConsumerConfig=").Append(Extension.ConsumerConfig?.ToString()).Append(' ');
-                    builder.Append("TopicPrefix=").Append(Extension.TopicPrefix).Append(' ');
                     builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
                     builder.Append("ManageEvents=").Append(Extension.ManageEvents).Append(' ');
                     builder.Append("ReadOnlyMode=").Append(Extension.ReadOnlyMode).Append(' ');
@@ -659,7 +648,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             debugInfo["KEFCore:UseKNetStreams"] = Extension.UseKNetStreams.ToString();
             debugInfo["KEFCore:UsePersistentStorage"] = Extension.UsePersistentStorage.ToString();
             debugInfo["KEFCore:ApplicationId"] = Extension.ApplicationId ?? "(none)";
-            debugInfo["KEFCore:TopicPrefix"] = Extension.TopicPrefix ?? "(none)";
         }
     }
 
