@@ -20,6 +20,8 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Extensions;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
@@ -44,7 +46,10 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///     Creates a new <see cref="KEFCoreConventionSetBuilder" /> instance.
 /// </remarks>
 /// <param name="dependencies">The core dependencies for this service.</param>
-public class KEFCoreConventionSetBuilder(ProviderConventionSetBuilderDependencies dependencies) : ProviderConventionSetBuilder(dependencies)
+public class KEFCoreConventionSetBuilder(
+ProviderConventionSetBuilderDependencies dependencies,
+IKEFCoreSingletonOptions options,
+IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(dependencies)
 {
     /// <inheritdoc />
     public override ConventionSet CreateConventionSet()
@@ -52,6 +57,8 @@ public class KEFCoreConventionSetBuilder(ProviderConventionSetBuilderDependencie
         var conventionSet = base.CreateConventionSet();
 
         conventionSet.ModelFinalizingConventions.Add(new DefiningQueryRewritingConvention(Dependencies));
+
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeConverterConvention(converterFactory));
 
         return conventionSet;
     }
