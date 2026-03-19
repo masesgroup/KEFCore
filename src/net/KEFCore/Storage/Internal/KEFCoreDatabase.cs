@@ -56,7 +56,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         _updateLogger = updateLogger;
         _tables = [];
         _cluster = _clusterCache.CreateCluster(_options);
-        _cluster.Register(this);
     }
     /// <inheritdoc/>
     public void Dispose()

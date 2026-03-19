@@ -29,6 +29,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -48,6 +49,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 {
     private readonly KEFCoreClusterAdmin _kefcoreAdminClient = KEFCoreClusterAdmin.Create(options.BootstrapServers);
 
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<IKEFCoreDatabase, IKEFCoreDatabase> _registeredDatabases = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IStreamsManager> _streamsForApplications = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
 
@@ -65,40 +67,26 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public virtual IValueGeneratorSelector ValueGeneratorSelector => valueGeneratorSelector;
     /// <inheritdoc/>
-    public virtual void Register(IKEFCoreDatabase database)
+    public virtual void Register(IKEFCoreDatabase db)
     {
-        database.InfrastructureLogger.Logger.LogDebug("Invoking Register");
-        var coll = TopicsFromModel(database, out var topics);
-        _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
-
-        System.Collections.Generic.List<IKEFCoreTable> tables = new();
-        var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
-        foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
+        _registeredDatabases.GetOrAdd(db, (database) =>
         {
-            var table = tableFactory.GetOrCreate(database, entityType);
-            database.RegisterTable(table);
-        }
+            database.InfrastructureLogger.Logger.LogDebug("Invoking Register");
+            var coll = TopicsFromModel(database, out var topics);
+            _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
-        tableFactory.Start(database.Tables);
+            System.Collections.Generic.List<IKEFCoreTable> tables = new();
+            var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
+            foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
+            {
+                var table = tableFactory.GetOrCreate(database, entityType);
+                database.RegisterTable(table);
+            }
 
-        if (database.Options.DefaultSynchronizationTimeout != 0)
-        {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            try
-            {
-                EnsureSynchronized(database, database.Options.DefaultSynchronizationTimeout);
-            }
-            catch
-            {
-                database.InfrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
-                throw;
-            }
-            finally
-            {
-                stopwatch.Stop();
-                database.InfrastructureLogger.Logger.LogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
-            }
-        }
+            tableFactory.Start(database.Tables);
+
+            return database;
+        });
     }
 
     /// <inheritdoc/>
@@ -178,6 +166,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
 
+        Register(database);
+
         var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
         var entries = new System.Collections.Generic.List<IUpdateEntry>();
         foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
@@ -226,6 +216,9 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public virtual bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking EnsureSynchronized with {Timeout}", timeout);
+        
+        Register(database);
+
         var remainingTimeout = timeout;
         bool?[] bools = new bool?[database.Tables.Count];
         Stopwatch stopwatch = new();
@@ -604,6 +597,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     {
         database.InfrastructureLogger.Logger.LogInformation("Invoking ExecuteTransaction for {number} entries", entries.Count);
 
+        Register(database);
+
         using var ctSource = new CancellationTokenSource();
         var tasks = ExecuteTransaction(database, entries, updateLogger, out var rowsAffected, ctSource.Token);
         var result = Task.WhenAll(tasks);
@@ -629,6 +624,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public async Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
         database.InfrastructureLogger.Logger.LogInformation("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
+
+        Register(database);
 
         var tasks = ExecuteTransaction(database, entries, updateLogger, out var rowsAffected, cancellationToken);
 
