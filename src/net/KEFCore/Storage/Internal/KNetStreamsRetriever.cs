@@ -21,7 +21,6 @@
 
 #nullable enable
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
@@ -41,16 +40,15 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType)
+    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
         private readonly Action<FreshEventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
-        private readonly IEntityType _entityType = entityType;
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
             return Record.DateTime;
         }
     }
@@ -78,7 +76,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = static (enqueuer, manager, entity, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity),
+            CreateTimestampExtractor = static (enqueuer, manager, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager),
             CreateConsumed = static (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
             CreateMaterialized = static (supplier) => Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
@@ -104,6 +102,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         return _streamsManager;
     }
 
+    private readonly IEntityTypeProducer _producer;
     private readonly IValueContainerMetadata _metadata;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly string _storageId;
@@ -111,8 +110,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory)
+    public KNetStreamsRetriever(IEntityTypeProducer producer, IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory)
     {
+        _producer = producer;
         _metadata = metadata;
         _complexTypeConverterFactory = complexTypeConverterFactory;
         _storageId = _streamsManager!.AddEntity(this, _metadata.EntityType, null);
@@ -204,6 +204,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         complexProperties = v?.GetComplexProperties(_metadata.EntityType, _complexTypeConverterFactory)!;
         return true;
     }
+
+    IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
 
     void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {

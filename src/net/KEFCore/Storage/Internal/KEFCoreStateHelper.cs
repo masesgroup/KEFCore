@@ -18,7 +18,6 @@
 
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {

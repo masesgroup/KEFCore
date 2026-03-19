@@ -48,15 +48,13 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     {
         private readonly Action<FreshEventChange> _pushChanges;
         private readonly IStreamsChangeManager _manager;
-        private readonly IEntityType _entityType;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
 
-        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, object optional)
+        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, object optional)
         {
             _pushChanges = pushChanges;
             _manager = manager;
-            _entityType = entityType;
             var serdes = (Tuple<ISerDes<TKey, K>, ISerDes<TValue, V>>)optional;
             _keySerdes = serdes.Item1;
             _valueSerdes = serdes.Item2;
@@ -71,7 +69,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, record2.Key());
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, record2.Value());
 
-            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
 
             return record.Timestamp();
         }
@@ -100,7 +98,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = static (enqueuer, manager, entity, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, entity, optional),
+            CreateTimestampExtractor = static (enqueuer, manager, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, optional),
             CreateConsumed = static (extractor) => Consumed<K, V>.With(extractor),
             CreateMaterialized = static (supplier) => Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
@@ -132,6 +130,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
     private static Properties? _properties = null;
 
+    private readonly IEntityTypeProducer _producer;
     private readonly IValueContainerMetadata _metadata;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly ISerDes<TKey, K> _keySerdes;
@@ -141,8 +140,9 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsRetriever(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
+    public KafkaStreamsRetriever(IEntityTypeProducer producer, IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
     {
+        _producer = producer;
         _metadata = metadata;
         _complexTypeConverterFactory = complexTypeConverterFactory;
         _keySerdes = keySerdes;
@@ -238,6 +238,8 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         complexProperties = entityTypeData?.GetComplexProperties(_metadata.EntityType, _complexTypeConverterFactory)!;
         return true;
     }
+
+    IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
 
     void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {

@@ -25,7 +25,6 @@ using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Streams;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.Apache.Kafka.Streams;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
@@ -33,10 +32,10 @@ using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
-    internal readonly struct FreshEventChange(IStreamsChangeManager manager, IEntityType entityType, int partition, long offset, object data)
+    internal readonly struct FreshEventChange(IStreamsChangeManager manager, string topic, int partition, long offset, object data)
     {
         public readonly IStreamsChangeManager Manager = manager;
-        public readonly IEntityType EntityType = entityType;
+        public readonly string Topic = topic;
         public readonly int Partition = partition;
         public readonly long Offset = offset;
         public readonly object Data = data;
@@ -49,6 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
     internal interface IStreamsChangeManager
     {
+        IEntityTypeProducer Producer { get; }
         void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
     }
     /// <summary>
@@ -293,7 +293,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public required Func<StreamsConfigBuilder, TStreamBuilder> CreateStreamBuilder { get; set; }
         public required Func<bool, string, TStoreSupplier> CreateStoreSupplier { get; set; }
-        public required Func<Action<FreshEventChange>, IStreamsChangeManager, IEntityType, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
+        public required Func<Action<FreshEventChange>, IStreamsChangeManager, object, TTimestampExtractor> CreateTimestampExtractor { get; set; }
         public required Func<TTimestampExtractor, TConsumed> CreateConsumed { get; set; }
         public required Func<TStoreSupplier, TMaterialized> CreateMaterialized { get; set; }
         public required Func<TStreamBuilder, string, TMaterialized, TGlobalKTable> CreateGlobalTable { get; set; }
@@ -326,7 +326,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var storeSupplier = CreateStoreSupplier(_usePersistentStorage, storageId);
                 TTimestampExtractor timestampExtractor = null;
                 TConsumed consumed = null;
-                timestampExtractor = CreateTimestampExtractor(FreshEventChangeReceiver, changeManager, entityType, optional);
+                timestampExtractor = CreateTimestampExtractor(FreshEventChangeReceiver, changeManager, optional);
                 consumed = CreateConsumed(timestampExtractor);
                 var materialized = CreateMaterialized(storeSupplier);
                 TGlobalKTable globalTable = null;
@@ -354,7 +354,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         private void FreshEventChangeReceiver(FreshEventChange data)
         {
-            _storagesForEntities[data.EntityType.GetKEFCoreTopicName()].UpdateLatestLocalKnownOffset(data.Partition, data.Offset);
+            _storagesForEntities[data.Topic].UpdateLatestLocalKnownOffset(data.Partition, data.Offset);
             _freshDataFromCluster.Enqueue(data);
         }
 
@@ -370,9 +370,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
                         if (!_freshDataFromCluster.TryDequeue(out var current)) break;
-                        foreach (var item in _updaters)
+                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == current.Manager))
                         {
-                            if (!item.Value.ManageEvents) continue;
                             IKEFCoreDatabase database = item.Key.Database;
                             KEFCoreDatabaseLocalData localData = item.Value;
                             current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, current.Data);

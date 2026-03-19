@@ -61,9 +61,10 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     public void Dispose()
     {
         _cluster.Unregister(this);
-        foreach (var item in _tables)
+        foreach (var item in _tables.ToArray())
         {
             item.Unregister(this);
+            _tables.Remove(item);
         }
     }
     /// <inheritdoc/>

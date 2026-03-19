@@ -27,7 +27,6 @@ using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -289,8 +288,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _kafkaProducer.SetCallback(_producerCallback);
-            _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_entityMetadata, _complexTypeConverterFactory)
-                                                           : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
+            _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory)
+                                                           : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
     }
 
