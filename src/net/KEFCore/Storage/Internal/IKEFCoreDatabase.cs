@@ -54,7 +54,12 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// <summary>
     /// Reference to the set of <see cref="IKEFCoreTable"/> associated
     /// </summary>
-    IList<IKEFCoreTable> Tables { get; }
+    IReadOnlyList<IKEFCoreTable> Tables { get; }
+    /// <summary>
+    /// Register <see cref="IKEFCoreTable"/> in this instance
+    /// </summary>
+    /// <param name="table"><see cref="IKEFCoreTable"/> to register</param>
+    void RegisterTable(IKEFCoreTable table);
     /// <summary>
     /// Execute the <see cref="IDatabaseCreator.EnsureDeleted"/>
     /// </summary>

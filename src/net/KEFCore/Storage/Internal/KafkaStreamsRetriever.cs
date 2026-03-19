@@ -30,7 +30,6 @@ using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Kstream;
 using Org.Apache.Kafka.Streams.Processor;
 using Org.Apache.Kafka.Streams.State;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -40,7 +39,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
+public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -144,7 +143,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IKEFCoreDatabase database, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
+    public KafkaStreamsRetriever(IKEFCoreDatabase database, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
     {
         _database = database;
         _metadata = metadata;

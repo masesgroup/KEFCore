@@ -27,6 +27,7 @@ using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -281,14 +282,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             _streamsManager = database.Cluster.GetStreamsManager(database, (db) =>
             {
                 return db.Options.UseKNetStreams ? KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster)
-                                                 : KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster);
+                                                 : KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster);
             });
 
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _kafkaProducer.SetCallback(_producerCallback);
             _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database, _entityMetadata, _primaryKey, _complexTypeConverterFactory)
-                                                           : new KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database, _entityMetadata, _primaryKey, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
+                                                           : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database, _entityMetadata, _primaryKey, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -445,12 +446,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_knetCompactedReplicator != null)
         {
-            if (_database.Options.ManageEvents)
-            {
-                _knetCompactedReplicator.OnRemoteAdd -= KNetCompactedReplicator_OnRemoteAdd;
-                _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
-                _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
-            }
+            _knetCompactedReplicator.OnRemoteAdd -= KNetCompactedReplicator_OnRemoteAdd;
+            _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
+            _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
             _knetCompactedReplicator?.Dispose();
         }
         else
@@ -579,16 +577,34 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KNetCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KEFCoreStateHelper.ManageAdded(_database.InfrastructureLogger, _database.ValueGeneratorSelector, _database.Cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        foreach (var item in _updaters)
+        {
+            if (!item.Value.ManageEvents) continue;
+            IKEFCoreDatabase database = item.Key;
+            KEFCoreDatabaseLocalData localData = item.Value;
+            KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+        }
     }
 
     private void KNetCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KEFCoreStateHelper.ManageUpdate(_database.InfrastructureLogger, _database.ValueGeneratorSelector, _database.Cluster.ComplexTypeConverterFactory, _updateAdapter!, _entityTypeForChanges!, _primaryKeyForChanges!, arg2.Key, arg2.Value);
+        foreach (var item in _updaters)
+        {
+            if (!item.Value.ManageEvents) continue;
+            IKEFCoreDatabase database = item.Key;
+            KEFCoreDatabaseLocalData localData = item.Value;
+            KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+        }
     }
 
     private void KNetCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        KEFCoreStateHelper.ManageDelete(_database.InfrastructureLogger, _updateAdapter!, _primaryKeyForChanges!, arg2.Key);
+        foreach (var item in _updaters)
+        {
+            if (!item.Value.ManageEvents) continue;
+            IKEFCoreDatabase database = item.Key;
+            KEFCoreDatabaseLocalData localData = item.Value;
+            KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.PrimaryKeyForChanges!, arg2.Key);
+        }
     }
 }

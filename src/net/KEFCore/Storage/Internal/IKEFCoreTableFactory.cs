@@ -33,6 +33,13 @@ public interface IKEFCoreTableFactory : IDisposable
     /// <returns></returns>
     IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
+    /// Allocate a new <see cref="IKEFCoreTable"/>
+    /// </summary>
+    /// <param name="cluster"></param>
+    /// <param name="entityType"></param>
+    /// <returns></returns>
+    IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType);
+    /// <summary>
     /// Returns a <see cref="IKEFCoreTable"/>
     /// </summary>
     /// <param name="tables"></param>

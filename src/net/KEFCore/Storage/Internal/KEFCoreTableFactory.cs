@@ -21,6 +21,7 @@ using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Connect.Util;
 using System.Collections.Concurrent;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -44,6 +45,16 @@ public class KEFCoreTableFactory(
     /// <inheritdoc/>
     public virtual IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)
         => _factories.GetOrAdd((database.Cluster, entityType.TopicName()), e => CreateTable(database, entityType)());
+
+    /// <inheritdoc/>
+    public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType)
+    {
+        if (!_factories.TryGetValue((cluster, entityType.TopicName()), out var table))
+        {
+            throw new InvalidOperationException($"EntityType {entityType} with topic {entityType.TopicName()} wasn't available");
+        }
+        return table;
+    }
 
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>

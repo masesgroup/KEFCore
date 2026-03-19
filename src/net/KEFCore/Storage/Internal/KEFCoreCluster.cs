@@ -76,9 +76,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
         foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
         {
-            var table = EnsureTable(database, entityType);
-            table.Register(database);
-            database.Tables.Add(table);
+            var table = tableFactory.GetOrCreate(database, entityType);
+            database.RegisterTable(table);
         }
 
         tableFactory.Start(database.Tables);
@@ -173,13 +172,6 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         _kefcoreAdminClient.DeleteTopics(coll, database.InfrastructureLogger);
 
-        if (_tables == null)
-        {
-            return false;
-        }
-
-        _tables = null;
-
         return true;
     }
     /// <inheritdoc/>
@@ -253,22 +245,22 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking EnsureSynchronized with {Timeout}", timeout);
         var remainingTimeout = timeout;
-        bool?[] bools = new bool?[_tables.Count];
+        bool?[] bools = new bool?[database.Tables.Count];
         Stopwatch stopwatch = new();
         do
         {
             int index = 0;
-            foreach (var item in _tables)
+            foreach (var item in database.Tables)
             {
                 stopwatch.Restart();
-                bools[index] = item.Value.EnsureSynchronized(remainingTimeout);
+                bools[index] = item.EnsureSynchronized(remainingTimeout);
                 stopwatch.Stop();
                 if (timeout != Timeout.Infinite)
                 {
                     remainingTimeout -= stopwatch.ElapsedMilliseconds;
                     if (remainingTimeout < 0)
                     {
-                        throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.Key}");
+                        throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.AssociatedTopicName}");
                     }
                 }
                 index++;
@@ -296,7 +288,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public IKEFCoreTable GetTable(IEntityType entityType)
     {
-        return tableFactory.Get(this, entityType.TopicName());
+        return tableFactory.Get(this, entityType);
     }
 
     /// <inheritdoc/>
@@ -374,12 +366,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffers();
             }
@@ -404,12 +395,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffer(keyValues);
             }
@@ -434,12 +424,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffersRange(rangeStart, rangeEnd);
             }
@@ -464,12 +453,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffersReverse();
             }
@@ -495,12 +483,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffersReverseRange(rangeStart, rangeEnd);
             }
@@ -528,12 +515,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
-            var key = entityType.TopicName();
-            if (_tables != null && _tables.TryGetValue(key, out var table))
+            if (table != null)
             {
                 return table.GetValueBuffersByPrefix(prefixValues);
             }
@@ -560,7 +546,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
             Check.DebugAssert(!entityType.IsAbstract(), "entityType is abstract");
 
-            var table = EnsureTable(database, entityType);
+            var table = tableFactory.GetOrCreate(database, entityType);
 
             IKEFCoreRowBag record;
 
@@ -676,22 +662,20 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return rowsAffected;
     }
 
-    // Must be called from inside the lock
-    private IKEFCoreTable EnsureTable(IKEFCoreDatabase database, IEntityType entityType)
-    {
-        _tables ??= new System.Collections.Concurrent.ConcurrentDictionary<string, IKEFCoreTable>();
+    //// Must be called from inside the lock
+    //private IKEFCoreTable EnsureTable(IKEFCoreDatabase database, IEntityType entityType)
+    //{
+    //    var entityTypes = entityType.GetAllBaseTypesInclusive();
+    //    foreach (var currentEntityType in entityTypes)
+    //    {
+    //        var key = currentEntityType.TopicName();
+    //        _ = _tables.GetOrAdd(key, (k) =>
+    //        {
+    //            database.InfrastructureLogger.Logger.LogInformation("KEFCoreCluster::EnsureTable creating table for {Name}", entityType.Name);
+    //            return tableFactory.Create(database, k, currentEntityType);
+    //        });
+    //    }
 
-        var entityTypes = entityType.GetAllBaseTypesInclusive();
-        foreach (var currentEntityType in entityTypes)
-        {
-            var key = currentEntityType.TopicName();
-            _ = _tables.GetOrAdd(key, (k) =>
-            {
-                database.InfrastructureLogger.Logger.LogInformation("KEFCoreCluster::EnsureTable creating table for {Name}", entityType.Name);
-                return tableFactory.Create(database, k, currentEntityType);
-            });
-        }
-
-        return _tables[entityType.TopicName()];
-    }
+    //    return _tables[entityType.TopicName()];
+    //}
 }

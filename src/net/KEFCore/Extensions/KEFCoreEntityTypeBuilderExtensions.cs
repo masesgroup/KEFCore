@@ -31,49 +31,6 @@ namespace MASES.EntityFrameworkCore.KNet.Extensions;
 public static class KEFCoreEntityTypeBuilderExtensions
 {
     /// <summary>
-    ///     Configures a query used to provide data for an entity type.
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="entityTypeBuilder">The builder for the entity type being configured.</param>
-    /// <param name="query">The query that will provide the underlying data for the entity type.</param>
-    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public static EntityTypeBuilder ToKEFCoreQuery(
-        this EntityTypeBuilder entityTypeBuilder,
-        LambdaExpression? query)
-    {
-        Check.NotNull(query, nameof(query));
-
-        entityTypeBuilder.Metadata.SetKEFCoreQuery(query);
-
-        return entityTypeBuilder;
-    }
-
-    /// <summary>
-    ///     Configures a query used to provide data for an entity type.
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="entityTypeBuilder">The builder for the entity type being configured.</param>
-    /// <param name="query">The query that will provide the underlying data for the entity type.</param>
-    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    public static EntityTypeBuilder<TEntity> ToKEFCoreQuery<TEntity>(
-        this EntityTypeBuilder<TEntity> entityTypeBuilder,
-        Expression<Func<IQueryable<TEntity>>> query)
-        where TEntity : class
-    {
-        Check.NotNull(query, nameof(query));
-
-        entityTypeBuilder.Metadata.SetKEFCoreQuery(query);
-
-        return entityTypeBuilder;
-    }
-
-    /// <summary>
     /// Sets the KEFCore event management behavior for this entity type,
     /// overriding the context-level default.
     /// </summary>

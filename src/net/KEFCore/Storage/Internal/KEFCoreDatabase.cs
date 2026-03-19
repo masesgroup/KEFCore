@@ -35,6 +35,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IKEFCoreCluster _cluster;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
+    private readonly List<IKEFCoreTable> _tables;
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -56,6 +57,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         _designTimeModel = designTimeModel;
         _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
+        _tables = [];
         _cluster = _clusterCache.CreateCluster(_options);
         _cluster.Register(this);
     }
@@ -63,6 +65,10 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     public void Dispose()
     {
         _cluster.Unregister(this);
+        foreach (var item in _tables)
+        {
+            item.Unregister(this);
+        }
     }
     /// <inheritdoc/>
     public virtual IKEFCoreCluster Cluster => _cluster;
@@ -77,7 +83,14 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
     /// <inheritdoc/>
-    public virtual IList<IKEFCoreTable> Tables { get; } = [];
+    public virtual IReadOnlyList<IKEFCoreTable> Tables => _tables;
+    /// <inheritdoc/>
+    public virtual void RegisterTable(IKEFCoreTable table)
+    {
+        if (_tables.Contains(table)) throw new InvalidOperationException("Cannot register a table twice.");
+        table.Register(this);
+        _tables.Add(table);
+    }
     /// <inheritdoc/>
     public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(this, entries, _updateLogger);
     /// <inheritdoc/>
