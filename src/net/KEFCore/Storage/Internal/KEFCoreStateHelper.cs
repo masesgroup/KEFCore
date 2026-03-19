@@ -51,11 +51,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 catch (Exception ex)
                 {
-                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                     if (IsCriticalException(ex))
                     {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                         throw;
                     }
+                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
             else
@@ -67,6 +68,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 catch (Exception ex)
                 {
+                    if (IsCriticalException(ex))
+                    {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        throw;
+                    }
                     logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
@@ -88,11 +94,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Exception ex)
             {
-                logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 if (IsCriticalException(ex))
                 {
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                     throw;
                 }
+                logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
             }
         }
 
@@ -158,6 +165,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 catch (Exception ex)
                 {
+                    if (IsCriticalException(ex))
+                    {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        throw;
+                    }
                     logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
@@ -169,7 +181,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
-                {
+                {             
+                    if (IsCriticalException(ex))
+                    {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        throw;
+                    }
                     logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
@@ -198,6 +215,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 }
                 catch (Exception ex)
                 {
+                    if (IsCriticalException(ex))
+                    {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        throw;
+                    }
                     logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
@@ -209,7 +231,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
-                {
+                {         
+                    if (IsCriticalException(ex))
+                    {
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        throw;
+                    }
                     logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
                 }
             }
@@ -264,6 +291,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Exception ex)
             {
+                if (IsCriticalException(ex))
+                {
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    throw;
+                }
                 logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
             }
         }
@@ -281,6 +313,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Exception ex)
             {
+                if (IsCriticalException(ex))
+                {
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    throw;
+                }
                 logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
             }
         }
