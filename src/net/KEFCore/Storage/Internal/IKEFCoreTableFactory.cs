@@ -40,9 +40,15 @@ public interface IKEFCoreTableFactory : IDisposable
     /// <returns></returns>
     IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType);
     /// <summary>
+    /// Check if all <paramref name="entityTypes"/> have associated <see cref="IKEFCoreTable"/>
+    /// </summary>
+    /// <param name="cluster"></param>
+    /// <param name="entityTypes"></param>
+    /// <returns></returns>
+    bool NeedsNewTables(IKEFCoreCluster cluster, IEnumerable<IEntityType> entityTypes);
+    /// <summary>
     /// Returns a <see cref="IKEFCoreTable"/>
     /// </summary>
-    /// <param name="tables"></param>
-    /// <returns></returns>
-    void Start(IEnumerable<IKEFCoreTable> tables);
+    /// <param name="database"></param>
+    void Start(IKEFCoreDatabase database);
 }

@@ -120,7 +120,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(database, prefixValues);
     /// <inheritdoc/>
-    public void Start() => _producer.Start();
+    public void Start(IKEFCoreDatabase database) => _producer.Start(database);
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => [.. properties.Select(p => p.GetKeyValueComparer())];
 

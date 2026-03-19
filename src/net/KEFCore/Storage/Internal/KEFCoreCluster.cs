@@ -29,7 +29,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -75,14 +74,22 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             var coll = TopicsFromModel(database, out var topics);
             _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
-            database.UpdateAdapterFactory.CreateStandalone();
-            foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
+            var adapter = database.UpdateAdapterFactory.CreateStandalone();
+            var entities = adapter.Model.GetEntityTypes();
+            bool needsNewTables = tableFactory.NeedsNewTables(this, entities);
+            if (!db.Options.UseCompactedReplicator && needsNewTables)
             {
-                var table = tableFactory.GetOrCreate(database, entityType);
-                database.RegisterTable(table);
+                database.InfrastructureLogger.Logger.LogInformation("KEFCore is using Streams, needs to stop topology due to new items to be added.");
+                if (_streamsForApplications.TryGetValue(db.Options.ApplicationId, out var streamsManager))
+                {
+                    streamsManager.StopTopology();
+                }
+                else database.InfrastructureLogger.Logger.LogInformation("Not found a Streams Manager for {AppId}, maybe it is the first start-up.", db.Options.ApplicationId);
             }
 
-            tableFactory.Start(database.Tables);
+            var tables = entities.Select((et) => tableFactory.GetOrCreate(database, et));
+            database.RegisterTables(tables);
+            tableFactory.Start(database);
 
             return database;
         });
@@ -215,7 +222,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public virtual bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking EnsureSynchronized with {Timeout}", timeout);
-        
+
         Register(database);
 
         var remainingTimeout = timeout;

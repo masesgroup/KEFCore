@@ -72,7 +72,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <summary>
         /// Creates and start the topology
         /// </summary>
-        void CreateAndStartTopology();
+        /// <param name="database"></param>
+        void CreateAndStartTopology(IKEFCoreDatabase database);
+        /// <summary>
+        /// Stop topology waiting for a new <see cref="CreateAndStartTopology(IKEFCoreDatabase)"/>
+        /// </summary>
+        bool StopTopology();
         /// <summary>
         /// Invoked when a new partiton/offset is received for <paramref name="entity"/>
         /// </summary>
@@ -188,13 +193,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
             {
+                var manager = ChangeManager;
+                var updaters = StreamsManager._updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == manager.Producer);
+
                 foreach (var storedEvent in factory(streams, StorageId, Optional))
                 {
-                    foreach (var updater in StreamsManager._updaters)
+                    foreach (var updater in updaters)
                     {
                         IKEFCoreDatabase database = updater.Key.Database;
                         KEFCoreDatabaseLocalData localData = updater.Value;
-                        ChangeManager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
                     }
                 }
             }
@@ -214,11 +222,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         // while this one is used to retain the allocated object to avoid their finalization before the streams is completly finalized
         private readonly ConcurrentDictionary<string, StreamsAssociatedData> _storagesForEntities = new();
 
+        private readonly object _lock = new();
         private readonly AutoResetEvent _dataReceived;
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _stateChanged;
-
         private readonly IKEFCoreCluster _kefcoreCluster;
+        private readonly System.Collections.Generic.List<string> _latestAdded = new();
+        private readonly bool _usePersistentStorage;
+        private readonly bool _useGlobalTable;
+        private readonly System.Threading.Thread _thread;
+
+        private bool _started = false;
         private StreamsConfigBuilder _streamsConfig;
         private TStreamBuilder _builder;
         private TTopology _topology;
@@ -228,10 +242,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _stateListener;
         private System.Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
-
-        private readonly bool _usePersistentStorage;
-        private readonly bool _useGlobalTable;
-        private readonly System.Threading.Thread _thread;
 
         static Java.Util.Properties PropertyUpdate(StreamsConfigBuilder builder)
         {
@@ -320,6 +330,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             var topicName = entityType.GetKEFCoreTopicName();
             var storage = _storagesForEntities.GetOrAdd(topicName, (tn) =>
             {
+                if (_currentState != Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING)
+                {
+                    throw new InvalidOperationException($"Cannot execute while Streams is in {_currentState} state");
+                }
+
                 string storageId = entityType.StorageIdForTable();
                 storageId = _usePersistentStorage ? storageId : System.Diagnostics.Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
@@ -342,10 +357,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entityType);
                 var storage = new StreamsAssociatedData(this, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
 
-                if (CheckState())
-                {
-                    CreateAndStartTopology();
-                }
+                _latestAdded.Add(tn);
                 return storage;
             });
 
@@ -392,48 +404,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        bool CheckState()
-        {
-            lock (this)
-            {
-                bool wasRunning = false;
-                if (_streams != null)
-                {
-                    var state = GetState(_streams);
-                    if (state != null)
-                    {
-                        if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING) { _started = false; }
-                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
-                        {
-                            Close(_streams!);
-                            _streams = null;
-                            wasRunning = true;
-                            _started = false;
-                        }
-                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN ||
-                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
-                        {
-                            System.Threading.Thread.Sleep(1000);
-                            CheckState();
-                        }
-                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_ERROR ||
-                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
-                        {
-                            Close(_streams!);
-                            _streams = null;
-                            _started = false;
-                        }
-                    }
-                }
-                return wasRunning;
-            }
-        }
-
         public void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity)
         {
             if (!_updaters.TryAdd((producer, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
-                database.InfrastructureLogger.Logger.LogError($"StreamsManager: Failed to register database for {entity}");
+                database.InfrastructureLogger.Logger.LogError($"StreamsManager: Failed to register database for {entity} twice");
             }
         }
 
@@ -445,33 +420,63 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        bool _started = false;
-        public void CreateAndStartTopology()
+        public void CreateAndStartTopology(IKEFCoreDatabase database)
         {
-            lock (this)
+            lock (_lock)
             {
-                if (!_started)
+                var latestAdded = CreateAndStartTopology();
+                // new added item will update IKEFCoreDatabase using the standard behavior
+                // items was managed due to other IKEFCoreDatabase instances shall update the requesting
+                var storedEntities = database.Tables.Select((t) => t.AssociatedTopicName).Where((t) => !latestAdded.Contains(t));
+                foreach (var item in storedEntities)
                 {
-                    _topology = CreateTopology(_builder!);
-                    _streams = CreateStreams(_topology, _streamsConfig!);
-                    SetHandlers(_streams, _errorHandler!, _stateListener!);
-                    StartTopology(_streams);
-                    _started = true;
-                    if (_usePersistentStorage)
+                    if (_storagesForEntities.TryGetValue(item, out var storage))
                     {
-                        try
+                        storage.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _streams, GetStoredData);
+                    }
+                    else _kefcoreCluster.InfrastructureLogger.Logger.LogError("{Item} was available in latest added, but it is missing in stored entities", item);
+                }
+            }
+        }
+
+        private System.Collections.Generic.List<string> CreateAndStartTopology()
+        {
+            lock (_lock)
+            {
+                try
+                {
+                    if (!_started)
+                    {
+                        _topology = CreateTopology(_builder!);
+                        _streams = CreateStreams(_topology, _streamsConfig!);
+                        SetHandlers(_streams, _errorHandler!, _stateListener!);
+                        StartTopology(_streams);
+                        _started = true;
+                        if (_usePersistentStorage)
                         {
-                            Interlocked.Increment(ref canExecute);
-                            foreach (var item in _storagesForEntities)
+                            try
                             {
-                                item.Value.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _streams, GetStoredData);
+                                Interlocked.Increment(ref canExecute);
+                                foreach (var item in _latestAdded) // first time latest added are all entities
+                                {
+                                    if (_storagesForEntities.TryGetValue(item, out var storage))
+                                    {
+                                        storage.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _streams, GetStoredData);
+                                    }
+                                    else _kefcoreCluster.InfrastructureLogger.Logger.LogError("{Item} was available in latest added, but it is missing in stored entities", item);
+                                }
+                            }
+                            finally
+                            {
+                                Interlocked.Decrement(ref canExecute);
                             }
                         }
-                        finally
-                        {
-                            Interlocked.Decrement(ref canExecute);
-                        }
                     }
+                    return new System.Collections.Generic.List<string>(_latestAdded);
+                }
+                finally
+                {
+                    _latestAdded.Clear();
                 }
             }
         }
@@ -587,6 +592,46 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             watch.Stop();
             KNet.Internal.DebugPerformanceHelper.ReportString($"StreamsManager in running state started after {watch.Elapsed}");
 #endif
+        }
+
+        /// <summary>
+        /// Stop topology waiting for a new <see cref="CreateAndStartTopology(IKEFCoreDatabase)"/>
+        /// </summary>
+        public bool StopTopology()
+        {
+            lock (_lock)
+            {
+                bool wasRunning = false;
+                if (_streams != null)
+                {
+                    var state = GetState(_streams);
+                    if (state != null)
+                    {
+                        if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING) { _started = false; }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.RUNNING)
+                        {
+                            Close(_streams!);
+                            _streams = null;
+                            wasRunning = true;
+                            _started = false;
+                        }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_SHUTDOWN ||
+                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.REBALANCING)
+                        {
+                            System.Threading.Thread.Sleep(1000);
+                            StopTopology();
+                        }
+                        else if (state == Org.Apache.Kafka.Streams.KafkaStreams.State.PENDING_ERROR ||
+                                 state == Org.Apache.Kafka.Streams.KafkaStreams.State.ERROR)
+                        {
+                            Close(_streams!);
+                            _streams = null;
+                            _started = false;
+                        }
+                    }
+                }
+                return wasRunning;
+            }
         }
 
         /// <inheritdoc/>

@@ -96,7 +96,8 @@ public interface IEntityTypeProducer : IDisposable
     /// <summary>
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>
-    void Start();
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the operation</param>
+    void Start(IKEFCoreDatabase database);
     /// <summary>
     /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>

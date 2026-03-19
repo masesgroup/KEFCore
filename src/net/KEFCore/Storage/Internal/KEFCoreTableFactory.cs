@@ -56,14 +56,23 @@ public class KEFCoreTableFactory(
         return table;
     }
 
-    /// <summary>
-    /// Allocates a new <see cref="IEntityTypeProducer"/>
-    /// </summary>
-    public void Start(IEnumerable<IKEFCoreTable> tables)
+    /// <inheritdoc/>
+    public virtual bool NeedsNewTables(IKEFCoreCluster cluster, IEnumerable<IEntityType> entityTypes)
     {
-        foreach (var table in tables)
+        bool result = true;
+        foreach (var item in entityTypes)
         {
-            table.Start();
+            result &= _factories.ContainsKey((cluster, item.GetKEFCoreTopicName()));
+        }
+        return !result;
+    }
+
+    /// <inheritdoc/>
+    public void Start(IKEFCoreDatabase database)
+    {
+        foreach (var table in database.Tables)
+        {
+            table.Start(database);
         }
     }
     /// <inheritdoc/>

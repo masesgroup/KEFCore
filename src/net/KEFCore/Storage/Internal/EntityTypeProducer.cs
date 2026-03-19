@@ -384,7 +384,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (!_updaters.TryAdd(database, new KEFCoreDatabaseLocalData(database, _entityType)))
             {
-                database.InfrastructureLogger.Logger.LogError($"Failed to register database");
+                database.InfrastructureLogger.Logger.LogError("EntityTypeProducer: Failed to register database twice");
             }
         }
         else
@@ -532,9 +532,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <inheritdoc/>
-    public void Start()
+    public void Start(IKEFCoreDatabase database)
     {
-        if (_streamData != null) _streamsManager!.CreateAndStartTopology();
+        if (_streamData != null) _streamsManager!.CreateAndStartTopology(database);
         else if (_knetCompactedReplicator != null)
         {
 #if DEBUG_PERFORMANCE
@@ -543,6 +543,15 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (!_knetCompactedReplicator.IsStarted)
             {
                 _knetCompactedReplicator.Start();
+            }
+            else
+            {
+                // instance ready, try to fill IKEFCoreDatabase
+                KEFCoreDatabaseLocalData localData = new(database, _entityType);
+                foreach (var item in _knetCompactedReplicator)
+                {
+                    KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, item.Key, item.Value);
+                }
             }
 #if DEBUG_PERFORMANCE
             sw.Stop();

@@ -250,7 +250,7 @@ public class KEFCoreDbContext : DbContext
     /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka� backend
     /// </summary>
     /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka� backend</param>
-    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result, <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTime"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(TimeSpan waitTime)
     {
@@ -260,7 +260,7 @@ public class KEFCoreDbContext : DbContext
     /// Invoke the method to wait a timeout defined from <paramref name="waitTimeMs"/> for synchonization with Apache Kafka� backend
     /// </summary>
     /// <param name="waitTimeMs">The time expressed as milliseconds to wait for synchonization with Apache Kafka� backend</param>
-    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result, <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTimeMs"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(long waitTimeMs = Timeout.Infinite)
     {
