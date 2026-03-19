@@ -1,6 +1,5 @@
 {
   "UseKNetStreams": false,
   "UseByteBufferDataTransfer": false,
-  "BootstrapServers": "localhost:9092",
   "NumberOfExecutions": 10
 }
