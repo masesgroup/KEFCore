@@ -44,11 +44,11 @@ Using the [topic compaction](https://kafka.apache.org/documentation/#compaction)
 - Update: a producer storing a new record with a previously stored unique key will discard the old records
 - Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key
 
-All CRUD operations are helped, behind the scene, from ~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or~~ [`KNetProducer`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs)/[Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/).
+All CRUD operations are helped, behind the scene, from [`KNetProducer`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs)/[Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/).
 
 ### First-level cache
 
-~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) or~~ [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) act as first-level cache of [Entity Framework Core](https://learn.microsoft.com/ef/core/): **data coming from the Apache Kafka™ cluster updates their content while the system is running**.
+[Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) act as first-level cache of [Entity Framework Core](https://learn.microsoft.com/ef/core/): **data coming from the Apache Kafka™ cluster updates their content while the system is running**.
 The behavior is intrinsic and does not need any extra call to the back-end.
 
 ### Data storage
@@ -106,16 +106,31 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 ```
 
-each entity maps to a specific topic using the feature added with https://github.com/masesgroup/KEFCore/issues/417:
-- Blog belongs to the topic named [DatabaseName].Simple.Blog
-- Post belongs to the topic named [DatabaseName].Simple.Post
+Each entity maps to a specific topic. The topic name is resolved at model finalization time by `KEFCoreTopicNamingConvention` using the following priority:
 
-where DatabaseName is the property defined from `BloggingContext` see [KafkaDbContext](kafkadbcontext.md).
+1. `KEFCoreTopicAttribute` applied directly to the entity class
+2. `TableAttribute` applied to the entity class, including schema prefix if specified (e.g. `schema.tablename`)
+3. The EF Core entity type name (`IReadOnlyTypeBase.Name`), which includes the model namespace
+
+The topic prefix is resolved using the following priority:
+
+1. `KEFCoreTopicPrefixAttribute` applied directly to the entity class (a `null` prefix explicitly disables prefixing for that entity)
+2. `KEFCoreTopicPrefixAttribute` applied to the `DbContext` class
+3. `modelBuilder.UseKEFCoreTopicPrefix()` set in `OnModelCreating`
+4. No prefix
+
+In the example above:
+- Blog belongs to the topic named `[DatabaseName].Simple.Blog`
+- Post belongs to the topic named `[DatabaseName].Simple.Post`
 
 > [!IMPORTANT]
-> The entities Blog and Post are decorated with [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute), if the attribute is missing the topic name becomes different and use the [**Name**](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name) property of the Entity which belongs to the namespace defining it:
-> - Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog
-> - Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post
+> If neither `KEFCoreTopicAttribute` nor `TableAttribute` is applied, the topic name falls back to the EF Core entity type **Name** property which includes the full namespace:
+> - Blog belongs to the topic named `[DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog`
+> - Post belongs to the topic named `[DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post`
+>
+> It is strongly recommended to use `[Table]` or `[KEFCoreTopicAttribute]` to ensure stable topic names across namespace refactorings.
+
+See [conventions](conventions.md) for the full documentation on topic naming, event management, and ComplexType conventions.
 
 Established how [Apache Kafka™](https://kafka.apache.org/) stores the data it is important to understand how the storage is filled with the data in the model.
 Each element in the [DbSet](https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1), in the above example there are **Blogs** and **Posts**, is converted in something can be used from [Apache Kafka™](https://kafka.apache.org/).
@@ -142,7 +157,7 @@ The features below are strictly correlated with the consumers receiving back the
 ### Distributed cache
 
 In the previous chapter was stated that consumers align the application data to the last topics information.
-The alignment is managed from ~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or~~ [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/), everything is driven from the Apache Kafka™ back-end.
+The alignment is managed from [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/), everything is driven from the Apache Kafka™ back-end.
 Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
 This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka™ back-end:
 - Apache Kafka™ stores physically the cache (shared state) within the topics and routes changes to the subscribed applications
@@ -156,8 +171,10 @@ If an application restarts it will be able to retrieve latest data (latest cache
 
 Generally, an application based on [Entity Framework Core](https://learn.microsoft.com/ef/core/), executes queries to the back-end to store, or retrieve, information on demand.
 The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode:
-- Mainly these change events are used from ~~[`KNetCompactedReplicator`](https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs) and/or~~ [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) to align the local state;
+- Mainly these change events are used from [Apache Kafka™ Streams](https://kafka.apache.org/documentation/streams/) to align the local state;
 - Moreover [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) can inform, using callbacks and at zero cost, the registered application about these events.
+
+By default, event management is enabled for all entity types via `KEFCoreManageEventsConvention`. To disable it for a specific entity apply `[KEFCoreIgnoreEventsAttribute]` or call `HasKEFCoreManageEvents(false)` in `OnModelCreating`. See [conventions](conventions.md) for details.
 
 Then the application can use the reported events in many modes:
 - execute a query

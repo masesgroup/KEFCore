@@ -124,6 +124,7 @@ This project adheres to the Contributor [Covenant code of conduct](https://githu
 * [Use cases](articles/usecases.md)
 * [Templates usage](articles/usageTemplates.md)
 * [Serialization](articles/serialization.md)
+* [Conventions](articles/conventions.md)
 * [Schema migration](articles/migration.md)
 * [External application](articles/externalapplication.md)
 * [Roadmap](articles/roadmap.md)
