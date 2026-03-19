@@ -36,10 +36,6 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// </summary>
     IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
     /// <summary>
-    /// Reference to <see cref="IValueGeneratorSelector"/> received
-    /// </summary>
-    IValueGeneratorSelector ValueGeneratorSelector { get; }
-    /// <summary>
     /// Reference to <see cref="KEFCoreOptionsExtension"/> received
     /// </summary>
     KEFCoreOptionsExtension Options { get; }

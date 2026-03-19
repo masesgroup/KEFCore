@@ -68,8 +68,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseKafkaTopicPrefix(ProgramConfig.Config.UseModelBuilder ? ProgramConfig.Config.TopicPrefixWithModel
+            modelBuilder.UseKEFCoreTopicPrefix(ProgramConfig.Config.UseModelBuilder ? ProgramConfig.Config.TopicPrefixWithModel
                                                                                   : ProgramConfig.Config.TopicPrefix);
+
+            modelBuilder.UseKEFCoreManageEvents(ProgramConfig.Config.ManageEvents);
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -111,7 +114,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
         public bool UseValueContainerByteBufferDataTransfer { get; set; } = true;
-        public bool PreserveStreamsAcrossContexts { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
         public string TopicPrefix { get; set; } = "TestDB";
         public string TopicPrefixWithModel { get; set; } = "TestDBWithModel";
@@ -148,7 +150,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
             context.UseValueContainerByteBufferDataTransfer = UseValueContainerByteBufferDataTransfer;
-            context.ManageEvents = ManageEvents;
             context.DefaultSynchronizationTimeout = DefaultSynchronizationTimeout;
 
             if (UseJson)
@@ -233,7 +234,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
                 KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();
-                KEFCore.PreserveStreamsAcrossContexts = Config.PreserveStreamsAcrossContexts;
             }
         }
 

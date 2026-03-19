@@ -51,11 +51,5 @@ namespace MASES.EntityFrameworkCore.KNet
         {
             return Path.Combine(MASES.KNet.Const.DefaultConfigurationPath, "kefcore-log4j2.yaml");
         }
-
-        /// <summary>
-        /// Set to <see langword="false"/> to disable Apache Kafka Streams caching, default is <see langword="true"/>
-        /// </summary>
-        /// <remarks>This value is read only once when application starts: if the backend uses Apache Kafka Streams (i.e. <see cref="KEFCoreDbContext.UseCompactedReplicator"/> is <see langword="false"/>), the value is read to understand how to manage Streams instances lifetime</remarks>
-        public static bool PreserveStreamsAcrossContexts { get; set; } = true;
     }
 }

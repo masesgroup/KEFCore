@@ -24,14 +24,11 @@ using Java.Util;
 using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -46,6 +43,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KEFCoreCluster(KEFCoreOptionsExtension options,
     IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
     IKEFCoreTableFactory tableFactory,
+    IValueGeneratorSelector valueGeneratorSelector,
     IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreCluster
 {
     private readonly KEFCoreClusterAdmin _kefcoreAdminClient = KEFCoreClusterAdmin.Create(options.BootstrapServers);
@@ -64,7 +62,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => infrastructureLogger;
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => complexTypeConverterFactory;
-
+    /// <inheritdoc/>
+    public virtual IValueGeneratorSelector ValueGeneratorSelector => valueGeneratorSelector;
     /// <inheritdoc/>
     public virtual void Register(IKEFCoreDatabase database)
     {
@@ -119,7 +118,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         topics = new System.Collections.Generic.List<string>();
         foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
         {
-            string topic = entityType.TopicName();
+            string topic = entityType.GetKEFCoreTopicName();
             if (_topicForEntity.TryRemove(entityType, out string topicName))
             {
                 if (topicName != topic)
@@ -178,61 +177,44 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public virtual bool EnsureCreated(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking EnsureCreated");
-        var coll = TopicsFromModel(database, out var topics);
-        if (!database.Options.UsePersistentStorage)
+
+        var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
+        var entries = new System.Collections.Generic.List<IUpdateEntry>();
+        foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
         {
-            ResetStream(database, topics);
+            tableFactory.Get(this, entityType); // test existence
+            IEntityType targetEntityType = null;
+            foreach (var targetSeed in entityType.GetSeedData())
+            {
+                targetEntityType ??= updateAdapter.Model.FindEntityType(entityType.Name)!;
+                var entry = updateAdapter.CreateEntry(targetSeed, targetEntityType);
+                entry.EntityState = EntityState.Added;
+                entries.Add(entry);
+            }
         }
 
-        _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
+        ExecuteTransaction(database, entries, updateLogger);
 
-        var valuesSeeded = _tables == null;
-        if (valuesSeeded)
+        if (database.Options.DefaultSynchronizationTimeout != 0)
         {
-            System.Collections.Generic.List<IKEFCoreTable> tables = new();
-            _tables = new System.Collections.Concurrent.ConcurrentDictionary<string, IKEFCoreTable>();
-
-            var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
-            var entries = new System.Collections.Generic.List<IUpdateEntry>();
-            foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            try
             {
-                tables.Add(EnsureTable(database, entityType));
-
-                IEntityType targetEntityType = null;
-                foreach (var targetSeed in entityType.GetSeedData())
-                {
-                    targetEntityType ??= updateAdapter.Model.FindEntityType(entityType.Name)!;
-                    var entry = updateAdapter.CreateEntry(targetSeed, targetEntityType);
-                    entry.EntityState = EntityState.Added;
-                    entries.Add(entry);
-                }
+                EnsureSynchronized(database, database.Options.DefaultSynchronizationTimeout);
             }
-
-            tableFactory.Start(tables);
-
-            if (database.Options.DefaultSynchronizationTimeout != 0)
+            catch
             {
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                try
-                {
-                    EnsureSynchronized(database, database.Options.DefaultSynchronizationTimeout);
-                }
-                catch
-                {
-                    database.InfrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
-                    throw;
-                }
-                finally
-                {
-                    stopwatch.Stop();
-                    database.InfrastructureLogger.Logger.LogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
-                }
+                database.InfrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
+                throw;
             }
-
-            ExecuteTransaction(database, entries, updateLogger);
+            finally
+            {
+                stopwatch.Stop();
+                database.InfrastructureLogger.Logger.LogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
+            }
         }
 
-        return valuesSeeded;
+        return true;
     }
     /// <inheritdoc/>
     public virtual bool EnsureConnected(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
@@ -297,7 +279,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
             database.InfrastructureLogger.Logger.LogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
-            var topicName = entityType.TopicName();
+            var topicName = entityType.GetKEFCoreTopicName();
             var requestedPartitions = entityType.NumPartitions(database.Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(database.Options);
 
@@ -331,28 +313,28 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     }
 
     /// <inheritdoc/>
-    IDictionary<int, long> LatestOffsetForEntity(IKEFCoreDatabase database, IEntityType entityType, int waitTime, int maxCycles, int cycle)
+    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        database.InfrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
+        InfrastructureLogger.Logger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
 
         try
         {
-            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.TopicName());
+            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.GetKEFCoreTopicName());
         }
         catch (UnknownTopicOrPartitionException ex)
         {
             if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing LatestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
-            database.InfrastructureLogger.Logger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            InfrastructureLogger.Logger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
             Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
-            return LatestOffsetForEntity(database, entityType, waitTime, maxCycles, cycle++);
+            return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
     }
 
     /// <inheritdoc/>
-    public IDictionary<int, long> LatestOffsetForEntity(IKEFCoreDatabase database, IEntityType entityType)
+    public IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType)
     {
-        return LatestOffsetForEntity(database, entityType, 100, 10, 0);
+        return LatestOffsetForEntity(entityType, 100, 10, 0);
     }
 
     /// <inheritdoc/>
@@ -372,7 +354,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffers();
+                return table.GetValueBuffers(database);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -401,7 +383,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffer(keyValues);
+                return table.GetValueBuffer(database, keyValues);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -430,7 +412,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersRange(rangeStart, rangeEnd);
+                return table.GetValueBuffersRange(database, rangeStart, rangeEnd);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -459,7 +441,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersReverse();
+                return table.GetValueBuffersReverse(database);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -489,7 +471,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersReverseRange(rangeStart, rangeEnd);
+                return table.GetValueBuffersReverseRange(database, rangeStart, rangeEnd);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -521,7 +503,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersByPrefix(prefixValues);
+                return table.GetValueBuffersByPrefix(database, prefixValues);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE

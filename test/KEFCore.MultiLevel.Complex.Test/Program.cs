@@ -165,11 +165,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                     ProgramConfig.ReportString($"Elapsed UseModelBuilder {watch.ElapsedMilliseconds} ms");
                 }
 
-                if (!context.ManageEvents)
-                {
-                    Thread.Sleep(5000);
-                }
-
                 BlogComplex blog = null;
                 try
                 {

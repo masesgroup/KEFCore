@@ -33,6 +33,27 @@ using System.Collections;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
+
+readonly struct KEFCoreDatabaseLocalData
+{
+    public KEFCoreDatabaseLocalData(IKEFCoreDatabase database, IEntityType entityType)
+    {
+        Database = database;
+        ManageEvents = entityType.GetManageEvents();
+        if (ManageEvents)
+        {
+            UpdateAdapter = database.UpdateAdapterFactory.Create();
+            EntityTypeForChanges = UpdateAdapter.Model.FindEntityType(entityType.ClrType)!;
+            PrimaryKeyForChanges = EntityTypeForChanges.FindPrimaryKey()!;
+        }
+    }
+    public readonly IKEFCoreDatabase Database;
+    public readonly bool ManageEvents;
+    public readonly IUpdateAdapter? UpdateAdapter;
+    public readonly IEntityType? EntityTypeForChanges;
+    public readonly IKey? PrimaryKeyForChanges;
+}
+
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -69,26 +90,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IKEFCoreStreamsRetriever<TKey>? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
-
-    readonly struct KEFCoreDatabaseLocalData
-    {
-        public KEFCoreDatabaseLocalData(IKEFCoreDatabase database, IEntityType entityType)
-        {
-            Database = database;
-            ManageEvents = entityType.GetManageEvents();
-            if (ManageEvents)
-            {
-                UpdateAdapter = database.UpdateAdapterFactory.Create();
-                EntityTypeForChanges = UpdateAdapter.Model.FindEntityType(entityType.ClrType)!;
-                PrimaryKeyForChanges = EntityTypeForChanges.FindPrimaryKey()!;
-            }
-        }
-        public readonly IKEFCoreDatabase Database;
-        public readonly bool ManageEvents;
-        public readonly IUpdateAdapter? UpdateAdapter;
-        public readonly IEntityType? EntityTypeForChanges;
-        public readonly IKey? PrimaryKeyForChanges;
-    }
 
     readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
@@ -263,7 +264,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 UpdateMode = UpdateModeTypes.OnConsume,
                 BootstrapServers = _database.Options.BootstrapServers,
-                StateName = _entityType.TopicName(),
+                StateName = _entityType.GetKEFCoreTopicName(),
                 Partitions = _entityType.NumPartitions(_database.Options),
                 ConsumerInstances = _entityType.ConsumerInstances(_database.Options),
                 ReplicationFactor = _entityType.ReplicationFactor(_database.Options),
@@ -281,15 +282,15 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             _streamsManager = database.Cluster.GetStreamsManager(database, (db) =>
             {
-                return db.Options.UseKNetStreams ? KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster)
-                                                 : KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster);
+                return db.Options.UseKNetStreams ? KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster, db.Options)
+                                                 : KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster, db.Options);
             });
 
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
             _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
             _kafkaProducer.SetCallback(_producerCallback);
-            _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database, _entityMetadata, _primaryKey, _complexTypeConverterFactory)
-                                                           : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database, _entityMetadata, _primaryKey, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
+            _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_entityMetadata, _complexTypeConverterFactory)
+                                                           : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
     }
 
@@ -386,6 +387,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 database.InfrastructureLogger.Logger.LogError($"Failed to register database");
             }
         }
+        else if (_streamsManager != null)
+        {
+            _streamsManager.Register(database, _entityType);
+        }
     }
     /// <inheritdoc/>
     public virtual void Unregister(IKEFCoreDatabase database)
@@ -396,6 +401,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 database.InfrastructureLogger.Logger.LogError($"Failed to unregister database");
             }
+        }
+        else if (_streamsManager != null)
+        {
+            _streamsManager.Unregister(database);
         }
     }
     /// <inheritdoc/>
@@ -462,14 +471,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _valueSerdes?.Dispose();
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffers()
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
-        if (_streamData != null) return _streamData.GetValueBuffers();
+        if (_streamData != null) return _streamData.GetValueBuffers(database);
         else if (_knetCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _knetCompactedReplicator);
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public ValueBuffer? GetValueBuffer(object?[]? keyValues)
+    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues)
     {
         if (keyValues == null) return null;
         TKey? key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
@@ -485,38 +494,38 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd)
     {
         if (_streamData != null)
         {
-            return _streamData.GetValueBuffersRange(_keyValueFactory, rangeStart, rangeEnd);
+            return _streamData.GetValueBuffersRange(database, _keyValueFactory, rangeStart, rangeEnd);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverse()
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
     {
-        if (_streamData != null) return _streamData.GetValueBuffersReverse();
+        if (_streamData != null) return _streamData.GetValueBuffersReverse(database);
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd)
     {
         if (_streamData != null)
         {
-            return _streamData.GetValueBuffersReverseRange(_keyValueFactory, rangeStart, rangeEnd);
+            return _streamData.GetValueBuffersReverseRange(database, _keyValueFactory, rangeStart, rangeEnd);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues)
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues)
     {
         if (_streamData != null)
         {
-            return _streamData.GetValueBuffersByPrefix(_keyValueFactory, prefixValues);
+            return _streamData.GetValueBuffersByPrefix(database, _keyValueFactory, prefixValues);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support prefix iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
@@ -582,7 +591,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+            KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
         }
     }
 
@@ -593,7 +602,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+            KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
         }
     }
 

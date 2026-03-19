@@ -111,11 +111,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                     }
                 }
 
-                if (!context.ManageEvents)
-                {
-                    Thread.Sleep(5000);
-                }
-
                 BlogComplex blog = null;
                 try
                 {

@@ -41,6 +41,10 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }
     /// <summary>
+    /// The global <see cref="IValueGeneratorSelector"/>
+    /// </summary>
+    IValueGeneratorSelector ValueGeneratorSelector { get; }
+    /// <summary>
     /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
     /// </summary>
     /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be registered</param>
@@ -87,7 +91,7 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     /// <param name="entityType">The <see cref="IEntityType"/> to check</param>
     /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the values</returns>
-    IDictionary<int, long> LatestOffsetForEntity(IKEFCoreDatabase database, IEntityType entityType);
+    IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/>
     /// </summary>

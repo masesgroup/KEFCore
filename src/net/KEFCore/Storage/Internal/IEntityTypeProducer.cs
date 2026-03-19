@@ -54,39 +54,45 @@ public interface IEntityTypeProducer : IDisposable
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffers();
+    IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database);
     /// <summary>
     /// Retrieve an<see cref="ValueBuffer"/> associated to <paramref name="keyValues"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="keyValues">The key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    ValueBuffer? GetValueBuffer(object?[]? keyValues);
+    ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues);
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersReverse();
+    IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database);
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="prefixValues">The prefix</param>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues);
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues);
     /// <summary>
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>

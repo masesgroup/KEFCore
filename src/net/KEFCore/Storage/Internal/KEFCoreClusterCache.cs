@@ -53,7 +53,7 @@ public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory,
 
     /// <inheritdoc/>
     public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, _infrastructureLogger, _tableFactory, _complexTypeConverterFactory));
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, _infrastructureLogger, _tableFactory, _valueGeneratorSelector, _complexTypeConverterFactory));
 
     /// <inheritdoc/>
     public virtual void Dispose(IKEFCoreCluster cluster)

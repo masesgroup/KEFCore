@@ -44,14 +44,14 @@ public class KEFCoreTableFactory(
 
     /// <inheritdoc/>
     public virtual IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)
-        => _factories.GetOrAdd((database.Cluster, entityType.TopicName()), e => CreateTable(database, entityType)());
+        => _factories.GetOrAdd((database.Cluster, entityType.GetKEFCoreTopicName()), e => CreateTable(database, entityType)());
 
     /// <inheritdoc/>
     public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType)
     {
-        if (!_factories.TryGetValue((cluster, entityType.TopicName()), out var table))
+        if (!_factories.TryGetValue((cluster, entityType.GetKEFCoreTopicName()), out var table))
         {
-            throw new InvalidOperationException($"EntityType {entityType} with topic {entityType.TopicName()} wasn't available");
+            throw new InvalidOperationException($"EntityType {entityType} with topic {entityType.GetKEFCoreTopicName()} wasn't available");
         }
         return table;
     }

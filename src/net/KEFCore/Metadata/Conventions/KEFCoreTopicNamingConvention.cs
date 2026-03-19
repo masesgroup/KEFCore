@@ -43,7 +43,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///   (a <see langword="null"/> prefix explicitly disables prefixing for that entity).</description></item>
 ///   <item><description>The context-level prefix provided at convention registration time,
 ///   which itself comes from <see cref="KEFCoreTopicPrefixAttribute"/> on the <see cref="DbContext"/>
-///   or from <see cref="KEFCoreModelBuilderExtensions.UseKafkaTopicPrefix"/>.</description></item>
+///   or from <see cref="KEFCoreModelBuilderExtensions.UseKEFCoreTopicPrefix"/>.</description></item>
 /// </list>
 /// </para>
 /// </remarks>

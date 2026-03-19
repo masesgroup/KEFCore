@@ -47,7 +47,7 @@ public static class KEFCoreModelBuilderExtensions
     /// <param name="modelBuilder">The <see cref="ModelBuilder"/> to configure.</param>
     /// <param name="prefix">The topic prefix, or <see langword="null"/> to disable prefixing.</param>
     /// <returns>The same <see cref="ModelBuilder"/> for chaining.</returns>
-    public static ModelBuilder UseKafkaTopicPrefix(
+    public static ModelBuilder UseKEFCoreTopicPrefix(
         this ModelBuilder modelBuilder, string? prefix)
     {
         modelBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicPrefix, prefix);
@@ -63,7 +63,7 @@ public static class KEFCoreModelBuilderExtensions
     /// <param name="entityTypeBuilder">The <see cref="EntityTypeBuilder"/> to configure.</param>
     /// <param name="topicName">The Kafka topic name.</param>
     /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
-    public static EntityTypeBuilder ToKafkaTopic(
+    public static EntityTypeBuilder ToKEFCoreTopic(
         this EntityTypeBuilder entityTypeBuilder, string topicName)
     {
         entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicName, topicName);
@@ -76,7 +76,7 @@ public static class KEFCoreModelBuilderExtensions
     /// <param name="entityTypeBuilder">The <see cref="EntityTypeBuilder"/> to configure.</param>
     /// <param name="prefix">The topic prefix, or <see langword="null"/> to disable prefixing for this entity.</param>
     /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
-    public static EntityTypeBuilder HasKafkaTopicPrefix(
+    public static EntityTypeBuilder HasKEFCoreTopicPrefix(
         this EntityTypeBuilder entityTypeBuilder, string? prefix)
     {
         entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicPrefix, prefix);

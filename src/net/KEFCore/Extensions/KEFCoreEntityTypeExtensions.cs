@@ -54,18 +54,11 @@ public static class KEFCoreEntityTypeExtensions
         => entityType.FindAnnotation(KEFCoreAnnotationNames.ManageEvents)?.Value as bool? ?? true;
 
     /// <summary>
-    /// Creates the topic name
-    /// </summary>
-    public static string TopicName(this IEntityType entityType)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicName)?.Value as string
-           ?? entityType.Name;
-
-    /// <summary>
     /// Creates the storage id
     /// </summary>
     public static string StorageIdForTable(this IEntityType entityType)
     {
-        return $"Table_{entityType.TopicName()}";
+        return $"Table_{entityType.GetKEFCoreTopicName()}";
     }
     /// <summary>
     /// Creates the application id

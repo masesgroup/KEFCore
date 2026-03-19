@@ -306,13 +306,6 @@ public class KEFCoreDbContext : DbContext
 
         optionsBuilder.UseKEFCore(ApplicationId, BootstrapServers, (o) =>
         {
-            if (ManageEvents 
-                && !(UseCompactedReplicator || UseGlobalTable) 
-                && DefaultNumPartitions > 1)
-            {
-                throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-            }
-
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);

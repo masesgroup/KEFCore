@@ -108,17 +108,17 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records) => _producer.Commit(futures, records);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffers() => _producer.GetValueBuffers();
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database) => _producer.GetValueBuffers(database);
     /// <inheritdoc/>
-    public virtual ValueBuffer? GetValueBuffer(object?[]? keyValues) => _producer.GetValueBuffer(keyValues);
+    public virtual ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues) => _producer.GetValueBuffer(database, keyValues);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersRange(rangeStart, rangeEnd);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersRange(database, rangeStart, rangeEnd);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse() => _producer.GetValueBuffersReverse();
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database) => _producer.GetValueBuffersReverse(database);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(rangeStart, rangeEnd);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(database, rangeStart, rangeEnd);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(prefixValues);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(database, prefixValues);
     /// <inheritdoc/>
     public void Start() => _producer.Start();
 

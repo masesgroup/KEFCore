@@ -29,7 +29,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
 {
     private readonly IKEFCoreClusterCache _clusterCache;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger;
-    private readonly IValueGeneratorSelector _valueGeneratorSelector;
     private readonly KEFCoreOptionsExtension _options;
     private readonly IDesignTimeModel _designTimeModel;
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
@@ -43,7 +42,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         DatabaseDependencies dependencies,
         IKEFCoreClusterCache clusterCache,
         IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
-        IValueGeneratorSelector valueGeneratorSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
@@ -52,7 +50,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     {
         _clusterCache = clusterCache;
         _infrastructureLogger = infrastructureLogger;
-        _valueGeneratorSelector = valueGeneratorSelector;
         _options = options.Extensions.OfType<KEFCoreOptionsExtension>().First();
         _designTimeModel = designTimeModel;
         _updateAdapterFactory = updateAdapterFactory;
@@ -74,8 +71,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     public virtual IKEFCoreCluster Cluster => _cluster;
     /// <inheritdoc/>
     public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => _infrastructureLogger;
-    /// <inheritdoc/>
-    public virtual IValueGeneratorSelector ValueGeneratorSelector => _valueGeneratorSelector;
     /// <inheritdoc/>
     public virtual KEFCoreOptionsExtension Options => _options;
     /// <inheritdoc/>
