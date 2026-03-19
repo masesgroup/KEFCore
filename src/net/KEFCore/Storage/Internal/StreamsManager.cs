@@ -59,16 +59,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <summary>
         /// Register an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="table">The <see cref="IKEFCoreTable"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
         /// <param name="entity">Associated <see cref="IEntityType"/></param>
-        void Register(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entity);
+        void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity);
         /// <summary>
         /// Unregister an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="table">The <see cref="IKEFCoreTable"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
-        void Unregister(IKEFCoreTable table, IKEFCoreDatabase database);
+        void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database);
         /// <summary>
         /// Creates and start the topology
         /// </summary>
@@ -204,7 +204,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 TimestampExtractor?.Dispose();
             }
         }
-        readonly ConcurrentDictionary<(IKEFCoreTable Table, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
+        readonly ConcurrentDictionary<(IEntityTypeProducer Producer, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
         // enqueues changes from cluster when are send
         private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
         // enqueues changes from cluster when are send
@@ -430,19 +430,19 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Register(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entity)
+        public void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity)
         {
-            if (!_updaters.TryAdd((table, database), new KEFCoreDatabaseLocalData(database, entity)))
+            if (!_updaters.TryAdd((producer, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
-                database.InfrastructureLogger.Logger.LogError($"Failed to register database for Entity {entity}");
+                database.InfrastructureLogger.Logger.LogError($"StreamsManager: Failed to register database for {entity}");
             }
         }
 
-        public void Unregister(IKEFCoreTable table, IKEFCoreDatabase database)
+        public void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database)
         {
-            if (!_updaters.TryRemove((table, database), out _))
+            if (!_updaters.TryRemove((producer, database), out _))
             {
-                database.InfrastructureLogger.Logger.LogError($"Failed to unregister database");
+                database.InfrastructureLogger.Logger.LogError("StreamsManager: Failed to unregister database");
             }
         }
 

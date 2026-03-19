@@ -79,7 +79,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private readonly Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
-    private readonly IKEFCoreTable _table;
     private readonly IKEFCoreDatabase _database;
     private readonly IEntityType _entityType;
     private readonly IValueContainerMetadata _entityMetadata;
@@ -224,12 +223,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <summary>
     /// Default initializer
     /// </summary>
-    public EntityTypeProducer(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entityType)
+    public EntityTypeProducer(IKEFCoreDatabase database, IEntityType entityType)
     {
 #if DEBUG_PERFORMANCE
         KNet.Internal.DebugPerformanceHelper.ReportString($"Creating new EntityTypeProducer for {entityType.Name}");
 #endif
-        _table = table;
         _database = database;
         _entityType = entityType;
         _primaryKey = entityType.FindPrimaryKey();
@@ -391,7 +389,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else
         {
-            _streamsManager?.Register(_table, database, _entityType);
+            _streamsManager?.Register(this, database, _entityType);
         }
     }
     /// <inheritdoc/>
@@ -401,12 +399,12 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (!_updaters.TryRemove(database, out _))
             {
-                database.InfrastructureLogger.Logger.LogError($"Failed to unregister database");
+                database.InfrastructureLogger.Logger.LogError("EntityTypeProducer: Failed to unregister database");
             }
         }
         else if (_streamsManager != null)
         {
-            _streamsManager.Unregister(_table, database);
+            _streamsManager.Unregister(this, database);
         }
     }
     /// <inheritdoc/>
