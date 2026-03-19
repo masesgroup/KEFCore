@@ -16,27 +16,16 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
-{
-    // moved into specific file
-}
+namespace MASES.EntityFrameworkCore.KNet.Metadata;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved
-{
-    // moved into specific file
-}
-
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.ReducedComplex
-{
-    // moved into specific file
-}
-
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
-{
-    // moved into specific file
-}
-
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.MultiLevelComplex
-{
-    // moved into specific file
-}
+/// <summary>
+/// Suppresses the KEFCore equality check for this complex type.
+/// </summary>
+/// <remarks>
+/// By default, KEFCore requires all complex types to implement
+/// <see cref="IEquatable{T}"/> or override <see cref="object.Equals(object)"/>.
+/// Apply this attribute to opt out of this check when value equality
+/// is guaranteed by other means.
+/// </remarks>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
+public sealed class KEFCoreIgnoreEquatableCheckAttribute : Attribute { }
