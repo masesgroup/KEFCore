@@ -23,7 +23,7 @@ _description: Common errors and solutions for Entity Framework Core provider for
 
 **Solution**:
 - Verify the broker address in `BootstrapServers` is correct and reachable from the application host.
-- If you are running integration tests or building the model outside a live cluster, use `KEFCoreClusterAdmin.DisableClusterInvocation = true` before calling `KEFCoreConventionSetBuilder.Build()` or `CreateModelBuilder()`.
+- If you need to build the model outside a live cluster (e.g. in integration tests or standalone model inspection), use `KEFCoreConventionSetBuilder.Build()` or `KEFCoreConventionSetBuilder.CreateModelBuilder()` — these methods handle cluster suspension internally.
 
 ---
 
@@ -97,3 +97,37 @@ If equality is guaranteed by other means, apply `[KEFCoreIgnoreEquatableCheckAtt
 - Check broker connectivity and `StreamsConfig.BootstrapServers`.
 - If using `UsePersistentStorage = true`, the RocksDB state directory may be corrupt — delete it and let the store rebuild from the topics.
 - Check the application logs for the `StreamsUncaughtExceptionHandler` message which identifies the root cause.
+
+---
+
+### `StreamsException: Fatal user code error in TimestampExtractor callback` — `NullPointerException: Cannot invoke "java.lang.Long.longValue()" because "retVal" is null`
+
+**Symptom**: Kafka Streams reports a fatal error in the `TimestampExtractor` callback:
+
+```
+org.apache.kafka.streams.errors.StreamsException: Fatal user code error in TimestampExtractor callback
+Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because "retVal" is null
+```
+
+**Cause**: The JVM↔CLR callback invoked by the `TimestampExtractor` returns `null` instead of a `long` timestamp. This is part of a broader class of non-deterministic failures at the JVM↔CLR boundary under sustained call pressure, tracked in [JCOBridgePublic#24](https://github.com/masesgroup/JCOBridgePublic/issues/24). The root cause involves GC interactions between the JVM and CLR that are not fully mitigable with workarounds at the application level.
+
+**Mitigations** (in order of effectiveness):
+
+1. **JCOBridge HPA edition** — the definitive solution. The HPA (High Performance Application) edition of JCOBridge addresses the non-deterministic GC-boundary failures at the interop layer, eliminating this class of errors entirely under sustained load. See [jcobridge.com](https://www.jcobridge.com) for details.
+
+2. **Automatic recovery** — the `StreamsManager` error handler already catches this exception and responds with `REPLACE_THREAD`, which restarts the affected stream thread automatically. For most workloads the recovery is transparent.
+
+3. **Disable event management per entity** — removes the `TimestampExtractor` entirely for the affected entities, eliminating the error at the cost of real-time tracking and post-`SaveChanges` synchronization for those entities:
+
+   ```csharp
+   [KEFCoreIgnoreEventsAttribute]
+   [Table("HeavyEntity")]
+   public class HeavyEntity { ... }
+   ```
+
+   Note that `EnsureSynchronized` will not be available for entities with event management disabled.
+
+> [!NOTE]
+> Related issues: [KEFCore#448](https://github.com/masesgroup/KEFCore/issues/448), [KNet#1058](https://github.com/masesgroup/KNet/issues/1058), [JNet#856](https://github.com/masesgroup/JNet/issues/856). All are manifestations of the same underlying JVM↔CLR boundary issue documented in [JCOBridgePublic#24](https://github.com/masesgroup/JCOBridgePublic/issues/24).
+
+See [conventions](conventions.md#event-management-convention) for how to configure event management per entity.

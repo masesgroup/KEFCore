@@ -96,6 +96,9 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 > [!NOTE]
 > When event management is disabled for an entity, post-`SaveChanges` synchronization (`EnsureSynchronized`) is not available for that entity because the `TimestampExtractor` is not active.
 
+> [!TIP]
+> If you experience intermittent `StreamsException: Fatal user code error in TimestampExtractor callback` errors ([KEFCore#448](https://github.com/masesgroup/KEFCore/issues/448)), this is part of a broader class of non-deterministic JVM↔CLR boundary failures documented in [JCOBridgePublic#24](https://github.com/masesgroup/JCOBridgePublic/issues/24). The `StreamsManager` attempts automatic recovery via `REPLACE_THREAD`, but the definitive solution is the **JCOBridge HPA edition**. As a workaround, disabling event management for the affected entities via `KEFCoreIgnoreEventsAttribute` removes the `TimestampExtractor` and eliminates the error for those entities at the cost of real-time tracking.
+
 ## ComplexType equality convention
 
 `KEFCoreComplexTypeEquatableConvention` verifies at model finalization time that all ComplexTypes in the model implement `IEquatable<T>` or override `Equals(object)`. This is required because KEFCore relies on value equality to detect changes in ComplexType properties — without it, reference equality would cause incorrect change detection and unnecessary Kafka writes.

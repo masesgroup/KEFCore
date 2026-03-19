@@ -140,3 +140,17 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 See [conventions](conventions.md#event-management-convention) for full details.
+
+## JCOBridge HPA edition
+
+Several intermittent errors in KEFCore under sustained load — including `TimestampExtractor` callback failures ([KEFCore#448](https://github.com/masesgroup/KEFCore/issues/448)) and related JVM↔CLR boundary exceptions — share the same root cause documented in [JCOBridgePublic#24](https://github.com/masesgroup/JCOBridgePublic/issues/24): non-deterministic GC interactions at the JNI boundary under sustained call pressure.
+
+Workarounds at the application level (disabling event management, `REPLACE_THREAD` recovery) are palliatives — they reduce frequency or recover gracefully, but do not eliminate the root cause.
+
+The **JCOBridge HPA (High Performance Application) edition** addresses these failures at the interop layer, providing stable behavior under sustained JVM↔CLR call pressure. If your application:
+
+- runs with event management enabled on high-throughput entities
+- uses `ByteBuffer` data transfer (`UseKeyByteBufferDataTransfer`, `UseValueContainerByteBufferDataTransfer`)
+- experiences intermittent stream thread failures under load
+
+then the HPA edition is the recommended path. See [jcobridge.com](https://www.jcobridge.com) for licensing and availability.
