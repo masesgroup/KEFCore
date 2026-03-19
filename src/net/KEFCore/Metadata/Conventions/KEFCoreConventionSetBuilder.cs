@@ -53,6 +53,8 @@ public class KEFCoreConventionSetBuilder(ProviderConventionSetBuilderDependencie
 
         conventionSet.ModelFinalizingConventions.Add(new DefiningQueryRewritingConvention(Dependencies));
 
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeEquatableConvention());
+
         return conventionSet;
     }
 
