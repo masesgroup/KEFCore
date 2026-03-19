@@ -92,9 +92,9 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public virtual void Unregister(IKEFCoreDatabase database)
     {
-        foreach (var item in database.Tables)
+        if (!_registeredDatabases.TryRemove(database, out _))
         {
-            item.Unregister(database);
+            InfrastructureLogger.Logger.LogError("KEFCoreCluster: failed to unregister a database never registered before.");
         }
     }
 

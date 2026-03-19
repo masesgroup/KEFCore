@@ -129,7 +129,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
             {
-                infrastructureLogger?.Logger.LogError("EnsureDeleted reports the following {Error}", utpe.Message);
+                infrastructureLogger?.Logger.LogError(utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
             }
         }
 
