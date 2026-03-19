@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -41,44 +40,42 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// <list type="number">
 ///   <item><description><see cref="KEFCoreTopicPrefixAttribute"/> applied directly to the entity class
 ///   (a <see langword="null"/> prefix explicitly disables prefixing for that entity).</description></item>
-///   <item><description>The context-level prefix provided at convention registration time,
-///   which itself comes from <see cref="KEFCoreTopicPrefixAttribute"/> on the <see cref="DbContext"/>
-///   or from <see cref="KEFCoreModelBuilderExtensions.UseKEFCoreTopicPrefix"/>.</description></item>
+///   <item><description>The context-level prefix set via
+///   <see cref="Extensions.KEFCoreModelBuilderExtensions.UseKEFCoreTopicPrefix"/>,
+///   read from the <see cref="KEFCoreAnnotationNames.TopicPrefix"/> model annotation
+///   at model finalization time.</description></item>
 /// </list>
 /// </para>
 /// </remarks>
-/// <remarks>
-/// Initializes a new instance of <see cref="KEFCoreTopicNamingConvention"/>.
-/// </remarks>
-/// <param name="contextPrefix">
-/// The topic prefix defined at context level, or <see langword="null"/> if no prefix applies.
-/// </param>
-public class KEFCoreTopicNamingConvention(string? contextPrefix) : IEntityTypeAddedConvention
+public class KEFCoreTopicNamingConvention : IModelFinalizingConvention
 {
     /// <inheritdoc/>
-    public void ProcessEntityTypeAdded(
-        IConventionEntityTypeBuilder entityTypeBuilder,
-        IConventionContext<IConventionEntityTypeBuilder> context)
+    public void ProcessModelFinalizing(
+        IConventionModelBuilder modelBuilder,
+        IConventionContext<IConventionModelBuilder> context)
     {
-        var entityType = entityTypeBuilder.Metadata;
-        var clrType = entityType.ClrType;
-        var tableAttr = clrType.GetCustomAttribute<TableAttribute>();
+        var contextPrefix = modelBuilder.Metadata
+            .FindAnnotation(KEFCoreAnnotationNames.TopicPrefix)?.Value as string;
 
-        // 1. Topic base name — KafkaTopicAttribute > TableAttribute (with schema) > entityType.Name
-        var baseName = clrType.GetCustomAttribute<KEFCoreTopicAttribute>()?.TopicName
-                       ?? (tableAttr != null
-                           ? (tableAttr.Schema != null
-                               ? $"{tableAttr.Schema}.{tableAttr.Name}"
-                               : tableAttr.Name)
-                           : entityType.Name);
+        foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
+        {
+            var clrType = entityType.ClrType;
+            var tableAttr = clrType.GetCustomAttribute<TableAttribute>();
 
-        // 2. Prefix — KafkaTopicPrefixAttribute on entity > context-level prefix
-        var entityPrefixAttr = clrType.GetCustomAttribute<KEFCoreTopicPrefixAttribute>();
-        string? prefix = entityPrefixAttr != null ? entityPrefixAttr.Prefix : contextPrefix;
+            var baseName = clrType.GetCustomAttribute<KEFCoreTopicAttribute>()?.TopicName
+                           ?? (tableAttr != null
+                               ? (tableAttr.Schema != null
+                                   ? $"{tableAttr.Schema}.{tableAttr.Name}"
+                                   : tableAttr.Name)
+                               : entityType.Name);
 
-        // 3. Final composition
-        var fullTopicName = string.IsNullOrEmpty(prefix) ? baseName : $"{prefix}.{baseName}";
+            var entityPrefixAttr = clrType.GetCustomAttribute<KEFCoreTopicPrefixAttribute>();
+            string? prefix = entityPrefixAttr != null ? entityPrefixAttr.Prefix : contextPrefix;
 
-        entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicName, fullTopicName);
+            var fullTopicName = string.IsNullOrEmpty(prefix) ? baseName : $"{prefix}.{baseName}";
+
+            ((IConventionEntityTypeBuilder)entityType.Builder)
+                .HasAnnotation(KEFCoreAnnotationNames.TopicName, fullTopicName);
+        }
     }
 }

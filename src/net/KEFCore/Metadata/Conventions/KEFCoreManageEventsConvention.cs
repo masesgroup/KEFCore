@@ -21,7 +21,7 @@ using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 
 /// <summary>
-/// A convention that resolves and stores the KEFCore event management flag for each entity type
+/// A convention that resolves and stores the Kafka event management flag for each entity type
 /// as a model annotation (<see cref="KEFCoreAnnotationNames.ManageEvents"/>).
 /// </summary>
 /// <remarks>
@@ -34,37 +34,40 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// Resolution priority:
 /// <list type="number">
 ///   <item><description><see cref="KEFCoreIgnoreEventsAttribute"/> applied to the entity class — always disables events.</description></item>
-///   <item><description><c>HasKEFCoreManageEvents(false)</c> applied to the entity via <c>ModelBuilder</c>.</description></item>
-///   <item><description>Context-level default set via <c>UseKEFCoreManageEvents()</c>.</description></item>
+///   <item><description><c>HasKEFCoreManageEvents(false)</c> applied to the entity via <c>ModelBuilder</c>,
+///   read from the <see cref="KEFCoreAnnotationNames.ManageEvents"/> entity annotation.</description></item>
+///   <item><description>Context-level default set via
+///   <see cref="Extensions.KEFCoreModelBuilderExtensions.UseKEFCoreManageEvents"/>,
+///   read from the <see cref="KEFCoreAnnotationNames.ManageEvents"/> model annotation
+///   at model finalization time.</description></item>
 ///   <item><description><see langword="true"/> (default — events managed).</description></item>
 /// </list>
 /// </para>
 /// </remarks>
-public class KEFCoreManageEventsConvention : IEntityTypeAddedConvention
+public class KEFCoreManageEventsConvention : IModelFinalizingConvention
 {
-    private readonly bool _contextDefault;
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="KEFCoreManageEventsConvention"/>.
-    /// </summary>
-    /// <param name="contextDefault">
-    /// The context-level default for event management.
-    /// Defaults to <see langword="true"/> — all entities manage events unless overridden.
-    /// </param>
-    public KEFCoreManageEventsConvention(bool contextDefault = true)
-        => _contextDefault = contextDefault;
-
     /// <inheritdoc/>
-    public void ProcessEntityTypeAdded(
-        IConventionEntityTypeBuilder entityTypeBuilder,
-        IConventionContext<IConventionEntityTypeBuilder> context)
+    public void ProcessModelFinalizing(
+        IConventionModelBuilder modelBuilder,
+        IConventionContext<IConventionModelBuilder> context)
     {
-        var clrType = entityTypeBuilder.Metadata.ClrType;
+        // context-level default — set via UseKEFCoreManageEvents() or true if not set
+        var contextDefault = modelBuilder.Metadata
+            .FindAnnotation(KEFCoreAnnotationNames.ManageEvents)?.Value as bool? ?? true;
 
-        var manageEvents = clrType.GetCustomAttribute<KEFCoreIgnoreEventsAttribute>() != null
-            ? false
-            : _contextDefault;
+        foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
+        {
+            var clrType = entityType.ClrType;
 
-        entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.ManageEvents, manageEvents);
+            // entity-level annotation set via HasKEFCoreManageEvents() takes precedence
+            // over context default, but KEFCoreIgnoreEventsAttribute always wins
+            var manageEvents = clrType.GetCustomAttribute<KEFCoreIgnoreEventsAttribute>() != null
+                ? false
+                : entityType.FindAnnotation(KEFCoreAnnotationNames.ManageEvents)?.Value as bool?
+                  ?? contextDefault;
+
+            ((IConventionEntityTypeBuilder)entityType.Builder)
+                .HasAnnotation(KEFCoreAnnotationNames.ManageEvents, manageEvents);
+        }
     }
 }

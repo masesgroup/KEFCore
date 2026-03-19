@@ -35,28 +35,6 @@ public class KEFCoreModelValidator(ModelValidatorDependencies dependencies) : Mo
     {
         base.Validate(model, logger);
 
-        ValidateDefiningQuery(model, logger);
     }
 
-    /// <summary>
-    ///     Validates the configuration of defining queries in the model.
-    /// </summary>
-    /// <param name="model">The model to validate.</param>
-    /// <param name="logger">The logger to use.</param>
-    protected virtual void ValidateDefiningQuery(
-        IModel model,
-        IDiagnosticsLogger<DbLoggerCategory.Model.Validation> logger)
-    {
-        foreach (var entityType in model.GetEntityTypes())
-        {
-            if (entityType.GetKEFCoreQuery() != null)
-            {
-                if (entityType.BaseType != null)
-                {
-                    throw new InvalidOperationException(
-                        CoreStrings.DerivedTypeDefiningQuery(entityType.DisplayName(), entityType.BaseType.DisplayName()));
-                }
-            }
-        }
-    }
 }

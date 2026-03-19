@@ -51,7 +51,8 @@ public class KEFCoreConventionSetBuilder(ProviderConventionSetBuilderDependencie
     {
         var conventionSet = base.CreateConventionSet();
 
-        conventionSet.ModelFinalizingConventions.Add(new DefiningQueryRewritingConvention(Dependencies));
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreTopicNamingConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreManageEventsConvention());
 
         return conventionSet;
     }
