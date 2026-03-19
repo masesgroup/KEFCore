@@ -79,6 +79,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private readonly Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
+    private readonly IKEFCoreTable _table;
     private readonly IKEFCoreDatabase _database;
     private readonly IEntityType _entityType;
     private readonly IValueContainerMetadata _entityMetadata;
@@ -223,11 +224,12 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <summary>
     /// Default initializer
     /// </summary>
-    public EntityTypeProducer(IKEFCoreDatabase database, IEntityType entityType)
+    public EntityTypeProducer(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entityType)
     {
 #if DEBUG_PERFORMANCE
         KNet.Internal.DebugPerformanceHelper.ReportString($"Creating new EntityTypeProducer for {entityType.Name}");
 #endif
+        _table = table;
         _database = database;
         _entityType = entityType;
         _primaryKey = entityType.FindPrimaryKey();
@@ -387,9 +389,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 database.InfrastructureLogger.Logger.LogError($"Failed to register database");
             }
         }
-        else if (_streamsManager != null)
+        else
         {
-            _streamsManager.Register(database, _entityType);
+            _streamsManager?.Register(_table, database, _entityType);
         }
     }
     /// <inheritdoc/>
@@ -404,7 +406,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else if (_streamsManager != null)
         {
-            _streamsManager.Unregister(database);
+            _streamsManager.Unregister(_table, database);
         }
     }
     /// <inheritdoc/>
@@ -613,7 +615,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.PrimaryKeyForChanges!, arg2.Key);
+            KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);
         }
     }
 }

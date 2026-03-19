@@ -59,14 +59,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <summary>
         /// Register an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
+        /// <param name="table">The <see cref="IKEFCoreTable"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
         /// <param name="entity">Associated <see cref="IEntityType"/></param>
-        void Register(IKEFCoreDatabase database, IEntityType entity);
+        void Register(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entity);
         /// <summary>
         /// Unregister an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
+        /// <param name="table">The <see cref="IKEFCoreTable"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
-        void Unregister(IKEFCoreDatabase database);
+        void Unregister(IKEFCoreTable table, IKEFCoreDatabase database);
         /// <summary>
         /// Creates and start the topology
         /// </summary>
@@ -190,7 +192,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     foreach (var updater in StreamsManager._updaters)
                     {
-                        IKEFCoreDatabase database = updater.Key;
+                        IKEFCoreDatabase database = updater.Key.Database;
                         KEFCoreDatabaseLocalData localData = updater.Value;
                         ChangeManager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
                     }
@@ -202,7 +204,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 TimestampExtractor?.Dispose();
             }
         }
-        readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
+        readonly ConcurrentDictionary<(IKEFCoreTable Table, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
         // enqueues changes from cluster when are send
         private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
         // enqueues changes from cluster when are send
@@ -362,20 +364,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             while (true)
             {
-                do
+                try
                 {
-                    if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
-                    if (!_freshDataFromCluster.TryDequeue(out var current)) break;
-                    foreach (var item in _updaters)
+                    do
                     {
-                        if (!item.Value.ManageEvents) continue;
-                        IKEFCoreDatabase database = item.Key;
-                        KEFCoreDatabaseLocalData localData = item.Value;
-                        current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, current.Data);
+                        if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
+                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;
+                        foreach (var item in _updaters)
+                        {
+                            if (!item.Value.ManageEvents) continue;
+                            IKEFCoreDatabase database = item.Key.Database;
+                            KEFCoreDatabaseLocalData localData = item.Value;
+                            current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, current.Data);
+                        }
                     }
+                    while (!_freshDataFromCluster.IsEmpty);
+                    System.Threading.Thread.Sleep(10);
                 }
-                while (!_freshDataFromCluster.IsEmpty);
-                System.Threading.Thread.Sleep(10);
+                catch (System.Exception ex) { _kefcoreCluster.InfrastructureLogger.Logger.LogError(ex, "FreshEventChangePusher catched an exception: open an issue on GitHub."); } // final catch
             }
         }
 
@@ -424,17 +430,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Register(IKEFCoreDatabase database, IEntityType entity)
+        public void Register(IKEFCoreTable table, IKEFCoreDatabase database, IEntityType entity)
         {
-            if (!_updaters.TryAdd(database, new KEFCoreDatabaseLocalData(database, entity)))
+            if (!_updaters.TryAdd((table, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
                 database.InfrastructureLogger.Logger.LogError($"Failed to register database for Entity {entity}");
             }
         }
 
-        public void Unregister(IKEFCoreDatabase database)
+        public void Unregister(IKEFCoreTable table, IKEFCoreDatabase database)
         {
-            if (!_updaters.TryRemove(database, out _))
+            if (!_updaters.TryRemove((table, database), out _))
             {
                 database.InfrastructureLogger.Logger.LogError($"Failed to unregister database");
             }
