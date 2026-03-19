@@ -69,7 +69,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseKEFCoreTopicPrefix(ProgramConfig.Config.UseModelBuilder ? ProgramConfig.Config.TopicPrefixWithModel
-                                                                                  : ProgramConfig.Config.TopicPrefix);
+                                                                                    : ProgramConfig.Config.TopicPrefix);
 
             modelBuilder.UseKEFCoreManageEvents(ProgramConfig.Config.ManageEvents);
 

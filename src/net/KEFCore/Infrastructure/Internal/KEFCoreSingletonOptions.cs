@@ -18,6 +18,12 @@
 
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
+using MASES.KNet.Producer;
+using MASES.KNet.Streams;
+using Org.Apache.Kafka.Clients.Consumer;
+using Org.Apache.Kafka.Clients.Producer;
+using Org.Apache.Kafka.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -44,9 +50,13 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
         BootstrapServers = kefcoreOptions.BootstrapServers;
         UseKeyByteBufferDataTransfer = kefcoreOptions.UseKeyByteBufferDataTransfer;
         UseValueContainerByteBufferDataTransfer = kefcoreOptions.UseValueContainerByteBufferDataTransfer;
+        UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
+        ConsumerConfig = ConsumerConfigBuilder.CreateFrom(kefcoreOptions.ConsumerConfig);
         UseKNetStreams = kefcoreOptions.UseKNetStreams;
         UsePersistentStorage = kefcoreOptions.UsePersistentStorage;
-        UseCompactedReplicator = kefcoreOptions.UseCompactedReplicator;
+        ApplicationId = kefcoreOptions.ApplicationId;
+        StreamsConfig = StreamsConfigBuilder.CreateFrom(kefcoreOptions.StreamsConfig);
+        ProducerConfig = ProducerConfigBuilder.CreateFrom(kefcoreOptions.ProducerConfig);
         // non-hash singleton (first-wins)
         UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
         DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
@@ -65,9 +75,10 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
             || kefcoreOptions.ValueContainerType != ValueContainerType
             || kefcoreOptions.UseKeyByteBufferDataTransfer != UseKeyByteBufferDataTransfer
             || kefcoreOptions.UseValueContainerByteBufferDataTransfer != UseValueContainerByteBufferDataTransfer
+            || kefcoreOptions.UseCompactedReplicator != UseCompactedReplicator
             || kefcoreOptions.UseKNetStreams != UseKNetStreams
             || kefcoreOptions.UsePersistentStorage != UsePersistentStorage
-            || kefcoreOptions.UseCompactedReplicator != UseCompactedReplicator)
+            || kefcoreOptions.ApplicationId != ApplicationId)
         {
             throw new InvalidOperationException(
                 CoreStrings.SingletonOptionChanged(
@@ -82,20 +93,29 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     /// <inheritdoc/>
     public virtual Type? ValueContainerType { get; private set; }
     /// <inheritdoc/>
-    public virtual string? BootstrapServers { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool UseDeletePolicyForTopic { get; private set; }
-    /// <inheritdoc/>
-    [Obsolete("Option will be removed soon")]
-    public virtual bool UseCompactedReplicator { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool UseKNetStreams { get; private set; }
-    /// <inheritdoc/>
-    public virtual bool UsePersistentStorage { get; private set; }
-    /// <inheritdoc/>
     public virtual bool UseKeyByteBufferDataTransfer { get; private set; }
     /// <inheritdoc/>
     public virtual bool UseValueContainerByteBufferDataTransfer { get; private set; }
+    /// <inheritdoc/>
+    public virtual string? BootstrapServers { get; private set; }
+    /// <inheritdoc/>
+    public virtual bool UseDeletePolicyForTopic { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseCompactedReplicator"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual bool UseCompactedReplicator { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.ConsumerConfig"/>
+    [Obsolete("Option will be removed soon")]
+    public virtual ConsumerConfigBuilder? ConsumerConfig { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.UseKNetStreams"/>
+    public virtual bool UseKNetStreams { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.UsePersistentStorage"/>
+    public virtual bool UsePersistentStorage { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.ApplicationId"/>
+    public virtual string? ApplicationId { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.StreamsConfig"/>
+    public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
+    public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>
