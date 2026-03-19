@@ -59,6 +59,7 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
         conventionSet.ModelFinalizingConventions.Add(new DefiningQueryRewritingConvention(Dependencies));
 
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeConverterConvention(converterFactory));
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeEquatableConvention());
 
         return conventionSet;
     }
