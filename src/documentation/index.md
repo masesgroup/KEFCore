@@ -123,12 +123,16 @@ This project adheres to the Contributor [Covenant code of conduct](https://githu
 * [Usage](articles/usage.md)
 * [Use cases](articles/usecases.md)
 * [Templates usage](articles/usageTemplates.md)
-* [Serialization](articles/serialization.md)
+* [Options](articles/options.md)
 * [Conventions](articles/conventions.md)
+* [Serialization](articles/serialization.md)
 * [Schema migration](articles/migration.md)
+* [Performance tips](articles/performancetips.md)
+* [Troubleshooting](articles/troubleshooting.md)
 * [External application](articles/externalapplication.md)
 * [Roadmap](articles/roadmap.md)
 * [Current state](articles/currentstate.md)
+* [KEFCoreDbContext](articles/kefcoredbcontext.md)
 
 ---
 

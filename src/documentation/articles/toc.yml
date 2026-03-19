@@ -10,12 +10,18 @@
   href: usecases.md
 - name: Template usage
   href: usageTemplates.md
-- name: Serialization
-  href: serialization.md
+- name: Options
+  href: options.md
 - name: Conventions
   href: conventions.md
+- name: Serialization
+  href: serialization.md
 - name: Schema migration
   href: migration.md
+- name: Performance tips
+  href: performancetips.md
+- name: Troubleshooting
+  href: troubleshooting.md
 - name: External application
   href: externalapplication.md
 - name: Roadmap

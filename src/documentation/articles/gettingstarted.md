@@ -30,6 +30,7 @@ dotnet add package MASES.EntityFrameworkCore.KNet
 ```c#
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
@@ -41,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             using var context = new BloggingContext()
             {
                 BootstrapServers = "MY-KAFKA-BROKER:9092",
-                ApplicationId = "MyAppId",
+                ApplicationId = "MyAppId",   // mandatory — must be unique per process on the cluster
                 DbName = "MyDBName",
             };
             // add standard EFCore queries
@@ -50,6 +51,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     public class BloggingContext : KEFCoreDbContext { }
 
+    // [Table] stabilizes the Kafka topic name across namespace refactorings.
+    // Without it the topic name includes the full CLR namespace.
+    [Table("Blog", Schema = "Blogging")]
     public class Blog
     {
         public int BlogId { get; set; }
@@ -58,6 +62,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public List<Post> Posts { get; set; }
     }
 
+    [Table("Post", Schema = "Blogging")]
     public class Post
     {
         public int PostId { get; set; }
@@ -71,6 +76,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 ```
 
 The previous code follows the example of https://learn.microsoft.com/ef/core/. See [KEFCore usage](usage.md) and [KEFCoreDbContext](kefcoredbcontext.md) to find more information.
+
+> [!IMPORTANT]
+> Always apply `[Table]` or `[KEFCoreTopicAttribute]` to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See [conventions](conventions.md#topic-naming-convention) for details.
 
 - Build the project
 

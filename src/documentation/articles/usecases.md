@@ -114,6 +114,69 @@ Here below some differences between them and when KEFCore can be used.
 
 They complement each other.
 
+## Industry 4.0: OPC-UA data via [KNetOPC](https://knetopc.masesgroup.com)
+
+[KNetOPC](https://knetopc.masesgroup.com) is a bridge that connects [OPC-UA](https://opcfoundation.org/) industrial data sources to [Apache Kafka™](https://kafka.apache.org/) topics.
+Combined with KEFCore, it enables querying real-time industrial data using standard [Entity Framework Core](https://learn.microsoft.com/ef/core/) LINQ APIs — without any knowledge of OPC-UA protocols or Kafka internals.
+
+### Pipeline overview
+
+![KNetOPC + KEFCore pipeline](../images/knetopc_pipeline.svg "OPC-UA → KNetOPC → Kafka → KEFCore → .NET application")
+
+### Mapping OPC-UA types to EF Core entities
+
+OPC-UA nodes can be mapped to EF Core entities using [ComplexType](https://learn.microsoft.com/ef/core/modeling/complex-types) to represent structured OPC-UA values.
+The `TypeId`/`Body` pair used by the OPC-UA encoding is preserved as a ComplexType property, allowing the original OPC-UA type to be reconstructed on read:
+
+```csharp
+public class OpcUaReading
+{
+    public string NodeId { get; set; }         // PK — OPC-UA node identifier
+    public DateTime Timestamp { get; set; }
+    public OpcUaValue Value { get; set; }      // ComplexType
+}
+
+[KEFCoreComplexTypeConverterAttribute(typeof(OpcUaValueConverter))]
+public class OpcUaValue : IEquatable<OpcUaValue>
+{
+    public string TypeId { get; set; }
+    public string Body { get; set; }           // JSON-encoded OPC-UA body
+
+    public bool Equals(OpcUaValue other)
+        => TypeId == other?.TypeId && Body == other?.Body;
+
+    public override bool Equals(object obj)
+        => Equals(obj as OpcUaValue);
+
+    public override int GetHashCode()
+        => HashCode.Combine(TypeId, Body);
+}
+```
+
+### Querying industrial data with LINQ
+
+Once the model is defined and KEFCore is configured against the topics produced by KNetOPC, standard EF Core queries work transparently:
+
+```csharp
+// Latest readings above threshold for a specific sensor
+var alerts = await context.OpcUaReadings
+    .Where(r => r.NodeId == "ns=2;s=Temperature"
+             && r.Timestamp > DateTime.UtcNow.AddMinutes(-5))
+    .OrderByDescending(r => r.Timestamp)
+    .ToListAsync();
+```
+
+### Why this combination is useful
+
+- ✅ **No OPC-UA protocol knowledge required** — engineers query industrial data using familiar C# and LINQ
+- ✅ **Real-time alignment** — KEFCore's event management keeps the local state synchronized with the Kafka topics as new OPC-UA readings arrive
+- ✅ **Decoupled architecture** — OPC-UA sources, Kafka, and the .NET application are independently scalable
+- ✅ **ComplexType support** — structured OPC-UA values are preserved with their type information for correct deserialization
+- ✅ **Change event triggers** — react to threshold breaches or anomalies using KEFCore's event pipeline, feeding dashboards or alerting systems
+
+> [!NOTE]
+> The `ApplicationId` used by KEFCore must be unique per process on the same Kafka cluster. When multiple applications consume the same KNetOPC topics, each should use a distinct `ApplicationId` to maintain a complete local view of all partitions.
+
 ## Data processing out-side [Entity Framework Core](https://learn.microsoft.com/ef/core/) application
 
 The schema used to write the information in the topics are available, or can be defined from the user, so an external application can use the data in many mode:
