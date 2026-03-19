@@ -52,6 +52,10 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// </summary>
     IUpdateAdapterFactory UpdateAdapterFactory { get; }
     /// <summary>
+    /// Reference to the set of <see cref="IKEFCoreTable"/> associated
+    /// </summary>
+    IList<IKEFCoreTable> Tables { get; }
+    /// <summary>
     /// Execute the <see cref="IDatabaseCreator.EnsureDeleted"/>
     /// </summary>
     bool EnsureDatabaseDeleted();

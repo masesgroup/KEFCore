@@ -35,6 +35,16 @@ public interface IEntityTypeProducer : IDisposable
     /// </summary>
     IEntityType EntityType { get; }
     /// <summary>
+    /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be registered</param>
+    void Register(IKEFCoreDatabase database);
+    /// <summary>
+    /// Unregister a previously registered instance of <see cref="IKEFCoreDatabase"/> from an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be unregistered</param>
+    void Unregister(IKEFCoreDatabase database);
+    /// <summary>
     /// Stores an <see cref="IEnumerable{IKEFCoreRowBag}"/>
     /// </summary>
     /// <param name="futures">The <see cref="Future{V}"/> with <see cref="RecordMetadata"/> generated from <see cref="Commit(IList{Future{RecordMetadata}}?, IEnumerable{IKEFCoreRowBag})"/></param>

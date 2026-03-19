@@ -16,18 +16,16 @@
 *  Refer to LICENSE for more information.
 */
 
-namespace MASES.EntityFrameworkCore.KNet.Metadata
-{
-    /// <summary>
-    /// Overrides the Kafka topic name for an entity type.
-    /// Takes precedence over TableAttribute and entity short name.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class KafkaTopicAttribute(string topicName) : Attribute
-    {
-        /// <summary>
-        /// The topic name associated to the <see cref="IEntityType"/>
-        /// </summary>
-        public string TopicName { get; } = topicName;
-    }
-}
+namespace MASES.EntityFrameworkCore.KNet.Metadata;
+
+/// <summary>
+/// Disables KEFCore event management for this entity type,
+/// overriding the context-level default set by <c>UseKEFCoreManageEvents()</c>.
+/// </summary>
+/// <remarks>
+/// By default, event management is enabled for all entity types.
+/// Apply this attribute to opt out of real-time tracking updates
+/// via <c>TimestampExtractor</c> for a specific entity.
+/// </remarks>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+public sealed class KEFCoreIgnoreEventsAttribute : Attribute { }

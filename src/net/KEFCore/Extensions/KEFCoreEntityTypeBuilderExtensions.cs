@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
@@ -73,47 +74,23 @@ public static class KEFCoreEntityTypeBuilderExtensions
     }
 
     /// <summary>
-    ///     Configures a query used to provide data for an entity type.
+    /// Sets the KEFCore event management behavior for this entity type,
+    /// overriding the context-level default.
     /// </summary>
     /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// Passing <see langword="false"/> is equivalent to applying
+    /// <see cref="KEFCoreIgnoreEventsAttribute"/> on the entity class.
     /// </remarks>
-    /// <param name="entityTypeBuilder">The builder for the entity type being configured.</param>
-    /// <param name="query">The query that will provide the underlying data for the entity type.</param>
-    /// <param name="fromDataAnnotation">Indicates whether the configuration was specified using a data annotation.</param>
-    /// <returns>
-    ///     The same builder instance if the query was set, <see langword="null" /> otherwise.
-    /// </returns>
-    public static IConventionEntityTypeBuilder? ToKEFCoreQuery(
-        this IConventionEntityTypeBuilder entityTypeBuilder,
-        LambdaExpression? query,
-        bool fromDataAnnotation = false)
+    /// <param name="entityTypeBuilder">The <see cref="EntityTypeBuilder"/> to configure.</param>
+    /// <param name="manageEvents">
+    /// <see langword="true"/> to enable event management (default);
+    /// <see langword="false"/> to disable it for this entity.
+    /// </param>
+    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    public static EntityTypeBuilder HasKEFCoreManageEvents(
+        this EntityTypeBuilder entityTypeBuilder, bool manageEvents = true)
     {
-        if (CanSetKEFCoreQuery(entityTypeBuilder, query, fromDataAnnotation))
-        {
-            entityTypeBuilder.Metadata.SetKEFCoreQuery(query, fromDataAnnotation);
-
-            return entityTypeBuilder;
-        }
-
-        return null;
+        entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.ManageEvents, manageEvents);
+        return entityTypeBuilder;
     }
-
-    /// <summary>
-    ///     Returns a value indicating whether the given Kafka query can be set from the current configuration source.
-    /// </summary>
-    /// <remarks>
-    ///     See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see>, and
-    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
-    /// </remarks>
-    /// <param name="entityTypeBuilder">The builder for the entity type being configured.</param>
-    /// <param name="query">The query that will provide the underlying data for the keyless entity type.</param>
-    /// <param name="fromDataAnnotation">Indicates whether the configuration was specified using a data annotation.</param>
-    /// <returns><see langword="true" /> if the given Kafka query can be set.</returns>
-    public static bool CanSetKEFCoreQuery(
-        this IConventionEntityTypeBuilder entityTypeBuilder,
-        LambdaExpression? query,
-        bool fromDataAnnotation = false)
-        => entityTypeBuilder.CanSetAnnotation(KEFCoreAnnotationNames.DefiningQuery, query, fromDataAnnotation);
 }

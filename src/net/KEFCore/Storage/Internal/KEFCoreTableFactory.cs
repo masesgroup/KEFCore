@@ -16,10 +16,11 @@
 *  Refer to LICENSE for more information.
 */
 
-using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Org.Apache.Kafka.Connect.Util;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -41,18 +42,8 @@ public class KEFCoreTableFactory(
     private readonly ConcurrentDictionary<(IKEFCoreCluster Cluster, string topicName), IKEFCoreTable> _factories = new();
 
     /// <inheritdoc/>
-    public virtual IKEFCoreTable Create(IKEFCoreDatabase database, string topicName, IEntityType entityType)
-        => _factories.GetOrAdd((database.Cluster, topicName), e => CreateTable(database, entityType)());
-
-    /// <inheritdoc/>
-    public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, string topicName)
-    {
-        if (!_factories.TryGetValue((cluster, topicName), out var table))
-        {
-            throw new InvalidOperationException($"Topic name {topicName} on ClusterId {cluster.ClusterId} not registered yet.");
-        }
-        return table;
-    }
+    public virtual IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)
+        => _factories.GetOrAdd((database.Cluster, entityType.TopicName()), e => CreateTable(database, entityType)());
 
     /// <summary>
     /// Allocates a new <see cref="IEntityTypeProducer"/>
@@ -64,14 +55,12 @@ public class KEFCoreTableFactory(
             table.Start();
         }
     }
-
     /// <inheritdoc/>
-    public void Dispose(IKEFCoreTable table)
+    public void Dispose()
     {
-        if (table != null)
+        foreach (var item in _factories)
         {
-            table.Dispose();
-            _factories.TryRemove((table.Database.Cluster, table.AssociatedTopicName), out _);
+            item.Value.Dispose();
         }
     }
 

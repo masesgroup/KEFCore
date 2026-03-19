@@ -216,10 +216,6 @@ public class KEFCoreDbContext : DbContext
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <summary>
-    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>, default is <see langword="true"/>
-    /// </summary>
-    public virtual bool ManageEvents { get; set; } = true;
-    /// <summary>
     ///  Setting this property to <see langword="true"/> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.WRITE"/> and <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.READ"/>
     /// </summary>
     public virtual bool ReadOnlyMode { get; set; } = false;
@@ -330,7 +326,6 @@ public class KEFCoreDbContext : DbContext
             o.WithKNetStreams(UseKNetStreams);
             o.WithGlobalTable(UseGlobalTable);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
-            o.WithManageEvents(ManageEvents);
             o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);
             o.WithStorePrefixScan(UseStorePrefixScan);
             o.WithStoreSingleKeyLookup(UseStoreSingleKeyLookup);

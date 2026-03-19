@@ -33,6 +33,10 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     string ClusterId { get; }
     /// <summary>
+    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
+    /// </summary>
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
+    /// <summary>
     /// The global <see cref="IComplexTypeConverterFactory"/>
     /// </summary>
     IComplexTypeConverterFactory ComplexTypeConverterFactory { get; }

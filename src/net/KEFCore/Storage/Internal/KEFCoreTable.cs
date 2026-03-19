@@ -63,7 +63,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         Database = database;
         Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
         _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
-        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(Database, entityType);
+        _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
@@ -87,7 +87,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     public virtual void Dispose()
     {
         Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
-        EntityTypeProducers.Dispose(_producer!);
+        _producer.Dispose();
     }
     /// <inheritdoc/>
     public void FindAndAddOnTracker(object[] keyValues)
@@ -101,7 +101,10 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     public virtual string AssociatedTopicName => _tableAssociatedTopicName;
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _producer.EntityType;
-
+    /// <inheritdoc/>
+    public virtual void Register(IKEFCoreDatabase database) => _producer.Register(database);
+    /// <inheritdoc/>
+    public virtual void Unregister(IKEFCoreDatabase database) => _producer.Unregister(database);
     /// <inheritdoc/>
     public virtual void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records) => _producer.Commit(futures, records);
     /// <inheritdoc/>

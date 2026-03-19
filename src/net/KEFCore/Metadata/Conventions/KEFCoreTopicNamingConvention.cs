@@ -30,7 +30,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// <para>
 /// The topic name is resolved using the following priority order:
 /// <list type="number">
-///   <item><description><see cref="KafkaTopicAttribute"/> applied directly to the entity class.</description></item>
+///   <item><description><see cref="KEFCoreTopicAttribute"/> applied directly to the entity class.</description></item>
 ///   <item><description><see cref="System.ComponentModel.DataAnnotations.Schema.TableAttribute"/> applied to the entity class,
 ///   including schema prefix if specified (e.g. <c>schema.tablename</c>).</description></item>
 ///   <item><description>The EF Core entity type name (<see cref="IReadOnlyTypeBase.Name"/>), which includes the model namespace.</description></item>
@@ -39,21 +39,21 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 /// <para>
 /// The topic prefix is resolved using the following priority order:
 /// <list type="number">
-///   <item><description><see cref="KafkaTopicPrefixAttribute"/> applied directly to the entity class
+///   <item><description><see cref="KEFCoreTopicPrefixAttribute"/> applied directly to the entity class
 ///   (a <see langword="null"/> prefix explicitly disables prefixing for that entity).</description></item>
 ///   <item><description>The context-level prefix provided at convention registration time,
-///   which itself comes from <see cref="KafkaTopicPrefixAttribute"/> on the <see cref="DbContext"/>
+///   which itself comes from <see cref="KEFCoreTopicPrefixAttribute"/> on the <see cref="DbContext"/>
 ///   or from <see cref="KEFCoreModelBuilderExtensions.UseKafkaTopicPrefix"/>.</description></item>
 /// </list>
 /// </para>
 /// </remarks>
 /// <remarks>
-/// Initializes a new instance of <see cref="KafkaTopicNamingConvention"/>.
+/// Initializes a new instance of <see cref="KEFCoreTopicNamingConvention"/>.
 /// </remarks>
 /// <param name="contextPrefix">
 /// The topic prefix defined at context level, or <see langword="null"/> if no prefix applies.
 /// </param>
-public class KafkaTopicNamingConvention(string? contextPrefix) : IEntityTypeAddedConvention
+public class KEFCoreTopicNamingConvention(string? contextPrefix) : IEntityTypeAddedConvention
 {
     /// <inheritdoc/>
     public void ProcessEntityTypeAdded(
@@ -65,7 +65,7 @@ public class KafkaTopicNamingConvention(string? contextPrefix) : IEntityTypeAdde
         var tableAttr = clrType.GetCustomAttribute<TableAttribute>();
 
         // 1. Topic base name — KafkaTopicAttribute > TableAttribute (with schema) > entityType.Name
-        var baseName = clrType.GetCustomAttribute<KafkaTopicAttribute>()?.TopicName
+        var baseName = clrType.GetCustomAttribute<KEFCoreTopicAttribute>()?.TopicName
                        ?? (tableAttr != null
                            ? (tableAttr.Schema != null
                                ? $"{tableAttr.Schema}.{tableAttr.Name}"
@@ -73,7 +73,7 @@ public class KafkaTopicNamingConvention(string? contextPrefix) : IEntityTypeAdde
                            : entityType.Name);
 
         // 2. Prefix — KafkaTopicPrefixAttribute on entity > context-level prefix
-        var entityPrefixAttr = clrType.GetCustomAttribute<KafkaTopicPrefixAttribute>();
+        var entityPrefixAttr = clrType.GetCustomAttribute<KEFCoreTopicPrefixAttribute>();
         string? prefix = entityPrefixAttr != null ? entityPrefixAttr.Prefix : contextPrefix;
 
         // 3. Final composition

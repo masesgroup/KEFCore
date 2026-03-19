@@ -27,6 +27,7 @@ using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
@@ -43,41 +44,72 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// Default initializer
 /// </remarks>
 public class KEFCoreCluster(KEFCoreOptionsExtension options,
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
     IKEFCoreTableFactory tableFactory,
     IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreCluster
 {
     private readonly KEFCoreClusterAdmin _kefcoreAdminClient = KEFCoreClusterAdmin.Create(options.BootstrapServers);
 
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IStreamsManager> _streamsForApplications = new();
-    private System.Collections.Concurrent.ConcurrentDictionary<string, IKEFCoreTable> _tables;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
 
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        if (_tables != null)
-        {
-            foreach (var item in _tables.Values)
-            {
-                tableFactory.Dispose(item);
-            }
-        }
-        _tables?.Clear();
+        tableFactory?.Dispose();
     }
     /// <inheritdoc/>
     public virtual string ClusterId => _kefcoreAdminClient.ClusterId;
+    /// <inheritdoc/>
+    public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => infrastructureLogger;
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => complexTypeConverterFactory;
 
     /// <inheritdoc/>
     public virtual void Register(IKEFCoreDatabase database)
     {
+        database.InfrastructureLogger.Logger.LogDebug("Invoking Register");
+        var coll = TopicsFromModel(database, out var topics);
+        _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
+        System.Collections.Generic.List<IKEFCoreTable> tables = new();
+        var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
+        foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
+        {
+            var table = EnsureTable(database, entityType);
+            table.Register(database);
+            database.Tables.Add(table);
+        }
+
+        tableFactory.Start(database.Tables);
+
+        if (database.Options.DefaultSynchronizationTimeout != 0)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            try
+            {
+                EnsureSynchronized(database, database.Options.DefaultSynchronizationTimeout);
+            }
+            catch
+            {
+                database.InfrastructureLogger.Logger.LogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
+                throw;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                database.InfrastructureLogger.Logger.LogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
+            }
+        }
     }
+
     /// <inheritdoc/>
     public virtual void Unregister(IKEFCoreDatabase database)
     {
-
+        foreach (var item in database.Tables)
+        {
+            item.Unregister(database);
+        }
     }
 
     ArrayList<Java.Lang.String> TopicsFromModel(IKEFCoreDatabase database, out System.Collections.Generic.IList<string> topics)
@@ -106,7 +138,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return coll;
     }
 
-    void ResetStream(IKEFCoreDatabase database, System.Collections.Generic.IList<string> topics)
+    static void ResetStream(IKEFCoreDatabase database, System.Collections.Generic.IList<string> topics)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking ResetStream");
 
@@ -160,7 +192,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             ResetStream(database, topics);
         }
 
-        _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.Options.ManageEvents, database.Options.UseCompactedReplicator, database.InfrastructureLogger);
+        _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
         var valuesSeeded = _tables == null;
         if (valuesSeeded)
@@ -277,13 +309,6 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             var requestedPartitions = entityType.NumPartitions(database.Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(database.Options);
 
-            if (database.Options.ManageEvents
-                && !database.Options.UseCompactedReplicator
-                && requestedPartitions > 1)
-            {
-                throw new InvalidOperationException($"{nameof(KEFCoreDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KEFCoreDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-            }
-
             database.Options.TopicConfig.CleanupPolicy = database.Options.UseDeletePolicyForTopic
                         ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
                         : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
@@ -364,7 +389,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffers for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -394,7 +419,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffer for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffer for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -424,7 +449,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -454,7 +479,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverse for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverse for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -485,7 +510,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverseRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersReverseRange for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }
@@ -518,7 +543,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         finally
         {
             valueBufferSw.Stop();
-            _infrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersByPrefix for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
+            database.InfrastructureLogger.Logger.LogInformation($"KEFCoreCluster::GetValueBuffersByPrefix for {entityType.Name} - EnsureTable: {tableSw.Elapsed} ValueBuffer: {valueBufferSw.Elapsed}");
         }
 #endif
     }

@@ -28,9 +28,8 @@ using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common.Metrics.Stats;
 using System.Collections;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -54,7 +53,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
     }
 
-    private IStreamsManager? _streamsManager;
+    private readonly IStreamsManager? _streamsManager;
 
     private readonly Func<IValueContainerData, IComplexTypeConverterFactory?, TValueContainer> _createValueContainer;
     private readonly bool _useCompactedReplicator;
@@ -70,10 +69,27 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
-    private readonly IUpdateAdapter? _updateAdapter;
-    private readonly IEntityType? _entityTypeForChanges;
-    private readonly IKey? _primaryKeyForChanges;
+    readonly struct KEFCoreDatabaseLocalData
+    {
+        public KEFCoreDatabaseLocalData(IKEFCoreDatabase database, IEntityType entityType)
+        {
+            Database = database;
+            ManageEvents = entityType.GetManageEvents();
+            if (ManageEvents)
+            {
+                UpdateAdapter = database.UpdateAdapterFactory.Create();
+                EntityTypeForChanges = UpdateAdapter.Model.FindEntityType(entityType.ClrType)!;
+                PrimaryKeyForChanges = EntityTypeForChanges.FindPrimaryKey()!;
+            }
+        }
+        public readonly IKEFCoreDatabase Database;
+        public readonly bool ManageEvents;
+        public readonly IUpdateAdapter? UpdateAdapter;
+        public readonly IEntityType? EntityTypeForChanges;
+        public readonly IKey? PrimaryKeyForChanges;
+    }
 
+    readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
 
     #region KNetCompactedReplicatorEnumerable
@@ -256,15 +272,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
-            if (_database.Options.ManageEvents)
-            {
-                _updateAdapter = _database.UpdateAdapterFactory.Create();
-                _entityTypeForChanges = _updateAdapter.Model.FindEntityType(_entityType.ClrType)!;
-                _primaryKeyForChanges = _entityTypeForChanges.FindPrimaryKey()!;
-                _knetCompactedReplicator.OnRemoteAdd += KNetCompactedReplicator_OnRemoteAdd;
-                _knetCompactedReplicator.OnRemoteUpdate += KNetCompactedReplicator_OnRemoteUpdate;
-                _knetCompactedReplicator.OnRemoteRemove += KNetCompactedReplicator_OnRemoteRemove;
-            }
+            _knetCompactedReplicator.OnRemoteAdd += KNetCompactedReplicator_OnRemoteAdd;
+            _knetCompactedReplicator.OnRemoteUpdate += KNetCompactedReplicator_OnRemoteUpdate;
+            _knetCompactedReplicator.OnRemoteRemove += KNetCompactedReplicator_OnRemoteRemove;
         }
         else
         {
@@ -365,6 +375,28 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _entityType;
+    /// <inheritdoc/>
+    public virtual void Register(IKEFCoreDatabase database)
+    {
+        if (_useCompactedReplicator)
+        {
+            if (!_updaters.TryAdd(database, new KEFCoreDatabaseLocalData(database, _entityType)))
+            {
+                database.InfrastructureLogger.Logger.LogError($"Failed to register database");
+            }
+        }
+    }
+    /// <inheritdoc/>
+    public virtual void Unregister(IKEFCoreDatabase database)
+    {
+        if (_useCompactedReplicator)
+        {
+            if (!_updaters.TryRemove(database, out _))
+            {
+                database.InfrastructureLogger.Logger.LogError($"Failed to unregister database");
+            }
+        }
+    }
     /// <inheritdoc/>
     public void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records)
     {
@@ -501,7 +533,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 #if DEBUG_PERFORMANCE
             Stopwatch sw = Stopwatch.StartNew();
 #endif
-            _knetCompactedReplicator.Start();
+            if (!_knetCompactedReplicator.IsStarted)
+            {
+                _knetCompactedReplicator.Start();
+            }
 #if DEBUG_PERFORMANCE
             sw.Stop();
             KNet.Internal.DebugPerformanceHelper.ReportString($"EntityTypeProducer - KNetCompactedReplicator::StartAndWait for {_entityType.Name} in {sw.Elapsed}");

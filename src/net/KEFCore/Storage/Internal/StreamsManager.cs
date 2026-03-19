@@ -251,7 +251,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _usePersistentStorage = _kefcoreCluster.Options.UsePersistentStorage;
             _useEnumeratorWithPrefetch = _kefcoreCluster.Options.UseEnumeratorWithPrefetch;
             _useGlobalTable = _kefcoreCluster.Options.UseGlobalTable;
-            _manageEvents = _kefcoreCluster.Options.ManageEvents;
 
             if (_manageEvents)
             {

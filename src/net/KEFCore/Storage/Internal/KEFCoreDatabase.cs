@@ -66,33 +66,26 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     }
     /// <inheritdoc/>
     public virtual IKEFCoreCluster Cluster => _cluster;
-    /// <summary>
-    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
-    /// </summary>
+    /// <inheritdoc/>
     public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => _infrastructureLogger;
-    /// <summary>
-    /// Reference to <see cref="IValueGeneratorSelector"/> received
-    /// </summary>
+    /// <inheritdoc/>
     public virtual IValueGeneratorSelector ValueGeneratorSelector => _valueGeneratorSelector;
-    /// <summary>
-    /// Reference to <see cref="KEFCoreOptionsExtension"/> received
-    /// </summary>
+    /// <inheritdoc/>
     public virtual KEFCoreOptionsExtension Options => _options;
-    /// <summary>
-    /// Reference to <see cref="IDesignTimeModel"/> received
-    /// </summary>
+    /// <inheritdoc/>
     public virtual IDesignTimeModel DesignTimeModel => _designTimeModel;
-    /// <summary>
-    /// Reference to <see cref="IUpdateAdapterFactory"/> received
-    /// </summary>
+    /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
+    /// <inheritdoc/>
+    public virtual IList<IKEFCoreTable> Tables { get; } = [];
     /// <inheritdoc/>
     public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(this, entries, _updateLogger);
     /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
-        CancellationToken cancellationToken = default) => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
-                                                                                                    : _cluster.ExecuteTransactionAsync(this, entries, _updateLogger, cancellationToken);
+        CancellationToken cancellationToken = default) 
+        => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
+                                                     : _cluster.ExecuteTransactionAsync(this, entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
     public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(this, _updateLogger);
     /// <inheritdoc/>
