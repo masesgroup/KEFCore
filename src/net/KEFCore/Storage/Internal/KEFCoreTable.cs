@@ -63,7 +63,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         Database = database;
         Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
         _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
-        _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, database, entityType);
+        _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
@@ -79,7 +79,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         var param8 = Expression.Parameter(typeof(object?[]));
 
         _createRowBag = Expression.Lambda<Func<IUpdateEntry, string, TKey, IProperty[], IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKEFCoreRowBag>>(
-                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7,param8),
+                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7, param8),
                                     param1, param2, param3, param4, param5, param6, param7, param8)
                         .Compile();
     }
