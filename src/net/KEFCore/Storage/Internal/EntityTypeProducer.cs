@@ -30,6 +30,7 @@ using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 
@@ -585,9 +586,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KNetCompactedReplicator_OnRemoteAdd(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        foreach (var item in _updaters)
+        foreach (var item in _updaters.Where(u => u.Value.ManageEvents))
         {
-            if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
             KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
@@ -596,9 +596,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KNetCompactedReplicator_OnRemoteUpdate(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        foreach (var item in _updaters)
+        foreach (var item in _updaters.Where(u => u.Value.ManageEvents))
         {
-            if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
             KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
@@ -607,9 +606,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private void KNetCompactedReplicator_OnRemoteRemove(IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer> arg1, KeyValuePair<TKey, TValueContainer> arg2)
     {
-        foreach (var item in _updaters)
+        foreach (var item in _updaters.Where(u => u.Value.ManageEvents))
         {
-            if (!item.Value.ManageEvents) continue;
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
             KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);

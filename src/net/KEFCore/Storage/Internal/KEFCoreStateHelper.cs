@@ -23,6 +23,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KEFCoreStateHelper
     {
+        private static bool IsCriticalException(Exception ex)
+        {
+            return ex is OutOfMemoryException
+                or StackOverflowException
+                or ThreadAbortException
+                or ThreadInterruptedException;
+        }
+
         public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
@@ -44,6 +52,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 catch (Exception ex)
                 {
                     logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    if (IsCriticalException(ex))
+                    {
+                        throw;
+                    }
                 }
             }
             else
@@ -77,6 +89,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             catch (Exception ex)
             {
                 logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                if (IsCriticalException(ex))
+                {
+                    throw;
+                }
             }
         }
 

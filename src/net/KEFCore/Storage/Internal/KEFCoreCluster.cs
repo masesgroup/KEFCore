@@ -75,8 +75,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             var coll = TopicsFromModel(database, out var topics);
             _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
-            System.Collections.Generic.List<IKEFCoreTable> tables = new();
-            var updateAdapter = database.UpdateAdapterFactory.CreateStandalone();
+            database.UpdateAdapterFactory.CreateStandalone();
             foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
             {
                 var table = tableFactory.GetOrCreate(database, entityType);
