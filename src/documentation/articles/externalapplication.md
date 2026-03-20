@@ -17,6 +17,26 @@ Within the core packages there is the `EntityExtractor` class which contains, ti
 The method reads the info stored in the `ConsumerRecord<byte[], byte[]>` and returns the Entity object with the filled properties.
 
 It is possible to build a new application which subscribe to a topic created from the EFCore application.
+
+### Identifying the correct topic name
+
+The topic name to subscribe to is the same name resolved by `KEFCoreTopicNamingConvention` at model finalization time. The resolution priority is:
+
+1. `KEFCoreTopicAttribute` on the entity class
+2. `TableAttribute` on the entity class (including schema prefix, e.g. `schema.tablename`)
+3. The EF Core entity type name including full namespace
+
+The topic name is then optionally prefixed via `KEFCoreTopicPrefixAttribute` or `UseKEFCoreTopicPrefix()`. The full resolved name always follows the pattern `[DatabaseName].[resolved-topic-name]`.
+
+For example, given:
+```c#
+[Table("Blog", Schema = "Simple")]
+public class Blog { ... }
+```
+with `DatabaseName = "TestDB"`, the topic name is `TestDB.Simple.Blog`.
+
+See [conventions](conventions.md#topic-naming-convention) and [how it works](howitworks.md#data-storage) for full details.
+
 The following is a possible snippet of the logic can be applied:
 
 ```c#

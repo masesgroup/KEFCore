@@ -30,9 +30,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreClusterCache
+public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, 
+                                 IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
+                                 IValueGeneratorSelector valueGeneratorSelector,
+                                 IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreClusterCache
 {
     private readonly IKEFCoreTableFactory _tableFactory = tableFactory;
+    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger = infrastructureLogger;
+    private readonly IValueGeneratorSelector _valueGeneratorSelector = valueGeneratorSelector;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory = complexTypeConverterFactory;
     private readonly ConcurrentDictionary<string, IKEFCoreCluster> _namedClusters = new();
 
@@ -47,8 +52,8 @@ public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IComplexType
     }
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, infrastructureLogger, _tableFactory, _complexTypeConverterFactory, valueGeneratorSelector, updateAdapterFactory, designModel));
+    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options)
+        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, _infrastructureLogger, _tableFactory, _valueGeneratorSelector, _complexTypeConverterFactory));
 
     /// <inheritdoc/>
     public virtual void Dispose(IKEFCoreCluster cluster)

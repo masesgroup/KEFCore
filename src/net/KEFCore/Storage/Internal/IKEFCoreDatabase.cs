@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -29,6 +31,31 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// The referring <see cref="IKEFCoreCluster"/>
     /// </summary>
     IKEFCoreCluster Cluster { get; }
+    /// <summary>
+    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
+    /// </summary>
+    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
+    /// <summary>
+    /// Reference to <see cref="KEFCoreOptionsExtension"/> received
+    /// </summary>
+    KEFCoreOptionsExtension Options { get; }
+    /// <summary>
+    /// Reference to <see cref="IDesignTimeModel"/> received
+    /// </summary>
+    IDesignTimeModel DesignTimeModel { get; }
+    /// <summary>
+    /// Reference to <see cref="IUpdateAdapterFactory"/> received
+    /// </summary>
+    IUpdateAdapterFactory UpdateAdapterFactory { get; }
+    /// <summary>
+    /// Reference to the set of <see cref="IKEFCoreTable"/> associated
+    /// </summary>
+    IReadOnlyList<IKEFCoreTable> Tables { get; }
+    /// <summary>
+    /// Register <see cref="IKEFCoreTable"/> in this instance
+    /// </summary>
+    /// <param name="tables">The set of <see cref="IKEFCoreTable"/> to register</param>
+    void RegisterTables(IEnumerable<IKEFCoreTable> tables);
     /// <summary>
     /// Execute the <see cref="IDatabaseCreator.EnsureDeleted"/>
     /// </summary>

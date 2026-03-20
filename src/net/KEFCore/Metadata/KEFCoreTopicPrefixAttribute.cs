@@ -23,7 +23,7 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata
     /// or to a DbContext class (acts as default for all entities in that context).
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class KafkaTopicPrefixAttribute(string? prefix) : Attribute
+    public sealed class KEFCoreTopicPrefixAttribute(string? prefix) : Attribute
     {
         /// <summary>
         /// The prefix to associated to the topic when it is created

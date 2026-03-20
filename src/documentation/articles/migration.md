@@ -52,8 +52,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base
 }
 ```
 > [!TIP]
-> The model use the [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute) to define the topic to be used, this will be important later due to a change in namespace of the model.
-> For more info see [Data storage](howitworks.md#^data-storage)
+> The model uses the [TableAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute) or [KEFCoreTopicAttribute](conventions.md#topic-naming-convention) to define the topic to be used — this will be important later due to a change in namespace of the model.
+> Without one of these attributes, the topic name is derived from the full CLR type name including namespace: a namespace refactoring will silently change the topic name and break alignment with existing data.
+> For more info see [Data storage](howitworks.md#data-storage)
 
 ### First application run
 

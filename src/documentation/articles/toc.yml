@@ -9,13 +9,21 @@
 - name: Use cases
   href: usecases.md
 - name: Template usage
-  href: usageTemplates.md  
+  href: usageTemplates.md
+- name: Options
+  href: options.md
+- name: Conventions
+  href: conventions.md
 - name: Serialization
   href: serialization.md
 - name: Schema migration
   href: migration.md
+- name: Performance tips
+  href: performancetips.md
+- name: Troubleshooting
+  href: troubleshooting.md
 - name: External application
-  href: externalapplication.md 
+  href: externalapplication.md
 - name: Roadmap
   href: roadmap.md
 - name: Current state

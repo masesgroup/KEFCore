@@ -129,11 +129,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
             {
-                infrastructureLogger?.Logger.LogError("EnsureDeleted reports the following {Error}", utpe.Message);
+                infrastructureLogger?.Logger.LogError(utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
             }
         }
 
-        public void CheckTopics(Collection<Java.Lang.String> coll, bool readOnlyMode, bool manageEvents, bool useCompactedReplicator, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
+        public void CheckTopics(Collection<Java.Lang.String> coll, bool readOnlyMode, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
             try
             {
@@ -155,10 +155,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         }
                         var partitionsData = item.Value.Partitions();
                         var numPartition = partitionsData.Size();
-                        if (manageEvents && !useCompactedReplicator && numPartition > 1)
-                        {
-                            throw new InvalidOperationException($"{nameof(KEFCoreDbContext.ManageEvents)} supports a number of partition higher than 1 only with {nameof(KEFCoreDbContext.UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-                        }
 
                         bool write = false;
                         bool read = false;

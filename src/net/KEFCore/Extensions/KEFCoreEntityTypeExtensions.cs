@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,68 +33,32 @@ namespace MASES.EntityFrameworkCore.KNet.Extensions;
 public static class KEFCoreEntityTypeExtensions
 {
     /// <summary>
-    ///     Gets the LINQ query used as the default source for queries of this type.
-    /// </summary>
-    /// <param name="entityType">The entity type to get the Kafka query for.</param>
-    /// <returns>The LINQ query used as the default source.</returns>
-    public static LambdaExpression? GetKEFCoreQuery(this IReadOnlyEntityType entityType)
-        => (LambdaExpression?)entityType[KEFCoreAnnotationNames.DefiningQuery];
-
-    /// <summary>
-    ///     Sets the LINQ query used as the default source for queries of this type.
-    /// </summary>
-    /// <param name="entityType">The entity type.</param>
-    /// <param name="kefcoreQuery">The LINQ query used as the default source.</param>
-    public static void SetKEFCoreQuery(
-        this IMutableEntityType entityType,
-        LambdaExpression? kefcoreQuery)
-        => entityType
-            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kefcoreQuery);
-
-    /// <summary>
-    ///     Sets the LINQ query used as the default source for queries of this type.
-    /// </summary>
-    /// <param name="entityType">The entity type.</param>
-    /// <param name="kefcoreQuery">The LINQ query used as the default source.</param>
-    /// <param name="fromDataAnnotation">Indicates whether the configuration was specified using a data annotation.</param>
-    /// <returns>The configured entity type.</returns>
-    public static LambdaExpression? SetKEFCoreQuery(
-        this IConventionEntityType entityType,
-        LambdaExpression? kefcoreQuery,
-        bool fromDataAnnotation = false)
-        => (LambdaExpression?)entityType
-            .SetOrRemoveAnnotation(KEFCoreAnnotationNames.DefiningQuery, kefcoreQuery, fromDataAnnotation)
-            ?.Value;
-
-    /// <summary>
-    ///     Returns the configuration source for <see cref="GetKEFCoreQuery" />.
-    /// </summary>
-    /// <param name="entityType">The entity type.</param>
-    /// <returns>The configuration source for <see cref="GetKEFCoreQuery" />.</returns>
-    public static ConfigurationSource? GetDefiningQueryConfigurationSource(this IConventionEntityType entityType)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.DefiningQuery)?.GetConfigurationSource();
-
-
-    /// <summary>
     /// Creates the topic name
     /// </summary>
-    public static string GetKafkaTopicName(this IEntityType entityType)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicName)?.Value as string
-           ?? entityType.Name;  // fallback se convention non è stata applicata
-
-    /// <summary>
-    /// Creates the topic name
-    /// </summary>
-    public static string TopicName(this IEntityType entityType)
+    public static string GetKEFCoreTopicName(this IEntityType entityType)
         => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicName)?.Value as string
            ?? entityType.Name;
+
+    /// <summary>
+    /// Returns whether KEFCore event management is enabled for this entity type.
+    /// Reads the <see cref="KEFCoreAnnotationNames.ManageEvents"/> annotation
+    /// set by <see cref="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention"/>.
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to query.</param>
+    /// <returns>
+    /// <see langword="true"/> if event management is enabled (default);
+    /// <see langword="false"/> if disabled via <see cref="KEFCoreIgnoreEventsAttribute"/>
+    /// or <c>HasKEFCoreManageEvents(false)</c>.
+    /// </returns>
+    public static bool GetManageEvents(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ManageEvents)?.Value as bool? ?? true;
 
     /// <summary>
     /// Creates the storage id
     /// </summary>
     public static string StorageIdForTable(this IEntityType entityType)
     {
-        return $"Table_{entityType.TopicName()}";
+        return $"Table_{entityType.GetKEFCoreTopicName()}";
     }
     /// <summary>
     /// Creates the application id

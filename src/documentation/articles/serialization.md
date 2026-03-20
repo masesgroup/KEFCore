@@ -314,6 +314,9 @@ public class CustomValueContainerSerDes<T> : SerDesRaw<T>
 
 > **IMPORTANT NOTE**: the type applied in the previous properties of `KEFCoreDbContext` shall be a generic type definition, [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) will apply the right generic type when needed.
 
+> [!IMPORTANT]
+> These three properties are **singleton-scoped** — they contribute to the EF Core Service Provider cache key. All `DbContext` instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types. Mixing different serializers on the same cluster will result in a new Service Provider being created and a startup error.
+
 ## **Avro** serialization
 
 With package [MASES.EntityFrameworkCore.KNet.Serialization.Avro](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/) an user can choose two different Avro serializers:
@@ -438,6 +441,9 @@ The extension converted this schema into code to speedup the exection of seriali
 - **KeySerializationType**: set this value to `AvroKEFCoreSerDes.Key.BinaryRaw<>` or `AvroKEFCoreSerDes.Key.JsonRaw<>` or use `AvroKEFCoreSerDes.DefaultKeySerialization` (defaults to `AvroKEFCoreSerDes.Key.BinaryRaw<>`), both types automatically manages simple or complex Primary Key
 - **ValueSerializationType**: set this value to `AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>` or `AvroKEFCoreSerDes.ValueContainer.JsonRaw<>` or use `AvroKEFCoreSerDes.DefaultValueContainerSerialization` (defaults to `AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>`)
 - **ValueContainerType**: set this value to `AvroValueContainerRaw<>` or use `AvroKEFCoreSerDes.DefaultValueContainer`
+
+> [!IMPORTANT]
+> These three properties are **singleton-scoped** — all `DbContext` instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types.
 
 An example is:
 
@@ -622,6 +628,9 @@ The extension converted this schema into code to speedup the exection of seriali
 - **ValueSerializationType**: set this value to `ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainerSerialization`
 - **ValueContainerType**: set this value to `ProtobufValueContainerRaw<>` or use `ProtobufKEFCoreSerDes.DefaultValueContainer`
 
+> [!IMPORTANT]
+> These three properties are **singleton-scoped** — all `DbContext` instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types.
+
 An example is:
 
 ```C#
@@ -697,15 +706,69 @@ A single instance can support multiple `Type`s (this is the type declared as [Co
 > [!IMPORTANT]
 > The implementation of [`IComplexTypeConverter` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs) shall be thread-safe.
 
-An user can build an external library and can register the custom converters within the system using the singleton service implementing [`IComplexTypeConverterFactory` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs):
-- using `GetService`:
+An user can build an external library and can register the custom converters within the system. The preferred approach is to use the model convention pipeline so the converter is registered automatically at model finalization time without any extra startup code:
+
+- using `KEFCoreComplexTypeConverterAttribute` on the ComplexType class:
+
+  ```C#
+  [KEFCoreComplexTypeConverterAttribute(typeof(TaxInfoExtendedConverter))]
+  [ComplexType]
+  public class TaxInfoExtended
+  {
+      public int Code { get; set; }
+      public decimal Percentage { get; set; }
+  }
+  ```
+
+- using the fluent API `HasKEFCoreComplexTypeConverter()` in `OnModelCreating` (takes precedence over the attribute):
+
+  ```C#
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+      modelBuilder.Entity<TaxInfo>()
+                  .ComplexProperty(t => t.TaxInfoExtended)
+                  .HasKEFCoreComplexTypeConverter<TaxInfoExtendedConverter>();
+      base.OnModelCreating(modelBuilder);
+  }
+  ```
+
+- using `GetService` directly on the singleton (legacy approach):
 
   ```C#
   var context = new KakfaDbContext();
-  context.GetService<IComplexTypeConverterFactory>();
-  factory.Register(converter);
+  var factory = context.GetService<IComplexTypeConverterFactory>();
+  factory.Register(typeof(TaxInfoExtendedConverter));
   ```
-- using the methods available in [`KEFCoreDbContext`](kefcoredbcontext.md)
+
+See [conventions](conventions.md#complextype-converter-convention) for full details.
+
+### Value equality requirement
+
+KEFCore relies on value equality to detect changes in ComplexType properties. Without it, two logically identical instances would be treated as different, causing unnecessary Kafka writes or missed updates.
+
+At model finalization time, `KEFCoreComplexTypeEquatableConvention` verifies that every ComplexType either:
+- implements `IEquatable<T>`, or
+- overrides `Equals(object)`
+
+If neither condition is satisfied, an `InvalidOperationException` is thrown at startup with an actionable error message identifying the type. Apply `KEFCoreIgnoreEquatableCheckAttribute` to suppress the check when equality is guaranteed by other means.
+
+```C#
+// Good — implements IEquatable<T>
+[ComplexType]
+public class TaxInfoExtended : IEquatable<TaxInfoExtended>
+{
+    public int Code { get; set; }
+    public decimal Percentage { get; set; }
+
+    public bool Equals(TaxInfoExtended other)
+        => other != null && Code == other.Code && Percentage == other.Percentage;
+
+    public override bool Equals(object obj) => Equals(obj as TaxInfoExtended);
+    public override int GetHashCode() => HashCode.Combine(Code, Percentage);
+}
+```
+
+See [conventions](conventions.md#complextype-equality-convention) for full details.
 
 ### How to declare a complex property
 

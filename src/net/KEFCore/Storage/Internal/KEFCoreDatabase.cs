@@ -16,6 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -26,9 +28,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 public class KEFCoreDatabase : Database, IKEFCoreDatabase
 {
     private readonly IKEFCoreClusterCache _clusterCache;
-
+    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger;
+    private readonly KEFCoreOptionsExtension _options;
+    private readonly IDesignTimeModel _designTimeModel;
+    private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IKEFCoreCluster _cluster;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
+    private readonly List<IKEFCoreTable> _tables;
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -36,7 +42,6 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         DatabaseDependencies dependencies,
         IKEFCoreClusterCache clusterCache,
         IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
-        IValueGeneratorSelector valueGeneratorSelector,
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
@@ -44,29 +49,60 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         : base(dependencies)
     {
         _clusterCache = clusterCache;
-        _cluster = _clusterCache.CreateCluster(options, infrastructureLogger, valueGeneratorSelector, updateAdapterFactory, designTimeModel.Model);
+        _infrastructureLogger = infrastructureLogger;
+        _options = options.Extensions.OfType<KEFCoreOptionsExtension>().First();
+        _designTimeModel = designTimeModel;
+        _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
+        _tables = [];
+        _cluster = _clusterCache.CreateCluster(_options);
     }
     /// <inheritdoc/>
     public void Dispose()
     {
-        _clusterCache.Dispose(_cluster);
+        _cluster.Unregister(this);
+        foreach (var item in _tables.ToArray())
+        {
+            item.Unregister(this);
+            _tables.Remove(item);
+        }
     }
     /// <inheritdoc/>
     public virtual IKEFCoreCluster Cluster => _cluster;
     /// <inheritdoc/>
-    public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(entries, _updateLogger);
+    public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => _infrastructureLogger;
+    /// <inheritdoc/>
+    public virtual KEFCoreOptionsExtension Options => _options;
+    /// <inheritdoc/>
+    public virtual IDesignTimeModel DesignTimeModel => _designTimeModel;
+    /// <inheritdoc/>
+    public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
+    /// <inheritdoc/>
+    public virtual IReadOnlyList<IKEFCoreTable> Tables => _tables;
+    /// <inheritdoc/>
+    public virtual void RegisterTables(IEnumerable<IKEFCoreTable> tables)
+    {
+        foreach (var table in tables)
+        {
+            if (_tables.Contains(table)) throw new InvalidOperationException("Cannot register a table twice.");
+            table.Register(this);
+            _tables.Add(table);
+        }
+    }
+    /// <inheritdoc/>
+    public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(this, entries, _updateLogger);
     /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
-        CancellationToken cancellationToken = default) => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
-                                                                                                    : _cluster.ExecuteTransactionAsync(entries, _updateLogger, cancellationToken);
+        CancellationToken cancellationToken = default) 
+        => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
+                                                     : _cluster.ExecuteTransactionAsync(this, entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(_updateLogger);
+    public virtual bool EnsureDatabaseDeleted() => _cluster.EnsureDeleted(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseCreated() => _cluster.EnsureCreated(_updateLogger);
+    public virtual bool EnsureDatabaseCreated() => _cluster.EnsureCreated(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool EnsureDatabaseConnected() => _cluster.EnsureConnected(_updateLogger);
+    public virtual bool EnsureDatabaseConnected() => _cluster.EnsureConnected(this, _updateLogger);
     /// <inheritdoc/>
-    public virtual bool? EnsureDatabaseSynchronized(long timeout) => _cluster.EnsureSynchronized(timeout);
+    public virtual bool? EnsureDatabaseSynchronized(long timeout) => _cluster.EnsureSynchronized(this, timeout);
 }

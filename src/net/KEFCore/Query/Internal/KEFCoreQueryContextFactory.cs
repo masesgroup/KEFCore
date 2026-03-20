@@ -31,12 +31,13 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 public class KEFCoreQueryContextFactory(
     QueryContextDependencies dependencies,
     IKEFCoreClusterCache clusterCache,
-    IDbContextOptions contextOptions) : IQueryContextFactory
+    IDbContextOptions contextOptions,
+    IKEFCoreDatabase database) : IQueryContextFactory
 {
     /// <summary>
     ///     Dependencies for this service.
     /// </summary>
     protected virtual QueryContextDependencies Dependencies { get; } = dependencies;
     /// <inheritdoc/>
-    public virtual QueryContext Create() => new KEFCoreQueryContext(Dependencies, clusterCache.GetCluster(contextOptions));
+    public virtual QueryContext Create() => new KEFCoreQueryContext(Dependencies, clusterCache.GetCluster(contextOptions), database);
 }

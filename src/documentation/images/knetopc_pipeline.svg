@@ -1,0 +1,73 @@
+<svg width="100%" viewBox="0 0 680 500" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+<style>
+rect { fill: none; }
+.box-coral  { fill: #FAECE7; stroke: #993C1D; }
+.box-amber  { fill: #FAEEDA; stroke: #854F0B; }
+.box-teal   { fill: #E1F5EE; stroke: #0F6E56; }
+.box-purple { fill: #EEEDFE; stroke: #534AB7; }
+.box-blue   { fill: #E6F1FB; stroke: #185FA5; }
+.title-coral  { font: 500 14px sans-serif; fill: #993C1D; }
+.title-amber  { font: 500 14px sans-serif; fill: #854F0B; }
+.title-teal   { font: 500 14px sans-serif; fill: #0F6E56; }
+.title-purple { font: 500 14px sans-serif; fill: #534AB7; }
+.title-blue   { font: 500 14px sans-serif; fill: #185FA5; }
+.sub-coral    { font: 400 12px sans-serif; fill: #712B13; }
+.sub-amber    { font: 400 12px sans-serif; fill: #633806; }
+.sub-teal     { font: 400 12px sans-serif; fill: #085041; }
+.sub-purple   { font: 400 12px sans-serif; fill: #3C3489; }
+.sub-blue     { font: 400 12px sans-serif; fill: #0C447C; }
+.arr { stroke: #888780; stroke-width: 1.5; fill: none; }
+
+@media (prefers-color-scheme: dark) {
+  .box-coral  { fill: #4A1B0C; stroke: #F0997B; }
+  .box-amber  { fill: #412402; stroke: #EF9F27; }
+  .box-teal   { fill: #04342C; stroke: #5DCAA5; }
+  .box-purple { fill: #26215C; stroke: #AFA9EC; }
+  .box-blue   { fill: #042C53; stroke: #85B7EB; }
+  .title-coral  { fill: #F5C4B3; }
+  .title-amber  { fill: #FAC775; }
+  .title-teal   { fill: #9FE1CB; }
+  .title-purple { fill: #CECBF6; }
+  .title-blue   { fill: #B5D4F4; }
+  .sub-coral    { fill: #F0997B; }
+  .sub-amber    { fill: #EF9F27; }
+  .sub-teal     { fill: #5DCAA5; }
+  .sub-purple   { fill: #AFA9EC; }
+  .sub-blue     { fill: #85B7EB; }
+  .arr { stroke: #B4B2A9; }
+}
+</style>
+</defs>
+
+<rect class="box-coral" x="220" y="40"  width="240" height="56" rx="8" stroke-width="0.5"/>
+<text class="title-coral" x="340" y="62" text-anchor="middle">OPC-UA server</text>
+<text class="sub-coral"   x="340" y="80" text-anchor="middle">PLCs, SCADA, sensors</text>
+
+<line x1="340" y1="96" x2="340" y2="132" class="arr" marker-end="url(#arrow)"/>
+
+<rect class="box-amber" x="220" y="132" width="240" height="56" rx="8" stroke-width="0.5"/>
+<text class="title-amber" x="340" y="154" text-anchor="middle">KNetOPC bridge</text>
+<text class="sub-amber"   x="340" y="172" text-anchor="middle">OPC-UA → Kafka records</text>
+
+<line x1="340" y1="188" x2="340" y2="224" class="arr" marker-end="url(#arrow)"/>
+
+<rect class="box-teal" x="220" y="224" width="240" height="56" rx="8" stroke-width="0.5"/>
+<text class="title-teal" x="340" y="246" text-anchor="middle">Apache Kafka™ cluster</text>
+<text class="sub-teal"   x="340" y="264" text-anchor="middle">topic routing and storage</text>
+
+<line x1="340" y1="280" x2="340" y2="316" class="arr" marker-end="url(#arrow)"/>
+
+<rect class="box-purple" x="220" y="316" width="240" height="56" rx="8" stroke-width="0.5"/>
+<text class="title-purple" x="340" y="338" text-anchor="middle">KEFCore provider</text>
+<text class="sub-purple"   x="340" y="356" text-anchor="middle">topics → EF Core entities</text>
+
+<line x1="340" y1="372" x2="340" y2="408" class="arr" marker-end="url(#arrow)"/>
+
+<rect class="box-blue" x="220" y="408" width="240" height="56" rx="8" stroke-width="0.5"/>
+<text class="title-blue" x="340" y="430" text-anchor="middle">.NET application</text>
+<text class="sub-blue"   x="340" y="448" text-anchor="middle">LINQ queries over live data</text>
+</svg>

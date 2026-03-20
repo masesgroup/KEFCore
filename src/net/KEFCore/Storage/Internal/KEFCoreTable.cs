@@ -56,14 +56,14 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// Default initializer
     /// </summary>
     public KEFCoreTable(
-        IKEFCoreCluster cluster,
+        IKEFCoreDatabase database,
         IEntityType entityType,
         ILoggingOptions loggingOptions)
     {
-        cluster.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
-        Cluster = cluster;
-        _tableAssociatedTopicName = cluster.CreateTopicForEntity(entityType);
-        _producer = (IEntityTypeProducer<TKey>)EntityTypeProducers.Create<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType, cluster);
+        Database = database;
+        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
+        _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
+        _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
         _loggingOptions = loggingOptions;
@@ -79,15 +79,15 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         var param8 = Expression.Parameter(typeof(object?[]));
 
         _createRowBag = Expression.Lambda<Func<IUpdateEntry, string, TKey, IProperty[], IProperty[], object?[]?, IComplexProperty[]?, object?[]?, IKEFCoreRowBag>>(
-                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7,param8),
+                                   Expression.New(ctor, param1, param2, param3, param4, param5, param6, param7, param8),
                                     param1, param2, param3, param4, param5, param6, param7, param8)
                         .Compile();
     }
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        Cluster.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
-        EntityTypeProducers.Dispose(_producer!);
+        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
+        _producer.Dispose();
     }
     /// <inheritdoc/>
     public void FindAndAddOnTracker(object[] keyValues)
@@ -96,28 +96,31 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     }
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster Cluster { get; }
+    public virtual IKEFCoreDatabase Database { get; }
     /// <inheritdoc/>
     public virtual string AssociatedTopicName => _tableAssociatedTopicName;
     /// <inheritdoc/>
     public virtual IEntityType EntityType => _producer.EntityType;
-
+    /// <inheritdoc/>
+    public virtual void Register(IKEFCoreDatabase database) => _producer.Register(database);
+    /// <inheritdoc/>
+    public virtual void Unregister(IKEFCoreDatabase database) => _producer.Unregister(database);
     /// <inheritdoc/>
     public virtual void Commit(IList<Future<RecordMetadata>>? futures, IEnumerable<IKEFCoreRowBag> records) => _producer.Commit(futures, records);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffers() => _producer.GetValueBuffers();
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database) => _producer.GetValueBuffers(database);
     /// <inheritdoc/>
-    public virtual ValueBuffer? GetValueBuffer(object?[]? keyValues) => _producer.GetValueBuffer(keyValues);
+    public virtual ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues) => _producer.GetValueBuffer(database, keyValues);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersRange(rangeStart, rangeEnd);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersRange(database, rangeStart, rangeEnd);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse() => _producer.GetValueBuffersReverse();
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database) => _producer.GetValueBuffersReverse(database);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(rangeStart, rangeEnd);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => _producer.GetValueBuffersReverseRange(database, rangeStart, rangeEnd);
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(prefixValues);
+    public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues) => _producer.GetValueBuffersByPrefix(database, prefixValues);
     /// <inheritdoc/>
-    public void Start() => _producer.Start();
+    public void Start(IKEFCoreDatabase database) => _producer.Start(database);
 
     private static List<ValueComparer> GetKeyComparers(IEnumerable<IProperty> properties) => [.. properties.Select(p => p.GetKeyValueComparer())];
 

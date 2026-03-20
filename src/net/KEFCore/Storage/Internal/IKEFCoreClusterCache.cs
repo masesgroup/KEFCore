@@ -30,7 +30,7 @@ public interface IKEFCoreClusterCache
     /// <summary>
     /// Create new or get a previously allocated <see cref="IKEFCoreCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
-    IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel);
+    IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options);
     /// <summary>
     /// Gets an <see cref="IKEFCoreCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>

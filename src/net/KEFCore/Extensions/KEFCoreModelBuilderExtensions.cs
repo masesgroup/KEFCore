@@ -33,21 +33,21 @@ public static class KEFCoreModelBuilderExtensions
     /// <remarks>
     /// <para>
     /// The prefix is stored as a model annotation (<see cref="KEFCoreAnnotationNames.TopicPrefix"/>)
-    /// and consumed by <see cref="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KafkaTopicNamingConvention"/> during model building.
+    /// and consumed by <see cref="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention"/> during model building.
     /// </para>
     /// <para>
-    /// Per-entity overrides are still possible via <see cref="KafkaTopicPrefixAttribute"/>
+    /// Per-entity overrides are still possible via <see cref="KEFCoreTopicPrefixAttribute"/>
     /// applied directly to the entity class.
     /// </para>
     /// <para>
     /// Passing <see langword="null"/> explicitly disables prefixing for all entities
-    /// that do not have a <see cref="KafkaTopicPrefixAttribute"/>.
+    /// that do not have a <see cref="KEFCoreTopicPrefixAttribute"/>.
     /// </para>
     /// </remarks>
     /// <param name="modelBuilder">The <see cref="ModelBuilder"/> to configure.</param>
     /// <param name="prefix">The topic prefix, or <see langword="null"/> to disable prefixing.</param>
     /// <returns>The same <see cref="ModelBuilder"/> for chaining.</returns>
-    public static ModelBuilder UseKafkaTopicPrefix(
+    public static ModelBuilder UseKEFCoreTopicPrefix(
         this ModelBuilder modelBuilder, string? prefix)
     {
         modelBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicPrefix, prefix);
@@ -57,13 +57,13 @@ public static class KEFCoreModelBuilderExtensions
     /// Sets the Kafka topic name for this entity type, overriding the default naming convention.
     /// </summary>
     /// <remarks>
-    /// Equivalent to applying <see cref="KafkaTopicAttribute"/> on the entity class.
+    /// Equivalent to applying <see cref="KEFCoreTopicAttribute"/> on the entity class.
     /// Takes precedence over <see cref="TableAttribute"/> and the entity type name.
     /// </remarks>
     /// <param name="entityTypeBuilder">The <see cref="EntityTypeBuilder"/> to configure.</param>
     /// <param name="topicName">The Kafka topic name.</param>
     /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
-    public static EntityTypeBuilder ToKafkaTopic(
+    public static EntityTypeBuilder ToKEFCoreTopic(
         this EntityTypeBuilder entityTypeBuilder, string topicName)
     {
         entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicName, topicName);
@@ -76,10 +76,32 @@ public static class KEFCoreModelBuilderExtensions
     /// <param name="entityTypeBuilder">The <see cref="EntityTypeBuilder"/> to configure.</param>
     /// <param name="prefix">The topic prefix, or <see langword="null"/> to disable prefixing for this entity.</param>
     /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
-    public static EntityTypeBuilder HasKafkaTopicPrefix(
+    public static EntityTypeBuilder HasKEFCoreTopicPrefix(
         this EntityTypeBuilder entityTypeBuilder, string? prefix)
     {
         entityTypeBuilder.HasAnnotation(KEFCoreAnnotationNames.TopicPrefix, prefix);
         return entityTypeBuilder;
+    }
+
+    /// <summary>
+    /// Sets the default KEFCore event management behavior for all entity types in the model.
+    /// </summary>
+    /// <remarks>
+    /// Individual entities can override this via <see cref="KEFCoreIgnoreEventsAttribute"/>
+    /// or <see cref="KEFCoreEntityTypeBuilderExtensions.HasKEFCoreManageEvents"/>.
+    /// Event management is enabled by default — call this method with
+    /// <see langword="false"/> to disable it globally.
+    /// </remarks>
+    /// <param name="modelBuilder">The <see cref="ModelBuilder"/> to configure.</param>
+    /// <param name="manageEvents">
+    /// <see langword="true"/> to enable event management for all entities (default);
+    /// <see langword="false"/> to disable it globally.
+    /// </param>
+    /// <returns>The same <see cref="ModelBuilder"/> for chaining.</returns>
+    public static ModelBuilder UseKEFCoreManageEvents(
+        this ModelBuilder modelBuilder, bool manageEvents = true)
+    {
+        modelBuilder.HasAnnotation(KEFCoreAnnotationNames.ManageEvents, manageEvents);
+        return modelBuilder;
     }
 }

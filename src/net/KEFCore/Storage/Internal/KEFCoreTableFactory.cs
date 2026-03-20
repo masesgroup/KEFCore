@@ -16,10 +16,12 @@
 *  Refer to LICENSE for more information.
 */
 
-using System.Collections.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Org.Apache.Kafka.Connect.Util;
+using System.Collections.Concurrent;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -41,54 +43,61 @@ public class KEFCoreTableFactory(
     private readonly ConcurrentDictionary<(IKEFCoreCluster Cluster, string topicName), IKEFCoreTable> _factories = new();
 
     /// <inheritdoc/>
-    public virtual IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType)
-        => _factories.GetOrAdd((cluster, topicName), e => CreateTable(cluster, entityType)());
+    public virtual IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)
+        => _factories.GetOrAdd((database.Cluster, entityType.GetKEFCoreTopicName()), e => CreateTable(database, entityType)());
 
     /// <inheritdoc/>
-    public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, string topicName)
+    public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType)
     {
-        if (!_factories.TryGetValue((cluster, topicName), out var table))
+        if (!_factories.TryGetValue((cluster, entityType.GetKEFCoreTopicName()), out var table))
         {
-            throw new InvalidOperationException($"Topic name {topicName} on ClusterId {cluster.ClusterId} not registered yet.");
+            throw new InvalidOperationException($"EntityType {entityType} with topic {entityType.GetKEFCoreTopicName()} wasn't available");
         }
         return table;
     }
 
-    /// <summary>
-    /// Allocates a new <see cref="IEntityTypeProducer"/>
-    /// </summary>
-    public void Start(IEnumerable<IKEFCoreTable> tables)
+    /// <inheritdoc/>
+    public virtual bool NeedsNewTables(IKEFCoreCluster cluster, IEnumerable<IEntityType> entityTypes)
     {
-        foreach (var table in tables)
+        bool result = true;
+        foreach (var item in entityTypes)
         {
-            table.Start();
+            result &= _factories.ContainsKey((cluster, item.GetKEFCoreTopicName()));
         }
+        return !result;
     }
 
     /// <inheritdoc/>
-    public void Dispose(IKEFCoreTable table)
+    public void Start(IKEFCoreDatabase database)
     {
-        if (table != null)
+        foreach (var table in database.Tables)
         {
-            table.Dispose();
-            _factories.TryRemove((table.Cluster, table.AssociatedTopicName), out _);
+            table.Start(database);
+        }
+    }
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        foreach (var item in _factories)
+        {
+            item.Value.Dispose();
         }
     }
 
-    private Func<IKEFCoreTable> CreateTable(IKEFCoreCluster cluster, IEntityType entityType)
+    private Func<IKEFCoreTable> CreateTable(IKEFCoreDatabase database, IEntityType entityType)
         => (Func<IKEFCoreTable>)typeof(KEFCoreTableFactory).GetTypeInfo()
             .GetDeclaredMethod(nameof(CreateFactory))!
             .MakeGenericMethod(entityType.FindPrimaryKey()!.GetKeyType(),
                                _options.ValueContainerType(entityType),
                                _options.JVMKeyType(entityType),
                                _options.JVMValueContainerType(entityType))
-            .Invoke(null, [cluster, entityType, _loggingOptions])!;
+            .Invoke(null, [database, entityType, _loggingOptions])!;
 
     private static Func<IKEFCoreTable> CreateFactory<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(
-        IKEFCoreCluster cluster,
+        IKEFCoreDatabase database,
         IEntityType entityType,
         ILoggingOptions loggingOptions)
         where TKey : notnull
         where TValueContainer : class, IValueContainer<TKey>
-        => () => new KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(cluster, entityType, loggingOptions);
+        => () => new KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType, loggingOptions);
 }

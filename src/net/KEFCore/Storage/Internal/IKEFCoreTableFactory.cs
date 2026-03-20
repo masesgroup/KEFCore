@@ -23,31 +23,32 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKEFCoreTableFactory
+public interface IKEFCoreTableFactory : IDisposable
 {
     /// <summary>
     /// Allocate a new <see cref="IKEFCoreTable"/>
     /// </summary>
-    /// <param name="cluster"></param>
-    /// <param name="topicName"></param>
+    /// <param name="database"></param>
     /// <param name="entityType"></param>
     /// <returns></returns>
-    IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType);
+    IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
-    /// Returns a <see cref="IKEFCoreTable"/>
+    /// Allocate a new <see cref="IKEFCoreTable"/>
     /// </summary>
     /// <param name="cluster"></param>
-    /// <param name="topicName"></param>
+    /// <param name="entityType"></param>
     /// <returns></returns>
-    IKEFCoreTable Get(IKEFCoreCluster cluster, string topicName);
+    IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType);
+    /// <summary>
+    /// Check if all <paramref name="entityTypes"/> have associated <see cref="IKEFCoreTable"/>
+    /// </summary>
+    /// <param name="cluster"></param>
+    /// <param name="entityTypes"></param>
+    /// <returns></returns>
+    bool NeedsNewTables(IKEFCoreCluster cluster, IEnumerable<IEntityType> entityTypes);
     /// <summary>
     /// Returns a <see cref="IKEFCoreTable"/>
     /// </summary>
-    /// <param name="tables"></param>
-    /// <returns></returns>
-    void Start(IEnumerable<IKEFCoreTable> tables);
-    /// <summary>
-    /// Dispose a previously allocated <see cref="IKEFCoreTable"/>
-    /// </summary>
-    void Dispose(IKEFCoreTable table);
+    /// <param name="database"></param>
+    void Start(IKEFCoreDatabase database);
 }

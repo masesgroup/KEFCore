@@ -216,10 +216,6 @@ public class KEFCoreDbContext : DbContext
     /// </summary>
     public virtual TopicConfigBuilder? TopicConfig { get; set; }
     /// <summary>
-    ///  Setting this property to <see langword="true"/> the engine will emit events on <see cref="DbContext.ChangeTracker"/>, default is <see langword="true"/>
-    /// </summary>
-    public virtual bool ManageEvents { get; set; } = true;
-    /// <summary>
     ///  Setting this property to <see langword="true"/> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.WRITE"/> and <see cref="Org.Apache.Kafka.Common.Acl.AclOperation.READ"/>
     /// </summary>
     public virtual bool ReadOnlyMode { get; set; } = false;
@@ -254,7 +250,7 @@ public class KEFCoreDbContext : DbContext
     /// Invoke the method to wait a timeout defined from <paramref name="waitTime"/> for synchonization with Apache Kafka� backend
     /// </summary>
     /// <param name="waitTime">The time expressed as <see cref="TimeSpan"/> to wait for synchonization with Apache Kafka� backend</param>
-    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result, <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTime"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(TimeSpan waitTime)
     {
@@ -264,7 +260,7 @@ public class KEFCoreDbContext : DbContext
     /// Invoke the method to wait a timeout defined from <paramref name="waitTimeMs"/> for synchonization with Apache Kafka� backend
     /// </summary>
     /// <param name="waitTimeMs">The time expressed as milliseconds to wait for synchonization with Apache Kafka� backend</param>
-    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result (e.g. <see cref="UseGlobalTable"/> is <see langword="true"/>), <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
+    /// <returns>An optional <see cref="bool"/>, <see langword="null"/> means an uncertain result, <see langword="true"/> if the store is in-sync, <see langword="false"/> otherwise</returns>
     /// <exception cref="TimeoutException">Raised if the <paramref name="waitTimeMs"/> has expired without receive an information</exception>
     public bool? WaitForSynchronization(long waitTimeMs = Timeout.Infinite)
     {
@@ -286,13 +282,15 @@ public class KEFCoreDbContext : DbContext
         var serviceProvider = ((IInfrastructure<IServiceProvider>)this).Instance;
         var clusterCache = serviceProvider.GetService<IKEFCoreClusterCache>();
         var options = serviceProvider.GetService<IDbContextOptions>();
+        var database = serviceProvider.GetService<IKEFCoreDatabase>();
 
         if (clusterCache == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IKEFCoreClusterCache)} service");
         if (options == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IDbContextOptions)} service");
+        if (database == null) throw new InvalidOperationException($"Unable to retrieve {nameof(IKEFCoreDatabase)} service");
 
         var cluster = clusterCache.GetCluster(options);
 
-        cluster?.ResetStreams();
+        cluster?.ResetStreams(database);
     }
 
     /// <inheritdoc cref="DbContext.OnConfiguring(DbContextOptionsBuilder)"/>
@@ -308,13 +306,6 @@ public class KEFCoreDbContext : DbContext
 
         optionsBuilder.UseKEFCore(ApplicationId, BootstrapServers, (o) =>
         {
-            if (ManageEvents 
-                && !(UseCompactedReplicator || UseGlobalTable) 
-                && DefaultNumPartitions > 1)
-            {
-                throw new InvalidOperationException($"{nameof(ManageEvents)} supports a number of partition higher than 1 only with {nameof(UseCompactedReplicator)}=true, in all other cases events are supported only using a single partition.");
-            }
-
             o.WithConsumerConfig(ConsumerConfig ?? DefaultConsumerConfig);
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
@@ -328,7 +319,6 @@ public class KEFCoreDbContext : DbContext
             o.WithKNetStreams(UseKNetStreams);
             o.WithGlobalTable(UseGlobalTable);
             o.WithDefaultReplicationFactor(DefaultReplicationFactor);
-            o.WithManageEvents(ManageEvents);
             o.WithDefaultSynchronizationTimeout(DefaultSynchronizationTimeout);
             o.WithStorePrefixScan(UseStorePrefixScan);
             o.WithStoreSingleKeyLookup(UseStoreSingleKeyLookup);

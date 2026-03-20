@@ -42,9 +42,9 @@ public interface IKEFCoreTableEntityFinder
 public interface IKEFCoreTable : IEntityTypeProducer, IKEFCoreTableEntityFinder
 {
     /// <summary>
-    /// The referring <see cref="IKEFCoreCluster"/>
+    /// The referring <see cref="IKEFCoreDatabase"/>
     /// </summary>
-    IKEFCoreCluster Cluster { get; }
+    IKEFCoreDatabase Database { get; }
     /// <summary>
     /// The topic associated to this <see cref="IKEFCoreTable"/>
     /// </summary>

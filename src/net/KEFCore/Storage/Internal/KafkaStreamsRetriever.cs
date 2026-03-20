@@ -22,6 +22,7 @@
 #nullable enable
 
 using Java.Util;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
@@ -39,7 +40,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
+public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -47,17 +48,13 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     {
         private readonly Action<FreshEventChange> _pushChanges;
         private readonly IStreamsChangeManager _manager;
-        private readonly IEntityType _entityType;
-        private readonly IKey _primaryKey;
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
 
-        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey, object optional)
+        public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, object optional)
         {
             _pushChanges = pushChanges;
             _manager = manager;
-            _entityType = entityType;
-            _primaryKey = primaryKey;
             var serdes = (Tuple<ISerDes<TKey, K>, ISerDes<TValue, V>>)optional;
             _keySerdes = serdes.Item1;
             _valueSerdes = serdes.Item2;
@@ -72,7 +69,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, record2.Key());
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, record2.Value());
 
-            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, _primaryKey, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
 
             return record.Timestamp();
         }
@@ -92,16 +89,16 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     /// Creates an instance of <see cref="IStreamsManager"/>
     /// </summary>
     /// <param name="cluster"></param>
-    /// <param name="entity"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    public static IStreamsManager Create(IKEFCoreCluster cluster, IEntityType entity)
+    public static IStreamsManager Create(IKEFCoreCluster cluster, KEFCoreOptionsExtension options)
     {
-        _streamsManager ??= new(cluster, entity)
+        _streamsManager ??= new(cluster, options)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = static (enqueuer, manager, entity, key, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, entity, key, optional),
+            CreateTimestampExtractor = static (enqueuer, manager, optional) => new KafkaStreamsBaseRetrieverTimestampExtractor(enqueuer, manager, optional),
             CreateConsumed = static (extractor) => Consumed<K, V>.With(extractor),
             CreateMaterialized = static (supplier) => Materialized<K, V, KeyValueStore<Bytes, byte[]>>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
@@ -133,9 +130,8 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
 
     private static Properties? _properties = null;
 
-    private readonly IKEFCoreCluster _cluster;
+    private readonly IEntityTypeProducer _producer;
     private readonly IValueContainerMetadata _metadata;
-    private readonly IKey _primaryKey;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly ISerDes<TKey, K> _keySerdes;
     private readonly ISerDes<TValue, V> _valueSerdes;
@@ -144,11 +140,10 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KafkaStreamsBaseRetriever(IKEFCoreCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
+    public KafkaStreamsRetriever(IEntityTypeProducer producer, IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes)
     {
-        _cluster = cluster;
+        _producer = producer;
         _metadata = metadata;
-        _primaryKey = primaryKey;
         _complexTypeConverterFactory = complexTypeConverterFactory;
         _keySerdes = keySerdes;
         _valueSerdes = valueSerdes;
@@ -163,13 +158,13 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffers()
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
         return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, false);
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
     {
         TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
         TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
@@ -177,13 +172,13 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverse()
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
     {
         return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, true);
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
     {
         TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
         TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
@@ -191,7 +186,7 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
     {
         TKey? prefix = (TKey)keyValueFactory.CreateFromKeyValues(prefixValues!)!;
         return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, prefix);
@@ -244,10 +239,12 @@ public class KafkaStreamsBaseRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetr
         return true;
     }
 
-    void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
+    IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
+
+    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KafkaStreams streams, string storageId, object optional)

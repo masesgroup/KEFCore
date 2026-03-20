@@ -27,9 +27,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public static class KEFCoreClusterCacheExtensions
 {
-    /// <inheritdoc cref="IKEFCoreClusterCache.CreateCluster(KEFCoreOptionsExtension, IDiagnosticsLogger{DbLoggerCategory.Infrastructure}, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)"/>
-    public static IKEFCoreCluster CreateCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)
-        => storeCache.CreateCluster(options.Extensions.OfType<KEFCoreOptionsExtension>().First(), infrastructureLogger, valueGeneratorSelector, updateAdapterFactory, designModel);
+    /// <inheritdoc cref="IKEFCoreClusterCache.CreateCluster(KEFCoreOptionsExtension)"/>
+    public static IKEFCoreCluster CreateCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options)
+        => storeCache.CreateCluster(options.Extensions.OfType<KEFCoreOptionsExtension>().First());
     /// <inheritdoc cref="IKEFCoreClusterCache.GetCluster(KEFCoreOptionsExtension)"/>
     public static IKEFCoreCluster GetCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options)
         => storeCache.GetCluster(options.Extensions.OfType<KEFCoreOptionsExtension>().First());

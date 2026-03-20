@@ -1,5 +1,4 @@
 {
   "UseKNetStreams": false,
-  "BootstrapServers": "localhost:9092",
   "NumberOfExecutions": 10
 }

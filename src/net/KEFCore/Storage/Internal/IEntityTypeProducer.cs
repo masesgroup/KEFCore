@@ -35,6 +35,16 @@ public interface IEntityTypeProducer : IDisposable
     /// </summary>
     IEntityType EntityType { get; }
     /// <summary>
+    /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be registered</param>
+    void Register(IKEFCoreDatabase database);
+    /// <summary>
+    /// Unregister a previously registered instance of <see cref="IKEFCoreDatabase"/> from an instance of <see cref="IKEFCoreCluster"/>
+    /// </summary>
+    /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be unregistered</param>
+    void Unregister(IKEFCoreDatabase database);
+    /// <summary>
     /// Stores an <see cref="IEnumerable{IKEFCoreRowBag}"/>
     /// </summary>
     /// <param name="futures">The <see cref="Future{V}"/> with <see cref="RecordMetadata"/> generated from <see cref="Commit(IList{Future{RecordMetadata}}?, IEnumerable{IKEFCoreRowBag})"/></param>
@@ -44,43 +54,50 @@ public interface IEntityTypeProducer : IDisposable
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffers();
+    IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database);
     /// <summary>
     /// Retrieve an<see cref="ValueBuffer"/> associated to <paramref name="keyValues"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="keyValues">The key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    ValueBuffer? GetValueBuffer(object?[]? keyValues);
+    ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues);
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersRange(object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersReverse();
+    IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database);
     /// <summary>
     /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/>
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="rangeStart">The start key</param>
     /// <param name="rangeEnd">The end key</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(object?[]? rangeStart, object?[]? rangeEnd);
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
     /// </summary>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="prefixValues">The prefix</param>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ValueBuffer"/></returns>
-    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(object?[]? prefixValues);
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues);
     /// <summary>
     /// Starts the <see cref="IEntityTypeProducer"/> instance
     /// </summary>
-    void Start();
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the operation</param>
+    void Start(IKEFCoreDatabase database);
     /// <summary>
     /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>

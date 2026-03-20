@@ -78,8 +78,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         TopicConfig = TopicConfigBuilder.CreateFrom(copyFrom.TopicConfig);
 
         // ── Context-only options ──────────────────────────────────────────
-        DefaultConsumerInstances = copyFrom.DefaultConsumerInstances;
-        ManageEvents = copyFrom.ManageEvents;
         ReadOnlyMode = copyFrom.ReadOnlyMode;
         DefaultSynchronizationTimeout = copyFrom.DefaultSynchronizationTimeout;
         UseEnumeratorWithPrefetch = copyFrom.UseEnumeratorWithPrefetch;
@@ -155,8 +153,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// <inheritdoc cref="KEFCoreDbContext.DefaultConsumerInstances"/>
     [Obsolete("Option will be removed soon")]
     public virtual int? DefaultConsumerInstances { get; set; } = null;
-    /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
-    public virtual bool ManageEvents { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.ReadOnlyMode"/>
     public virtual bool ReadOnlyMode { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultSynchronizationTimeout"/>
@@ -313,13 +309,6 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     {
         var clone = Clone();
         clone.DefaultConsumerInstances = defaultConsumerInstances;
-        return clone;
-    }
-    /// <inheritdoc cref="KEFCoreDbContext.ManageEvents"/>
-    public virtual KEFCoreOptionsExtension WithManageEvents(bool manageEvents)
-    {
-        var clone = Clone();
-        clone.ManageEvents = manageEvents;
         return clone;
     }
     /// <inheritdoc cref="KEFCoreDbContext.ReadOnlyMode"/>
@@ -601,7 +590,8 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                     builder.Append("TopicConfig=").Append(Extension.TopicConfig).Append(' ');
                     // context
                     builder.Append("DefaultConsumerInstances=").Append(Extension.DefaultConsumerInstances).Append(' ');
-                    builder.Append("ManageEvents=").Append(Extension.ManageEvents).Append(' ');
+                    builder.Append("ConsumerConfig=").Append(Extension.ConsumerConfig?.ToString()).Append(' ');
+                    builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
                     builder.Append("ReadOnlyMode=").Append(Extension.ReadOnlyMode).Append(' ');
                     builder.Append("DefaultSynchronizationTimeout=").Append(Extension.DefaultSynchronizationTimeout).Append(' ');
                     builder.Append("UseEnumeratorWithPrefetch=").Append(Extension.UseEnumeratorWithPrefetch).Append(' ');

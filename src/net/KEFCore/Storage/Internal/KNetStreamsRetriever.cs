@@ -21,6 +21,7 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
@@ -39,17 +40,15 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, IEntityType entityType, IKey primaryKey)
+    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
         private readonly Action<FreshEventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
-        private readonly IEntityType _entityType = entityType;
-        private readonly IKey _primaryKey = primaryKey;
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke(new FreshEventChange(_manager, _entityType, _primaryKey, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
             return Record.DateTime;
         }
     }
@@ -68,16 +67,16 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     /// Creates an instance of <see cref="IStreamsManager"/>
     /// </summary>
     /// <param name="cluster"></param>
-    /// <param name="entity"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    public static IStreamsManager Create(IKEFCoreCluster cluster, IEntityType entity)
+    public static IStreamsManager Create(IKEFCoreCluster cluster, KEFCoreOptionsExtension options)
     {
-        _streamsManager ??= new(cluster, entity)
+        _streamsManager ??= new(cluster, options)
         {
             CreateStreamBuilder = static (streamsConfig) => new StreamsBuilder(streamsConfig),
             CreateStoreSupplier = static (usePersistentStorage, storageId) => usePersistentStorage ? Org.Apache.Kafka.Streams.State.Stores.PersistentKeyValueStore(storageId)
                                                                                                    : Org.Apache.Kafka.Streams.State.Stores.InMemoryKeyValueStore(storageId),
-            CreateTimestampExtractor = static (enqueuer, manager, entity, key, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager, entity, key),
+            CreateTimestampExtractor = static (enqueuer, manager, _) => new KNetStreamsRetrieverTimestampExtractor(enqueuer, manager),
             CreateConsumed = static (extractor) => Consumed<TKey, TValue, TJVMKey, TJVMValue>.With(extractor),
             CreateMaterialized = static (supplier) => Materialized<TKey, TValue, TJVMKey, TJVMValue>.As(supplier),
             CreateGlobalTable = static (builder, topicName, materialized) => builder.GlobalTable(topicName, materialized),
@@ -103,20 +102,18 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         return _streamsManager;
     }
 
-    private readonly IKEFCoreCluster _cluster;
+    private readonly IEntityTypeProducer _producer;
     private readonly IValueContainerMetadata _metadata;
-    private readonly IKey _primaryKey;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly string _storageId;
 
     /// <summary>
     /// Default initializer
     /// </summary>
-    public KNetStreamsRetriever(IKEFCoreCluster cluster, IValueContainerMetadata metadata, IKey primaryKey, IComplexTypeConverterFactory complexTypeConverterFactory)
+    public KNetStreamsRetriever(IEntityTypeProducer producer, IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory)
     {
-        _cluster = cluster;
+        _producer = producer;
         _metadata = metadata;
-        _primaryKey = primaryKey;
         _complexTypeConverterFactory = complexTypeConverterFactory;
         _storageId = _streamsManager!.AddEntity(this, _metadata.EntityType, null);
     }
@@ -128,38 +125,38 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffers()
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, false);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, database.Options, false);
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
-    {
-        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
-        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, false, start, end);
-    }
-
-    /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverse()
-    {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, true);
-    }
-
-    /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
     {
         TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
         TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, true, start, end);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, database.Options, false, start, end);
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
+    {
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, database.Options, true);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd)
+    {
+        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, database.Options, true, start, end);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
     {
         TKey? prefix = (TKey)keyValueFactory.CreateFromKeyValues(prefixValues!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, _streamsManager!.UseEnumeratorWithPrefetch, prefix);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _storageId, database.Options, prefix);
     }
 
     TValue GetTValue(TKey key)
@@ -208,10 +205,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         return true;
     }
 
-    void IStreamsChangeManager.ManageChange(IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
+    IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
+
+    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(_cluster.InfrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
@@ -226,7 +225,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
-        private readonly bool _useEnumeratorWithPrefetch;
+        private readonly KEFCoreOptionsExtension _options;
         private readonly bool _withPrefix;
         private readonly bool _isReverse;
         private readonly bool _useRange = false;
@@ -237,24 +236,24 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
         private readonly ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore = null;
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch, bool isReverse)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, KEFCoreOptionsExtension options, bool isReverse)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
-            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+            _options = options;
             _isReverse = isReverse;
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
         }
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch, bool isReverse, TKey? rangeStart, TKey? rangeEnd)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, KEFCoreOptionsExtension options, bool isReverse, TKey? rangeStart, TKey? rangeEnd)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
-            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+            _options = options;
             _isReverse = isReverse;
             _useRange = true;
             _rangeStart = rangeStart;
@@ -264,12 +263,12 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #endif
         }
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, bool useEnumeratorWithPrefetch, TKey? prefix)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, string storageId, KEFCoreOptionsExtension options, TKey? prefix)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueStore = _streamsManager!.Streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
-            _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
+            _options = options;
             _withPrefix = true;
             _prefix = prefix;
 #if DEBUG_PERFORMANCE
@@ -338,7 +337,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _withPrefix, _rangeStart, _rangeEnd, _prefix), _useEnumeratorWithPrefetch, false);
+            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _withPrefix, _rangeStart, _rangeEnd, _prefix), _options.UseEnumeratorWithPrefetch, false);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -352,7 +351,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requesting async KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
-            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _withPrefix, _rangeStart, _rangeEnd, _prefix, cancellationToken), _useEnumeratorWithPrefetch, true, cancellationToken);
+            return new KafkaEnumerator(_metadata, _complexTypeConverterFactory, GetIterator(_keyValueStore, _isReverse, _useRange, _withPrefix, _rangeStart, _rangeEnd, _prefix, cancellationToken), _options.UseEnumeratorWithPrefetch, true, cancellationToken);
         }
     }
 
