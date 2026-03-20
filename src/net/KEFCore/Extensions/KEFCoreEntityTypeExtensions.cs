@@ -108,7 +108,7 @@ public static class KEFCoreEntityTypeExtensions
     /// or if the context-level <see cref="KEFCoreOptionsExtension.ReadOnlyMode"/> is enabled.
     /// </summary>
     public static bool GetReadOnly(this IEntityType entityType, KEFCoreOptionsExtension options)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.ReadOnly)?.Value as bool? ?? false
+        => (entityType.FindAnnotation(KEFCoreAnnotationNames.ReadOnly)?.Value as bool? ?? false)
            || options.ReadOnlyMode;
 
     /// <summary>
