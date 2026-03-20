@@ -177,6 +177,58 @@ Here below some differences between them and when KEFCore can be used.</p>
 <li><strong>KEFCore</strong>: Durable shared state, complex data, cross-region sync</li>
 </ul>
 <p>They complement each other.</p>
+<h2 id="industry-40-opc-ua-data-via-knetopc">Industry 4.0: OPC-UA data via <a href="https://knetopc.masesgroup.com">KNetOPC</a></h2>
+<p><a href="https://knetopc.masesgroup.com">KNetOPC</a> is a bridge that connects <a href="https://opcfoundation.org/">OPC-UA</a> industrial data sources to <a href="https://kafka.apache.org/">Apache Kafka™</a> topics.
+Combined with KEFCore, it enables querying real-time industrial data using standard <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> LINQ APIs — without any knowledge of OPC-UA protocols or Kafka internals.</p>
+<h3 id="pipeline-overview">Pipeline overview</h3>
+<p><img src="../images/knetopc_pipeline.svg" alt="KNetOPC + KEFCore pipeline" title="OPC-UA → KNetOPC → Kafka → KEFCore → .NET application"></p>
+<h3 id="mapping-opc-ua-types-to-ef-core-entities">Mapping OPC-UA types to EF Core entities</h3>
+<p>OPC-UA nodes can be mapped to EF Core entities using <a href="https://learn.microsoft.com/ef/core/modeling/complex-types">ComplexType</a> to represent structured OPC-UA values.
+The <code>TypeId</code>/<code>Body</code> pair used by the OPC-UA encoding is preserved as a ComplexType property, allowing the original OPC-UA type to be reconstructed on read:</p>
+<pre><code class="lang-csharp">public class OpcUaReading
+{
+    public string NodeId { get; set; }         // PK — OPC-UA node identifier
+    public DateTime Timestamp { get; set; }
+    public OpcUaValue Value { get; set; }      // ComplexType
+}
+
+[KEFCoreComplexTypeConverterAttribute(typeof(OpcUaValueConverter))]
+public class OpcUaValue : IEquatable&lt;OpcUaValue&gt;
+{
+    public string TypeId { get; set; }
+    public string Body { get; set; }           // JSON-encoded OPC-UA body
+
+    public bool Equals(OpcUaValue other)
+        =&gt; TypeId == other?.TypeId &amp;&amp; Body == other?.Body;
+
+    public override bool Equals(object obj)
+        =&gt; Equals(obj as OpcUaValue);
+
+    public override int GetHashCode()
+        =&gt; HashCode.Combine(TypeId, Body);
+}
+</code></pre>
+<h3 id="querying-industrial-data-with-linq">Querying industrial data with LINQ</h3>
+<p>Once the model is defined and KEFCore is configured against the topics produced by KNetOPC, standard EF Core queries work transparently:</p>
+<pre><code class="lang-csharp">// Latest readings above threshold for a specific sensor
+var alerts = await context.OpcUaReadings
+    .Where(r =&gt; r.NodeId == &quot;ns=2;s=Temperature&quot;
+             &amp;&amp; r.Timestamp &gt; DateTime.UtcNow.AddMinutes(-5))
+    .OrderByDescending(r =&gt; r.Timestamp)
+    .ToListAsync();
+</code></pre>
+<h3 id="why-this-combination-is-useful">Why this combination is useful</h3>
+<ul>
+<li>✅ <strong>No OPC-UA protocol knowledge required</strong> — engineers query industrial data using familiar C# and LINQ</li>
+<li>✅ <strong>Real-time alignment</strong> — KEFCore's event management keeps the local state synchronized with the Kafka topics as new OPC-UA readings arrive</li>
+<li>✅ <strong>Decoupled architecture</strong> — OPC-UA sources, Kafka, and the .NET application are independently scalable</li>
+<li>✅ <strong>ComplexType support</strong> — structured OPC-UA values are preserved with their type information for correct deserialization</li>
+<li>✅ <strong>Change event triggers</strong> — react to threshold breaches or anomalies using KEFCore's event pipeline, feeding dashboards or alerting systems</li>
+</ul>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The <code>ApplicationId</code> used by KEFCore must be unique per process on the same Kafka cluster. When multiple applications consume the same KNetOPC topics, each should use a distinct <code>ApplicationId</code> to maintain a complete local view of all partitions.</p>
+</div>
 <h2 id="data-processing-out-side-entity-framework-core-application">Data processing out-side <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> application</h2>
 <p>The schema used to write the information in the topics are available, or can be defined from the user, so an external application can use the data in many mode:</p>
 <ul>

@@ -125,9 +125,9 @@ Using the <a href="https://kafka.apache.org/documentation/#compaction">topic com
 <li>Update: a producer storing a new record with a previously stored unique key will discard the old records</li>
 <li>Delete: a producer storing a new record with a previously stored unique key, and value set to null, will delete all records with that unique key</li>
 </ul>
-<p>All CRUD operations are helped, behind the scene, from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or</del> <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>.</p>
+<p>All CRUD operations are helped, behind the scene, from <a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Producer/KNetProducer.cs"><code>KNetProducer</code></a>/<a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>.</p>
 <h3 id="first-level-cache">First-level cache</h3>
-<p><del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> act as first-level cache of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>: <strong>data coming from the Apache Kafka™ cluster updates their content while the system is running</strong>.
+<p><a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> act as first-level cache of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>: <strong>data coming from the Apache Kafka™ cluster updates their content while the system is running</strong>.
 The behavior is intrinsic and does not need any extra call to the back-end.</p>
 <h3 id="data-storage">Data storage</h3>
 <p>Apache Kafka™ stores the information using records. It is important to convert entities in something usable from Apache Kafka™.</p>
@@ -178,20 +178,34 @@ The behavior is intrinsic and does not need any extra call to the back-end.</p>
     }
 }
 </code></pre>
-<p>each entity maps to a specific topic using the feature added with <a href="https://github.com/masesgroup/KEFCore/issues/417">https://github.com/masesgroup/KEFCore/issues/417</a>:</p>
+<p>Each entity maps to a specific topic. The topic name is resolved at model finalization time by <code>KEFCoreTopicNamingConvention</code> using the following priority:</p>
+<ol>
+<li><code>KEFCoreTopicAttribute</code> applied directly to the entity class</li>
+<li><code>TableAttribute</code> applied to the entity class, including schema prefix if specified (e.g. <code>schema.tablename</code>)</li>
+<li>The EF Core entity type name (<code>IReadOnlyTypeBase.Name</code>), which includes the model namespace</li>
+</ol>
+<p>The topic prefix is resolved using the following priority:</p>
+<ol>
+<li><code>KEFCoreTopicPrefixAttribute</code> applied directly to the entity class (a <code>null</code> prefix explicitly disables prefixing for that entity)</li>
+<li><code>KEFCoreTopicPrefixAttribute</code> applied to the <code>DbContext</code> class</li>
+<li><code>modelBuilder.UseKEFCoreTopicPrefix()</code> set in <code>OnModelCreating</code></li>
+<li>No prefix</li>
+</ol>
+<p>In the example above:</p>
 <ul>
-<li>Blog belongs to the topic named [DatabaseName].Simple.Blog</li>
-<li>Post belongs to the topic named [DatabaseName].Simple.Post</li>
+<li>Blog belongs to the topic named <code>[DatabaseName].Simple.Blog</code></li>
+<li>Post belongs to the topic named <code>[DatabaseName].Simple.Post</code></li>
 </ul>
-<p>where DatabaseName is the property defined from <code>BloggingContext</code> see <a href="kafkadbcontext.md">KafkaDbContext</a>.</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>The entities Blog and Post are decorated with <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a>, if the attribute is missing the topic name becomes different and use the <a href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ireadonlytypebase.name"><strong>Name</strong></a> property of the Entity which belongs to the namespace defining it:</p>
+<p>If neither <code>KEFCoreTopicAttribute</code> nor <code>TableAttribute</code> is applied, the topic name falls back to the EF Core entity type <strong>Name</strong> property which includes the full namespace:</p>
 <ul>
-<li>Blog belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog</li>
-<li>Post belongs to the topic named [DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post</li>
+<li>Blog belongs to the topic named <code>[DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Blog</code></li>
+<li>Post belongs to the topic named <code>[DatabaseName].MASES.EntityFrameworkCore.KNet.Test.Model.Post</code></li>
 </ul>
+<p>It is strongly recommended to use <code>[Table]</code> or <code>[KEFCoreTopicAttribute]</code> to ensure stable topic names across namespace refactorings.</p>
 </div>
+<p>See <a href="conventions.html">conventions</a> for the full documentation on topic naming, event management, and ComplexType conventions.</p>
 <p>Established how <a href="https://kafka.apache.org/">Apache Kafka™</a> stores the data it is important to understand how the storage is filled with the data in the model.
 Each element in the <a href="https://learn.microsoft.com/dotnet/api/system.data.entity.dbset-1">DbSet</a>, in the above example there are <strong>Blogs</strong> and <strong>Posts</strong>, is converted in something can be used from <a href="https://kafka.apache.org/">Apache Kafka™</a>.
 The conversion is done using serializers that converts the Entities (data in the model) into <a href="https://kafka.apache.org/">Apache Kafka™</a> records and viceversa: see <a href="serialization.html">serialization chapter</a> for more info.
@@ -208,7 +222,7 @@ From the point of view of an application, the use of <a href="https://learn.micr
 The features below are strictly correlated with the consumers receiving back the record from Apache Kafka™ cluster described above.</p>
 <h3 id="distributed-cache">Distributed cache</h3>
 <p>In the previous chapter was stated that consumers align the application data to the last topics information.
-The alignment is managed from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>, everything is driven from the Apache Kafka™ back-end.
+The alignment is managed from <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a>, everything is driven from the Apache Kafka™ back-end.
 Considering two, or more, applications, sharing the same model and configuration, they always align to the latest state of the topics involved.
 This implies that, virtually, there is a distributed cache between the applications and the Apache Kafka™ back-end:</p>
 <ul>
@@ -221,9 +235,10 @@ This implies that, virtually, there is a distributed cache between the applicati
 <p>Generally, an application based on <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a>, executes queries to the back-end to store, or retrieve, information on demand.
 The alignment (record consumed) can be considered a change event: so any change in the backend produces an event used in different mode:</p>
 <ul>
-<li>Mainly these change events are used from <del><a href="https://github.com/masesgroup/KNet/blob/master/src/net/KNet/Specific/Replicator/KNetCompactedReplicator.cs"><code>KNetCompactedReplicator</code></a> and/or</del> <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> to align the local state;</li>
+<li>Mainly these change events are used from <a href="https://kafka.apache.org/documentation/streams/">Apache Kafka™ Streams</a> to align the local state;</li>
 <li>Moreover <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can inform, using callbacks and at zero cost, the registered application about these events.</li>
 </ul>
+<p>By default, event management is enabled for all entity types via <code>KEFCoreManageEventsConvention</code>. To disable it for a specific entity apply <code>[KEFCoreIgnoreEventsAttribute]</code> or call <code>HasKEFCoreManageEvents(false)</code> in <code>OnModelCreating</code>. See <a href="conventions.html">conventions</a> for details.</p>
 <p>Then the application can use the reported events in many modes:</p>
 <ul>
 <li>execute a query</li>

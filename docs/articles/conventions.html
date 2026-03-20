@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Conventions in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Conventions in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="Describes the model conventions available in Entity Framework Core provider for Apache Kafka™">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/conventions.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="kefcore-conventions">KEFCore: conventions</h1>
+
+<p>KEFCore uses EF Core model finalization conventions to resolve configuration declared via attributes or fluent API into model annotations. This approach ensures that topic names, event management, and ComplexType configuration are determined at model build time rather than at runtime.</p>
+<p>All conventions are registered automatically in <code>KEFCoreConventionSetBuilder</code> and require no additional setup.</p>
+<h2 id="topic-naming-convention">Topic naming convention</h2>
+<p><code>KEFCoreTopicNamingConvention</code> resolves the Kafka topic name for each entity type and stores it as a model annotation. The resolved name is then used consistently throughout the provider — in topic creation, producer routing, and Streams topology — without requiring options to be passed through the call stack.</p>
+<h3 id="topic-name-resolution-priority">Topic name resolution priority</h3>
+<ol>
+<li><code>KEFCoreTopicAttribute</code> applied directly to the entity class</li>
+<li><code>TableAttribute</code> applied to the entity class, including schema prefix if specified (e.g. <code>schema.tablename</code>)</li>
+<li>The EF Core entity type name (<code>IReadOnlyTypeBase.Name</code>), which includes the model namespace</li>
+</ol>
+<h3 id="topic-prefix-resolution-priority">Topic prefix resolution priority</h3>
+<ol>
+<li><code>KEFCoreTopicPrefixAttribute</code> applied directly to the entity class — a <code>null</code> prefix explicitly disables prefixing for that entity</li>
+<li><code>KEFCoreTopicPrefixAttribute</code> applied to the <code>DbContext</code> class</li>
+<li><code>modelBuilder.UseKEFCoreTopicPrefix()</code> set in <code>OnModelCreating</code></li>
+<li>No prefix (default)</li>
+</ol>
+<h3 id="usage-examples">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute on entity — explicit topic name
+[KEFCoreTopicAttribute(&quot;my-orders&quot;)]
+public class Order { ... }
+
+// Attribute on entity — explicit prefix
+[KEFCoreTopicPrefixAttribute(&quot;production&quot;)]
+public class Product { ... }
+
+// Attribute on entity — disable prefix for this entity
+[KEFCoreTopicPrefixAttribute(null)]
+public class InternalLog { ... }
+
+// Attribute on DbContext — prefix for all entities
+[KEFCoreTopicPrefixAttribute(&quot;myapp&quot;)]
+public class MyDbContext : KEFCoreDbContext { ... }
+
+// Fluent API — global prefix
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.UseKEFCoreTopicPrefix(&quot;myapp&quot;);
+}
+
+// Fluent API — per-entity topic name
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;Order&gt;().ToKEFCoreTopic(&quot;my-orders&quot;);
+    modelBuilder.Entity&lt;Product&gt;().HasKEFCoreTopicPrefix(&quot;catalog&quot;);
+}
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>If neither <code>KEFCoreTopicAttribute</code> nor <code>TableAttribute</code> is applied, the topic name falls back to <code>IReadOnlyTypeBase.Name</code> which includes the full model namespace. This means a namespace refactoring will change the topic name and break alignment with existing data in the cluster. It is strongly recommended to always use <code>[Table]</code> or <code>[KEFCoreTopicAttribute]</code> for stable topic names.</p>
+</div>
+<h2 id="event-management-convention">Event management convention</h2>
+<p><code>KEFCoreManageEventsConvention</code> resolves whether the <code>TimestampExtractor</code> is activated for each entity type, enabling real-time tracking updates from the Apache Kafka™ cluster. Event management is <strong>enabled by default</strong> for all entity types.</p>
+<h3 id="resolution-priority">Resolution priority</h3>
+<ol>
+<li><code>KEFCoreIgnoreEventsAttribute</code> applied to the entity class — always disables events for that entity</li>
+<li><code>HasKEFCoreManageEvents(false)</code> applied via fluent API — disables events for that entity</li>
+<li><code>modelBuilder.UseKEFCoreManageEvents(false)</code> — disables events globally</li>
+<li><code>true</code> (default — events enabled)</li>
+</ol>
+<h3 id="usage-examples-1">Usage examples</h3>
+<pre><code class="lang-csharp">// Disable events for a specific entity via attribute
+[KEFCoreIgnoreEventsAttribute]
+public class ReadOnlyLookup { ... }
+
+// Disable events for a specific entity via fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;ReadOnlyLookup&gt;().HasKEFCoreManageEvents(false);
+}
+
+// Disable events globally
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.UseKEFCoreManageEvents(false);
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>When event management is disabled for an entity, post-<code>SaveChanges</code> synchronization (<code>EnsureSynchronized</code>) is not available for that entity because the <code>TimestampExtractor</code> is not active.</p>
+</div>
+<div class="TIP">
+<h5>Tip</h5>
+<p>If you experience intermittent <code>StreamsException: Fatal user code error in TimestampExtractor callback</code> errors (<a href="https://github.com/masesgroup/KEFCore/issues/448">KEFCore#448</a>), this is part of a broader class of non-deterministic JVM↔CLR boundary failures documented in <a href="https://github.com/masesgroup/JCOBridgePublic/issues/24">JCOBridgePublic#24</a>. The <code>StreamsManager</code> attempts automatic recovery via <code>REPLACE_THREAD</code>, but the definitive solution is the <strong>JCOBridge HPA edition</strong>. As a workaround, disabling event management for the affected entities via <code>KEFCoreIgnoreEventsAttribute</code> removes the <code>TimestampExtractor</code> and eliminates the error for those entities at the cost of real-time tracking.</p>
+</div>
+<h2 id="complextype-equality-convention">ComplexType equality convention</h2>
+<p><code>KEFCoreComplexTypeEquatableConvention</code> verifies at model finalization time that all ComplexTypes in the model implement <code>IEquatable&lt;T&gt;</code> or override <code>Equals(object)</code>. This is required because KEFCore relies on value equality to detect changes in ComplexType properties — without it, reference equality would cause incorrect change detection and unnecessary Kafka writes.</p>
+<p>If a ComplexType does not satisfy the requirement, an <code>InvalidOperationException</code> is thrown at startup with an actionable message.</p>
+<h3 id="opt-out">Opt-out</h3>
+<p>Apply <code>KEFCoreIgnoreEquatableCheckAttribute</code> to a ComplexType class to suppress the check when value equality is guaranteed by other means:</p>
+<pre><code class="lang-csharp">[KEFCoreIgnoreEquatableCheckAttribute]
+public class MySpecialAddress { ... }
+</code></pre>
+<h2 id="complextype-converter-convention">ComplexType converter convention</h2>
+<p><code>KEFCoreComplexTypeConverterConvention</code> registers <code>IComplexTypeConverter</code> implementations declared via attribute or fluent API into <code>IComplexTypeConverterFactory</code> at model finalization time, making the converter available to the serialization subsystem without any additional startup code.</p>
+<h3 id="usage-examples-2">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute on ComplexType class
+[KEFCoreComplexTypeConverterAttribute(typeof(AddressConverter))]
+public class Address { ... }
+
+// Fluent API on ComplexPropertyBuilder
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;Invoice&gt;()
+                .ComplexProperty(i =&gt; i.ShippingAddress)
+                .HasKEFCoreComplexTypeConverter&lt;AddressConverter&gt;();
+}
+</code></pre>
+<p>The converter type must implement <code>IComplexTypeConverter</code>. If declared via fluent API, it takes precedence over the attribute.</p>
+<h2 id="topic-partitions-and-replication-factor-convention">Topic partitions and replication factor convention</h2>
+<p><code>KEFCoreTopicPartitionsConvention</code> resolves per-entity partition and replication factor configuration at model finalization time. The resolved values are used by <code>EnsureCreated</code> when creating the Kafka topic for each entity, overriding the global <code>DefaultNumPartitions</code> and <code>DefaultReplicationFactor</code> singleton options.</p>
+<h3 id="usage-examples-3">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — high-throughput entity needs more partitions
+[KEFCoreTopicPartitionsAttribute(numPartitions: 12)]
+[KEFCoreTopicReplicationFactorAttribute(replicationFactor: 3)]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Low-traffic reference data — single partition is enough
+[KEFCoreTopicPartitionsAttribute(numPartitions: 1)]
+[Table(&quot;Country&quot;)]
+public class Country { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreTopicPartitions(12)
+                .HasKEFCoreTopicReplicationFactor(3);
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Partition and replication factor are applied only at topic creation time (<code>EnsureCreated</code>). Changing these values after the topic exists has no effect — use Kafka admin tools to alter existing topics.</p>
+</div>
+<h2 id="topic-retention-convention">Topic retention convention</h2>
+<p><code>KEFCoreTopicRetentionConvention</code> resolves per-entity topic retention configuration at model finalization time. The resolved values override the global <code>TopicConfig</code> retention settings for that entity's topic.</p>
+<h3 id="usage-examples-4">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — keep only last 7 days of sensor data
+[KEFCoreTopicRetentionAttribute(retentionMs: 7 * 24 * 60 * 60 * 1000L)]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Attribute — limit topic size to 500 MB
+[KEFCoreTopicRetentionAttribute(retentionBytes: 500 * 1024 * 1024L)]
+[Table(&quot;EventLog&quot;)]
+public class EventLog { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreTopicRetention(retentionMs: 7 * 24 * 60 * 60 * 1000L);
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Retention is applied only at topic creation time. Use <code>-1</code> for either parameter to leave that setting at the cluster default.</p>
+</div>
+<h2 id="read-only-convention">Read-only convention</h2>
+<p><code>KEFCoreReadOnlyConvention</code> resolves per-entity read-only configuration at model finalization time. Entities marked as read-only will have their <code>SaveChanges</code> entries skipped and logged as warnings — valid entries from other entity types in the same <code>SaveChanges</code> call are still committed.</p>
+<p>This differs from <code>ReadOnlyMode</code> on the context, which blocks all writes for the entire context. Per-entity read-only is useful for mixed models where some entities are immutable reference data consumed from external topics.</p>
+<h3 id="resolution-priority-1">Resolution priority</h3>
+<ol>
+<li><code>KEFCoreReadOnlyAttribute</code> applied to the entity class</li>
+<li><code>IsKEFCoreReadOnly()</code> applied via fluent API</li>
+<li>Context-level <code>ReadOnlyMode = true</code> — applies to all entities</li>
+</ol>
+<h3 id="usage-examples-5">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — reference data that should never be written by this process
+[KEFCoreReadOnlyAttribute]
+[Table(&quot;Country&quot;)]
+public class Country { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;Country&gt;().IsKEFCoreReadOnly();
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>When a read-only entity is included in a <code>SaveChanges</code> call, the entry is skipped and a warning is logged via both <code>InfrastructureLogger</code> (per-entry) and <code>updateLogger</code> (aggregated summary). No exception is thrown — the remaining entries are committed normally.</p>
+</div>
+<h2 id="store-lookup-convention">Store lookup convention</h2>
+<p><code>KEFCoreStoreLookupConvention</code> resolves per-entity Kafka Streams state store query optimization flags at model finalization time. The resolved values override the context-level <code>UseStore*</code> options for queries on that entity type.</p>
+<p>This allows enabling expensive optimizations (e.g. prefix scan) only for the specific entities that benefit from them, rather than globally.</p>
+<h3 id="usage-examples-6">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — enable prefix scan for this entity, disable unused range lookups
+[KEFCoreStoreLookupAttribute(UseStorePrefixScan = true, UseStoreKeyRange = false, UseStoreReverseKeyRange = false)]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Fluent API — only override the flags you need
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreStoreLookup(prefixScan: true, keyRange: false);
+}
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Only override the flags relevant to the actual query patterns used for that entity. Enabling unused optimizations adds overhead to query planning without benefit. See <a href="performancetips.html#store-query-optimizations">performance tips</a> for guidance on which flags to enable.</p>
+</div>
+<h2 id="serialization-convention">Serialization convention</h2>
+<p><code>KEFCoreSerDesConvention</code> resolves per-entity serialization type overrides at model finalization time. The resolved types are used when creating serializer instances for that entity, overriding the global <code>KeySerDesSelectorType</code>, <code>ValueSerDesSelectorType</code> and <code>ValueContainerType</code> singleton options.</p>
+<p>This is useful when a model contains entities with heterogeneous serialization needs — for example mixing JSON and Avro entities on the same cluster, or using a custom serializer for a specific high-throughput entity.</p>
+<h3 id="usage-examples-7">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — use Avro for this entity, JSON for everything else
+[KEFCoreSerDesAttribute(
+    keySerDesSelectorType: typeof(AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;),
+    valueSerDesSelectorType: typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;),
+    valueContainerType: typeof(AvroValueContainer&lt;&gt;))]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Attribute — override only the value container, inherit key serializer from context
+[KEFCoreSerDesAttribute(valueContainerType: typeof(MyCustomValueContainer&lt;&gt;))]
+[Table(&quot;Order&quot;)]
+public class Order { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreSerDes(
+                    keySerDesSelectorType: typeof(AvroKEFCoreSerDes.Key.BinaryRaw&lt;&gt;),
+                    valueSerDesSelectorType: typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;),
+                    valueContainerType: typeof(AvroValueContainer&lt;&gt;));
+}
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>All serialization types must be open generic type definitions (e.g. <code>typeof(MySerDes&lt;&gt;)</code>). Closed generic types will throw <code>ArgumentException</code> at model build time.</p>
+</div>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>UseKeyByteBufferDataTransfer</code> and <code>UseValueContainerByteBufferDataTransfer</code> are singleton options that control the JVM transport layer and apply globally to the Streams topology — they cannot be overridden per entity. Only the serializer selector types and value container type can be overridden.</p>
+</div>
+<h2 id="producer-configuration-convention">Producer configuration convention</h2>
+<p><code>KEFCoreProducerConvention</code> resolves per-entity producer configuration overrides at model finalization time. The resolved configuration is used when creating the <code>KNetProducer</code> instance for that entity's topic, merging the global <code>ProducerConfig</code> singleton option with per-entity overrides. Per-entity values take precedence.</p>
+<p>This allows tuning producer behavior per entity — for example using higher throughput settings for high-volume entities and stronger reliability guarantees for critical ones.</p>
+<h3 id="usage-examples-8">Usage examples</h3>
+<pre><code class="lang-csharp">// High-throughput entity — batch more aggressively, compress, relax acks
+[KEFCoreProducerAttribute(
+    Acks = ProducerConfigBuilder.AcksTypes.One,
+    LingerMs = 50,
+    BatchSize = 65536,
+    CompressionType = ProducerConfigBuilder.CompressionTypes.Lz4)]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Critical entity — strongest delivery guarantees
+[KEFCoreProducerAttribute(
+    Acks = ProducerConfigBuilder.AcksTypes.All,
+    Retries = 10,
+    MaxInFlightRequestsPerConnection = 1,
+    DeliveryTimeoutMs = 300000)]
+[Table(&quot;FinancialTransaction&quot;)]
+public class FinancialTransaction { ... }
+
+// Fluent API — only override what you need
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreProducer(lingerMs: 50, compressionType: ProducerConfigBuilder.CompressionTypes.Lz4);
+
+    modelBuilder.Entity&lt;FinancialTransaction&gt;()
+                .HasKEFCoreProducer(acks: ProducerConfigBuilder.AcksTypes.All, retries: 10);
+}
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Only explicitly set properties override the global <code>ProducerConfig</code>. Omitted properties inherit the global defaults set via <code>KEFCoreDbContext.ProducerConfig</code> or <code>ProducerOptionsBuilder()</code>.</p>
+</div>
+<div class="TIP">
+<h5>Tip</h5>
+<p>When setting <code>Retries</code> &gt; 0, also set <code>MaxInFlightRequestsPerConnection = 1</code> to preserve message ordering on retry. See <a href="https://kafka.apache.org/documentation/#producerconfigs">Kafka producer documentation</a> for the full list of producer configuration options.</p>
+</div>
+<h2 id="transactional-producer-convention">Transactional producer convention</h2>
+<p><code>KEFCoreTransactionalConvention</code> resolves per-entity Kafka transaction group configuration at model finalization time. Entity types assigned to the same group share a single transactional <code>KafkaProducer</code> with exactly-once semantics — writes from a <code>SaveChanges</code> call involving those entities are committed or aborted atomically at the Kafka level.</p>
+<p>Entity types without this attribute use the standard non-transactional producer path unchanged.</p>
+<h3 id="how-it-works">How it works</h3>
+<ul>
+<li>Each transaction group gets a dedicated <code>KafkaProducer</code> with <code>transactional.id = &quot;{ApplicationId}.{transactionGroup}&quot;</code>, stable across application restarts</li>
+<li><code>BeginTransaction()</code> is lazy — the Kafka transaction starts only when <code>SaveChanges</code> identifies which groups are actually involved in the current operation</li>
+<li>After <code>SaveChanges</code>, the user calls <code>tx.Commit()</code> or <code>tx.Rollback()</code> to commit or abort all groups atomically</li>
+<li><code>EnsureSynchronized</code> works correctly — <code>PartitionOffsetWritten</code> is called only after <code>CommitTransaction()</code>, when records become visible to the Streams consumer</li>
+</ul>
+<h3 id="usage-examples-9">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — Order and OrderLine participate in the same Kafka transaction
+[KEFCoreTransactionalAttribute(transactionGroup: &quot;OrderGroup&quot;)]
+[Table(&quot;Order&quot;)]
+public class Order { ... }
+
+[KEFCoreTransactionalAttribute(transactionGroup: &quot;OrderGroup&quot;)]
+[Table(&quot;OrderLine&quot;)]
+public class OrderLine { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;Order&gt;().HasKEFCoreTransactionGroup(&quot;OrderGroup&quot;);
+    modelBuilder.Entity&lt;OrderLine&gt;().HasKEFCoreTransactionGroup(&quot;OrderGroup&quot;);
+}
+
+// Usage — standard EF Core transaction pattern
+KEFCore.CreateGlobalInstance();
+
+using var context = new OrderContext()
+{
+    BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
+    ApplicationId = &quot;MyApp&quot;,
+};
+context.Database.EnsureCreated();
+
+using var tx = context.Database.BeginTransaction();
+try
+{
+    context.Add(new Order { ... });
+    context.Add(new OrderLine { ... });
+    context.SaveChanges();
+    tx.Commit();   // → CommitTransaction() on the Kafka transactional producer
+}
+catch
+{
+    tx.Rollback(); // → AbortTransaction() — records not visible to consumers
+    throw;
+}
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>All entity types in a transaction group must be part of the same <code>SaveChanges</code> call. Kafka transactions do not span multiple <code>SaveChanges</code> calls.</p>
+</div>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The transactional producer is automatically configured with the settings required by Kafka for exactly-once semantics:</p>
+<ul>
+<li><code>transactional.id = &quot;{ApplicationId}.{transactionGroup}&quot;</code></li>
+<li><code>acks = all</code></li>
+<li><code>enable.idempotence = true</code></li>
+<li><code>retries = Int32.MaxValue</code></li>
+<li><code>max.in.flight.requests.per.connection = 1</code></li>
+</ul>
+<p>These settings cannot be overridden via <code>KEFCoreProducerAttribute</code> or <code>HasKEFCoreProducer()</code> for transactional producers.</p>
+</div>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>UseKeyByteBufferDataTransfer</code> and <code>UseValueContainerByteBufferDataTransfer</code> are singleton options — the transactional producer type (<code>byte[]</code> vs <code>ByteBuffer</code>) follows the global setting and cannot be overridden per group.</p>
+</div>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Consumers reading from topics written by transactional producers must set <code>isolation.level = read_committed</code> to correctly filter aborted transactions. Verify the <code>StreamsConfig</code> for the consuming application.</p>
+</div>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/conventions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

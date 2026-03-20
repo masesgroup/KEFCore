@@ -105,7 +105,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IKEFCoreTableFactory</code></pre>
+    <pre><code class="lang-csharp hljs">public interface IKEFCoreTableFactory : IDisposable</code></pre>
   </div>
 
 
@@ -114,6 +114,13 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable.dispose">IDisposable.Dispose()</a>
+    </div>
+  </dd></dl>
 
 
 
@@ -124,11 +131,11 @@ doing so can result in application failures when updating to a new Entity Framew
 </h2>
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Create_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Create*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Get_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Get*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Create_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_System_String_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Create(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster,System.String,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  Create(IKEFCoreCluster, string, IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Get_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Get(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  Get(IKEFCoreCluster, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L41"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Allocate a new <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
@@ -136,14 +143,12 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IKEFCoreTable Create(IKEFCoreCluster cluster, string topicName, IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
-    <dd></dd>
-    <dt><code>topicName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
@@ -165,58 +170,26 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Dispose*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_GetOrCreate_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.GetOrCreate*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTable_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable)">
-  Dispose(IKEFCoreTable)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_GetOrCreate_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.GetOrCreate(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  GetOrCreate(IKEFCoreDatabase, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Dispose a previously allocated <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
+  <div class="markdown level1 summary"><p>Allocate a new <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Dispose(IKEFCoreTable table)</code></pre>
+    <pre><code class="lang-csharp hljs">IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>table</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></dt>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
     <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Get_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Get*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Get_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Get(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster,System.String)">
-  Get(IKEFCoreCluster, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L42"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IKEFCoreTable Get(IKEFCoreCluster cluster, string topicName)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
-    <dd></dd>
-    <dt><code>topicName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
   </dl>
 
@@ -236,11 +209,50 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_NeedsNewTables_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.NeedsNewTables*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_NeedsNewTables_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_System_Collections_Generic_IEnumerable_Microsoft_EntityFrameworkCore_Metadata_IEntityType__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.NeedsNewTables(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster,System.Collections.Generic.IEnumerable{Microsoft.EntityFrameworkCore.Metadata.IEntityType})">
+  NeedsNewTables(IKEFCoreCluster, IEnumerable&lt;IEntityType&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Check if all <code class="paramref">entityTypes</code> have associated <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool NeedsNewTables(IKEFCoreCluster cluster, IEnumerable&lt;IEntityType&gt; entityTypes)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
+    <dd></dd>
+    <dt><code>entityTypes</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Start_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Start*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Start_System_Collections_Generic_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTable__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Start(System.Collections.Generic.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable})">
-  Start(IEnumerable&lt;IKEFCoreTable&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Start_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.Start(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  Start(IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreTableFactory.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a></p>
@@ -248,12 +260,12 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Start(IEnumerable&lt;IKEFCoreTable&gt; tables)</code></pre>
+    <pre><code class="lang-csharp hljs">void Start(IKEFCoreDatabase database)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>tables</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a>&gt;</dt>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
     <dd></dd>
   </dl>
 

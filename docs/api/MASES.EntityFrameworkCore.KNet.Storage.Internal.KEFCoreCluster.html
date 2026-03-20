@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster" class="text-break">
-Class KEFCoreCluster  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L40"><i class="bi bi-code-slash"></i></a>
+Class KEFCoreCluster  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,6 +157,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h2 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Default initializer</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -165,17 +168,20 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster__ctor_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_Microsoft_EntityFrameworkCore_Update_IUpdateAdapterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.#ctor(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Infrastructure},MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,Microsoft.EntityFrameworkCore.Update.IUpdateAdapterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
-  KEFCoreCluster(KEFCoreOptionsExtension, IDiagnosticsLogger&lt;Infrastructure&gt;, IKEFCoreTableFactory, IComplexTypeConverterFactory, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster__ctor_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.#ctor(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Infrastructure},MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory,Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
+  KEFCoreCluster(KEFCoreOptionsExtension, IDiagnosticsLogger&lt;Infrastructure&gt;, IKEFCoreTableFactory, IValueGeneratorSelector, IComplexTypeConverterFactory)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Dfault initializer</p>
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KEFCoreCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; infrastructureLogger, IKEFCoreTableFactory tableFactory, IComplexTypeConverterFactory complexTypeConverterFactory, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)</code></pre>
+    <pre><code class="lang-csharp hljs">public KEFCoreCluster(KEFCoreOptionsExtension options, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; infrastructureLogger, IKEFCoreTableFactory tableFactory, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory complexTypeConverterFactory)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -186,13 +192,9 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>tableFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.html">IKEFCoreTableFactory</a></dt>
     <dd></dd>
-    <dt><code>complexTypeConverterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
-    <dd></dd>
     <dt><code>valueGeneratorSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a></dt>
     <dd></dd>
-    <dt><code>updateAdapterFactory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateadapterfactory">IUpdateAdapterFactory</a></dt>
-    <dd></dd>
-    <dt><code>designModel</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dt><code>complexTypeConverterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
     <dd></dd>
   </dl>
 
@@ -203,6 +205,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster__ctor_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Default initializer</p>
+</div>
 
 
 
@@ -215,7 +220,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ClusterId" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ClusterId">
   ClusterId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L66"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The Apche Kafka cluster identifier</p>
@@ -247,7 +252,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ComplexTypeConverterFactory" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ComplexTypeConverterFactory">
   ComplexTypeConverterFactory
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L70"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The global <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></p>
@@ -279,10 +284,10 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_InfrastructureLogger" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.InfrastructureLogger">
   InfrastructureLogger
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger&lt;TLoggerCategory&gt;</a> to be used to log info within the provider</p>
+  <div class="markdown level1 summary"><p>Reference to <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger&lt;TLoggerCategory&gt;</a> received</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -307,115 +312,19 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Model_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Model*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Model" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Model">
-  Model
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L96"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>The associated <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IModel Model { get; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Options_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Options*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Options" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Options">
-  Options
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L92"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreOptionsExtension Options { get; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_UpdateAdapterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.UpdateAdapterFactory*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_UpdateAdapterFactory" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.UpdateAdapterFactory">
-  UpdateAdapterFactory
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L98"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>The associated <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateadapterfactory">IUpdateAdapterFactory</a></p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IUpdateAdapterFactory UpdateAdapterFactory { get; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateadapterfactory">IUpdateAdapterFactory</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ValueGeneratorSelector_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ValueGeneratorSelector*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ValueGeneratorSelector" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ValueGeneratorSelector">
   ValueGeneratorSelector
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L72"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a> instance</p>
+  <div class="markdown level1 summary"><p>The global <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IValueGeneratorSelector ValueGeneratorSelector { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IValueGeneratorSelector ValueGeneratorSelector { get; }</code></pre>
   </div>
 
 
@@ -439,11 +348,109 @@ doing so can result in application failures when updating to a new Entity Framew
 </h2>
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_AbortTransactions_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.AbortTransactions*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_AbortTransactions_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.AbortTransactions(System.String)">
+  AbortTransactions(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L751"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calls <code>AbortTransaction()</code> on the transactional producer for <code class="paramref">transactionGroup</code>,
+then calls <code>AbortPendingOffsets()</code> on all <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a> registered in the group.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AbortTransactions(string transactionGroup)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transactionGroup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_BeginTransactions_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.BeginTransactions*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_BeginTransactions_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.BeginTransactions(System.String)">
+  BeginTransactions(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L722"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calls <code>BeginTransaction()</code> on the transactional producer for <code class="paramref">transactionGroup</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BeginTransactions(string transactionGroup)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transactionGroup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_CommitTransactions_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.CommitTransactions*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_CommitTransactions_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.CommitTransactions(System.String)">
+  CommitTransactions(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L732"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calls <code>CommitTransaction()</code> on the transactional producer for <code class="paramref">transactionGroup</code>,
+then calls <code>CommitPendingOffsets()</code> on all <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a> registered in the group.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CommitTransactions(string transactionGroup)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transactionGroup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_CreateTopicForEntity_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.CreateTopicForEntity*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_CreateTopicForEntity_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.CreateTopicForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  CreateTopicForEntity(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L282"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_CreateTopicForEntity_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.CreateTopicForEntity(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  CreateTopicForEntity(IKEFCoreDatabase, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L281"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a topic for <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> on Apache Kafka cluster</p>
@@ -451,11 +458,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual string CreateTopicForEntity(IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual string CreateTopicForEntity(IKEFCoreDatabase database, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
   </dl>
@@ -480,7 +489,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -505,9 +514,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureConnected_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureConnected*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureConnected_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureConnected(Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
-  EnsureConnected(IDiagnosticsLogger&lt;Update&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L233"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureConnected_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureConnected(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
+  EnsureConnected(IKEFCoreDatabase, IDiagnosticsLogger&lt;Update&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L221"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseConnected">EnsureDatabaseConnected()</a></p>
@@ -515,11 +524,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool EnsureConnected(IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual bool EnsureConnected(IKEFCoreDatabase database, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>updateLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.update">Update</a>&gt;</dt>
     <dd></dd>
   </dl>
@@ -542,9 +553,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureCreated_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureCreated*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureCreated_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureCreated(Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
-  EnsureCreated(IDiagnosticsLogger&lt;Update&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L173"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureCreated_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureCreated(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
+  EnsureCreated(IKEFCoreDatabase, IDiagnosticsLogger&lt;Update&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L176"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseCreated">EnsureDatabaseCreated()</a></p>
@@ -552,11 +563,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool EnsureCreated(IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual bool EnsureCreated(IKEFCoreDatabase database, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>updateLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.update">Update</a>&gt;</dt>
     <dd></dd>
   </dl>
@@ -579,9 +592,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureDeleted_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureDeleted*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureDeleted_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureDeleted(Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
-  EnsureDeleted(IDiagnosticsLogger&lt;Update&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L155"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureDeleted_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureDeleted(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
+  EnsureDeleted(IKEFCoreDatabase, IDiagnosticsLogger&lt;Update&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L165"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseDeleted">EnsureDatabaseDeleted()</a></p>
@@ -589,11 +602,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool EnsureDeleted(IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual bool EnsureDeleted(IKEFCoreDatabase database, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>updateLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.update">Update</a>&gt;</dt>
     <dd></dd>
   </dl>
@@ -616,9 +631,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureSynchronized_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureSynchronized*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureSynchronized_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureSynchronized(System.Int64)">
-  EnsureSynchronized(long)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L239"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_EnsureSynchronized_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.EnsureSynchronized(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,System.Int64)">
+  EnsureSynchronized(IKEFCoreDatabase, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L227"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Verify if local instance is synchronized with the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance</p>
@@ -626,11 +641,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool? EnsureSynchronized(long timeout)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>timeout</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
     <dd></dd>
   </dl>
@@ -653,9 +670,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransaction_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransaction*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransaction_System_Collections_Generic_IList_Microsoft_EntityFrameworkCore_Update_IUpdateEntry__Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransaction(System.Collections.Generic.IList{Microsoft.EntityFrameworkCore.Update.IUpdateEntry},Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
-  ExecuteTransaction(IList&lt;IUpdateEntry&gt;, IDiagnosticsLogger&lt;Update&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L621"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransaction_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Collections_Generic_IList_Microsoft_EntityFrameworkCore_Update_IUpdateEntry__Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransaction(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,System.Collections.Generic.IList{Microsoft.EntityFrameworkCore.Update.IUpdateEntry},Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update})">
+  ExecuteTransaction(IKEFCoreDatabase, IList&lt;IUpdateEntry&gt;, IDiagnosticsLogger&lt;Update&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L641"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes a transaction</p>
@@ -663,11 +680,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual int ExecuteTransaction(IList&lt;IUpdateEntry&gt; entries, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual int ExecuteTransaction(IKEFCoreDatabase database, IList&lt;IUpdateEntry&gt; entries, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entries</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateentry">IUpdateEntry</a>&gt;</dt>
     <dd></dd>
     <dt><code>updateLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.update">Update</a>&gt;</dt>
@@ -692,9 +711,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransactionAsync_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransactionAsync*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransactionAsync_System_Collections_Generic_IList_Microsoft_EntityFrameworkCore_Update_IUpdateEntry__Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransactionAsync(System.Collections.Generic.IList{Microsoft.EntityFrameworkCore.Update.IUpdateEntry},Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update},System.Threading.CancellationToken)">
-  ExecuteTransactionAsync(IList&lt;IUpdateEntry&gt;, IDiagnosticsLogger&lt;Update&gt;, CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L647"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ExecuteTransactionAsync_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Collections_Generic_IList_Microsoft_EntityFrameworkCore_Update_IUpdateEntry__Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Update__System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ExecuteTransactionAsync(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,System.Collections.Generic.IList{Microsoft.EntityFrameworkCore.Update.IUpdateEntry},Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Update},System.Threading.CancellationToken)">
+  ExecuteTransactionAsync(IKEFCoreDatabase, IList&lt;IUpdateEntry&gt;, IDiagnosticsLogger&lt;Update&gt;, CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L667"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes a transaction in async</p>
@@ -702,11 +721,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; ExecuteTransactionAsync(IList&lt;IUpdateEntry&gt; entries, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger, CancellationToken cancellationToken = default)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; ExecuteTransactionAsync(IKEFCoreDatabase database, IList&lt;IUpdateEntry&gt; entries, IDiagnosticsLogger&lt;DbLoggerCategory.Update&gt; updateLogger, CancellationToken cancellationToken = default)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entries</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateentry">IUpdateEntry</a>&gt;</dt>
     <dd></dd>
     <dt><code>updateLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.update">Update</a>&gt;</dt>
@@ -731,11 +752,94 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetOrCreateTransactionalProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetOrCreateTransactionalProducer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetOrCreateTransactionalProducer_System_String_MASES_EntityFrameworkCore_KNet_Storage_Internal_ITransactionalEntityTypeProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetOrCreateTransactionalProducer(System.String,MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer)">
+  GetOrCreateTransactionalProducer(string, ITransactionalEntityTypeProducer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L688"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns or creates the transactional <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Clients.Producer.KafkaProducer-2.html">KafkaProducer&lt;K, V&gt;</a>
+for the given <code class="paramref">transactionGroup</code>, calling <code>InitTransactions()</code> on first creation.
+Registers <code class="paramref">entityTypeProducer</code> in the group in the same call.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProducer GetOrCreateTransactionalProducer(string transactionGroup, ITransactionalEntityTypeProducer entityTypeProducer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transactionGroup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The transaction group name.</p>
+</dd>
+    <dt><code>entityTypeProducer</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.html">ITransactionalEntityTypeProducer</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.html">ITransactionalEntityTypeProducer</a> joining the group.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Clients.Producer.IProducer.html">IProducer</a></dt>
+    <dd><p>The shared transactional producer for the group.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetStreamsManager_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetStreamsManager*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetStreamsManager_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Func_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetStreamsManager(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,System.Func{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager})">
+  GetStreamsManager(IKEFCoreDatabase, Func&lt;IKEFCoreDatabase, IStreamsManager&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L269"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieves the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html">IStreamsManager</a> associated to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a> in the instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IStreamsManager GetStreamsManager(IKEFCoreDatabase database, Func&lt;IKEFCoreDatabase, IStreamsManager&gt; createFunc)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
+    <dt><code>createFunc</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a>, <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html">IStreamsManager</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html">IStreamsManager</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetTable_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetTable*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetTable(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L276"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L275"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a> associated to <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> in the instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></p>
@@ -770,9 +874,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffer_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffer*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffer_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffer(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])">
-  GetValueBuffer(IEntityType, object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L383"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffer_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffer(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])">
+  GetValueBuffer(IKEFCoreDatabase, IEntityType, object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L371"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> for a specified key</p>
@@ -780,11 +884,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ValueBuffer? GetValueBuffer(IEntityType entityType, object[] keyValues)</code></pre>
+    <pre><code class="lang-csharp hljs">public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object[] keyValues)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
     <dt><code>keyValues</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
@@ -809,9 +915,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffers*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffers_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffers(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  GetValueBuffers(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L353"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffers_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffers(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  GetValueBuffers(IKEFCoreDatabase, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L342"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a></p>
@@ -819,11 +925,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;ValueBuffer&gt; GetValueBuffers(IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;ValueBuffer&gt; GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
   </dl>
@@ -846,9 +954,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersByPrefix_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersByPrefix*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersByPrefix_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersByPrefix(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])">
-  GetValueBuffersByPrefix(IEntityType, object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L507"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersByPrefix_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersByPrefix(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[])">
+  GetValueBuffersByPrefix(IKEFCoreDatabase, IEntityType, object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L491"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> using prefix scan</p>
@@ -856,11 +964,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersByPrefix(IEntityType entityType, object[] prefixValues)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object[] prefixValues)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
     <dt><code>prefixValues</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
@@ -885,9 +995,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersRange*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersRange_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersRange(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[],System.Object[])">
-  GetValueBuffersRange(IEntityType, object[], object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L413"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[],System.Object[])">
+  GetValueBuffersRange(IKEFCoreDatabase, IEntityType, object[], object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L400"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> in a range of keys</p>
@@ -895,11 +1005,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersRange(IEntityType entityType, object[] rangeStart, object[] rangeEnd)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
     <dt><code>rangeStart</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
@@ -926,9 +1038,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverse_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverse*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverse_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverse(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  GetValueBuffersReverse(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L443"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverse_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverse(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  GetValueBuffersReverse(IKEFCoreDatabase, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L429"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> in reverse order</p>
@@ -936,11 +1048,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersReverse(IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
   </dl>
@@ -963,9 +1077,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverseRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverseRange*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverseRange_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverseRange(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[],System.Object[])">
-  GetValueBuffersReverseRange(IEntityType, object[], object[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L474"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_GetValueBuffersReverseRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.GetValueBuffersReverseRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Object[],System.Object[])">
+  GetValueBuffersReverseRange(IKEFCoreDatabase, IEntityType, object[], object[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L459"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> in a range of keys</p>
@@ -973,11 +1087,13 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersReverseRange(IEntityType entityType, object[] rangeStart, object[] rangeEnd)</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ValueBuffer&gt; GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
     <dd></dd>
     <dt><code>rangeStart</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>[]</dt>
@@ -1006,7 +1122,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_LatestOffsetForEntity_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.LatestOffsetForEntity(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   LatestOffsetForEntity(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L347"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L336"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the latest offset for each partition associated to <code class="paramref">entityType</code></p>
@@ -1041,11 +1157,43 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Register_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Register*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Register_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Register(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  Register(IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Register an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a> in an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Register(IKEFCoreDatabase db)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>db</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ResetStreams_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ResetStreams*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ResetStreams" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ResetStreams">
-  ResetStreams()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L148"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_ResetStreams_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.ResetStreams(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  ResetStreams(IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L158"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Resets the Apache Kafka streams application associated to this <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance</p>
@@ -1053,9 +1201,47 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void ResetStreams()</code></pre>
+    <pre><code class="lang-csharp hljs">public void ResetStreams(IKEFCoreDatabase database)</code></pre>
   </div>
 
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Unregister_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Unregister*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreCluster_Unregister_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.Unregister(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  Unregister(IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Unregister a previously registered instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a> from an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Unregister(IKEFCoreDatabase database)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd><p>The instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a> to be unregistered</p>
+</dd>
+  </dl>
 
 
 
@@ -1072,7 +1258,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L40" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreCluster.cs/#L45" class="edit-link">Edit this page</a>
         </div>
 
 

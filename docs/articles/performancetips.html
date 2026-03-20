@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Performance tips for KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Performance tips for KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="Describes performance tips for Entity Framework Core provider for Apache Kafka™">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/performancetips.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="kefcore-performance-tips">KEFCore: performance tips</h1>
+
+<h2 id="query-optimization-with-store-access-hints">Query optimization with store access hints</h2>
+<p>KEFCore can optimize LINQ queries by using targeted Kafka Streams state store access methods instead of full scans. These are context-scoped options — they can differ between <code>DbContext</code> instances on the same cluster.</p>
+<h3 id="usestoresinglekeylookup-default-true"><code>UseStoreSingleKeyLookup</code> (default: <code>true</code>)</h3>
+<p>Enables direct single-key look-up in the state store for queries like:</p>
+<pre><code class="lang-csharp">var blog = context.Blogs.Single(b =&gt; b.BlogId == 42);
+var blog = context.Blogs.Find(42);
+</code></pre>
+<p>Without this, the engine falls back to a full store scan. Keep this enabled unless you have a specific reason to disable it.</p>
+<h3 id="usestorekeyrange-default-true"><code>UseStoreKeyRange</code> (default: <code>true</code>)</h3>
+<p>Enables range queries on the primary key:</p>
+<pre><code class="lang-csharp">var blogs = context.Blogs.Where(b =&gt; b.BlogId &gt;= 10 &amp;&amp; b.BlogId &lt;= 20).ToList();
+</code></pre>
+<h3 id="usestoreprefixscan-default-false"><code>UseStorePrefixScan</code> (default: <code>false</code>)</h3>
+<p>Enables prefix scan for composite keys where the leading key component is known. Useful when the primary key is a composite type and you want to retrieve all records with a given prefix. Disabled by default because it requires the key serializer to support prefix comparison.</p>
+<h3 id="usestorereverse-and-usestorereversekeyrange-default-true"><code>UseStoreReverse</code> and <code>UseStoreReverseKeyRange</code> (default: <code>true</code>)</h3>
+<p>Enable reverse iteration and reverse range queries:</p>
+<pre><code class="lang-csharp">var latest = context.Blogs.OrderByDescending(b =&gt; b.BlogId).First();
+</code></pre>
+<hr>
+<h2 id="data-transfer-byte-vs-bytebuffer">Data transfer: <code>byte[]</code> vs <code>ByteBuffer</code></h2>
+<p>KEFCore supports two data transfer modes between .NET and the JVM for serialization:</p>
+<ul>
+<li><strong><code>byte[]</code> (default)</strong>: standard managed array, copied across the JVM boundary on each operation</li>
+<li><strong><code>ByteBuffer</code></strong>: direct JVM buffer, avoids array copying — lower memory pressure and better throughput under high load</li>
+</ul>
+<p>These are singleton options (affect all <code>DbContext</code> instances on the cluster):</p>
+<pre><code class="lang-csharp">optionsBuilder.UseKEFCore(opt =&gt; opt
+    .WithBootstrapServers(&quot;KAFKA-SERVER:9092&quot;)
+    .WithKeyByteBufferDataTransfer()           // default: false
+    .WithValueContainerByteBufferDataTransfer() // default: false
+);
+</code></pre>
+<p>Enable <code>ByteBuffer</code> when throughput is a priority and your serializer supports it. The default JSON serializer supports both modes. Avro and Protobuf serializers also support <code>ByteBuffer</code> via their <code>Buffered</code> variants.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>UseKeyByteBufferDataTransfer</code> and <code>UseValueContainerByteBufferDataTransfer</code> are singleton options — they determine the <code>DefaultKeySerdeClass</code> and <code>DefaultValueSerdeClass</code> in the Streams topology and must be consistent across all contexts on the same cluster.</p>
+</div>
+<hr>
+<h2 id="persistent-vs-in-memory-storage">Persistent vs in-memory storage</h2>
+<p><code>UsePersistentStorage</code> (singleton, default: <code>false</code>) controls whether the Streams state store uses RocksDB (persistent) or in-memory storage.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>In-memory (default)</th>
+<th>Persistent (RocksDB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Startup time</td>
+<td>Instant — empty store</td>
+<td>Slower — reads from topics to rebuild</td>
+</tr>
+<tr>
+<td>Memory usage</td>
+<td>Higher — all data in RAM</td>
+<td>Lower — RocksDB spills to disk</td>
+</tr>
+<tr>
+<td>Restart behavior</td>
+<td>Full rebuild from topics</td>
+<td>Incremental — resumes from last checkpoint</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Development, short-lived processes</td>
+<td>Long-running production services</td>
+</tr>
+</tbody>
+</table>
+<p>Enable persistent storage for production services that restart frequently:</p>
+<pre><code class="lang-csharp">optionsBuilder.UseKEFCore(opt =&gt; opt
+    .WithBootstrapServers(&quot;KAFKA-SERVER:9092&quot;)
+    .WithPersistentStorage()
+);
+</code></pre>
+<hr>
+<h2 id="enumerator-prefetch">Enumerator prefetch</h2>
+<p><code>UseEnumeratorWithPrefetch</code> (context-scoped, default: <code>true</code>) activates enumerator instances that prefetch data from the state store in batches, reducing JVM boundary crossings during enumeration.</p>
+<p>This is beneficial when iterating large result sets. Disable it only if you observe ordering or consistency issues during enumeration (which should be rare).</p>
+<hr>
+<h2 id="synchronization-timeout">Synchronization timeout</h2>
+<p><code>DefaultSynchronizationTimeout</code> (context-scoped, default: <code>Timeout.Infinite</code>) controls how long KEFCore waits after <code>SaveChanges</code> for the Streams state store to acknowledge the new offsets.</p>
+<ul>
+<li><code>Timeout.Infinite</code> — wait indefinitely (safe, but may block under load)</li>
+<li>A positive value (milliseconds) — fail fast if the store does not catch up in time</li>
+<li><code>0</code> — disable synchronization entirely (useful for write-only producers or read-only consumers)</li>
+</ul>
+<p>For high-throughput write scenarios where you do not need to immediately read back what you wrote, set <code>DefaultSynchronizationTimeout = 0</code>:</p>
+<pre><code class="lang-csharp">optionsBuilder.UseKEFCore(opt =&gt; opt
+    .WithBootstrapServers(&quot;KAFKA-SERVER:9092&quot;)
+    .WithDefaultSynchronizationTimeout(0)
+);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Synchronization is only available when event management is enabled for the entity. If <code>[KEFCoreIgnoreEventsAttribute]</code> is applied or <code>HasKEFCoreManageEvents(false)</code> is set, the synchronization wait is skipped regardless of <code>DefaultSynchronizationTimeout</code>.</p>
+</div>
+<hr>
+<h2 id="event-management-per-entity">Event management per entity</h2>
+<p>By default, KEFCore activates the <code>TimestampExtractor</code> for all entities, enabling real-time local state updates and post-<code>SaveChanges</code> synchronization. This has a small overhead per consumed record.</p>
+<p>For entities that are never written by this process (reference data, lookup tables), disable event management to reduce CPU overhead:</p>
+<pre><code class="lang-csharp">[KEFCoreIgnoreEventsAttribute]
+public class Country { ... }
+</code></pre>
+<p>Or globally, if the application is a pure consumer:</p>
+<pre><code class="lang-csharp">protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.UseKEFCoreManageEvents(false);
+    base.OnModelCreating(modelBuilder);
+}
+</code></pre>
+<p>See <a href="conventions.html#event-management-convention">conventions</a> for full details.</p>
+<h2 id="jcobridge-hpa-edition">JCOBridge HPA edition</h2>
+<p>Several intermittent errors in KEFCore under sustained load — including <code>TimestampExtractor</code> callback failures (<a href="https://github.com/masesgroup/KEFCore/issues/448">KEFCore#448</a>) and related JVM↔CLR boundary exceptions — share the same root cause documented in <a href="https://github.com/masesgroup/JCOBridgePublic/issues/24">JCOBridgePublic#24</a>: non-deterministic GC interactions at the JNI boundary under sustained call pressure.</p>
+<p>Workarounds at the application level (disabling event management, <code>REPLACE_THREAD</code> recovery) are palliatives — they reduce frequency or recover gracefully, but do not eliminate the root cause.</p>
+<p>The <strong>JCOBridge HPA (High Performance Application) edition</strong> addresses these failures at the interop layer, providing stable behavior under sustained JVM↔CLR call pressure. If your application:</p>
+<ul>
+<li>runs with event management enabled on high-throughput entities</li>
+<li>uses <code>ByteBuffer</code> data transfer (<code>UseKeyByteBufferDataTransfer</code>, <code>UseValueContainerByteBufferDataTransfer</code>)</li>
+<li>experiences intermittent stream thread failures under load</li>
+</ul>
+<p>then the HPA edition is the recommended path. See <a href="https://www.jcobridge.com">jcobridge.com</a> for licensing and availability.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/performancetips.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -130,8 +130,9 @@ KEFCore provides a way to incrementally update the schema to keep it in sync wit
 </code></pre>
 <div class="TIP">
 <h5>Tip</h5>
-<p>The model use the <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a> to define the topic to be used, this will be important later due to a change in namespace of the model.
-For more info see <a href="howitworks.html#%5Edata-storage">Data storage</a></p>
+<p>The model uses the <a href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a> or <a href="conventions.html#topic-naming-convention">KEFCoreTopicAttribute</a> to define the topic to be used — this will be important later due to a change in namespace of the model.
+Without one of these attributes, the topic name is derived from the full CLR type name including namespace: a namespace refactoring will silently change the topic name and break alignment with existing data.
+For more info see <a href="howitworks.html#data-storage">Data storage</a></p>
 </div>
 <h3 id="first-application-run">First application run</h3>
 <p>Considering the applcation is using the JSON serialization just for simplicity, the value stored on <a href="https://kafka.apache.org/">Apache Kafka�</a> cluster are:</p>

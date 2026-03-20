@@ -210,8 +210,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContext__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContext.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContext__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContext.#ctor(Microsoft.EntityFrameworkCore.Query.QueryContextDependencies,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)">
-  KEFCoreQueryContext(QueryContextDependencies, IKEFCoreCluster)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContext__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContext.#ctor(Microsoft.EntityFrameworkCore.Query.QueryContextDependencies,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  KEFCoreQueryContext(QueryContextDependencies, IKEFCoreCluster, IKEFCoreDatabase)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContext.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -223,7 +223,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCoreCluster cluster)</code></pre>
+    <pre><code class="lang-csharp hljs">public KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCoreCluster cluster, IKEFCoreDatabase database)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -231,6 +231,8 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt><code>dependencies</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontextdependencies">QueryContextDependencies</a></dt>
     <dd></dd>
     <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
+    <dd></dd>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
     <dd></dd>
   </dl>
 
@@ -241,7 +243,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContext__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContext__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>Default initializer</p>
 </div>
 

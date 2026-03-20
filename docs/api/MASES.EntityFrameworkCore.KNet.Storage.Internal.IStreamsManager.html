@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager" class="text-break">
-Interface IStreamsManager  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L55"><i class="bi bi-code-slash"></i></a>
+Interface IStreamsManager  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -123,9 +123,9 @@ Interface IStreamsManager  <a class="header-action link-secondary" title="View s
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_CreateAndStartTopology_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.CreateAndStartTopology*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_CreateAndStartTopology" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.CreateAndStartTopology">
-  CreateAndStartTopology()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_CreateAndStartTopology_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.CreateAndStartTopology(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  CreateAndStartTopology(IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates and start the topology</p>
@@ -133,9 +133,14 @@ Interface IStreamsManager  <a class="header-action link-secondary" title="View s
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void CreateAndStartTopology()</code></pre>
+    <pre><code class="lang-csharp hljs">void CreateAndStartTopology(IKEFCoreDatabase database)</code></pre>
   </div>
 
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
+  </dl>
 
 
 
@@ -152,7 +157,7 @@ Interface IStreamsManager  <a class="header-action link-secondary" title="View s
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_EnsureSynchronized_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.EnsureSynchronized(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Int64)">
   EnsureSynchronized(IEntityType, long)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L91"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Verify if local instance is synchronized with the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance</p>
@@ -189,23 +194,23 @@ Interface IStreamsManager  <a class="header-action link-secondary" title="View s
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_PartitionOffsetWritten_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.PartitionOffsetWritten*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_PartitionOffsetWritten_Microsoft_EntityFrameworkCore_Metadata_IEntityType_System_Int32_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.PartitionOffsetWritten(Microsoft.EntityFrameworkCore.Metadata.IEntityType,System.Int32,System.Int64)">
-  PartitionOffsetWritten(IEntityType, int, long)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_PartitionOffsetWritten_System_String_System_Int32_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.PartitionOffsetWritten(System.String,System.Int32,System.Int64)">
+  PartitionOffsetWritten(string, int, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Invoked when a new partiton/offset is received for <code class="paramref">entity</code></p>
+  <div class="markdown level1 summary"><p>Invoked when a new partiton/offset is received for <code class="paramref">topic</code></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void PartitionOffsetWritten(IEntityType entity, int partition, long offset)</code></pre>
+    <pre><code class="lang-csharp hljs">void PartitionOffsetWritten(string topic, int partition, long offset)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>entity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
-    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
+    <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The topic associated to the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
 </dd>
     <dt><code>partition</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
     <dd><p>The partiton where the data was stored</p>
@@ -226,11 +231,118 @@ Interface IStreamsManager  <a class="header-action link-secondary" title="View s
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_Register_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.Register*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_Register_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.Register(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  Register(IEntityTypeProducer, IKEFCoreDatabase, IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Register an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>producer</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a> requesting the operation</p>
+</dd>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></p>
+</dd>
+    <dt><code>entity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd><p>Associated <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_StopTopology_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.StopTopology*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_StopTopology" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.StopTopology">
+  StopTopology()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stop topology waiting for a new <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_CreateAndStartTopology_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_">CreateAndStartTopology(IKEFCoreDatabase)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool StopTopology()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_Unregister_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.Unregister*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IStreamsManager_Unregister_MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.Unregister(MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  Unregister(IEntityTypeProducer, IKEFCoreDatabase)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Unregister an instance of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>producer</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a> requesting the operation</p>
+</dd>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L55" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/StreamsManager.cs/#L57" class="edit-link">Edit this page</a>
         </div>
 
 

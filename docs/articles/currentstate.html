@@ -87,13 +87,19 @@
         <article data-uid="">
 <h1 id="kefcore-development-state">KEFCore: development state</h1>
 
-<p>The latest release implementes these features:</p>
+<p>The latest release implements these features:</p>
 <ul>
 <li>[x] A working provider based on Apache Kafka™ Streams</li>
-<li>[x] The provider can use KNetCompactedReplicator</li>
 <li>[x] A base package for serialization based on .NET Json serializers</li>
 <li>[x] An external package for serialization based on Apache Avro serializers</li>
+<li>[x] An external package for serialization based on Protobuf serializers</li>
 <li>[x] A package with some templates</li>
+<li>[x] Separation of singleton-scoped and context-scoped options with correct EF Core Service Provider caching</li>
+<li>[x] Topic naming via <code>KEFCoreTopicNamingConvention</code> — supports <code>KEFCoreTopicAttribute</code>, <code>KEFCoreTopicPrefixAttribute</code>, <code>TableAttribute</code>, and fluent API (<code>ToKEFCoreTopic</code>, <code>HasKEFCoreTopicPrefix</code>, <code>UseKEFCoreTopicPrefix</code>)</li>
+<li>[x] Event management via <code>KEFCoreManageEventsConvention</code> — enabled by default per entity, opt-out via <code>KEFCoreIgnoreEventsAttribute</code> or fluent API</li>
+<li>[x] ComplexType equality enforcement via <code>KEFCoreComplexTypeEquatableConvention</code> with opt-out via <code>KEFCoreIgnoreEquatableCheckAttribute</code></li>
+<li>[x] ComplexType converter registration via <code>KEFCoreComplexTypeConverterConvention</code> — supports <code>KEFCoreComplexTypeConverterAttribute</code> and fluent API (<code>HasKEFCoreComplexTypeConverter</code>)</li>
+<li>[x] <code>StreamsManager</code> lifecycle managed per <code>ApplicationId</code> via <code>IKEFCoreCluster.GetOrCreateStreamsManager</code></li>
 </ul>
 
 </article>

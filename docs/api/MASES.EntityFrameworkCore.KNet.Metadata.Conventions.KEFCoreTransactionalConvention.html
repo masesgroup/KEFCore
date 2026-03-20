@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-      <title>Class KEFCoreServiceCollectionExtensions | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <title>Class KEFCoreTransactionalConvention | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Class KEFCoreServiceCollectionExtensions | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="title" content="Class KEFCoreTransactionalConvention | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
-      <meta name="description" content="KEFCore specific extension methods for .">
+      <meta name="description" content="A convention that resolves per-entity Kafka transaction group configuration at model finalization time, storing the result as a model annotation on each .">
       <link rel="icon" href="../images/favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=Microsoft_Extensions_DependencyInjection_KEFCoreServiceCollectionExtensions.md&amp;value=---%0Auid%3A%20Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreTransactionalConvention.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,25 +84,26 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions">
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention">
 
 
 
-  <h1 id="Microsoft_Extensions_DependencyInjection_KEFCoreServiceCollectionExtensions" data-uid="Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions" class="text-break">
-Class KEFCoreServiceCollectionExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreServiceCollectionExtensions.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  <h1 id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreTransactionalConvention" data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention" class="text-break">
+Class KEFCoreTransactionalConvention  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Metadata/Conventions/KEFCoreTransactionalConvention.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft">Microsoft</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions">Extensions</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection">DependencyInjection</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.html">Metadata</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.html">Conventions</a></dd></dl>
   <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>KEFCore specific extension methods for <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection">IServiceCollection</a>.</p>
+  <div class="markdown summary"><p>A convention that resolves per-entity Kafka transaction group configuration
+at model finalization time, storing the result as a model annotation on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
 </div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class KEFCoreServiceCollectionExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public class KEFCoreTransactionalConvention : IModelFinalizingConvention, IConvention</code></pre>
   </div>
 
 
@@ -112,10 +113,17 @@ Class KEFCoreServiceCollectionExtensions  <a class="header-action link-secondary
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-      <div><span class="xref">KEFCoreServiceCollectionExtensions</span></div>
+      <div><span class="xref">KEFCoreTransactionalConvention</span></div>
     </dd>
   </dl>
 
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.conventions.imodelfinalizingconvention">IModelFinalizingConvention</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.conventions.iconvention">IConvention</a></div>
+    </dd>
+  </dl>
 
 
   <dl class="typelist inheritedMembers">
@@ -147,13 +155,57 @@ Class KEFCoreServiceCollectionExtensions  <a class="header-action link-secondary
 
 
 
+  <h2 id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreTransactionalConvention_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>Reads <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html">KEFCoreTransactionalAttribute</a> from the entity CLR type.
+Entity types without the attribute use the standard non-transactional producer path unchanged.</p>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreTransactionalConvention_ProcessModelFinalizing_" data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.ProcessModelFinalizing*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreTransactionalConvention_ProcessModelFinalizing_Microsoft_EntityFrameworkCore_Metadata_Builders_IConventionModelBuilder_Microsoft_EntityFrameworkCore_Metadata_Conventions_IConventionContext_Microsoft_EntityFrameworkCore_Metadata_Builders_IConventionModelBuilder__" data-uid="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.ProcessModelFinalizing(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder,Microsoft.EntityFrameworkCore.Metadata.Conventions.IConventionContext{Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder})">
+  ProcessModelFinalizing(IConventionModelBuilder, IConventionContext&lt;IConventionModelBuilder&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Metadata/Conventions/KEFCoreTransactionalConvention.cs/#L34"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Called when a model is being finalized.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ProcessModelFinalizing(IConventionModelBuilder modelBuilder, IConventionContext&lt;IConventionModelBuilder&gt; context)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelBuilder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.iconventionmodelbuilder">IConventionModelBuilder</a></dt>
+    <dd><p>The builder for the model.</p>
+</dd>
+    <dt><code>context</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.conventions.iconventioncontext-1">IConventionContext</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.iconventionmodelbuilder">IConventionModelBuilder</a>&gt;</dt>
+    <dd><p>Additional information associated with convention execution.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
 
 
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreServiceCollectionExtensions.cs/#L34" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Metadata/Conventions/KEFCoreTransactionalConvention.cs/#L31" class="edit-link">Edit this page</a>
         </div>
 
 

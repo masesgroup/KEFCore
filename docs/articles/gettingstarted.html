@@ -111,6 +111,7 @@
 </ul>
 <pre><code class="lang-c#">using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Test
 {
@@ -122,7 +123,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             using var context = new BloggingContext()
             {
                 BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
-                ApplicationId = &quot;MyAppId&quot;,
+                ApplicationId = &quot;MyAppId&quot;,   // mandatory — must be unique per process on the cluster
                 DbName = &quot;MyDBName&quot;,
             };
             // add standard EFCore queries
@@ -131,6 +132,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     public class BloggingContext : KEFCoreDbContext { }
 
+    // [Table] stabilizes the Kafka topic name across namespace refactorings.
+    // Without it the topic name includes the full CLR namespace.
+    [Table(&quot;Blog&quot;, Schema = &quot;Blogging&quot;)]
     public class Blog
     {
         public int BlogId { get; set; }
@@ -139,6 +143,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         public List&lt;Post&gt; Posts { get; set; }
     }
 
+    [Table(&quot;Post&quot;, Schema = &quot;Blogging&quot;)]
     public class Post
     {
         public int PostId { get; set; }
@@ -151,6 +156,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 </code></pre>
 <p>The previous code follows the example of <a href="https://learn.microsoft.com/ef/core/">https://learn.microsoft.com/ef/core/</a>. See <a href="usage.html">KEFCore usage</a> and <a href="kefcoredbcontext.html">KEFCoreDbContext</a> to find more information.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Always apply <code>[Table]</code> or <code>[KEFCoreTopicAttribute]</code> to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See <a href="conventions.html#topic-naming-convention">conventions</a> for details.</p>
+</div>
 <ul>
 <li>Build the project</li>
 </ul>

@@ -88,46 +88,65 @@
 <h1 id="kefcore-usage">KEFCore usage</h1>
 
 <p>Read <a href="gettingstarted.html">Getting started</a> to find out info and tips.</p>
+<h2 id="mandatory-runtime-initialization">Mandatory runtime initialization</h2>
+<p>Before any interaction with <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, the KNet runtime must be initialized. This step starts the JVM™, loads the Kafka libraries, and sets up the JVM↔CLR interop layer.</p>
+<pre><code class="lang-csharp">// Must be called once at application startup, before any DbContext is created
+KEFCore.CreateGlobalInstance();
+</code></pre>
+<p>JVM heap settings can be configured before the call:</p>
+<pre><code class="lang-csharp">KEFCore.ApplicationHeapSize = &quot;4G&quot;;
+KEFCore.ApplicationInitialHeapSize = &quot;512M&quot;;
+KEFCore.CreateGlobalInstance();
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><code>KEFCore.CreateGlobalInstance()</code> must be called <strong>before</strong> any <code>DbContext</code> is created, before <code>EnsureCreated()</code>, and before any LINQ query. Everything after this point follows standard EF Core patterns.</p>
+</div>
+<p>See <a href="gettingstarted.html">Getting started</a> for JVM identification and environment setup details.</p>
 <h2 id="basic-example">Basic example</h2>
-<p>The following code demonstrates basic usage of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>..
-For a full tutorial to configure the <code>KafkaDbContext</code>, defines the model, and creates the database, see <a href="kafkadbcontext.md">KafkaDbContext</a> in the docs.</p>
-<pre><code class="lang-cs">using (var context = new BloggingContext()
+<p>After the runtime is initialized, KEFCore follows standard <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> patterns. The only difference from other providers is that <code>KEFCoreDbContext</code> exposes Kafka-specific properties (<code>BootstrapServers</code>, <code>ApplicationId</code>, etc.) that can be set like any other property.</p>
+<pre><code class="lang-csharp">KEFCore.CreateGlobalInstance();
+
+using var context = new BloggingContext()
 {
-    BootstrapServers = serverToUse,
-    ApplicationId = &quot;TestApplication&quot;,
+    BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
+    ApplicationId = &quot;MyAppId&quot;,  // mandatory — must be unique per process on the cluster
     DbName = &quot;TestDB&quot;,
-})
-{
-    // Inserting data into the database
-    db.Add(new Blog { Url = &quot;http://blogs.msdn.com/adonet&quot; });
-    db.SaveChanges();
+};
 
-    // Querying
-    var blog = db.Blogs
-        .OrderBy(b =&gt; b.BlogId)
-        .First();
+// Ensure topics exist (standard EF Core)
+context.Database.EnsureCreated();
 
-    // Updating
-    blog.Url = &quot;https://devblogs.microsoft.com/dotnet&quot;;
-    blog.Posts.Add(
-        new Post
-        {
-            Title = &quot;Hello World&quot;,
-            Content = &quot;I wrote an app using EF Core!&quot;
-        });
-    db.SaveChanges();
+// Insert
+context.Add(new Blog { Url = &quot;http://blogs.msdn.com/adonet&quot;, Rating = 5 });
+context.SaveChanges();
 
-    // Deleting
-    db.Remove(blog);
-    db.SaveChanges();
-}
+// Query
+var blog = context.Blogs.OrderBy(b =&gt; b.BlogId).First();
 
-public class BloggingContext : KafkaDbContext
+// Update
+blog.Url = &quot;https://devblogs.microsoft.com/dotnet&quot;;
+blog.Posts.Add(new Post { Title = &quot;Hello World&quot;, Content = &quot;I wrote an app using EF Core!&quot; });
+context.SaveChanges();
+
+// Delete
+context.Remove(blog);
+context.SaveChanges();
+
+public class BloggingContext : KEFCoreDbContext
 {
     public DbSet&lt;Blog&gt; Blogs { get; set; }
     public DbSet&lt;Post&gt; Posts { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.UseKEFCoreTopicPrefix(&quot;TestDB&quot;);
+        base.OnModelCreating(modelBuilder);
+    }
 }
 
+// [Table] stabilizes the Kafka topic name across namespace refactorings
+[Table(&quot;Blog&quot;)]
 public class Blog
 {
     public int BlogId { get; set; }
@@ -136,6 +155,7 @@ public class Blog
     public List&lt;Post&gt; Posts { get; set; }
 }
 
+[Table(&quot;Post&quot;)]
 public class Post
 {
     public int PostId { get; set; }
@@ -146,8 +166,47 @@ public class Post
     public Blog Blog { get; set; }
 }
 </code></pre>
+<h2 id="topic-naming">Topic naming</h2>
+<p>Each entity maps to a Kafka topic. The topic name is resolved at model build time by <code>KEFCoreTopicNamingConvention</code>. With the example above the topics are:</p>
+<ul>
+<li><code>TestDB.Blog</code> (prefix <code>TestDB</code> + <code>[Table(&quot;Blog&quot;)]</code>)</li>
+<li><code>TestDB.Post</code> (prefix <code>TestDB</code> + <code>[Table(&quot;Post&quot;)]</code>)</li>
+</ul>
+<p>Without <code>[Table]</code>, the topic name includes the full .NET namespace — a namespace refactoring would break alignment with existing data. See <a href="conventions.html#topic-naming-convention">conventions</a> for the full resolution priority.</p>
+<h2 id="event-management">Event management</h2>
+<p>By default, KEFCore enables real-time event management for all entity types. The local state is updated as new records arrive from the cluster, and post-<code>SaveChanges</code> synchronization is available.</p>
+<p>To disable events for a specific entity:</p>
+<pre><code class="lang-csharp">[KEFCoreIgnoreEventsAttribute]
+[Table(&quot;ReadOnlyLookup&quot;)]
+public class ReadOnlyLookup { ... }
+
+// or via fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;ReadOnlyLookup&gt;().HasKEFCoreManageEvents(false);
+    base.OnModelCreating(modelBuilder);
+}
+</code></pre>
+<p>See <a href="conventions.html#event-management-convention">conventions</a> for full details.</p>
+<h2 id="complextype-usage">ComplexType usage</h2>
+<p>EF Core <a href="https://learn.microsoft.com/ef/core/modeling/complex-types">ComplexTypes</a> are fully supported. KEFCore requires ComplexTypes to implement value equality. A converter can be registered for types not natively supported by the underlying serializer:</p>
+<pre><code class="lang-csharp">[ComplexType]
+[KEFCoreComplexTypeConverterAttribute(typeof(AddressConverter))]
+public class Address : IEquatable&lt;Address&gt;
+{
+    public string Street { get; set; }
+    public string City { get; set; }
+
+    public bool Equals(Address other)
+        =&gt; other != null &amp;&amp; Street == other.Street &amp;&amp; City == other.City;
+
+    public override bool Equals(object obj) =&gt; Equals(obj as Address);
+    public override int GetHashCode() =&gt; HashCode.Combine(Street, City);
+}
+</code></pre>
+<p>See <a href="serialization.html#complex-type-serialization">serialization</a> for full details.</p>
 <h2 id="possible-usages">Possible usages</h2>
-<p>For possible usages of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, and this feature, see <a href="usecases.html">use cases</a></p>
+<p>For possible usages of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, see <a href="usecases.html">use cases</a>.</p>
 
 </article>
 

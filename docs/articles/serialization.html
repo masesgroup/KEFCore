@@ -387,6 +387,10 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
 <blockquote>
 <p><strong>IMPORTANT NOTE</strong>: the type applied in the previous properties of <code>KEFCoreDbContext</code> shall be a generic type definition, <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> will apply the right generic type when needed.</p>
 </blockquote>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>These three properties are <strong>singleton-scoped</strong> — they contribute to the EF Core Service Provider cache key. All <code>DbContext</code> instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types. Mixing different serializers on the same cluster will result in a new Service Provider being created and a startup error.</p>
+</div>
 <h2 id="avro-serialization"><strong>Avro</strong> serialization</h2>
 <p>With package <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet.Serialization.Avro/">MASES.EntityFrameworkCore.KNet.Serialization.Avro</a> an user can choose two different Avro serializers:
 The engine comes with two different encoders</p>
@@ -510,6 +514,10 @@ The engine comes with two different encoders</p>
 <li><strong>ValueSerializationType</strong>: set this value to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or <code>AvroKEFCoreSerDes.ValueContainer.JsonRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainerSerialization</code> (defaults to <code>AvroKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code>)</li>
 <li><strong>ValueContainerType</strong>: set this value to <code>AvroValueContainerRaw&lt;&gt;</code> or use <code>AvroKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>These three properties are <strong>singleton-scoped</strong> — all <code>DbContext</code> instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types.</p>
+</div>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
 {
@@ -684,6 +692,10 @@ message ValueContainer {
 <li><strong>ValueSerializationType</strong>: set this value to <code>ProtobufKEFCoreSerDes.ValueContainer.BinaryRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainerSerialization</code></li>
 <li><strong>ValueContainerType</strong>: set this value to <code>ProtobufValueContainerRaw&lt;&gt;</code> or use <code>ProtobufKEFCoreSerDes.DefaultValueContainer</code></li>
 </ul>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>These three properties are <strong>singleton-scoped</strong> — all <code>DbContext</code> instances pointing to the same physical Apache Kafka™ cluster must use the same serialization types.</p>
+</div>
 <p>An example is:</p>
 <pre><code class="lang-C#">using (context = new BloggingContext()
 {
@@ -757,17 +769,59 @@ public interface IComplexTypeConverter : IComplexTypeConverterLogging
 <h5>Important</h5>
 <p>The implementation of <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverter.cs"><code>IComplexTypeConverter</code> interface</a> shall be thread-safe.</p>
 </div>
-<p>An user can build an external library and can register the custom converters within the system using the singleton service implementing <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IComplexTypeConverterFactory.cs"><code>IComplexTypeConverterFactory</code> interface</a>:</p>
+<p>An user can build an external library and can register the custom converters within the system. The preferred approach is to use the model convention pipeline so the converter is registered automatically at model finalization time without any extra startup code:</p>
 <ul>
-<li><p>using <code>GetService</code>:</p>
-<pre><code class="lang-C#">var context = new KakfaDbContext();
-context.GetService&lt;IComplexTypeConverterFactory&gt;();
-factory.Register(converter);
+<li><p>using <code>KEFCoreComplexTypeConverterAttribute</code> on the ComplexType class:</p>
+<pre><code class="lang-C#">[KEFCoreComplexTypeConverterAttribute(typeof(TaxInfoExtendedConverter))]
+[ComplexType]
+public class TaxInfoExtended
+{
+    public int Code { get; set; }
+    public decimal Percentage { get; set; }
+}
 </code></pre>
 </li>
-<li><p>using the methods available in <a href="kefcoredbcontext.html"><code>KEFCoreDbContext</code></a></p>
+<li><p>using the fluent API <code>HasKEFCoreComplexTypeConverter()</code> in <code>OnModelCreating</code> (takes precedence over the attribute):</p>
+<pre><code class="lang-C#">protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;TaxInfo&gt;()
+                .ComplexProperty(t =&gt; t.TaxInfoExtended)
+                .HasKEFCoreComplexTypeConverter&lt;TaxInfoExtendedConverter&gt;();
+    base.OnModelCreating(modelBuilder);
+}
+</code></pre>
+</li>
+<li><p>using <code>GetService</code> directly on the singleton (legacy approach):</p>
+<pre><code class="lang-C#">var context = new KakfaDbContext();
+var factory = context.GetService&lt;IComplexTypeConverterFactory&gt;();
+factory.Register(typeof(TaxInfoExtendedConverter));
+</code></pre>
 </li>
 </ul>
+<p>See <a href="conventions.html#complextype-converter-convention">conventions</a> for full details.</p>
+<h3 id="value-equality-requirement">Value equality requirement</h3>
+<p>KEFCore relies on value equality to detect changes in ComplexType properties. Without it, two logically identical instances would be treated as different, causing unnecessary Kafka writes or missed updates.</p>
+<p>At model finalization time, <code>KEFCoreComplexTypeEquatableConvention</code> verifies that every ComplexType either:</p>
+<ul>
+<li>implements <code>IEquatable&lt;T&gt;</code>, or</li>
+<li>overrides <code>Equals(object)</code></li>
+</ul>
+<p>If neither condition is satisfied, an <code>InvalidOperationException</code> is thrown at startup with an actionable error message identifying the type. Apply <code>KEFCoreIgnoreEquatableCheckAttribute</code> to suppress the check when equality is guaranteed by other means.</p>
+<pre><code class="lang-C#">// Good — implements IEquatable&lt;T&gt;
+[ComplexType]
+public class TaxInfoExtended : IEquatable&lt;TaxInfoExtended&gt;
+{
+    public int Code { get; set; }
+    public decimal Percentage { get; set; }
+
+    public bool Equals(TaxInfoExtended other)
+        =&gt; other != null &amp;&amp; Code == other.Code &amp;&amp; Percentage == other.Percentage;
+
+    public override bool Equals(object obj) =&gt; Equals(obj as TaxInfoExtended);
+    public override int GetHashCode() =&gt; HashCode.Combine(Code, Percentage);
+}
+</code></pre>
+<p>See <a href="conventions.html#complextype-equality-convention">conventions</a> for full details.</p>
 <h3 id="how-to-declare-a-complex-property">How to declare a complex property</h3>
 <p>Some good examples comes from <a href="https://www.learnentityframeworkcore.com/model/complex-type">https://www.learnentityframeworkcore.com/model/complex-type</a>.
 An user can choose two different approaches:</p>

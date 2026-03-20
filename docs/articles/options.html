@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Options in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Options in KEFCore | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="Describes the options available in Entity Framework Core provider for Apache Kafka™">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/options.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="kefcore-options">KEFCore: options</h1>
+
+<p>KEFCore separates its options into two categories: <strong>singleton-scoped</strong> and <strong>context-scoped</strong>. Understanding this separation is important to avoid unexpected Service Provider cache misses or configuration errors at startup.</p>
+<h2 id="why-the-separation-matters">Why the separation matters</h2>
+<p>EF Core caches the internal Service Provider (the DI container that holds provider services) and reuses it across <code>DbContext</code> instances that share the same configuration. KEFCore keys this cache on the physical Kafka cluster identity (<code>ClusterId</code>, resolved from <code>BootstrapServers</code>) plus the singleton options that affect which services are registered.</p>
+<p>Two <code>DbContext</code> instances that share all singleton options will reuse the same Service Provider — and the same <code>StreamsManager</code>. Two instances with different singleton options will create separate Service Providers.</p>
+<p>Context-scoped options do not affect the Service Provider cache. They are read per-<code>DbContext</code> instance at runtime.</p>
+<h2 id="singleton-options">Singleton options</h2>
+<p>These options must be consistent across all <code>DbContext</code> instances pointing to the same physical Apache Kafka™ cluster. Changing any of these between two contexts on the same cluster will cause a new Service Provider to be created, or a <code>SingletonOptionChanged</code> exception if <code>UseInternalServiceProvider</code> is in use.</p>
+<h3 id="in-hash-affect-service-provider-cache-key">In hash (affect Service Provider cache key)</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BootstrapServers</code></td>
+<td>—</td>
+<td>Mandatory. Resolved to <code>ClusterId</code> for caching</td>
+</tr>
+<tr>
+<td><code>ApplicationId</code></td>
+<td>—</td>
+<td>Mandatory when not using <code>UseCompactedReplicator</code>. Unique per process on the cluster</td>
+</tr>
+<tr>
+<td><code>KeySerDesSelectorType</code></td>
+<td><code>DefaultKEFCoreSerDes.DefaultKeySerialization</code></td>
+<td>Generic type definition — overridable per entity via <code>KEFCoreSerDesAttribute</code> or <code>HasKEFCoreSerDes()</code></td>
+</tr>
+<tr>
+<td><code>ValueSerDesSelectorType</code></td>
+<td><code>DefaultKEFCoreSerDes.DefaultValueContainerSerialization</code></td>
+<td>Generic type definition — overridable per entity</td>
+</tr>
+<tr>
+<td><code>ValueContainerType</code></td>
+<td><code>DefaultKEFCoreSerDes.DefaultValueContainer</code></td>
+<td>Generic type definition — overridable per entity</td>
+</tr>
+<tr>
+<td><code>UseKeyByteBufferDataTransfer</code></td>
+<td><code>false</code></td>
+<td>Determines key transport type in Streams topology</td>
+</tr>
+<tr>
+<td><code>UseValueContainerByteBufferDataTransfer</code></td>
+<td><code>false</code></td>
+<td>Determines value transport type in Streams topology</td>
+</tr>
+<tr>
+<td><code>UseKNetStreams</code></td>
+<td><code>true</code></td>
+<td>KNet vs plain Kafka Streams backend</td>
+</tr>
+<tr>
+<td><code>UsePersistentStorage</code></td>
+<td><code>false</code></td>
+<td>RocksDB vs in-memory store supplier</td>
+</tr>
+<tr>
+<td><code>UseCompactedReplicator</code></td>
+<td><code>false</code></td>
+<td>⚠️ Deprecated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="first-wins-singleton-but-not-in-hash">First-wins (singleton but not in hash)</h3>
+<p>These are cluster-level but do not affect the Service Provider cache key. The values set by the first <code>DbContext</code> to initialize the cluster are used for all subsequent contexts.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UseDeletePolicyForTopic</code></td>
+<td><code>false</code></td>
+<td>Applied at topic creation time</td>
+</tr>
+<tr>
+<td><code>DefaultNumPartitions</code></td>
+<td><code>1</code></td>
+<td>Applied at topic creation time — overridable per entity via <code>KEFCoreTopicPartitionsAttribute</code> or <code>HasKEFCoreTopicPartitions()</code></td>
+</tr>
+<tr>
+<td><code>DefaultReplicationFactor</code></td>
+<td><code>1</code></td>
+<td>Applied at topic creation time — overridable per entity via <code>KEFCoreTopicReplicationFactorAttribute</code> or <code>HasKEFCoreTopicReplicationFactor()</code></td>
+</tr>
+<tr>
+<td><code>TopicConfig</code></td>
+<td><code>null</code></td>
+<td>Cluster-level topic configuration — retention can be overridden per entity via <code>KEFCoreTopicRetentionAttribute</code> or <code>HasKEFCoreTopicRetention()</code></td>
+</tr>
+<tr>
+<td><code>StreamsConfig</code></td>
+<td><code>null</code></td>
+<td>Kafka Streams application configuration</td>
+</tr>
+<tr>
+<td><code>ProducerConfig</code></td>
+<td><code>null</code></td>
+<td>Cluster-level producer configuration (first-wins) — individual settings can be overridden per entity via <code>KEFCoreProducerAttribute</code> or <code>HasKEFCoreProducer()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="context-scoped-options">Context-scoped options</h2>
+<p>These options are specific to each <code>DbContext</code> instance and do not affect the Service Provider cache.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ReadOnlyMode</code></td>
+<td><code>false</code></td>
+<td>Rejects all write operations for the entire context — individual entities can be marked read-only via <code>KEFCoreReadOnlyAttribute</code> or <code>IsKEFCoreReadOnly()</code></td>
+</tr>
+<tr>
+<td><code>DefaultSynchronizationTimeout</code></td>
+<td><code>Timeout.Infinite</code></td>
+<td>Milliseconds to wait after <code>SaveChanges</code> for backend sync; <code>0</code> disables sync</td>
+</tr>
+<tr>
+<td><code>UseEnumeratorWithPrefetch</code></td>
+<td><code>true</code></td>
+<td>Prefetch enumerator for faster enumeration with Streams</td>
+</tr>
+<tr>
+<td><code>UseStorePrefixScan</code></td>
+<td><code>false</code></td>
+<td>Enables prefix scan globally — overridable per entity via <code>KEFCoreStoreLookupAttribute</code> or <code>HasKEFCoreStoreLookup()</code></td>
+</tr>
+<tr>
+<td><code>UseStoreSingleKeyLookup</code></td>
+<td><code>true</code></td>
+<td>Enables single key look-up globally — overridable per entity</td>
+</tr>
+<tr>
+<td><code>UseStoreKeyRange</code></td>
+<td><code>true</code></td>
+<td>Enables key range look-up globally — overridable per entity</td>
+</tr>
+<tr>
+<td><code>UseStoreReverse</code></td>
+<td><code>true</code></td>
+<td>Enables reverse look-up globally — overridable per entity</td>
+</tr>
+<tr>
+<td><code>UseStoreReverseKeyRange</code></td>
+<td><code>true</code></td>
+<td>Enables reverse key range look-up globally — overridable per entity</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deprecated-context-scoped-options">Deprecated context-scoped options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ManageEvents</code></td>
+<td><code>KEFCoreIgnoreEventsAttribute</code> / <code>HasKEFCoreManageEvents()</code></td>
+</tr>
+<tr>
+<td><code>UseGlobalTable</code></td>
+<td>Removed — <code>ApplicationId</code> uniqueness per process makes it unnecessary</td>
+</tr>
+<tr>
+<td><code>ConsumerConfig</code></td>
+<td>No replacement — deprecated with <code>UseCompactedReplicator</code></td>
+</tr>
+<tr>
+<td><code>DefaultConsumerInstances</code></td>
+<td>No replacement — deprecated with <code>UseCompactedReplicator</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="topic-naming-and-event-management">Topic naming and event management</h2>
+<p><code>TopicPrefix</code>, <code>ManageEvents</code>, and topic name configuration are no longer options — they are model conventions resolved at model finalization time. See <a href="conventions.html">conventions</a> for details.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/documentation/articles/options.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor" class="text-break">
-Class EntityExtractor  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L615"><i class="bi bi-code-slash"></i></a>
+Class EntityExtractor  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L616"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -155,9 +155,9 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_System_Type_System_Type_System_Type_System_Type_System_String_System_Byte___System_Byte___System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData(System.Type,System.Type,System.Type,System.Type,System.String,System.Byte[],System.Byte[],System.Boolean)">
-  FromRawValueData(Type, Type, Type, Type, string, byte[], byte[], bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L779"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRawValueData_System_Type_System_Type_System_Type_System_Type_System_String_System_Byte___System_Byte___Org_Apache_Kafka_Common_Header_Headers_System_Boolean_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRawValueData(System.Type,System.Type,System.Type,System.Type,System.String,System.Byte[],System.Byte[],Org.Apache.Kafka.Common.Header.Headers,System.Boolean,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  FromRawValueData(Type, Type, Type, Type, string, byte[], byte[], Headers, bool, IComplexTypeConverterFactory?, IModel?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L846"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Extract information for Entity from <code class="paramref">recordValue</code> in input</p>
@@ -165,7 +165,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializerSelectorType, Type valueSerializerSelectorType, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializerSelectorType, Type valueSerializerSelectorType, string topic, byte[] recordKey, byte[] recordValue, Headers headers, bool throwUnmatch = false, IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -185,14 +185,25 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
     <dt><code>topic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>The Apache Kafka topic the data is coming from</p>
 </dd>
-    <dt><code>recordValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
-    <dd><p>The Apache Kafka record value containing the information</p>
-</dd>
     <dt><code>recordKey</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
     <dd><p>The Apache Kafka record key containing the information</p>
 </dd>
+    <dt><code>recordValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The Apache Kafka record value containing the information</p>
+</dd>
+    <dt><code>headers</code> <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a></dt>
+    <dd><p>The Apache Kafka record <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Header.Headers.html">Headers</a> containing the meta information</p>
+</dd>
     <dt><code>throwUnmatch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</p>
+    <dd><p>Throws exceptions if there is unmatch in data retrieve</p>
+</dd>
+    <dt><code>converterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd><p>Optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> for ComplexType deserialization.
+Obtain it from the KEFCore model builder outside of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onmodelcreating">OnModelCreating(ModelBuilder)</a>.</p>
+</dd>
+    <dt><code>model</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd><p>Optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a> for accurate property mapping via <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.
+When provided, the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> is resolved from the CLR type embedded in the record value.</p>
 </dd>
   </dl>
 
@@ -215,9 +226,9 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)">
-  FromRecord(ConsumerRecord&lt;byte[], byte[]&gt;, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L723"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  FromRecord(ConsumerRecord&lt;byte[], byte[]&gt;, bool, IComplexTypeConverterFactory?, IModel?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L776"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Extract information for Entity from <code class="paramref">record</code> in input</p>
@@ -225,7 +236,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static object FromRecord(ConsumerRecord&lt;byte[], byte[]&gt; record, bool throwUnmatch = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public static object FromRecord(ConsumerRecord&lt;byte[], byte[]&gt; record, bool throwUnmatch = false, IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -234,7 +245,13 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
     <dd><p>The Apache Kafka record containing the information</p>
 </dd>
     <dt><code>throwUnmatch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</p>
+    <dd><p>Throws exceptions if there is unmatch in data retrieve</p>
+</dd>
+    <dt><code>converterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd><p>Optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> for ComplexType deserialization.</p>
+</dd>
+    <dt><code>model</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd><p>Optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a> for accurate property mapping via <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
 </dd>
   </dl>
 
@@ -257,9 +274,9 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord__1_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord``1(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean)">
-  FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;byte[], byte[]&gt;, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L711"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromRecord__1_Org_Apache_Kafka_Clients_Consumer_ConsumerRecord_System_Byte___System_Byte____System_Boolean_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromRecord``1(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord{System.Byte[],System.Byte[]},System.Boolean,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;byte[], byte[]&gt;, bool, IComplexTypeConverterFactory?, IModel?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L759"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Extract information for Entity from <code class="paramref">record</code> in input</p>
@@ -267,7 +284,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static TEntity FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;byte[], byte[]&gt; record, bool throwUnmatch = false) where TEntity : class</code></pre>
+    <pre><code class="lang-csharp hljs">public static TEntity FromRecord&lt;TEntity&gt;(ConsumerRecord&lt;byte[], byte[]&gt; record, bool throwUnmatch = false, IComplexTypeConverterFactory? converterFactory = null, IModel? model = null) where TEntity : class</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -276,7 +293,13 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
     <dd><p>The Apache Kafka record containing the information</p>
 </dd>
     <dt><code>throwUnmatch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</p>
+    <dd><p>Throws exceptions if there is unmatch in data retrieve</p>
+</dd>
+    <dt><code>converterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd><p>Optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> for ComplexType deserialization.</p>
+</dd>
+    <dt><code>model</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd><p>Optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a> for accurate property mapping via <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
 </dd>
   </dl>
 
@@ -290,7 +313,8 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>TEntity</code></dt>
-    <dd></dd>
+    <dd><p>The Entity type if it is known</p>
+</dd>
   </dl>
 
 
@@ -306,10 +330,10 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_MASES_KNet_Consumer_ConsumerConfigBuilder_System_String_System_Action_System_Object_System_Exception__System_Threading_CancellationToken_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(MASES.KNet.Consumer.ConsumerConfigBuilder,System.String,System.Action{System.Object,System.Exception},System.Threading.CancellationToken,System.Boolean)">
   FromTopic(ConsumerConfigBuilder, string, Action&lt;object?, Exception?&gt;, CancellationToken, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L625"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L633"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Extract information for Entity using <code class="paramref">consumerConfig</code> configurtion within a <code class="paramref">topicName</code> and send them to <code class="paramref">cb</code></p>
+  <div class="markdown level1 summary"><p>Extract information for Entity using <code class="paramref">consumerConfig</code> configuration within a <code class="paramref">topicName</code> and send them to <code class="paramref">cb</code></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -351,7 +375,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_System_String_System_String_System_Action_System_Object_System_Exception__System_Threading_CancellationToken_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic(System.String,System.String,System.Action{System.Object,System.Exception},System.Threading.CancellationToken,System.Boolean)">
   FromTopic(string, string, Action&lt;object?, Exception?&gt;, CancellationToken, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L638"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L646"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Extract information for Entity from <code class="paramref">bootstrapServer</code> within a <code class="paramref">topicName</code> and send them to <code class="paramref">cb</code></p>
@@ -365,7 +389,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>bootstrapServer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The Apache Kafka <a href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</a></p>
+    <dd><p>The Apache Kafka bootstrap.servers</p>
 </dd>
     <dt><code>topicName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>The topic containing the data</p>
@@ -394,17 +418,19 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_MASES_KNet_Consumer_ConsumerConfigBuilder_System_String_System_Action___0_System_Exception__System_Threading_CancellationToken_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(MASES.KNet.Consumer.ConsumerConfigBuilder,System.String,System.Action{``0,System.Exception},System.Threading.CancellationToken,System.Boolean)">
-  FromTopic&lt;TEntity&gt;(ConsumerConfigBuilder, string, Action&lt;TEntity?, Exception?&gt;, CancellationToken, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L667"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_MASES_KNet_Consumer_ConsumerConfigBuilder_System_String_System_Action___0_System_Exception__System_Threading_CancellationToken_System_Boolean_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(MASES.KNet.Consumer.ConsumerConfigBuilder,System.String,System.Action{``0,System.Exception},System.Threading.CancellationToken,System.Boolean,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  FromTopic&lt;TEntity&gt;(ConsumerConfigBuilder, string?, Action&lt;TEntity?, Exception?&gt;, CancellationToken, bool, IComplexTypeConverterFactory?, IModel?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L699"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Extract information for Entity using <code class="paramref">consumerConfig</code> configurtion within a <code class="paramref">topicName</code> and send them to <code class="paramref">cb</code></p>
+  <div class="markdown level1 summary"><p>Extract information for Entity using <code class="paramref">consumerConfig</code> configuration within a topic and send them to <code class="paramref">cb</code>.
+When <code class="paramref">model</code> is provided and <code class="paramref">topicName</code> is null, the topic name is resolved
+from the model annotation set by the KEFCore topic naming convention.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void FromTopic&lt;TEntity&gt;(ConsumerConfigBuilder consumerConfig, string topicName, Action&lt;TEntity?, Exception?&gt; cb, CancellationToken token, bool onlyLatest = false) where TEntity : class</code></pre>
+    <pre><code class="lang-csharp hljs">public static void FromTopic&lt;TEntity&gt;(ConsumerConfigBuilder consumerConfig, string? topicName, Action&lt;TEntity?, Exception?&gt; cb, CancellationToken token, bool onlyLatest = false, IComplexTypeConverterFactory? converterFactory = null, IModel? model = null) where TEntity : class</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -413,7 +439,8 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
     <dd><p>The <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a> with configuration</p>
 </dd>
     <dt><code>topicName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The topic containing the data</p>
+    <dd><p>The topic containing the data. If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> and <code class="paramref">model</code> is provided,
+the topic name is resolved automatically from the model.</p>
 </dd>
     <dt><code>cb</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-2">Action</a>&lt;TEntity, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception">Exception</a>&gt;</dt>
     <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-2">Action&lt;T1, T2&gt;</a> where data will be available</p>
@@ -423,6 +450,13 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 </dd>
     <dt><code>onlyLatest</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd><p>Start execution only for newest messages and does not execute for oldest, default is from beginning</p>
+</dd>
+    <dt><code>converterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd><p>Optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> for ComplexType deserialization.
+Obtain it from the KEFCore model builder outside of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onmodelcreating">OnModelCreating(ModelBuilder)</a>.</p>
+</dd>
+    <dt><code>model</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd><p>Optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a> for accurate property mapping and automatic topic name resolution.</p>
 </dd>
   </dl>
 
@@ -445,9 +479,9 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_System_String_System_String_System_Action___0_System_Exception__System_Threading_CancellationToken_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(System.String,System.String,System.Action{``0,System.Exception},System.Threading.CancellationToken,System.Boolean)">
-  FromTopic&lt;TEntity&gt;(string, string, Action&lt;TEntity?, Exception?&gt;, CancellationToken, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L651"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_EntityExtractor_FromTopic__1_System_String_System_String_System_Action___0_System_Exception__System_Threading_CancellationToken_System_Boolean_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.EntityExtractor.FromTopic``1(System.String,System.String,System.Action{``0,System.Exception},System.Threading.CancellationToken,System.Boolean,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
+  FromTopic&lt;TEntity&gt;(string, string, Action&lt;TEntity?, Exception?&gt;, CancellationToken, bool, IComplexTypeConverterFactory?, IModel?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L670"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Extract information for Entity from <code class="paramref">bootstrapServer</code> within a <code class="paramref">topicName</code> and send them to <code class="paramref">cb</code></p>
@@ -455,13 +489,13 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void FromTopic&lt;TEntity&gt;(string bootstrapServer, string topicName, Action&lt;TEntity?, Exception?&gt; cb, CancellationToken token, bool onlyLatest = false) where TEntity : class</code></pre>
+    <pre><code class="lang-csharp hljs">public static void FromTopic&lt;TEntity&gt;(string bootstrapServer, string topicName, Action&lt;TEntity?, Exception?&gt; cb, CancellationToken token, bool onlyLatest = false, IComplexTypeConverterFactory? converterFactory = null, IModel? model = null) where TEntity : class</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>bootstrapServer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The Apache Kafka <a href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</a></p>
+    <dd><p>The Apache Kafka bootstrap.servers</p>
 </dd>
     <dt><code>topicName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>The topic containing the data</p>
@@ -474,6 +508,15 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 </dd>
     <dt><code>onlyLatest</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
     <dd><p>Start execution only for newest messages and does not execute for oldest, default is from beginning</p>
+</dd>
+    <dt><code>converterFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
+    <dd><p>Optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> for ComplexType deserialization.
+Obtain it from the KEFCore model builder outside of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.onmodelcreating">OnModelCreating(ModelBuilder)</a>.</p>
+</dd>
+    <dt><code>model</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
+    <dd><p>Optional <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a> for accurate property mapping and automatic topic name resolution.
+When provided and <code class="paramref">topicName</code> is not given, the topic name is resolved
+from the model annotation set by the KEFCore topic naming convention.</p>
 </dd>
   </dl>
 
@@ -498,7 +541,7 @@ Class EntityExtractor  <a class="header-action link-secondary" title="View sourc
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L615" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L616" class="edit-link">Edit this page</a>
         </div>
 
 
