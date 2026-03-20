@@ -393,6 +393,16 @@ catch
 > All entity types in a transaction group must be part of the same `SaveChanges` call. Kafka transactions do not span multiple `SaveChanges` calls.
 
 > [!NOTE]
+> The transactional producer is automatically configured with the settings required by Kafka for exactly-once semantics:
+> - `transactional.id = "{ApplicationId}.{transactionGroup}"`
+> - `acks = all`
+> - `enable.idempotence = true`
+> - `retries = Int32.MaxValue`
+> - `max.in.flight.requests.per.connection = 1`
+>
+> These settings cannot be overridden via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` for transactional producers.
+
+> [!NOTE]
 > `UseKeyByteBufferDataTransfer` and `UseValueContainerByteBufferDataTransfer` are singleton options — the transactional producer type (`byte[]` vs `ByteBuffer`) follows the global setting and cannot be overridden per group.
 
 > [!NOTE]
