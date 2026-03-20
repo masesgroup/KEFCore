@@ -2,10 +2,10 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test</RootNamespace>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Transaction</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Transaction</RootNamespace>
 		<Title>EntityFrameworkCore KNet Test</Title>
-		<Description>EntityFrameworkCore KNet Test</Description>
+		<Description>EntityFrameworkCore KNet Test </Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
 		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
@@ -13,39 +13,39 @@
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="Test.InMemory.json">
+	  <None Update="Transaction.Test.InMemory.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KafkaStreams.json">
+	  <None Update="Transaction.Test.KafkaStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KafkaStreamsModelBuilder.json">
+	  <None Update="Transaction.Test.KafkaStreamsModelBuilder.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KafkaStreamsNoLoad.json">
+	  <None Update="Transaction.Test.KafkaStreamsNoLoad.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KafkaStreamsPersisted.json">
+	  <None Update="Transaction.Test.KafkaStreamsPersisted.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicator.json">
+	  <None Update="Transaction.Test.KNetReplicator.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicatorModelBuilder.json">
+	  <None Update="Transaction.Test.KNetReplicatorModelBuilder.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicatorNoLoad.json">
+	  <None Update="Transaction.Test.KNetReplicatorNoLoad.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicatorWithEvents.json">
+	  <None Update="Transaction.Test.KNetReplicatorWithEvents.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetStreamsWithEvents.json">
+	  <None Update="Transaction.Test.KNetStreamsWithEvents.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="TestAvro.KNetReplicatorModelBuilder.json">
+	  <None Update="Transaction.TestAvro.KNetReplicatorModelBuilder.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
-
+	
 </Project>
