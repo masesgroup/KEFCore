@@ -93,6 +93,28 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
     }
 
     /// <summary>
+    /// Builds a <see cref="ConventionSet"/> for KEFCore outside of <see cref="DbContext.OnModelCreating"/>,
+    /// exposing the <see cref="IComplexTypeConverterFactory"/> populated during model finalization.
+    /// Use the factory with <see cref="EntityExtractor.UseComplexTypeFactory"/> for external application scenarios.
+    /// </summary>
+    /// <param name="converterFactory">
+    /// The <see cref="IComplexTypeConverterFactory"/> populated by <see cref="KEFCoreComplexTypeConverterConvention"/>
+    /// during model finalization.
+    /// </param>
+    public static ConventionSet Build(out IComplexTypeConverterFactory converterFactory)
+    {
+        try
+        {
+            KEFCoreClusterAdmin.DisableClusterInvocation = true;
+            using var serviceScope = CreateServiceScope();
+            using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
+            converterFactory = serviceScope.ServiceProvider.GetRequiredService<IComplexTypeConverterFactory>();
+            return ConventionSet.CreateConventionSet(context);
+        }
+        finally { KEFCoreClusterAdmin.DisableClusterInvocation = false; }
+    }
+
+    /// <summary>
     ///     Call this method to build a <see cref="ModelBuilder" /> for KEFCore outside of <see cref="DbContext.OnModelCreating" />.
     /// </summary>
     /// <remarks>
@@ -108,6 +130,29 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
             using var serviceScope = CreateServiceScope();
             using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
             return new ModelBuilder(ConventionSet.CreateConventionSet(context), context.GetService<ModelDependencies>());
+        }
+        finally { KEFCoreClusterAdmin.DisableClusterInvocation = false; }
+    }
+
+    /// <summary>
+    /// Builds a <see cref="ModelBuilder"/> for KEFCore outside of <see cref="DbContext.OnModelCreating"/>,
+    /// exposing the <see cref="IComplexTypeConverterFactory"/> populated during model finalization.
+    /// Use the factory with <see cref="EntityExtractor.UseComplexTypeFactory"/> for external application scenarios.
+    /// </summary>
+    /// <param name="converterFactory">
+    /// The <see cref="IComplexTypeConverterFactory"/> populated by <see cref="KEFCoreComplexTypeConverterConvention"/>
+    /// during model finalization.
+    /// </param>
+    public static ModelBuilder CreateModelBuilder(out IComplexTypeConverterFactory converterFactory)
+    {
+        try
+        {
+            KEFCoreClusterAdmin.DisableClusterInvocation = true;
+            using var serviceScope = CreateServiceScope();
+            using var context = serviceScope.ServiceProvider.GetRequiredService<DbContext>();
+            converterFactory = serviceScope.ServiceProvider.GetRequiredService<IComplexTypeConverterFactory>();
+            return new ModelBuilder(ConventionSet.CreateConventionSet(context),
+                                    context.GetService<ModelDependencies>());
         }
         finally { KEFCoreClusterAdmin.DisableClusterInvocation = false; }
     }
