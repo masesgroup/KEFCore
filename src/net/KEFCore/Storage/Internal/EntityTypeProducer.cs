@@ -269,7 +269,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 ConsumerInstances = _entityType.ConsumerInstances(_database.Options),
                 ReplicationFactor = _entityType.ReplicationFactor(_database.Options),
                 ConsumerConfig = _database.Options.ConsumerConfig,
-                TopicConfig = _database.Options.TopicConfig,
+                TopicConfig = _entityType.BuildTopicConfig(_database.Options),
                 ProducerConfig = _database.Options.ProducerConfig,
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,

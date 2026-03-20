@@ -58,9 +58,12 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
 
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreTopicNamingConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreManageEventsConvention());
-
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeConverterConvention(converterFactory));
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreComplexTypeEquatableConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreTopicPartitionsConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreTopicRetentionConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreReadOnlyConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreStoreLookupConvention());
 
         return conventionSet;
     }

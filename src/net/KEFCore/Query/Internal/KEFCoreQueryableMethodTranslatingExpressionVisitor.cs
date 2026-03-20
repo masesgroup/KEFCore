@@ -19,6 +19,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using ExpressionExtensions = Microsoft.EntityFrameworkCore.Infrastructure.ExpressionExtensions;
 
@@ -37,11 +38,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
     private readonly KEFCoreProjectionBindingExpressionVisitor _projectionBindingExpressionVisitor;
     private readonly IModel _model;
 
-    private readonly bool _useStorePrefixScan;
-    private readonly bool _useStoreSingleKeyLookup;
-    private readonly bool _useStoreKeyRange; 
-    private readonly bool _useStoreReverse;
-    private readonly bool _useStoreReverseKeyRange;
+    private readonly KEFCoreOptionsExtension? _kefcoreOptions;
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -59,12 +56,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         _projectionBindingExpressionVisitor = new KEFCoreProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = queryCompilationContext.Model;
 
-        var kafkaOptions = queryCompilationContext.ContextOptions.FindExtension<KEFCoreOptionsExtension>();
-        _useStoreSingleKeyLookup = kafkaOptions?.UseStoreSingleKeyLookup ?? true;
-        _useStoreKeyRange = kafkaOptions?.UseStoreKeyRange ?? true;
-        _useStorePrefixScan = kafkaOptions?.UseStorePrefixScan ?? false;
-        _useStoreReverse = kafkaOptions?.UseStoreReverse ?? true;
-        _useStoreReverseKeyRange = kafkaOptions?.UseStoreReverseKeyRange ?? true;
+        _kefcoreOptions = queryCompilationContext.ContextOptions.FindExtension<KEFCoreOptionsExtension>();
     }
 
     /// <summary>
@@ -82,11 +74,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         _projectionBindingExpressionVisitor = new KEFCoreProjectionBindingExpressionVisitor(this, _expressionTranslator);
         _model = parentVisitor._model;
 
-        _useStoreSingleKeyLookup = parentVisitor._useStoreSingleKeyLookup;
-        _useStoreKeyRange = parentVisitor._useStoreKeyRange;
-        _useStorePrefixScan = parentVisitor._useStorePrefixScan;
-        _useStoreReverse = parentVisitor._useStoreReverse;
-        _useStoreReverseKeyRange = parentVisitor._useStoreReverseKeyRange;
+        _kefcoreOptions = parentVisitor._kefcoreOptions;
     }
 
     /// <summary>
@@ -683,12 +671,12 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         switch (kefcoreQueryExpression.ServerQueryExpression)
         {
-            case KEFCoreTableExpression tableExpression when _useStoreReverse:
+            case KEFCoreTableExpression tableExpression when tableExpression.EntityType.GetUseStoreReverse(_kefcoreOptions!):
                 kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseTableExpression(tableExpression.EntityType));
                 break;
 
-            case KEFCoreRangeTableExpression range when _useStoreReverseKeyRange:
+            case KEFCoreRangeTableExpression range when range.EntityType.GetUseStoreReverseKeyRange(_kefcoreOptions!):
                 kefcoreQueryExpression.UpdateServerQueryExpression(
                     new KEFCoreReverseRangeTableExpression(
                         range.EntityType,
@@ -1187,7 +1175,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             var translatedPredicate = TranslateLambdaExpression(source, predicate, preserveType: true);
             if (translatedPredicate != null)
             {
-                if (_useStoreSingleKeyLookup && TryExtractPrimaryKeyLookup(
+                if (tableExpression.EntityType.GetUseStoreSingleKeyLookup(_kefcoreOptions!) && TryExtractPrimaryKeyLookup(
                         tableExpression.EntityType,
                         translatedPredicate,
                         out var keyExpressions))
@@ -1198,7 +1186,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                     return source;
                 }
 
-                if (_useStoreKeyRange && TryExtractKeyRange(
+                if (tableExpression.EntityType.GetUseStoreKeyRange(_kefcoreOptions!) && TryExtractKeyRange(
                         tableExpression.EntityType,
                         translatedPredicate,
                         out var rangeStart,
@@ -1210,7 +1198,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
                     return source;
                 }
 
-                if (_useStorePrefixScan && TryExtractPrefixScan(
+                if (tableExpression.EntityType.GetUseStorePrefixScan(_kefcoreOptions!) && TryExtractPrefixScan(
                         tableExpression.EntityType,
                         translatedPredicate,
                         out var prefixProperties,

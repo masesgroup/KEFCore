@@ -19,6 +19,9 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
+using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using MASES.KNet.Common;
+using Org.Apache.Kafka.Common.Config;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
@@ -68,21 +71,124 @@ public static class KEFCoreEntityTypeExtensions
         return $"{options.ApplicationId}_{entityType.Name}";
     }
     /// <summary>
-    /// Gets replication factor
-    /// </summary>
-    public static short ReplicationFactor(this IEntityType entityType, KEFCoreOptionsExtension options)
-    {
-        var replicationFactor = options.DefaultReplicationFactor;
-        return replicationFactor;
-    }
-    /// <summary>
-    /// Gets number of partitions
+    /// Returns the number of partitions for the Kafka topic associated with this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.NumPartitions"/> annotation first,
+    /// falling back to <see cref="IKEFCoreSingletonOptions.DefaultNumPartitions"/>.
     /// </summary>
     public static int NumPartitions(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.NumPartitions)?.Value as int?
+           ?? options.DefaultNumPartitions;
+
+    /// <summary>
+    /// Returns the replication factor for the Kafka topic associated with this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.ReplicationFactor"/> annotation first,
+    /// falling back to <see cref="IKEFCoreSingletonOptions.DefaultReplicationFactor"/>.
+    /// </summary>
+    public static short ReplicationFactor(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ReplicationFactor)?.Value as short?
+           ?? options.DefaultReplicationFactor;
+
+    /// <summary>
+    /// Returns the per-entity topic retention in bytes, or <see langword="null"/> if not set.
+    /// When <see langword="null"/>, the global <see cref="IKEFCoreSingletonOptions.TopicConfig"/> applies.
+    /// </summary>
+    public static long? GetTopicRetentionBytes(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicRetentionBytes)?.Value as long?;
+
+    /// <summary>
+    /// Returns the per-entity topic retention in milliseconds, or <see langword="null"/> if not set.
+    /// When <see langword="null"/>, the global <see cref="IKEFCoreSingletonOptions.TopicConfig"/> applies.
+    /// </summary>
+    public static long? GetTopicRetentionMs(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.TopicRetentionMs)?.Value as long?;
+
+    /// <summary>
+    /// Returns whether this entity type is read-only.
+    /// Returns <see langword="true"/> if <see cref="KEFCoreReadOnlyAttribute"/> is applied
+    /// or if the context-level <see cref="KEFCoreOptionsExtension.ReadOnlyMode"/> is enabled.
+    /// </summary>
+    public static bool GetReadOnly(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ReadOnly)?.Value as bool? ?? false
+           || options.ReadOnlyMode;
+
+    /// <summary>
+    /// Returns whether prefix scan optimization is enabled for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.UseStorePrefixScan"/> annotation first,
+    /// falling back to <see cref="KEFCoreOptionsExtension.UseStorePrefixScan"/>.
+    /// </summary>
+    public static bool GetUseStorePrefixScan(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.UseStorePrefixScan)?.Value as bool?
+           ?? options.UseStorePrefixScan;
+
+    /// <summary>
+    /// Returns whether single key look-up optimization is enabled for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.UseStoreSingleKeyLookup"/> annotation first,
+    /// falling back to <see cref="KEFCoreOptionsExtension.UseStoreSingleKeyLookup"/>.
+    /// </summary>
+    public static bool GetUseStoreSingleKeyLookup(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.UseStoreSingleKeyLookup)?.Value as bool?
+           ?? options.UseStoreSingleKeyLookup;
+
+    /// <summary>
+    /// Returns whether key range look-up optimization is enabled for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.UseStoreKeyRange"/> annotation first,
+    /// falling back to <see cref="KEFCoreOptionsExtension.UseStoreKeyRange"/>.
+    /// </summary>
+    public static bool GetUseStoreKeyRange(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.UseStoreKeyRange)?.Value as bool?
+           ?? options.UseStoreKeyRange;
+
+    /// <summary>
+    /// Returns whether reverse iteration optimization is enabled for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.UseStoreReverse"/> annotation first,
+    /// falling back to <see cref="KEFCoreOptionsExtension.UseStoreReverse"/>.
+    /// </summary>
+    public static bool GetUseStoreReverse(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.UseStoreReverse)?.Value as bool?
+           ?? options.UseStoreReverse;
+
+    /// <summary>
+    /// Returns whether reverse key range look-up optimization is enabled for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.UseStoreReverseKeyRange"/> annotation first,
+    /// falling back to <see cref="KEFCoreOptionsExtension.UseStoreReverseKeyRange"/>.
+    /// </summary>
+    public static bool GetUseStoreReverseKeyRange(this IEntityType entityType, KEFCoreOptionsExtension options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.UseStoreReverseKeyRange)?.Value as bool?
+           ?? options.UseStoreReverseKeyRange;
+
+    /// <summary>
+    /// Builds the <see cref="TopicConfigBuilder"/> for this entity type, merging the global
+    /// <see cref="IKEFCoreSingletonOptions.TopicConfig"/> with any per-entity retention
+    /// overrides set via <see cref="KEFCoreTopicRetentionAttribute"/> or
+    /// <see cref="KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicRetention"/>.
+    /// Per-entity values take precedence over the global config.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="TopicConfigBuilder"/> ready to pass to
+    /// <see cref="KEFCoreClusterAdmin.CreateTopic"/> via <see cref="MASES.KNet.GenericConfigBuilder{T}.ToMap"/>.
+    /// </returns>
+    public static TopicConfigBuilder BuildTopicConfig(
+        this IEntityType entityType, KEFCoreOptionsExtension options)
     {
-        var numPartitions = options.DefaultNumPartitions;
-        return numPartitions;
+        var builder = TopicConfigBuilder.CreateFrom(options.TopicConfig) ?? new TopicConfigBuilder();
+
+        builder.CleanupPolicy = options.UseDeletePolicyForTopic
+            ? TopicConfigBuilder.CleanupPolicyTypes.Compact | TopicConfigBuilder.CleanupPolicyTypes.Delete
+            : TopicConfigBuilder.CleanupPolicyTypes.Compact;
+
+        var retentionBytes = entityType.GetTopicRetentionBytes();
+        if (retentionBytes.HasValue)
+        {
+            builder.RetentionBytes = (int)retentionBytes.Value; // force to int, open issue on KNet
+        }
+        var retentionMs = entityType.GetTopicRetentionMs();
+        if (retentionMs.HasValue)
+        {
+            builder.RetentionMs = (int)retentionMs.Value; // force to int, open issue on KNet
+        }
+        return builder;
     }
+
     /// <summary>
     /// Gets consumer instances
     /// </summary>
