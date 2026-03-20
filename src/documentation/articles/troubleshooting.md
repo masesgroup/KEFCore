@@ -131,3 +131,15 @@ Caused by: java.lang.NullPointerException: Cannot invoke "java.lang.Long.longVal
 > Related issues: [KEFCore#448](https://github.com/masesgroup/KEFCore/issues/448), [KNet#1058](https://github.com/masesgroup/KNet/issues/1058), [JNet#856](https://github.com/masesgroup/JNet/issues/856). All are manifestations of the same underlying JVM↔CLR boundary issue documented in [JCOBridgePublic#24](https://github.com/masesgroup/JCOBridgePublic/issues/24).
 
 See [conventions](conventions.md#event-management-convention) for how to configure event management per entity.
+
+---
+
+### `EnsureSynchronized` never returns when using transactional producers
+
+**Symptom**: After `tx.Commit()`, `EnsureSynchronized` blocks indefinitely or returns `false` even though all data was written correctly.
+
+**Cause**: Kafka transactional producers write control records (commit/abort markers) to the topic in addition to data records. `ListOffsets` HEAD includes these markers — for example 5 data records produce offsets 0-4 plus a commit marker at offset 5, so `ListOffsets` returns 6. If `EnsureSynchronized` uses `ListOffsets` to set the expected offset, the local Streams store will never report offset 6 (the marker is a control record, not a data record), causing the synchronization wait to loop indefinitely.
+
+**Solution**: KEFCore automatically skips the `LatestOffsetForEntity` call in `EnsureSynchronized` for entity types that belong to a transaction group — the expected offset is set by `CommitPendingOffsets` via `PartitionOffsetWritten` immediately after `CommitTransaction()`, using only the actual data record offsets. No user action required.
+
+**If you still see this issue**: verify that `isolation.level = read_committed` is set in the `StreamsConfig` of the consuming application. Without it, the Streams consumer will not correctly process the commit marker and the local offset tracking may diverge.

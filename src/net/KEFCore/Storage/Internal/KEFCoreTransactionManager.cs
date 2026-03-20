@@ -26,70 +26,47 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KEFCoreTransactionManager : IDbContextTransactionManager, ITransactionEnlistmentManager
+public class KEFCoreTransactionManager(IDiagnosticsLogger<DbLoggerCategory.Database.Transaction> logger) : IDbContextTransactionManager, ITransactionEnlistmentManager
 {
     private static readonly KEFCoreTransaction StubTransaction = new();
-
-    private readonly IDiagnosticsLogger<DbLoggerCategory.Database.Transaction> _logger;
-    /// <summary>
-    /// Default initializer
-    /// </summary>
-    public KEFCoreTransactionManager(
-        IDiagnosticsLogger<DbLoggerCategory.Database.Transaction> logger)
-    {
-        _logger = logger;
-    }
+    private KEFCoreTransaction? _currentTransaction;
     /// <inheritdoc/>
     public virtual IDbContextTransaction BeginTransaction()
     {
-        _logger.TransactionIgnoredWarning();
-
-        return StubTransaction;
+        // crea la transazione lazy — Begin() verrà chiamato da ExecuteTransaction
+        _currentTransaction = new KEFCoreTransaction();
+        return _currentTransaction;
     }
     /// <inheritdoc/>
     public virtual Task<IDbContextTransaction> BeginTransactionAsync(
         CancellationToken cancellationToken = default)
-    {
-        _logger.TransactionIgnoredWarning();
-
-        return Task.FromResult<IDbContextTransaction>(StubTransaction);
-    }
+        => Task.FromResult<IDbContextTransaction>(BeginTransaction());
     /// <inheritdoc/>
     public virtual void CommitTransaction()
-        => _logger.TransactionIgnoredWarning();
+        => _currentTransaction?.Commit();
     /// <inheritdoc/>
     public virtual Task CommitTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        _logger.TransactionIgnoredWarning();
-        return Task.CompletedTask;
-    }
+        => _currentTransaction?.CommitAsync(cancellationToken) ?? Task.CompletedTask;
     /// <inheritdoc/>
     public virtual void RollbackTransaction()
-        => _logger.TransactionIgnoredWarning();
+        => _currentTransaction?.Rollback();
     /// <inheritdoc/>
     public virtual Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        _logger.TransactionIgnoredWarning();
-        return Task.CompletedTask;
-    }
+        => _currentTransaction?.RollbackAsync(cancellationToken) ?? Task.CompletedTask;
     /// <inheritdoc/>
-    public virtual IDbContextTransaction? CurrentTransaction
-        => null;
+    public virtual IDbContextTransaction? CurrentTransaction => _currentTransaction;
     /// <inheritdoc/>
-    public virtual Transaction? EnlistedTransaction
-        => null;
+    public virtual Transaction? EnlistedTransaction => null;
     /// <inheritdoc/>
     public virtual void EnlistTransaction(Transaction? transaction)
-        => _logger.TransactionIgnoredWarning();
+        => logger.TransactionIgnoredWarning();
     /// <inheritdoc/>
     public virtual void ResetState()
-    {
-    }
+        => _currentTransaction = null;
     /// <inheritdoc/>
     public virtual Task ResetStateAsync(CancellationToken cancellationToken = default)
     {
         ResetState();
-
         return Task.CompletedTask;
     }
 }

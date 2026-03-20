@@ -48,9 +48,13 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// </summary>
     IUpdateAdapterFactory UpdateAdapterFactory { get; }
     /// <summary>
+    /// Reference to <see cref="IDbContextTransactionManager"/> received
+    /// </summary>
+    IDbContextTransactionManager TransactionManager { get; }
+    /// <summary>
     /// Reference to the set of <see cref="IKEFCoreTable"/> associated
     /// </summary>
-    IReadOnlyList<IKEFCoreTable> Tables { get; }
+    IReadOnlyList <IKEFCoreTable> Tables { get; }
     /// <summary>
     /// Register <see cref="IKEFCoreTable"/> in this instance
     /// </summary>

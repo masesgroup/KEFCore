@@ -19,6 +19,8 @@
 #nullable enable
 
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
+using MASES.EntityFrameworkCore.KNet.Metadata;
 using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
@@ -130,4 +132,27 @@ public interface IEntityTypeProducer<TKey> : IEntityTypeProducer where TKey : no
     /// </summary>
     /// <param name="keyValues">The key values to manage</param>
     void TryAddKey(object[] keyValues);
+}
+/// <summary>
+/// Extends <see cref="IEntityTypeProducer"/> with Kafka transactional producer support.
+/// Implemented only by entity type producers that belong to a transaction group
+/// declared via <see cref="KEFCoreTransactionalAttribute"/> or <see cref="KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTransactionGroup"/>.
+/// </summary>
+public interface ITransactionalEntityTypeProducer : IEntityTypeProducer
+{
+    /// <summary>
+    /// The transaction group this producer belongs to.
+    /// </summary>
+    string TransactionGroup { get; }
+
+    /// <summary>
+    /// Forwards accumulated pending offsets to <see cref="IStreamsManager"/>
+    /// after a Kafka transaction commit.
+    /// </summary>
+    void CommitPendingOffsets();
+
+    /// <summary>
+    /// Discards accumulated pending offsets after a Kafka transaction abort.
+    /// </summary>
+    void AbortPendingOffsets();
 }

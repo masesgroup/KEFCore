@@ -247,4 +247,24 @@ public static class KEFCoreEntityTypeBuilderExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// Assigns this entity type to a Kafka transaction group, enabling exactly-once semantics
+    /// for all entity types sharing the same <paramref name="transactionGroup"/>.
+    /// Equivalent to applying <see cref="KEFCoreTransactionalAttribute"/> on the entity class.
+    /// </summary>
+    /// <param name="builder">The <see cref="EntityTypeBuilder"/> to configure.</param>
+    /// <param name="transactionGroup">
+    /// The transaction group name. All entity types sharing this name will participate
+    /// in the same Kafka transaction. Must be non-empty.
+    /// </param>
+    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    public static EntityTypeBuilder HasKEFCoreTransactionGroup(
+        this EntityTypeBuilder builder, string transactionGroup)
+    {
+        if (string.IsNullOrWhiteSpace(transactionGroup))
+            throw new ArgumentException("Transaction group name must be non-empty.", nameof(transactionGroup));
+        builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.TransactionGroup, transactionGroup);
+        return builder;
+    }
 }

@@ -47,8 +47,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
 
                 ProgramConfig.Config.ApplyOnContext(context);
 
-                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
-
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
                     ProgramConfig.ReportString("Process EnsureDeleted");

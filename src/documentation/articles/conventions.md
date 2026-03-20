@@ -331,3 +331,79 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 > [!TIP]
 > When setting `Retries` > 0, also set `MaxInFlightRequestsPerConnection = 1` to preserve message ordering on retry. See [Kafka producer documentation](https://kafka.apache.org/documentation/#producerconfigs) for the full list of producer configuration options.
+
+## Transactional producer convention
+
+`KEFCoreTransactionalConvention` resolves per-entity Kafka transaction group configuration at model finalization time. Entity types assigned to the same group share a single transactional `KafkaProducer` with exactly-once semantics — writes from a `SaveChanges` call involving those entities are committed or aborted atomically at the Kafka level.
+
+Entity types without this attribute use the standard non-transactional producer path unchanged.
+
+### How it works
+
+- Each transaction group gets a dedicated `KafkaProducer` with `transactional.id = "{ApplicationId}.{transactionGroup}"`, stable across application restarts
+- `BeginTransaction()` is lazy — the Kafka transaction starts only when `SaveChanges` identifies which groups are actually involved in the current operation
+- After `SaveChanges`, the user calls `tx.Commit()` or `tx.Rollback()` to commit or abort all groups atomically
+- `EnsureSynchronized` works correctly — `PartitionOffsetWritten` is called only after `CommitTransaction()`, when records become visible to the Streams consumer
+
+### Usage examples
+
+```csharp
+// Attribute — Order and OrderLine participate in the same Kafka transaction
+[KEFCoreTransactionalAttribute(transactionGroup: "OrderGroup")]
+[Table("Order")]
+public class Order { ... }
+
+[KEFCoreTransactionalAttribute(transactionGroup: "OrderGroup")]
+[Table("OrderLine")]
+public class OrderLine { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Order>().HasKEFCoreTransactionGroup("OrderGroup");
+    modelBuilder.Entity<OrderLine>().HasKEFCoreTransactionGroup("OrderGroup");
+}
+
+// Usage — standard EF Core transaction pattern
+KEFCore.CreateGlobalInstance();
+
+using var context = new OrderContext()
+{
+    BootstrapServers = "MY-KAFKA-BROKER:9092",
+    ApplicationId = "MyApp",
+};
+context.Database.EnsureCreated();
+
+using var tx = context.Database.BeginTransaction();
+try
+{
+    context.Add(new Order { ... });
+    context.Add(new OrderLine { ... });
+    context.SaveChanges();
+    tx.Commit();   // → CommitTransaction() on the Kafka transactional producer
+}
+catch
+{
+    tx.Rollback(); // → AbortTransaction() — records not visible to consumers
+    throw;
+}
+```
+
+> [!IMPORTANT]
+> All entity types in a transaction group must be part of the same `SaveChanges` call. Kafka transactions do not span multiple `SaveChanges` calls.
+
+> [!NOTE]
+> The transactional producer is automatically configured with the settings required by Kafka for exactly-once semantics:
+> - `transactional.id = "{ApplicationId}.{transactionGroup}"`
+> - `acks = all`
+> - `enable.idempotence = true`
+> - `retries = Int32.MaxValue`
+> - `max.in.flight.requests.per.connection = 1`
+>
+> These settings cannot be overridden via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` for transactional producers.
+
+> [!NOTE]
+> `UseKeyByteBufferDataTransfer` and `UseValueContainerByteBufferDataTransfer` are singleton options — the transactional producer type (`byte[]` vs `ByteBuffer`) follows the global setting and cannot be overridden per group.
+
+> [!NOTE]
+> Consumers reading from topics written by transactional producers must set `isolation.level = read_committed` to correctly filter aborted transactions. Verify the `StreamsConfig` for the consuming application.

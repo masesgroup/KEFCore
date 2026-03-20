@@ -359,6 +359,10 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
 
+      - name: Execute only reload Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Transaction.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBTransaction /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000
+
       - uses: actions/upload-artifact@v7
         with:
           if-no-files-found: ignore

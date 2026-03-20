@@ -26,11 +26,11 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -53,6 +53,9 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IKEFCoreDatabase, IKEFCoreDatabase> _registeredDatabases = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IStreamsManager> _streamsForApplications = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
+
+    private readonly ConcurrentDictionary<string, (Properties, IProducer)> _transactionalProducers = new();
+    private readonly ConcurrentDictionary<string, System.Collections.Generic.List<ITransactionalEntityTypeProducer>> _producersByGroup = new();
 
     /// <inheritdoc/>
     public virtual void Dispose()
@@ -596,32 +599,42 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger, out var readOnlyViolations);
 
+        var currentTx = database.TransactionManager?.CurrentTransaction as KEFCoreTransaction;
+        if (currentTx != null)
+        {
+            var groups = entries
+                .Select(e => e.EntityType.GetTransactionGroup())
+                .OfType<string>()
+                .Distinct()
+                .ToList();
+            if (groups.Count > 0)
+            {
+                currentTx.Begin(groups, database.Cluster);
+            }
+        }
+
         System.Collections.Generic.List<Future<RecordMetadata>> futures = [];
         foreach (var tableData in dataInTransaction)
         {
             tableData.Key.Commit(futures, tableData.Value);
         }
 
-        try
+        if (readOnlyViolations?.Count > 0)
         {
-            return futures.Select(obj => Task.Run(() =>
+            updateLogger.Logger?.LogWarning("SaveChanges completed but {Count} entries were skipped because their entity types are read-only: {Types}.",
+                                            readOnlyViolations.Count, string.Join(", ", readOnlyViolations));
+        }
+
+        return futures.Select(obj => Task.Run(() =>
+        {
+            try
             {
-                try
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    return obj.Get();
-                }
-                catch (ExecutionException ex) { throw ex.InnerException; }
-                catch (OperationCanceledException) { return null; }
-            }, cancellationToken));
-        }
-        finally
-        {
-            if (readOnlyViolations?.Count > 0)
-                updateLogger.Logger?.LogWarning(
-                    "SaveChanges completed but {Count} entries were skipped because their entity types are read-only: {Types}.",
-                    readOnlyViolations.Count, string.Join(", ", readOnlyViolations));
-        }
+                cancellationToken.ThrowIfCancellationRequested();
+                return obj.Get();
+            }
+            catch (ExecutionException ex) { throw ex.InnerException; }
+            catch (OperationCanceledException) { return null; }
+        }, cancellationToken));
     }
 
     /// <inheritdoc/>
@@ -650,9 +663,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return rowsAffected;
     }
 
-    /// <summary>
-    /// Executes a transaction in async
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
         database.InfrastructureLogger.Logger.LogInformation("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
@@ -673,20 +684,85 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return rowsAffected;
     }
 
-    //// Must be called from inside the lock
-    //private IKEFCoreTable EnsureTable(IKEFCoreDatabase database, IEntityType entityType)
-    //{
-    //    var entityTypes = entityType.GetAllBaseTypesInclusive();
-    //    foreach (var currentEntityType in entityTypes)
-    //    {
-    //        var key = currentEntityType.TopicName();
-    //        _ = _tables.GetOrAdd(key, (k) =>
-    //        {
-    //            database.InfrastructureLogger.Logger.LogInformation("KEFCoreCluster::EnsureTable creating table for {Name}", entityType.Name);
-    //            return tableFactory.Create(database, k, currentEntityType);
-    //        });
-    //    }
+    /// <inheritdoc/>
+    public IProducer GetOrCreateTransactionalProducer(string transactionGroup, ITransactionalEntityTypeProducer entityTypeProducer)
+    {
+        _producersByGroup.GetOrAdd(transactionGroup, _ => new()).Add(entityTypeProducer);
 
-    //    return _tables[entityType.TopicName()];
-    //}
+        var tmp = _transactionalProducers.GetOrAdd(transactionGroup, group =>
+        {
+            var config = options.ProducerOptionsBuilder();
+            config.TransactionalId = $"{options.ApplicationId}.{group}";
+            config.Acks = ProducerConfigBuilder.AcksTypes.All;
+            config.EnableIdempotence = true;
+            config.Retries = int.MaxValue;
+            config.MaxInFlightRequestPerConnection = 1;
+
+            string baSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
+            string bbSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
+
+            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? bbSerdesName : baSerdesName;
+            config.ValueSerializerClass = options.UseValueContainerByteBufferDataTransfer ? bbSerdesName : baSerdesName;
+
+            var jvmKeyType = options.UseKeyByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
+            var jvmValueType = options.UseValueContainerByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
+
+            var properties = config.ToProperties();
+            var producerType = typeof(KafkaProducer<,>).MakeGenericType(jvmKeyType, jvmValueType);
+            var producer = (IProducer)Activator.CreateInstance(producerType, properties)!;
+
+            producer.InitTransactions();
+            InfrastructureLogger.Logger?.LogInformation("Created transactional producer for group '{Group}' with transactional.id '{TransactionalId}'", group, config.TransactionalId);
+            return (properties, producer);
+        });
+        return tmp.Item2;
+    }
+
+    /// <inheritdoc/>
+    public void BeginTransactions(string transactionGroup)
+    {
+        if (_transactionalProducers.TryGetValue(transactionGroup, out var producer))
+        {
+            producer.Item2.BeginTransaction();
+        }
+        else throw new InvalidOperationException($"No transactional producer found for group '{transactionGroup}'.");
+    }
+
+    /// <inheritdoc/>
+    public void CommitTransactions(string transactionGroup)
+    {
+        if (!_transactionalProducers.TryGetValue(transactionGroup, out var producer))
+        {
+            throw new InvalidOperationException($"No transactional producer found for group '{transactionGroup}'.");
+        }
+
+        producer.Item2.CommitTransaction();
+
+        if (_producersByGroup.TryGetValue(transactionGroup, out var producers))
+        {
+            foreach (var p in producers)
+            {
+                p.CommitPendingOffsets();
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    public void AbortTransactions(string transactionGroup)
+    {
+        if (!_transactionalProducers.TryGetValue(transactionGroup, out var producer))
+        {
+            throw new InvalidOperationException($"No transactional producer found for group '{transactionGroup}'.");
+        }
+
+        producer.Item2.AbortTransaction();
+
+        if (_producersByGroup.TryGetValue(transactionGroup, out var producers))
+        {
+            foreach (var p in producers)
+            {
+                p.AbortPendingOffsets();
+            }
+        }
+    }
 }

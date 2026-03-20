@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using System.Transactions;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -34,6 +35,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     private readonly IUpdateAdapterFactory _updateAdapterFactory;
     private readonly IKEFCoreCluster _cluster;
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
+    private readonly IDbContextTransactionManager _transactionManager;
     private readonly List<IKEFCoreTable> _tables;
     /// <summary>
     /// Default initializer
@@ -45,7 +47,8 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         IDbContextOptions options,
         IDesignTimeModel designTimeModel,
         IUpdateAdapterFactory updateAdapterFactory,
-        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+        IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger,
+        IDbContextTransactionManager transactionManager)
         : base(dependencies)
     {
         _clusterCache = clusterCache;
@@ -54,6 +57,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         _designTimeModel = designTimeModel;
         _updateAdapterFactory = updateAdapterFactory;
         _updateLogger = updateLogger;
+        _transactionManager = transactionManager;
         _tables = [];
         _cluster = _clusterCache.CreateCluster(_options);
     }
@@ -77,6 +81,8 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     public virtual IDesignTimeModel DesignTimeModel => _designTimeModel;
     /// <inheritdoc/>
     public virtual IUpdateAdapterFactory UpdateAdapterFactory => _updateAdapterFactory;
+    /// <inheritdoc/>
+    public virtual IDbContextTransactionManager TransactionManager => _transactionManager;
     /// <inheritdoc/>
     public virtual IReadOnlyList<IKEFCoreTable> Tables => _tables;
     /// <inheritdoc/>

@@ -16,8 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Org.Apache.Kafka.Clients.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -124,4 +124,30 @@ public interface IKEFCoreCluster : IDisposable
     /// Executes a transaction in async
     /// </summary>
     Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Returns or creates the transactional <see cref="Org.Apache.Kafka.Clients.Producer.KafkaProducer{K,V}"/>
+    /// for the given <paramref name="transactionGroup"/>, calling <c>InitTransactions()</c> on first creation.
+    /// Registers <paramref name="entityTypeProducer"/> in the group in the same call.
+    /// </summary>
+    /// <param name="transactionGroup">The transaction group name.</param>
+    /// <param name="entityTypeProducer">The <see cref="ITransactionalEntityTypeProducer"/> joining the group.</param>
+    /// <returns>The shared transactional producer for the group.</returns>
+    IProducer GetOrCreateTransactionalProducer(string transactionGroup, ITransactionalEntityTypeProducer entityTypeProducer);
+
+    /// <summary>
+    /// Calls <c>BeginTransaction()</c> on the transactional producer for <paramref name="transactionGroup"/>.
+    /// </summary>
+    void BeginTransactions(string transactionGroup);
+
+    /// <summary>
+    /// Calls <c>CommitTransaction()</c> on the transactional producer for <paramref name="transactionGroup"/>,
+    /// then calls <c>CommitPendingOffsets()</c> on all <see cref="IEntityTypeProducer"/> registered in the group.
+    /// </summary>
+    void CommitTransactions(string transactionGroup);
+
+    /// <summary>
+    /// Calls <c>AbortTransaction()</c> on the transactional producer for <paramref name="transactionGroup"/>,
+    /// then calls <c>AbortPendingOffsets()</c> on all <see cref="IEntityTypeProducer"/> registered in the group.
+    /// </summary>
+    void AbortTransactions(string transactionGroup);
 }

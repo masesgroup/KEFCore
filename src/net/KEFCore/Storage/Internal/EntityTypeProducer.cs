@@ -60,7 +60,7 @@ readonly struct KEFCoreDatabaseLocalData
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IEntityTypeProducer<TKey>
+public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : IEntityTypeProducer<TKey>, ITransactionalEntityTypeProducer
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
 {
@@ -72,6 +72,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         public override void OnCompletion(RecordMetadata arg0, JVMBridgeException arg1)
         {
             _result?.Invoke(_entityTypeProducer, arg0.Partition(), arg0.HasOffset() ? arg0.Offset() : null, arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null, arg1);
+        }
+    }
+
+    class TransactionalCallback(ConcurrentQueue<(string topicName, int partition, long offset, JVMBridgeException? exception)> pendingOffsets) : Callback
+    {
+        public override void OnCompletion(RecordMetadata metadata, JVMBridgeException error)
+        {
+            pendingOffsets.Enqueue((metadata.Topic(), metadata.Partition(), metadata.Offset(), error));
         }
     }
 
@@ -93,6 +101,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
+
+    private readonly IProducer? _transactionalProducer;
+    private readonly string? _transactionGroup;
+    private readonly ConcurrentQueue<(string topicName, int partition, long offset, JVMBridgeException? exception)> _pendingOffsets = new();
+    private readonly TransactionalCallback? _transactionalCallback;
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? knetCompactedReplicator) : IEnumerable<ValueBuffer>
@@ -286,9 +299,18 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                                                  : KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>.Create(db.Cluster, db.Options);
             });
 
-            _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
-            _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType.BuildProducerConfig(_database.Options), _keySerdes, _valueSerdes);
-            _kafkaProducer.SetCallback(_producerCallback);
+            _transactionGroup = _entityType.GetTransactionGroup();
+            if (_transactionGroup != null)
+            {
+                _transactionalProducer = _database.Cluster.GetOrCreateTransactionalProducer(_transactionGroup, this);
+                _transactionalCallback = new TransactionalCallback(_pendingOffsets);
+            }
+            else
+            {
+                _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
+                _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType.BuildProducerConfig(_database.Options), _keySerdes, _valueSerdes);
+                _kafkaProducer.SetCallback(_producerCallback);
+            }
             _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory)
                                                            : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
         }
@@ -418,19 +440,22 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 _knetCompactedReplicator?[record.GetKey<TKey>()] = value!;
             }
         }
-        else
+        else if (_transactionalProducer != null)
         {
+            var txProducer = (IProducer<TJVMKey, TJVMValueContainer>)_transactionalProducer;
             foreach (var record in records)
             {
-                Future<RecordMetadata> future;
-#if OLD_WAY
-                var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
-                future = _kafkaProducer?.Send(newRecord);
-                futures.Add(future!);
-#else
+                var topicName = record.AssociatedTopicName;
                 if (record.EntityState == EntityState.Deleted)
                 {
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, record.GetKey<TKey>(), null!)!;
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
+                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
+                    var future = txProducer.Send(kRecord, _transactionalCallback);
                     futures?.Add(future);
                 }
                 else
@@ -440,10 +465,43 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                    var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
+                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
+                    var future = txProducer.Send(kRecord, _transactionalCallback);
                     futures?.Add(future);
                 }
+            }
+        }
+        else
+        {
+            foreach (var record in records)
+            {
+                Future<RecordMetadata> future;
+#if OLD_WAY
+                var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
+                future = _kafkaProducer?.Send(newRecord);
+#else
+                if (record.EntityState == EntityState.Deleted)
+                {
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), null!, headers)!;
+                }
+                else
+                {
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                }
 #endif
+                futures?.Add(future);
             }
 
             _kafkaProducer?.Flush();
@@ -459,6 +517,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
             _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
             _knetCompactedReplicator?.Dispose();
+        }
+        else if (_transactionalProducer != null)
+        {
+            _transactionalCallback?.Dispose();
+            _pendingOffsets.Clear();
         }
         else
         {
@@ -563,12 +626,24 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private static void UpdateFromCommit(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> producer, int partiton, long? offset, DateTime? timestamp, JVMBridgeException error)
     {
-        if (offset.HasValue) producer._streamsManager!.PartitionOffsetWritten(producer.EntityType, partiton, offset.Value);
+        if (offset.HasValue) producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partiton, offset.Value);
     }
 
-    /// <summary>
-    /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
-    /// </summary>
+    /// <inheritdoc/>
+    string ITransactionalEntityTypeProducer.TransactionGroup => _transactionGroup!;
+
+    /// <inheritdoc/>
+    void ITransactionalEntityTypeProducer.CommitPendingOffsets()
+    {
+        while (_pendingOffsets.TryDequeue(out var item))
+        {
+            _streamsManager!.PartitionOffsetWritten(item.topicName, item.partition, item.offset);
+        }
+    }
+    /// <inheritdoc/>
+    void ITransactionalEntityTypeProducer.AbortPendingOffsets() => _pendingOffsets.Clear();
+
+    /// <inheritdoc/>
     public bool? EnsureSynchronized(long timeout)
     {
         if (_streamData != null) return _streamsManager!.EnsureSynchronized(_entityType, timeout);
@@ -622,4 +697,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);
         }
     }
+
+
 }

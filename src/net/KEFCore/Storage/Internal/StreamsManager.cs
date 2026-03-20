@@ -79,12 +79,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// </summary>
         bool StopTopology();
         /// <summary>
-        /// Invoked when a new partiton/offset is received for <paramref name="entity"/>
+        /// Invoked when a new partiton/offset is received for <paramref name="topic"/>
         /// </summary>
-        /// <param name="entity">The <see cref="IEntityType"/></param>
+        /// <param name="topic">The topic associated to the <see cref="IEntityType"/></param>
         /// <param name="partition">The partiton where the data was stored</param>
         /// <param name="offset">The offset received</param>
-        void PartitionOffsetWritten(IEntityType entity, int partition, long offset);
+        void PartitionOffsetWritten(string topic, int partition, long offset);
         /// <summary>
         /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
         /// </summary>
@@ -635,13 +635,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         }
 
         /// <inheritdoc/>
-        public void PartitionOffsetWritten(IEntityType entity, int partition, long offset)
+        public void PartitionOffsetWritten(string topic, int partition, long offset)
         {
-            if (_storagesForEntities.TryGetValue(entity.GetKEFCoreTopicName(), out var storage))
+            if (_storagesForEntities.TryGetValue(topic, out var storage))
             {
                 storage.UpdateCurrentRemoteKnownPartitionOffset(partition, offset);
             }
-            else throw new InvalidOperationException($"{entity} not found in managed entities.");
+            else throw new InvalidOperationException($"{topic} not found in managed entities.");
         }
 
         /// <inheritdoc/>
@@ -655,8 +655,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             if (_storagesForEntities.TryGetValue(entity.GetKEFCoreTopicName(), out var storage))
             {
-                var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entity);
-                storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
+                if (entity.GetTransactionGroup() == null)
+                {
+                    var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entity);
+                    storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
+                }
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _freshDataFromCluster.IsEmpty; // and all data are processed
             }

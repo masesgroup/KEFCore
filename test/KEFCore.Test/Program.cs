@@ -18,10 +18,8 @@
 
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
-using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -47,8 +45,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Start();
                 context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
-
-                context.RegisterComplexTypeConverter(typeof(TaxInfoExtendedConverter));
 
                 if (ProgramConfig.Config.ManageEvents)
                 {
