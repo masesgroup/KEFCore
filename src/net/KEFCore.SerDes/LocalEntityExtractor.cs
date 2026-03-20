@@ -19,13 +19,14 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
+using Org.Apache.Kafka.Common.Header;
 using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization;
 
 interface ILocalEntityExtractor<TJVMKey, TJVMValueContainer>
 {
-    object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch);
+    object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, Headers? headers, bool throwUnmatch);
 }
 
 class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, TKeySerDesSelectorType, TValueContainerSerDesSelectorType>
@@ -35,65 +36,77 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
     where TKeySerDesSelectorType : class, ISerDesSelector<TKey>, new()
     where TValueContainerSerDesSelectorType : class, ISerDesSelector<TValueContainer>, new()
 {
-    static ConcurrentDictionary<(Type, Type), ISerDes<TKey, TJVMKey>> _keySerdeses = new();
-    static ConcurrentDictionary<(Type, Type), ISerDes<TValueContainer, TJVMValueContainer>> _valueSerdeses = new();
+    static readonly ConcurrentDictionary<(Type, Type), ISerDes<TKey, TJVMKey>> _keySerdeses = new();
+    static readonly ConcurrentDictionary<(Type, Type), ISerDes<TValueContainer, TJVMValueContainer>> _valueSerdeses = new();
 
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
     private readonly IComplexTypeConverterFactory? _complexTypeFactory;
+    private readonly IModel? _model;
 
     public LocalEntityExtractor()
     {
-        _keySerdes = _keySerdeses.GetOrAdd((typeof(TKeySerDesSelectorType), typeof(TJVMKey)), (o) => { return new TKeySerDesSelectorType().NewSerDes<TJVMKey>(); });
-        _valueSerdes = _valueSerdeses.GetOrAdd((typeof(TValueContainerSerDesSelectorType), typeof(TValueContainer)), (o) => { return new TValueContainerSerDesSelectorType().NewSerDes<TJVMValueContainer>(); });
+        _keySerdes = _keySerdeses.GetOrAdd((typeof(TKeySerDesSelectorType), typeof(TJVMKey)),
+            _ => new TKeySerDesSelectorType().NewSerDes<TJVMKey>());
+        _valueSerdes = _valueSerdeses.GetOrAdd((typeof(TValueContainerSerDesSelectorType), typeof(TValueContainer)),
+            _ => new TValueContainerSerDesSelectorType().NewSerDes<TJVMValueContainer>());
     }
 
-    public LocalEntityExtractor(IComplexTypeConverterFactory? complexTypeFactory) : base()
+    /// <param name="complexTypeFactory">
+    /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+    /// Obtain it from the KEFCore model builder outside of <see cref="DbContext.OnModelCreating"/>.
+    /// </param>
+    /// <param name="model">
+    /// Optional <see cref="IModel"/> for accurate property mapping via <see cref="IEntityType"/>.
+    /// When provided, <see cref="IEntityType"/> is resolved from the CLR type embedded in the record value.
+    /// </param>
+    public LocalEntityExtractor(IComplexTypeConverterFactory? complexTypeFactory, IModel? model = null) : this()
     {
         _complexTypeFactory = complexTypeFactory;
+        _model = model;
     }
 
-    public object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, bool throwUnmatch)
+    public object GetEntity(string topic, TJVMKey recordKey, TJVMValueContainer recordValue, Headers? headers, bool throwUnmatch)
     {
         if (recordValue == null) throw new ArgumentNullException(nameof(recordValue), "Record value shall be available");
 
-        TValueContainer valueContainer = _valueSerdes?.DeserializeWithHeaders(topic, null, recordValue)!;
-        var entityType = Type.GetType(valueContainer.ClrType, true);
-        if (entityType != null)
+        TValueContainer valueContainer = _valueSerdes?.DeserializeWithHeaders(topic, headers, recordValue)!;
+        var clrType = Type.GetType(valueContainer.ClrType, true);
+        if (clrType != null)
         {
-            var newEntity = Activator.CreateInstance(entityType!);
-            foreach (var property in valueContainer.GetProperties(null))
+            var entityType = _model?.FindEntityType(clrType);
+
+            var newEntity = Activator.CreateInstance(clrType!);
+            foreach (var property in valueContainer.GetProperties(entityType))
             {
-                var propInfo = entityType.GetProperty(property.Key);
+                var propInfo = clrType.GetProperty(property.Key);
                 if (propInfo != null)
                 {
                     if (propInfo.CanWrite)
-                    {
                         propInfo.SetValue(newEntity, property.Value);
-                    }
-                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
+                    else if (throwUnmatch)
+                        throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
                 }
-                else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+                else if (throwUnmatch)
+                    throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }
 
-            foreach (var property in valueContainer.GetComplexProperties(null, _complexTypeFactory))
+            foreach (var property in valueContainer.GetComplexProperties(entityType, _complexTypeFactory))
             {
-                var propInfo = entityType.GetProperty(property.Key);
+                var propInfo = clrType.GetProperty(property.Key);
                 if (propInfo != null)
                 {
                     if (propInfo.CanWrite)
-                    {
                         propInfo.SetValue(newEntity, property.Value);
-                    }
-                    else if (throwUnmatch) throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
+                    else if (throwUnmatch)
+                        throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
                 }
-                else if (throwUnmatch) throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+                else if (throwUnmatch)
+                    throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
             }
 
             return newEntity!;
-
         }
         throw new ArgumentException($"Cannot create an instance of {valueContainer.ClrType}");
     }
 }
-

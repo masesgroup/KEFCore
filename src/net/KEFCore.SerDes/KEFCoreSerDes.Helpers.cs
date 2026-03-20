@@ -26,6 +26,7 @@ using MASES.KNet.Consumer;
 using MASES.KNet.Serialization;
 using Microsoft.IO;
 using Org.Apache.Kafka.Clients.Consumer;
+using Org.Apache.Kafka.Common.Header;
 using Org.Apache.Kafka.Common.Serialization;
 using System.Collections.Concurrent;
 using System.Text;
@@ -614,8 +615,15 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
     /// </summary>
     public class EntityExtractor
     {
+        // cache of (extractor instance, compiled delegate) keyed on
+        // (keyType, valueContainerType, keySerDesType, valueSerDesType, converterFactory, model)
+        // factory and model are part of the key because different combinations produce different behavior
+        private static readonly ConcurrentDictionary<
+            (Type, Type, Type, Type, IComplexTypeConverterFactory?, IModel?),
+            (object Extractor, Func<string, byte[], byte[], Headers?, bool, object> GetEntity)> _extractorCache = new();
+
         /// <summary>
-        /// Extract information for Entity using <paramref name="consumerConfig"/> configurtion within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+        /// Extract information for Entity using <paramref name="consumerConfig"/> configuration within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
         /// </summary>
         /// <param name="consumerConfig">The <see cref="ConsumerConfigBuilder"/> with configuration</param>
         /// <param name="topicName">The topic containing the data</param>
@@ -630,53 +638,86 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <summary>
         /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
         /// </summary>
-        /// <param name="bootstrapServer">The Apache Kafka <see href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</see></param>
+        /// <param name="bootstrapServer">The Apache Kafka bootstrap.servers</param>
         /// <param name="topicName">The topic containing the data</param>
         /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
         /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
         /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
         public static void FromTopic(string bootstrapServer, string topicName, Action<object?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
         {
-            FromTopic<object>(bootstrapServer, topicName, cb, token, onlyLatest);
+            ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create().WithBootstrapServers(bootstrapServer);
+            FromTopic<object>(consumerBuilder, topicName, cb, token, onlyLatest);
         }
+
         /// <summary>
         /// Extract information for Entity from <paramref name="bootstrapServer"/> within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
         /// </summary>
         /// <typeparam name="TEntity">The Entity type if it is known</typeparam>
-        /// <param name="bootstrapServer">The Apache Kafka <see href="https://kafka.apache.org/documentation/#consumerconfigs_bootstrap.servers">bootstrap.servers</see></param>
+        /// <param name="bootstrapServer">The Apache Kafka bootstrap.servers</param>
         /// <param name="topicName">The topic containing the data</param>
         /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
         /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
         /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-        public static void FromTopic<TEntity>(string bootstrapServer, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
+        /// <param name="converterFactory">
+        /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+        /// Obtain it from the KEFCore model builder outside of <see cref="DbContext.OnModelCreating"/>.
+        /// </param>
+        /// <param name="model">
+        /// Optional <see cref="IModel"/> for accurate property mapping and automatic topic name resolution.
+        /// When provided and <paramref name="topicName"/> is not given, the topic name is resolved
+        /// from the model annotation set by the KEFCore topic naming convention.
+        /// </param>
+        public static void FromTopic<TEntity>(string bootstrapServer, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false,
+            IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)
             where TEntity : class
         {
             ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.Create().WithBootstrapServers(bootstrapServer);
-            FromTopic<TEntity>(consumerBuilder, topicName, cb, token, onlyLatest);
+            FromTopic(consumerBuilder, topicName, cb, token, onlyLatest, converterFactory, model);
         }
 
         /// <summary>
-        /// Extract information for Entity using <paramref name="consumerConfig"/> configurtion within a <paramref name="topicName"/> and send them to <paramref name="cb"/>
+        /// Extract information for Entity using <paramref name="consumerConfig"/> configuration within a topic and send them to <paramref name="cb"/>.
+        /// When <paramref name="model"/> is provided and <paramref name="topicName"/> is null, the topic name is resolved
+        /// from the model annotation set by the KEFCore topic naming convention.
         /// </summary>
         /// <typeparam name="TEntity">The Entity type if it is known</typeparam>
         /// <param name="consumerConfig">The <see cref="ConsumerConfigBuilder"/> with configuration</param>
-        /// <param name="topicName">The topic containing the data</param>
+        /// <param name="topicName">
+        /// The topic containing the data. If <see langword="null"/> and <paramref name="model"/> is provided,
+        /// the topic name is resolved automatically from the model.
+        /// </param>
         /// <param name="cb">The <see cref="Action{T1, T2}"/> where data will be available</param>
         /// <param name="token">The <see cref="CancellationToken"/> to use to stop execution</param>
         /// <param name="onlyLatest">Start execution only for newest messages and does not execute for oldest, default is from beginning</param>
-        public static void FromTopic<TEntity>(ConsumerConfigBuilder consumerConfig, string topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false)
+        /// <param name="converterFactory">
+        /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+        /// Obtain it from the KEFCore model builder outside of <see cref="DbContext.OnModelCreating"/>.
+        /// </param>
+        /// <param name="model">
+        /// Optional <see cref="IModel"/> for accurate property mapping and automatic topic name resolution.
+        /// </param>
+        public static void FromTopic<TEntity>(ConsumerConfigBuilder consumerConfig, string? topicName, Action<TEntity?, Exception?> cb, CancellationToken token, bool onlyLatest = false,
+            IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)
             where TEntity : class
         {
+            // resolve topic name from model annotation if not provided explicitly
+            // "KEFCore:TopicName" is the annotation set by KEFCoreTopicNamingConvention.
+            // TODO: replace with entityType.GetKEFCoreTopicName() if/when this class moves to the KEFCore assembly.
+            var resolvedTopic = (!string.IsNullOrWhiteSpace(topicName) ? topicName : null)
+                ?? model?.FindEntityType(typeof(TEntity))?.FindAnnotation("KEFCore:TopicName")?.Value as string
+                ?? model?.FindEntityType(typeof(TEntity))?.Name
+                ?? throw new InvalidOperationException($"Cannot resolve topic name for {typeof(TEntity).Name}. Provide topicName explicitly or pass an IModel.");
+
             try
             {
                 ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfig)
-                                                                             .WithGroupId(Guid.NewGuid().ToString())
-                                                                             .WithAutoOffsetReset(onlyLatest ? ConsumerConfigBuilder.AutoOffsetResetTypes.LATEST : ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
-                                                                             .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
-                                                                             .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
+                    .WithGroupId(Guid.NewGuid().ToString())
+                    .WithAutoOffsetReset(onlyLatest ? ConsumerConfigBuilder.AutoOffsetResetTypes.LATEST : ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
+                    .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
+                    .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
 
-                KafkaConsumer<byte[], byte[]> kafkaConsumer = new KafkaConsumer<byte[], byte[]>(consumerBuilder);
-                using var collection = Collections.Singleton((Java.Lang.String)topicName);
+                KafkaConsumer<byte[], byte[]> kafkaConsumer = new(consumerBuilder);
+                using var collection = Collections.Singleton((Java.Lang.String)resolvedTopic);
                 kafkaConsumer.Subscribe(collection);
 
                 while (!token.IsCancellationRequested)
@@ -688,7 +729,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                         Exception? exception = null;
                         try
                         {
-                            entity = FromRecord<TEntity>(record, true);
+                            entity = FromRecord<TEntity>(record, true, converterFactory, model);
                         }
                         catch (Exception ex)
                         {
@@ -705,22 +746,35 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <summary>
         /// Extract information for Entity from <paramref name="record"/> in input
         /// </summary>
+        /// <typeparam name="TEntity">The Entity type if it is known</typeparam>
         /// <param name="record">The Apache Kafka record containing the information</param>
-        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
+        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve</param>
+        /// <param name="converterFactory">
+        /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+        /// </param>
+        /// <param name="model">
+        /// Optional <see cref="IModel"/> for accurate property mapping via <see cref="IEntityType"/>.
+        /// </param>
         /// <returns>The extracted entity</returns>
-        public static TEntity FromRecord<TEntity>(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
+        public static TEntity FromRecord<TEntity>(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false,
+            IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)
             where TEntity : class
-        {
-            return (TEntity)FromRecord(record, throwUnmatch);
-        }
+            => (TEntity)FromRecord(record, throwUnmatch, converterFactory, model);
 
         /// <summary>
         /// Extract information for Entity from <paramref name="record"/> in input
         /// </summary>
         /// <param name="record">The Apache Kafka record containing the information</param>
-        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
+        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve</param>
+        /// <param name="converterFactory">
+        /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+        /// </param>
+        /// <param name="model">
+        /// Optional <see cref="IModel"/> for accurate property mapping via <see cref="IEntityType"/>.
+        /// </param>
         /// <returns>The extracted entity</returns>
-        public static object FromRecord(Org.Apache.Kafka.Clients.Consumer.ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false)
+        public static object FromRecord(ConsumerRecord<byte[], byte[]> record, bool throwUnmatch = false,
+            IComplexTypeConverterFactory? converterFactory = null, IModel? model = null)
         {
             Type? keySerializerSelectorType = null;
             Type? valueSerializerSelectorType = null;
@@ -758,10 +812,14 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
 
             if (keyType == null || keySerializerSelectorType == null || valueType == null || valueSerializerSelectorType == null)
             {
-                throw new InvalidOperationException($"Missing one, or more, mandatory information in record: keyType: {keyType} - keySerializerType: {keySerializerSelectorType} - valueType: {valueType} - valueSerializerType: {valueSerializerSelectorType}");
+                throw new InvalidOperationException(
+                    $"Missing one, or more, mandatory information in record: keyType: {keyType} - " +
+                    $"keySerializerType: {keySerializerSelectorType} - valueType: {valueType} - " +
+                    $"valueSerializerType: {valueSerializerSelectorType}");
             }
 
-            return FromRawValueData(keyType!, valueType!, keySerializerSelectorType!, valueSerializerSelectorType!, record.Topic(), record.Value(), record.Key(), throwUnmatch);
+            return FromRawValueData(keyType!, valueType!, keySerializerSelectorType!, valueSerializerSelectorType!,
+                record.Topic(), record.Key(), record.Value(), headers!, throwUnmatch, converterFactory, model);
         }
 
         /// <summary>
@@ -772,22 +830,63 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <param name="keySerializerSelectorType">Key serializer to be used</param>
         /// <param name="valueSerializerSelectorType">ValueContainer serializer to be used</param>
         /// <param name="topic">The Apache Kafka topic the data is coming from</param>
-        /// <param name="recordValue">The Apache Kafka record value containing the information</param>
         /// <param name="recordKey">The Apache Kafka record key containing the information</param>
-        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve, e.g. a property not available or a not settable</param>
+        /// <param name="recordValue">The Apache Kafka record value containing the information</param>
+        /// <param name="headers">The Apache Kafka record <see cref="Headers"/> containing the meta information</param>
+        /// <param name="throwUnmatch">Throws exceptions if there is unmatch in data retrieve</param>
+        /// <param name="converterFactory">
+        /// Optional <see cref="IComplexTypeConverterFactory"/> for ComplexType deserialization.
+        /// Obtain it from the KEFCore model builder outside of <see cref="DbContext.OnModelCreating"/>.
+        /// </param>
+        /// <param name="model">
+        /// Optional <see cref="IModel"/> for accurate property mapping via <see cref="IEntityType"/>.
+        /// When provided, the <see cref="IEntityType"/> is resolved from the CLR type embedded in the record value.
+        /// </param>
         /// <returns>The extracted entity</returns>
-        public static object FromRawValueData(Type keyType, Type valueContainer, Type keySerializerSelectorType, Type valueSerializerSelectorType, string topic, byte[] recordValue, byte[] recordKey, bool throwUnmatch = false)
+        public static object FromRawValueData(Type keyType, Type valueContainer,
+            Type keySerializerSelectorType, Type valueSerializerSelectorType,
+            string topic, byte[] recordKey, byte[] recordValue, Headers headers,
+            bool throwUnmatch = false,
+            IComplexTypeConverterFactory? converterFactory = null,
+            IModel? model = null)
         {
             var fullKeySerializer = keySerializerSelectorType.MakeGenericType(keyType);
-
             var fullValueContainer = valueContainer.MakeGenericType(keyType);
             var fullValueContainerSerializer = valueSerializerSelectorType.MakeGenericType(fullValueContainer);
 
-            var ccType = typeof(LocalEntityExtractor<,,,,,>);
-            var extractorType = ccType.MakeGenericType(keyType, fullValueContainer, typeof(byte[]), typeof(byte[]), fullKeySerializer, fullValueContainerSerializer);
-            var methodInfo = extractorType.GetMethod(nameof(LocalEntityExtractor<,,,,,>.GetEntity));
-            var extractor = Activator.CreateInstance(extractorType);
-            return methodInfo?.Invoke(extractor, new object[] { topic, recordKey, recordValue, throwUnmatch })!;
+            var cacheKey = (keyType, fullValueContainer, fullKeySerializer, fullValueContainerSerializer, converterFactory, model);
+
+            var (_, getEntity) = _extractorCache.GetOrAdd(cacheKey, key =>
+            {
+                var extractorType = typeof(LocalEntityExtractor<,,,,,>)
+                    .MakeGenericType(key.Item1, key.Item2,
+                                     typeof(byte[]), typeof(byte[]),
+                                     key.Item3, key.Item4);
+
+                // create instance with factory and model — both nullable
+                var instance = (key.Item5 != null || key.Item6 != null)
+                    ? Activator.CreateInstance(extractorType, key.Item5, key.Item6)!
+                    : Activator.CreateInstance(extractorType)!;
+
+                // compile the delegate once — zero reflection at runtime per record
+                var instanceParam = Expression.Constant(instance, extractorType);
+                var topicParam = Expression.Parameter(typeof(string), "topic");
+                var keyParam = Expression.Parameter(typeof(byte[]), "recordKey");
+                var valueParam = Expression.Parameter(typeof(byte[]), "recordValue");
+                var headersParam = Expression.Parameter(typeof(Headers), "headers");
+                var throwParam = Expression.Parameter(typeof(bool), "throwUnmatch");
+
+                var methodInfo = extractorType.GetMethod(nameof(ILocalEntityExtractor<byte[], byte[]>.GetEntity))!;
+                var call = Expression.Call(instanceParam, methodInfo, topicParam, keyParam, valueParam, headersParam, throwParam);
+                var body = Expression.Convert(call, typeof(object));
+
+                var compiled = Expression.Lambda<Func<string, byte[], byte[], Headers?, bool, object>>(
+                    body, topicParam, keyParam, valueParam, headersParam, throwParam).Compile();
+
+                return (instance, compiled);
+            });
+
+            return getEntity(topic, recordKey, recordValue, headers, throwUnmatch);
         }
     }
 }

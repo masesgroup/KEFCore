@@ -16,8 +16,10 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
+using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using System;
 using System.Threading;
 
@@ -31,22 +33,36 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Extractor
         {
             try
             {
-                ProgramConfig.LoadConfig(args);
+                ProgramConfig.LoadConfig(args); // calls KEFCore.CreateGlobalInstance()
 
-                if (string.IsNullOrWhiteSpace(ProgramConfig.Config.BootstrapServers)) throw new ArgumentException("BootstrapServers must be set");
-                if (string.IsNullOrWhiteSpace(ProgramConfig.Config.TopicToSubscribe)) throw new ArgumentException("TopicToSubscribe must be set");
+                if (string.IsNullOrWhiteSpace(ProgramConfig.Config.BootstrapServers))
+                {
+                    throw new ArgumentException("BootstrapServers must be set");
+                }
 
-                KEFCore.CreateGlobalInstance();
                 Console.CancelKeyPress += Console_CancelKeyPress;
-                EntityExtractor.FromTopic(ProgramConfig.Config.BootstrapServers, ProgramConfig.Config.TopicToSubscribe, ReportData, runApplication.Token);
+
+                var modelBuilder = KEFCoreConventionSetBuilder.CreateModelBuilder(out var converterFactory);
+                modelBuilder.Entity<Blog>();
+                modelBuilder.Entity<Post>();
+                var model = modelBuilder.FinalizeModel();
+
+                // TopicToSubscribe null/empty → resolved from model; explicit → used directly
+                EntityExtractor.FromTopic<Blog>(
+                    ProgramConfig.Config.BootstrapServers,
+                    ProgramConfig.Config.TopicToSubscribe,
+                    ReportData,
+                    runApplication.Token,
+                    converterFactory: converterFactory,
+                    model: model);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Environment.ExitCode = ProgramConfig.ManageException(ex);
             }
         }
 
-        static void ReportData(object entity, Exception exception)
+        static void ReportData(Blog entity, Exception exception)
         {
             if (exception != null) { Console.Error.WriteLine(exception.Message); }
             if (entity != null) { Console.Out.WriteLine(entity.ToString()); }
