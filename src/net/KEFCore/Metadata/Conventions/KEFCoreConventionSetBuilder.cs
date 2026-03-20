@@ -46,9 +46,9 @@ namespace MASES.EntityFrameworkCore.KNet.Metadata.Conventions;
 ///     Creates a new <see cref="KEFCoreConventionSetBuilder" /> instance.
 /// </remarks>
 /// <param name="dependencies">The core dependencies for this service.</param>
+/// <param name="converterFactory">The <see cref="IComplexTypeConverterFactory"/> instance</param>
 public class KEFCoreConventionSetBuilder(
 ProviderConventionSetBuilderDependencies dependencies,
-IKEFCoreSingletonOptions options,
 IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(dependencies)
 {
     /// <inheritdoc />
@@ -65,6 +65,7 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreReadOnlyConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreStoreLookupConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreProducerConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreTransactionalConvention());
 
         return conventionSet;
     }

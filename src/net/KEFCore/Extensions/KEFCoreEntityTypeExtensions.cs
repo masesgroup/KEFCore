@@ -22,8 +22,6 @@ using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Producer;
-using Org.Apache.Kafka.Common.Config;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
@@ -244,6 +242,13 @@ public static class KEFCoreEntityTypeExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// Returns the Kafka transaction group for this entity type, or <see langword="null"/>
+    /// if the entity does not participate in a Kafka transaction.
+    /// </summary>
+    public static string? GetTransactionGroup(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.TransactionGroup)?.Value as string;
 
     /// <summary>
     /// Gets consumer instances

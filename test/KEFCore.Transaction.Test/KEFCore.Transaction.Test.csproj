@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Common\Common.props" />
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test</RootNamespace>
+		<Title>EntityFrameworkCore KNet Test</Title>
+		<Description>EntityFrameworkCore KNet Test</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test</Product>
+		<OutputPath>..\..\bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Test.InMemory.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KafkaStreams.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KafkaStreamsModelBuilder.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KafkaStreamsNoLoad.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KafkaStreamsPersisted.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicator.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicatorModelBuilder.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicatorNoLoad.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetReplicatorWithEvents.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Test.KNetStreamsWithEvents.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="TestAvro.KNetReplicatorModelBuilder.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

@@ -79,6 +79,7 @@ By default, KEFCore enables event management (i.e. `TimestampExtractor` activati
 
 Several context-level options can be overridden per entity type via conventions, allowing fine-grained control without affecting the global configuration:
 
+- **Kafka transactions** — `KEFCoreTransactionalAttribute` or `HasKEFCoreTransactionGroup()` to assign entity types to a transaction group, enabling exactly-once semantics for atomic writes across multiple entity types
 - **Producer configuration** — `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` to override individual producer settings (`Acks`, `LingerMs`, `BatchSize`, `CompressionType`, `Retries`, etc.) per entity, enabling mixed throughput/reliability profiles on the same cluster
 - **Serialization types** — `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()` to override `KeySerDesSelectorType`, `ValueSerDesSelectorType` and `ValueContainerType` per entity, enabling mixed serialization formats on the same cluster
 - **Topic partitions and replication factor** — `KEFCoreTopicPartitionsAttribute`, `KEFCoreTopicReplicationFactorAttribute`, or fluent API `HasKEFCoreTopicPartitions()` / `HasKEFCoreTopicReplicationFactor()`
@@ -96,6 +97,8 @@ The most simple example of usage can be found in [KEFCore usage](usage.md). By d
   - default `ProducerConfig` can be overridden using **ProducerConfig** property
   - default `StreamsConfig` can be overridden using **StreamsConfig** property
   - default `TopicConfig` can be overridden using **TopicConfig** property
+
+Kafka transactional producers are supported via `Database.BeginTransaction()` when entity types are assigned to a transaction group via `KEFCoreTransactionalAttribute` or `HasKEFCoreTransactionGroup()`. The standard EF Core transaction pattern applies — `tx.Commit()` or `tx.Rollback()` maps to `CommitTransaction()`/`AbortTransaction()` on the Kafka transactional producer. See [conventions](conventions.md#transactional-producer-convention) for full details.
 
 ### Default **ProducerConfig**
 

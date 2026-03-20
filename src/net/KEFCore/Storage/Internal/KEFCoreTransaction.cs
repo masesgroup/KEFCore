@@ -25,27 +25,68 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public class KEFCoreTransaction : IDbContextTransaction
 {
+    private IKEFCoreCluster? _cluster;
+    private List<string>? _activeGroups;
+
     /// <inheritdoc/>
     public virtual Guid TransactionId { get; } = Guid.NewGuid();
+
+    /// <summary>
+    /// Called by ExecuteTransaction after PrepareTransaction to register the active groups
+    /// and call BeginTransaction() on each transactional producer.
+    /// </summary>
+    internal void Begin(IEnumerable<string> transactionGroups, IKEFCoreCluster cluster)
+    {
+        _cluster = cluster;
+        _activeGroups = transactionGroups.Distinct().ToList();
+        foreach (var group in _activeGroups)
+            _cluster.BeginTransactions(group);
+    }
+
+    /// <summary>Returns true if this is a real transaction (not the stub).</summary>
+    internal bool IsActive => _cluster != null;
     /// <inheritdoc/>
     public virtual void Commit()
     {
+        if (_activeGroups == null) return;
+        foreach (var group in _activeGroups)
+        {
+            _cluster!.CommitTransactions(group);
+        }
+        _activeGroups = null;
     }
     /// <inheritdoc/>
-    public virtual Task CommitAsync(CancellationToken cancellationToken = default)
-        => Task.CompletedTask;
+    public virtual async Task CommitAsync(CancellationToken cancellationToken = default)
+    {
+        if (_activeGroups == null) return;
+        foreach (var group in _activeGroups)
+        {
+            await Task.Run(() => _cluster!.CommitTransactions(group), cancellationToken);
+        }
+        _activeGroups = null;
+    }
     /// <inheritdoc/>
     public virtual void Rollback()
     {
+        if (_activeGroups == null) return;
+        foreach (var group in _activeGroups)
+        {
+            _cluster!.AbortTransactions(group);
+        }
+        _activeGroups = null;
     }
     /// <inheritdoc/>
-    public virtual Task RollbackAsync(CancellationToken cancellationToken = default)
-        => Task.CompletedTask;
-    /// <inheritdoc/>
-    public virtual void Dispose()
+    public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
+        if (_activeGroups == null) return;
+        foreach (var group in _activeGroups)
+        {
+            await Task.Run(() => _cluster!.AbortTransactions(group), cancellationToken);
+        }
+        _activeGroups = null;
     }
     /// <inheritdoc/>
-    public virtual ValueTask DisposeAsync()
-        => default;
+    public virtual void Dispose() { }
+    /// <inheritdoc/>
+    public virtual ValueTask DisposeAsync() => default;
 }

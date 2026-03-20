@@ -16,31 +16,34 @@
 *  Refer to LICENSE for more information.
 */
 
+
+using MASES.EntityFrameworkCore.KNet.Metadata;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Evolved
+namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Transaction
 {
     [PrimaryKey("BlogId")]
-    [Table("Blog", Schema = "Simple")]
+    [Table("Blog", Schema = "TransactionTest")]
+    [KEFCoreTransactional("testTransaction")]
     public class Blog
     {
         public int BlogId { get; set; }
+        public string Url { get; set; }
         public int Rating { get; set; }
-        public DateTime? Date { get; set; }
 
         public List<Post> Posts { get; set; }
 
         public override string ToString()
         {
-            return $"BlogId: {BlogId} Rating: {Rating} Date: {Date}";
+            return $"BlogId: {BlogId} Url: {Url} Rating: {Rating}";
         }
     }
 
     [PrimaryKey("PostId")]
-    [Table("Post", Schema = "Simple")]
+    [Table("Post", Schema = "TransactionTest")]
+    [KEFCoreTransactional("testTransaction")]
     public class Post
     {
         public int PostId { get; set; }

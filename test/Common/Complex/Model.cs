@@ -17,6 +17,7 @@
 */
 
 
+using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -94,6 +95,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex
     }
 
     [ComplexType]
+    [KEFCoreComplexTypeConverter(typeof(TaxInfoExtendedConverter))]
     public class TaxInfoExtended : IEquatable<TaxInfoExtended>
     {
         public TaxInfoExtended()
