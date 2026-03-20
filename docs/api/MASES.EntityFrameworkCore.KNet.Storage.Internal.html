@@ -103,14 +103,6 @@ doing so can result in application failures when updating to a new Entity Framew
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.html">EntityTypeProducers</a></dt>
-      <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-the same compatibility standards as public APIs. It may be changed or removed without notice in
-any release. You should only use it directly in your code with extreme caution and knowing that
-doing so can result in application failures when updating to a new Entity Framework Core release.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
       <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreCluster.html">KEFCoreCluster</a></dt>
       <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -215,15 +207,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html">KafkaStreamsBaseRetriever&lt;TKey, TValue, K, V&gt;</a></dt>
-      <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-the same compatibility standards as public APIs. It may be changed or removed without notice in
-any release. You should only use it directly in your code with extreme caution and knowing that
-doing so can result in application failures when updating to a new Entity Framework Core release.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html">KafkaStreamsTableRetriever&lt;TKey, TValueContainer, TJVMKey, TJVMValueContainer&gt;</a></dt>
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.html">KafkaStreamsRetriever&lt;TKey, TValue, K, V&gt;</a></dt>
       <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
 any release. You should only use it directly in your code with extreme caution and knowing that
@@ -313,6 +297,13 @@ doing so can result in application failures when updating to a new Entity Framew
     <dl class="jumplist">
       <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html">IStreamsManager</a></dt>
       <dd><p>Central interface for stream management</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.html">ITransactionalEntityTypeProducer</a></dt>
+      <dd><p>Extends <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html">IEntityTypeProducer</a> with Kafka transactional producer support.
+Implemented only by entity type producers that belong to a transaction group
+declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html">KEFCoreTransactionalAttribute</a> or <a class="xref" href="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTransactionGroup_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_String_">HasKEFCoreTransactionGroup(EntityTypeBuilder, string)</a>.</p>
 </dd>
     </dl>
 

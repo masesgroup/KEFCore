@@ -167,8 +167,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContextFactory.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContextFactory.#ctor(Microsoft.EntityFrameworkCore.Query.QueryContextDependencies,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache,Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions)">
-  KEFCoreQueryContextFactory(QueryContextDependencies, IKEFCoreClusterCache, IDbContextOptions)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContextFactory.#ctor(Microsoft.EntityFrameworkCore.Query.QueryContextDependencies,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache,Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  KEFCoreQueryContextFactory(QueryContextDependencies, IKEFCoreClusterCache, IDbContextOptions, IKEFCoreDatabase)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContextFactory.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -180,7 +180,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KEFCoreQueryContextFactory(QueryContextDependencies dependencies, IKEFCoreClusterCache clusterCache, IDbContextOptions contextOptions)</code></pre>
+    <pre><code class="lang-csharp hljs">public KEFCoreQueryContextFactory(QueryContextDependencies dependencies, IKEFCoreClusterCache clusterCache, IDbContextOptions contextOptions, IKEFCoreDatabase database)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -191,6 +191,8 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd></dd>
     <dt><code>contextOptions</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a></dt>
     <dd></dd>
+    <dt><code>database</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html">IKEFCoreDatabase</a></dt>
+    <dd></dd>
   </dl>
 
 
@@ -200,7 +202,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory__ctor_Microsoft_EntityFrameworkCore_Query_QueryContextDependencies_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>Default initializer</p>
 </div>
 
@@ -215,7 +217,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory_Dependencies" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContextFactory.Dependencies">
   Dependencies
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContextFactory.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContextFactory.cs/#L40"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Dependencies for this service.</p>
@@ -251,7 +253,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryContextFactory_Create" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryContextFactory.Create">
   Create()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContextFactory.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryContextFactory.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates a new QueryContext.</p>

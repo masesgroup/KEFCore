@@ -90,59 +90,92 @@
 <p><code>KEFCoreDbContext</code> is a special class which helps to define the <code>DbContext</code> and use <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>:</p>
 <ul>
 <li><code>KEFCoreDbContext</code> inherits from <code>DbContext</code>: to define the model, and/or creating the database, see <a href="https://docs.microsoft.com/ef/core/get-started/">getting started</a> in the docs and <a href="usage.html">KEFCore usage</a></li>
-<li><code>KEFCoreDbContext</code> defines the following properties:
+</ul>
+<h2 id="singleton-vs-context-scoped-options">Singleton vs context-scoped options</h2>
+<p>KEFCore separates options into two categories:</p>
+<p><strong>Singleton options</strong> are shared across all <code>DbContext</code> instances pointing to the same physical Apache Kafka™ cluster (identified by <code>ClusterId</code>). They contribute to the EF Core Service Provider cache key — two contexts with different singleton options will use separate Service Providers. These include serialization types, backend architecture choices, and cluster-level configuration.</p>
+<p><strong>Context-scoped options</strong> are specific to each <code>DbContext</code> instance and do not affect Service Provider caching. They control runtime behavior such as synchronization timeouts and query optimization hints.</p>
+<h2 id="singleton-options">Singleton options</h2>
+<p>The following options are singleton-scoped and must be consistent across all <code>DbContext</code> instances sharing the same cluster:</p>
 <ul>
-<li><strong>KeySerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key</li>
-<li><strong>ValueSerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value</li>
-<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka™ record value</li>
-<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka™</li>
-<li><strong>ApplicationId</strong>: the application identifier used to identify the context</li>
-<li><strong>TopicPrefix</strong>: the optional user defined name which is used to prepend every Topic which belongs to the application</li>
-<li><del><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity</del></li>
-<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when data are stored in Apache Kafka™</li>
-<li><strong>DefaultConsumerInstances</strong>: the consumer instances to be allocated when UseCompactedReplicator is <strong>true</strong></li>
-<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use a persistent storage between multiple application startup</li>
-<li><strong>UseEnumeratorWithPrefetch</strong>: set to <strong>true</strong> to prefer enumerator instances able to do a prefetch on data speeding up execution, used if <strong>UseKNetStreams</strong> is <strong>true</strong> and <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
-<li><strong>UseByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <see cref="Java.Nio.ByteBuffer"></see> data exchange in serializer instances</li>
-<li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a></li>
-<li><del><strong>UseCompactedReplicator</strong>: Use <code>KNetCompactedReplicator</code> instead of Apache Kafka™ Streams to manage data to or from topics</del></li>
-<li><strong>UseKNetStreams</strong>: Setting this property to true the KNet version of Apache Kafka™ Streams is used instead of standard Apache Kafka™ Streams, the property is used if <strong>UseCompactedReplicator</strong> is <strong>false</strong></li>
-<li><strong>UseGlobalTable</strong>: Setting this property to true the engine based on Streams (i.e. <strong>UseCompactedReplicator</strong> is false will use <code>Org.Apache.Kafka.Streams.Kstream.GlobalKTable</code> (<code>MASES.KNet.Streams.Kstream.GlobalKTable</code> if <strong>UseKNetStreams</strong> is true) instead of <code>Org.Apache.Kafka.Streams.Kstream.KTable</code> (<code>MASES.KNet.Streams.Kstream.KTable</code> if <strong>UseKNetStreams</strong> is true) to manage local storage of information.</li>
-<li><del><strong>ConsumerConfig</strong>: parameters to use for Producer</del></li>
-<li><strong>ProducerConfig</strong>: parameters to use for Producer</li>
-<li><strong>StreamsConfig</strong>: parameters to use for Apche Kafka™ Streams application</li>
-<li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity</li>
-<li><strong>ManageEvents</strong>: Setting this property to true (default) the backend emits events on ChangeTracker</li>
-<li><strong>ReadOnlyMode</strong>: Setting this property to true (default is false) if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights AclOperation.WRITE and AclOperation.READ</li>
-<li><strong>DefaultSynchronizationTimeout</strong>: The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster. Setting this property to 0 the synchronization will be disabled</li>
-<li><strong>UseStorePrefixScan</strong>: Set this property to true to enable prefix scan in engine, default is false</li>
-<li><strong>UseStoreSingleKeyLookup</strong>: Set this property to true to enable single key look-up in engine, default is true</li>
-<li><strong>UseStoreKeyRange</strong>: Set this property to true to enable key range look-up in engine, default is true</li>
-<li><strong>UseStoreReverse</strong>: Set this property to true to enable reverse look-up in engine, default is true</li>
-<li><strong>UseStoreReverseKeyRange</strong>: Set this property to true to reverse key range look-up in engine, default is true</li>
+<li><strong>KeySerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key — overridable per entity via <code>KEFCoreSerDesAttribute</code> or <code>HasKEFCoreSerDes()</code></li>
+<li><strong>ValueSerDesSelectorType</strong>: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value — overridable per entity</li>
+<li><strong>ValueContainerType</strong>: the .NET type to be used to allocate an external container class for Apache Kafka™ record value — overridable per entity</li>
+<li><strong>UseKeyByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <code>Java.Nio.ByteBuffer</code> data exchange in serializer instances for keys</li>
+<li><strong>UseValueContainerByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <code>Java.Nio.ByteBuffer</code> data exchange in serializer instances for value containers</li>
+<li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka™ — used to resolve the <code>ClusterId</code> which is the actual Service Provider cache key</li>
+<li><strong>ApplicationId</strong>: the application identifier used for the Apache Kafka™ Streams topology — must be unique per process on the same cluster</li>
+<li><strong>UseKNetStreams</strong>: set to <strong>true</strong> (default) to use the KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</li>
+<li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use persistent storage (RocksDB) between multiple application startups; set to <strong>false</strong> (default) for in-memory storage</li>
+<li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> on topic creation</li>
+<li><strong>DefaultNumPartitions</strong>: the default number of partitions used when topics are created for each entity (first-wins per cluster) — overridable per entity via <code>KEFCoreTopicPartitionsAttribute</code> or <code>HasKEFCoreTopicPartitions()</code></li>
+<li><strong>DefaultReplicationFactor</strong>: the replication factor to use when topics are created (first-wins per cluster) — overridable per entity via <code>KEFCoreTopicReplicationFactorAttribute</code> or <code>HasKEFCoreTopicReplicationFactor()</code></li>
+<li><strong>ProducerConfig</strong>: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins) — individual producer settings can be overridden per entity via <code>KEFCoreProducerAttribute</code> or <code>HasKEFCoreProducer()</code></li>
+<li><strong>StreamsConfig</strong>: parameters to use for the Apache Kafka™ Streams application (cluster-level, first-wins)</li>
+<li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity (cluster-level, first-wins) — retention can be overridden per entity via <code>KEFCoreTopicRetentionAttribute</code> or <code>HasKEFCoreTopicRetention()</code></li>
+<li><del><strong>UseCompactedReplicator</strong></del>: deprecated, will be removed in a future release</li>
+<li><del><strong>DefaultConsumerInstances</strong></del>: deprecated, will be removed in a future release</li>
+<li><del><strong>ConsumerConfig</strong></del>: deprecated, will be removed in a future release</li>
 </ul>
-</li>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Options marked as <strong>first-wins</strong> are singleton but do not affect the Service Provider cache key — the values set by the first <code>DbContext</code> to initialize the cluster are used for all subsequent contexts on the same cluster.</p>
+</div>
+<h2 id="context-scoped-options">Context-scoped options</h2>
+<p>The following options are scoped to each <code>DbContext</code> instance:</p>
+<ul>
+<li><strong>ReadOnlyMode</strong>: set to <strong>true</strong> (default is <strong>false</strong>) to reject any write operation for the entire context; the engine will also verify that topics have proper <code>AclOperation.READ</code> rights — individual entities can be marked read-only via <code>KEFCoreReadOnlyAttribute</code> or <code>IsKEFCoreReadOnly()</code></li>
+<li><strong>DefaultSynchronizationTimeout</strong>: the default timeout in milliseconds KEFCore waits for the backend to be in-sync with the Apache Kafka™ cluster after a <code>SaveChanges</code>; set to <code>Timeout.Infinite</code> (default) to wait indefinitely, or <code>0</code> to disable synchronization</li>
+<li><strong>UseEnumeratorWithPrefetch</strong>: set to <strong>true</strong> (default) to prefer enumerator instances that prefetch data, speeding up enumeration when using Apache Kafka™ Streams</li>
+<li><strong>UseStorePrefixScan</strong>: set to <strong>true</strong> to enable prefix scan in the engine (default is <strong>false</strong>) — overridable per entity via <code>KEFCoreStoreLookupAttribute</code> or <code>HasKEFCoreStoreLookup()</code></li>
+<li><strong>UseStoreSingleKeyLookup</strong>: set to <strong>true</strong> (default) to enable single key look-up in the engine — overridable per entity</li>
+<li><strong>UseStoreKeyRange</strong>: set to <strong>true</strong> (default) to enable key range look-up in the engine — overridable per entity</li>
+<li><strong>UseStoreReverse</strong>: set to <strong>true</strong> (default) to enable reverse look-up in the engine — overridable per entity</li>
+<li><strong>UseStoreReverseKeyRange</strong>: set to <strong>true</strong> (default) to enable reverse key range look-up in the engine — overridable per entity</li>
+<li><del><strong>UseGlobalTable</strong></del>: deprecated — see <a href="conventions.html">topic naming and event management conventions</a> for the recommended approach</li>
+<li><del><strong>ManageEvents</strong></del>: deprecated — event management is now enabled by default for all entity types; use <code>KEFCoreIgnoreEventsAttribute</code> or <code>HasKEFCoreManageEvents(false)</code> to disable it per entity</li>
 </ul>
+<h2 id="topic-naming-conventions">Topic naming conventions</h2>
+<p>Topic names are no longer configured via a <code>TopicPrefix</code> option. Instead, KEFCore resolves the topic name for each entity at model finalization time using <code>KEFCoreTopicNamingConvention</code>. See <a href="conventions.html">conventions</a> for the full resolution priority.</p>
+<p>In short:</p>
+<ul>
+<li>Apply <code>[KEFCoreTopicAttribute(&quot;my-topic&quot;)]</code> on the entity class to set the topic name explicitly</li>
+<li>Apply <code>[KEFCoreTopicPrefixAttribute(&quot;myprefix&quot;)]</code> on the entity class or the <code>DbContext</code> class to set a prefix</li>
+<li>Call <code>modelBuilder.UseKEFCoreTopicPrefix(&quot;myprefix&quot;)</code> in <code>OnModelCreating</code> for a global prefix</li>
+<li>Call <code>modelBuilder.Entity&lt;T&gt;().ToKEFCoreTopic(&quot;my-topic&quot;)</code> for a per-entity override</li>
+</ul>
+<h2 id="event-management-conventions">Event management conventions</h2>
+<p>By default, KEFCore enables event management (i.e. <code>TimestampExtractor</code> activation for real-time change tracking) for all entity types via <code>KEFCoreManageEventsConvention</code>. To opt out:</p>
+<ul>
+<li>Apply <code>[KEFCoreIgnoreEventsAttribute]</code> on the entity class to disable events for that entity</li>
+<li>Call <code>modelBuilder.Entity&lt;T&gt;().HasKEFCoreManageEvents(false)</code> for a per-entity override</li>
+<li>Call <code>modelBuilder.UseKEFCoreManageEvents(false)</code> to disable events globally</li>
+</ul>
+<h2 id="per-entity-topic-and-store-conventions">Per-entity topic and store conventions</h2>
+<p>Several context-level options can be overridden per entity type via conventions, allowing fine-grained control without affecting the global configuration:</p>
+<ul>
+<li><strong>Kafka transactions</strong> — <code>KEFCoreTransactionalAttribute</code> or <code>HasKEFCoreTransactionGroup()</code> to assign entity types to a transaction group, enabling exactly-once semantics for atomic writes across multiple entity types</li>
+<li><strong>Producer configuration</strong> — <code>KEFCoreProducerAttribute</code> or <code>HasKEFCoreProducer()</code> to override individual producer settings (<code>Acks</code>, <code>LingerMs</code>, <code>BatchSize</code>, <code>CompressionType</code>, <code>Retries</code>, etc.) per entity, enabling mixed throughput/reliability profiles on the same cluster</li>
+<li><strong>Serialization types</strong> — <code>KEFCoreSerDesAttribute</code> or <code>HasKEFCoreSerDes()</code> to override <code>KeySerDesSelectorType</code>, <code>ValueSerDesSelectorType</code> and <code>ValueContainerType</code> per entity, enabling mixed serialization formats on the same cluster</li>
+<li><strong>Topic partitions and replication factor</strong> — <code>KEFCoreTopicPartitionsAttribute</code>, <code>KEFCoreTopicReplicationFactorAttribute</code>, or fluent API <code>HasKEFCoreTopicPartitions()</code> / <code>HasKEFCoreTopicReplicationFactor()</code></li>
+<li><strong>Topic retention</strong> — <code>KEFCoreTopicRetentionAttribute</code> or <code>HasKEFCoreTopicRetention()</code> to override <code>RetentionBytes</code> and <code>RetentionMs</code> per entity</li>
+<li><strong>Read-only</strong> — <code>KEFCoreReadOnlyAttribute</code> or <code>IsKEFCoreReadOnly()</code> to prevent writes for a specific entity type while allowing writes for others in the same <code>SaveChanges</code> call</li>
+<li><strong>Store lookup optimizations</strong> — <code>KEFCoreStoreLookupAttribute</code> or <code>HasKEFCoreStoreLookup()</code> to enable or disable specific query optimization paths per entity</li>
+</ul>
+<p>See <a href="conventions.html">conventions</a> for full documentation and examples.</p>
 <h2 id="how-to-use-kefcoredbcontext-class">How to use <code>KEFCoreDbContext</code> class</h2>
-<p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KEFCoreDbContext</code> automatically manages <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
+<p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KEFCoreDbContext</code> automatically manages the <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
 <ul>
-<li><code>KEFCoreDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>DbName</strong></li>
-<li><code>KEFCoreDbContext</code> setup the options needed to use an Apache Kafka™ cluster:
+<li><code>KEFCoreDbContext</code> checks the mandatory options like <strong>BootstrapServers</strong> and <strong>ApplicationId</strong></li>
+<li><code>KEFCoreDbContext</code> sets up the options needed to use an Apache Kafka™ cluster:
 <ul>
-<li><del>default <code>ConsumerConfig</code> can be overridden using <strong>ConsumerConfig</strong> property of <code>KEFCoreDbContext</code></del></li>
-<li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property of <code>KEFCoreDbContext</code></li>
-<li>default <code>StreamsConfig</code> can be overridden using <strong>StreamsConfig</strong> property of <code>KEFCoreDbContext</code></li>
-<li>default <code>TopicConfig</code> can be overridden using <strong>TopicConfig</strong> property of <code>KEFCoreDbContext</code></li>
+<li>default <code>ProducerConfig</code> can be overridden using <strong>ProducerConfig</strong> property</li>
+<li>default <code>StreamsConfig</code> can be overridden using <strong>StreamsConfig</strong> property</li>
+<li>default <code>TopicConfig</code> can be overridden using <strong>TopicConfig</strong> property</li>
 </ul>
 </li>
 </ul>
-<h3 id="default-consumerconfig">Default <strong>ConsumerConfig</strong></h3>
-<p>Over the <a href="https://kafka.apache.org/documentation/#consumerconfigs">Apache Kafka™ defaults</a> it applies:</p>
-<ul>
-<li>EnableAutoCommit is <strong>true</strong></li>
-<li>AutoOffsetReset set to <strong>EARLIEST</strong></li>
-<li>AllowAutoCreateTopics set to <strong>false</strong></li>
-</ul>
+<p>Kafka transactional producers are supported via <code>Database.BeginTransaction()</code> when entity types are assigned to a transaction group via <code>KEFCoreTransactionalAttribute</code> or <code>HasKEFCoreTransactionGroup()</code>. The standard EF Core transaction pattern applies — <code>tx.Commit()</code> or <code>tx.Rollback()</code> maps to <code>CommitTransaction()</code>/<code>AbortTransaction()</code> on the Kafka transactional producer. See <a href="conventions.html#transactional-producer-convention">conventions</a> for full details.</p>
 <h3 id="default-producerconfig">Default <strong>ProducerConfig</strong></h3>
 <p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#producerconfigs">Apache Kafka™ defaults</a></p>
 <h3 id="default-streamsconfig">Default <strong>StreamsConfig</strong></h3>

@@ -124,6 +124,118 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreComplexPropertyBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreComplexPropertyBuilderExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreComplexPropertyBuilderExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreComplexPropertyBuilderExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods on <xref href=\"Microsoft.EntityFrameworkCore.Metadata.Builders.ComplexPropertyBuilder\" data-throw-if-not-resolved=\"false\"></xref> for KEFCore-specific\ncomplex type configuration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDatabaseFacadeExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDatabaseFacadeExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDatabaseFacadeExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDatabaseFacadeExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContext.Database\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods on <xref href=\"Microsoft.EntityFrameworkCore.ModelBuilder\" data-throw-if-not-resolved=\"false\"></xref> for Kafka-specific model configuration.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreServiceCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreServiceCollectionExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreServiceCollectionExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreServiceCollectionExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.Extensions.DependencyInjection.IServiceCollection\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Infrastructure.IKEFCoreDbContextOptionsBuilderInfrastructure.yml",
       "output": {
         ".html": {
@@ -218,7 +330,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.yml\" sourcestartlinenumber=\"1\">A <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> instance represents a session with the Apache Kafka™ cluster and can be used to query and save\ninstances of your entities. <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> extends <xref href=\"Microsoft.EntityFrameworkCore.DbContext\" data-throw-if-not-resolved=\"false\"></xref> and it is a combination of the Unit Of Work and Repository patterns.</p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.yml\" sourcestartlinenumber=\"1\">A <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> instance represents a session with the Apache Kafka� cluster and can be used to query and save\ninstances of your entities. <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> extends <xref href=\"Microsoft.EntityFrameworkCore.DbContext\" data-throw-if-not-resolved=\"false\"></xref> and it is a combination of the Unit Of Work and Repository patterns.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -334,73 +446,31 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreDatabaseFacadeExtensions.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeConverterConvention.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreDatabaseFacadeExtensions.html"
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeConverterConvention.html"
         }
       },
       "version": "",
       "Uid": null,
       "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.KEFCoreDatabaseFacadeExtensions",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KEFCoreDatabaseFacadeExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContext.Database\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeConverterConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeConverterConvention.yml\" sourcestartlinenumber=\"1\">A convention that registers <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter\" data-throw-if-not-resolved=\"false\"></xref> implementations\ndeclared via <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute\" data-throw-if-not-resolved=\"false\"></xref> or\n<code>HasKEFCoreComplexTypeConverter()</code> into <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory\" data-throw-if-not-resolved=\"false\"></xref>\nat model finalization time.</p>\n"
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeEquatableConvention.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html"
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeEquatableConvention.html"
         }
       },
       "version": "",
       "Uid": null,
       "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.DbContextOptionsBuilder\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeBuilderExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeBuilderExtensions.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeBuilderExtensions",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeBuilderExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeExtensions.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeExtensions",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.KEFCoreEntityTypeExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.yml\" sourcestartlinenumber=\"1\">Convention that converts accesses of <xref href=\"Microsoft.EntityFrameworkCore.DbSet%601\" data-throw-if-not-resolved=\"false\"></xref> inside query filters and defining queries into\n<xref href=\"Microsoft.EntityFrameworkCore.Query.QueryRootExpression\" data-throw-if-not-resolved=\"false\"></xref>.\nThis makes them consistent with how DbSet accesses in the actual queries are represented, which allows for easier processing in the\nquery pipeline.</p>\n"
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeEquatableConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeEquatableConvention.yml\" sourcestartlinenumber=\"1\">A convention that verifies all complex types in the model implement value equality,\neither via <xref href=\"System.IEquatable%601\" data-throw-if-not-resolved=\"false\"></xref> or by overriding <xref href=\"System.Object.Equals(System.Object)\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -415,6 +485,132 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreConventionSetBuilder",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreConventionSetBuilder.yml\" sourcestartlinenumber=\"1\">A builder for building conventions for the KEFCore provider.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves and stores the Kafka event management flag for each entity type\nas a model annotation (<xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.ManageEvents\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity producer configuration overrides at model finalization time,\nstoring the result as a <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation\" data-throw-if-not-resolved=\"false\"></xref> on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity read-only configuration\nat model finalization time, storing the result as a model annotation on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity serialization type overrides at model finalization time,\nstoring the results as model annotations on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreStoreLookupConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreStoreLookupConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreStoreLookupConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreStoreLookupConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity Streams store query optimization flags\nat model finalization time, storing the results as model annotations on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves and stores the Kafka topic name for each entity type\nas a model annotation (<xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.TopicName\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicPartitionsConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicPartitionsConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicPartitionsConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicPartitionsConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity topic partition and replication factor configuration\nat model finalization time, storing the results as model annotations on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicRetentionConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicRetentionConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicRetentionConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicRetentionConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity topic retention configuration\nat model finalization time, storing the results as model annotations on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.yml\" sourcestartlinenumber=\"1\">A convention that resolves per-entity Kafka transaction group configuration\nat model finalization time, storing the result as a model annotation on each <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IEntityType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -446,6 +642,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation.yml\" sourcestartlinenumber=\"1\">Internal DTO stored as a model annotation to carry per-entity producer configuration overrides.\nPopulated by <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention\" data-throw-if-not-resolved=\"false\"></xref> from\n<xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute\" data-throw-if-not-resolved=\"false\"></xref> or <xref href=\"MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreProducer(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder%2cSystem.Nullable%7bMASES.KNet.Producer.ProducerConfigBuilder.AcksTypes%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bMASES.KNet.Producer.ProducerConfigBuilder.CompressionTypes%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bSystem.Int32%7d%2cSystem.Nullable%7bSystem.Int64%7d%2cSystem.Nullable%7bSystem.Int64%7d)\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.yml",
       "output": {
         ".html": {
@@ -456,6 +666,202 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Internal",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute.yml\" sourcestartlinenumber=\"1\">Associates a <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter\" data-throw-if-not-resolved=\"false\"></xref> implementation with this complex type,\nregistering it in <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory\" data-throw-if-not-resolved=\"false\"></xref> at model finalization time.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEquatableCheckAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEquatableCheckAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEquatableCheckAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEquatableCheckAttribute.yml\" sourcestartlinenumber=\"1\">Suppresses the KEFCore equality check for this complex type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute.yml\" sourcestartlinenumber=\"1\">Disables KEFCore event management for this entity type,\noverriding the context-level default set by <code>UseKEFCoreManageEvents()</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute.yml\" sourcestartlinenumber=\"1\">Overrides producer configuration for the Kafka topic associated with this entity type.\nOnly explicitly set properties override the global <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.ProducerConfig\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.yml\" sourcestartlinenumber=\"1\">Marks this entity type as read-only within the current <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref>.\nAny attempt to write entries of this type via <xref href=\"Microsoft.EntityFrameworkCore.DbContext.SaveChanges\" data-throw-if-not-resolved=\"false\"></xref>\nwill throw <xref href=\"System.InvalidOperationException\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.yml\" sourcestartlinenumber=\"1\">Overrides the serialization types for the Kafka topic associated with this entity type.\nTakes precedence over the context-level <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.KeySerDesSelectorType\" data-throw-if-not-resolved=\"false\"></xref>,\n<xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.ValueSerDesSelectorType\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.ValueContainerType\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute.yml\" sourcestartlinenumber=\"1\">Configures the Kafka Streams store query optimization flags for this entity type,\noverriding the context-level defaults set via <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> options.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicAttribute.yml\" sourcestartlinenumber=\"1\">Overrides the Kafka topic name for an entity type.\nTakes precedence over <xref href=\"System.ComponentModel.DataAnnotations.Schema.TableAttribute\" data-throw-if-not-resolved=\"false\"></xref>&gt; and entity name.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute.yml\" sourcestartlinenumber=\"1\">Overrides the number of partitions for the Kafka topic associated with this entity type.\nTakes precedence over <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.DefaultNumPartitions\" data-throw-if-not-resolved=\"false\"></xref>.\nApplied at topic creation time (<xref href=\"Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreated\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPrefixAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPrefixAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPrefixAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPrefixAttribute.yml\" sourcestartlinenumber=\"1\">Sets the Kafka topic prefix. Can be applied to an entity class\nor to a DbContext class (acts as default for all entities in that context).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute.yml\" sourcestartlinenumber=\"1\">Overrides the replication factor for the Kafka topic associated with this entity type.\nTakes precedence over <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.DefaultReplicationFactor\" data-throw-if-not-resolved=\"false\"></xref>.\nApplied at topic creation time (<xref href=\"Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreated\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute.yml\" sourcestartlinenumber=\"1\">Overrides the retention policy for the Kafka topic associated with this entity type.\nApplied at topic creation time (<xref href=\"Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade.EnsureCreated\" data-throw-if-not-resolved=\"false\"></xref>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.yml\" sourcestartlinenumber=\"1\">Assigns this entity type to a Kafka transaction group, enabling exactly-once semantics\nfor all entities sharing the same <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.TransactionGroup\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata",
       "Summary": null
     },
     {
@@ -1594,20 +2000,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.EntityTypeProducers.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer-1.yml",
       "output": {
         ".html": {
@@ -1759,6 +2151,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.yml\" sourcestartlinenumber=\"1\">Central interface for stream management</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.yml\" sourcestartlinenumber=\"1\">Extends <xref href=\"MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer\" data-throw-if-not-resolved=\"false\"></xref> with Kafka transactional producer support.\nImplemented only by entity type producers that belong to a transaction group\ndeclared via <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute\" data-throw-if-not-resolved=\"false\"></xref> or <xref href=\"MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTransactionGroup(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder%2cSystem.String)\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1944,31 +2350,17 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.html"
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.html"
         }
       },
       "version": "",
       "Uid": null,
       "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever<TKey, TValue, K, V>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsBaseRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsTableRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever<TKey, TValue, K, V>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2139,34 +2531,6 @@
       "Summary": null
     },
     {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions",
-      "Summary": "<p sourcefile=\"api/Microsoft.Extensions.DependencyInjection.KEFCoreServiceCollectionExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.Extensions.DependencyInjection.IServiceCollection\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Microsoft.Extensions.DependencyInjection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Microsoft.Extensions.DependencyInjection.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "Microsoft.Extensions.DependencyInjection",
-      "Summary": null
-    },
-    {
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
@@ -2185,6 +2549,16 @@
         },
         ".json": {
           "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/conventions.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/conventions.html"
         }
       },
       "version": ""
@@ -2261,6 +2635,26 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/options.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/options.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/performancetips.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/performancetips.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/roadmap.md",
       "output": {
         ".html": {
@@ -2288,6 +2682,16 @@
         },
         ".json": {
           "relative_path": "articles/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/troubleshooting.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/troubleshooting.html"
         }
       },
       "version": ""
@@ -2348,6 +2752,16 @@
       "output": {
         "resource": {
           "relative_path": "images/favicon.ico"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/knetopc_pipeline.svg",
+      "output": {
+        "resource": {
+          "relative_path": "images/knetopc_pipeline.svg"
         }
       },
       "version": ""

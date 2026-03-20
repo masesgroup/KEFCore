@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Namespace MASES.EntityFrameworkCore.KNet.Metadata | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace MASES.EntityFrameworkCore.KNet.Metadata | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Metadata">
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Metadata" data-uid="MASES.EntityFrameworkCore.KNet.Metadata" class="text-break">Namespace MASES.EntityFrameworkCore.KNet.Metadata</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute.html">KEFCoreComplexTypeConverterAttribute</a></dt>
+      <dd><p>Associates a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> implementation with this complex type,
+registering it in <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> at model finalization time.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEquatableCheckAttribute.html">KEFCoreIgnoreEquatableCheckAttribute</a></dt>
+      <dd><p>Suppresses the KEFCore equality check for this complex type.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute.html">KEFCoreIgnoreEventsAttribute</a></dt>
+      <dd><p>Disables KEFCore event management for this entity type,
+overriding the context-level default set by <code>UseKEFCoreManageEvents()</code>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute.html">KEFCoreProducerAttribute</a></dt>
+      <dd><p>Overrides producer configuration for the Kafka topic associated with this entity type.
+Only explicitly set properties override the global <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">ProducerConfig</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.html">KEFCoreReadOnlyAttribute</a></dt>
+      <dd><p>Marks this entity type as read-only within the current <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html">KEFCoreDbContext</a>.
+Any attempt to write entries of this type via <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.savechanges#microsoft-entityframeworkcore-dbcontext-savechanges">SaveChanges()</a>
+will throw <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.html">KEFCoreSerDesAttribute</a></dt>
+      <dd><p>Overrides the serialization types for the Kafka topic associated with this entity type.
+Takes precedence over the context-level <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_KeySerDesSelectorType">KeySerDesSelectorType</a>,
+<a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ValueSerDesSelectorType">ValueSerDesSelectorType</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ValueContainerType">ValueContainerType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute.html">KEFCoreStoreLookupAttribute</a></dt>
+      <dd><p>Configures the Kafka Streams store query optimization flags for this entity type,
+overriding the context-level defaults set via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html">KEFCoreDbContext</a> options.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicAttribute.html">KEFCoreTopicAttribute</a></dt>
+      <dd><p>Overrides the Kafka topic name for an entity type.
+Takes precedence over <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.schema.tableattribute">TableAttribute</a>&gt; and entity name.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute.html">KEFCoreTopicPartitionsAttribute</a></dt>
+      <dd><p>Overrides the number of partitions for the Kafka topic associated with this entity type.
+Takes precedence over <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultNumPartitions">DefaultNumPartitions</a>.
+Applied at topic creation time (<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPrefixAttribute.html">KEFCoreTopicPrefixAttribute</a></dt>
+      <dd><p>Sets the Kafka topic prefix. Can be applied to an entity class
+or to a DbContext class (acts as default for all entities in that context).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute.html">KEFCoreTopicReplicationFactorAttribute</a></dt>
+      <dd><p>Overrides the replication factor for the Kafka topic associated with this entity type.
+Takes precedence over <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultReplicationFactor">DefaultReplicationFactor</a>.
+Applied at topic creation time (<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute.html">KEFCoreTopicRetentionAttribute</a></dt>
+      <dd><p>Overrides the retention policy for the Kafka topic associated with this entity type.
+Applied at topic creation time (<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html">KEFCoreTransactionalAttribute</a></dt>
+      <dd><p>Assigns this entity type to a Kafka transaction group, enabling exactly-once semantics
+for all entities sharing the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreTransactionalAttribute_TransactionGroup">TransactionGroup</a>.</p>
+</dd>
+    </dl>
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -158,8 +158,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCacheExtensions_CreateCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCacheExtensions.CreateCluster*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCacheExtensions_CreateCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_Microsoft_EntityFrameworkCore_Update_IUpdateAdapterFactory_Microsoft_EntityFrameworkCore_Metadata_IModel_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCacheExtensions.CreateCluster(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache,Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Infrastructure},Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,Microsoft.EntityFrameworkCore.Update.IUpdateAdapterFactory,Microsoft.EntityFrameworkCore.Metadata.IModel)">
-  CreateCluster(IKEFCoreClusterCache, IDbContextOptions, IDiagnosticsLogger&lt;Infrastructure&gt;, IValueGeneratorSelector, IUpdateAdapterFactory, IModel)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCacheExtensions_CreateCluster_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreClusterCache_Microsoft_EntityFrameworkCore_Infrastructure_IDbContextOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCacheExtensions.CreateCluster(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache,Microsoft.EntityFrameworkCore.Infrastructure.IDbContextOptions)">
+  CreateCluster(IKEFCoreClusterCache, IDbContextOptions)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCacheExtensions.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -168,7 +168,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IKEFCoreCluster CreateCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapterFactory updateAdapterFactory, IModel designModel)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IKEFCoreCluster CreateCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -176,14 +176,6 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt><code>storeCache</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreClusterCache.html">IKEFCoreClusterCache</a></dt>
     <dd></dd>
     <dt><code>options</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.idbcontextoptions">IDbContextOptions</a></dt>
-    <dd></dd>
-    <dt><code>infrastructureLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.infrastructure">Infrastructure</a>&gt;</dt>
-    <dd></dd>
-    <dt><code>valueGeneratorSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a></dt>
-    <dd></dd>
-    <dt><code>updateAdapterFactory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.update.iupdateadapterfactory">IUpdateAdapterFactory</a></dt>
-    <dd></dd>
-    <dt><code>designModel</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel">IModel</a></dt>
     <dd></dd>
   </dl>
 

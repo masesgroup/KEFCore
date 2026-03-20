@@ -156,7 +156,7 @@ Class KEFCoreDbContextOptionsBuilder  <a class="header-action link-secondary" ti
   <h2 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_remarks">Remarks</h2>
   <div class="markdown level0 remarks"><p>
     Instances of this class are returned from a call to
-    <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_UseKEFCore_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder__">UseKEFCore(DbContextOptionsBuilder, string?, string, Action&lt;KEFCoreDbContextOptionsBuilder&gt;?)</a>
+    <a class="xref" href="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreDbContextOptionsExtensions_UseKEFCore_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder__">UseKEFCore(DbContextOptionsBuilder, string?, string, Action&lt;KEFCoreDbContextOptionsBuilder&gt;?)</a>
     and it is not designed to be directly constructed in your application code.
 </p>
 <p>
@@ -202,7 +202,7 @@ Class KEFCoreDbContextOptionsBuilder  <a class="header-action link-secondary" ti
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder__ctor_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>
     Instances of this class are returned from a call to
-    <a class="xref" href="MASES.EntityFrameworkCore.KNet.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_KEFCoreDbContextOptionsExtensions_UseKEFCore_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder__">UseKEFCore(DbContextOptionsBuilder, string?, string, Action&lt;KEFCoreDbContextOptionsBuilder&gt;?)</a>
+    <a class="xref" href="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreDbContextOptionsExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreDbContextOptionsExtensions_UseKEFCore_Microsoft_EntityFrameworkCore_DbContextOptionsBuilder_System_String_System_String_System_Action_MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder__">UseKEFCore(DbContextOptionsBuilder, string?, string, Action&lt;KEFCoreDbContextOptionsBuilder&gt;?)</a>
     and it is not designed to be directly constructed in your application code.
 </p>
 <p>
@@ -259,7 +259,7 @@ Class KEFCoreDbContextOptionsBuilder  <a class="header-action link-secondary" ti
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithCompactedReplicator_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithCompactedReplicator(System.Boolean)">
   WithCompactedReplicator(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L183"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L162"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Enables use of <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a></p>
@@ -303,7 +303,7 @@ public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithConsumerConfig_MASES_KNet_Consumer_ConsumerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithConsumerConfig(MASES.KNet.Consumer.ConsumerConfigBuilder)">
   WithConsumerConfig(ConsumerConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L377"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L378"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a>.</p>
@@ -311,7 +311,8 @@ public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCo
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Option will be removed soon&quot;)]
+public virtual KEFCoreDbContextOptionsBuilder WithConsumerConfig(ConsumerConfigBuilder consumerConfigBuilder)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -354,7 +355,8 @@ public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCo
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithDefaultConsumerInstances(int? defaultConsumerInstances = null)</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Option will be removed soon&quot;)]
+public virtual KEFCoreDbContextOptionsBuilder WithDefaultConsumerInstances(int? defaultConsumerInstances = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -432,7 +434,7 @@ public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDefaultReplicationFactor_System_Int16_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithDefaultReplicationFactor(System.Int16)">
   WithDefaultReplicationFactor(short)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L356"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L357"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Defines the default replication factor to use when a new topic is created</p>
@@ -475,7 +477,7 @@ public virtual KEFCoreDbContextOptionsBuilder WithCompactedReplicator(bool useCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDefaultSynchronizationTimeout_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithDefaultSynchronizationTimeout(System.Int64)">
   WithDefaultSynchronizationTimeout(long)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L504"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L485"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
@@ -508,6 +510,224 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDefaultSynchronizationTimeout_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDeletePolicyForTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithDeletePolicyForTopic*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDeletePolicyForTopic_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithDeletePolicyForTopic(System.Boolean)">
+  WithDeletePolicyForTopic(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L141"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Enables <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> when the topic is created the first time</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithDeletePolicyForTopic(bool useDeletePolicyForTopic = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useDeletePolicyForTopic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, then will be used <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> when the topic is created the first time.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithDeletePolicyForTopic_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithEnumeratorWithPrefetch_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithEnumeratorWithPrefetch*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithEnumeratorWithPrefetch_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithEnumeratorWithPrefetch(System.Boolean)">
+  WithEnumeratorWithPrefetch(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L251"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useEnumeratorWithPrefetch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, prefetch in enumeration will be used.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithEnumeratorWithPrefetch_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Used only if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, not available in EFCore 6
+See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithGlobalTable_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithGlobalTable*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithGlobalTable_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithGlobalTable(System.Boolean)">
+  WithGlobalTable(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L207"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine based on Streams (i.e. <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>)
+will use <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.GlobalKTable-2.html">GlobalKTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.GlobalKTable-4.html">GlobalKTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
+instead of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>) to manage local storage of information.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithGlobalTable(bool useGlobalTable = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useGlobalTable</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.GlobalKTable-2.html">GlobalKTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.GlobalKTable-4.html">GlobalKTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithGlobalTable_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKNetStreams_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithKNetStreams*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKNetStreams_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithKNetStreams(System.Boolean)">
+  WithKNetStreams(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L184"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Enables use of KNet version of Apache Kafka Streams</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithKNetStreams(bool useKNetStreams = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useKNetStreams</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then KNet version of Apache Kafka Streams will be used instead of standard Apache Kafka Streams.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKNetStreams_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKeyByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithKeyByteBufferDataTransfer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKeyByteBufferDataTransfer_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithKeyByteBufferDataTransfer(System.Boolean)">
+  WithKeyByteBufferDataTransfer(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L272"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances for key</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithKeyByteBufferDataTransfer(bool useKeyByteBufferDataTransfer = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>useKeyByteBufferDataTransfer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange will be preferred for key.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
+    <dd><p>The same builder instance so that multiple calls can be chained.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithKeyByteBufferDataTransfer_System_Boolean__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>
@@ -558,25 +778,25 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithManageEvents_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithManageEvents*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithPersistentStorage_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithPersistentStorage*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithManageEvents_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithManageEvents(System.Boolean)">
-  WithManageEvents(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L461"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithPersistentStorage_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithPersistentStorage(System.Boolean)">
+  WithPersistentStorage(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L229"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the engine shall reject any write operation, its value will be used to verify if topics has the proper rights <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Acl.AclOperation.html#Org_Apache_Kafka_Common_Acl_AclOperation_WRITE">WRITE</a> and <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Acl.AclOperation.html#Org_Apache_Kafka_Common_Acl_AclOperation_READ">READ</a></p>
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithManageEvents(bool manageEvents)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithPersistentStorage(bool usePersistentStorage = false)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>manageEvents</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the engine shall reject any write operation</p>
+    <dt><code>usePersistentStorage</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
 </dd>
   </dl>
 
@@ -593,8 +813,9 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithManageEvents_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithPersistentStorage_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Used only if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>,  not available in EFCore 6.
+See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>
 
@@ -605,7 +826,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithProducerConfig_MASES_KNet_Producer_ProducerConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithProducerConfig(MASES.KNet.Producer.ProducerConfigBuilder)">
   WithProducerConfig(ProducerConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L398"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L400"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Clients.Producer.KafkaProducer.html">KafkaProducer</a>.</p>
@@ -648,7 +869,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithReadOnlyMode_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithReadOnlyMode(System.Boolean)">
   WithReadOnlyMode(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L482"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L463"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine will emit events on <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.changetracker">ChangeTracker</a></p>
@@ -691,7 +912,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStoreKeyRange_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStoreKeyRange(System.Boolean)">
   WithStoreKeyRange(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L567"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L548"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting the value to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> will enable key range look-up</p>
@@ -734,7 +955,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStorePrefixScan_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStorePrefixScan(System.Boolean)">
   WithStorePrefixScan(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L525"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L506"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting the value to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> will enable prefix scan in engine</p>
@@ -777,7 +998,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStoreReverse_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStoreReverse(System.Boolean)">
   WithStoreReverse(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L588"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L569"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting the value to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> will enable reverse look-up</p>
@@ -820,7 +1041,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStoreReverseKeyRange_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStoreReverseKeyRange(System.Boolean)">
   WithStoreReverseKeyRange(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L609"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L590"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting the value to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> will enable reverse key range look-up</p>
@@ -863,7 +1084,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStoreSingleKeyLookup_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStoreSingleKeyLookup(System.Boolean)">
   WithStoreSingleKeyLookup(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L546"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L527"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Setting the value to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> will enable single key look-up</p>
@@ -906,7 +1127,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStreamsConfig_MASES_KNet_Streams_StreamsConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStreamsConfig(MASES.KNet.Streams.StreamsConfigBuilder)">
   WithStreamsConfig(StreamsConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L419"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L421"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.KafkaStreams.html">KafkaStreams</a>.</p>
@@ -949,7 +1170,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithTopicConfig_MASES_KNet_Common_TopicConfigBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithTopicConfig(MASES.KNet.Common.TopicConfigBuilder)">
   WithTopicConfig(TopicConfigBuilder)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L440"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L442"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Set properties of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Common.Config.TopicConfig.html">TopicConfig</a>.</p>
@@ -988,68 +1209,25 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithTopicPrefix_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithTopicPrefix*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithValueContainerByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithValueContainerByteBufferDataTransfer*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithTopicPrefix_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithTopicPrefix(System.String)">
-  WithTopicPrefix(string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L141"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Define the prefix to be added to the topic name deducted from the model</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithTopicPrefix(string? topicPrefix)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>topicPrefix</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The prefix to be added to the topic name deducted from the model.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithTopicPrefix_System_String__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseByteBufferDataTransfer_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseByteBufferDataTransfer*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseByteBufferDataTransfer_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseByteBufferDataTransfer(System.Boolean)">
-  WithUseByteBufferDataTransfer(bool)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithValueContainerByteBufferDataTransfer_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithValueContainerByteBufferDataTransfer(System.Boolean)">
+  WithValueContainerByteBufferDataTransfer(bool)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L293"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances</p>
+  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange in serializer instances for value container</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUseByteBufferDataTransfer(bool useByteBufferDataTransfer = true)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithValueContainerByteBufferDataTransfer(bool useValueContainerByteBufferDataTransfer = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>useByteBufferDataTransfer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange will be preferred.</p>
+    <dt><code>useValueContainerByteBufferDataTransfer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, <a class="xref" href="https://jnet.masesgroup.com/api/Java.Nio.ByteBuffer.html">ByteBuffer</a> data exchange will be preferred for value container.</p>
 </dd>
   </dl>
 
@@ -1066,227 +1244,8 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseByteBufferDataTransfer_System_Boolean__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithValueContainerByteBufferDataTransfer_System_Boolean__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseDeletePolicyForTopic_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseDeletePolicyForTopic*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseDeletePolicyForTopic_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseDeletePolicyForTopic(System.Boolean)">
-  WithUseDeletePolicyForTopic(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L162"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Enables <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> when the topic is created the first time</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUseDeletePolicyForTopic(bool useDeletePolicyForTopic = false)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>useDeletePolicyForTopic</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, then will be used <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> when the topic is created the first time.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseDeletePolicyForTopic_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseEnumeratorWithPrefetch_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseEnumeratorWithPrefetch*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseEnumeratorWithPrefetch_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseEnumeratorWithPrefetch(System.Boolean)">
-  WithUseEnumeratorWithPrefetch(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L272"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUseEnumeratorWithPrefetch(bool useEnumeratorWithPrefetch = true)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>useEnumeratorWithPrefetch</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, prefetch in enumeration will be used.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseEnumeratorWithPrefetch_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Used only if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, not available in EFCore 6
-See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseGlobalTable_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseGlobalTable*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseGlobalTable_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseGlobalTable(System.Boolean)">
-  WithUseGlobalTable(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L228"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine based on Streams (i.e. <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>)
-will use <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.GlobalKTable-2.html">GlobalKTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.GlobalKTable-4.html">GlobalKTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>)
-instead of <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.KTable-2.html">KTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.KTable-4.html">KTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>) to manage local storage of information.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUseGlobalTable(bool useGlobalTable = false)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>useGlobalTable</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then <a class="xref" href="https://knet.masesgroup.com/api/Org.Apache.Kafka.Streams.Kstream.GlobalKTable-2.html">GlobalKTable&lt;K, V&gt;</a> (<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Streams.Kstream.GlobalKTable-4.html">GlobalKTable&lt;K, V, TJVMK, TJVMV&gt;</a> if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseGlobalTable_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseKNetStreams_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseKNetStreams*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseKNetStreams_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUseKNetStreams(System.Boolean)">
-  WithUseKNetStreams(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L205"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Enables use of KNet version of Apache Kafka Streams</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUseKNetStreams(bool useKNetStreams = false)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>useKNetStreams</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then KNet version of Apache Kafka Streams will be used instead of standard Apache Kafka Streams.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUseKNetStreams_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
-<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
-</div>
-
-
-
-
-  <a id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUsePersistentStorage_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUsePersistentStorage*"></a>
-
-  <h3 id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUsePersistentStorage_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithUsePersistentStorage(System.Boolean)">
-  WithUsePersistentStorage(bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/KEFCoreDbContextOptionsBuilder.cs/#L250"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Setting this property to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual KEFCoreDbContextOptionsBuilder WithUsePersistentStorage(bool usePersistentStorage = false)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>usePersistentStorage</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> the engine prefers to use enumerator instances able to do a prefetch on data speeding up execution</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html">KEFCoreDbContextOptionsBuilder</a></dt>
-    <dd><p>The same builder instance so that multiple calls can be chained.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithUsePersistentStorage_System_Boolean__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Used only if <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseCompactedReplicator">UseCompactedReplicator</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseKNetStreams">UseKNetStreams</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>,  not available in EFCore 6.
-See <a href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</a>, and
 <a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
 </div>
 

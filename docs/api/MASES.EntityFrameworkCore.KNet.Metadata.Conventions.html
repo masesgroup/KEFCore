@@ -95,16 +95,76 @@
 Classes
 </h3>
     <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.DefiningQueryRewritingConvention.html">DefiningQueryRewritingConvention</a></dt>
-      <dd><p>Convention that converts accesses of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1">DbSet&lt;TEntity&gt;</a> inside query filters and defining queries into
-<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryrootexpression">QueryRootExpression</a>.
-This makes them consistent with how DbSet accesses in the actual queries are represented, which allows for easier processing in the
-query pipeline.</p>
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeConverterConvention.html">KEFCoreComplexTypeConverterConvention</a></dt>
+      <dd><p>A convention that registers <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverter.html">IComplexTypeConverter</a> implementations
+declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreComplexTypeConverterAttribute.html">KEFCoreComplexTypeConverterAttribute</a> or
+<code>HasKEFCoreComplexTypeConverter()</code> into <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a>
+at model finalization time.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreComplexTypeEquatableConvention.html">KEFCoreComplexTypeEquatableConvention</a></dt>
+      <dd><p>A convention that verifies all complex types in the model implement value equality,
+either via <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable&lt;T&gt;</a> or by overriding <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">Equals(object)</a>.</p>
 </dd>
     </dl>
     <dl class="jumplist">
       <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreConventionSetBuilder.html">KEFCoreConventionSetBuilder</a></dt>
       <dd><p>A builder for building conventions for the KEFCore provider.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreManageEventsConvention.html">KEFCoreManageEventsConvention</a></dt>
+      <dd><p>A convention that resolves and stores the Kafka event management flag for each entity type
+as a model annotation (<a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KEFCoreAnnotationNames_ManageEvents">ManageEvents</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreProducerConvention.html">KEFCoreProducerConvention</a></dt>
+      <dd><p>A convention that resolves per-entity producer configuration overrides at model finalization time,
+storing the result as a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation.html">KEFCoreProducerAnnotation</a> on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention.html">KEFCoreReadOnlyConvention</a></dt>
+      <dd><p>A convention that resolves per-entity read-only configuration
+at model finalization time, storing the result as a model annotation on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.html">KEFCoreSerDesConvention</a></dt>
+      <dd><p>A convention that resolves per-entity serialization type overrides at model finalization time,
+storing the results as model annotations on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreStoreLookupConvention.html">KEFCoreStoreLookupConvention</a></dt>
+      <dd><p>A convention that resolves per-entity Streams store query optimization flags
+at model finalization time, storing the results as model annotations on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicNamingConvention.html">KEFCoreTopicNamingConvention</a></dt>
+      <dd><p>A convention that resolves and stores the Kafka topic name for each entity type
+as a model annotation (<a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KEFCoreAnnotationNames_TopicName">TopicName</a>).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicPartitionsConvention.html">KEFCoreTopicPartitionsConvention</a></dt>
+      <dd><p>A convention that resolves per-entity topic partition and replication factor configuration
+at model finalization time, storing the results as model annotations on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTopicRetentionConvention.html">KEFCoreTopicRetentionConvention</a></dt>
+      <dd><p>A convention that resolves per-entity topic retention configuration
+at model finalization time, storing the results as model annotations on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreTransactionalConvention.html">KEFCoreTransactionalConvention</a></dt>
+      <dd><p>A convention that resolves per-entity Kafka transaction group configuration
+at model finalization time, storing the result as a model annotation on each <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a>.</p>
 </dd>
     </dl>
 

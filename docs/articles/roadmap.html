@@ -91,10 +91,47 @@
 <ul>
 <li>[x] Create a first working provider starting from the code of InMemory provider</li>
 <li>[x] Extends the first provider with new features able to create Apache Kafka™ Streams topology to retrieve information</li>
-<li>[x] Use KNetCompactedReplicator beside Apache Kafka™ Streams</li>
 <li>[x] Add external package to manage data serialization</li>
 <li>[x] Add Avro external package to manage data serialization</li>
+<li>[x] Add Protobuf external package to manage data serialization</li>
 <li>[x] Add Templates package</li>
+<li>[x] Separate singleton-scoped from context-scoped options — correct EF Core Service Provider cache behavior (#438)</li>
+<li>[x] Topic naming convention and attributes — <code>KEFCoreTopicAttribute</code>, <code>KEFCoreTopicPrefixAttribute</code>, fluent API (#417)</li>
+<li>[x] Event management convention — per-entity opt-out via <code>KEFCoreIgnoreEventsAttribute</code> (#501)</li>
+<li>[x] ComplexType equality enforcement convention (#494)</li>
+<li>[x] ComplexType converter registration convention (#417)</li>
+<li>[x] <code>StreamsManager</code> factory — lifecycle managed per <code>ApplicationId</code> via <code>IKEFCoreCluster</code> (#501)</li>
+<li>[x] ComplexType LINQ binding — <code>TryBindMember</code> extension, <code>KEFCoreComplexTypeProjectionExpression</code> (#491)</li>
+<li>[x] <code>TranslateRightJoin</code> implementation — EF Core 10 requirement (#514)</li>
+<li>[ ] Remove deprecated options: <code>UseCompactedReplicator</code>, <code>UseGlobalTable</code>, <code>ManageEvents</code>, <code>ConsumerConfig</code>, <code>DefaultConsumerInstances</code></li>
+<li>[ ] Full documentation update for new conventions and options architecture</li>
+</ul>
+<h2 id="query-engine-improvements">Query engine improvements</h2>
+<h3 id="store-level-query-optimizations-496-497">Store-level query optimizations (#496, #497)</h3>
+<p>These optimizations bypass full table scans by delegating work directly to the underlying
+Kafka Streams state store (RocksDB). Each optimization is independently controlled via a
+<code>KafkaOptionsExtension</code> flag.</p>
+<ul>
+<li>[x] <strong>Single key lookup</strong> (<code>UseStoreSingleKeyLookup</code>, default: <code>true</code>) — PK equality predicate → direct <code>store.get(key)</code> instead of full scan + <code>Where</code> (#497)</li>
+<li>[x] <strong>Key range scan</strong> (<code>UseStoreKeyRange</code>, default: <code>true</code>) — PK range predicate (<code>&gt;=</code>, <code>&lt;=</code>) → <code>store.range(from, to)</code> iterator (#497)</li>
+<li>[x] <strong>Reverse iteration</strong> (<code>UseStoreReverse</code>, default: <code>true</code>) — <code>Last()</code>/<code>LastOrDefault()</code> without range → native <code>store.reverseAll()</code> iterator (#497)</li>
+<li>[x] <strong>Reverse range scan</strong> (<code>UseStoreReverseKeyRange</code>, default: <code>true</code>) — <code>Last()</code>/<code>LastOrDefault()</code> with PK range → <code>store.reverseRange(from, to)</code> with inverted bounds (#497)</li>
+<li>[ ] <strong>Prefix scan</strong> (<code>UseStorePrefixScan</code>, default: <code>false</code>, experimental) — <code>LIKE 'prefix%'</code> on PK string or partial composite PK equality → <code>store.prefixScan(prefix, serializer)</code>. Requires string-serialized keys for correct lexicographic behavior. (stub introduced in #524, implementation tracked in #541)</li>
+</ul>
+<h3 id="ktable-level-query-optimizations-496">KTable-level query optimizations (#496)</h3>
+<p>These optimizations require Kafka Streams topology awareness. KTable joins operate only
+on record keys (PK), require co-partitioned topics, and must be explicitly enabled.</p>
+<ul>
+<li>[ ] <strong>KTable inner/left/right join</strong> (<code>UseStoreKTableJoin</code>, default: <code>false</code>) — EF Core <code>Join</code>/<code>LeftJoin</code>/<code>RightJoin</code> on PK-to-PK conditions → <code>KTable.join()</code> / <code>KTable.leftJoin()</code> native API (#537)</li>
+</ul>
+<h3 id="future--topology-dependent">Future / topology-dependent</h3>
+<p>These features require pre-configured Kafka Streams topology elements (declared before
+Streams startup) and are not implementable on-the-fly:</p>
+<ul>
+<li>[ ] Secondary index support via <code>KGroupedTable</code> — opt-in per property via fluent API / attribute; enables optimized <code>Where</code> on non-PK properties (#538)</li>
+<li>[ ] Aggregate push-down (<code>Count</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Average</code>) via <code>KGroupedTable.aggregate()</code> / <code>reduce()</code> (#539)</li>
+<li>[ ] <code>GroupBy</code> push-down via <code>KTable.groupBy()</code> → <code>KGroupedTable</code> (#540)</li>
+<li>[ ] Subquery-to-KTable join — use pre-built KTable results as subquery sources in LINQ</li>
 </ul>
 
 </article>

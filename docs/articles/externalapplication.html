@@ -87,40 +87,110 @@
         <article data-uid="">
 <h1 id="kefcore-external-application">KEFCore: external application</h1>
 
-<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> shall convert the entities used within the model in something viable from the backend.
-Continuing from the concepts introduced in <a href="serialization.html">serialization</a>, an external application can use the data stored in the topics in a way it decides: <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> gives some helpers to get back the CLR Entity objects stored in the topics.</p>
-<blockquote>
-<p>IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.</p>
-</blockquote>
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> converts the entities used within the model into a format suitable for the backend. Continuing from the concepts introduced in <a href="serialization.html">serialization</a>, an external application can consume data stored in the topics and get back the original CLR entity objects using the <code>EntityExtractor</code> helper class.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Until the first major version, all releases are considered not stable: public and internal APIs may change without notice.</p>
+</div>
 <h2 id="basic-concepts">Basic concepts</h2>
-<p>An external application may want to be informed about data changes in the topics and want to analyze the Entity was previously managed from the EFCore application.
-Within the core packages there is the <code>EntityExtractor</code> class which contains, till now, few methods and one accepts a raw <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> from Apache Kafka™.
-The method reads the info stored in the <code>ConsumerRecord&lt;byte[], byte[]&gt;</code> and returns the Entity object with the filled properties.</p>
-<p>It is possible to build a new application which subscribe to a topic created from the EFCore application.
-The following is a possible snippet of the logic can be applied:</p>
-<pre><code class="lang-c#">const string topicFrom = &quot;TheKEFCoreTopicWithData&quot;;
-
-KafkaConsumer&lt;byte[], byte[]&gt; consumer = new KafkaConsumer&lt;byte[], byte[]&gt;();
-consumer.Subscribe(topicFrom); // the callback was omitted for simplicity
-
-var records = consumer.Poll(100);
-
-foreach(var record in records)
-{
-	var entity = EntityExtractor.FromRecord(record);
-	Console.WriteLine(entity);
-}
+<p>An external application may want to be informed about data changes in topics and reconstruct the entity objects that were previously managed by the EF Core application. <code>EntityExtractor</code> provides methods to consume records from Apache Kafka™ topics and return the entity objects with all properties populated.</p>
+<h2 id="identifying-the-correct-topic-name">Identifying the correct topic name</h2>
+<p>The topic name to subscribe to is the same name resolved by <code>KEFCoreTopicNamingConvention</code> at model finalization time. The resolution priority is:</p>
+<ol>
+<li><code>KEFCoreTopicAttribute</code> on the entity class</li>
+<li><code>TableAttribute</code> on the entity class (including schema prefix, e.g. <code>schema.tablename</code>)</li>
+<li>The EF Core entity type name including full namespace</li>
+</ol>
+<p>The topic name is then optionally prefixed via <code>KEFCoreTopicPrefixAttribute</code> or <code>UseKEFCoreTopicPrefix()</code>. The full resolved name always follows the pattern <code>[prefix].[resolved-topic-name]</code>.</p>
+<p>For example, given:</p>
+<pre><code class="lang-csharp">[Table(&quot;Blog&quot;, Schema = &quot;Simple&quot;)]
+public class Blog { ... }
 </code></pre>
-<p>A full working example can be found under test folder of the <a href="https://github.com/masesgroup/KEFCore">repository</a>.</p>
-<h3 id="mandatory-information">Mandatory information</h3>
-<p>The method <code>EntityExtractor.FromTopic</code>, and then <code>EntityExtractor.FromRecord</code>, use the reflection to get back the types referring to serializer and types of the model which were stored in the topics.
-To work properly it needs, to be loaded in memory, at least:</p>
+<p>with <code>TopicPrefix = &quot;TestDB&quot;</code>, the topic name is <code>TestDB.Simple.Blog</code>.</p>
+<p>See <a href="conventions.html#topic-naming-convention">conventions</a> for full details.</p>
+<h2 id="basic-usage">Basic usage</h2>
+<p>The simplest case — no ComplexType properties, topic name provided explicitly:</p>
+<pre><code class="lang-csharp">KEFCore.CreateGlobalInstance();
+
+EntityExtractor.FromTopic(
+    &quot;MY-KAFKA-BROKER:9092&quot;,
+    &quot;TestDB.Simple.Blog&quot;,
+    (entity, exception) =&gt;
+    {
+        if (exception != null) Console.Error.WriteLine(exception.Message);
+        if (entity != null) Console.WriteLine(entity);
+    },
+    cancellationToken);
+</code></pre>
+<h2 id="complextype-support-and-imodel-integration">ComplexType support and IModel integration</h2>
+<p>When entity types contain ComplexType properties, <code>EntityExtractor</code> needs an <code>IComplexTypeConverterFactory</code> populated with the converters declared in the model. It also optionally accepts an <code>IModel</code> for accurate property mapping via <code>IEntityType</code>.</p>
+<p>Both are obtained by building the KEFCore model standalone outside of <code>DbContext.OnModelCreating</code>:</p>
+<pre><code class="lang-csharp">KEFCore.CreateGlobalInstance();
+
+// build the model standalone — populates the converter factory
+var modelBuilder = KEFCoreConventionSetBuilder.CreateModelBuilder(out var converterFactory);
+
+// register the same entity types as in the DbContext
+modelBuilder.Entity&lt;Blog&gt;();
+modelBuilder.Entity&lt;Post&gt;();
+
+// finalize the model — applies all KEFCore conventions including topic name resolution
+IModel model = modelBuilder.FinalizeModel();
+
+// pass factory and model to EntityExtractor
+EntityExtractor.FromTopic&lt;Blog&gt;(
+    &quot;MY-KAFKA-BROKER:9092&quot;,
+    &quot;TestDB.Simple.Blog&quot;,
+    (entity, exception) =&gt;
+    {
+        if (exception != null) Console.Error.WriteLine(exception.Message);
+        if (entity != null) Console.WriteLine(entity);
+    },
+    cancellationToken,
+    converterFactory: converterFactory,
+    model: model);
+</code></pre>
+<h2 id="automatic-topic-name-resolution">Automatic topic name resolution</h2>
+<p>When <code>IModel</code> is provided, the topic name can be omitted — <code>EntityExtractor</code> resolves it automatically from the model annotation set by <code>KEFCoreTopicNamingConvention</code>:</p>
+<pre><code class="lang-csharp">// topicName not required — resolved from model
+EntityExtractor.FromTopic&lt;Blog&gt;(
+    &quot;MY-KAFKA-BROKER:9092&quot;,
+    topicName: null,
+    (entity, exception) =&gt; { ... },
+    cancellationToken,
+    converterFactory: converterFactory,
+    model: model);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>topicName</code> null or whitespace triggers automatic resolution. An explicit non-empty value always takes precedence.</p>
+</div>
+<h2 id="processing-individual-records">Processing individual records</h2>
+<pre><code class="lang-csharp">var record = ...; // ConsumerRecord&lt;byte[], byte[]&gt; from KafkaConsumer
+
+// without model — basic deserialization
+var entity = EntityExtractor.FromRecord(record);
+
+// with model and factory — full ComplexType support
+var entity = EntityExtractor.FromRecord(record,
+    converterFactory: converterFactory,
+    model: model);
+
+// typed
+var blog = EntityExtractor.FromRecord&lt;Blog&gt;(record,
+    converterFactory: converterFactory,
+    model: model);
+</code></pre>
+<h2 id="mandatory-runtime-dependencies">Mandatory runtime dependencies</h2>
+<p><code>EntityExtractor.FromTopic</code> and <code>FromRecord</code> use reflection to recover the serializer and entity types from the record headers. The following must be loaded in memory:</p>
 <ul>
-<li>The assembly containing the serializer: if the serializer are the default this information is intrisecally available</li>
-<li>The model types (i.e. the types used to build the <code>DbContext</code> or <code>KafkaDbContext</code>)</li>
+<li>The assembly containing the serializer — if using the default JSON serializer this is automatically available</li>
+<li>The assembly containing the model entity types (<code>Blog</code>, <code>Post</code>, etc.)</li>
 </ul>
+<h2 id="performance">Performance</h2>
+<p>The internal extractor cache ensures that <code>MakeGenericType</code>, <code>Activator.CreateInstance</code> and delegate compilation happen only once per unique combination of <code>(keyType, valueContainerType, keySerDesType, valueSerDesType, converterFactory, model)</code>. Subsequent records of the same type invoke only the compiled delegate — zero reflection overhead at runtime per record.</p>
 <h2 id="possible-usages">Possible usages</h2>
-<p>For possible usages of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, and this feature, see <a href="usecases.html">use cases</a></p>
+<p>For possible usages of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, and this feature, see <a href="usecases.html">use cases</a>.</p>
 
 </article>
 

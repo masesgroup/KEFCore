@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <title>Class KEFCoreEntityTypeBuilderExtensions | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class KEFCoreEntityTypeBuilderExtensions | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
+      <meta name="description" content="Extension methods for  for the Kafka provider.">
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions">
+
+
+
+  <h1 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions" class="text-break">
+Class KEFCoreEntityTypeBuilderExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Extensions.html">Extensions</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Extension methods for <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for the Kafka provider.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class KEFCoreEntityTypeBuilderExtensions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">KEFCoreEntityTypeBuilderExtensions</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+  <h2 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>See <a href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</a>, and
+<a href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</a> for more information and examples.</p>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreManageEvents_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreManageEvents*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreManageEvents_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreManageEvents(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Boolean)">
+  HasKEFCoreManageEvents(EntityTypeBuilder, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the KEFCore event management behavior for this entity type,
+overriding the context-level default.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreManageEvents(this EntityTypeBuilder entityTypeBuilder, bool manageEvents = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entityTypeBuilder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>manageEvents</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> to enable event management (default);
+<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> to disable it for this entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreManageEvents_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Boolean__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> is equivalent to applying
+<a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreIgnoreEventsAttribute.html">KEFCoreIgnoreEventsAttribute</a> on the entity class.</p>
+</div>
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreProducer_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreProducer*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreProducer_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Nullable_MASES_KNet_Producer_ProducerConfigBuilder_AcksTypes__System_Nullable_System_Int32__System_Nullable_System_Int32__System_Nullable_MASES_KNet_Producer_ProducerConfigBuilder_CompressionTypes__System_Nullable_System_Int32__System_Nullable_System_Int32__System_Nullable_System_Int32__System_Nullable_System_Int32__System_Nullable_System_Int64__System_Nullable_System_Int64__" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreProducer(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Nullable{MASES.KNet.Producer.ProducerConfigBuilder.AcksTypes},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{MASES.KNet.Producer.ProducerConfigBuilder.CompressionTypes},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Nullable{System.Int64})">
+  HasKEFCoreProducer(EntityTypeBuilder, AcksTypes?, int?, int?, CompressionTypes?, int?, int?, int?, int?, long?, long?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L218"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Overrides producer configuration for the Kafka topic associated with this entity type.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreProducerAttribute.html">KEFCoreProducerAttribute</a> on the entity class.
+Only explicitly provided parameters override the global <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">ProducerConfig</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreProducer(this EntityTypeBuilder builder, ProducerConfigBuilder.AcksTypes? acks = null, int? lingerMs = null, int? batchSize = null, ProducerConfigBuilder.CompressionTypes? compressionType = null, int? retries = null, int? maxInFlightRequestsPerConnection = null, int? deliveryTimeoutMs = null, int? requestTimeoutMs = null, long? bufferMemory = null, long? maxBlockMs = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>acks</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a>.<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.AcksTypes.html">AcksTypes</a>?</dt>
+    <dd><p>Acknowledgment mode. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>lingerMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Batch linger delay in milliseconds. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>batchSize</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Maximum batch size in bytes. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>compressionType</code> <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a>.<a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.CompressionTypes.html">CompressionTypes</a>?</dt>
+    <dd><p>Compression algorithm. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>retries</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Number of retries on transient failure. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>maxInFlightRequestsPerConnection</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Max unacknowledged requests per connection. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>deliveryTimeoutMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Total delivery timeout in milliseconds. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>requestTimeoutMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>?</dt>
+    <dd><p>Single request timeout in milliseconds. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>bufferMemory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd><p>Total producer buffer memory in bytes. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>maxBlockMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>?</dt>
+    <dd><p>Max block time when buffer is full in milliseconds. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreSerDes_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreSerDes*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreSerDes_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Type_System_Type_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreSerDes(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Type,System.Type,System.Type)">
+  HasKEFCoreSerDes(EntityTypeBuilder, Type?, Type?, Type?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L174"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Overrides the serialization types for the Kafka topic associated with this entity type.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.html">KEFCoreSerDesAttribute</a> on the entity class.
+Only the types explicitly provided are stored — omitted parameters inherit the context-level default.
+All types must be open generic type definitions (e.g. <code>typeof(MySerDes&lt;&gt;)</code>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreSerDes(this EntityTypeBuilder builder, Type? keySerDesSelectorType = null, Type? valueSerDesSelectorType = null, Type? valueContainerType = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>keySerDesSelectorType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd><p>Open generic key serializer selector type, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>valueSerDesSelectorType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd><p>Open generic value container serializer selector type, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+    <dt><code>valueContainerType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a></dt>
+    <dd><p>Open generic value container type, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to inherit.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreStoreLookup_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreStoreLookup*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreStoreLookup_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Nullable_System_Boolean__System_Nullable_System_Boolean__System_Nullable_System_Boolean__System_Nullable_System_Boolean__System_Nullable_System_Boolean__" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreStoreLookup(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+  HasKEFCoreStoreLookup(EntityTypeBuilder, bool?, bool?, bool?, bool?, bool?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L142"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures the Kafka Streams store query optimization flags for this entity type,
+overriding the context-level defaults from <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html">KEFCoreDbContext</a>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreStoreLookupAttribute.html">KEFCoreStoreLookupAttribute</a> on the entity class.
+Only the flags explicitly provided are stored — omitted parameters retain the context-level default.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreStoreLookup(this EntityTypeBuilder builder, bool? prefixScan = null, bool? singleKeyLookup = null, bool? keyRange = null, bool? reverse = null, bool? reverseKeyRange = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>prefixScan</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd><p>Enables prefix scan optimization. Default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> (inherit).</p>
+</dd>
+    <dt><code>singleKeyLookup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd><p>Enables single key look-up optimization. Default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> (inherit).</p>
+</dd>
+    <dt><code>keyRange</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd><p>Enables key range look-up optimization. Default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> (inherit).</p>
+</dd>
+    <dt><code>reverse</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd><p>Enables reverse iteration optimization. Default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> (inherit).</p>
+</dd>
+    <dt><code>reverseKeyRange</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>?</dt>
+    <dd><p>Enables reverse key range look-up optimization. Default is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> (inherit).</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicPartitions_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicPartitions*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicPartitions_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Int32_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicPartitions(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Int32)">
+  HasKEFCoreTopicPartitions(EntityTypeBuilder, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the number of partitions for the Kafka topic associated with this entity type,
+overriding <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultNumPartitions">DefaultNumPartitions</a>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicPartitionsAttribute.html">KEFCoreTopicPartitionsAttribute</a> on the entity class.
+Applied at topic creation time.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreTopicPartitions(this EntityTypeBuilder builder, int numPartitions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>numPartitions</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The number of partitions. Must be greater than zero.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicReplicationFactor_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicReplicationFactor*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicReplicationFactor_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Int16_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicReplicationFactor(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Int16)">
+  HasKEFCoreTopicReplicationFactor(EntityTypeBuilder, short)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the replication factor for the Kafka topic associated with this entity type,
+overriding <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultReplicationFactor">DefaultReplicationFactor</a>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicReplicationFactorAttribute.html">KEFCoreTopicReplicationFactorAttribute</a> on the entity class.
+Applied at topic creation time.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreTopicReplicationFactor(this EntityTypeBuilder builder, short replicationFactor)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>replicationFactor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a></dt>
+    <dd><p>The replication factor. Must be greater than zero.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicRetention_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicRetention*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTopicRetention_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Int64_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTopicRetention(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Int64,System.Int64)">
+  HasKEFCoreTopicRetention(EntityTypeBuilder, long, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the retention policy for the Kafka topic associated with this entity type,
+overriding the values in <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_TopicConfig">TopicConfig</a>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTopicRetentionAttribute.html">KEFCoreTopicRetentionAttribute</a> on the entity class.
+Applied at topic creation time.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreTopicRetention(this EntityTypeBuilder builder, long retentionBytes = -1, long retentionMs = -1)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>retentionBytes</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>Maximum size in bytes before older segments are deleted. Use <code>-1</code> to leave at cluster default.</p>
+</dd>
+    <dt><code>retentionMs</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>Maximum retention time in milliseconds. Use <code>-1</code> to leave at cluster default.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTransactionGroup_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTransactionGroup*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreTransactionGroup_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_String_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreTransactionGroup(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.String)">
+  HasKEFCoreTransactionGroup(EntityTypeBuilder, string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L262"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Assigns this entity type to a Kafka transaction group, enabling exactly-once semantics
+for all entity types sharing the same <code class="paramref">transactionGroup</code>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html">KEFCoreTransactionalAttribute</a> on the entity class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreTransactionGroup(this EntityTypeBuilder builder, string transactionGroup)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+    <dt><code>transactionGroup</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The transaction group name. All entity types sharing this name will participate
+in the same Kafka transaction. Must be non-empty.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_IsKEFCoreReadOnly_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_IsKEFCoreReadOnly_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)">
+  IsKEFCoreReadOnly(EntityTypeBuilder)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Marks this entity type as read-only, preventing any write via
+<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.savechanges#microsoft-entityframeworkcore-dbcontext-savechanges">SaveChanges()</a>.
+Equivalent to applying <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.html">KEFCoreReadOnlyAttribute</a> on the entity class.
+Unlike <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ReadOnlyMode">ReadOnlyMode</a> which applies to the entire context,
+this applies only to this entity type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder IsKEFCoreReadOnly(this EntityTypeBuilder builder)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> to configure.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The same <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a> for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L33" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <script type="text/javascript">document.write('<div style="text-align: center;">Copyright © 2022 - ' + new Date().getFullYear() + ' MASES s.r.l. | Via San Cesidio 16 - San Valentino in A.C. - PE | P.I. 01932310681</div>');</script>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
