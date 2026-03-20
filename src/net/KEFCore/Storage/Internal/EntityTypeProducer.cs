@@ -448,39 +448,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var topicName = record.AssociatedTopicName;
                 if (record.EntityState == EntityState.Deleted)
                 {
-                    var jvmKey = _keySerdes!.Serialize(topicName, record.GetKey<TKey>());
-                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, jvmKey, default!);
-                    var future = txProducer.Send(kRecord, _transactionalCallback);
-                    futures?.Add(future);
-                }
-                else
-                {
                     Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                    if (_keySerdes!.UseHeaders)
+                    {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
-
-                    var jvmKey = _keySerdes!.Serialize(topicName, record.GetKey<TKey>());
-                    var jvmValue = _valueSerdes!.Serialize(topicName, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
-                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
+                    }
+                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
                     var future = txProducer.Send(kRecord, _transactionalCallback);
-                    futures?.Add(future);
-                }
-            }
-            // no Flush — sarà CommitTransaction() a flusharsi
-        }
-        else
-        {
-            foreach (var record in records)
-            {
-                Future<RecordMetadata> future;
-#if OLD_WAY
-                var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
-                future = _kafkaProducer?.Send(newRecord);
-                futures.Add(future!);
-#else
-                if (record.EntityState == EntityState.Deleted)
-                {
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, record.GetKey<TKey>(), null!)!;
                     futures?.Add(future);
                 }
                 else
@@ -490,10 +465,43 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                     {
                         headers = Org.Apache.Kafka.Common.Header.Headers.Create();
                     }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                    var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
+                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
+                    var future = txProducer.Send(kRecord, _transactionalCallback);
                     futures?.Add(future);
                 }
+            }
+        }
+        else
+        {
+            foreach (var record in records)
+            {
+                Future<RecordMetadata> future;
+#if OLD_WAY
+                var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
+                future = _kafkaProducer?.Send(newRecord);
+#else
+                if (record.EntityState == EntityState.Deleted)
+                {
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), null!, headers)!;
+                }
+                else
+                {
+                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                    {
+                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                    }
+                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                }
 #endif
+                futures?.Add(future);
             }
 
             _kafkaProducer?.Flush();
