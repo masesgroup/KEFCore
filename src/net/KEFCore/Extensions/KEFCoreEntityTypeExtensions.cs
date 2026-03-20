@@ -188,6 +188,32 @@ public static class KEFCoreEntityTypeExtensions
         }
         return builder;
     }
+    /// <summary>
+    /// Returns the key serializer selector type for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.KeySerDesSelectorType"/> annotation first,
+    /// falling back to <see cref="IKEFCoreSingletonOptions.KeySerDesSelectorType"/>.
+    /// </summary>
+    public static Type? GetKeySerDesSelectorType(this IEntityType entityType, IKEFCoreSingletonOptions options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.KeySerDesSelectorType)?.Value as Type
+           ?? options.KeySerDesSelectorType;
+
+    /// <summary>
+    /// Returns the value container serializer selector type for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.ValueSerDesSelectorType"/> annotation first,
+    /// falling back to <see cref="IKEFCoreSingletonOptions.ValueSerDesSelectorType"/>.
+    /// </summary>
+    public static Type? GetValueSerDesSelectorType(this IEntityType entityType, IKEFCoreSingletonOptions options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueSerDesSelectorType)?.Value as Type
+           ?? options.ValueSerDesSelectorType;
+
+    /// <summary>
+    /// Returns the value container type for this entity type.
+    /// Reads <see cref="KEFCoreAnnotationNames.ValueContainerType"/> annotation first,
+    /// falling back to <see cref="IKEFCoreSingletonOptions.ValueContainerType"/>.
+    /// </summary>
+    public static Type? GetValueContainerType(this IEntityType entityType, IKEFCoreSingletonOptions options)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueContainerType)?.Value as Type
+           ?? options.ValueContainerType;
 
     /// <summary>
     /// Gets consumer instances

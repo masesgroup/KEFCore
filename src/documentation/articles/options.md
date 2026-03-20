@@ -25,9 +25,9 @@ These options must be consistent across all `DbContext` instances pointing to th
 |---|---|---|
 | `BootstrapServers` | — | Mandatory. Resolved to `ClusterId` for caching |
 | `ApplicationId` | — | Mandatory when not using `UseCompactedReplicator`. Unique per process on the cluster |
-| `KeySerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultKeySerialization` | Generic type definition |
-| `ValueSerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultValueContainerSerialization` | Generic type definition |
-| `ValueContainerType` | `DefaultKEFCoreSerDes.DefaultValueContainer` | Generic type definition |
+| `KeySerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultKeySerialization` | Generic type definition — overridable per entity via `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()` |
+| `ValueSerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultValueContainerSerialization` | Generic type definition — overridable per entity |
+| `ValueContainerType` | `DefaultKEFCoreSerDes.DefaultValueContainer` | Generic type definition — overridable per entity |
 | `UseKeyByteBufferDataTransfer` | `false` | Determines key transport type in Streams topology |
 | `UseValueContainerByteBufferDataTransfer` | `false` | Determines value transport type in Streams topology |
 | `UseKNetStreams` | `true` | KNet vs plain Kafka Streams backend |

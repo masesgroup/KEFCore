@@ -248,3 +248,42 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 > [!TIP]
 > Only override the flags relevant to the actual query patterns used for that entity. Enabling unused optimizations adds overhead to query planning without benefit. See [performance tips](performancetips.md#store-query-optimizations) for guidance on which flags to enable.
+
+## Serialization convention
+
+`KEFCoreSerDesConvention` resolves per-entity serialization type overrides at model finalization time. The resolved types are used when creating serializer instances for that entity, overriding the global `KeySerDesSelectorType`, `ValueSerDesSelectorType` and `ValueContainerType` singleton options.
+
+This is useful when a model contains entities with heterogeneous serialization needs — for example mixing JSON and Avro entities on the same cluster, or using a custom serializer for a specific high-throughput entity.
+
+### Usage examples
+
+```csharp
+// Attribute — use Avro for this entity, JSON for everything else
+[KEFCoreSerDesAttribute(
+    keySerDesSelectorType: typeof(AvroKEFCoreSerDes.Key.BinaryRaw<>),
+    valueSerDesSelectorType: typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>),
+    valueContainerType: typeof(AvroValueContainer<>))]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Attribute — override only the value container, inherit key serializer from context
+[KEFCoreSerDesAttribute(valueContainerType: typeof(MyCustomValueContainer<>))]
+[Table("Order")]
+public class Order { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreSerDes(
+                    keySerDesSelectorType: typeof(AvroKEFCoreSerDes.Key.BinaryRaw<>),
+                    valueSerDesSelectorType: typeof(AvroKEFCoreSerDes.ValueContainer.BinaryRaw<>),
+                    valueContainerType: typeof(AvroValueContainer<>));
+}
+```
+
+> [!IMPORTANT]
+> All serialization types must be open generic type definitions (e.g. `typeof(MySerDes<>)`). Closed generic types will throw `ArgumentException` at model build time.
+
+> [!NOTE]
+> `UseKeyByteBufferDataTransfer` and `UseValueContainerByteBufferDataTransfer` are singleton options that control the JVM transport layer and apply globally to the Streams topology — they cannot be overridden per entity. Only the serializer selector types and value container type can be overridden.

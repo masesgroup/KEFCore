@@ -158,4 +158,42 @@ public static class KEFCoreEntityTypeBuilderExtensions
             builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.UseStoreReverseKeyRange, reverseKeyRange.Value);
         return builder;
     }
+
+    /// <summary>
+    /// Overrides the serialization types for the Kafka topic associated with this entity type.
+    /// Equivalent to applying <see cref="KEFCoreSerDesAttribute"/> on the entity class.
+    /// Only the types explicitly provided are stored — omitted parameters inherit the context-level default.
+    /// All types must be open generic type definitions (e.g. <c>typeof(MySerDes&lt;&gt;)</c>).
+    /// </summary>
+    /// <param name="builder">The <see cref="EntityTypeBuilder"/> to configure.</param>
+    /// <param name="keySerDesSelectorType">Open generic key serializer selector type, or <see langword="null"/> to inherit.</param>
+    /// <param name="valueSerDesSelectorType">Open generic value container serializer selector type, or <see langword="null"/> to inherit.</param>
+    /// <param name="valueContainerType">Open generic value container type, or <see langword="null"/> to inherit.</param>
+    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    public static EntityTypeBuilder HasKEFCoreSerDes(
+        this EntityTypeBuilder builder,
+        Type? keySerDesSelectorType = null,
+        Type? valueSerDesSelectorType = null,
+        Type? valueContainerType = null)
+    {
+        if (keySerDesSelectorType != null)
+        {
+            if (!keySerDesSelectorType.IsGenericTypeDefinition)
+                throw new ArgumentException($"{keySerDesSelectorType.Name} must be an open generic type definition.", nameof(keySerDesSelectorType));
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.KeySerDesSelectorType, keySerDesSelectorType);
+        }
+        if (valueSerDesSelectorType != null)
+        {
+            if (!valueSerDesSelectorType.IsGenericTypeDefinition)
+                throw new ArgumentException($"{valueSerDesSelectorType.Name} must be an open generic type definition.", nameof(valueSerDesSelectorType));
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueSerDesSelectorType, valueSerDesSelectorType);
+        }
+        if (valueContainerType != null)
+        {
+            if (!valueContainerType.IsGenericTypeDefinition)
+                throw new ArgumentException($"{valueContainerType.Name} must be an open generic type definition.", nameof(valueContainerType));
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueContainerType, valueContainerType);
+        }
+        return builder;
+    }
 }

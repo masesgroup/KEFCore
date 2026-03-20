@@ -20,9 +20,9 @@ KEFCore separates options into two categories:
 
 The following options are singleton-scoped and must be consistent across all `DbContext` instances sharing the same cluster:
 
-- **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key
-- **ValueSerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value
-- **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka™ record value
+- **KeySerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record key — overridable per entity via `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()`
+- **ValueSerDesSelectorType**: the .NET type to be used to allocate an external serializer for Apache Kafka™ record value — overridable per entity
+- **ValueContainerType**: the .NET type to be used to allocate an external container class for Apache Kafka™ record value — overridable per entity
 - **UseKeyByteBufferDataTransfer**: set to **true** to prefer `Java.Nio.ByteBuffer` data exchange in serializer instances for keys
 - **UseValueContainerByteBufferDataTransfer**: set to **true** to prefer `Java.Nio.ByteBuffer` data exchange in serializer instances for value containers
 - **BootstrapServers**: the server hosting the broker of Apache Kafka™ — used to resolve the `ClusterId` which is the actual Service Provider cache key
@@ -79,6 +79,7 @@ By default, KEFCore enables event management (i.e. `TimestampExtractor` activati
 
 Several context-level options can be overridden per entity type via conventions, allowing fine-grained control without affecting the global configuration:
 
+- **Serialization types** — `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()` to override `KeySerDesSelectorType`, `ValueSerDesSelectorType` and `ValueContainerType` per entity, enabling mixed serialization formats on the same cluster
 - **Topic partitions and replication factor** — `KEFCoreTopicPartitionsAttribute`, `KEFCoreTopicReplicationFactorAttribute`, or fluent API `HasKEFCoreTopicPartitions()` / `HasKEFCoreTopicReplicationFactor()`
 - **Topic retention** — `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` to override `RetentionBytes` and `RetentionMs` per entity
 - **Read-only** — `KEFCoreReadOnlyAttribute` or `IsKEFCoreReadOnly()` to prevent writes for a specific entity type while allowing writes for others in the same `SaveChanges` call
