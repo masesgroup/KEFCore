@@ -126,7 +126,8 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static Type ValueContainerType(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
-        return options.ValueContainerType?.MakeGenericType(options.KeyType(entityType))!;
+        var containerType = entityType.GetValueContainerType(options);
+        return containerType?.MakeGenericType(options.KeyType(entityType))!;
     }
     /// <summary>
     /// Create the ValueContainer <see cref="Type"/>
@@ -176,7 +177,8 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static ISerDesSelector? SerDesSelectorForKey(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
-        return _keySerDesSelctors.GetOrAdd((options.KeySerDesSelectorType, entityType), (o) =>
+        var keySerDesType = entityType.GetKeySerDesSelectorType(options);
+        return _keySerDesSelctors.GetOrAdd((keySerDesType, entityType), (o) =>
         {
             var selector = o.Item1?.MakeGenericType(options.KeyType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;
@@ -190,7 +192,8 @@ public static class KEFCoreDbContextOptionsExtensions
     /// </summary>
     public static ISerDesSelector? SerDesSelectorForValue(this IKEFCoreSingletonOptions options, IEntityType entityType)
     {
-        return _valueContainerSerDesSelctors.GetOrAdd((options.ValueSerDesSelectorType, entityType), (o) =>
+        var valueSerDesType = entityType.GetValueSerDesSelectorType(options);
+        return _valueContainerSerDesSelctors.GetOrAdd((valueSerDesType, entityType), (o) =>
         {
             var selector = o.Item1?.MakeGenericType(options.ValueContainerType(o.Item2))!;
             return Activator.CreateInstance(selector) as ISerDesSelector;

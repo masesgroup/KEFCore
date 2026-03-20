@@ -26,9 +26,11 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -281,12 +283,9 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             var topicName = entityType.GetKEFCoreTopicName();
             var requestedPartitions = entityType.NumPartitions(database.Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(database.Options);
+            var topicConfig = entityType.BuildTopicConfig(database.Options);
 
-            database.Options.TopicConfig.CleanupPolicy = database.Options.UseDeletePolicyForTopic
-                        ? MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact | MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Delete
-                        : MASES.KNet.Common.TopicConfigBuilder.CleanupPolicyTypes.Compact;
-
-            return CreateTopicForEntity(database, et, topicName, requestedPartitions, requestedReplicationFactor, database.Options.TopicConfig.ToMap(), 100, 100, 0);
+            return CreateTopicForEntity(database, et, topicName, requestedPartitions, requestedReplicationFactor, topicConfig.ToMap(), 100, 100, 0);
         });
     }
 
@@ -517,15 +516,32 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
     int PrepareTransaction(IKEFCoreDatabase database, IDictionary<IKEFCoreTable, System.Collections.Generic.IList<IKEFCoreRowBag>> dataInTransaction,
                            System.Collections.Generic.IList<IUpdateEntry> entries,
-                           IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
+                           IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger,
+                           out System.Collections.Generic.List<string> readOnlyViolations)
     {
         var rowsAffected = 0;
+        readOnlyViolations = null;
         for (var i = 0; i < entries.Count; i++)
         {
             var entry = entries[i];
             var entityType = entry.EntityType;
 
+            if (entityType.GetReadOnly(database.Options))
+            {
+                throw new InvalidOperationException($"Entity type '{entityType.DisplayName()}' is read-only.");
+            }
+
             Check.DebugAssert(!entityType.IsAbstract(), "entityType is abstract");
+
+            if (entityType.GetReadOnly(database.Options))
+            {
+                readOnlyViolations ??= [];
+                readOnlyViolations.Add(entityType.DisplayName());
+                database.InfrastructureLogger.Logger?.LogWarning(
+                    "Entity type '{EntityType}' is read-only — entry with state {State} skipped.",
+                    entityType.DisplayName(), entry.EntityState);
+                continue;
+            }
 
             var table = tableFactory.GetOrCreate(database, entityType);
 
@@ -578,7 +594,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         System.Collections.Generic.Dictionary<IKEFCoreTable, System.Collections.Generic.IList<IKEFCoreRowBag>> dataInTransaction = [];
 
-        rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger);
+        rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger, out var readOnlyViolations);
 
         System.Collections.Generic.List<Future<RecordMetadata>> futures = [];
         foreach (var tableData in dataInTransaction)
@@ -586,16 +602,26 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             tableData.Key.Commit(futures, tableData.Value);
         }
 
-        return futures.Select(obj => Task.Run(() =>
+        try
         {
-            try
+            return futures.Select(obj => Task.Run(() =>
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                return obj.Get();
-            }
-            catch (ExecutionException ex) { throw ex.InnerException; }
-            catch (OperationCanceledException) { return null; }
-        }, cancellationToken));
+                try
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return obj.Get();
+                }
+                catch (ExecutionException ex) { throw ex.InnerException; }
+                catch (OperationCanceledException) { return null; }
+            }, cancellationToken));
+        }
+        finally
+        {
+            if (readOnlyViolations?.Count > 0)
+                updateLogger.Logger?.LogWarning(
+                    "SaveChanges completed but {Count} entries were skipped because their entity types are read-only: {Types}.",
+                    readOnlyViolations.Count, string.Join(", ", readOnlyViolations));
+        }
     }
 
     /// <inheritdoc/>

@@ -25,9 +25,9 @@ These options must be consistent across all `DbContext` instances pointing to th
 |---|---|---|
 | `BootstrapServers` | — | Mandatory. Resolved to `ClusterId` for caching |
 | `ApplicationId` | — | Mandatory when not using `UseCompactedReplicator`. Unique per process on the cluster |
-| `KeySerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultKeySerialization` | Generic type definition |
-| `ValueSerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultValueContainerSerialization` | Generic type definition |
-| `ValueContainerType` | `DefaultKEFCoreSerDes.DefaultValueContainer` | Generic type definition |
+| `KeySerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultKeySerialization` | Generic type definition — overridable per entity via `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()` |
+| `ValueSerDesSelectorType` | `DefaultKEFCoreSerDes.DefaultValueContainerSerialization` | Generic type definition — overridable per entity |
+| `ValueContainerType` | `DefaultKEFCoreSerDes.DefaultValueContainer` | Generic type definition — overridable per entity |
 | `UseKeyByteBufferDataTransfer` | `false` | Determines key transport type in Streams topology |
 | `UseValueContainerByteBufferDataTransfer` | `false` | Determines value transport type in Streams topology |
 | `UseKNetStreams` | `true` | KNet vs plain Kafka Streams backend |
@@ -41,11 +41,11 @@ These are cluster-level but do not affect the Service Provider cache key. The va
 | Option | Default | Notes |
 |---|---|---|
 | `UseDeletePolicyForTopic` | `false` | Applied at topic creation time |
-| `DefaultNumPartitions` | `1` | Applied at topic creation time |
-| `DefaultReplicationFactor` | `1` | Applied at topic creation time |
-| `TopicConfig` | `null` | Kafka topic-level configuration |
+| `DefaultNumPartitions` | `1` | Applied at topic creation time — overridable per entity via `KEFCoreTopicPartitionsAttribute` or `HasKEFCoreTopicPartitions()` |
+| `DefaultReplicationFactor` | `1` | Applied at topic creation time — overridable per entity via `KEFCoreTopicReplicationFactorAttribute` or `HasKEFCoreTopicReplicationFactor()` |
+| `TopicConfig` | `null` | Cluster-level topic configuration — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` |
 | `StreamsConfig` | `null` | Kafka Streams application configuration |
-| `ProducerConfig` | `null` | Kafka producer configuration |
+| `ProducerConfig` | `null` | Cluster-level producer configuration (first-wins) — individual settings can be overridden per entity via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` |
 
 ## Context-scoped options
 
@@ -53,14 +53,14 @@ These options are specific to each `DbContext` instance and do not affect the Se
 
 | Option | Default | Notes |
 |---|---|---|
-| `ReadOnlyMode` | `false` | Rejects write operations; verifies ACL rights |
+| `ReadOnlyMode` | `false` | Rejects all write operations for the entire context — individual entities can be marked read-only via `KEFCoreReadOnlyAttribute` or `IsKEFCoreReadOnly()` |
 | `DefaultSynchronizationTimeout` | `Timeout.Infinite` | Milliseconds to wait after `SaveChanges` for backend sync; `0` disables sync |
 | `UseEnumeratorWithPrefetch` | `true` | Prefetch enumerator for faster enumeration with Streams |
-| `UseStorePrefixScan` | `false` | Enables prefix scan in the query engine |
-| `UseStoreSingleKeyLookup` | `true` | Enables single key look-up in the query engine |
-| `UseStoreKeyRange` | `true` | Enables key range look-up in the query engine |
-| `UseStoreReverse` | `true` | Enables reverse look-up in the query engine |
-| `UseStoreReverseKeyRange` | `true` | Enables reverse key range look-up in the query engine |
+| `UseStorePrefixScan` | `false` | Enables prefix scan globally — overridable per entity via `KEFCoreStoreLookupAttribute` or `HasKEFCoreStoreLookup()` |
+| `UseStoreSingleKeyLookup` | `true` | Enables single key look-up globally — overridable per entity |
+| `UseStoreKeyRange` | `true` | Enables key range look-up globally — overridable per entity |
+| `UseStoreReverse` | `true` | Enables reverse look-up globally — overridable per entity |
+| `UseStoreReverseKeyRange` | `true` | Enables reverse key range look-up globally — overridable per entity |
 
 ### Deprecated context-scoped options
 

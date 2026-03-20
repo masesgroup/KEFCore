@@ -269,8 +269,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 ConsumerInstances = _entityType.ConsumerInstances(_database.Options),
                 ReplicationFactor = _entityType.ReplicationFactor(_database.Options),
                 ConsumerConfig = _database.Options.ConsumerConfig,
-                TopicConfig = _database.Options.TopicConfig,
-                ProducerConfig = _database.Options.ProducerConfig,
+                TopicConfig = _entityType.BuildTopicConfig(_database.Options),
+                ProducerConfig = entityType.BuildProducerConfig(_database.Options),
                 KeySerDes = _keySerdes,
                 ValueSerDes = _valueSerdes,
             };
@@ -287,7 +287,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             });
 
             _producerCallback = new EntityTypeProducerCallback(this, UpdateFromCommit);
-            _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(_database.Options.ProducerOptionsBuilder(), _keySerdes, _valueSerdes);
+            _kafkaProducer = new KNetProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(entityType.BuildProducerConfig(_database.Options), _keySerdes, _valueSerdes);
             _kafkaProducer.SetCallback(_producerCallback);
             _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory)
                                                            : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
