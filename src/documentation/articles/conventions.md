@@ -135,3 +135,116 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 The converter type must implement `IComplexTypeConverter`. If declared via fluent API, it takes precedence over the attribute.
+
+## Topic partitions and replication factor convention
+
+`KEFCoreTopicPartitionsConvention` resolves per-entity partition and replication factor configuration at model finalization time. The resolved values are used by `EnsureCreated` when creating the Kafka topic for each entity, overriding the global `DefaultNumPartitions` and `DefaultReplicationFactor` singleton options.
+
+### Usage examples
+
+```csharp
+// Attribute — high-throughput entity needs more partitions
+[KEFCoreTopicPartitionsAttribute(numPartitions: 12)]
+[KEFCoreTopicReplicationFactorAttribute(replicationFactor: 3)]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Low-traffic reference data — single partition is enough
+[KEFCoreTopicPartitionsAttribute(numPartitions: 1)]
+[Table("Country")]
+public class Country { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreTopicPartitions(12)
+                .HasKEFCoreTopicReplicationFactor(3);
+}
+```
+
+> [!NOTE]
+> Partition and replication factor are applied only at topic creation time (`EnsureCreated`). Changing these values after the topic exists has no effect — use Kafka admin tools to alter existing topics.
+
+## Topic retention convention
+
+`KEFCoreTopicRetentionConvention` resolves per-entity topic retention configuration at model finalization time. The resolved values override the global `TopicConfig` retention settings for that entity's topic.
+
+### Usage examples
+
+```csharp
+// Attribute — keep only last 7 days of sensor data
+[KEFCoreTopicRetentionAttribute(retentionMs: 7 * 24 * 60 * 60 * 1000L)]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Attribute — limit topic size to 500 MB
+[KEFCoreTopicRetentionAttribute(retentionBytes: 500 * 1024 * 1024L)]
+[Table("EventLog")]
+public class EventLog { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreTopicRetention(retentionMs: 7 * 24 * 60 * 60 * 1000L);
+}
+```
+
+> [!NOTE]
+> Retention is applied only at topic creation time. Use `-1` for either parameter to leave that setting at the cluster default.
+
+## Read-only convention
+
+`KEFCoreReadOnlyConvention` resolves per-entity read-only configuration at model finalization time. Entities marked as read-only will have their `SaveChanges` entries skipped and logged as warnings — valid entries from other entity types in the same `SaveChanges` call are still committed.
+
+This differs from `ReadOnlyMode` on the context, which blocks all writes for the entire context. Per-entity read-only is useful for mixed models where some entities are immutable reference data consumed from external topics.
+
+### Resolution priority
+
+1. `KEFCoreReadOnlyAttribute` applied to the entity class
+2. `IsKEFCoreReadOnly()` applied via fluent API
+3. Context-level `ReadOnlyMode = true` — applies to all entities
+
+### Usage examples
+
+```csharp
+// Attribute — reference data that should never be written by this process
+[KEFCoreReadOnlyAttribute]
+[Table("Country")]
+public class Country { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Country>().IsKEFCoreReadOnly();
+}
+```
+
+> [!NOTE]
+> When a read-only entity is included in a `SaveChanges` call, the entry is skipped and a warning is logged via both `InfrastructureLogger` (per-entry) and `updateLogger` (aggregated summary). No exception is thrown — the remaining entries are committed normally.
+
+## Store lookup convention
+
+`KEFCoreStoreLookupConvention` resolves per-entity Kafka Streams state store query optimization flags at model finalization time. The resolved values override the context-level `UseStore*` options for queries on that entity type.
+
+This allows enabling expensive optimizations (e.g. prefix scan) only for the specific entities that benefit from them, rather than globally.
+
+### Usage examples
+
+```csharp
+// Attribute — enable prefix scan for this entity, disable unused range lookups
+[KEFCoreStoreLookupAttribute(UseStorePrefixScan = true, UseStoreKeyRange = false, UseStoreReverseKeyRange = false)]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Fluent API — only override the flags you need
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreStoreLookup(prefixScan: true, keyRange: false);
+}
+```
+
+> [!TIP]
+> Only override the flags relevant to the actual query patterns used for that entity. Enabling unused optimizations adds overhead to query planning without benefit. See [performance tips](performancetips.md#store-query-optimizations) for guidance on which flags to enable.

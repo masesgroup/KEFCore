@@ -30,11 +30,11 @@ The following options are singleton-scoped and must be consistent across all `Db
 - **UseKNetStreams**: set to **true** (default) to use the KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams
 - **UsePersistentStorage**: set to **true** to use persistent storage (RocksDB) between multiple application startups; set to **false** (default) for in-memory storage
 - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy) on topic creation
-- **DefaultNumPartitions**: the default number of partitions used when topics are created for each entity (first-wins per cluster)
-- **DefaultReplicationFactor**: the replication factor to use when topics are created (first-wins per cluster)
+- **DefaultNumPartitions**: the default number of partitions used when topics are created for each entity (first-wins per cluster) — overridable per entity via `KEFCoreTopicPartitionsAttribute` or `HasKEFCoreTopicPartitions()`
+- **DefaultReplicationFactor**: the replication factor to use when topics are created (first-wins per cluster) — overridable per entity via `KEFCoreTopicReplicationFactorAttribute` or `HasKEFCoreTopicReplicationFactor()`
 - **ProducerConfig**: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins)
 - **StreamsConfig**: parameters to use for the Apache Kafka™ Streams application (cluster-level, first-wins)
-- **TopicConfig**: parameters to use on topic creation for each entity (cluster-level, first-wins)
+- **TopicConfig**: parameters to use on topic creation for each entity (cluster-level, first-wins) — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()`
 - ~~**UseCompactedReplicator**~~: deprecated, will be removed in a future release
 - ~~**DefaultConsumerInstances**~~: deprecated, will be removed in a future release
 - ~~**ConsumerConfig**~~: deprecated, will be removed in a future release
@@ -46,14 +46,14 @@ The following options are singleton-scoped and must be consistent across all `Db
 
 The following options are scoped to each `DbContext` instance:
 
-- **ReadOnlyMode**: set to **true** (default is **false**) to reject any write operation; the engine will also verify that topics have proper `AclOperation.READ` rights
+- **ReadOnlyMode**: set to **true** (default is **false**) to reject any write operation for the entire context; the engine will also verify that topics have proper `AclOperation.READ` rights — individual entities can be marked read-only via `KEFCoreReadOnlyAttribute` or `IsKEFCoreReadOnly()`
 - **DefaultSynchronizationTimeout**: the default timeout in milliseconds KEFCore waits for the backend to be in-sync with the Apache Kafka™ cluster after a `SaveChanges`; set to `Timeout.Infinite` (default) to wait indefinitely, or `0` to disable synchronization
 - **UseEnumeratorWithPrefetch**: set to **true** (default) to prefer enumerator instances that prefetch data, speeding up enumeration when using Apache Kafka™ Streams
-- **UseStorePrefixScan**: set to **true** to enable prefix scan in the engine (default is **false**)
-- **UseStoreSingleKeyLookup**: set to **true** (default) to enable single key look-up in the engine
-- **UseStoreKeyRange**: set to **true** (default) to enable key range look-up in the engine
-- **UseStoreReverse**: set to **true** (default) to enable reverse look-up in the engine
-- **UseStoreReverseKeyRange**: set to **true** (default) to enable reverse key range look-up in the engine
+- **UseStorePrefixScan**: set to **true** to enable prefix scan in the engine (default is **false**) — overridable per entity via `KEFCoreStoreLookupAttribute` or `HasKEFCoreStoreLookup()`
+- **UseStoreSingleKeyLookup**: set to **true** (default) to enable single key look-up in the engine — overridable per entity
+- **UseStoreKeyRange**: set to **true** (default) to enable key range look-up in the engine — overridable per entity
+- **UseStoreReverse**: set to **true** (default) to enable reverse look-up in the engine — overridable per entity
+- **UseStoreReverseKeyRange**: set to **true** (default) to enable reverse key range look-up in the engine — overridable per entity
 - ~~**UseGlobalTable**~~: deprecated — see [topic naming and event management conventions](conventions.md) for the recommended approach
 - ~~**ManageEvents**~~: deprecated — event management is now enabled by default for all entity types; use `KEFCoreIgnoreEventsAttribute` or `HasKEFCoreManageEvents(false)` to disable it per entity
 
@@ -74,6 +74,17 @@ By default, KEFCore enables event management (i.e. `TimestampExtractor` activati
 - Apply `[KEFCoreIgnoreEventsAttribute]` on the entity class to disable events for that entity
 - Call `modelBuilder.Entity<T>().HasKEFCoreManageEvents(false)` for a per-entity override
 - Call `modelBuilder.UseKEFCoreManageEvents(false)` to disable events globally
+
+## Per-entity topic and store conventions
+
+Several context-level options can be overridden per entity type via conventions, allowing fine-grained control without affecting the global configuration:
+
+- **Topic partitions and replication factor** — `KEFCoreTopicPartitionsAttribute`, `KEFCoreTopicReplicationFactorAttribute`, or fluent API `HasKEFCoreTopicPartitions()` / `HasKEFCoreTopicReplicationFactor()`
+- **Topic retention** — `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` to override `RetentionBytes` and `RetentionMs` per entity
+- **Read-only** — `KEFCoreReadOnlyAttribute` or `IsKEFCoreReadOnly()` to prevent writes for a specific entity type while allowing writes for others in the same `SaveChanges` call
+- **Store lookup optimizations** — `KEFCoreStoreLookupAttribute` or `HasKEFCoreStoreLookup()` to enable or disable specific query optimization paths per entity
+
+See [conventions](conventions.md) for full documentation and examples.
 
 ## How to use `KEFCoreDbContext` class
 
