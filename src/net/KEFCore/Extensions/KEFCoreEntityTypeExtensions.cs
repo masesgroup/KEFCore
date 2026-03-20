@@ -21,6 +21,7 @@ using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
+using MASES.KNet.Producer;
 using Org.Apache.Kafka.Common.Config;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -214,6 +215,35 @@ public static class KEFCoreEntityTypeExtensions
     public static Type? GetValueContainerType(this IEntityType entityType, IKEFCoreSingletonOptions options)
         => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueContainerType)?.Value as Type
            ?? options.ValueContainerType;
+
+    /// <summary>
+    /// Builds the <see cref="ProducerConfigBuilder"/> for this entity type, merging the global
+    /// <see cref="IKEFCoreSingletonOptions.ProducerConfig"/> with any per-entity overrides
+    /// stored as a <see cref="KEFCoreProducerAnnotation"/> annotation.
+    /// Per-entity values take precedence over the global config.
+    /// </summary>
+    public static ProducerConfigBuilder BuildProducerConfig(
+        this IEntityType entityType, KEFCoreOptionsExtension options)
+    {
+        var builder = options.ProducerOptionsBuilder();
+
+        var ann = entityType.FindAnnotation(KEFCoreAnnotationNames.ProducerConfig)?.Value
+                  as KEFCoreProducerAnnotation;
+        if (ann == null) return builder;
+
+        if (ann.Acks.HasValue) builder.Acks = ann.Acks.Value;
+        if (ann.LingerMs.HasValue) builder.LingerMs = ann.LingerMs.Value;
+        if (ann.BatchSize.HasValue) builder.BatchSize = ann.BatchSize.Value;
+        if (ann.CompressionType.HasValue) builder.CompressionType = ann.CompressionType.Value;
+        if (ann.Retries.HasValue) builder.Retries = ann.Retries.Value;
+        if (ann.MaxInFlightRequestsPerConnection.HasValue) builder.MaxInFlightRequestPerConnection = ann.MaxInFlightRequestsPerConnection.Value;
+        if (ann.DeliveryTimeoutMs.HasValue) builder.DeliveryTimeoutMs = ann.DeliveryTimeoutMs.Value;
+        if (ann.RequestTimeoutMs.HasValue) builder.RequestTimeoutMs = ann.RequestTimeoutMs.Value;
+        if (ann.BufferMemory.HasValue) builder.BufferMemory = ann.BufferMemory.Value;
+        if (ann.MaxBlockMs.HasValue) builder.MaxBlockMs = ann.MaxBlockMs.Value;
+
+        return builder;
+    }
 
     /// <summary>
     /// Gets consumer instances

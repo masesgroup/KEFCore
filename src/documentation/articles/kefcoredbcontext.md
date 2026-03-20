@@ -32,7 +32,7 @@ The following options are singleton-scoped and must be consistent across all `Db
 - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy) on topic creation
 - **DefaultNumPartitions**: the default number of partitions used when topics are created for each entity (first-wins per cluster) — overridable per entity via `KEFCoreTopicPartitionsAttribute` or `HasKEFCoreTopicPartitions()`
 - **DefaultReplicationFactor**: the replication factor to use when topics are created (first-wins per cluster) — overridable per entity via `KEFCoreTopicReplicationFactorAttribute` or `HasKEFCoreTopicReplicationFactor()`
-- **ProducerConfig**: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins)
+- **ProducerConfig**: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins) — individual producer settings can be overridden per entity via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()`
 - **StreamsConfig**: parameters to use for the Apache Kafka™ Streams application (cluster-level, first-wins)
 - **TopicConfig**: parameters to use on topic creation for each entity (cluster-level, first-wins) — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()`
 - ~~**UseCompactedReplicator**~~: deprecated, will be removed in a future release
@@ -79,6 +79,7 @@ By default, KEFCore enables event management (i.e. `TimestampExtractor` activati
 
 Several context-level options can be overridden per entity type via conventions, allowing fine-grained control without affecting the global configuration:
 
+- **Producer configuration** — `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` to override individual producer settings (`Acks`, `LingerMs`, `BatchSize`, `CompressionType`, `Retries`, etc.) per entity, enabling mixed throughput/reliability profiles on the same cluster
 - **Serialization types** — `KEFCoreSerDesAttribute` or `HasKEFCoreSerDes()` to override `KeySerDesSelectorType`, `ValueSerDesSelectorType` and `ValueContainerType` per entity, enabling mixed serialization formats on the same cluster
 - **Topic partitions and replication factor** — `KEFCoreTopicPartitionsAttribute`, `KEFCoreTopicReplicationFactorAttribute`, or fluent API `HasKEFCoreTopicPartitions()` / `HasKEFCoreTopicReplicationFactor()`
 - **Topic retention** — `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` to override `RetentionBytes` and `RetentionMs` per entity

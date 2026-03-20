@@ -45,7 +45,7 @@ These are cluster-level but do not affect the Service Provider cache key. The va
 | `DefaultReplicationFactor` | `1` | Applied at topic creation time — overridable per entity via `KEFCoreTopicReplicationFactorAttribute` or `HasKEFCoreTopicReplicationFactor()` |
 | `TopicConfig` | `null` | Cluster-level topic configuration — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` |
 | `StreamsConfig` | `null` | Kafka Streams application configuration |
-| `ProducerConfig` | `null` | Kafka producer configuration |
+| `ProducerConfig` | `null` | Cluster-level producer configuration (first-wins) — individual settings can be overridden per entity via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` |
 
 ## Context-scoped options
 

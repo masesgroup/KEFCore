@@ -287,3 +287,47 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 > [!NOTE]
 > `UseKeyByteBufferDataTransfer` and `UseValueContainerByteBufferDataTransfer` are singleton options that control the JVM transport layer and apply globally to the Streams topology — they cannot be overridden per entity. Only the serializer selector types and value container type can be overridden.
+
+## Producer configuration convention
+
+`KEFCoreProducerConvention` resolves per-entity producer configuration overrides at model finalization time. The resolved configuration is used when creating the `KNetProducer` instance for that entity's topic, merging the global `ProducerConfig` singleton option with per-entity overrides. Per-entity values take precedence.
+
+This allows tuning producer behavior per entity — for example using higher throughput settings for high-volume entities and stronger reliability guarantees for critical ones.
+
+### Usage examples
+
+```csharp
+// High-throughput entity — batch more aggressively, compress, relax acks
+[KEFCoreProducerAttribute(
+    Acks = ProducerConfigBuilder.AcksTypes.One,
+    LingerMs = 50,
+    BatchSize = 65536,
+    CompressionType = ProducerConfigBuilder.CompressionTypes.Lz4)]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Critical entity — strongest delivery guarantees
+[KEFCoreProducerAttribute(
+    Acks = ProducerConfigBuilder.AcksTypes.All,
+    Retries = 10,
+    MaxInFlightRequestsPerConnection = 1,
+    DeliveryTimeoutMs = 300000)]
+[Table("FinancialTransaction")]
+public class FinancialTransaction { ... }
+
+// Fluent API — only override what you need
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreProducer(lingerMs: 50, compressionType: ProducerConfigBuilder.CompressionTypes.Lz4);
+
+    modelBuilder.Entity<FinancialTransaction>()
+                .HasKEFCoreProducer(acks: ProducerConfigBuilder.AcksTypes.All, retries: 10);
+}
+```
+
+> [!NOTE]
+> Only explicitly set properties override the global `ProducerConfig`. Omitted properties inherit the global defaults set via `KEFCoreDbContext.ProducerConfig` or `ProducerOptionsBuilder()`.
+
+> [!TIP]
+> When setting `Retries` > 0, also set `MaxInFlightRequestsPerConnection = 1` to preserve message ordering on retry. See [Kafka producer documentation](https://kafka.apache.org/documentation/#producerconfigs) for the full list of producer configuration options.

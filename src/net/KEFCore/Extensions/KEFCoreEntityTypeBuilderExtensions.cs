@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
+using MASES.KNet.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
@@ -194,6 +195,56 @@ public static class KEFCoreEntityTypeBuilderExtensions
                 throw new ArgumentException($"{valueContainerType.Name} must be an open generic type definition.", nameof(valueContainerType));
             builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueContainerType, valueContainerType);
         }
+        return builder;
+    }
+
+    /// <summary>
+    /// Overrides producer configuration for the Kafka topic associated with this entity type.
+    /// Equivalent to applying <see cref="KEFCoreProducerAttribute"/> on the entity class.
+    /// Only explicitly provided parameters override the global <see cref="KEFCoreDbContext.ProducerConfig"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="EntityTypeBuilder"/> to configure.</param>
+    /// <param name="acks">Acknowledgment mode. <see langword="null"/> to inherit.</param>
+    /// <param name="lingerMs">Batch linger delay in milliseconds. <see langword="null"/> to inherit.</param>
+    /// <param name="batchSize">Maximum batch size in bytes. <see langword="null"/> to inherit.</param>
+    /// <param name="compressionType">Compression algorithm. <see langword="null"/> to inherit.</param>
+    /// <param name="retries">Number of retries on transient failure. <see langword="null"/> to inherit.</param>
+    /// <param name="maxInFlightRequestsPerConnection">Max unacknowledged requests per connection. <see langword="null"/> to inherit.</param>
+    /// <param name="deliveryTimeoutMs">Total delivery timeout in milliseconds. <see langword="null"/> to inherit.</param>
+    /// <param name="requestTimeoutMs">Single request timeout in milliseconds. <see langword="null"/> to inherit.</param>
+    /// <param name="bufferMemory">Total producer buffer memory in bytes. <see langword="null"/> to inherit.</param>
+    /// <param name="maxBlockMs">Max block time when buffer is full in milliseconds. <see langword="null"/> to inherit.</param>
+    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    public static EntityTypeBuilder HasKEFCoreProducer(
+        this EntityTypeBuilder builder,
+        ProducerConfigBuilder.AcksTypes? acks = null,
+        int? lingerMs = null,
+        int? batchSize = null,
+        ProducerConfigBuilder.CompressionTypes? compressionType = null,
+        int? retries = null,
+        int? maxInFlightRequestsPerConnection = null,
+        int? deliveryTimeoutMs = null,
+        int? requestTimeoutMs = null,
+        long? bufferMemory = null,
+        long? maxBlockMs = null)
+    {
+        var ann = new KEFCoreProducerAnnotation
+        {
+            Acks = acks,
+            LingerMs = lingerMs,
+            BatchSize = batchSize,
+            CompressionType = compressionType,
+            Retries = retries,
+            MaxInFlightRequestsPerConnection = maxInFlightRequestsPerConnection,
+            DeliveryTimeoutMs = deliveryTimeoutMs,
+            RequestTimeoutMs = requestTimeoutMs,
+            BufferMemory = bufferMemory,
+            MaxBlockMs = maxBlockMs,
+        };
+
+        if (ann.HasAnyValue)
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ProducerConfig, ann);
+
         return builder;
     }
 }
