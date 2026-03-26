@@ -696,7 +696,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             config.Acks = ProducerConfigBuilder.AcksTypes.All;
             config.EnableIdempotence = true;
             config.Retries = int.MaxValue;
-            config.MaxInFlightRequestPerConnection = 1;
+            config.MaxInFlightRequestsPerConnection = 1;
 
             string baSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
             string bbSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();

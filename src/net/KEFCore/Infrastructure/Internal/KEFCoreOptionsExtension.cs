@@ -397,8 +397,15 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                                                                      : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
         builder.DefaultValueSerdeClass = !UseValueContainerByteBufferDataTransfer ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
                                                                                   : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
-        builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader)
-                                                              : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
+        if (UsePersistentStorage)
+        {
+            builder.DSLStoreSuppliersClass = Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader);
+            builder.RocksDbConfigSetterClass = KNetRocksDBConfigSetter.KNetRocksDBConfigSetterClass;
+        }
+        else
+        {
+            builder.DSLStoreSuppliersClass = Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
+        }
 
         //Properties props = builder.ToProperties();
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
