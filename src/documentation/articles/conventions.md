@@ -407,3 +407,48 @@ catch
 
 > [!NOTE]
 > Consumers reading from topics written by transactional producers must set `isolation.level = read_committed` to correctly filter aborted transactions. Verify the `StreamsConfig` for the consuming application.
+
+## RocksDB lifecycle convention
+
+`KEFCoreRocksDbLifecycleAttributeConvention` resolves per-entity RocksDB lifecycle handler configuration at model finalization time. The resolved handler is registered with `KNetRocksDBConfigSetter` and invoked when Kafka Streams configures and closes the RocksDB state store for that entity's topic.
+
+This convention only applies when `UsePersistentStorage = true`.
+
+### Resolution priority
+
+1. `KEFCoreRocksDbLifecycleAttribute` applied to the entity class — specifies a handler type
+2. `HasKEFCoreRocksDbLifecycleHandler()` or `HasKEFCoreRocksDbLifecycle()` via fluent API
+
+### Usage examples
+
+```csharp
+// Attribute — handler type
+[KEFCoreRocksDbLifecycleAttribute(typeof(MyRocksDbHandler))]
+[Table("SensorReading")]
+public class SensorReading { ... }
+
+// Fluent API — handler type
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreRocksDbLifecycleHandler<MyRocksDbHandler>();
+}
+
+// Fluent API — handler instance
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreRocksDbLifecycleHandler(new MyRocksDbHandler());
+}
+
+// Fluent API — inline callbacks
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<SensorReading>()
+                .HasKEFCoreRocksDbLifecycle(
+                    onSetConfig: (options, config, data) => { ... },
+                    onClose: (options, data) => { ... });
+}
+```
+
+See [performance tips](performancetips.md#rocksdb-configuration) for full details on the lifecycle model and object retention rules.

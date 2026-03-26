@@ -143,3 +143,13 @@ See [conventions](conventions.md#event-management-convention) for how to configu
 **Solution**: KEFCore automatically skips the `LatestOffsetForEntity` call in `EnsureSynchronized` for entity types that belong to a transaction group — the expected offset is set by `CommitPendingOffsets` via `PartitionOffsetWritten` immediately after `CommitTransaction()`, using only the actual data record offsets. No user action required.
 
 **If you still see this issue**: verify that `isolation.level = read_committed` is set in the `StreamsConfig` of the consuming application. Without it, the Streams consumer will not correctly process the commit marker and the local offset tracking may diverge.
+
+---
+
+### Persistent storage state directory not found after upgrade
+
+**Symptom**: After upgrading to a version that includes the `StorageIdForTable` change, the application rebuilds the entire state from Kafka topics instead of resuming from the existing RocksDB checkpoint.
+
+**Cause**: The storage directory identifier now includes the `ClusterId` in addition to the topic name (`Table_{topicName}_{clusterId}`). Previous versions used only the topic name (`Table_{topicName}`). The existing RocksDB directory is not found under the new identifier, causing a full rebuild.
+
+**Solution**: This is a one-time cost at the first startup after the upgrade. The state is rebuilt correctly from the Kafka topics. If the topic contains a large amount of data and rebuild time is a concern, plan the upgrade during a maintenance window.
