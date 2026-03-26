@@ -111,13 +111,18 @@ This means that for long-running services or large datasets, restart time is pro
 
 When `UsePersistentStorage = true`, KEFCore uses RocksDB as the Streams state store backend. Per-entity RocksDB configuration is exposed via `KEFCoreRocksDbLifecycleAttributeConvention` — the convention reads a lifecycle handler from attributes or fluent API and registers it with `KNetRocksDBConfigSetter` so that RocksDB options can be tuned per store instance at runtime.
 
+> [!NOTE]
+> This feature requires the KNet package version that includes `IRocksDbLifecycleHandler` and `KNetRocksDBConfigSetter` (KNet PR [#1480](https://github.com/masesgroup/KNet/pull/1480)). All new types are under the `Org.Apache.Kafka.Streams.State` namespace.
+
 ### Configuration models
 
 Two models are supported:
 
-**Handler type** — implement `IRocksDbLifecycleHandler` and associate it via attribute or fluent API:
+**Handler type** — implement `IRocksDbLifecycleHandler` (from `Org.Apache.Kafka.Streams.State`) and associate it via attribute or fluent API:
 
 ```csharp
+using Org.Apache.Kafka.Streams.State;
+
 public class MyRocksDbHandler : IRocksDbLifecycleHandler
 {
     public void OnSetConfig(Org.Rocksdb.Options options, IKNetConfigurationFromMap config,
@@ -154,6 +159,8 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 **Inline callbacks** — pass `onSetConfig` and `onClose` directly without implementing an interface:
 
 ```csharp
+using Org.Apache.Kafka.Streams.State;
+
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.Entity<SensorReading>()
