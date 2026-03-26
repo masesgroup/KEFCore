@@ -110,12 +110,10 @@ Currently the project tries to support, at our best, the [official supported Apa
 
 ### Community and Contribution
 
-Do you like the project? 
-- Request your free [community subscription](https://www.jcobridge.com/pricing-25/).
+If you find KEFCore useful:
 
-Do you want to help us?
-- put a :star: on this project
-- open [issues](https://github.com/masesgroup/KEFCore/issues) to request features or report bugs :bug:
-- improves the project with Pull Requests
+* Leave a ⭐ on the repository
+* Open [issues](https://github.com/masesgroup/KEFCore/issues) to report bugs 🐛 or request features
+* Submit Pull Requests to improve the project
 
 This project adheres to the Contributor [Covenant code of conduct](https://github.com/masesgroup/KEFCore/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.

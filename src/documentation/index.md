@@ -105,13 +105,11 @@ Currently the project tries to support, at our best, the [official supported Apa
 
 ### Community and Contribution
 
-Do you like the project? 
-- Request your free [community subscription](https://www.jcobridge.com/pricing-25/).
+If you find KEFCore useful:
 
-Do you want to help us?
-- put a :star: on this project
-- open [issues](https://github.com/masesgroup/KEFCore/issues) to request features or report bugs :bug:
-- improves the project with Pull Requests
+* Leave a ⭐ on the repository
+* Open [issues](https://github.com/masesgroup/KEFCore/issues) to report bugs 🐛 or request features
+* Submit Pull Requests to improve the project
 
 This project adheres to the Contributor [Covenant code of conduct](https://github.com/masesgroup/KEFCore/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.
 
@@ -150,7 +148,8 @@ KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](
   * No extra validation cycle on protocol and functionality: bug fix, improvements, new features are immediately available;
   * Documentation is shared;
 
-[JCOBridge 2.6.*](https://www.jcobridge.com) can be used for free without any obligations; you need to purchase a commercial license, or uninstall the software, if you have direct or indirect incomes from the product usage.
+> [!NOTE]
+> [JCOBridge 2.6.*](https://www.jcobridge.com) can be used for free without any obligations; you need to purchase a commercial license, or uninstall the software, if you have direct or indirect incomes from the product usage.
 
 ### JCOBridge resources
 
@@ -160,8 +159,8 @@ Have a look at the following JCOBridge resources:
 |:---:	|:---:	|:---:	|
 |KEFCore | > 1.0.* series | > 2.6.1 series |
 |Release notes|[Link](https://www.jcobridge.com/release-notes/)| [Link](https://www.jcobridge.com/release-notes/)|
-|Community Edition|[Conditions](https://www.jcobridge.com/pricing-25/)|[Conditions](https://www.jcobridge.com/pricing-25/)|
-|Commercial Edition|[Information](https://www.jcobridge.com/pricing-26/)|[Information](https://www.jcobridge.com/pricing-26/)|
+|Community Edition|[Conditions](https://www.jcobridge.com/pricing-25/)|[Conditions](https://www.jcobridge.com/pricing-26/)|
+|Commercial Edition|[Information](https://www.jcobridge.com/pricing-25/)|[Information](https://www.jcobridge.com/pricing-26/)|
 
 Latest release: [![JCOBridge nuget](https://img.shields.io/nuget/v/MASES.JCOBridge)](https://www.nuget.org/packages/MASES.JCOBridge)
 

@@ -141,7 +141,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             readonly TGlobalKTable GlobalTable = globalTable;
             readonly TKTable Table = table;
             readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
-            readonly IDictionary<int, long> LatestLocalKnownOffset = new ConcurrentDictionary<int, long>();
+            readonly ConcurrentDictionary<int, long> LatestLocalKnownOffset = new();
 
             public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
@@ -332,8 +332,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (!typeof(IRocksDbLifecycleHandler).IsAssignableFrom(handlerType))
             {
-                throw new InvalidOperationException(
-                    $"{handlerType.Name} must implement {nameof(IRocksDbLifecycleHandler)}.");
+                throw new InvalidOperationException($"{handlerType.Name} must implement {nameof(IRocksDbLifecycleHandler)}.");
             }
 
             var constructor = handlerType.GetConstructor(Type.EmptyTypes) ?? throw new InvalidOperationException($"{handlerType.Name} must expose a public parameterless constructor.");
@@ -488,6 +487,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (_storagesForEntities.TryGetAndRemove(entityType.GetKEFCoreTopicName(), out StreamsAssociatedData data))
             {
+                if (_usePersistentStorage)
+                {
+                    if (!KNetRocksDBConfigSetter.Unregister(data.StorageId, true))
+                    {
+                        _kefcoreCluster.InfrastructureLogger.Logger.LogError("Dispose: failed to unregister {Storage}.", data.StorageId);
+                    }
+                }
                 data.Dispose();
             }
         }
