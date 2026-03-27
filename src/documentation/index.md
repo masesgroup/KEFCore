@@ -16,13 +16,11 @@ Based on [KNet client-side features](https://github.com/masesgroup/KNet) it allo
 
 ### Project disclaimer
 
-KEFCore is a project, curated by MASES Group, can be supported by the open-source community.
+KEFCore is a project curated by MASES Group and supported by the open-source community.
+Its primary scope is to support other MASES Group projects — both open-source and commercial — though it is freely available for any use. Dedicated community and commercial subscription plans are available.
+The repository and releases may contain bugs. The release cycle depends on critical issues discovered and/or enhancement requests from this or other dependent projects.
 
-Its primary scope is to support other, public or internal, MASES Group projects: open-source community and commercial entities can use it for their needs and support this project, moreover there are dedicated community and commercial subscription plans.
-
-The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.
-
-Looking for the help of [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) applications.
+Looking for Entity Framework Core and Apache Kafka™ expertise? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) applications. [Find out more.](articles/support.md)
 
 ---
 
