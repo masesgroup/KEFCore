@@ -90,6 +90,11 @@
 <p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> can be used in some operative conditions.
 Here a possible, non exhaustive list, of use cases.</p>
 <p>Before read following chapters it is important to understand <a href="howitworks.html">how it works</a>.</p>
+<h2 id="backend-compatibility">Backend compatibility</h2>
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> uses the official Apache Kafka™ Java client packages directly through <a href="https://github.com/masesgroup/KNet">KNet client-side features</a>.
+All examples in this page use standard Producer, Consumer, and Admin Client APIs, which communicate with the broker exclusively through the Kafka wire protocol.</p>
+<p>This means the information shared applies to <strong>any broker that implements the Kafka wire protocol</strong> — not only Apache Kafka™ itself. Examples of compatible brokers: <a href="https://redpanda.com/">Redpanda</a>, <a href="https://aws.amazon.com/msk/">Amazon MSK</a>, <a href="https://www.confluent.io/">Confluent Platform / Cloud</a>, <a href="https://aiven.io/kafka">Aiven for Apache Kafka™</a>, <a href="https://www.ibm.com/products/event-streams">IBM Event Streams</a>, <a href="https://www.warpstream.com/">WarpStream</a>, <a href="https://www.automq.com/">AutoMQ</a>, and others.</p>
+<p>See <a href="backends.html">Supported Backends</a> for the full compatibility matrix covering all KNet feature areas.</p>
 <h2 id="apache-kafka-as-database"><a href="https://kafka.apache.org/">Apache Kafka™</a> as Database</h2>
 <div class="IMPORTANT">
 <h5>Important</h5>

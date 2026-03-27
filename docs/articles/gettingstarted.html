@@ -92,9 +92,11 @@
 <li>an installed JRE/JDK (17+)</li>
 <li>an accessible Apache Kafka™ broker (a full cluster or a local Dockerized version)</li>
 </ul>
-<blockquote>
-<p>IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.</p>
-</blockquote>
+<h2 id="backend-compatibility">Backend compatibility</h2>
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> uses the official Apache Kafka™ Java client packages directly through <a href="https://github.com/masesgroup/KNet">KNet client-side features</a>.
+All examples in this page use standard Producer, Consumer, and Admin Client APIs, which communicate with the broker exclusively through the Kafka wire protocol.</p>
+<p>This means the code shown here works with <strong>any broker that implements the Kafka wire protocol</strong> — not only Apache Kafka™ itself. Examples of compatible brokers: <a href="https://redpanda.com/">Redpanda</a>, <a href="https://aws.amazon.com/msk/">Amazon MSK</a>, <a href="https://www.confluent.io/">Confluent Platform / Cloud</a>, <a href="https://aiven.io/kafka">Aiven for Apache Kafka™</a>, <a href="https://www.ibm.com/products/event-streams">IBM Event Streams</a>, <a href="https://www.warpstream.com/">WarpStream</a>, <a href="https://www.automq.com/">AutoMQ</a>, and others.</p>
+<p>See <a href="backends.html">Supported Backends</a> for the full compatibility matrix covering all KNet feature areas.</p>
 <h2 id="first-project-setup">First project setup</h2>
 <ul>
 <li>Create a new simple empty project:</li>
