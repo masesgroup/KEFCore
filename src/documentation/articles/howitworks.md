@@ -10,6 +10,15 @@ _description: Describes how works Entity Framework Core provider for Apache Kafk
 It is important to start with a simple description on how it works.
 In the following chapters sometime it is used the term back-end and sometime Apache Kafka™ cluster: they shall be considered the same thing int the [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) context.
 
+## Backend compatibility
+
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) uses the official Apache Kafka™ Java client packages directly through [KNet client-side features](https://github.com/masesgroup/KNet).
+All chapters in this page use standard Producer, Consumer, and Admin Client APIs, which communicate with the broker exclusively through the Kafka wire protocol.
+
+This means the information shared applies to **any broker that implements the Kafka wire protocol** — not only Apache Kafka™ itself. Examples of compatible brokers: [Redpanda](https://redpanda.com/), [Amazon MSK](https://aws.amazon.com/msk/), [Confluent Platform / Cloud](https://www.confluent.io/), [Aiven for Apache Kafka™](https://aiven.io/kafka), [IBM Event Streams](https://www.ibm.com/products/event-streams), [WarpStream](https://www.warpstream.com/), [AutoMQ](https://www.automq.com/), and others.
+
+See [Supported Backends](backends.md) for the full compatibility matrix covering all KNet feature areas.
+
 ## Basic concepts
 
 Here below an image from Wikipedia describing simple concepts:

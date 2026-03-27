@@ -4,6 +4,8 @@
   href: gettingstarted.md
 - name: How it works
   href: howitworks.md
+- name: Supported Backends
+  href: backends.md
 - name: Usage
   href: usage.md
 - name: Use cases
