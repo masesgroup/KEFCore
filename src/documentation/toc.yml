@@ -4,6 +4,7 @@
   href: api/
   homepage: api/index.md
 - name: KEFCore repository
+  dropdown: true
   items:
   - name: Browse
     href: https://github.com/masesgroup/KEFCore
