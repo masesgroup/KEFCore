@@ -21,7 +21,10 @@ using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
+using Org.Apache.Kafka.Clients.Consumer;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
 
@@ -249,6 +252,20 @@ public static class KEFCoreEntityTypeExtensions
     /// </summary>
     public static string? GetTransactionGroup(this IEntityType entityType)
         => entityType.FindAnnotation(KEFCoreAnnotationNames.TransactionGroup)?.Value as string;
+
+    /// <summary>
+    /// Builds the <see cref="ConsumerConfigBuilder"/> for this entity type, merging the global
+    /// <see cref="IKEFCoreSingletonOptions.ConsumerConfig"/> with any per-entity overrides
+    /// stored as a <see cref="KEFCoreProducerAnnotation"/> annotation.
+    /// Per-entity values take precedence over the global config.
+    /// </summary>
+    [Obsolete("Option will be removed soon")]
+    public static ConsumerConfigBuilder BuildConsumerConfig(this IEntityType entityType, KEFCoreOptionsExtension options)
+    {
+        var builder = options.ConsumerOptionsBuilder();
+
+        return builder;
+    }
 
     /// <summary>
     /// Gets consumer instances

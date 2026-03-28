@@ -22,13 +22,14 @@ using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
-using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
+using MASES.KNet;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Serialization;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Common.Security.Auth;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure;
 
@@ -204,13 +205,31 @@ public class KEFCoreDbContext : DbContext
     [Obsolete("Option will be removed soon")] 
     public virtual ConsumerConfigBuilder? ConsumerConfig { get; set; }
     /// <summary>
+    /// The optional <see cref="StreamsConfig"/> used when <see cref="UseCompactedReplicator"/> is <see langword="false"/>
+    /// </summary>
+    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
+    /// <summary>
     /// The optional <see cref="ProducerConfigBuilder"/>
     /// </summary>
     public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
     /// <summary>
-    /// The optional <see cref="StreamsConfig"/> used when <see cref="UseCompactedReplicator"/> is <see langword="false"/>
+    /// <see cref="SecurityProtocol"/> configuration applied to all Kafka clients (producer, streams).
+    /// When set, it is merged into <see cref="ProducerConfig"/> and <see cref="StreamsConfig"/>
+    /// at connection time via <see cref="CommonClientConfigsBuilder{T}.WithSecurityProtocol"/>.
     /// </summary>
-    public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
+    public virtual SecurityProtocol? SecurityProtocol { get; set; }
+    /// <summary>
+    /// SSL configuration applied to all Kafka clients (producer, streams).
+    /// When set, it is merged into <see cref="ProducerConfig"/> and <see cref="StreamsConfig"/>
+    /// at connection time via <see cref="CommonClientConfigsBuilder{T}.WithSslConfigs"/>.
+    /// </summary>
+    public virtual SslConfigsBuilder? SslConfig { get; set; }
+    /// <summary>
+    /// SASL configuration applied to all Kafka clients (producer, streams).
+    /// When set, it is merged into <see cref="ProducerConfig"/> and <see cref="StreamsConfig"/>
+    /// at connection time via <see cref="CommonClientConfigsBuilder{T}.WithSaslConfigs"/>.
+    /// </summary>
+    public virtual SaslConfigsBuilder? SaslConfig { get; set; }
     /// <summary>
     /// The optional <see cref="TopicConfigBuilder"/> used when topics shall be created
     /// </summary>
@@ -310,6 +329,9 @@ public class KEFCoreDbContext : DbContext
             o.WithProducerConfig(ProducerConfig ?? DefaultProducerConfig);
             o.WithStreamsConfig(StreamsConfig ?? DefaultStreamsConfig).WithDefaultNumPartitions(DefaultNumPartitions);
             o.WithTopicConfig(TopicConfig ?? DefaultTopicConfig);
+            if (SecurityProtocol != null) o.WithSecurityProtocol(SecurityProtocol);
+            if (SslConfig != null) o.WithSslConfig(SslConfig);
+            if (SaslConfig != null) o.WithSaslConfig(SaslConfig);
             o.WithPersistentStorage(UsePersistentStorage);
             o.WithEnumeratorWithPrefetch(UseEnumeratorWithPrefetch);
             o.WithKeyByteBufferDataTransfer(UseKeyByteBufferDataTransfer);
