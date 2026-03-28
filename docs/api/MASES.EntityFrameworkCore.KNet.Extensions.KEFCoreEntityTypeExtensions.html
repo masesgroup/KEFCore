@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions" class="text-break">
-Class KEFCoreEntityTypeExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L35"><i class="bi bi-code-slash"></i></a>
+Class KEFCoreEntityTypeExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -161,7 +161,7 @@ Class KEFCoreEntityTypeExtensions  <a class="header-action link-secondary" title
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_ApplicationIdForTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ApplicationIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   ApplicationIdForTable(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L69"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates the application id</p>
@@ -196,11 +196,54 @@ Class KEFCoreEntityTypeExtensions  <a class="header-action link-secondary" title
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildConsumerConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildConsumerConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
+  BuildConsumerConfig(IEntityType, KEFCoreOptionsExtension)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L260"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Builds the <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a> for this entity type, merging the global
+<a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_ConsumerConfig">ConsumerConfig</a> with any per-entity overrides
+stored as a <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreProducerAnnotation.html">KEFCoreProducerAnnotation</a> annotation.
+Per-entity values take precedence over the global config.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Option will be removed soon&quot;)]
+public static ConsumerConfigBuilder BuildConsumerConfig(this IEntityType entityType, KEFCoreOptionsExtension options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+    <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildProducerConfig_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildProducerConfig*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildProducerConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildProducerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   BuildProducerConfig(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L223"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L224"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Builds the <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Producer.ProducerConfigBuilder.html">ProducerConfigBuilder</a> for this entity type, merging the global
@@ -242,7 +285,7 @@ Per-entity values take precedence over the global config.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildTopicConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildTopicConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   BuildTopicConfig(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L169"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L170"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Builds the <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Common.TopicConfigBuilder.html">TopicConfigBuilder</a> for this entity type, merging the global
@@ -287,7 +330,7 @@ Per-entity values take precedence over the global config.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_ConsumerInstances_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ConsumerInstances(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   ConsumerInstances(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L256"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L271"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets consumer instances</p>
@@ -327,7 +370,7 @@ public static int? ConsumerInstances(this IEntityType entityType, KEFCoreOptions
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetKEFCoreTopicName_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetKEFCoreTopicName(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetKEFCoreTopicName(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L41"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Creates the topic name</p>
@@ -364,7 +407,7 @@ public static int? ConsumerInstances(this IEntityType entityType, KEFCoreOptions
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetKeySerDesSelectorType_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetKeySerDesSelectorType(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions)">
   GetKeySerDesSelectorType(IEntityType, IKEFCoreSingletonOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L195"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L196"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the key serializer selector type for this entity type.
@@ -405,7 +448,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetManageEvents_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetManageEvents(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetManageEvents(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether KEFCore event management is enabled for this entity type.
@@ -448,7 +491,7 @@ or <code>HasKEFCoreManageEvents(false)</code>.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetReadOnly_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetReadOnly(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetReadOnly(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L110"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether this entity type is read-only.
@@ -489,7 +532,7 @@ or if the context-level <a class="xref" href="MASES.EntityFrameworkCore.KNet.Inf
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetTopicRetentionBytes_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetTopicRetentionBytes(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetTopicRetentionBytes(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L95"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the per-entity topic retention in bytes, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> if not set.
@@ -527,7 +570,7 @@ When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetTopicRetentionMs_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetTopicRetentionMs(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetTopicRetentionMs(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the per-entity topic retention in milliseconds, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> if not set.
@@ -565,7 +608,7 @@ When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetTransactionGroup_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetTransactionGroup(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
   GetTransactionGroup(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L250"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L251"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the Kafka transaction group for this entity type, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
@@ -603,7 +646,7 @@ if the entity does not participate in a Kafka transaction.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetUseStoreKeyRange_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetUseStoreKeyRange(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetUseStoreKeyRange(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L137"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether key range look-up optimization is enabled for this entity type.
@@ -644,7 +687,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetUseStorePrefixScan_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetUseStorePrefixScan(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetUseStorePrefixScan(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L119"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether prefix scan optimization is enabled for this entity type.
@@ -685,7 +728,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetUseStoreReverse_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetUseStoreReverse(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetUseStoreReverse(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L145"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L146"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether reverse iteration optimization is enabled for this entity type.
@@ -726,7 +769,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetUseStoreReverseKeyRange_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetUseStoreReverseKeyRange(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetUseStoreReverseKeyRange(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L154"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L155"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether reverse key range look-up optimization is enabled for this entity type.
@@ -767,7 +810,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetUseStoreSingleKeyLookup_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetUseStoreSingleKeyLookup(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   GetUseStoreSingleKeyLookup(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L128"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns whether single key look-up optimization is enabled for this entity type.
@@ -808,7 +851,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueContainerType_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueContainerType(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions)">
   GetValueContainerType(IEntityType, IKEFCoreSingletonOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L213"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L214"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the value container type for this entity type.
@@ -849,7 +892,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueSerDesSelectorType_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueSerDesSelectorType(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions)">
   GetValueSerDesSelectorType(IEntityType, IKEFCoreSingletonOptions)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L204"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L205"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the value container serializer selector type for this entity type.
@@ -890,7 +933,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_NumPartitions_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.NumPartitions(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   NumPartitions(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the number of partitions for the Kafka topic associated with this entity type.
@@ -931,7 +974,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_ReplicationFactor_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ReplicationFactor(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   ReplicationFactor(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the replication factor for the Kafka topic associated with this entity type.
@@ -970,22 +1013,24 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 
   <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  StorageIdForTable(IEntityType)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)">
+  StorageIdForTable(IEntityType, IKEFCoreCluster)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Creates the storage id</p>
+  <div class="markdown level1 summary"><p>Creates the storage id based on <a class="xref" href="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetKEFCoreTopicName_Microsoft_EntityFrameworkCore_Metadata_IEntityType_">GetKEFCoreTopicName(IEntityType)</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_ClusterId">ClusterId</a></p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static string StorageIdForTable(this IEntityType entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">public static string StorageIdForTable(this IEntityType entityType, IKEFCoreCluster cluster)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+    <dt><code>cluster</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a></dt>
     <dd></dd>
   </dl>
 
@@ -1009,7 +1054,7 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L35" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L36" class="edit-link">Edit this page</a>
         </div>
 
 

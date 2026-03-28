@@ -181,6 +181,11 @@ public class HeavyEntity { ... }
 <p><strong>Cause</strong>: Kafka transactional producers write control records (commit/abort markers) to the topic in addition to data records. <code>ListOffsets</code> HEAD includes these markers — for example 5 data records produce offsets 0-4 plus a commit marker at offset 5, so <code>ListOffsets</code> returns 6. If <code>EnsureSynchronized</code> uses <code>ListOffsets</code> to set the expected offset, the local Streams store will never report offset 6 (the marker is a control record, not a data record), causing the synchronization wait to loop indefinitely.</p>
 <p><strong>Solution</strong>: KEFCore automatically skips the <code>LatestOffsetForEntity</code> call in <code>EnsureSynchronized</code> for entity types that belong to a transaction group — the expected offset is set by <code>CommitPendingOffsets</code> via <code>PartitionOffsetWritten</code> immediately after <code>CommitTransaction()</code>, using only the actual data record offsets. No user action required.</p>
 <p><strong>If you still see this issue</strong>: verify that <code>isolation.level = read_committed</code> is set in the <code>StreamsConfig</code> of the consuming application. Without it, the Streams consumer will not correctly process the commit marker and the local offset tracking may diverge.</p>
+<hr>
+<h3 id="persistent-storage-state-directory-not-found-after-upgrade">Persistent storage state directory not found after upgrade</h3>
+<p><strong>Symptom</strong>: After upgrading to a version that includes the <code>StorageIdForTable</code> change, the application rebuilds the entire state from Kafka topics instead of resuming from the existing RocksDB checkpoint.</p>
+<p><strong>Cause</strong>: The storage directory identifier now includes the <code>ClusterId</code> in addition to the topic name (<code>Table_{topicName}_{clusterId}</code>). Previous versions used only the topic name (<code>Table_{topicName}</code>). The existing RocksDB directory is not found under the new identifier, causing a full rebuild.</p>
+<p><strong>Solution</strong>: This is a one-time cost at the first startup after the upgrade. The state is rebuilt correctly from the Kafka topics. If the topic contains a large amount of data and rebuild time is a concern, plan the upgrade during a maintenance window.</p>
 
 </article>
 

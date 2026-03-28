@@ -113,6 +113,9 @@
 <li><strong>ProducerConfig</strong>: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins) — individual producer settings can be overridden per entity via <code>KEFCoreProducerAttribute</code> or <code>HasKEFCoreProducer()</code></li>
 <li><strong>StreamsConfig</strong>: parameters to use for the Apache Kafka™ Streams application (cluster-level, first-wins)</li>
 <li><strong>TopicConfig</strong>: parameters to use on topic creation for each entity (cluster-level, first-wins) — retention can be overridden per entity via <code>KEFCoreTopicRetentionAttribute</code> or <code>HasKEFCoreTopicRetention()</code></li>
+<li><strong>SecurityProtocol</strong>: the security protocol for broker connections (<code>PLAINTEXT</code>, <code>SSL</code>, <code>SASL_PLAINTEXT</code>, or <code>SASL_SSL</code>) — must be consistent with <code>SslConfigs</code> and <code>SaslConfigs</code> (first-wins)</li>
+<li><strong>SslConfigs</strong>: SSL/TLS configuration built via <code>SslConfigsBuilder</code> — required when <code>SecurityProtocol</code> is <code>SSL</code> or <code>SASL_SSL</code> (first-wins)</li>
+<li><strong>SaslConfigs</strong>: SASL authentication configuration built via <code>SaslConfigsBuilder</code> — required when <code>SecurityProtocol</code> is <code>SASL_PLAINTEXT</code> or <code>SASL_SSL</code> (first-wins)</li>
 <li><del><strong>UseCompactedReplicator</strong></del>: deprecated, will be removed in a future release</li>
 <li><del><strong>DefaultConsumerInstances</strong></del>: deprecated, will be removed in a future release</li>
 <li><del><strong>ConsumerConfig</strong></del>: deprecated, will be removed in a future release</li>
@@ -176,6 +179,23 @@
 </li>
 </ul>
 <p>Kafka transactional producers are supported via <code>Database.BeginTransaction()</code> when entity types are assigned to a transaction group via <code>KEFCoreTransactionalAttribute</code> or <code>HasKEFCoreTransactionGroup()</code>. The standard EF Core transaction pattern applies — <code>tx.Commit()</code> or <code>tx.Rollback()</code> maps to <code>CommitTransaction()</code>/<code>AbortTransaction()</code> on the Kafka transactional producer. See <a href="conventions.html#transactional-producer-convention">conventions</a> for full details.</p>
+<h3 id="secure-broker-connections">Secure broker connections</h3>
+<p><code>SecurityProtocol</code>, <code>SslConfigs</code>, and <code>SaslConfigs</code> are cluster-level first-wins options that configure authentication and encryption for all internal Kafka clients (producer, admin client, and Streams topology).</p>
+<pre><code class="lang-csharp">optionsBuilder.UseKEFCore(opt =&gt; opt
+    .WithBootstrapServers(&quot;KAFKA-SERVER:9093&quot;)
+    .WithApplicationId(&quot;MyApp&quot;)
+    .WithSecurityProtocol(SecurityProtocol.SASL_SSL)
+    .WithSslConfig(new SslConfigsBuilder()
+        .WithSslTruststoreLocation(&quot;/path/to/truststore.jks&quot;)
+        .WithSslTruststorePassword(new Password(&quot;truststore-password&quot;)))
+    .WithSaslConfig(new SaslConfigsBuilder()
+        .WithSaslMechanism(&quot;PLAIN&quot;)
+        .WithSaslJaasConfig(new Password(
+            &quot;org.apache.kafka.common.security.plain.PlainLoginModule required &quot; +
+            &quot;username=\&quot;myuser\&quot; password=\&quot;mypassword\&quot;;&quot;)))
+);
+</code></pre>
+<p>See <a href="options.html#secure-broker-connections">options</a> for the full protocol matrix and additional notes.</p>
 <h3 id="default-producerconfig">Default <strong>ProducerConfig</strong></h3>
 <p>Does not change anything over the <a href="https://kafka.apache.org/documentation/#producerconfigs">Apache Kafka™ defaults</a></p>
 <h3 id="default-streamsconfig">Default <strong>StreamsConfig</strong></h3>

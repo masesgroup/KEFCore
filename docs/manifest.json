@@ -180,6 +180,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.yml\" sourcestartlinenumber=\"1\">Fluent API extensions for configuring KEFCore RocksDB lifecycle behavior on entity types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.yml",
       "output": {
         ".html": {
@@ -191,6 +205,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType\" data-throw-if-not-resolved=\"false\"></xref> for the Kafka provider.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for KEFCore RocksDB lifecycle metadata associated to entity types.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -530,6 +558,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.yml\" sourcestartlinenumber=\"1\">Reads <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute\" data-throw-if-not-resolved=\"false\"></xref> from CLR entity types and writes\nthe corresponding KEFCore RocksDB lifecycle metadata into the EF Core model.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.yml",
       "output": {
         ".html": {
@@ -737,6 +779,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute.yml\" sourcestartlinenumber=\"1\">Marks this entity type as read-only within the current <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref>.\nAny attempt to write entries of this type via <xref href=\"Microsoft.EntityFrameworkCore.DbContext.SaveChanges\" data-throw-if-not-resolved=\"false\"></xref>\nwill throw <xref href=\"System.InvalidOperationException\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.yml\" sourcestartlinenumber=\"1\">Declares the <xref href=\"Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler\" data-throw-if-not-resolved=\"false\"></xref> type associated to an entity type.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2679,6 +2735,16 @@
       "output": {
         ".html": {
           "relative_path": "articles/serialization.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/support.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/support.html"
         }
       },
       "version": ""

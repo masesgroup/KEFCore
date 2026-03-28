@@ -97,21 +97,15 @@ Based on <a href="https://github.com/masesgroup/KNet">KNet client-side features<
 </tbody>
 </table>
 <h3 id="project-disclaimer">Project disclaimer</h3>
-<p>KEFCore is a project, curated by MASES Group, can be supported by the open-source community.</p>
-<p>Its primary scope is to support other, public or internal, MASES Group projects: open-source community and commercial entities can use it for their needs and support this project, moreover there are dedicated community and commercial subscription plans.</p>
-<p>The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.</p>
-<p>Looking for the help of <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> experts? MASES Group can help you design, build, deploy, and manage <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> applications.</p>
+<p>KEFCore is a project curated by MASES Group and supported by the open-source community.
+Its primary scope is to support other MASES Group projects — both open-source and commercial — though it is freely available for any use. Dedicated community and commercial subscription plans are available.
+The repository and releases may contain bugs. The release cycle depends on critical issues discovered and/or enhancement requests from this or other dependent projects.</p>
+<p>Looking for <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> expertise? MASES Group can help you design, build, deploy, and manage <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> and <a href="https://kafka.apache.org/">Apache Kafka™</a> applications. <a href="articles/support.html">Find out more.</a></p>
 <hr>
 <h2 id="scope-of-the-project">Scope of the project</h2>
-<p>This project aims to create a provider able to save data to, and read data from, an Apache Kafka™ cluster using the paradigm behind Entity Framework.</p>
-<p>Have you ever reached the <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core introduction page</a>?
-The first example proposed is:</p>
-<pre><code class="lang-c#">using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-namespace Intro;
-
-public class BloggingContext : DbContext
+<p>KEFCore provides an <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>, enabling .NET applications to use Kafka topics as a data store through the standard EF Core programming model — <code>DbContext</code>, LINQ queries, and strongly-typed entities — with no Kafka-specific consumer or producer code.</p>
+<p>The <a href="https://learn.microsoft.com/ef/core/">EF Core introduction page</a> opens with this example:</p>
+<pre><code class="lang-c#">public class BloggingContext : DbContext
 {
     public DbSet&lt;Blog&gt; Blogs { get; set; }
     public DbSet&lt;Post&gt; Posts { get; set; }
@@ -122,46 +116,22 @@ public class BloggingContext : DbContext
             @&quot;Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;ConnectRetryCount=0&quot;);
     }
 }
-
-public class Blog
-{
-    public int BlogId { get; set; }
-    public string Url { get; set; }
-    public int Rating { get; set; }
-    public List&lt;Post&gt; Posts { get; set; }
-}
-
-public class Post
-{
-    public int PostId { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-
-    public int BlogId { get; set; }
-    public Blog Blog { get; set; }
-}
 </code></pre>
-<p>which uses a SQL Server instance to store and retrieve the data.</p>
-<p>With <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> any user can replace a database (the available providers always use a database) with an <a href="https://kafka.apache.org/">Apache Kafka™</a> cluster.
-So the following query:</p>
-<pre><code class="lang-c#">using (var db = new BloggingContext())
-{
-    var blogs = await db.Blogs
-        .Where(b =&gt; b.Rating &gt; 3)
-        .OrderBy(b =&gt; b.Url)
-        .ToListAsync();
-}
+<p>With KEFCore, replacing the SQL Server backend with an Apache Kafka™ cluster requires changing a single line:</p>
+<pre><code class="lang-c#">optionsBuilder.UseKEFCore(&quot;my-application&quot;, &quot;localhost:9092&quot;);
 </code></pre>
-<p>or the following operation:</p>
-<pre><code class="lang-c#">using (var db = new BloggingContext())
-{
-    var blog = new Blog { Url = &quot;http://sample.com&quot; };
-    db.Blogs.Add(blog);
-    await db.SaveChangesAsync();
-}
+<p>From that point on, standard EF Core code works unchanged against Kafka topics:</p>
+<pre><code class="lang-c#">// Query
+var blogs = await db.Blogs
+    .Where(b =&gt; b.Rating &gt; 3)
+    .OrderBy(b =&gt; b.Url)
+    .ToListAsync();
+
+// Write
+db.Blogs.Add(new Blog { Url = &quot;http://sample.com&quot; });
+await db.SaveChangesAsync();
 </code></pre>
-<p>can be done on a set of topics in an <a href="https://kafka.apache.org/">Apache Kafka™</a> cluster.</p>
-<p>The project is based on available information within the official <a href="https://github.com/dotnet/efcore">EntityFrameworkCore repository</a>, many classes was copied from there as reported in the official documentation within the Microsoft website at <a href="https://docs.microsoft.com/ef/core/providers/writing-a-provider">https://docs.microsoft.com/ef/core/providers/writing-a-provider</a>.</p>
+<p>KEFCore is developed following the guidelines in the official <a href="https://github.com/dotnet/efcore">EntityFrameworkCore repository</a> and the <a href="https://docs.microsoft.com/ef/core/providers/writing-a-provider">Writing a provider</a> documentation published by Microsoft.</p>
 <p>Currently the project tries to support, at our best, the <a href="https://kafka.apache.org/downloads">official supported Apache Kafka™ binary distribution</a>:</p>
 <table>
 <thead>
@@ -252,7 +222,10 @@ So the following query:</p>
 </ul>
 </li>
 </ul>
+<div class="NOTE">
+<h5>Note</h5>
 <p><a href="https://www.jcobridge.com">JCOBridge 2.6.*</a> can be used for free without any obligations. A commercial license must be purchased — or the software uninstalled — if you derive direct or indirect income from its usage.</p>
+</div>
 <h3 id="jcobridge-resources">JCOBridge resources</h3>
 <p>Have a look at the following JCOBridge resources:</p>
 <table>

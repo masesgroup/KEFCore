@@ -171,6 +171,23 @@ public class Post
     public Blog Blog { get; set; }
 }
 </code></pre>
+<h2 id="secure-broker-connections">Secure broker connections</h2>
+<p>For brokers that require TLS encryption or SASL authentication (common in production and managed cloud environments), use the <code>WithSecurityProtocol()</code>, <code>WithSslConfig()</code>, and <code>WithSaslConfig()</code> fluent options:</p>
+<pre><code class="lang-csharp">optionsBuilder.UseKEFCore(opt =&gt; opt
+    .WithBootstrapServers(&quot;KAFKA-SERVER:9093&quot;)
+    .WithApplicationId(&quot;MyApp&quot;)
+    .WithSecurityProtocol(SecurityProtocol.SASL_SSL)
+    .WithSslConfig(new SslConfigsBuilder()
+        .WithSslTruststoreLocation(&quot;/path/to/truststore.jks&quot;)
+        .WithSslTruststorePassword(new Password(&quot;truststore-password&quot;)))
+    .WithSaslConfig(new SaslConfigsBuilder()
+        .WithSaslMechanism(&quot;PLAIN&quot;)
+        .WithSaslJaasConfig(new Password(
+            &quot;org.apache.kafka.common.security.plain.PlainLoginModule required &quot; +
+            &quot;username=\&quot;myuser\&quot; password=\&quot;mypassword\&quot;;&quot;)))
+);
+</code></pre>
+<p>See <a href="options.html#secure-broker-connections">options — secure broker connections</a> for the full protocol matrix and configuration reference.</p>
 <h2 id="topic-naming">Topic naming</h2>
 <p>Each entity maps to a Kafka topic. The topic name is resolved at model build time by <code>KEFCoreTopicNamingConvention</code>. With the example above the topics are:</p>
 <ul>
