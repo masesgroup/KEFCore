@@ -47,12 +47,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (DisableClusterInvocation) { _clusterId = "FakeClusterId"; return; }
 
             var builder = AdminClientConfigBuilder.Create();
-            builder.WithBootstrapServers(configuration.BootstrapServers);
-            if (configuration.SecurityProtocol != null) builder.WithSecurityProtocol(configuration.SecurityProtocol.ToString());
-            if (configuration.SslConfig != null) builder.WithSslConfigs(configuration.SslConfig);
-            if (configuration.SaslConfig != null) builder.WithSaslConfigs(configuration.SaslConfig);
+            builder = builder.WithBootstrapServers(configuration.BootstrapServers);
+            if (configuration.SecurityProtocol != null) builder = builder.WithSecurityProtocol(configuration.SecurityProtocol.ToString());
+            if (configuration.SslConfig != null) builder = builder.WithSslConfigs(configuration.SslConfig);
+            if (configuration.SaslConfig != null) builder = builder.WithSaslConfigs(configuration.SaslConfig);
 
-            _bootstrapProperties = AdminClientConfigBuilder.Create().ToProperties();
+            _bootstrapProperties = builder.ToProperties();
             try
             {
                 _kafkaAdminClient = Admin.Create(_bootstrapProperties);
