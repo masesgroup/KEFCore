@@ -452,6 +452,83 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly
   nameWithType: KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions
+  name: KEFCoreEntityTypeBuilderRocksDbExtensions
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Action{Org.Rocksdb.Options,MASES.KNet.IKNetConfigurationFromMap,System.Collections.Generic.IDictionary{System.String,System.Object}},System.Action{Org.Rocksdb.Options,System.Collections.Generic.IDictionary{System.String,System.Object}})
+  name: HasKEFCoreRocksDbLifecycle(EntityTypeBuilder, Action<Options, IKNetConfigurationFromMap, IDictionary<string, object>>?, Action<Options, IDictionary<string, object>>?)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycle_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Action_Org_Rocksdb_Options_MASES_KNet_IKNetConfigurationFromMap_System_Collections_Generic_IDictionary_System_String_System_Object___System_Action_Org_Rocksdb_Options_System_Collections_Generic_IDictionary_System_String_System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Action{Org.Rocksdb.Options,MASES.KNet.IKNetConfigurationFromMap,System.Collections.Generic.IDictionary{System.String,System.Object}},System.Action{Org.Rocksdb.Options,System.Collections.Generic.IDictionary{System.String,System.Object}})
+  name.vb: HasKEFCoreRocksDbLifecycle(EntityTypeBuilder, Action(Of Options, IKNetConfigurationFromMap, IDictionary(Of String, Object)), Action(Of Options, IDictionary(Of String, Object)))
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, System.Action<Org.Rocksdb.Options, MASES.KNet.IKNetConfigurationFromMap, System.Collections.Generic.IDictionary<string, object>>?, System.Action<Org.Rocksdb.Options, System.Collections.Generic.IDictionary<string, object>>?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, System.Action(Of Org.Rocksdb.Options, MASES.KNet.IKNetConfigurationFromMap, System.Collections.Generic.IDictionary(Of String, Object)), System.Action(Of Org.Rocksdb.Options, System.Collections.Generic.IDictionary(Of String, Object)))
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(EntityTypeBuilder, Action<Options, IKNetConfigurationFromMap, IDictionary<string, object>>?, Action<Options, IDictionary<string, object>>?)
+  nameWithType.vb: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(EntityTypeBuilder, Action(Of Options, IKNetConfigurationFromMap, IDictionary(Of String, Object)), Action(Of Options, IDictionary(Of String, Object)))
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle*
+  name: HasKEFCoreRocksDbLifecycle
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycle_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  name: HasKEFCoreRocksDbLifecycleHandler(EntityTypeBuilder, IRocksDbLifecycleHandler)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_Org_Apache_Kafka_Streams_State_IRocksDbLifecycleHandler_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(EntityTypeBuilder, IRocksDbLifecycleHandler)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Type)
+  name: HasKEFCoreRocksDbLifecycleHandler(EntityTypeBuilder, Type)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_Type_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.Type)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder, System.Type)
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(EntityTypeBuilder, Type)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler*
+  name: HasKEFCoreRocksDbLifecycleHandler
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)
+  name: HasKEFCoreRocksDbLifecycleHandler<THandler>(EntityTypeBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler__1_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)
+  name.vb: HasKEFCoreRocksDbLifecycleHandler(Of THandler)(EntityTypeBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<THandler>(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of THandler)(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<THandler>(EntityTypeBuilder)
+  nameWithType.vb: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of THandler)(EntityTypeBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0},Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  name: HasKEFCoreRocksDbLifecycleHandler<TEntity>(EntityTypeBuilder<TEntity>, IRocksDbLifecycleHandler)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler__1_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder___0__Org_Apache_Kafka_Streams_State_IRocksDbLifecycleHandler_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0},Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  name.vb: HasKEFCoreRocksDbLifecycleHandler(Of TEntity)(EntityTypeBuilder(Of TEntity), IRocksDbLifecycleHandler)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<TEntity>(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity>, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of TEntity)(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder(Of TEntity), Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<TEntity>(EntityTypeBuilder<TEntity>, IRocksDbLifecycleHandler)
+  nameWithType.vb: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of TEntity)(EntityTypeBuilder(Of TEntity), IRocksDbLifecycleHandler)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``2(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0})
+  name: HasKEFCoreRocksDbLifecycleHandler<TEntity, THandler>(EntityTypeBuilder<TEntity>)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycleHandler__2_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder___0__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler``2(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0})
+  name.vb: HasKEFCoreRocksDbLifecycleHandler(Of TEntity, THandler)(EntityTypeBuilder(Of TEntity))
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<TEntity, THandler>(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of TEntity, THandler)(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder(Of TEntity))
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler<TEntity, THandler>(EntityTypeBuilder<TEntity>)
+  nameWithType.vb: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycleHandler(Of TEntity, THandler)(EntityTypeBuilder(Of TEntity))
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0},System.Action{Org.Rocksdb.Options,MASES.KNet.IKNetConfigurationFromMap,System.Collections.Generic.IDictionary{System.String,System.Object}},System.Action{Org.Rocksdb.Options,System.Collections.Generic.IDictionary{System.String,System.Object}})
+  name: HasKEFCoreRocksDbLifecycle<TEntity>(EntityTypeBuilder<TEntity>, Action<Options, IKNetConfigurationFromMap, IDictionary<string, object>>?, Action<Options, IDictionary<string, object>>?)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderRocksDbExtensions_HasKEFCoreRocksDbLifecycle__1_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder___0__System_Action_Org_Rocksdb_Options_MASES_KNet_IKNetConfigurationFromMap_System_Collections_Generic_IDictionary_System_String_System_Object___System_Action_Org_Rocksdb_Options_System_Collections_Generic_IDictionary_System_String_System_Object___
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0},System.Action{Org.Rocksdb.Options,MASES.KNet.IKNetConfigurationFromMap,System.Collections.Generic.IDictionary{System.String,System.Object}},System.Action{Org.Rocksdb.Options,System.Collections.Generic.IDictionary{System.String,System.Object}})
+  name.vb: HasKEFCoreRocksDbLifecycle(Of TEntity)(EntityTypeBuilder(Of TEntity), Action(Of Options, IKNetConfigurationFromMap, IDictionary(Of String, Object)), Action(Of Options, IDictionary(Of String, Object)))
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle<TEntity>(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity>, System.Action<Org.Rocksdb.Options, MASES.KNet.IKNetConfigurationFromMap, System.Collections.Generic.IDictionary<string, object>>?, System.Action<Org.Rocksdb.Options, System.Collections.Generic.IDictionary<string, object>>?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Of TEntity)(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder(Of TEntity), System.Action(Of Org.Rocksdb.Options, MASES.KNet.IKNetConfigurationFromMap, System.Collections.Generic.IDictionary(Of String, Object)), System.Action(Of Org.Rocksdb.Options, System.Collections.Generic.IDictionary(Of String, Object)))
+  nameWithType: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle<TEntity>(EntityTypeBuilder<TEntity>, Action<Options, IKNetConfigurationFromMap, IDictionary<string, object>>?, Action<Options, IDictionary<string, object>>?)
+  nameWithType.vb: KEFCoreEntityTypeBuilderRocksDbExtensions.HasKEFCoreRocksDbLifecycle(Of TEntity)(EntityTypeBuilder(Of TEntity), Action(Of Options, IKNetConfigurationFromMap, IDictionary(Of String, Object)), Action(Of Options, IDictionary(Of String, Object)))
 - uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions
   name: KEFCoreEntityTypeExtensions
   href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html
@@ -471,6 +548,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ApplicationIdForTable
   nameWithType: KEFCoreEntityTypeExtensions.ApplicationIdForTable
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)
+  name: BuildConsumerConfig(IEntityType, KEFCoreOptionsExtension)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildConsumerConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)
+  nameWithType: KEFCoreEntityTypeExtensions.BuildConsumerConfig(IEntityType, KEFCoreOptionsExtension)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig*
+  name: BuildConsumerConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildConsumerConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig
+  nameWithType: KEFCoreEntityTypeExtensions.BuildConsumerConfig
 - uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildProducerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)
   name: BuildProducerConfig(IEntityType, KEFCoreOptionsExtension)
   href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildProducerConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_
@@ -718,12 +808,12 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ReplicationFactor
   nameWithType: KEFCoreEntityTypeExtensions.ReplicationFactor
-- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  name: StorageIdForTable(IEntityType)
-  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_
-  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType)
-  nameWithType: KEFCoreEntityTypeExtensions.StorageIdForTable(IEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)
+  name: StorageIdForTable(IEntityType, IKEFCoreCluster)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable(Microsoft.EntityFrameworkCore.Metadata.IEntityType, MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)
+  nameWithType: KEFCoreEntityTypeExtensions.StorageIdForTable(IEntityType, IKEFCoreCluster)
 - uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable*
   name: StorageIdForTable
   href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_StorageIdForTable_
@@ -731,6 +821,88 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.StorageIdForTable
   nameWithType: KEFCoreEntityTypeExtensions.StorageIdForTable
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions
+  name: KEFCoreEntityTypeRocksDbExtensions
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  name: GetRocksDbLifecycleHandler(IReadOnlyEntityType)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_GetRocksDbLifecycleHandler_Microsoft_EntityFrameworkCore_Metadata_IReadOnlyEntityType_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler(IReadOnlyEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler*
+  name: GetRocksDbLifecycleHandler
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_GetRocksDbLifecycleHandler_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandler
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  name: GetRocksDbLifecycleHandlerType(IReadOnlyEntityType)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_GetRocksDbLifecycleHandlerType_Microsoft_EntityFrameworkCore_Metadata_IReadOnlyEntityType_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IReadOnlyEntityType)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType(IReadOnlyEntityType)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType*
+  name: GetRocksDbLifecycleHandlerType
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_GetRocksDbLifecycleHandlerType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.GetRocksDbLifecycleHandlerType
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler,System.Boolean)
+  name: SetRocksDbLifecycleHandler(IConventionEntityType, IRocksDbLifecycleHandler?, bool)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandler_Microsoft_EntityFrameworkCore_Metadata_IConventionEntityType_Org_Apache_Kafka_Streams_State_IRocksDbLifecycleHandler_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler,System.Boolean)
+  name.vb: SetRocksDbLifecycleHandler(IConventionEntityType, IRocksDbLifecycleHandler, Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler?, bool)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler, Boolean)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(IConventionEntityType, IRocksDbLifecycleHandler?, bool)
+  nameWithType.vb: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(IConventionEntityType, IRocksDbLifecycleHandler, Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  name: SetRocksDbLifecycleHandler(IMutableEntityType, IRocksDbLifecycleHandler?)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandler_Microsoft_EntityFrameworkCore_Metadata_IMutableEntityType_Org_Apache_Kafka_Streams_State_IRocksDbLifecycleHandler_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType,Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  name.vb: SetRocksDbLifecycleHandler(IMutableEntityType, IRocksDbLifecycleHandler)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType, Org.Apache.Kafka.Streams.State.IRocksDbLifecycleHandler)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(IMutableEntityType, IRocksDbLifecycleHandler?)
+  nameWithType.vb: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler(IMutableEntityType, IRocksDbLifecycleHandler)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler*
+  name: SetRocksDbLifecycleHandler
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandler_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandler
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType,System.Type,System.Boolean)
+  name: SetRocksDbLifecycleHandlerType(IConventionEntityType, Type?, bool)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandlerType_Microsoft_EntityFrameworkCore_Metadata_IConventionEntityType_System_Type_System_Boolean_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType,System.Type,System.Boolean)
+  name.vb: SetRocksDbLifecycleHandlerType(IConventionEntityType, Type, Boolean)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType, System.Type?, bool)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType, System.Type, Boolean)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(IConventionEntityType, Type?, bool)
+  nameWithType.vb: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(IConventionEntityType, Type, Boolean)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType,System.Type)
+  name: SetRocksDbLifecycleHandlerType(IMutableEntityType, Type?)
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandlerType_Microsoft_EntityFrameworkCore_Metadata_IMutableEntityType_System_Type_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType,System.Type)
+  name.vb: SetRocksDbLifecycleHandlerType(IMutableEntityType, Type)
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType, System.Type?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType, System.Type)
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(IMutableEntityType, Type?)
+  nameWithType.vb: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType(IMutableEntityType, Type)
+- uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType*
+  name: SetRocksDbLifecycleHandlerType
+  href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.html#MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeRocksDbExtensions_SetRocksDbLifecycleHandlerType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType
+  nameWithType: KEFCoreEntityTypeRocksDbExtensions.SetRocksDbLifecycleHandlerType
 - uid: MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions
   name: KEFCoreModelBuilderExtensions
   href: api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreModelBuilderExtensions.html
@@ -935,6 +1107,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.ProducerConfig
   nameWithType: IKEFCoreSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SaslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig
+  nameWithType: IKEFCoreSingletonOptions.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig*
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SaslConfig
+  nameWithType: IKEFCoreSingletonOptions.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SecurityProtocol
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol
+  nameWithType: IKEFCoreSingletonOptions.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol*
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SecurityProtocol
+  nameWithType: IKEFCoreSingletonOptions.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig
+  nameWithType: IKEFCoreSingletonOptions.SslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig*
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_SslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.SslConfig
+  nameWithType: IKEFCoreSingletonOptions.SslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.StreamsConfig
   name: StreamsConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.IKEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_IKEFCoreSingletonOptions_StreamsConfig
@@ -1218,6 +1429,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerConfig
   nameWithType: KEFCoreOptionsExtension.ConsumerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder
+  name: ConsumerOptionsBuilder()
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_ConsumerOptionsBuilder
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder()
+  nameWithType: KEFCoreOptionsExtension.ConsumerOptionsBuilder()
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder*
+  name: ConsumerOptionsBuilder
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_ConsumerOptionsBuilder_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ConsumerOptionsBuilder
+  nameWithType: KEFCoreOptionsExtension.ConsumerOptionsBuilder
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.DefaultConsumerInstances
   name: DefaultConsumerInstances
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_DefaultConsumerInstances
@@ -1361,6 +1585,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.ReadOnlyMode
   nameWithType: KEFCoreOptionsExtension.ReadOnlyMode
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SaslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig
+  nameWithType: KEFCoreOptionsExtension.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig*
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SaslConfig
+  nameWithType: KEFCoreOptionsExtension.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SecurityProtocol
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol
+  nameWithType: KEFCoreOptionsExtension.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol*
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SecurityProtocol
+  nameWithType: KEFCoreOptionsExtension.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig
+  nameWithType: KEFCoreOptionsExtension.SslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig*
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_SslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.SslConfig
+  nameWithType: KEFCoreOptionsExtension.SslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.StreamsConfig
   name: StreamsConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_StreamsConfig
@@ -1880,6 +2143,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithReadOnlyMode
   nameWithType: KEFCoreOptionsExtension.WithReadOnlyMode
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  name: WithSaslConfig(SaslConfigsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSaslConfig_MASES_KNet_Common_SaslConfigsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  nameWithType: KEFCoreOptionsExtension.WithSaslConfig(SaslConfigsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig*
+  name: WithSaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSaslConfig
+  nameWithType: KEFCoreOptionsExtension.WithSaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  name: WithSecurityProtocol(SecurityProtocol)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSecurityProtocol_Org_Apache_Kafka_Common_Security_Auth_SecurityProtocol_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  nameWithType: KEFCoreOptionsExtension.WithSecurityProtocol(SecurityProtocol)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol*
+  name: WithSecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSecurityProtocol
+  nameWithType: KEFCoreOptionsExtension.WithSecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  name: WithSslConfig(SslConfigsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSslConfig_MASES_KNet_Common_SslConfigsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  nameWithType: KEFCoreOptionsExtension.WithSslConfig(SslConfigsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig*
+  name: WithSslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithSslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithSslConfig
+  nameWithType: KEFCoreOptionsExtension.WithSslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.WithStoreKeyRange(System.Boolean)
   name: WithStoreKeyRange(bool)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithStoreKeyRange_System_Boolean_
@@ -2138,6 +2440,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.ProducerConfig
   nameWithType: KEFCoreSingletonOptions.ProducerConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SaslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig
+  nameWithType: KEFCoreSingletonOptions.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig*
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SaslConfig
+  nameWithType: KEFCoreSingletonOptions.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SecurityProtocol
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol
+  nameWithType: KEFCoreSingletonOptions.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol*
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SecurityProtocol
+  nameWithType: KEFCoreSingletonOptions.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig
+  nameWithType: KEFCoreSingletonOptions.SslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig*
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_SslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.SslConfig
+  nameWithType: KEFCoreSingletonOptions.SslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.StreamsConfig
   name: StreamsConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreSingletonOptions.html#MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_StreamsConfig
@@ -2548,6 +2889,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.ResetStreams
   nameWithType: KEFCoreDbContext.ResetStreams
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SaslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig
+  nameWithType: KEFCoreDbContext.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig*
+  name: SaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SaslConfig
+  nameWithType: KEFCoreDbContext.SaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SecurityProtocol
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol
+  nameWithType: KEFCoreDbContext.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol*
+  name: SecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SecurityProtocol
+  nameWithType: KEFCoreDbContext.SecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SslConfig
+  commentId: P:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig
+  nameWithType: KEFCoreDbContext.SslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig*
+  name: SslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.SslConfig
+  nameWithType: KEFCoreDbContext.SslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.StreamsConfig
   name: StreamsConfig
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig
@@ -3073,6 +3453,45 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithReadOnlyMode
   nameWithType: KEFCoreDbContextOptionsBuilder.WithReadOnlyMode
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  name: WithSaslConfig(SaslConfigsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSaslConfig_MASES_KNet_Common_SaslConfigsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig(MASES.KNet.Common.SaslConfigsBuilder)
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSaslConfig(SaslConfigsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig*
+  name: WithSaslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSaslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSaslConfig
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSaslConfig
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  name: WithSecurityProtocol(SecurityProtocol)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSecurityProtocol_Org_Apache_Kafka_Common_Security_Auth_SecurityProtocol_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol(Org.Apache.Kafka.Common.Security.Auth.SecurityProtocol)
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSecurityProtocol(SecurityProtocol)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol*
+  name: WithSecurityProtocol
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSecurityProtocol_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSecurityProtocol
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSecurityProtocol
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  name: WithSslConfig(SslConfigsBuilder)
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSslConfig_MASES_KNet_Common_SslConfigsBuilder_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig(MASES.KNet.Common.SslConfigsBuilder)
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSslConfig(SslConfigsBuilder)
+- uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig*
+  name: WithSslConfig
+  href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithSslConfig_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithSslConfig
+  nameWithType: KEFCoreDbContextOptionsBuilder.WithSslConfig
 - uid: MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.WithStoreKeyRange(System.Boolean)
   name: WithStoreKeyRange(bool)
   href: api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContextOptionsBuilder.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContextOptionsBuilder_WithStoreKeyRange_System_Boolean_
@@ -3763,6 +4182,28 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreReadOnlyConvention.ProcessModelFinalizing
   nameWithType: KEFCoreReadOnlyConvention.ProcessModelFinalizing
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention
+  name: KEFCoreRocksDbLifecycleAttributeConvention
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention
+  nameWithType: KEFCoreRocksDbLifecycleAttributeConvention
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder,Microsoft.EntityFrameworkCore.Metadata.Conventions.IConventionContext{Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder})
+  name: ProcessModelFinalizing(IConventionModelBuilder, IConventionContext<IConventionModelBuilder>)
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.html#MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreRocksDbLifecycleAttributeConvention_ProcessModelFinalizing_Microsoft_EntityFrameworkCore_Metadata_Builders_IConventionModelBuilder_Microsoft_EntityFrameworkCore_Metadata_Conventions_IConventionContext_Microsoft_EntityFrameworkCore_Metadata_Builders_IConventionModelBuilder__
+  commentId: M:MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder,Microsoft.EntityFrameworkCore.Metadata.Conventions.IConventionContext{Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder})
+  name.vb: ProcessModelFinalizing(IConventionModelBuilder, IConventionContext(Of IConventionModelBuilder))
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder, Microsoft.EntityFrameworkCore.Metadata.Conventions.IConventionContext<Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder>)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder, Microsoft.EntityFrameworkCore.Metadata.Conventions.IConventionContext(Of Microsoft.EntityFrameworkCore.Metadata.Builders.IConventionModelBuilder))
+  nameWithType: KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(IConventionModelBuilder, IConventionContext<IConventionModelBuilder>)
+  nameWithType.vb: KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing(IConventionModelBuilder, IConventionContext(Of IConventionModelBuilder))
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing*
+  name: ProcessModelFinalizing
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.html#MASES_EntityFrameworkCore_KNet_Metadata_Conventions_KEFCoreRocksDbLifecycleAttributeConvention_ProcessModelFinalizing_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing
+  nameWithType: KEFCoreRocksDbLifecycleAttributeConvention.ProcessModelFinalizing
 - uid: MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention
   name: KEFCoreSerDesConvention
   href: api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreSerDesConvention.html
@@ -3955,6 +4396,18 @@ references:
   commentId: F:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.ReplicationFactor
   fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.ReplicationFactor
   nameWithType: KEFCoreAnnotationNames.ReplicationFactor
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerAnnotation
+  name: RocksDbLifecycleHandlerAnnotation
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KEFCoreAnnotationNames_RocksDbLifecycleHandlerAnnotation
+  commentId: F:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerAnnotation
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerAnnotation
+  nameWithType: KEFCoreAnnotationNames.RocksDbLifecycleHandlerAnnotation
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerTypeAnnotation
+  name: RocksDbLifecycleHandlerTypeAnnotation
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KEFCoreAnnotationNames_RocksDbLifecycleHandlerTypeAnnotation
+  commentId: F:MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerTypeAnnotation
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.RocksDbLifecycleHandlerTypeAnnotation
+  nameWithType: KEFCoreAnnotationNames.RocksDbLifecycleHandlerTypeAnnotation
 - uid: MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.TopicName
   name: TopicName
   href: api/MASES.EntityFrameworkCore.KNet.Metadata.Internal.KEFCoreAnnotationNames.html#MASES_EntityFrameworkCore_KNet_Metadata_Internal_KEFCoreAnnotationNames_TopicName
@@ -4368,6 +4821,44 @@ references:
   commentId: T:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute
   fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreReadOnlyAttribute
   nameWithType: KEFCoreReadOnlyAttribute
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute
+  name: KEFCoreRocksDbLifecycleAttribute
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html
+  commentId: T:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute
+  nameWithType: KEFCoreRocksDbLifecycleAttribute
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.#ctor(System.Type)
+  name: KEFCoreRocksDbLifecycleAttribute(Type)
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreRocksDbLifecycleAttribute__ctor_System_Type_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.#ctor(System.Type)
+  name.vb: New(Type)
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.KEFCoreRocksDbLifecycleAttribute(System.Type)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.New(System.Type)
+  nameWithType: KEFCoreRocksDbLifecycleAttribute.KEFCoreRocksDbLifecycleAttribute(Type)
+  nameWithType.vb: KEFCoreRocksDbLifecycleAttribute.New(Type)
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.#ctor*
+  name: KEFCoreRocksDbLifecycleAttribute
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreRocksDbLifecycleAttribute__ctor_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.KEFCoreRocksDbLifecycleAttribute
+  fullName.vb: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.New
+  nameWithType: KEFCoreRocksDbLifecycleAttribute.KEFCoreRocksDbLifecycleAttribute
+  nameWithType.vb: KEFCoreRocksDbLifecycleAttribute.New
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType
+  name: HandlerType
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreRocksDbLifecycleAttribute_HandlerType
+  commentId: P:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType
+  nameWithType: KEFCoreRocksDbLifecycleAttribute.HandlerType
+- uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType*
+  name: HandlerType
+  href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreRocksDbLifecycleAttribute_HandlerType_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreRocksDbLifecycleAttribute.HandlerType
+  nameWithType: KEFCoreRocksDbLifecycleAttribute.HandlerType
 - uid: MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute
   name: KEFCoreSerDesAttribute
   href: api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreSerDesAttribute.html

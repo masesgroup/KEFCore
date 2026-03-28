@@ -441,6 +441,44 @@ catch
 <h5>Note</h5>
 <p>Consumers reading from topics written by transactional producers must set <code>isolation.level = read_committed</code> to correctly filter aborted transactions. Verify the <code>StreamsConfig</code> for the consuming application.</p>
 </div>
+<h2 id="rocksdb-lifecycle-convention">RocksDB lifecycle convention</h2>
+<p><code>KEFCoreRocksDbLifecycleAttributeConvention</code> resolves per-entity RocksDB lifecycle handler configuration at model finalization time. The resolved handler is registered with <code>KNetRocksDBConfigSetter</code> and invoked when Kafka Streams configures and closes the RocksDB state store for that entity's topic.</p>
+<p>This convention only applies when <code>UsePersistentStorage = true</code>.</p>
+<h3 id="resolution-priority-2">Resolution priority</h3>
+<ol>
+<li><code>KEFCoreRocksDbLifecycleAttribute</code> applied to the entity class — specifies a handler type</li>
+<li><code>HasKEFCoreRocksDbLifecycleHandler()</code> or <code>HasKEFCoreRocksDbLifecycle()</code> via fluent API</li>
+</ol>
+<h3 id="usage-examples-10">Usage examples</h3>
+<pre><code class="lang-csharp">// Attribute — handler type
+[KEFCoreRocksDbLifecycleAttribute(typeof(MyRocksDbHandler))]
+[Table(&quot;SensorReading&quot;)]
+public class SensorReading { ... }
+
+// Fluent API — handler type
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreRocksDbLifecycleHandler&lt;MyRocksDbHandler&gt;();
+}
+
+// Fluent API — handler instance
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreRocksDbLifecycleHandler(new MyRocksDbHandler());
+}
+
+// Fluent API — inline callbacks
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&lt;SensorReading&gt;()
+                .HasKEFCoreRocksDbLifecycle(
+                    onSetConfig: (options, config, data) =&gt; { ... },
+                    onClose: (options, data) =&gt; { ... });
+}
+</code></pre>
+<p>See <a href="performancetips.html#rocksdb-configuration">performance tips</a> for full details on the lifecycle model and object retention rules.</p>
 
 </article>
 
