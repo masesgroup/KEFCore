@@ -6,7 +6,7 @@ _description: Main page of Entity Framework Core provider for Apache Kafka™
 # KEFCore: [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/)
 
 KEFCore is the [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/).
-Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka™](https://kafka.apache.org/) as a distributed database and more.
+Based on [KNet client-side features](https://github.com/masesgroup/KNet) it allows to use [Apache Kafka™](https://kafka.apache.org/) as a distributed database and more: KNet client-side features are also compatible with any broker that implements the Kafka wire protocol — see [Backend compatibility](#backend-compatibility) below.
 
 ### Libraries and Tools
 
@@ -16,29 +16,20 @@ Based on [KNet](https://github.com/masesgroup/KNet) it allows to use [Apache Kaf
 
 ### Project disclaimer
 
-KEFCore is a project, curated by MASES Group, can be supported by the open-source community.
+KEFCore is a project curated by MASES Group and supported by the open-source community.
+Its primary scope is to support other MASES Group projects — both open-source and commercial — though it is freely available for any use. Dedicated community and commercial subscription plans are available.
+The repository and releases may contain bugs. The release cycle depends on critical issues discovered and/or enhancement requests from this or other dependent projects.
 
-Its primary scope is to support other, public or internal, MASES Group projects: open-source community and commercial entities can use it for their needs and support this project, moreover there are dedicated community and commercial subscription plans.
-
-The repository code and releases may contain bugs, the release cycle depends from critical discovered issues and/or enhancement requested from this or other projects.
-
-Looking for the help of [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) experts? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) applications.
+Looking for [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) expertise? MASES Group can help you design, build, deploy, and manage [Entity Framework Core](https://learn.microsoft.com/ef/core/) and [Apache Kafka™](https://kafka.apache.org/) applications. [Find out more.](articles/support.md)
 
 ---
 
 ## Scope of the project
 
-This project aims to create a provider able to save data to, and read data from, an Apache Kafka™ cluster using the paradigm behind Entity Framework.
+KEFCore provides an [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/), enabling .NET applications to use Kafka topics as a data store through the standard EF Core programming model — `DbContext`, LINQ queries, and strongly-typed entities — with no Kafka-specific consumer or producer code.
 
-Have you ever reached the [Entity Framework Core introduction page](https://learn.microsoft.com/ef/core/)? 
-The first example proposed is:
-
+The [EF Core introduction page](https://learn.microsoft.com/ef/core/) opens with this example:
 ```c#
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-namespace Intro;
-
 public class BloggingContext : DbContext
 {
     public DbSet<Blog> Blogs { get; set; }
@@ -50,62 +41,52 @@ public class BloggingContext : DbContext
             @"Server=(localdb)\mssqllocaldb;Database=Blogging;Trusted_Connection=True;ConnectRetryCount=0");
     }
 }
-
-public class Blog
-{
-    public int BlogId { get; set; }
-    public string Url { get; set; }
-    public int Rating { get; set; }
-    public List<Post> Posts { get; set; }
-}
-
-public class Post
-{
-    public int PostId { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-
-    public int BlogId { get; set; }
-    public Blog Blog { get; set; }
-}
 ```
-which uses a SQL Server instance to store and retrieve the data.
 
-With [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) any user can replace a database (the available providers always use a database) with an [Apache Kafka™](https://kafka.apache.org/) cluster.
-So the following query:
+With KEFCore, replacing the SQL Server backend with an Apache Kafka™ cluster requires changing a single line:
 ```c#
-using (var db = new BloggingContext())
-{
-    var blogs = await db.Blogs
-        .Where(b => b.Rating > 3)
-        .OrderBy(b => b.Url)
-        .ToListAsync();
-}
+optionsBuilder.UseKEFCore("my-application", "localhost:9092");
 ```
-or the following operation:
+
+From that point on, standard EF Core code works unchanged against Kafka topics:
 ```c#
-using (var db = new BloggingContext())
-{
-    var blog = new Blog { Url = "http://sample.com" };
-    db.Blogs.Add(blog);
-    await db.SaveChangesAsync();
-}
+// Query
+var blogs = await db.Blogs
+    .Where(b => b.Rating > 3)
+    .OrderBy(b => b.Url)
+    .ToListAsync();
+
+// Write
+db.Blogs.Add(new Blog { Url = "http://sample.com" });
+await db.SaveChangesAsync();
 ```
 
-can be done on a set of topics in an [Apache Kafka™](https://kafka.apache.org/) cluster.
-
-The project is based on available information within the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore), many classes was copied from there as reported in the official documentation within the Microsoft website at https://docs.microsoft.com/ef/core/providers/writing-a-provider.
+KEFCore is developed following the guidelines in the official [EntityFrameworkCore repository](https://github.com/dotnet/efcore) and the [Writing a provider](https://docs.microsoft.com/ef/core/providers/writing-a-provider) documentation published by Microsoft.
 
 Currently the project tries to support, at our best, the [official supported Apache Kafka™ binary distribution](https://kafka.apache.org/downloads):
 
 | KEFCore | State | KNet | Apache Kafka™ | .NET | JVM™ |
 |:---:	|:---:	|:---:	|:---:	|:---:	|:---:	|
-| 2.6.*+ | Active | 3.1.x | 4.1.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
+| 2.6.*+ | Active | 3.2.x | 4.2.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
 | 2.5.* | Deprecated | 2.9.x | 3.9.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
 
-### Community and Contribution
+---
 
-If you find KEFCore useful:
+## Backend compatibility
+
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) uses the official Apache Kafka™ Java client packages directly through [KNet client-side features](https://github.com/masesgroup/KNet). This architecture has a direct impact on backend compatibility.
+
+**Client-side features** — Producer, Consumer, Admin Client, Kafka Streams, KNet Streams SDK, KNet Connect SDK, KNetPS scriptable cmdlets — communicate with the broker exclusively through the Kafka wire protocol and are therefore compatible with **any broker that implements it**, not only Apache Kafka™ itself.
+
+Examples of compatible brokers: [Redpanda](https://redpanda.com/), [Amazon MSK](https://aws.amazon.com/msk/), [Confluent Platform / Cloud](https://www.confluent.io/), [Aiven for Apache Kafka™](https://aiven.io/kafka), [IBM Event Streams](https://www.ibm.com/products/event-streams), [WarpStream](https://www.warpstream.com/), [AutoMQ](https://www.automq.com/), and others.
+
+See [Supported Backends](src/documentation/articles/backends.md) for the full compatibility matrix covering all KNet feature areas.
+
+---
+
+## Community and Contribution
+
+If you find [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) useful:
 
 * Leave a ⭐ on the repository
 * Open [issues](https://github.com/masesgroup/KEFCore/issues) to report bugs 🐛 or request features
@@ -118,6 +99,7 @@ This project adheres to the Contributor [Covenant code of conduct](https://githu
 
 * [Getting started](articles/gettingstarted.md)
 * [How it works](articles/howitworks.md)
+* [Supported backends](articles/backends.md)
 * [Usage](articles/usage.md)
 * [Use cases](articles/usecases.md)
 * [Templates usage](articles/usageTemplates.md)
@@ -149,7 +131,7 @@ KEFCore uses [KNet](https://github.com/masesgroup/KNet), and indeed [JCOBridge](
   * Documentation is shared;
 
 > [!NOTE]
-> [JCOBridge 2.6.*](https://www.jcobridge.com) can be used for free without any obligations; you need to purchase a commercial license, or uninstall the software, if you have direct or indirect incomes from the product usage.
+> [JCOBridge 2.6.\*](https://www.jcobridge.com) can be used for free without any obligations. A commercial license must be purchased — or the software uninstalled — if you derive direct or indirect income from its usage.
 
 ### JCOBridge resources
 

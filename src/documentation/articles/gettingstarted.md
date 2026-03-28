@@ -9,7 +9,14 @@ To use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider fo
 - an installed JRE/JDK (17+)
 - an accessible Apache Kafka™ broker (a full cluster or a local Dockerized version)
 
-> IMPORTANT NOTE: till the first major version, all releases shall be considered not stable: this means the API public, or internal, can change without notice.
+## Backend compatibility
+
+[Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) uses the official Apache Kafka™ Java client packages directly through [KNet client-side features](https://github.com/masesgroup/KNet).
+All examples in this page use standard Producer, Consumer, and Admin Client APIs, which communicate with the broker exclusively through the Kafka wire protocol.
+
+This means the code shown here works with **any broker that implements the Kafka wire protocol** — not only Apache Kafka™ itself. Examples of compatible brokers: [Redpanda](https://redpanda.com/), [Amazon MSK](https://aws.amazon.com/msk/), [Confluent Platform / Cloud](https://www.confluent.io/), [Aiven for Apache Kafka™](https://aiven.io/kafka), [IBM Event Streams](https://www.ibm.com/products/event-streams), [WarpStream](https://www.warpstream.com/), [AutoMQ](https://www.automq.com/), and others.
+
+See [Supported Backends](backends.md) for the full compatibility matrix covering all KNet feature areas.
 
 ## First project setup
 

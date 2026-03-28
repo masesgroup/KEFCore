@@ -74,7 +74,7 @@
 <h1 id="kefcore-entity-framework-core-provider-for-apache-kafka">KEFCore: <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a></h1>
 
 <p>KEFCore is the <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a>.
-Based on <a href="https://github.com/masesgroup/KNet">KNet</a> it allows to use <a href="https://kafka.apache.org/">Apache Kafka™</a> as a distributed database and more.</p>
+Based on <a href="https://github.com/masesgroup/KNet">KNet client-side features</a> it allows to use <a href="https://kafka.apache.org/">Apache Kafka™</a> as a distributed database and more: KNet client-side features are also compatible with any broker that implements the Kafka wire protocol — see <a href="#backend-compatibility">Backend compatibility</a> below.</p>
 <h3 id="libraries-and-tools">Libraries and Tools</h3>
 <table>
 <thead>
@@ -179,8 +179,8 @@ So the following query:</p>
 <tr>
 <td style="text-align: center;">2.6.<em>+</em></td>
 <td style="text-align: center;">Active</td>
-<td style="text-align: center;">3.1.x</td>
-<td style="text-align: center;">4.1.x</td>
+<td style="text-align: center;">3.2.x</td>
+<td style="text-align: center;">4.2.x</td>
 <td style="text-align: center;"><a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-8%2B-purple" alt=".NET 8+"></a></td>
 <td style="text-align: center;"><a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java-17%2B-blue" alt="Java 17+"></a></td>
 <td></td>
@@ -196,16 +196,19 @@ So the following query:</p>
 </tr>
 </tbody>
 </table>
-<h3 id="community-and-contribution">Community and Contribution</h3>
-<p>Do you like the project?</p>
+<hr>
+<h2 id="backend-compatibility">Backend compatibility</h2>
+<p><a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> uses the official Apache Kafka™ Java client packages directly through <a href="https://github.com/masesgroup/KNet">KNet client-side features</a>. This architecture has a direct impact on backend compatibility.</p>
+<p><strong>Client-side features</strong> — Producer, Consumer, Admin Client, Kafka Streams, KNet Streams SDK, KNet Connect SDK, KNetPS scriptable cmdlets — communicate with the broker exclusively through the Kafka wire protocol and are therefore compatible with <strong>any broker that implements it</strong>, not only Apache Kafka™ itself.</p>
+<p>Examples of compatible brokers: <a href="https://redpanda.com/">Redpanda</a>, <a href="https://aws.amazon.com/msk/">Amazon MSK</a>, <a href="https://www.confluent.io/">Confluent Platform / Cloud</a>, <a href="https://aiven.io/kafka">Aiven for Apache Kafka™</a>, <a href="https://www.ibm.com/products/event-streams">IBM Event Streams</a>, <a href="https://www.warpstream.com/">WarpStream</a>, <a href="https://www.automq.com/">AutoMQ</a>, and others.</p>
+<p>See <a href="src/documentation/articles/backends.md">Supported Backends</a> for the full compatibility matrix covering all KNet feature areas.</p>
+<hr>
+<h2 id="community-and-contribution">Community and Contribution</h2>
+<p>If you find <a href="https://learn.microsoft.com/ef/core/">Entity Framework Core</a> provider for <a href="https://kafka.apache.org/">Apache Kafka™</a> useful:</p>
 <ul>
-<li>Request your free <a href="https://www.jcobridge.com/pricing-25/">community subscription</a>.</li>
-</ul>
-<p>Do you want to help us?</p>
-<ul>
-<li>put a ⭐ on this project</li>
-<li>open <a href="https://github.com/masesgroup/KEFCore/issues">issues</a> to request features or report bugs 🐛</li>
-<li>improves the project with Pull Requests</li>
+<li>Leave a ⭐ on the repository</li>
+<li>Open <a href="https://github.com/masesgroup/KEFCore/issues">issues</a> to report bugs 🐛 or request features</li>
+<li>Submit Pull Requests to improve the project</li>
 </ul>
 <p>This project adheres to the Contributor <a href="https://github.com/masesgroup/KEFCore/blob/master/CODE_OF_CONDUCT.md">Covenant code of conduct</a>. By participating, you are expected to uphold this code. Please report unacceptable behavior to coc_reporting@masesgroup.com.</p>
 <hr>
@@ -213,6 +216,7 @@ So the following query:</p>
 <ul>
 <li><a href="articles/gettingstarted.html">Getting started</a></li>
 <li><a href="articles/howitworks.html">How it works</a></li>
+<li><a href="articles/backends.html">Supported backends</a></li>
 <li><a href="articles/usage.html">Usage</a></li>
 <li><a href="articles/usecases.html">Use cases</a></li>
 <li><a href="articles/usageTemplates.html">Templates usage</a></li>
@@ -248,7 +252,7 @@ So the following query:</p>
 </ul>
 </li>
 </ul>
-<p><a href="https://www.jcobridge.com">JCOBridge 2.6.*</a> can be used for free without any obligations; you need to purchase a commercial license, or uninstall the software, if you have direct or indirect incomes from the product usage.</p>
+<p><a href="https://www.jcobridge.com">JCOBridge 2.6.*</a> can be used for free without any obligations. A commercial license must be purchased — or the software uninstalled — if you derive direct or indirect income from its usage.</p>
 <h3 id="jcobridge-resources">JCOBridge resources</h3>
 <p>Have a look at the following JCOBridge resources:</p>
 <table>
@@ -273,11 +277,11 @@ So the following query:</p>
 <tr>
 <td style="text-align: center;">Community Edition</td>
 <td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-25/">Conditions</a></td>
-<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-25/">Conditions</a></td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-26/">Conditions</a></td>
 </tr>
 <tr>
 <td style="text-align: center;">Commercial Edition</td>
-<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-26/">Information</a></td>
+<td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-25/">Information</a></td>
 <td style="text-align: center;"><a href="https://www.jcobridge.com/pricing-26/">Information</a></td>
 </tr>
 </tbody>
