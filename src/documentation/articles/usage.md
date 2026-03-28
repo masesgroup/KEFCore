@@ -105,6 +105,28 @@ public class Post
 }
 ```
 
+## Secure broker connections
+
+For brokers that require TLS encryption or SASL authentication (common in production and managed cloud environments), use the `WithSecurityProtocol()`, `WithSslConfig()`, and `WithSaslConfig()` fluent options:
+
+```csharp
+optionsBuilder.UseKEFCore(opt => opt
+    .WithBootstrapServers("KAFKA-SERVER:9093")
+    .WithApplicationId("MyApp")
+    .WithSecurityProtocol(SecurityProtocol.SASL_SSL)
+    .WithSslConfig(new SslConfigsBuilder()
+        .WithSslTruststoreLocation("/path/to/truststore.jks")
+        .WithSslTruststorePassword(new Password("truststore-password")))
+    .WithSaslConfig(new SaslConfigsBuilder()
+        .WithSaslMechanism("PLAIN")
+        .WithSaslJaasConfig(new Password(
+            "org.apache.kafka.common.security.plain.PlainLoginModule required " +
+            "username=\"myuser\" password=\"mypassword\";")))
+);
+```
+
+See [options — secure broker connections](options.md#secure-broker-connections) for the full protocol matrix and configuration reference.
+
 ## Topic naming
 
 Each entity maps to a Kafka topic. The topic name is resolved at model build time by `KEFCoreTopicNamingConvention`. With the example above the topics are:

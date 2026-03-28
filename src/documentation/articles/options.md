@@ -46,6 +46,48 @@ These are cluster-level but do not affect the Service Provider cache key. The va
 | `TopicConfig` | `null` | Cluster-level topic configuration — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()` |
 | `StreamsConfig` | `null` | Kafka Streams application configuration |
 | `ProducerConfig` | `null` | Cluster-level producer configuration (first-wins) — individual settings can be overridden per entity via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()` |
+| `SecurityProtocol` | `null` | Security protocol for broker connections — set to `SSL`, `SASL_PLAINTEXT`, or `SASL_SSL` to enable encrypted or authenticated connections; must be consistent with `SslConfigs` and `SaslConfigs` |
+| `SslConfigs` | `null` | SSL/TLS configuration for encrypted broker connections — built via `SslConfigsBuilder`; required when `SecurityProtocol` is `SSL` or `SASL_SSL` |
+| `SaslConfigs` | `null` | SASL authentication configuration — built via `SaslConfigsBuilder`; required when `SecurityProtocol` is `SASL_PLAINTEXT` or `SASL_SSL` |
+
+## Secure broker connections
+
+`SecurityProtocol`, `SslConfigs`, and `SaslConfigs` are cluster-level options used to authenticate and encrypt the connection between KEFCore and the broker. They are applied to all internal Kafka clients (producer, admin client, and Streams topology).
+
+The example below shows `SASL_SSL` — TLS encryption combined with SASL/PLAIN authentication, the most common configuration for managed cloud brokers (Amazon MSK, Confluent Cloud, Aiven, etc.):
+
+```csharp
+optionsBuilder.UseKEFCore(opt => opt
+    .WithBootstrapServers("KAFKA-SERVER:9093")
+    .WithApplicationId("MyApp")
+    .WithSecurityProtocol(SecurityProtocol.SASL_SSL)
+    .WithSslConfig(new SslConfigsBuilder()
+        .WithSslTruststoreLocation("/path/to/truststore.jks")
+        .WithSslTruststorePassword(new Password("truststore-password"))
+        .WithSslKeystoreLocation("/path/to/keystore.jks")
+        .WithSslKeystoreLocation(new Password("keystore-password")))
+    .WithSaslConfig(new SaslConfigsBuilder()
+        .WithSaslMechanism("PLAIN")
+        .WithSaslJaasConfig(new Password(
+            "org.apache.kafka.common.security.plain.PlainLoginModule required " +
+            "username=\"myuser\" password=\"mypassword\";")))
+);
+```
+
+For brokers that only require TLS (no SASL), use `SecurityProtocol.SSL` and omit `WithSaslConfig`. For SCRAM-based authentication, replace `"PLAIN"` with `"SCRAM-SHA-256"` or `"SCRAM-SHA-512"` and the corresponding JAAS login module (`ScramLoginModule`). The default SASL mechanism when `SaslConfigs` is set without an explicit mechanism is `GSSAPI` (Kerberos).
+
+| `SecurityProtocol` value | When to use |
+|---|---|
+| `PLAINTEXT` (default) | Unencrypted, unauthenticated — development and trusted networks only |
+| `SSL` | TLS encryption, no SASL authentication — requires `SslConfigs` |
+| `SASL_PLAINTEXT` | SASL authentication, no TLS encryption — requires `SaslConfigs` |
+| `SASL_SSL` | TLS encryption + SASL authentication — requires both `SslConfigs` and `SaslConfigs` |
+
+> [!IMPORTANT]
+> These options are **first-wins singleton** — the values set by the first `DbContext` to initialize the cluster are used for all subsequent contexts on the same cluster. Ensure all `DbContext` instances that share the same cluster use the same security configuration.
+
+> [!NOTE]
+> The `SslConfigsBuilder` and `SaslConfigsBuilder` builders expose only the properties relevant to their scope. Refer to the [Apache Kafka™ security documentation](https://kafka.apache.org/documentation/#security) and the KNet API documentation for the full list of available properties.
 
 ## Context-scoped options
 
