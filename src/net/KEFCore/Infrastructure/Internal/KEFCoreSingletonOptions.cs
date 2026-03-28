@@ -21,10 +21,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
-using Org.Apache.Kafka.Clients.Consumer;
-using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Security.Auth;
-using Org.Apache.Kafka.Streams;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>

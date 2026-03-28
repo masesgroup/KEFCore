@@ -23,8 +23,6 @@ using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
-using Org.Apache.Kafka.Clients.Consumer;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
 

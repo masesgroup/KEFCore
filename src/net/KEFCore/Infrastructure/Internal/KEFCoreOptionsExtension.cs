@@ -77,7 +77,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         DefaultNumPartitions = copyFrom.DefaultNumPartitions;
         DefaultReplicationFactor = copyFrom.DefaultReplicationFactor;
         TopicConfig = TopicConfigBuilder.CreateFrom(copyFrom.TopicConfig);
-        SecurityProtocol = SslConfigsBuilder.CreateFrom(copyFrom.SecurityProtocol);
+        SecurityProtocol = copyFrom.SecurityProtocol;
         SslConfig = SslConfigsBuilder.CreateFrom(copyFrom.SslConfig);
         SaslConfig = SaslConfigsBuilder.CreateFrom(copyFrom.SaslConfig);
 
@@ -105,7 +105,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         {
             lock (_clusterIdLock)
             {
-                _clusterId ??= KEFCoreClusterAdmin.Create(BootstrapServers).ClusterId;
+                _clusterId ??= KEFCoreClusterAdmin.Create(this).ClusterId;
                 if (_clusterId == null) throw new InvalidOperationException($"ClusterId currently not available from {BootstrapServers}");
                 return _clusterId;
             }
