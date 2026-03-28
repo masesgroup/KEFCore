@@ -26,12 +26,15 @@ using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams;
+using Org.Apache.Kafka.Streams.State;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
+    #region FreshEventChange
+
     internal readonly struct FreshEventChange(IStreamsChangeManager manager, string topic, int partition, long offset, object data)
     {
         public readonly IStreamsChangeManager Manager = manager;
@@ -41,16 +44,28 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public readonly object Data = data;
     }
 
+    #endregion
+
+    #region StoredEventChange
+
     internal readonly struct StoredEventChange(object data)
     {
         public readonly object Data = data;
     }
+
+    #endregion
+
+    #region IStreamsChangeManager
 
     internal interface IStreamsChangeManager
     {
         IEntityTypeProducer Producer { get; }
         void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
     }
+
+    #endregion
+
+    #region IStreamsManager
     /// <summary>
     /// Central interface for stream management
     /// </summary>
@@ -91,6 +106,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         bool? EnsureSynchronized(IEntityType entity, long timeout);
     }
 
+    #endregion
+
+    #region StreamsManager
+
     internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> : IStreamsManager
         where TStream : class
         where TStreamBuilder : class
@@ -102,6 +121,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         where TGlobalKTable : class
         where TKTable : class
     {
+        #region StreamsAssociatedData
+
         readonly struct StreamsAssociatedData(StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> streamsManager,
                                               string storageId, object optional, IStreamsChangeManager changeManager,
                                               TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed,
@@ -120,7 +141,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             readonly TGlobalKTable GlobalTable = globalTable;
             readonly TKTable Table = table;
             readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
-            readonly IDictionary<int, long> LatestLocalKnownOffset = new ConcurrentDictionary<int, long>();
+            readonly ConcurrentDictionary<int, long> LatestLocalKnownOffset = new();
 
             public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
@@ -212,7 +233,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 TimestampExtractor?.Dispose();
             }
         }
-        readonly ConcurrentDictionary<(IEntityTypeProducer Producer, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
+
+        #endregion
+
+        #region Read-only private
+
+        private readonly ConcurrentDictionary<(IEntityTypeProducer Producer, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
         // enqueues changes from cluster when are send
         private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
         // enqueues changes from cluster when are send
@@ -232,6 +258,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private readonly bool _useGlobalTable;
         private readonly System.Threading.Thread _thread;
 
+        #endregion
+
+        #region Private
+
         private bool _started = false;
         private StreamsConfigBuilder _streamsConfig;
         private TStreamBuilder _builder;
@@ -242,6 +272,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         private KEFCoreStreamsStateListener<StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable>> _stateListener;
         private System.Exception _resultException;
         private Org.Apache.Kafka.Streams.KafkaStreams.State _currentState = Org.Apache.Kafka.Streams.KafkaStreams.State.NOT_RUNNING;
+
+        #endregion
+
+        #region Static constructor and fields
 
         static Java.Util.Properties PropertyUpdate(StreamsConfigBuilder builder)
         {
@@ -260,6 +294,54 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             KNetStreams.OverrideProperties = PropertyUpdate;
             MASES.KNet.Streams.StreamsBuilder.OverrideProperties = PropertyUpdate;
         }
+
+        private static readonly ConcurrentDictionary<Type, Func<IRocksDbLifecycleHandler>> _factories = new();
+
+        /// <summary>
+        /// Resolves the effective RocksDB lifecycle handler associated to the specified entity type.
+        /// </summary>
+        /// <param name="entityType">The entity type.</param>
+        /// <returns>
+        /// The configured handler instance, or <see cref="RocksDbLifecycleDelegateHandler.Null"/>
+        /// if no explicit RocksDB lifecycle configuration was found.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the configured handler type does not expose a public parameterless constructor.
+        /// </exception>
+        static IRocksDbLifecycleHandler HandlerFromType(IReadOnlyEntityType entityType)
+        {
+            ArgumentNullException.ThrowIfNull(entityType);
+
+            var handler = entityType.GetRocksDbLifecycleHandler();
+            if (handler is not null)
+            {
+                return handler;
+            }
+
+            var handlerType = entityType.GetRocksDbLifecycleHandlerType();
+            if (handlerType is null)
+            {
+                return RocksDbLifecycleDelegateHandler.Null;
+            }
+
+            var factory = _factories.GetOrAdd(handlerType, static t => BuildFactory(t));
+            return factory();
+        }
+
+        private static Func<IRocksDbLifecycleHandler> BuildFactory(Type handlerType)
+        {
+            if (!typeof(IRocksDbLifecycleHandler).IsAssignableFrom(handlerType))
+            {
+                throw new InvalidOperationException($"{handlerType.Name} must implement {nameof(IRocksDbLifecycleHandler)}.");
+            }
+
+            var constructor = handlerType.GetConstructor(Type.EmptyTypes) ?? throw new InvalidOperationException($"{handlerType.Name} must expose a public parameterless constructor.");
+            var newExpression = Expression.New(constructor);
+            var convertExpression = Expression.Convert(newExpression, typeof(IRocksDbLifecycleHandler));
+            return Expression.Lambda<Func<IRocksDbLifecycleHandler>>(convertExpression).Compile();
+        }
+
+        #endregion
 
         public StreamsManager(IKEFCoreCluster kefcoreCluster, KEFCoreOptionsExtension options)
         {
@@ -335,7 +417,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     throw new InvalidOperationException($"Cannot execute while Streams is in {_currentState} state");
                 }
 
-                string storageId = entityType.StorageIdForTable();
+                string storageId = entityType.StorageIdForTable(_kefcoreCluster);
                 storageId = _usePersistentStorage ? storageId : System.Diagnostics.Process.GetCurrentProcess().ProcessName + "-" + storageId;
 
                 var storeSupplier = CreateStoreSupplier(_usePersistentStorage, storageId);
@@ -358,6 +440,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var storage = new StreamsAssociatedData(this, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
 
                 _latestAdded.Add(tn);
+                if (_usePersistentStorage)
+                {
+                    var handler = HandlerFromType(entityType);
+                    KNetRocksDBConfigSetter.Register(storageId, handler);
+                }
                 return storage;
             });
 
@@ -400,6 +487,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (_storagesForEntities.TryGetAndRemove(entityType.GetKEFCoreTopicName(), out StreamsAssociatedData data))
             {
+                if (_usePersistentStorage)
+                {
+                    if (!KNetRocksDBConfigSetter.Unregister(data.StorageId, true))
+                    {
+                        _kefcoreCluster.InfrastructureLogger.Logger.LogError("Dispose: failed to unregister {Storage}.", data.StorageId);
+                    }
+                }
                 data.Dispose();
             }
         }
@@ -697,4 +791,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _topology = null;
         }
     }
+
+    #endregion
 }

@@ -84,6 +84,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
 The previous code follows the example of https://learn.microsoft.com/ef/core/. See [KEFCore usage](usage.md) and [KEFCoreDbContext](kefcoredbcontext.md) to find more information.
 
+> [!NOTE]
+> The example above connects to the broker without authentication or encryption. For production environments, KEFCore supports TLS and SASL via `WithSecurityProtocol()`, `WithSslConfig()`, and `WithSaslConfig()`. See [options — secure broker connections](options.md#secure-broker-connections) for details.
+
 > [!IMPORTANT]
 > Always apply `[Table]` or `[KEFCoreTopicAttribute]` to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See [conventions](conventions.md#topic-naming-convention) for details.
 

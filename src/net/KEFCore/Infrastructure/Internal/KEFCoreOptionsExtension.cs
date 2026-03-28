@@ -27,6 +27,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Common.Security.Auth;
 using Org.Apache.Kafka.Streams.State;
 using System.Globalization;
 
@@ -76,6 +77,9 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         DefaultNumPartitions = copyFrom.DefaultNumPartitions;
         DefaultReplicationFactor = copyFrom.DefaultReplicationFactor;
         TopicConfig = TopicConfigBuilder.CreateFrom(copyFrom.TopicConfig);
+        SecurityProtocol = copyFrom.SecurityProtocol;
+        SslConfig = SslConfigsBuilder.CreateFrom(copyFrom.SslConfig);
+        SaslConfig = SaslConfigsBuilder.CreateFrom(copyFrom.SaslConfig);
 
         // ── Context-only options ──────────────────────────────────────────
         ReadOnlyMode = copyFrom.ReadOnlyMode;
@@ -101,7 +105,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         {
             lock (_clusterIdLock)
             {
-                _clusterId ??= KEFCoreClusterAdmin.Create(BootstrapServers).ClusterId;
+                _clusterId ??= KEFCoreClusterAdmin.Create(this).ClusterId;
                 if (_clusterId == null) throw new InvalidOperationException($"ClusterId currently not available from {BootstrapServers}");
                 return _clusterId;
             }
@@ -138,6 +142,12 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     public virtual StreamsConfigBuilder? StreamsConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
     public virtual ProducerConfigBuilder? ProducerConfig { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SecurityProtocol"/>
+    public virtual SecurityProtocol? SecurityProtocol { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SslConfig"/>
+    public virtual SslConfigsBuilder? SslConfig { get; set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SaslConfig"/>
+    public virtual SaslConfigsBuilder? SaslConfig { get; set; }
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
     public virtual bool UseDeletePolicyForTopic { get; set; } = false;
     /// <inheritdoc cref="KEFCoreDbContext.DefaultNumPartitions"/>
@@ -273,6 +283,27 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         clone.ProducerConfig = ProducerConfigBuilder.CreateFrom(producerConfigBuilder);
         return clone;
     }
+    /// <inheritdoc cref="KEFCoreDbContext.SecurityProtocol"/>
+    public virtual KEFCoreOptionsExtension WithSecurityProtocol(SecurityProtocol securityProtocol)
+    {
+        var clone = Clone();
+        clone.SecurityProtocol = securityProtocol;
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.SslConfig"/>
+    public virtual KEFCoreOptionsExtension WithSslConfig(SslConfigsBuilder sslConfigsBuilder)
+    {
+        var clone = Clone();
+        clone.SslConfig = SslConfigsBuilder.CreateFrom(sslConfigsBuilder);
+        return clone;
+    }
+    /// <inheritdoc cref="KEFCoreDbContext.SaslConfig"/>
+    public virtual KEFCoreOptionsExtension WithSaslConfig(SaslConfigsBuilder saslConfigsBuilder)
+    {
+        var clone = Clone();
+        clone.SaslConfig = SaslConfigsBuilder.CreateFrom(saslConfigsBuilder);
+        return clone;
+    }
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
     public virtual KEFCoreOptionsExtension WithDeletePolicyForTopic(bool useDeletePolicyForTopic = true)
     {
@@ -397,8 +428,18 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                                                                      : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
         builder.DefaultValueSerdeClass = !UseValueContainerByteBufferDataTransfer ? Class.ForName(baSerdesName, true, Class.SystemClassLoader)
                                                                                   : Class.ForName(bbSerdesName, true, Class.SystemClassLoader);
-        builder.DSLStoreSuppliersClass = UsePersistentStorage ? Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader)
-                                                              : Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
+        if (UsePersistentStorage)
+        {
+            builder.DSLStoreSuppliersClass = Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.RocksDBDslStoreSuppliers>(), true, Class.SystemClassLoader);
+            builder.RocksDbConfigSetterClass = KNetRocksDBConfigSetter.KNetRocksDBConfigSetterClass;
+        }
+        else
+        {
+            builder.DSLStoreSuppliersClass = Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
+        }
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
+        if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
 
         //Properties props = builder.ToProperties();
         //if (props.ContainsKey(Org.Apache.Kafka.Streams.StreamsConfig.APPLICATION_ID_CONFIG))
@@ -469,12 +510,15 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     /// </summary>
     public virtual ProducerConfigBuilder ProducerOptionsBuilder()
     {
-        ProducerConfigBuilder props = ProducerConfig ?? new();
-        props.BootstrapServers = BootstrapServers;
-        props.Acks = ProducerConfigBuilder.AcksTypes.All;
-        props.Retries = 0;
-        props.LingerMs = 1;
-        return props;
+        ProducerConfigBuilder builder = ProducerConfig ?? new();
+        builder.BootstrapServers = BootstrapServers;
+        builder.Acks = ProducerConfigBuilder.AcksTypes.All;
+        builder.Retries = 0;
+        builder.LingerMs = 1;
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
+        if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
+        return builder;
     }
     /// <summary>
     /// Build <see cref="Properties"/> for producers
@@ -513,6 +557,18 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         return props;
     }
 
+    /// <summary>
+    /// Build <see cref="ConsumerConfigBuilder"/> for producers
+    /// </summary>
+    public virtual ConsumerConfigBuilder ConsumerOptionsBuilder()
+    {
+        ConsumerConfigBuilder builder = ConsumerConfig ?? new();
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
+        if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
+        return builder;
+    }
+
     #region IDbContextOptionsExtension
 
     /// <inheritdoc/>
@@ -544,7 +600,10 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
             || other.UseCompactedReplicator != UseCompactedReplicator
             || other.UseKNetStreams != UseKNetStreams
             || other.UsePersistentStorage != UsePersistentStorage
-            || other.ApplicationId != ApplicationId)
+            || other.ApplicationId != ApplicationId
+            || other.SecurityProtocol?.ToString() != SecurityProtocol?.ToString()
+            || other.SslConfig?.ToString() != SslConfig?.ToString()
+            || other.SaslConfig?.ToString() != SaslConfig?.ToString())
         {
             throw new InvalidOperationException(
                 "Cannot reuse internal service provider: singleton options mismatch.");
@@ -584,6 +643,9 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
                     builder.Append("ApplicationId=").Append(Extension.ApplicationId).Append(' ');
                     builder.Append("StreamsConfig=").Append(Extension.StreamsConfig).Append(' ');
                     builder.Append("ProducerConfig=").Append(Extension.ProducerConfig).Append(' ');
+                    builder.Append("SecurityProtocol=").Append(Extension.SecurityProtocol?.ToString()).Append(' ');
+                    builder.Append("SslConfig=").Append(Extension.SslConfig?.ToString()).Append(' ');
+                    builder.Append("SaslConfig=").Append(Extension.SaslConfig?.ToString()).Append(' ');
                     builder.Append("UseDeletePolicyForTopic=").Append(Extension.UseDeletePolicyForTopic).Append(' ');
                     builder.Append("DefaultNumPartitions=").Append(Extension.DefaultNumPartitions).Append(' ');
                     builder.Append("DefaultReplicationFactor=").Append(Extension.DefaultReplicationFactor).Append(' ');

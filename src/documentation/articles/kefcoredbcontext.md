@@ -35,6 +35,9 @@ The following options are singleton-scoped and must be consistent across all `Db
 - **ProducerConfig**: parameters to use for the Apache Kafka™ producer (cluster-level, first-wins) — individual producer settings can be overridden per entity via `KEFCoreProducerAttribute` or `HasKEFCoreProducer()`
 - **StreamsConfig**: parameters to use for the Apache Kafka™ Streams application (cluster-level, first-wins)
 - **TopicConfig**: parameters to use on topic creation for each entity (cluster-level, first-wins) — retention can be overridden per entity via `KEFCoreTopicRetentionAttribute` or `HasKEFCoreTopicRetention()`
+- **SecurityProtocol**: the security protocol for broker connections (`PLAINTEXT`, `SSL`, `SASL_PLAINTEXT`, or `SASL_SSL`) — must be consistent with `SslConfigs` and `SaslConfigs` (first-wins)
+- **SslConfigs**: SSL/TLS configuration built via `SslConfigsBuilder` — required when `SecurityProtocol` is `SSL` or `SASL_SSL` (first-wins)
+- **SaslConfigs**: SASL authentication configuration built via `SaslConfigsBuilder` — required when `SecurityProtocol` is `SASL_PLAINTEXT` or `SASL_SSL` (first-wins)
 - ~~**UseCompactedReplicator**~~: deprecated, will be removed in a future release
 - ~~**DefaultConsumerInstances**~~: deprecated, will be removed in a future release
 - ~~**ConsumerConfig**~~: deprecated, will be removed in a future release
@@ -99,6 +102,28 @@ The most simple example of usage can be found in [KEFCore usage](usage.md). By d
   - default `TopicConfig` can be overridden using **TopicConfig** property
 
 Kafka transactional producers are supported via `Database.BeginTransaction()` when entity types are assigned to a transaction group via `KEFCoreTransactionalAttribute` or `HasKEFCoreTransactionGroup()`. The standard EF Core transaction pattern applies — `tx.Commit()` or `tx.Rollback()` maps to `CommitTransaction()`/`AbortTransaction()` on the Kafka transactional producer. See [conventions](conventions.md#transactional-producer-convention) for full details.
+
+### Secure broker connections
+
+`SecurityProtocol`, `SslConfigs`, and `SaslConfigs` are cluster-level first-wins options that configure authentication and encryption for all internal Kafka clients (producer, admin client, and Streams topology).
+
+```csharp
+optionsBuilder.UseKEFCore(opt => opt
+    .WithBootstrapServers("KAFKA-SERVER:9093")
+    .WithApplicationId("MyApp")
+    .WithSecurityProtocol(SecurityProtocol.SASL_SSL)
+    .WithSslConfig(new SslConfigsBuilder()
+        .WithSslTruststoreLocation("/path/to/truststore.jks")
+        .WithSslTruststorePassword(new Password("truststore-password")))
+    .WithSaslConfig(new SaslConfigsBuilder()
+        .WithSaslMechanism("PLAIN")
+        .WithSaslJaasConfig(new Password(
+            "org.apache.kafka.common.security.plain.PlainLoginModule required " +
+            "username=\"myuser\" password=\"mypassword\";")))
+);
+```
+
+See [options](options.md#secure-broker-connections) for the full protocol matrix and additional notes.
 
 ### Default **ProducerConfig**
 

@@ -21,6 +21,7 @@ using MASES.EntityFrameworkCore.KNet.Metadata;
 using MASES.EntityFrameworkCore.KNet.Metadata.Internal;
 using MASES.EntityFrameworkCore.KNet.Storage.Internal;
 using MASES.KNet.Common;
+using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 
 namespace MASES.EntityFrameworkCore.KNet.Extensions;
@@ -56,11 +57,11 @@ public static class KEFCoreEntityTypeExtensions
         => entityType.FindAnnotation(KEFCoreAnnotationNames.ManageEvents)?.Value as bool? ?? true;
 
     /// <summary>
-    /// Creates the storage id
+    /// Creates the storage id based on <see cref="GetKEFCoreTopicName"/> and <see cref="IKEFCoreCluster.ClusterId"/>
     /// </summary>
-    public static string StorageIdForTable(this IEntityType entityType)
+    public static string StorageIdForTable(this IEntityType entityType, IKEFCoreCluster cluster)
     {
-        return $"Table_{entityType.GetKEFCoreTopicName()}";
+        return $"Table_{entityType.GetKEFCoreTopicName()}_{cluster.ClusterId}";
     }
     /// <summary>
     /// Creates the application id
@@ -178,12 +179,12 @@ public static class KEFCoreEntityTypeExtensions
         var retentionBytes = entityType.GetTopicRetentionBytes();
         if (retentionBytes.HasValue)
         {
-            builder.RetentionBytes = (int)retentionBytes.Value; // force to int, open issue on KNet
+            builder.RetentionBytes = retentionBytes.Value;
         }
         var retentionMs = entityType.GetTopicRetentionMs();
         if (retentionMs.HasValue)
         {
-            builder.RetentionMs = (int)retentionMs.Value; // force to int, open issue on KNet
+            builder.RetentionMs = retentionMs.Value;
         }
         return builder;
     }
@@ -234,7 +235,7 @@ public static class KEFCoreEntityTypeExtensions
         if (ann.BatchSize.HasValue) builder.BatchSize = ann.BatchSize.Value;
         if (ann.CompressionType.HasValue) builder.CompressionType = ann.CompressionType.Value;
         if (ann.Retries.HasValue) builder.Retries = ann.Retries.Value;
-        if (ann.MaxInFlightRequestsPerConnection.HasValue) builder.MaxInFlightRequestPerConnection = ann.MaxInFlightRequestsPerConnection.Value;
+        if (ann.MaxInFlightRequestsPerConnection.HasValue) builder.MaxInFlightRequestsPerConnection = ann.MaxInFlightRequestsPerConnection.Value;
         if (ann.DeliveryTimeoutMs.HasValue) builder.DeliveryTimeoutMs = ann.DeliveryTimeoutMs.Value;
         if (ann.RequestTimeoutMs.HasValue) builder.RequestTimeoutMs = ann.RequestTimeoutMs.Value;
         if (ann.BufferMemory.HasValue) builder.BufferMemory = ann.BufferMemory.Value;
@@ -249,6 +250,20 @@ public static class KEFCoreEntityTypeExtensions
     /// </summary>
     public static string? GetTransactionGroup(this IEntityType entityType)
         => entityType.FindAnnotation(KEFCoreAnnotationNames.TransactionGroup)?.Value as string;
+
+    /// <summary>
+    /// Builds the <see cref="ConsumerConfigBuilder"/> for this entity type, merging the global
+    /// <see cref="IKEFCoreSingletonOptions.ConsumerConfig"/> with any per-entity overrides
+    /// stored as a <see cref="KEFCoreProducerAnnotation"/> annotation.
+    /// Per-entity values take precedence over the global config.
+    /// </summary>
+    [Obsolete("Option will be removed soon")]
+    public static ConsumerConfigBuilder BuildConsumerConfig(this IEntityType entityType, KEFCoreOptionsExtension options)
+    {
+        var builder = options.ConsumerOptionsBuilder();
+
+        return builder;
+    }
 
     /// <summary>
     /// Gets consumer instances

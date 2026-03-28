@@ -21,9 +21,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
-using Org.Apache.Kafka.Clients.Consumer;
-using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Streams;
+using Org.Apache.Kafka.Common.Security.Auth;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -57,6 +55,9 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
         ApplicationId = kefcoreOptions.ApplicationId;
         StreamsConfig = StreamsConfigBuilder.CreateFrom(kefcoreOptions.StreamsConfig);
         ProducerConfig = ProducerConfigBuilder.CreateFrom(kefcoreOptions.ProducerConfig);
+        SecurityProtocol = kefcoreOptions.SecurityProtocol;
+        SslConfig = SslConfigsBuilder.CreateFrom(kefcoreOptions.SslConfig);
+        SaslConfig = SaslConfigsBuilder.CreateFrom(kefcoreOptions.SaslConfig);
         // non-hash singleton (first-wins)
         UseDeletePolicyForTopic = kefcoreOptions.UseDeletePolicyForTopic;
         DefaultNumPartitions = kefcoreOptions.DefaultNumPartitions;
@@ -116,6 +117,12 @@ public class KEFCoreSingletonOptions : IKEFCoreSingletonOptions
     public virtual StreamsConfigBuilder? StreamsConfig { get; private set; }
     /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
     public virtual ProducerConfigBuilder? ProducerConfig { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SecurityProtocol"/>
+    public virtual SecurityProtocol? SecurityProtocol { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SslConfig"/>
+    public virtual SslConfigsBuilder? SslConfig { get; private set; }
+    /// <inheritdoc cref="KEFCoreDbContext.SaslConfig"/>
+    public virtual SaslConfigsBuilder? SaslConfig { get; private set; }
     /// <inheritdoc/>
     public virtual int DefaultNumPartitions { get; private set; }
     /// <inheritdoc/>

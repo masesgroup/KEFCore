@@ -66,6 +66,7 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreStoreLookupConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreProducerConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreTransactionalConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreRocksDbLifecycleAttributeConvention());
 
         return conventionSet;
     }
@@ -95,7 +96,6 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
     /// <summary>
     /// Builds a <see cref="ConventionSet"/> for KEFCore outside of <see cref="DbContext.OnModelCreating"/>,
     /// exposing the <see cref="IComplexTypeConverterFactory"/> populated during model finalization.
-    /// Use the factory with <see cref="EntityExtractor.UseComplexTypeFactory"/> for external application scenarios.
     /// </summary>
     /// <param name="converterFactory">
     /// The <see cref="IComplexTypeConverterFactory"/> populated by <see cref="KEFCoreComplexTypeConverterConvention"/>
@@ -137,7 +137,6 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
     /// <summary>
     /// Builds a <see cref="ModelBuilder"/> for KEFCore outside of <see cref="DbContext.OnModelCreating"/>,
     /// exposing the <see cref="IComplexTypeConverterFactory"/> populated during model finalization.
-    /// Use the factory with <see cref="EntityExtractor.UseComplexTypeFactory"/> for external application scenarios.
     /// </summary>
     /// <param name="converterFactory">
     /// The <see cref="IComplexTypeConverterFactory"/> populated by <see cref="KEFCoreComplexTypeConverterConvention"/>

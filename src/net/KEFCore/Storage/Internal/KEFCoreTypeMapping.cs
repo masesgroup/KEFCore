@@ -47,16 +47,7 @@ public class KEFCoreTypeMapping : CoreTypeMapping
         : base(parameters)
     {
     }
-#if NET9_0 || NET10_0
-    /// <inheritdoc/>
-    protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
-    {
-        return new KEFCoreTypeMapping(parameters);
-    }
-    /// <inheritdoc/>
-    public override CoreTypeMapping WithComposedConverter(ValueConverter? converter, ValueComparer? comparer = null, ValueComparer? keyComparer = null, CoreTypeMapping? elementMapping = null, JsonValueReaderWriter? jsonValueReaderWriter = null)
-        => new KEFCoreTypeMapping(Parameters.WithComposedConverter(converter, comparer, keyComparer, elementMapping, jsonValueReaderWriter));
-#elif NET8_0
+#if NET8_0 || NET9_0 || NET10_0
     /// <inheritdoc/>
     protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
         => new KEFCoreTypeMapping(parameters);

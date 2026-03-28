@@ -22,6 +22,7 @@ using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Common.Security.Auth;
 
 namespace MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 /// <summary>
@@ -70,7 +71,12 @@ public interface IKEFCoreSingletonOptions : ISingletonOptions
     StreamsConfigBuilder? StreamsConfig { get; }
     /// <inheritdoc cref="KEFCoreDbContext.ProducerConfig"/>
     ProducerConfigBuilder? ProducerConfig { get; }
-
+    /// <inheritdoc cref="KEFCoreDbContext.SecurityProtocol"/>
+    SecurityProtocol? SecurityProtocol { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.SslConfig"/>
+    SslConfigsBuilder? SslConfig { get; }
+    /// <inheritdoc cref="KEFCoreDbContext.SaslConfig"/>
+    SaslConfigsBuilder? SaslConfig { get; }
     // ── Topic structure — NOT in hash (first-wins at topic creation) ──────
     /// <inheritdoc cref="KEFCoreDbContext.UseDeletePolicyForTopic"/>
     bool UseDeletePolicyForTopic { get; }

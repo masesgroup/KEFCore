@@ -16,8 +16,8 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
+using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.KNet.Common;
 using MASES.KNet.Consumer;
 using MASES.KNet.Producer;
@@ -25,6 +25,7 @@ using MASES.KNet.Replicator;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Config;
+using Org.Apache.Kafka.Common.Security.Auth;
 using Org.Apache.Kafka.Streams;
 using System.ComponentModel;
 
@@ -403,6 +404,69 @@ public class KEFCoreDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuild
             ?? new KEFCoreOptionsExtension();
 
         extension = extension.WithProducerConfig(producerConfigBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set properties of <see cref="SecurityProtocol"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="securityProtocol">The <see cref="SecurityProtocol"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithSecurityProtocol(SecurityProtocol securityProtocol)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithSecurityProtocol(securityProtocol);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set properties of <see cref="SslConfigsBuilder"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="sslConfigsBuilder">The <see cref="SslConfigsBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithSslConfig(SslConfigsBuilder sslConfigsBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithSslConfig(sslConfigsBuilder);
+
+        ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
+
+        return this;
+    }
+
+    /// <summary>
+    ///      Set properties of <see cref="SaslConfigsBuilder"/>.
+    /// </summary>
+    /// <remarks>
+    ///     See <see href="https://aka.ms/efcore-docs-dbcontext-options">Using DbContextOptions</see>, and
+    ///     <see href="https://github.com/masesgroup/KEFCore">The EF Core Kafka database provider</see> for more information and examples.
+    /// </remarks>
+    /// <param name="saslConfigsBuilder">The <see cref="SaslConfigsBuilder"/> where options are stored.</param>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual KEFCoreDbContextOptionsBuilder WithSaslConfig(SaslConfigsBuilder saslConfigsBuilder)
+    {
+        var extension = OptionsBuilder.Options.FindExtension<KEFCoreOptionsExtension>()
+            ?? new KEFCoreOptionsExtension();
+
+        extension = extension.WithSaslConfig(saslConfigsBuilder);
 
         ((IDbContextOptionsBuilderInfrastructure)OptionsBuilder).AddOrUpdateExtension(extension);
 
