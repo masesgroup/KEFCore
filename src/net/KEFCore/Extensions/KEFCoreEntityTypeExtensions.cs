@@ -252,6 +252,23 @@ public static class KEFCoreEntityTypeExtensions
         => entityType.FindAnnotation(KEFCoreAnnotationNames.TransactionGroup)?.Value as string;
 
     /// <summary>
+    /// Returns the cache TTL for forward enumeration of this entity type's state store.
+    /// Returns <see cref="TimeSpan.Zero"/> if caching is not configured — the proxy
+    /// is a transparent pass-through with no allocation overhead.
+    /// </summary>
+    public static TimeSpan GetValueBufferCacheTtl(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferCacheTtl)?.Value as TimeSpan?
+           ?? TimeSpan.Zero;
+
+    /// <summary>
+    /// Returns the cache TTL for reverse enumeration of this entity type's state store.
+    /// Returns <see cref="TimeSpan.Zero"/> if caching is not configured.
+    /// </summary>
+    public static TimeSpan GetValueBufferReverseCacheTtl(this IEntityType entityType)
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl)?.Value as TimeSpan?
+           ?? TimeSpan.Zero;
+
+    /// <summary>
     /// Builds the <see cref="ConsumerConfigBuilder"/> for this entity type, merging the global
     /// <see cref="IKEFCoreSingletonOptions.ConsumerConfig"/> with any per-entity overrides
     /// stored as a <see cref="KEFCoreProducerAnnotation"/> annotation.

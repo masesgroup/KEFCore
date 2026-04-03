@@ -64,6 +64,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     where TKey : notnull
     where TValueContainer : class, IValueContainer<TKey>
 {
+    #region EntityTypeProducerCallback
+
     class EntityTypeProducerCallback(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> entityTypeProducer, Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int, long?, DateTime?, JVMBridgeException> result) : Callback
     {
         readonly EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> _entityTypeProducer = entityTypeProducer;
@@ -75,6 +77,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
     }
 
+    #endregion
+
+    #region TransactionalCallback
+
     class TransactionalCallback(ConcurrentQueue<(string topicName, int partition, long offset, JVMBridgeException? exception)> pendingOffsets) : Callback
     {
         public override void OnCompletion(RecordMetadata metadata, JVMBridgeException error)
@@ -82,6 +88,121 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             pendingOffsets.Enqueue((metadata.Topic(), metadata.Partition(), metadata.Offset(), error));
         }
     }
+
+    #endregion
+
+    #region CachedValueBufferEnumerable
+
+    /// <summary>
+    /// Caching proxy over <see cref="IEnumerable{ValueBuffer}"/>.
+    /// When <paramref name="ttl"/> is <see cref="TimeSpan.Zero"/> or negative the proxy
+    /// is a transparent pass-through — no list is allocated, no data is retained.
+    /// Otherwise the first full enumeration populates an internal list; subsequent
+    /// enumerations within the TTL window return the list directly (zero JNI cost).
+    /// Call <see cref="Invalidate"/> to force a refresh on the next enumeration.
+    /// </summary>
+    /// <param name="source">Factory that produces a fresh upstream enumerator.</param>
+    /// <param name="ttl">Cache time-to-live. Zero or negative disables caching.</param>
+    internal sealed class CachedValueBufferEnumerable(Func<IEnumerable<ValueBuffer>> source, TimeSpan ttl) : IEnumerable<ValueBuffer>
+    {
+        private readonly Func<IEnumerable<ValueBuffer>> _source = source;
+        private readonly TimeSpan _ttl = ttl;
+        private readonly bool _cacheEnabled = ttl > TimeSpan.Zero;
+
+        private List<ValueBuffer>? _cache;
+        private DateTime _cacheExpiry = DateTime.MinValue;
+        private readonly object _lock = new();
+
+        /// <summary>
+        /// Marks the cache as expired. The next enumeration will re-fetch from the upstream source.
+        /// No-op when caching is disabled.
+        /// </summary>
+        public void Invalidate()
+        {
+            if (!_cacheEnabled) return;
+            lock (_lock)
+            {
+                _cache = null;
+                _cacheExpiry = DateTime.MinValue;
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerator<ValueBuffer> GetEnumerator()
+        {
+            // pass-through — no allocation, no caching
+            if (!_cacheEnabled)
+                return _source().GetEnumerator();
+
+            lock (_lock)
+            {
+                // cache hit
+                if (_cache != null && DateTime.UtcNow < _cacheExpiry)
+                    return _cache.GetEnumerator();
+
+                // cache miss — reset so the populating enumerator starts fresh
+                _cache = null;
+                _cacheExpiry = DateTime.MinValue;
+            }
+
+            // populate cache while caller enumerates
+            return new PopulatingEnumerator(this, _source());
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Wraps the upstream enumerator: as each element is yielded it is added to
+        /// the parent's cache. On <see cref="Dispose"/> — whether the caller consumed
+        /// all elements or not — if the list is complete the expiry is set;
+        /// otherwise the partial list is discarded so the next call re-fetches.
+        /// </summary>
+        private sealed class PopulatingEnumerator(CachedValueBufferEnumerable parent, IEnumerable<ValueBuffer> source) : IEnumerator<ValueBuffer>
+        {
+            private readonly CachedValueBufferEnumerable _parent = parent;
+            private readonly IEnumerator<ValueBuffer> _inner = source.GetEnumerator();
+            private readonly List<ValueBuffer> _buffer = new();
+            private bool _completed = false;
+
+            public ValueBuffer Current => _inner.Current;
+            object IEnumerator.Current => Current;
+
+            public bool MoveNext()
+            {
+                if (!_inner.MoveNext())
+                {
+                    _completed = true;
+                    return false;
+                }
+                _buffer.Add(_inner.Current);
+                return true;
+            }
+
+            public void Reset() => throw new NotSupportedException();
+
+            public void Dispose()
+            {
+                _inner.Dispose();
+                lock (_parent._lock)
+                {
+                    if (_completed)
+                    {
+                        // full enumeration — commit to cache
+                        _parent._cache = _buffer;
+                        _parent._cacheExpiry = DateTime.UtcNow.Add(_parent._ttl);
+                    }
+                    else
+                    {
+                        // partial enumeration — discard, next call re-fetches
+                        _parent._cache = null;
+                        _parent._cacheExpiry = DateTime.MinValue;
+                    }
+                }
+            }
+        }
+    }
+
+    #endregion
 
     private readonly IStreamsManager? _streamsManager;
 
@@ -98,6 +219,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IKEFCoreStreamsRetriever<TKey>? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
+    private readonly CachedValueBufferEnumerable _cachedValueBuffers;
+    private readonly CachedValueBufferEnumerable _cachedValueBuffersReverse;
 
     readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
@@ -313,6 +436,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             }
             _streamData = _database.Options.UseKNetStreams ? new KNetStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory)
                                                            : new KafkaStreamsRetriever<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(this, _entityMetadata, _complexTypeConverterFactory, _keySerdes!, _valueSerdes!);
+
+            _cachedValueBuffers = new CachedValueBufferEnumerable(() => _streamData!.GetValueBuffers(_database), _entityType.GetValueBufferCacheTtl());
+            _cachedValueBuffersReverse = new CachedValueBufferEnumerable(() => _streamData!.GetValueBuffersReverse(_database), _entityType.GetValueBufferReverseCacheTtl());
         }
     }
 
@@ -536,7 +662,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
-        if (_streamData != null) return _streamData.GetValueBuffers(database);
+        if (_streamData != null) return _cachedValueBuffers;
         else if (_knetCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _knetCompactedReplicator);
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
@@ -569,7 +695,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
     {
-        if (_streamData != null) return _streamData.GetValueBuffersReverse(database);
+        if (_streamData != null) return _cachedValueBuffersReverse;
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
@@ -626,7 +752,12 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private static void UpdateFromCommit(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> producer, int partiton, long? offset, DateTime? timestamp, JVMBridgeException error)
     {
-        if (offset.HasValue) producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partiton, offset.Value);
+        if (offset.HasValue)
+        {
+            producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partiton, offset.Value);
+            producer._cachedValueBuffers.Invalidate();
+            producer._cachedValueBuffersReverse.Invalidate();
+        }
     }
 
     /// <inheritdoc/>

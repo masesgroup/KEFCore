@@ -67,6 +67,7 @@ IComplexTypeConverterFactory converterFactory) : ProviderConventionSetBuilder(de
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreProducerConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreTransactionalConvention());
         conventionSet.ModelFinalizingConventions.Add(new KEFCoreRocksDbLifecycleAttributeConvention());
+        conventionSet.ModelFinalizingConventions.Add(new KEFCoreValueBufferCacheConvention());
 
         return conventionSet;
     }

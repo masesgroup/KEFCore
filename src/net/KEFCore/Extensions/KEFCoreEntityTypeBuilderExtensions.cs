@@ -267,4 +267,27 @@ public static class KEFCoreEntityTypeBuilderExtensions
         builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.TransactionGroup, transactionGroup);
         return builder;
     }
+
+    /// <summary>
+    /// Configures in-memory result caching for full enumeration of this entity type's state store.
+    /// Equivalent to applying <see cref="KEFCoreValueBufferCacheAttribute"/> on the entity class.
+    /// </summary>
+    /// <param name="builder">The <see cref="EntityTypeBuilder"/> to configure.</param>
+    /// <param name="ttl">Cache TTL for forward enumeration. Zero or negative disables caching.</param>
+    /// <param name="reverseTtl">
+    /// Cache TTL for reverse enumeration. <see langword="null"/> defaults to the same value as <paramref name="ttl"/>.
+    /// </param>
+    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    public static EntityTypeBuilder HasKEFCoreValueBufferCache(
+        this EntityTypeBuilder builder,
+        TimeSpan ttl,
+        TimeSpan? reverseTtl = null)
+    {
+        if (ttl > TimeSpan.Zero)
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueBufferCacheTtl, ttl);
+        var effectiveReverseTtl = reverseTtl ?? ttl;
+        if (effectiveReverseTtl > TimeSpan.Zero)
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl, effectiveReverseTtl);
+        return builder;
+    }
 }
