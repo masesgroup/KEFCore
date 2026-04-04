@@ -452,3 +452,76 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 See [performance tips](performancetips.md#rocksdb-configuration) for full details on the lifecycle model and object retention rules.
+
+## Value buffer cache convention
+
+`KEFCoreValueBufferCacheConvention` resolves per-entity in-memory result cache configuration at model finalization time. When active, the first **complete** enumeration of `GetValueBuffers()` or `GetValueBuffersReverse()` populates an internal list with the deserialized `ValueBuffer` objects. Subsequent full scans within the TTL window are served from that list — zero JNI cost, zero deserialization overhead.
+
+The cache is stored in `EntityTypeProducer` (singleton per cluster and `ApplicationId`) and is therefore shared across all `DbContext` instances using the same cluster.
+
+### When the cache is populated vs bypassed
+
+| Access path | Cache behavior |
+|---|---|
+| `GetValueBuffers()` — full scan | Populates cache on first complete enumeration; hits cache on subsequent full scans within TTL |
+| `GetValueBuffersReverse()` — full reverse scan | Independent cache with its own TTL; same population/hit rules |
+| Single key lookup (`UseStoreSingleKeyLookup`) | Always bypasses cache — goes directly to state store |
+| Key range scan (`UseStoreKeyRange`, `UseStoreReverseKeyRange`) | Always bypasses cache — result depends on range parameters |
+| Prefix scan (`UseStorePrefixScan`) | Always bypasses cache |
+
+**Partial enumeration** (e.g. `First()`, `Take(3)`, any LINQ operator that stops early) **never populates the cache**. If the enumerator is disposed before `MoveNext()` returns `false`, the accumulated list is discarded — the next call will re-fetch from the state store. This is intentional: a partial list would produce incorrect results for subsequent full-scan queries.
+
+### Invalidation
+
+The cache is invalidated automatically when new data arrives from the Kafka cluster via `FreshEventChange` — i.e. after any `SaveChanges` that writes to that entity's topic reaches the Streams state store. `EnsureSynchronized` can be used to wait for the state store to be in sync before querying; the cache is invalidated before the wait completes.
+
+Both forward and reverse caches are invalidated together on any write.
+
+### Resolution priority
+
+1. `KEFCoreValueBufferCacheAttribute` applied to the entity class
+2. `HasKEFCoreValueBufferCache()` applied via fluent API
+
+### Usage examples
+
+```csharp
+// Attribute — cache forward and reverse scans for 30 seconds
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 30)]
+[Table("Country")]
+public class Country { ... }
+
+// Attribute — different TTL for forward and reverse
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 30)]
+[Table("Product")]
+public class Product { ... }
+
+// Attribute — cache only forward scan, disable reverse cache
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 0)]
+[Table("PriceList")]
+public class PriceList { ... }
+
+// Fluent API — same TTL for both directions
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Country>()
+                .HasKEFCoreValueBufferCache(ttl: TimeSpan.FromSeconds(30));
+}
+
+// Fluent API — different TTL for forward and reverse
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Product>()
+                .HasKEFCoreValueBufferCache(
+                    ttl: TimeSpan.FromSeconds(60),
+                    reverseTtl: TimeSpan.FromSeconds(30));
+}
+```
+
+> [!TIP]
+> This cache is most effective for entities that are queried frequently with full scans but written infrequently — reference data, lookup tables, configuration entities. For entities with high write frequency the cache will be invalidated often and the benefit diminishes.
+
+> [!NOTE]
+> A `TTL` of zero or negative disables caching for that direction — the proxy still exists but acts as a transparent pass-through with no allocation overhead. When neither attribute nor fluent API is applied, TTL defaults to zero and the proxy is always a pass-through.
+
+> [!IMPORTANT]
+> The cache operates at the `EntityTypeProducer` level — it is shared across all `DbContext` instances on the same cluster and `ApplicationId`. This means a write from one context will invalidate the cache for all contexts sharing the same producer. This is the correct behavior for consistency.

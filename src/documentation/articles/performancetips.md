@@ -192,6 +192,61 @@ The `data` dictionary passed to `onSetConfig` is the per-store lifetime containe
 
 ---
 
+## Value buffer cache
+
+For entities queried with full scans but written infrequently, KEFCore supports an in-memory result cache that eliminates the deserialization and JNI boundary cost on repeated full-scan queries. The cache is per entity type, stored in `EntityTypeProducer` (singleton per cluster and `ApplicationId`), and shared across all `DbContext` instances on the same cluster.
+
+### How it works
+
+The cache is implemented as a `CachedValueBufferEnumerable` proxy over `GetValueBuffers()` and `GetValueBuffersReverse()`. On the first **complete** enumeration, the proxy accumulates all `ValueBuffer` objects into an internal list. Subsequent full scans within the TTL window return that list directly — zero JNI calls, zero deserialization.
+
+If the caller stops early (e.g. `First()`, `Take(3)`, any LINQ operator that disposes the enumerator before it is exhausted), the accumulated list is discarded and the next call re-fetches from the state store. This is intentional: a partial list would return incorrect results for subsequent full scans.
+
+The cache is invalidated automatically when new data arrives from the cluster via `FreshEventChange` — which fires after any `SaveChanges` that writes to that entity's topic reaches the Streams state store. Both forward and reverse caches are invalidated together.
+
+### What bypasses the cache
+
+Single key lookups, key range scans, reverse range scans, and prefix scans always go directly to the state store regardless of TTL. Only `GetValueBuffers()` (full forward scan) and `GetValueBuffersReverse()` (full reverse scan) participate in the cache.
+
+### Configuration
+
+Enable the cache via `KEFCoreValueBufferCacheAttribute` or `HasKEFCoreValueBufferCache()`. The TTL is specified in seconds for the attribute and as `TimeSpan` for the fluent API. Forward and reverse scans have independent TTLs.
+
+```csharp
+// Attribute — same TTL for forward and reverse
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 30)]
+[Table("Country")]
+public class Country { ... }
+
+// Attribute — longer TTL for forward scan, shorter for reverse
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 15)]
+[Table("Product")]
+public class Product { ... }
+
+// Fluent API
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Country>()
+                .HasKEFCoreValueBufferCache(ttl: TimeSpan.FromSeconds(30));
+
+    modelBuilder.Entity<Product>()
+                .HasKEFCoreValueBufferCache(
+                    ttl: TimeSpan.FromSeconds(60),
+                    reverseTtl: TimeSpan.FromSeconds(15));
+}
+```
+
+> [!TIP]
+> This cache delivers the greatest benefit for reference data and lookup tables — entities that are read frequently with full scans (`ToList()`, `Count()`, `OrderBy()`) but written rarely. For entities with frequent writes the cache will be invalidated often and the benefit diminishes.
+
+> [!NOTE]
+> Setting `ttlSeconds: 0` or a negative value disables caching for that direction. The proxy is always created but acts as a transparent pass-through with no allocation overhead when TTL is zero.
+
+> [!IMPORTANT]
+> The cache lives in `EntityTypeProducer` — it is shared across all `DbContext` instances using the same cluster and `ApplicationId`. A write from any context invalidates the cache for all contexts sharing the same producer. This is the correct behavior for consistency.
+
+---
+
 ## Enumerator prefetch
 
 `UseEnumeratorWithPrefetch` (context-scoped, default: `true`) activates enumerator instances that prefetch data from the state store in batches, reducing JVM boundary crossings during enumeration.

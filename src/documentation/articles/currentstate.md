@@ -18,3 +18,12 @@ The latest release implements these features:
 * [x] ComplexType equality enforcement via `KEFCoreComplexTypeEquatableConvention` with opt-out via `KEFCoreIgnoreEquatableCheckAttribute`
 * [x] ComplexType converter registration via `KEFCoreComplexTypeConverterConvention` — supports `KEFCoreComplexTypeConverterAttribute` and fluent API (`HasKEFCoreComplexTypeConverter`)
 * [x] `StreamsManager` lifecycle managed per `ApplicationId` via `IKEFCoreCluster.GetOrCreateStreamsManager`
+* [x] Per-entity topic partitions, replication factor, and retention — `KEFCoreTopicPartitionsConvention`, `KEFCoreTopicRetentionConvention`
+* [x] Per-entity read-only mode — `KEFCoreReadOnlyConvention`, `KEFCoreReadOnlyAttribute`
+* [x] Per-entity store lookup optimization flags — `KEFCoreStoreLookupConvention`, `KEFCoreStoreLookupAttribute`
+* [x] Per-entity serialization override — `KEFCoreSerDesConvention`, `KEFCoreSerDesAttribute`
+* [x] Per-entity producer configuration — `KEFCoreProducerConvention`, `KEFCoreProducerAttribute`
+* [x] Kafka transactional producer support — `KEFCoreTransactionalConvention`, `ITransactionalEntityTypeProducer`, `KEFCoreTransactionManager`
+* [x] Per-entity RocksDB lifecycle handler — `KEFCoreRocksDbLifecycleAttributeConvention`, `KEFCoreRocksDbLifecycleAttribute` (requires KNet with `IRocksDbLifecycleHandler`)
+* [x] SSL/SASL broker authentication — `SslConfig`, `SaslConfig`, `SecurityProtocol` singleton options applied to all internal Kafka clients
+* [x] Value buffer result cache — `KEFCoreValueBufferCacheConvention`, `KEFCoreValueBufferCacheAttribute`, TTL-based `CachedValueBufferEnumerable` with automatic invalidation on writes
