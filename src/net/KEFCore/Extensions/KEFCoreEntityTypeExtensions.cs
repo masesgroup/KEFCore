@@ -252,21 +252,22 @@ public static class KEFCoreEntityTypeExtensions
         => entityType.FindAnnotation(KEFCoreAnnotationNames.TransactionGroup)?.Value as string;
 
     /// <summary>
-    /// Returns the cache TTL for forward enumeration of this entity type's state store.
-    /// Returns <see cref="TimeSpan.Zero"/> if caching is not configured — the proxy
-    /// is a transparent pass-through with no allocation overhead.
+    /// Returns the forward cache TTL for this entity type.
+    /// Returns <see cref="TimeSpan.Zero"/> when not configured (caching disabled).
     /// </summary>
     public static TimeSpan GetValueBufferCacheTtl(this IEntityType entityType)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferCacheTtl)?.Value as TimeSpan?
-           ?? TimeSpan.Zero;
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferCacheTtl)?.Value is TimeSpan ttl
+            ? ttl
+            : TimeSpan.Zero;
 
     /// <summary>
-    /// Returns the cache TTL for reverse enumeration of this entity type's state store.
-    /// Returns <see cref="TimeSpan.Zero"/> if caching is not configured.
+    /// Returns the reverse cache TTL for this entity type.
+    /// Returns <see cref="TimeSpan.Zero"/> when not configured (reverse caching disabled).
     /// </summary>
     public static TimeSpan GetValueBufferReverseCacheTtl(this IEntityType entityType)
-        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl)?.Value as TimeSpan?
-           ?? TimeSpan.Zero;
+        => entityType.FindAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl)?.Value is TimeSpan ttl
+            ? ttl
+            : TimeSpan.Zero;
 
     /// <summary>
     /// Builds the <see cref="ConsumerConfigBuilder"/> for this entity type, merging the global

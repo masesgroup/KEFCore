@@ -194,56 +194,75 @@ The `data` dictionary passed to `onSetConfig` is the per-store lifetime containe
 
 ## Value buffer cache
 
-For entities queried with full scans but written infrequently, KEFCore supports an in-memory result cache that eliminates the deserialization and JNI boundary cost on repeated full-scan queries. The cache is per entity type, stored in `EntityTypeProducer` (singleton per cluster and `ApplicationId`), and shared across all `DbContext` instances on the same cluster.
+For entities queried with full scans but written infrequently, KEFCore supports an in-memory result cache that eliminates deserialization and JNI boundary cost on repeated queries. Two independent caches are maintained per entity type — one for forward enumeration and one for reverse — each a `SortedList<TKey, ValueBuffer>` keyed on the entity primary key.
 
 ### How it works
 
-The cache is implemented as a `CachedValueBufferEnumerable` proxy over `GetValueBuffers()` and `GetValueBuffersReverse()`. On the first **complete** enumeration, the proxy accumulates all `ValueBuffer` objects into an internal list. Subsequent full scans within the TTL window return that list directly — zero JNI calls, zero deserialization.
+Each cache is populated lazily on the first **complete** enumeration in its direction. The `PopulatingEnumerator` accumulates `(key, ValueBuffer)` pairs as the caller iterates. On `Dispose`, if the enumeration was complete (`MoveNext` returned `false`), the `SortedList` is committed to the cache with the configured expiry. If the caller stopped early, the accumulated data is discarded — no partial population.
 
-If the caller stops early (e.g. `First()`, `Take(3)`, any LINQ operator that disposes the enumerator before it is exhausted), the accumulated list is discarded and the next call re-fetches from the state store. This is intentional: a partial list would return incorrect results for subsequent full scans.
+Once warm, the `SortedList` serves all access paths in that direction:
 
-The cache is invalidated automatically when new data arrives from the cluster via `FreshEventChange` — which fires after any `SaveChanges` that writes to that entity's topic reaches the Streams state store. Both forward and reverse caches are invalidated together.
+| Access path | Forward cache | Reverse cache |
+|---|---|---|
+| `GetValueBuffers()` — full scan | Populates on first complete enumeration; hits on subsequent | — |
+| `GetValueBuffersReverse()` — full reverse scan | — | Populates on first complete enumeration; hits on subsequent; cold → native RocksDB reverse iterator |
+| Single key lookup | `O(log n)` binary search on `Keys` array, zero JNI | — |
+| Key range | Index scan lower→upper bound, zero JNI | — |
+| Reverse range | — | Index scan upper→lower bound, zero JNI |
+| Prefix scan | Scan from first matching key, zero JNI | — |
 
-### What bypasses the cache
+The `SortedList` is backed by two parallel arrays (`keys[]` and `values[]`). Reverse iteration is direct index traversal — `O(n)`, zero allocation, no buffering.
 
-Single key lookups, key range scans, reverse range scans, and prefix scans always go directly to the state store regardless of TTL. Only `GetValueBuffers()` (full forward scan) and `GetValueBuffersReverse()` (full reverse scan) participate in the cache.
+### Invalidation
+
+Both caches are invalidated together when new data from the cluster arrives via `FreshEventChange`, which fires after any `SaveChanges` reaches the Streams state store. `IsWarm` is checked as a guard before constructing key objects — key construction has a non-trivial allocation cost and is skipped when the cache is definitely cold.
+
+### Memory considerations
+
+Enabling both forward and reverse caches doubles memory consumption for that entity — each holds an independent copy of all `ValueBuffer` objects. For large entities, enable only the direction that is actually queried frequently.
 
 ### Configuration
 
-Enable the cache via `KEFCoreValueBufferCacheAttribute` or `HasKEFCoreValueBufferCache()`. The TTL is specified in seconds for the attribute and as `TimeSpan` for the fluent API. Forward and reverse scans have independent TTLs.
-
 ```csharp
-// Attribute — same TTL for forward and reverse
+// Attribute — same TTL for forward and reverse (default: reverseTtlSeconds = ttlSeconds)
 [KEFCoreValueBufferCacheAttribute(ttlSeconds: 30)]
 [Table("Country")]
 public class Country { ... }
 
-// Attribute — longer TTL for forward scan, shorter for reverse
+// Attribute — different TTLs
 [KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 15)]
 [Table("Product")]
 public class Product { ... }
 
-// Fluent API
-protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    modelBuilder.Entity<Country>()
-                .HasKEFCoreValueBufferCache(ttl: TimeSpan.FromSeconds(30));
+// Attribute — only forward cache
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 0)]
+[Table("PriceList")]
+public class PriceList { ... }
 
-    modelBuilder.Entity<Product>()
-                .HasKEFCoreValueBufferCache(
-                    ttl: TimeSpan.FromSeconds(60),
-                    reverseTtl: TimeSpan.FromSeconds(15));
-}
+// Attribute — only reverse cache (entity always queried OrderByDescending)
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 0, reverseTtlSeconds: 30)]
+[Table("EventLog")]
+public class EventLog { ... }
+
+// Fluent API — same TTL for both (reverseTtl defaults to ttl)
+modelBuilder.Entity<Country>()
+            .HasKEFCoreValueBufferCache(ttl: TimeSpan.FromSeconds(30));
+
+// Fluent API — different TTLs
+modelBuilder.Entity<Product>()
+            .HasKEFCoreValueBufferCache(
+                ttl: TimeSpan.FromSeconds(60),
+                reverseTtl: TimeSpan.FromSeconds(15));
 ```
 
 > [!TIP]
-> This cache delivers the greatest benefit for reference data and lookup tables — entities that are read frequently with full scans (`ToList()`, `Count()`, `OrderBy()`) but written rarely. For entities with frequent writes the cache will be invalidated often and the benefit diminishes.
+> This cache is most effective for reference data and lookup tables — entities queried frequently but written rarely. For entities with high write frequency the cache is invalidated often and the benefit diminishes.
 
 > [!NOTE]
-> Setting `ttlSeconds: 0` or a negative value disables caching for that direction. The proxy is always created but acts as a transparent pass-through with no allocation overhead when TTL is zero.
+> A TTL of zero or negative disables that cache direction. The internal `CachedValueBufferStore<TKey>` proxy is always created but acts as a transparent pass-through with no allocation overhead.
 
 > [!IMPORTANT]
-> The cache lives in `EntityTypeProducer` — it is shared across all `DbContext` instances using the same cluster and `ApplicationId`. A write from any context invalidates the cache for all contexts sharing the same producer. This is the correct behavior for consistency.
+> Both caches are shared across all `DbContext` instances on the same cluster and `ApplicationId`. A write from any context invalidates both caches for all contexts sharing the same producer.
 
 ---
 

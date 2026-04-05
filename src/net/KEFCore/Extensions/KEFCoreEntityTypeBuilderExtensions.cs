@@ -269,25 +269,50 @@ public static class KEFCoreEntityTypeBuilderExtensions
     }
 
     /// <summary>
-    /// Configures in-memory result caching for full enumeration of this entity type's state store.
-    /// Equivalent to applying <see cref="KEFCoreValueBufferCacheAttribute"/> on the entity class.
+    /// Configures independent in-memory result caches for forward and reverse enumeration
+    /// of this entity type's Kafka Streams state store.
+    /// <para>
+    /// Forward cache: populated by the first complete <c>GetValueBuffers()</c> enumeration.
+    /// Also serves single key lookup and range queries when warm.
+    /// </para>
+    /// <para>
+    /// Reverse cache: populated by the first complete <c>GetValueBuffersReverse()</c>
+    /// enumeration. Also serves reverse range queries when warm.
+    /// </para>
     /// </summary>
-    /// <param name="builder">The <see cref="EntityTypeBuilder"/> to configure.</param>
-    /// <param name="ttl">Cache TTL for forward enumeration. Zero or negative disables caching.</param>
-    /// <param name="reverseTtl">
-    /// Cache TTL for reverse enumeration. <see langword="null"/> defaults to the same value as <paramref name="ttl"/>.
+    /// <param name="builder">The entity type builder.</param>
+    /// <param name="ttl">
+    /// TTL for the forward cache. Zero or negative disables it.
     /// </param>
-    /// <returns>The same <see cref="EntityTypeBuilder"/> for chaining.</returns>
+    /// <param name="reverseTtl">
+    /// TTL for the reverse cache. <see langword="null"/> defaults to the same value as
+    /// <paramref name="ttl"/>. Zero or negative disables it.
+    /// </param>
     public static EntityTypeBuilder HasKEFCoreValueBufferCache(
         this EntityTypeBuilder builder,
         TimeSpan ttl,
         TimeSpan? reverseTtl = null)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         if (ttl > TimeSpan.Zero)
             builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueBufferCacheTtl, ttl);
-        var effectiveReverseTtl = reverseTtl ?? ttl;
-        if (effectiveReverseTtl > TimeSpan.Zero)
-            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl, effectiveReverseTtl);
+
+        var effectiveReverse = reverseTtl ?? ttl;
+        if (effectiveReverse > TimeSpan.Zero)
+            builder.Metadata.SetAnnotation(KEFCoreAnnotationNames.ValueBufferReverseCacheTtl, effectiveReverse);
+
+        return builder;
+    }
+
+    /// <inheritdoc cref="HasKEFCoreValueBufferCache(EntityTypeBuilder,TimeSpan,TimeSpan?)"/>
+    public static EntityTypeBuilder<TEntity> HasKEFCoreValueBufferCache<TEntity>(
+        this EntityTypeBuilder<TEntity> builder,
+        TimeSpan ttl,
+        TimeSpan? reverseTtl = null)
+        where TEntity : class
+    {
+        ((EntityTypeBuilder)builder).HasKEFCoreValueBufferCache(ttl, reverseTtl);
         return builder;
     }
 }
