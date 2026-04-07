@@ -36,7 +36,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
+public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreStreamsRetriever<TKey, TValue>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -190,27 +190,18 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     }
 
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
+    public bool TryGetProperties(TKey key, out TValue valueContainer)
     {
-        var v = GetTValue(key);
-        if (v == null)
-        {
-            properties = default!;
-            complexProperties = default!;
-            return false;
-        }
-
-        properties = v?.GetProperties(_metadata.EntityType)!;
-        complexProperties = v?.GetComplexProperties(_metadata.EntityType, _complexTypeConverterFactory)!;
-        return true;
+        valueContainer = GetTValue(key);
+        return valueContainer != null;
     }
 
     IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
 
-    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
+    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)

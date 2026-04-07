@@ -22,6 +22,7 @@
 
 using MASES.KNet.Serialization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.W3c.Dom.Ls;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
@@ -268,6 +269,9 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         }
     }
 
+    Dictionary<IPropertyBase, object>? propertiesInfo = null;
+    Dictionary<IComplexProperty, object>? complexPropertiesInfo = null;
+
     /// <inheritdoc/>
     public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory)
     {
@@ -287,46 +291,53 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
             if (Data == null) { return; }
 #if DEBUG_PERFORMANCE
-            newSw.Start();
-#endif
-            allPropertyValues = new object[flattenedProperties!.Length];
-#if DEBUG_PERFORMANCE
-            newSw.Stop();
             iterationSw.Start();
 #endif
             if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
             {
-                for (int i = 0; i < Data.Count; i++)
+                if (propertiesInfo != null)
                 {
-                    if (NativeTypeMapper.IsComplex(Data[i].ManagedType)) continue;
-
-                    IPropertyBase? prop = tName.FindProperty(Data[i].PropertyName!);
-                    if (prop == null) continue; // a property was removed from the schema 
-                    ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
+                    allPropertyValues = [.. propertiesInfo.Values];
+                }
+                else
+                {
+                    allPropertyValues = new object[flattenedProperties!.Length];
+                    propertiesInfo = [];
+                    for (int i = 0; i < Data.Count; i++)
+                    {
+                        if (NativeTypeMapper.IsComplex(Data[i].ManagedType)) continue;
+                        IPropertyBase? prop = tName.FindProperty(Data[i].PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema 
+                        ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
+                        propertiesInfo.Add(prop, allPropertyValues[i]!);
+                    }
                 }
             }
             else
             {
-                Dictionary<IPropertyBase, object> propertiesInfo = new();
-                Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
-                for (int i = 0; i < Data.Count; i++)
+                if (propertiesInfo == null || complexPropertiesInfo == null)
                 {
-                    IPropertyBase? prop = NativeTypeMapper.IsComplex(Data[i].ManagedType)
-                         ? tName.FindComplexProperty(Data[i].PropertyName!)
-                         : tName.FindProperty(Data[i].PropertyName!);
-                    if (prop == null) continue; // a property was removed from the schema
-                    object input = null!;
-                    ConvertInnerData(Data[i], ref input!, prop, complexTypeFactory);
-                    if (prop is IComplexProperty complexProperty)
+                    propertiesInfo = [];
+                    complexPropertiesInfo = [];
+                    for (int i = 0; i < Data.Count; i++)
                     {
-                        complexPropertiesInfo.Add(complexProperty, input);
-                    }
-                    else
-                    {
-                        propertiesInfo.Add(prop, input);
+                        IPropertyBase? prop = NativeTypeMapper.IsComplex(Data[i].ManagedType)
+                             ? tName.FindComplexProperty(Data[i].PropertyName!)
+                             : tName.FindProperty(Data[i].PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema
+                        object input = null!;
+                        ConvertInnerData(Data[i], ref input!, prop, complexTypeFactory);
+                        if (prop is IComplexProperty complexProperty)
+                        {
+                            complexPropertiesInfo.Add(complexProperty, input);
+                        }
+                        else
+                        {
+                            propertiesInfo.Add(prop, input);
+                        }
                     }
                 }
-
+                allPropertyValues = new object[flattenedProperties!.Length];
                 flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
 #if DEBUG_PERFORMANCE
@@ -342,32 +353,84 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
         }
 #endif
     }
+    System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>? outputProperties = null;
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IEntityType? entityType)
+    public IDictionary<string, object?> GetProperties(IValueContainerMetadata? metadata)
     {
-        Dictionary<string, object?> props = [];
+        if (outputProperties != null) return outputProperties;
+        if (propertiesInfo != null)
+        {
+            Dictionary<string, object?> dict = [];
+            foreach (var item in propertiesInfo)
+            {
+                dict.Add(item.Key.Name, item.Value);
+            }
+            outputProperties = new(dict);
+            return outputProperties;
+        }
+
+        if (metadata != null)
+        {
+            propertiesInfo = [];
+        }
+        Dictionary<string, object?> props = new();
         object? result = null!;
+        IPropertyBase? property = null;
         foreach (var item in Data)
         {
             if (NativeTypeMapper.IsComplex(item.ManagedType)) continue;
-            IPropertyBase property = entityType?.FindProperty(item.PropertyName!)!;
+            if (metadata != null)
+            {
+                property = metadata.EntityType?.FindProperty(item.PropertyName!)!;
+            }
             ConvertInnerData(item, ref result, property);
+            if (metadata != null && property != null)
+            {
+                propertiesInfo!.Add(property, result);
+            }
             props.Add(item.PropertyName, result);
         }
-        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+        outputProperties = new(props);
+        return outputProperties;
     }
+    System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>? outputComplexProperties = null;
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
+    public IDictionary<string, object?> GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory)
     {
+        if (outputComplexProperties != null) return outputComplexProperties;
+        if (complexPropertiesInfo != null)
+        {
+            Dictionary<string, object?> dict = [];
+            foreach (var item in complexPropertiesInfo)
+            {
+                dict.Add(item.Key.Name, item.Value);
+            }
+            outputComplexProperties = new(dict);
+            return outputComplexProperties;
+        }
+
+        if (metadata != null)
+        {
+            complexPropertiesInfo = [];
+        }
         Dictionary<string, object?> props = [];
         object? result = null!;
+        IComplexProperty? property = null;
         foreach (var item in Data)
         {
             if (!NativeTypeMapper.IsComplex(item.ManagedType)) continue;
-            IPropertyBase property = entityType?.FindComplexProperty(item.PropertyName!)!;
+            if (metadata != null)
+            {
+                property = metadata?.EntityType?.FindComplexProperty(item.PropertyName!)!;
+            }
             ConvertInnerData(item, ref result, property, complexTypeFactory);
+            if (metadata != null && property != null)
+            {
+                complexPropertiesInfo!.Add(property, result);
+            }
             props.Add(item.PropertyName, result);
         }
-        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+        outputComplexProperties = new(props);
+        return outputComplexProperties;
     }
 }

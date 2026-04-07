@@ -71,42 +71,38 @@ class LocalEntityExtractor<TKey, TValueContainer, TJVMKey, TJVMValueContainer, T
         if (recordValue == null) throw new ArgumentNullException(nameof(recordValue), "Record value shall be available");
 
         TValueContainer valueContainer = _valueSerdes?.DeserializeWithHeaders(topic, headers, recordValue)!;
-        var clrType = Type.GetType(valueContainer.ClrType, true);
-        if (clrType != null)
+        var clrType = Type.GetType(valueContainer.ClrType, true) ?? throw new ArgumentException($"Cannot create an instance of {valueContainer.ClrType}");
+        var entityType = (_model?.FindEntityType(clrType)) ?? throw new ArgumentException($"Cannot extract an IEntityType from {valueContainer.ClrType}");
+        var metadata = new ValueContainerMetadata(entityType!);
+        var newEntity = Activator.CreateInstance(clrType!);
+        foreach (var property in valueContainer.GetProperties(metadata))
         {
-            var entityType = _model?.FindEntityType(clrType);
-
-            var newEntity = Activator.CreateInstance(clrType!);
-            foreach (var property in valueContainer.GetProperties(entityType))
+            var propInfo = clrType.GetProperty(property.Key);
+            if (propInfo != null)
             {
-                var propInfo = clrType.GetProperty(property.Key);
-                if (propInfo != null)
-                {
-                    if (propInfo.CanWrite)
-                        propInfo.SetValue(newEntity, property.Value);
-                    else if (throwUnmatch)
-                        throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
-                }
+                if (propInfo.CanWrite)
+                    propInfo.SetValue(newEntity, property.Value);
                 else if (throwUnmatch)
-                    throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+                    throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
             }
-
-            foreach (var property in valueContainer.GetComplexProperties(entityType, _complexTypeFactory))
-            {
-                var propInfo = clrType.GetProperty(property.Key);
-                if (propInfo != null)
-                {
-                    if (propInfo.CanWrite)
-                        propInfo.SetValue(newEntity, property.Value);
-                    else if (throwUnmatch)
-                        throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
-                }
-                else if (throwUnmatch)
-                    throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
-            }
-
-            return newEntity!;
+            else if (throwUnmatch)
+                throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
         }
-        throw new ArgumentException($"Cannot create an instance of {valueContainer.ClrType}");
+
+        foreach (var property in valueContainer.GetComplexProperties(metadata, _complexTypeFactory))
+        {
+            var propInfo = clrType.GetProperty(property.Key);
+            if (propInfo != null)
+            {
+                if (propInfo.CanWrite)
+                    propInfo.SetValue(newEntity, property.Value);
+                else if (throwUnmatch)
+                    throw new InvalidOperationException($"Unable to write property {property.Value} at index {property.Key} with {property.Value}");
+            }
+            else if (throwUnmatch)
+                throw new InvalidOperationException($"Property {property.Value} not found in {valueContainer.ClrType}");
+        }
+
+        return newEntity!;
     }
 }

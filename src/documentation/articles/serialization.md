@@ -143,9 +143,9 @@ The default serialization can be overridden with user defined **ValueContainer**
 A custom **ValueContainer** class must contains enough information and shall follow the following rules:
 - must implements the [`IValueContainer<T>` interface](https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs)
 - must be a generic type
-- must have at least a default constructor and a constructor which accept six parameters in this order:
+- must have at least a default constructor and a constructor which accept two parameters in this order:
   1. `IValueContainerData` -> the reference containing support information and data
-  6. `IComplexTypeConverterFactory?` -> an optional reference to the factory where the instance will retrieve specialized serializer, see [Complex type serialization](#complex-type-serialization)
+  2. `IComplexTypeConverterFactory?` -> an optional reference to the factory where the instance will retrieve specialized serializer, see [Complex type serialization](#complex-type-serialization)
 
 An example snippet is the follow:
 
@@ -184,19 +184,19 @@ public class CustomValueContainer<TKey> : IValueContainer<TKey> where TKey : not
     /// <summary>
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <param name="entityType">The <see cref="IEntityType"/> can be used to retrieve metadata, if <see langword="null"/> shall be done an inference from stored data</param>
+    /// <param name="metadata">The <see cref="IValueContainerMetadata"/> can be used to retrieve data, if <see langword="null"/> shall be done an inference from stored data</param>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    public IDictionary<string, object?> GetProperties(IEntityType? entityType)
+    public IDictionary<string, object?> GetProperties(IValueContainerMetadata? metadata)
     {
         // add specific logic
     }
     /// <summary>
     /// Returns back a dictionary of complex properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <param name="entityType">The <see cref="IEntityType"/> can be used to retrieve metadata, if <see langword="null"/> shall be done an inference from stored data</param>
+    /// <param name="metadata">The <see cref="IValueContainerMetadata"/> can be used to retrieve data, if <see langword="null"/> shall be done an inference from stored data</param>
     /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    public IDictionary<string, object?> GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
+    public IDictionary<string, object?> GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }

@@ -43,14 +43,15 @@ readonly struct KEFCoreDatabaseLocalData
         if (ManageEvents)
         {
             UpdateAdapter = database.UpdateAdapterFactory.Create();
-            EntityTypeForChanges = UpdateAdapter.Model.FindEntityType(entityType.ClrType)!;
-            PrimaryKeyForChanges = EntityTypeForChanges.FindPrimaryKey()!;
+            var entityType1 = UpdateAdapter.Model.FindEntityType(entityType.ClrType)!;
+            MetadataForChanges = new ValueContainerMetadata(entityType1);
+            PrimaryKeyForChanges = entityType1.FindPrimaryKey()!;
         }
     }
     public readonly IKEFCoreDatabase Database;
     public readonly bool ManageEvents;
     public readonly IUpdateAdapter? UpdateAdapter;
-    public readonly IEntityType? EntityTypeForChanges;
+    public readonly IValueContainerMetadata? MetadataForChanges;
     public readonly IKey? PrimaryKeyForChanges;
 }
 
@@ -95,7 +96,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
     private readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _knetCompactedReplicator;
     private readonly IProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _kafkaProducer;
-    private readonly IKEFCoreStreamsRetriever<TKey>? _streamData;
+    private readonly IKEFCoreStreamsRetriever<TKey, TValueContainer>? _streamData;
     private readonly ISerDes<TKey, TJVMKey>? _keySerdes;
     private readonly ISerDes<TValueContainer, TJVMValueContainer>? _valueSerdes;
 
@@ -354,9 +355,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
         if (_streamData != null)
         {
-            if (_streamData.TryGetProperties(key, out var properties, out var complexProperties))
+            if (_streamData.TryGetProperties(key, out var valueContainer))
             {
-                KEFCoreStateHelper.ManageFind(_database.InfrastructureLogger, _database.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
+                KEFCoreStateHelper.ManageFind(_database.InfrastructureLogger, _database.UpdateAdapterFactory, _entityMetadata, _primaryKey!, keyValues, valueContainer.GetProperties(_entityMetadata), valueContainer.GetComplexProperties(_entityMetadata, _complexTypeConverterFactory));
             }
             return;
         }
@@ -364,9 +365,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (_knetCompactedReplicator.TryGetValue(key, out var valueContainer))
             {
-                IDictionary<string, object?>? properties = valueContainer?.GetProperties(_entityType)!;
-                IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_entityType, _complexTypeConverterFactory)!;
-                KEFCoreStateHelper.ManageFind(_database.InfrastructureLogger, _database.UpdateAdapterFactory, _entityType, _primaryKey!, keyValues, properties, complexProperties);
+                IDictionary<string, object?>? properties = valueContainer?.GetProperties(_entityMetadata)!;
+                IDictionary<string, object?>? complexProperties = valueContainer?.GetComplexProperties(_entityMetadata, _complexTypeConverterFactory)!;
+                KEFCoreStateHelper.ManageFind(_database.InfrastructureLogger, _database.UpdateAdapterFactory, _entityMetadata, _primaryKey!, keyValues, properties, complexProperties);
             }
             return;
         }
@@ -374,24 +375,15 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     }
 
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
+    public bool TryGetProperties(TKey key, out TValueContainer valueContainer)
     {
         if (_streamData != null)
         {
-            return _streamData.TryGetProperties(key, out properties, out complexProperties);
+            return _streamData.TryGetProperties(key, out valueContainer);
         }
         else if (_knetCompactedReplicator != null)
         {
-            if (_knetCompactedReplicator.TryGetValue(key, out var valueContainer))
-            {
-                properties = valueContainer?.GetProperties(_entityType)!;
-                complexProperties = valueContainer?.GetComplexProperties(_entityType, _complexTypeConverterFactory)!;
-                return true;
-            }
-
-            properties = default!;
-            complexProperties = default!;
-            return false;
+            return _knetCompactedReplicator.TryGetValue(key, out valueContainer!);
         }
 
         throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
@@ -613,7 +605,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 KEFCoreDatabaseLocalData localData = new(database, _entityType);
                 foreach (var item in _knetCompactedReplicator)
                 {
-                    KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, item.Key, item.Value);
+                    KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.MetadataForChanges!, localData.PrimaryKeyForChanges!, item.Key, item.Value);
                 }
             }
 #if DEBUG_PERFORMANCE
@@ -674,7 +666,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+            KEFCoreStateHelper.ManageAdded(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.MetadataForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
         }
     }
 
@@ -684,7 +676,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
+            KEFCoreStateHelper.ManageUpdate(database.InfrastructureLogger, database.Cluster.ValueGeneratorSelector, database.Cluster.ComplexTypeConverterFactory, localData.UpdateAdapter!, localData.MetadataForChanges!, localData.PrimaryKeyForChanges!, arg2.Key, arg2.Value);
         }
     }
 
@@ -694,7 +686,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             IKEFCoreDatabase database = item.Key;
             KEFCoreDatabaseLocalData localData = item.Value;
-            KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.EntityTypeForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);
+            KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.MetadataForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);
         }
     }
 

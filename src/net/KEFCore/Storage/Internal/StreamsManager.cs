@@ -24,6 +24,7 @@ using Java.Lang;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.State;
@@ -60,7 +61,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     internal interface IStreamsChangeManager
     {
         IEntityTypeProducer Producer { get; }
-        void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data);
+        void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data);
     }
 
     #endregion
@@ -223,7 +224,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         IKEFCoreDatabase database = updater.Key.Database;
                         KEFCoreDatabaseLocalData localData = updater.Value;
-                        manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
                     }
                 }
             }
@@ -473,7 +474,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         {
                             IKEFCoreDatabase database = item.Key.Database;
                             KEFCoreDatabaseLocalData localData = item.Value;
-                            current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.EntityTypeForChanges, localData.PrimaryKeyForChanges, current.Data);
+                            current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, current.Data);
                         }
                     }
                     while (!_freshDataFromCluster.IsEmpty);
