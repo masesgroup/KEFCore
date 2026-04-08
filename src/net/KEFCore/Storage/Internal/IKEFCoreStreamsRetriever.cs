@@ -18,6 +18,8 @@
 
 #nullable enable
 
+using MASES.EntityFrameworkCore.KNet.Serialization;
+
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
 ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -25,16 +27,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public interface IKEFCoreStreamsRetriever<TKey> : IDisposable where TKey : notnull
+public interface IKEFCoreStreamsRetriever<TKey, TValueContainer> : IDisposable 
+    where TKey : notnull
+    where TValueContainer : IValueContainer<TKey>
 {
     /// <summary>
-    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKEFCoreStreamsRetriever{TKey, TValueContainer}"/> instance
     /// </summary>
     /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database);
     /// <summary>
-    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey, TValueContainer}"/> instance
     /// </summary>
     /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="keyValueFactory">The key converter</param>
@@ -43,13 +47,13 @@ public interface IKEFCoreStreamsRetriever<TKey> : IDisposable where TKey : notnu
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd);
     /// <summary>
-    /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
+    /// Retrieve a reverse order <see cref="IEnumerable{ValueBuffer}"/> from the <see cref="IKEFCoreStreamsRetriever{TKey, TValueContainer}"/> instance
     /// </summary>
     /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <returns>An <see cref="IEnumerable{ValueBuffer}"/></returns>
     IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database);
     /// <summary>
-    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey}"/> instance
+    /// Retrieve an <see cref="IEnumerable{ValueBuffer}"/> in the reverse range <paramref name="rangeStart"/>/<paramref name="rangeEnd"/> from the <see cref="IKEFCoreStreamsRetriever{TKey, TValueContainer}"/> instance
     /// </summary>
     /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
     /// <param name="keyValueFactory">The key converter</param>
@@ -82,8 +86,7 @@ public interface IKEFCoreStreamsRetriever<TKey> : IDisposable where TKey : notnu
     /// Returns the values associated to the <paramref name="key"/>
     /// </summary>
     /// <param name="key">The key to retrieve</param>
-    /// <param name="properties">A <see cref="IDictionary{TKey, TValue}"/> containing the property name and associated value, or <see langword="null"/> otherwise</param>
-    /// <param name="complexProperties">A <see cref="IDictionary{TKey, TValue}"/> containing the complex property name and associated value, or <see langword="null"/> otherwise</param>
+    /// <param name="valueContainer">The <see cref="IValueContainer{T}"/> containing the properties associated to <paramref name="key"/>, or <see langword="null"/> otherwise</param>
     /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
-    bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties);
+    bool TryGetProperties(TKey key, out TValueContainer valueContainer);
 }

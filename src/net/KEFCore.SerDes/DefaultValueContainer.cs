@@ -21,6 +21,7 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
+using Org.Apache.Kafka.Clients;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -272,6 +273,12 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
     /// The data stored associated to the <see cref="IProperty"/> and <see cref="IComplexProperty"/> of <see cref="IEntityType"/>
     /// </summary>
     public PropertyData[]? Properties { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    Dictionary<IPropertyBase, object>? propertiesInfo = null;
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    Dictionary<IComplexProperty, object>? complexPropertiesInfo = null;
+
     /// <inheritdoc/>
     public void GetData(IValueContainerMetadata metadata, ref object[] allPropertyValues, IComplexTypeConverterFactory? complexTypeFactory = null)
     {
@@ -294,64 +301,85 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             newSw.Start();
 #endif
 
-            allPropertyValues = new object[flattenedProperties!.Length];
 #if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
             if (Data != null)
             {
-                foreach (var item in Data!)
+                if (propertiesInfo != null)
                 {
-                    var prop = metadata.EntityType.FindProperty(item.Value?.PropertyName!);
-                    if (prop == null) continue; // a property was removed from the schema 
-                    allPropertyValues[item.Key] = item.Value?.Value!;
+                    allPropertyValues = [.. propertiesInfo.Values];
+                }
+                else
+                {
+                    allPropertyValues = new object[flattenedProperties!.Length];
+                    propertiesInfo = [];
+                    foreach (var item in Data!)
+                    {
+                        var prop = metadata.EntityType.FindProperty(item.Value?.PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema 
+                        allPropertyValues[item.Key] = item.Value?.Value!;
+                        propertiesInfo.Add(prop, allPropertyValues[item.Key]!);
+                    }
                 }
             }
             else
             {
                 if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
                 {
-                    for (int i = 0; i < Properties.Length; i++)
+                    if (propertiesInfo != null)
                     {
-                        if (NativeTypeMapper.IsComplex(Properties[i].ManagedType)) continue;
-
-                        IPropertyBase? prop = tName.FindProperty(Properties[i].PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema
-                        allPropertyValues[i] = Properties[i]?.Value!;
+                        allPropertyValues = [.. propertiesInfo.Values];
+                    }
+                    else
+                    {
+                        allPropertyValues = new object[flattenedProperties!.Length];
+                        propertiesInfo = [];
+                        for (int i = 0; i < Properties.Length; i++)
+                        {
+                            if (NativeTypeMapper.IsComplex(Properties[i].ManagedType)) continue;
+                            IPropertyBase? prop = tName.FindProperty(Properties[i].PropertyName!);
+                            if (prop == null) continue; // a property was removed from the schema
+                            allPropertyValues[i] = Properties[i]?.Value!;
+                            propertiesInfo.Add(prop, allPropertyValues[i]!);
+                        }
                     }
                 }
                 else
                 {
-                    Dictionary<IPropertyBase, object> propertiesInfo = new();
-                    Dictionary<IComplexProperty, object> complexPropertiesInfo = new();
-                    for (int i = 0; i < Properties.Length; i++)
+                    if (propertiesInfo == null || complexPropertiesInfo == null)
                     {
-                        IPropertyBase? prop = NativeTypeMapper.IsComplex(Properties[i].ManagedType)
-                            ? tName.FindComplexProperty(Properties[i].PropertyName!)
-                            : tName.FindProperty(Properties[i].PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema
-                        if (prop is IComplexProperty complexProperty)
+                        propertiesInfo = [];
+                        complexPropertiesInfo = [];
+                        for (int i = 0; i < Properties.Length; i++)
                         {
-                            var input = Properties[i]?.Value!;
-                            if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && input is string str)
+                            IPropertyBase? prop = NativeTypeMapper.IsComplex(Properties[i].ManagedType)
+                                ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                                : tName.FindProperty(Properties[i].PropertyName!);
+                            if (prop == null) continue; // a property was removed from the schema
+                            if (prop is IComplexProperty complexProperty)
                             {
-                                input = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
+                                var input = Properties[i]?.Value!;
+                                if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && input is string str)
+                                {
+                                    input = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
+                                }
+                                else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
+                                    complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                                {
+                                    complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
+                                }
+                                else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
+                                complexPropertiesInfo.Add(complexProperty, input!);
                             }
-                            else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
-                                complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                            else
                             {
-                                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
+                                propertiesInfo.Add(prop, Properties[i]?.Value!);
                             }
-                            else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
-                            complexPropertiesInfo.Add(complexProperty, input!);
-                        }
-                        else
-                        {
-                            propertiesInfo.Add(prop, Properties[i]?.Value!);
                         }
                     }
-
+                    allPropertyValues = new object[flattenedProperties!.Length];
                     flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
                 }
             }
@@ -368,10 +396,32 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
         }
 #endif
     }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>? outputProperties = null;
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetProperties(IEntityType? entityType)
+    public IDictionary<string, object?> GetProperties(IValueContainerMetadata? metadata)
     {
+        if (outputProperties != null) return outputProperties;
+        if (propertiesInfo != null)
+        {
+            Dictionary<string, object?> dict = [];
+            foreach (var item in propertiesInfo)
+            {
+                dict.Add(item.Key.Name, item.Value);
+            }
+            outputProperties = new(dict);
+            return outputProperties;
+        }
+
+        if (metadata != null)
+        {
+            propertiesInfo = [];
+        }
+
         Dictionary<string, object?> props = [];
+        object? result = null!;
+        IPropertyBase? property = null;
         if (Data == null && Properties == null) { return props; }
 
         if (Data != null)
@@ -379,43 +429,90 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             // old implementation
             foreach (var item in Data!)
             {
+                if (metadata != null)
+                {
+                    property = metadata.EntityType?.FindProperty(item.Value.PropertyName!)!;
+                }
                 props.Add(item.Value.PropertyName!, item.Value.Value!);
+                if (metadata != null && property != null)
+                {
+                    propertiesInfo!.Add(property, result);
+                }
             }
-            return props;
+            outputProperties = new(props);
+            return outputProperties;
         }
-        object? value;
+
         foreach (var item in Properties!)
         {
-            value = item.Value!;
             if (NativeTypeMapper.IsComplex(item.ManagedType)) continue;
-            props.Add(item.PropertyName!, value);
+            if (metadata != null)
+            {
+                property = metadata.EntityType?.FindProperty(item.PropertyName!)!;
+            }
+            result = item.Value!;
+            if (metadata != null && property != null)
+            {
+                propertiesInfo!.Add(property, result);
+            }
+            props.Add(item.PropertyName!, result);
         }
-        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+        outputProperties = new(props);
+        return outputProperties;
     }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>? outputComplexProperties = null;
     /// <inheritdoc/>
-    public IDictionary<string, object?> GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
+    public IDictionary<string, object?> GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory)
     {
+        if (outputComplexProperties != null) return outputComplexProperties;
+        if (complexPropertiesInfo != null)
+        {
+            Dictionary<string, object?> dict = [];
+            foreach (var item in complexPropertiesInfo)
+            {
+                dict.Add(item.Key.Name, item.Value);
+            }
+            outputComplexProperties = new(dict);
+            return outputComplexProperties;
+        }
+
+        if (metadata != null)
+        {
+            complexPropertiesInfo = [];
+        }
+
         Dictionary<string, object?> props = [];
+        object? result = null!;
+        IComplexProperty? property = null;
         if (Data == null && Properties == null) { return props; }
 
-        object? value;
         foreach (var item in Properties!)
         {
             if (!NativeTypeMapper.IsComplex(item.ManagedType)) continue;
-            value = item.Value!;
-            Type propertyType = entityType?.FindComplexProperty(item.PropertyName!)?.ClrType! ?? Type.GetType(item.ClrType!)!;
-            if (item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && value is string str)
+            if (metadata != null)
             {
-                value = JsonSupport.ValueContainer.Deserialize(propertyType, str);
+                property = metadata?.EntityType?.FindComplexProperty(item.PropertyName!)!;
+            }
+            result = item.Value!;
+            Type propertyType = metadata?.EntityType?.FindComplexProperty(item.PropertyName!)?.ClrType! ?? Type.GetType(item.ClrType!)!;
+            if (item.ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && result is string str)
+            {
+                result = JsonSupport.ValueContainer.Deserialize(propertyType, str);
             }
             else if (complexTypeFactory != null && complexTypeFactory.TryGet(propertyType, out IComplexTypeConverter? complexTypeHook))
             {
-                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref value!);
+                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref result!);
             }
-            else throw new InvalidCastException($"Cannot manage record value {value}.");
-            props.Add(item.PropertyName!, value);
+            else throw new InvalidCastException($"Cannot manage record value {result}.");
+            if (metadata != null && property != null)
+            {
+                complexPropertiesInfo!.Add(property, result);
+            }
+            props.Add(item.PropertyName!, result);
         }
-        return new System.Collections.ObjectModel.ReadOnlyDictionary<string, object?>(props);
+        outputComplexProperties = new(props);
+        return outputComplexProperties;
     }
 }

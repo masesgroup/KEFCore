@@ -40,7 +40,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey>, IStreamsChangeManager
+public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey, TValue>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
@@ -224,27 +224,24 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         return true;
     }
     /// <inheritdoc/>
-    public bool TryGetProperties(TKey key, out IDictionary<string, object?> properties, out IDictionary<string, object?> complexProperties)
+    public bool TryGetProperties(TKey key, out TValue valueContainer)
     {
         var v = GetV(key);
         if (v == null)
         {
-            properties = default!;
-            complexProperties = default!;
+            valueContainer = default!;
             return false;
         }
-        var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
-        properties = entityTypeData?.GetProperties(_metadata.EntityType)!;
-        complexProperties = entityTypeData?.GetComplexProperties(_metadata.EntityType, _complexTypeConverterFactory)!;
+        valueContainer = _valueSerdes.DeserializeWithHeaders(null, null, v!);
         return true;
     }
 
     IEntityTypeProducer IStreamsChangeManager.Producer => _producer;
 
-    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey primaryKey, object data)
+    void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data)
     {
         var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, entityType, primaryKey, input.Item1, input.Item2);
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Item1, input.Item2);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KafkaStreams streams, string storageId, object optional)

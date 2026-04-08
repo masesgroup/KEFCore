@@ -44,14 +44,14 @@ public interface IValueContainer<in T> where T : notnull
     /// <summary>
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <param name="entityType">The <see cref="IEntityType"/> can be used to retrieve metadata, if <see langword="null"/> shall be done an inference from stored data</param>
+    /// <param name="metadata">The <see cref="IValueContainerMetadata"/> can be used to retrieve data, if <see langword="null"/> shall be done an inference from stored data</param>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    IDictionary<string, object?> GetProperties(IEntityType? entityType);
+    IDictionary<string, object?> GetProperties(IValueContainerMetadata? metadata);
     /// <summary>
     /// Returns back a dictionary of complex properties (PropertyName, Value) associated to the Entity
     /// </summary>
-    /// <param name="entityType">The <see cref="IEntityType"/> can be used to retrieve metadata, if <see langword="null"/> shall be done an inference from stored data</param>
+    /// <param name="metadata">The <see cref="IValueContainerMetadata"/> can be used to retrieve data, if <see langword="null"/> shall be done an inference from stored data</param>
     /// <param name="complexTypeFactory">The optional <see cref="IComplexTypeConverterFactory"/> instance to manage conversion of <see cref="IComplexType"/></param>
     /// <returns>A dictionary of properties (PropertyName, Value) filled in with the data stored in the <see cref="IValueContainer{T}"/> instance</returns>
-    IDictionary<string, object?> GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory);
+    IDictionary<string, object?> GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory);
 }

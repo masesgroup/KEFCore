@@ -31,7 +31,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 or ThreadInterruptedException;
         }
 
-        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IValueContainerMetadata metadata, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -53,10 +53,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
@@ -64,21 +64,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 logger.Logger.LogDebug("Record with key {key} added", key);
                 try
                 {
-                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(entityType), container.GetComplexProperties(entityType, converterFactory));
+                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, container.GetProperties(metadata), container.GetComplexProperties(metadata, converterFactory));
                 }
                 catch (Exception ex)
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
 
-        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageAdded<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : IValueContainer<TKey>
         {
@@ -90,32 +90,32 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             try
             {
-                ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, container.GetProperties(entityType), container.GetComplexProperties(entityType, converterFactory));
+                ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, container.GetProperties(metadata), container.GetComplexProperties(metadata, converterFactory));
             }
             catch (Exception ex)
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
-        static void ManageAddedInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues, IDictionary<string, object?> complexPropertyValues)
+        static void ManageAddedInternal(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey ikey, object?[] keyValues, IDictionary<string, object?> propertyValues, IDictionary<string, object?> complexPropertyValues)
         {
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry == null)
             {
                 logger.Logger.LogDebug("ManageAddedInternal: Record not available, adding");
-                var properties = entityType.GetValueGeneratingProperties();
+                var properties = metadata.EntityType.GetValueGeneratingProperties();
                 foreach (var item in properties)
                 {
 #if NET9_0 || NET10_0
-                    if (!valueGeneratorSelector.TrySelect(item, entityType, out ValueGenerator? valueGenerator)) valueGenerator = null;
+                    if (!valueGeneratorSelector.TrySelect(item, metadata.EntityType, out ValueGenerator? valueGenerator)) valueGenerator = null;
 #else
-                    ValueGenerator? valueGenerator = valueGeneratorSelector?.Select(item, entityType);
+                    ValueGenerator? valueGenerator = valueGeneratorSelector?.Select(item, metadata.EntityType);
 #endif
                     if (valueGenerator is IKEFCoreValueGenerator iKEFCoreGenerator)
                     {
@@ -123,7 +123,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     }
                 }
                 // the key does not exist
-                var newEntry = adapter.CreateEntry(propertyValues, entityType);
+                var newEntry = adapter.CreateEntry(propertyValues, metadata.EntityType);
                 var entityEntry = newEntry.ToEntityEntry();
                 foreach (var item in entityEntry.ComplexProperties)
                 {
@@ -141,7 +141,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapterFactory factory, IValueContainerMetadata metadata, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -154,8 +154,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties(entityType);
-            var complexProperties = container.GetComplexProperties(entityType, converterFactory);
+            var properties = container.GetProperties(metadata);
+            var complexProperties = container.GetComplexProperties(metadata, converterFactory);
             if (entry != null)
             {
                 try
@@ -167,10 +167,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
@@ -178,21 +178,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 try
                 {
                     logger.Logger.LogDebug("ManageUpdate: Record with key {key} does not exists, add", key);
-                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties, complexProperties);
+                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {             
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
 
-        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key, TValueContainer container)
+        public static void ManageUpdate<TKey, TValueContainer>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory converterFactory, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey ikey, TKey key, TValueContainer container)
             where TKey : notnull
             where TValueContainer : class, IValueContainer<TKey>
         {
@@ -204,8 +204,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
 
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
-            var properties = container.GetProperties(entityType);
-            var complexProperties = container.GetComplexProperties(entityType, converterFactory);
+            var properties = container.GetProperties(metadata);
+            var complexProperties = container.GetComplexProperties(metadata, converterFactory);
             if (entry != null)
             {
                 try
@@ -217,10 +217,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
@@ -228,16 +228,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 try
                 {
                     logger.Logger.LogDebug("ManageUpdate: Record does not exists, add");
-                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, entityType, ikey, keyValues, properties, complexProperties);
+                    ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {         
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
@@ -276,7 +276,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IEntityType entityType, IKey ikey, TKey key)
+        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IValueContainerMetadata metadata, IKey ikey, TKey key)
             where TKey : notnull
         {
             if (key is not object?[] keyValues)
@@ -293,14 +293,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
-        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapter adapter, IEntityType entityType, IKey ikey, TKey key)
+        public static void ManageDelete<TKey>(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey ikey, TKey key)
             where TKey : notnull
         {
             if (key is not object?[] keyValues)
@@ -315,10 +315,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", entityType, key, ex.Message);
+                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
@@ -332,14 +332,14 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public static void ManageFind(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IEntityType entityType, IKey key, object?[] keyValues, IDictionary<string, object?>? propertyValues, IDictionary<string, object?> complexPropertyValues)
+        public static void ManageFind(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, IUpdateAdapterFactory factory, IValueContainerMetadata metadata, IKey key, object?[] keyValues, IDictionary<string, object?>? propertyValues, IDictionary<string, object?> complexPropertyValues)
         {
             var adapter = factory.Create();
             IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
             if (entry == null)
             {
                 logger.Logger.LogDebug("ManageFind: Record does not exist exists, add in state as Unchanged");
-                var entity2 = adapter.Model.FindEntityType(entityType.ClrType);
+                var entity2 = adapter.Model.FindEntityType(metadata.EntityType.ClrType);
                 // the key does not exist
                 var newEntry = adapter.CreateEntry(propertyValues!, entity2!);
                 var entityEntry = newEntry.ToEntityEntry();
