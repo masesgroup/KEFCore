@@ -21,6 +21,16 @@ The roadmap can be synthetized in the following points:
 * [x] `StreamsManager` factory — lifecycle managed per `ApplicationId` via `IKEFCoreCluster` (#501)
 * [x] ComplexType LINQ binding — `TryBindMember` extension, `KEFCoreComplexTypeProjectionExpression` (#491)
 * [x] `TranslateRightJoin` implementation — EF Core 10 requirement (#514)
+* [x] Per-entity topic partitions and replication factor — `KEFCoreTopicPartitionsConvention`, `KEFCoreTopicReplicationFactorConvention` (#417)
+* [x] Per-entity topic retention — `KEFCoreTopicRetentionConvention`, `KEFCoreTopicRetentionAttribute` (#417)
+* [x] Per-entity read-only mode — `KEFCoreReadOnlyConvention`, `KEFCoreReadOnlyAttribute` (#417)
+* [x] Per-entity store lookup optimization flags — `KEFCoreStoreLookupConvention`, `KEFCoreStoreLookupAttribute` (#417)
+* [x] Per-entity serialization override — `KEFCoreSerDesConvention`, `KEFCoreSerDesAttribute` (#417)
+* [x] Per-entity producer configuration — `KEFCoreProducerConvention`, `KEFCoreProducerAttribute` (#417)
+* [x] Kafka transactional producer support — `KEFCoreTransactionalConvention`, `KEFCoreTransactionalAttribute`, `ITransactionalEntityTypeProducer` (#544, #545)
+* [x] Per-entity RocksDB lifecycle handler — `KEFCoreRocksDbLifecycleAttributeConvention`, `KEFCoreRocksDbLifecycleAttribute` (#551, #552)
+* [x] SSL/SASL broker authentication — `SslConfig`, `SaslConfig`, `SecurityProtocol` singleton options; `SslConfigsBuilder`, `SaslConfigsBuilder` from KNet (#1465)
+* [x] Value buffer result cache — `KEFCoreValueBufferCacheConvention`, `KEFCoreValueBufferCacheAttribute`, `CachedValueBufferEnumerable` proxy with TTL and auto-invalidation on `FreshEventChange`
 * [ ] Remove deprecated options: `UseCompactedReplicator`, `UseGlobalTable`, `ManageEvents`, `ConsumerConfig`, `DefaultConsumerInstances`
 * [ ] Full documentation update for new conventions and options architecture
 
