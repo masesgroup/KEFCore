@@ -194,7 +194,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
     V GetV(TKey key)
     {
-        ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         if (keyValueStore == null) return default!;
         var k = _keySerdes.Serialize(null, key);
         var v = keyValueStore.Get(k);
@@ -250,12 +250,12 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         ISerDes<TKey, K> keySerdes = serdes.Item1;
         ISerDes<TValue, V> valueSerdes = serdes.Item2;
 
-        ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-        var iterator = keyValueStore?.All();
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        using var iterator = keyValueStore?.All();
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
-            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
             yield return new StoredEventChange(new Tuple<TKey, TValue>(keySerdes.Deserialize(null, kvSupport.Key), valueSerdes.Deserialize(null, kvSupport.Value)));
         }
     }
@@ -478,7 +478,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                         V? data;
                         using (KeyValue<K, V> kv = _keyValueIterator.Next())
                         {
-                            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+                            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
                             data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
                         }
 #if DEBUG_PERFORMANCE

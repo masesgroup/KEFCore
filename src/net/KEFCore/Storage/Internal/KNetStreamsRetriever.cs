@@ -161,7 +161,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     TValue GetTValue(TKey key)
     {
-        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
         if (keyValueStore == null) return default!;
         var v = keyValueStore.Get(key);
         return v;
@@ -206,11 +206,14 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
     {
-        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
 
         foreach (var item in keyValueStore!.All())
         {
-            yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+            using (item)
+            {
+                yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+            }
         }
     }
 
@@ -375,7 +378,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
-            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator();
+            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
         }
 
@@ -445,11 +448,23 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                        if (kv != null)
+                        {
+                            using (kv)
+                            {
+                                value = kv.Value;
+                            }
+                        }
+                        else
+                        {
+#if DEBUG_PERFORMANCE
+                            _valueGet2Sw.Stop();
+#endif
+                            continue;
+                        }
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
                         hasNext = true;
                     }
                     break;
@@ -519,11 +534,23 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                        if (kv != null)
+                        {
+                            using (kv)
+                            {
+                                value = kv.Value;
+                            }
+                        }
+                        else
+                        {
+#if DEBUG_PERFORMANCE
+                            _valueGet2Sw.Stop();
+#endif
+                            continue;
+                        }
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
                         hasNext = true;
                     }
                     break;
