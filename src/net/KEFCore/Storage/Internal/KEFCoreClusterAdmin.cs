@@ -48,7 +48,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             var builder = AdminClientConfigBuilder.Create();
             builder = builder.WithBootstrapServers(configuration.BootstrapServers);
-            if (configuration.SecurityProtocol != null) builder = builder.WithSecurityProtocol(configuration.SecurityProtocol.ToString());
+            if (configuration.SecurityProtocol != null) builder = builder.WithSecurityProtocol(configuration.SecurityProtocol);
             if (configuration.SslConfig != null) builder = builder.WithSslConfigs(configuration.SslConfig);
             if (configuration.SaslConfig != null) builder = builder.WithSaslConfigs(configuration.SaslConfig);
 

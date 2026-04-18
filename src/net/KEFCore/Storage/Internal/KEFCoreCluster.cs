@@ -698,11 +698,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             config.Retries = int.MaxValue;
             config.MaxInFlightRequestsPerConnection = 1;
 
-            string baSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
-            string bbSerdesName = Java.Lang.Class.ClassNameOf<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
-
-            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? bbSerdesName : baSerdesName;
-            config.ValueSerializerClass = options.UseValueContainerByteBufferDataTransfer ? bbSerdesName : baSerdesName;
+            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>() 
+                                                                             : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
+            config.ValueSerializerClass = options.UseValueContainerByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
+                                                                                          : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
 
             var jvmKeyType = options.UseKeyByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
             var jvmValueType = options.UseValueContainerByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
