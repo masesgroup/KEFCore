@@ -559,7 +559,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             // construct key only if forward cache is warm — avoids non-trivial key allocation
             TKey? key = _forwardCache.IsWarm
                 ? (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!
-                : null;
+                : default;
 
             if (key != null && _forwardCache.TryGetValue(key, out var cached))
                 return cached;
