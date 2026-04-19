@@ -437,7 +437,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         {
             builder.DSLStoreSuppliersClass = Class.ForName(Class.ClassNameOf<BuiltInDslStoreSuppliers.InMemoryDslStoreSuppliers>(), true, Class.SystemClassLoader);
         }
-        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol);
         if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
         if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
 
@@ -515,7 +515,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
         builder.Acks = ProducerConfigBuilder.AcksTypes.All;
         builder.Retries = 0;
         builder.LingerMs = 1;
-        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol);
         if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
         if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
         return builder;
@@ -563,7 +563,7 @@ public class KEFCoreOptionsExtension : IDbContextOptionsExtension, IKEFCoreSingl
     public virtual ConsumerConfigBuilder ConsumerOptionsBuilder()
     {
         ConsumerConfigBuilder builder = ConsumerConfig ?? new();
-        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol.ToString());
+        if (SecurityProtocol != null) builder = builder.WithSecurityProtocol(SecurityProtocol);
         if (SslConfig != null) builder = builder.WithSslConfigs(SslConfig);
         if (SaslConfig != null) builder = builder.WithSaslConfigs(SaslConfig);
         return builder;
