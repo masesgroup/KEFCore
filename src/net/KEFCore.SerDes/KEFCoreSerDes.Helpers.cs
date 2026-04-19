@@ -713,8 +713,8 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
                 ConsumerConfigBuilder consumerBuilder = ConsumerConfigBuilder.CreateFrom(consumerConfig)
                     .WithGroupId(Guid.NewGuid().ToString())
                     .WithAutoOffsetReset(onlyLatest ? ConsumerConfigBuilder.AutoOffsetResetTypes.LATEST : ConsumerConfigBuilder.AutoOffsetResetTypes.EARLIEST)
-                    .WithKeyDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>())
-                    .WithValueDeserializerClass(JVMBridgeBase.ClassNameOf<ByteArrayDeserializer>());
+                    .WithKeyDeserializerClass(Java.Lang.Class.Of<ByteArrayDeserializer>())
+                    .WithValueDeserializerClass(Java.Lang.Class.Of<ByteArrayDeserializer>());
 
                 KafkaConsumer<byte[], byte[]> kafkaConsumer = new(consumerBuilder);
                 using var collection = Collections.Singleton((Java.Lang.String)resolvedTopic);
