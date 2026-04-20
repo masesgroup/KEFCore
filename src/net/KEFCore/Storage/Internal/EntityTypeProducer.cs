@@ -74,29 +74,14 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         public override void OnCompletion(RecordMetadata arg0, JVMBridgeException arg1)
         {
             if (arg1 != null) _entityTypeProducer._database.InfrastructureLogger.Logger.LogError(arg1, "EntityTypeProducerCallback failed with error: {Message}", arg1.Message);
-            int? partition = null;
-            long? offset = null;
-            DateTime? timestmp = null;
-            if (arg0 != null)
+            else if (arg0 != null)
             {
-                partition = arg0.Partition();
-                offset = arg0.Offset();
-                timestmp = arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null;
+                int? partition = arg0.Partition();
+                long? offset = arg0.Offset();
+                DateTime? timestmp = arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null;
+                _result?.Invoke(_entityTypeProducer, partition, offset, timestmp);
+                arg0?.Dispose();
             }
-            _result?.Invoke(_entityTypeProducer, partition, offset, timestmp);
-            arg0?.Dispose();
-        }
-    }
-
-    #endregion
-
-    #region TransactionalCallback
-
-    class TransactionalCallback(ConcurrentQueue<(string topicName, int partition, long offset, JVMBridgeException? exception)> pendingOffsets) : Callback
-    {
-        public override void OnCompletion(RecordMetadata metadata, JVMBridgeException error)
-        {
-            pendingOffsets.Enqueue((metadata.Topic(), metadata.Partition(), metadata.Offset(), error));
         }
     }
 
@@ -130,8 +115,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
     private readonly IProducer? _transactionalProducer;
     private readonly string? _transactionGroup;
-    private readonly ConcurrentQueue<(string topicName, int partition, long offset, JVMBridgeException? exception)> _pendingOffsets = new();
-    private readonly TransactionalCallback? _transactionalCallback;
+    private readonly List<(Future<RecordMetadata> future, string topicName)> _pendingFutures = new();
 
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? knetCompactedReplicator) : IEnumerable<ValueBuffer>
@@ -329,7 +313,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             if (_transactionGroup != null)
             {
                 _transactionalProducer = _database.Cluster.GetOrCreateTransactionalProducer(_transactionGroup, this);
-                _transactionalCallback = new TransactionalCallback(_pendingOffsets);
             }
             else
             {
@@ -478,8 +461,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         }
                         var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
                         using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
-                        var future = txProducer.Send(kRecord, _transactionalCallback);
-                        futures?.Add(future);
+                        var future = txProducer.Send(kRecord);
+                        _pendingFutures.Add((future, topicName));
+                        //futures?.Add(future);
                     }
                     else
                     {
@@ -490,8 +474,9 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
                         var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
                         using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
-                        var future = txProducer.Send(kRecord, _transactionalCallback);
-                        futures?.Add(future);
+                        var future = txProducer.Send(kRecord);
+                        _pendingFutures.Add((future, topicName));
+                        //futures?.Add(future);
                     }
                 }
                 finally
@@ -553,8 +538,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else if (_transactionalProducer != null)
         {
-            _transactionalCallback?.Dispose();
-            _pendingOffsets.Clear();
+            foreach (var (future, _) in _pendingFutures)
+            {
+                future.Dispose();
+            }
+            _pendingFutures.Clear();
         }
         else
         {
@@ -708,13 +696,34 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     void ITransactionalEntityTypeProducer.CommitPendingOffsets()
     {
-        while (_pendingOffsets.TryDequeue(out var item))
+        foreach (var (future, topicName) in _pendingFutures)
         {
-            _streamsManager!.PartitionOffsetWritten(item.topicName, item.partition, item.offset);
+            try
+            {
+                using var metadata = future.Get();
+                _streamsManager!.PartitionOffsetWritten(topicName, metadata.Partition(), metadata.Offset());
+            }
+            catch { /* log, non bloccare */ }
+            finally
+            {
+                future.Dispose();
+            }
         }
+        _pendingFutures.Clear();
+        _forwardCache?.Invalidate();
+        _reverseCache?.Invalidate();
     }
     /// <inheritdoc/>
-    void ITransactionalEntityTypeProducer.AbortPendingOffsets() => _pendingOffsets.Clear();
+    void ITransactionalEntityTypeProducer.AbortPendingOffsets()
+    {
+        foreach (var (future, _) in _pendingFutures)
+        {
+            future.Dispose();
+        }
+        _pendingFutures.Clear();
+        _forwardCache?.Invalidate();
+        _reverseCache?.Invalidate();
+    }
 
     /// <inheritdoc/>
     public bool? EnsureSynchronized(long timeout)
