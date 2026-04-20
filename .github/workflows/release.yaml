@@ -34,7 +34,7 @@ jobs:
             9.x
             10.x
 
-      - uses: nuget/setup-nuget@v3.0.0
+      - uses: nuget/setup-nuget@v3.1.0
         with:
           nuget-version: '5.x'
 
