@@ -630,6 +630,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                if (obj is null) return;
                 using (obj.Get()) { };
                 return;
             }
