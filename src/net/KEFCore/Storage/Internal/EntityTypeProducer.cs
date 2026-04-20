@@ -674,16 +674,13 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         foreach (var (future, topicName) in _pendingFutures)
         {
+            using var ownedFuture = future;
             try
             {
-                using var metadata = future.Get();
+                using var metadata = ownedFuture.Get();
                 _streamsManager!.PartitionOffsetWritten(topicName, metadata.Partition(), metadata.Offset());
             }
             catch (Exception e) { _database.InfrastructureLogger.Logger.LogError(e, "CommitPendingOffsets failed."); }
-            finally
-            {
-                future.Dispose();
-            }
         }
         _pendingFutures.Clear();
         _forwardCache?.Invalidate();
