@@ -35,8 +35,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </para>
 /// <para>
 /// Partial enumerations (caller disposes the enumerator before <c>MoveNext</c> returns
-/// <see langword="false"/>) discard any accumulated data — the next call re-fetches from
-/// the upstream source.
+/// <see langword="false"/>) transparently hand off the upstream enumerator to a background
+/// task that completes the scan and commits the result to the cache. The caller sees no
+/// delay; the cache becomes warm once the background task finishes. A generation counter
+/// ensures that data accumulated before an <see cref="Invalidate"/> call is never committed
+/// after the invalidation.
 /// </para>
 /// <para>
 /// When <paramref name="ttl"/> is <see cref="TimeSpan.Zero"/> or negative, caching is
@@ -84,13 +87,17 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
         private readonly KEFCoreCachedValueBufferStore<TKey> _store;
         private readonly IEnumerator<ValueBuffer> _inner;
         private readonly SortedList<TKey, ValueBuffer> _accumulator;
+        private readonly int _capturedGeneration;
         private bool _completed;
+        private bool _disposed;
 
         public PopulatingEnumerator(KEFCoreCachedValueBufferStore<TKey> store, IEnumerable<ValueBuffer> source)
         {
             _store = store;
             _inner = source.GetEnumerator();
             _accumulator = new SortedList<TKey, ValueBuffer>(store._comparer);
+            // capture generation before any MoveNext so we can detect intervening Invalidate()
+            lock (store._lock) _capturedGeneration = store._generation;
         }
 
         public ValueBuffer Current => _inner.Current;
@@ -114,24 +121,68 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
 
         public void Dispose()
         {
-            _inner.Dispose();
+            if (_disposed) return;
+            _disposed = true;
+
             if (_completed)
             {
-                // full enumeration completed — commit to cache
-                lock (_store._lock)
+                // full enumeration — commit synchronously and dispose inner
+                _inner.Dispose();
+                TryCommit();
+                return;
+            }
+
+            // partial enumeration — hand off _inner to a background task that
+            // completes the scan and then commits. _inner must NOT be disposed here.
+            var inner = _inner;
+            var accumulator = _accumulator;
+            var store = _store;
+            var capturedGeneration = _capturedGeneration;
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    while (inner.MoveNext())
+                    {
+                        var vb = inner.Current;
+                        var key = store.ExtractKey(vb);
+                        accumulator[key] = CopyValueBuffer(vb);
+                    }
+                    // full scan completed in background — try to commit
+                    lock (store._lock)
+                    {
+                        // only commit if no Invalidate() arrived since we started
+                        if (store._generation == capturedGeneration)
+                        {
+                            store._cache = accumulator;
+                            store._expiry = DateTime.UtcNow.Add(store._ttl);
+                        }
+                    }
+                }
+                catch
+                {
+                    // background population failure — cache stays cold, no action needed
+                }
+                finally
+                {
+                    inner.Dispose();
+                }
+            });
+        }
+
+        private void TryCommit()
+        {
+            lock (_store._lock)
+            {
+                if (_store._generation == _capturedGeneration)
                 {
                     _store._cache = _accumulator;
                     _store._expiry = DateTime.UtcNow.Add(_store._ttl);
                 }
             }
-            // partial enumeration — _accumulator is discarded, cache stays null/expired
         }
 
-        /// <summary>
-        /// Copies the underlying object array of a <see cref="ValueBuffer"/> so that
-        /// each cached entry has independent ownership and is not affected by the caller
-        /// reusing the upstream buffer.
-        /// </summary>
         private static ValueBuffer CopyValueBuffer(in ValueBuffer vb)
         {
             var arr = new object?[vb.Count];
@@ -150,6 +201,9 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
     private SortedList<TKey, ValueBuffer>? _cache;
     private DateTime _expiry = DateTime.MinValue;
     private readonly object _lock = new();
+    // incremented by Invalidate() — background tasks compare against their captured value
+    // to avoid committing data that became stale after a write arrived mid-population
+    private int _generation = 0;
 
     // ── construction ──────────────────────────────────────────────────────────
     public KEFCoreCachedValueBufferStore(
@@ -181,6 +235,7 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
         {
             _cache = null;
             _expiry = DateTime.MinValue;
+            _generation++;
         }
     }
 

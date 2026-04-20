@@ -556,17 +556,17 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (keyValues == null) return null;
         if (_streamData != null)
         {
-            // construct key only if forward cache is warm — avoids non-trivial key allocation
-            TKey? key = _forwardCache.IsWarm
-                ? (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!
-                : default;
-
-            if (key != null && _forwardCache.TryGetValue(key, out var cached))
-                return cached;
-
-            // cache cold, disabled, or key not found — fall back to store
-            key ??= (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
-            return key != null && _streamData.TryGetValue(key, out var vb) ? vb : null;
+            if (_forwardCache.IsWarm)
+            {
+                // construct key only when cache is actually warm — avoids non-trivial allocation
+                TKey key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+                if (_forwardCache.TryGetValue(key, out var cached)) return cached;
+                // cache warm but miss — fall through to store with the already-constructed key
+                return _streamData.TryGetValue(key, out var vbMiss) ? vbMiss : null;
+            }
+            // cache cold or disabled — go directly to store
+            TKey k = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
+            return _streamData.TryGetValue(k, out var vb) ? vb : null;
         }
         else if (_knetCompactedReplicator != null)
         {
@@ -746,6 +746,4 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             KEFCoreStateHelper.ManageDelete(database.InfrastructureLogger, localData.UpdateAdapter!, localData.MetadataForChanges!, localData.PrimaryKeyForChanges!, arg2.Key);
         }
     }
-
-
 }
