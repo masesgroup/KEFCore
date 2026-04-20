@@ -588,7 +588,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return rowsAffected;
     }
 
-    IEnumerable<Task<RecordMetadata>> ExecuteTransaction(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, out int rowsAffected, CancellationToken cancellationToken = default)
+    IEnumerable<Task> ExecuteTransaction(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, out int rowsAffected, CancellationToken cancellationToken = default)
     {
         if (database.Options.ReadOnlyMode)
         {
@@ -630,10 +630,15 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return obj.Get();
+                using (obj.Get()) { };
+                return;
             }
             catch (ExecutionException ex) { throw ex.InnerException; }
-            catch (OperationCanceledException) { return null; }
+            catch (OperationCanceledException) { return; }
+            finally
+            {
+                obj?.Dispose();
+            }
         }, cancellationToken));
     }
 

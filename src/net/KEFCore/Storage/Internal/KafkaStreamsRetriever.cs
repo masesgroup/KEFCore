@@ -62,7 +62,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
-            var record2 = record.CastTo<ConsumerRecord<K, V>>();
+            using var record2 = record.CastTo<ConsumerRecord<K, V>>();
             var topic = record2.Topic();
             var headers = record2.Headers();
 
