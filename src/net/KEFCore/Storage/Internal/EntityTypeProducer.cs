@@ -464,7 +464,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         }
                         var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
                         using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
-                        var future = txProducer.Send(kRecord, _transactionalCallback);
+                        var future = txProducer.Send(kRecord);
                         _pendingFutures.Add((future, topicName));
                     }
                     else
@@ -476,7 +476,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                         var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
                         var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
                         using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
-                        var future = txProducer.Send(kRecord, _transactionalCallback);
+                        var future = txProducer.Send(kRecord);
                         _pendingFutures.Add((future, topicName));
                     }
                 }
