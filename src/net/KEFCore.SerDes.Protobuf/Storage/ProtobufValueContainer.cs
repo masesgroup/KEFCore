@@ -21,7 +21,6 @@
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using MASES.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 
