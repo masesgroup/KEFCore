@@ -21,7 +21,6 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
-using Org.Apache.Kafka.Clients;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

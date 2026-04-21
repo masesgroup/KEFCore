@@ -23,7 +23,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace MASES.EntityFrameworkCore.KNet.Test
+namespace MASES.EntityFrameworkCore.KNet.Test.Transaction
 {
     partial class Program
     {
@@ -90,7 +90,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         {
                             context.Add(new Blog
                             {
-                                Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                                Url = "http://blogs.msdn.com/adonet" + i,
                                 Posts =
                                 [
                                     new Post()
@@ -110,8 +110,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                         ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
                         tx.Commit();
                     }
-                    catch
+                    catch (Exception e)
                     {
+                        ProgramConfig.ReportString($"Failed transaction with {e}.");
                         tx.Rollback();
                     }
                     watch.Restart();
@@ -188,36 +189,45 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
-                    watch.Restart();
-                    context.Remove(post);
-                    context.Remove(blog);
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
-                    for (int i = ProgramConfig.Config.NumberOfElements; i < ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements; i++)
+                    using var tx = context.Database.BeginTransaction();
+                    try
                     {
-                        context.Add(new Blog
-                        {
-                            Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts =
-                            [
-                                new Post()
-                                {
-                                    Title = "title",
-                                    Content = i.ToString()
-                                }
-                            ],
-                            Rating = i,
-                        });
-                    }
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
-                    watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                        watch.Restart();
+                        context.Remove(post);
+                        context.Remove(blog);
+                        watch.Stop();
+                        ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
 
+                        watch.Restart();
+                        for (int i = ProgramConfig.Config.NumberOfElements; i < ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements; i++)
+                        {
+                            context.Add(new Blog
+                            {
+                                Url = "http://blogs.msdn.com/adonet" + i,
+                                Posts =
+                                [
+                                    new Post()
+                                    {
+                                        Title = "title",
+                                        Content = i.ToString()
+                                    }
+                                ],
+                                Rating = i,
+                            });
+                        }
+                        watch.Stop();
+                        ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+                        watch.Restart();
+                        context.SaveChanges();
+                        watch.Stop();
+                        ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                        tx.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        ProgramConfig.ReportString($"Failed transaction with {e}.");
+                        tx.Rollback();
+                    }
                     watch.Restart();
                     var res = context.WaitForSynchronization();
                     watch.Stop();
