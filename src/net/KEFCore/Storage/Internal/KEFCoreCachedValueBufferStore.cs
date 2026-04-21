@@ -47,7 +47,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <c>TryGet*</c> methods return <see langword="null"/> immediately.
 /// </para>
 /// </summary>
-internal sealed class KEFCoreCachedValueBufferStore<TKey>
+internal sealed class KEFCoreCachedValueBufferStore<TKey>(
+    IKey primaryKey,
+    IPrincipalKeyValueFactory<TKey> keyValueFactory,
+    TimeSpan ttl)
     where TKey : notnull
 {
     // ── comparer for composite keys (object?[]) ──────────────────────────────
@@ -192,11 +195,13 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
     }
 
     // ── state ─────────────────────────────────────────────────────────────────
-    private readonly TimeSpan _ttl;
-    private readonly bool _enabled;
-    private readonly IComparer<TKey> _comparer;
-    private readonly IKey _primaryKey;
-    private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory;
+    private readonly TimeSpan _ttl = ttl;
+    private readonly bool _enabled = ttl > TimeSpan.Zero;
+    private readonly IComparer<TKey> _comparer = primaryKey.Properties.Count == 1
+            ? Comparer<TKey>.Default
+            : new CompositeKeyComparer(primaryKey.Properties);
+    private readonly IKey _primaryKey = primaryKey;
+    private readonly IPrincipalKeyValueFactory<TKey> _keyValueFactory = keyValueFactory;
 
     private SortedList<TKey, ValueBuffer>? _cache;
     private DateTime _expiry = DateTime.MinValue;
@@ -204,21 +209,6 @@ internal sealed class KEFCoreCachedValueBufferStore<TKey>
     // incremented by Invalidate() — background tasks compare against their captured value
     // to avoid committing data that became stale after a write arrived mid-population
     private int _generation = 0;
-
-    // ── construction ──────────────────────────────────────────────────────────
-    public KEFCoreCachedValueBufferStore(
-        IKey primaryKey,
-        IPrincipalKeyValueFactory<TKey> keyValueFactory,
-        TimeSpan ttl)
-    {
-        _primaryKey = primaryKey;
-        _keyValueFactory = keyValueFactory;
-        _ttl = ttl;
-        _enabled = ttl > TimeSpan.Zero;
-        _comparer = primaryKey.Properties.Count == 1
-            ? Comparer<TKey>.Default
-            : new CompositeKeyComparer(primaryKey.Properties);
-    }
 
     /// <summary><see langword="true"/> when caching is active (TTL &gt; zero).</summary>
     public bool IsEnabled => _enabled;

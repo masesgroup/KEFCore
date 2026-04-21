@@ -21,7 +21,6 @@
 using Java.Nio;
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Serialization.Json.Storage;
-using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Consumer;
 using MASES.KNet.Serialization;
 using Microsoft.IO;

@@ -21,8 +21,6 @@
 #nullable enable
 
 using MASES.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Org.W3c.Dom.Ls;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 

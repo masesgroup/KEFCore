@@ -687,7 +687,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public IProducer GetOrCreateTransactionalProducer(string transactionGroup, ITransactionalEntityTypeProducer entityTypeProducer)
     {
-        _producersByGroup.GetOrAdd(transactionGroup, _ => new()).Add(entityTypeProducer);
+        _producersByGroup.GetOrAdd(transactionGroup, _ => []).Add(entityTypeProducer);
 
         var tmp = _transactionalProducers.GetOrAdd(transactionGroup, group =>
         {
@@ -698,10 +698,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             config.Retries = int.MaxValue;
             config.MaxInFlightRequestsPerConnection = 1;
 
-            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>() 
-                                                                             : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
+            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
+                                                                             : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
             config.ValueSerializerClass = options.UseValueContainerByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
-                                                                                          : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>();
+                                                                                          : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
 
             var jvmKeyType = options.UseKeyByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
             var jvmValueType = options.UseValueContainerByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
