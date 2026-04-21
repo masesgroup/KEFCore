@@ -534,7 +534,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
         if (_streamData != null)
-            return _forwardCache.GetAllPopulating(() => _streamData.GetValueBuffers(_database));
+            return _forwardCache!.GetAllPopulating(() => _streamData.GetValueBuffers(_database));
         else if (_knetCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _knetCompactedReplicator);
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
@@ -544,7 +544,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (keyValues == null) return null;
         if (_streamData != null)
         {
-            if (_forwardCache.IsWarm)
+            if (_forwardCache!.IsWarm)
             {
                 // construct key only when cache is actually warm — avoids non-trivial allocation
                 TKey key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
@@ -568,11 +568,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (_streamData != null)
         {
             // guard: build keys only if forward cache is warm — avoids non-trivial allocation
-            if (rangeStart != null && rangeEnd != null && _forwardCache.IsWarm)
+            if (rangeStart != null && rangeEnd != null && _forwardCache!.IsWarm)
             {
                 TKey from = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
                 TKey to = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
-                var cached = _forwardCache.TryGetRange(from, to);
+                var cached = _forwardCache?.TryGetRange(from, to);
                 if (cached != null) return cached;
             }
             return _streamData.GetValueBuffersRange(database, _keyValueFactory, rangeStart, rangeEnd);
@@ -586,7 +586,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (_streamData != null)
             // reverse cache: populated by this method, serves reverse range when warm.
             // cold → native RocksDB reverse iterator (more efficient than any .NET alternative)
-            return _reverseCache.GetAllPopulating(() => _streamData.GetValueBuffersReverse(_database));
+            return _reverseCache!.GetAllPopulating(() => _streamData.GetValueBuffersReverse(_database));
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
@@ -596,11 +596,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (_streamData != null)
         {
             // guard: build keys only if reverse cache is warm
-            if (rangeStart != null && rangeEnd != null && _reverseCache.IsWarm)
+            if (rangeStart != null && rangeEnd != null && _reverseCache!.IsWarm)
             {
                 TKey from = (TKey)_keyValueFactory.CreateFromKeyValues(rangeStart)!;
                 TKey to = (TKey)_keyValueFactory.CreateFromKeyValues(rangeEnd)!;
-                var cached = _reverseCache.TryGetReverseRange(from, to);
+                var cached = _reverseCache?.TryGetReverseRange(from, to);
                 if (cached != null) return cached;
             }
             return _streamData.GetValueBuffersReverseRange(database, _keyValueFactory, rangeStart, rangeEnd);
@@ -614,10 +614,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (_streamData != null)
         {
             // try forward cache first if warm
-            if (prefixValues != null && _forwardCache.IsWarm)
+            if (prefixValues != null && _forwardCache!.IsWarm)
             {
                 TKey prefix = (TKey)_keyValueFactory.CreateFromKeyValues(prefixValues)!;
-                var cached = _forwardCache.TryGetPrefix(prefix, prefixValues.Length);
+                var cached = _forwardCache?.TryGetPrefix(prefix, prefixValues.Length);
                 if (cached != null) return cached;
             }
             return _streamData.GetValueBuffersByPrefix(database, _keyValueFactory, prefixValues);
@@ -661,8 +661,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         if (offset.HasValue)
         {
             producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partiton, offset.Value);
-            producer._forwardCache.Invalidate();
-            producer._reverseCache.Invalidate();
+            producer._forwardCache?.Invalidate();
+            producer._reverseCache?.Invalidate();
         }
     }
 
