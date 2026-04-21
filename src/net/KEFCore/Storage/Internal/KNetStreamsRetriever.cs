@@ -48,8 +48,11 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
-            return Record.DateTime;
+            using (this.Record)
+            {
+                _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+                return Record.DateTime;
+            }
         }
     }
 

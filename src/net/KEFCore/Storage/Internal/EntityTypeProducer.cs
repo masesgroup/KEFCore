@@ -258,10 +258,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _entityType = entityType;
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
-        _entityMetadata = new ValueContainerMetadata(_entityType,
-                                                     [.. _entityType.GetProperties()],
-                                                     [.. _entityType.GetFlattenedProperties()],
-                                                     [.. _entityType.GetComplexProperties()]);
+        _entityMetadata = new ValueContainerMetadata(_entityType);
         _complexTypeConverterFactory = _database.Cluster.ComplexTypeConverterFactory;
         _useCompactedReplicator = _database.Options.UseCompactedReplicator;
 
