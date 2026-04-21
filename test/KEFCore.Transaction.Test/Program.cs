@@ -90,7 +90,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Transaction
                         {
                             context.Add(new Blog
                             {
-                                Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                                Url = "http://blogs.msdn.com/adonet" + i,
                                 Posts =
                                 [
                                     new Post()
@@ -203,7 +203,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Transaction
                         {
                             context.Add(new Blog
                             {
-                                Url = "http://blogs.msdn.com/adonet" + i.ToString(),
+                                Url = "http://blogs.msdn.com/adonet" + i,
                                 Posts =
                                 [
                                     new Post()
