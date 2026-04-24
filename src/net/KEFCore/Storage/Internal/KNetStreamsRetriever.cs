@@ -23,6 +23,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
 using MASES.KNet.Streams.Processor;
@@ -209,6 +210,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
     {
+        using var scope = new JvmBatchDisposeFastScope();
         using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
 
         foreach (var item in keyValueStore!.All())
@@ -362,7 +364,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         private readonly IEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _enumerator = null;
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
         private readonly CancellationToken _cancellationToken = default;
-
+        private readonly IDisposable _disposeScope;
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -383,6 +385,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
             if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
+            _disposeScope = isAsync ? new JvmBatchDisposeAsyncScope() : new JvmBatchDisposeFastScope();
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -415,6 +418,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
             _enumerator?.Dispose();
+            _disposeScope?.Dispose();
         }
 
         public ValueTask DisposeAsync()
@@ -422,7 +426,20 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-            return _asyncEnumerator != null ? _asyncEnumerator.DisposeAsync() : new ValueTask();
+            if (_asyncEnumerator != null)
+            {
+                var vt = _asyncEnumerator.DisposeAsync();
+                if (!vt.IsCompletedSuccessfully)
+                    return AwaitBoth(vt);
+                return _disposeScope.DisposeAsyncIfAvailable();
+            }
+            return _disposeScope.DisposeAsyncIfAvailable();
+
+            async ValueTask AwaitBoth(ValueTask first)
+            {
+                await first;
+                await _disposeScope.DisposeAsyncIfAvailable();
+            }
         }
 
         public bool MoveNext()
