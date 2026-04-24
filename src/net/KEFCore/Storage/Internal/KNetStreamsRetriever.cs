@@ -23,6 +23,7 @@
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Streams;
 using MASES.KNet.Streams.Kstream;
 using MASES.KNet.Streams.Processor;
@@ -48,8 +49,11 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
         public override DateTime Extract()
         {
-            _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
-            return Record.DateTime;
+            using (this.Record)
+            {
+                _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+                return Record.DateTime;
+            }
         }
     }
 
@@ -161,7 +165,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     TValue GetTValue(TKey key)
     {
-        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = _streamsManager!.Streams?.Store(_storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
         if (keyValueStore == null) return default!;
         var v = keyValueStore.Get(key);
         return v;
@@ -206,11 +210,15 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
     {
-        ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        using var scope = new JvmBatchDisposeFastScope();
+        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
 
         foreach (var item in keyValueStore!.All())
         {
-            yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+            using (item)
+            {
+                yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+            }
         }
     }
 
@@ -356,7 +364,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         private readonly IEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _enumerator = null;
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
         private readonly CancellationToken _cancellationToken = default;
-
+        private readonly IDisposable _disposeScope;
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -375,8 +383,9 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
-            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator();
+            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
+            _disposeScope = isAsync ? new JvmBatchDisposeAsyncScope() : new JvmBatchDisposeFastScope();
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -409,6 +418,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
             _enumerator?.Dispose();
+            _disposeScope?.Dispose();
         }
 
         public ValueTask DisposeAsync()
@@ -416,7 +426,20 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-            return _asyncEnumerator != null ? _asyncEnumerator.DisposeAsync() : new ValueTask();
+            if (_asyncEnumerator != null)
+            {
+                var vt = _asyncEnumerator.DisposeAsync();
+                if (!vt.IsCompletedSuccessfully)
+                    return AwaitBoth(vt);
+                return _disposeScope.DisposeAsyncIfAvailable();
+            }
+            return _disposeScope.DisposeAsyncIfAvailable();
+
+            async ValueTask AwaitBoth(ValueTask first)
+            {
+                await first;
+                await _disposeScope.DisposeAsyncIfAvailable();
+            }
         }
 
         public bool MoveNext()
@@ -445,11 +468,23 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                        if (kv != null)
+                        {
+                            using (kv)
+                            {
+                                value = kv.Value;
+                            }
+                        }
+                        else
+                        {
+#if DEBUG_PERFORMANCE
+                            _valueGet2Sw.Stop();
+#endif
+                            continue;
+                        }
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
                         hasNext = true;
                     }
                     break;
@@ -519,11 +554,23 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
 #endif
-                        value = kv != null ? kv.Value : default;
+                        if (kv != null)
+                        {
+                            using (kv)
+                            {
+                                value = kv.Value;
+                            }
+                        }
+                        else
+                        {
+#if DEBUG_PERFORMANCE
+                            _valueGet2Sw.Stop();
+#endif
+                            continue;
+                        }
 #if DEBUG_PERFORMANCE
                         _valueGet2Sw.Stop();
 #endif
-                        if (value == null) continue;
                         hasNext = true;
                     }
                     break;

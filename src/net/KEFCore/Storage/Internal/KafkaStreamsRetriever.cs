@@ -24,6 +24,7 @@
 using Java.Util;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
 using Org.Apache.Kafka.Common.Utils;
@@ -62,7 +63,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
-            var record2 = record.CastTo<ConsumerRecord<K, V>>();
+            using var record2 = record.CastTo<ConsumerRecord<K, V>>();
             var topic = record2.Topic();
             var headers = record2.Headers();
 
@@ -194,7 +195,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
     V GetV(TKey key)
     {
-        ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         if (keyValueStore == null) return default!;
         var k = _keySerdes.Serialize(null, key);
         var v = keyValueStore.Get(k);
@@ -250,12 +251,13 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         ISerDes<TKey, K> keySerdes = serdes.Item1;
         ISerDes<TValue, V> valueSerdes = serdes.Item2;
 
-        ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-        var iterator = keyValueStore?.All();
+        using var scope = new JvmBatchDisposeFastScope();
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+        using var iterator = keyValueStore?.All();
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
-            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
             yield return new StoredEventChange(new Tuple<TKey, TValue>(keySerdes.Deserialize(null, kvSupport.Key), valueSerdes.Deserialize(null, kvSupport.Value)));
         }
     }
@@ -399,7 +401,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
-
+        private readonly JvmBatchDisposeFastScope _disposeScope;
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -417,6 +419,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
+            _disposeScope = new JvmBatchDisposeFastScope();
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requested KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif
@@ -452,6 +455,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
             _keyValueIterator?.Dispose();
+            _disposeScope?.Dispose();
         }
 
         public bool MoveNext()
@@ -478,7 +482,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                         V? data;
                         using (KeyValue<K, V> kv = _keyValueIterator.Next())
                         {
-                            var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+                            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
                             data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
                         }
 #if DEBUG_PERFORMANCE

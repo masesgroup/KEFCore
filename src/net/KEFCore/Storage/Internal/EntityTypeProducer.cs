@@ -66,14 +66,25 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 {
     #region EntityTypeProducerCallback
 
-    class EntityTypeProducerCallback(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> entityTypeProducer, Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int, long?, DateTime?, JVMBridgeException> result) : Callback
+    class EntityTypeProducerCallback(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> entityTypeProducer, Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int?, long?, DateTime?> result) : Callback
     {
         readonly EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> _entityTypeProducer = entityTypeProducer;
-        readonly Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int, long?, DateTime?, JVMBridgeException> _result = result;
+        readonly Action<EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>, int?, long?, DateTime?> _result = result;
 
         public override void OnCompletion(RecordMetadata arg0, JVMBridgeException arg1)
         {
-            _result?.Invoke(_entityTypeProducer, arg0.Partition(), arg0.HasOffset() ? arg0.Offset() : null, arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null, arg1);
+            if (arg1 != null) _entityTypeProducer._database.InfrastructureLogger.Logger.LogError(arg1, "EntityTypeProducerCallback failed with error: {Message}", arg1.Message);
+            int? partition = null;
+            long? offset = null;
+            DateTime? timestmp = null;
+            if (arg0 != null)
+            {
+                partition = arg0.Partition();
+                offset = arg0.Offset();
+                timestmp = arg0.HasTimestamp() ? System.DateTimeOffset.FromUnixTimeMilliseconds((long)arg0.Timestamp()).DateTime : null;
+            }
+            _result?.Invoke(_entityTypeProducer, partition, offset, timestmp);
+            arg0?.Dispose();
         }
     }
 
@@ -247,10 +258,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _entityType = entityType;
         _primaryKey = entityType.FindPrimaryKey();
         _keyValueFactory = _primaryKey!.GetPrincipalKeyValueFactory<TKey>();
-        _entityMetadata = new ValueContainerMetadata(_entityType,
-                                                     [.. _entityType.GetProperties()],
-                                                     [.. _entityType.GetFlattenedProperties()],
-                                                     [.. _entityType.GetComplexProperties()]);
+        _entityMetadata = new ValueContainerMetadata(_entityType);
         _complexTypeConverterFactory = _database.Cluster.ComplexTypeConverterFactory;
         _useCompactedReplicator = _database.Options.UseCompactedReplicator;
 
@@ -440,31 +448,38 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             var txProducer = (IProducer<TJVMKey, TJVMValueContainer>)_transactionalProducer;
             foreach (var record in records)
             {
-                var topicName = record.AssociatedTopicName;
-                if (record.EntityState == EntityState.Deleted)
+                Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                try
                 {
-                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                    if (_keySerdes!.UseHeaders)
+
+                    var topicName = record.AssociatedTopicName;
+                    if (record.EntityState == EntityState.Deleted)
                     {
-                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        if (_keySerdes!.UseHeaders)
+                        {
+                            headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        }
+                        var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                        using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
+                        var future = txProducer.Send(kRecord);
+                        _pendingFutures.Add((future, topicName));
                     }
-                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
-                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, default!, headers);
-                    var future = txProducer.Send(kRecord);
-                    _pendingFutures.Add((future, topicName));
+                    else
+                    {
+                        if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                        {
+                            headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        }
+                        var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
+                        var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
+                        using var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
+                        var future = txProducer.Send(kRecord);
+                        _pendingFutures.Add((future, topicName));
+                    }
                 }
-                else
+                finally
                 {
-                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
-                    {
-                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
-                    }
-                    var jvmKey = _keySerdes!.SerializeWithHeaders(topicName, headers, record.GetKey<TKey>());
-                    var jvmValue = _valueSerdes!.SerializeWithHeaders(topicName, headers, record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!);
-                    var kRecord = new Org.Apache.Kafka.Clients.Producer.ProducerRecord<TJVMKey, TJVMValueContainer>(topicName, null, jvmKey, jvmValue, headers);
-                    var future = txProducer.Send(kRecord);
-                    _pendingFutures.Add((future, topicName));
+                    headers?.Dispose();
                 }
             }
         }
@@ -477,23 +492,29 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var newRecord = _kafkaProducer?.NewRecord(record.AssociatedTopicName, 0, record.Key, record.Value(TValueContainerConstructor)!);
                 future = _kafkaProducer?.Send(newRecord);
 #else
-                if (record.EntityState == EntityState.Deleted)
+                Org.Apache.Kafka.Common.Header.Headers headers = null!;
+                try
                 {
-                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                    if (_keySerdes!.UseHeaders)
+                    if (record.EntityState == EntityState.Deleted)
                     {
-                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        if (_keySerdes!.UseHeaders)
+                        {
+                            headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        }
+                        future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), null!, headers)!;
                     }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), null!, headers)!;
+                    else
+                    {
+                        if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
+                        {
+                            headers = Org.Apache.Kafka.Common.Header.Headers.Create();
+                        }
+                        future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                    }
                 }
-                else
+                finally
                 {
-                    Org.Apache.Kafka.Common.Header.Headers headers = null!;
-                    if (_keySerdes!.UseHeaders || _valueSerdes!.UseHeaders)
-                    {
-                        headers = Org.Apache.Kafka.Common.Header.Headers.Create();
-                    }
-                    future = _kafkaProducer?.Send(record.AssociatedTopicName, null, record.GetKey<TKey>(), record.GetValue<TKey, TValueContainer>(_createValueContainer, _complexTypeConverterFactory)!, headers)!;
+                    headers?.Dispose();
                 }
 #endif
                 futures?.Add(future);
@@ -656,11 +677,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
 
-    private static void UpdateFromCommit(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> producer, int partiton, long? offset, DateTime? timestamp, JVMBridgeException error)
+    private static void UpdateFromCommit(EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer> producer, int? partition, long? offset, DateTime? timestamp)
     {
-        if (offset.HasValue)
+        if (offset.HasValue && partition.HasValue)
         {
-            producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partiton, offset.Value);
+            producer._streamsManager!.PartitionOffsetWritten(producer.EntityType.GetKEFCoreTopicName(), partition.Value, offset.Value);
             producer._forwardCache?.Invalidate();
             producer._reverseCache?.Invalidate();
         }
