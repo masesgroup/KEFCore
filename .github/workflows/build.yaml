@@ -93,7 +93,6 @@ on:
         options:
           - "0"
           - "1"
-
   schedule:
     - cron: "0 4 * * 6"
 
@@ -150,8 +149,27 @@ jobs:
       - name: Get run_build
         run: echo "The selected run_build is ${{ steps.check_files.outputs.run_build || steps.force_execute.outputs.run_build }}"
 
-  build:
+  compute_versions:
     needs: check_changes
+    if: "always() && needs.check_changes.outputs.run_build == 'true'"
+    runs-on: ubuntu-latest
+    outputs:
+      knet_cli_version: ${{ steps.compute.outputs.knet_cli_version }}
+      knet_docker_tag: ${{ steps.compute.outputs.knet_docker_tag }}
+    steps:
+      - name: Compute KNet version variants
+        id: compute
+        run: |
+          VERSION="3.2.3-rc"
+          # KNetCLI uses the version as-is (e.g. 3.2.3 or 3.2.3-rc)
+          echo "knet_cli_version=$VERSION" >> $GITHUB_OUTPUT
+          # Docker tag: split on '-', prepend V and append .0 to the numeric part
+          BASE="${VERSION%%-*}"
+          PRERELEASE="${VERSION#$BASE}"
+          echo "knet_docker_tag=V${BASE}.0${PRERELEASE}" >> $GITHUB_OUTPUT
+
+  build:
+    needs: [ check_changes, compute_versions ]
     if: "always() && needs.check_changes.outputs.run_build == 'true'"
     permissions:
       contents: read
@@ -176,6 +194,8 @@ jobs:
       EnableProcessDump: ${{ inputs.EnableProcessDump || '0' }}
       ProcessDumpType: ${{ inputs.ProcessDumpType || '3' }}
       EnableVerboseDiagnosticProcessDump: ${{ inputs.EnableVerboseDiagnosticProcessDump || '0' }}
+      KNetVersion: ${{ needs.compute_versions.outputs.knet_cli_version }}
+      KNetDockerTag: ${{ needs.compute_versions.outputs.knet_docker_tag }}
     secrets:
       actor: ${{ github.actor }}
       GITHUB_TOKEN_INHERITED: ${{ secrets.GITHUB_TOKEN }}

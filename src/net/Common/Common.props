@@ -42,7 +42,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.202">
+		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.203">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
