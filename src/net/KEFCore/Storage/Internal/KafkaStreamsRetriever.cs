@@ -251,7 +251,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         ISerDes<TKey, K> keySerdes = serdes.Item1;
         ISerDes<TValue, V> valueSerdes = serdes.Item2;
 
-        using var scope = new JvmBatchDisposeFastScope();
+        using var scope = new JCOBridgeDisposeFastScope();
         using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         using var iterator = keyValueStore?.All();
         while (iterator!.HasNext())
@@ -401,7 +401,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         private readonly ISerDes<TKey, K> _keySerdes;
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
-        private readonly JvmBatchDisposeFastScope _disposeScope;
+        private readonly JCOBridgeDisposeFastScope _disposeScope;
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -419,7 +419,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _keySerdes = keySerdes ?? throw new ArgumentNullException(nameof(keySerdes));
             _valueSerdes = valueSerdes ?? throw new ArgumentNullException(nameof(valueSerdes));
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
-            _disposeScope = new JvmBatchDisposeFastScope();
+            _disposeScope = new JCOBridgeDisposeFastScope();
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"Requested KafkaEnumerator for {_metadata.EntityType.Name} on {DateTime.Now:HH:mm:ss.FFFFFFF}");
 #endif

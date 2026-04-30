@@ -210,7 +210,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
     {
-        using var scope = new JvmBatchDisposeFastScope();
+        using var scope = new JCOBridgeDisposeFastScope();
         using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams?.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
 
         foreach (var item in keyValueStore!.All())
@@ -385,7 +385,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
             if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
-            _disposeScope = isAsync ? new JvmBatchDisposeAsyncScope() : new JvmBatchDisposeFastScope();
+            _disposeScope = isAsync ? new JCOBridgeDisposeAsyncScope() : new JCOBridgeDisposeFastScope();
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
