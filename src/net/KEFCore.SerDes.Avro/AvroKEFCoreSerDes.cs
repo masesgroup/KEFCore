@@ -228,11 +228,14 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
-
-                    BinaryDecoder decoder = new(data);
-                    AvroKeyContainer t = new();
-                    t = SpecificReader.Read(t!, decoder);
-                    return (TData)(object)(t.PrimaryKey.ToArray());
+                    using (data)
+                    {
+                        using var stream = data.ToStream();
+                        BinaryDecoder decoder = new(stream);
+                        AvroKeyContainer t = new();
+                        t = SpecificReader.Read(t!, decoder);
+                        return (TData)(object)(t.PrimaryKey.ToArray());
+                    }
                 }
             }
         }
@@ -407,11 +410,14 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                     if (data == null) return default!;
-
-                    JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, data);
-                    TData t = Activator.CreateInstance<TData>()!;
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    using (data)
+                    {
+                        using var stream = data.ToStream();
+                        JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
+                        TData t = Activator.CreateInstance<TData>()!;
+                        t = SpecificReader.Read(t!, decoder);
+                        return t;
+                    }
                 }
             }
         }
@@ -593,11 +599,14 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-
-                    BinaryDecoder decoder = new(data);
-                    TData t = Activator.CreateInstance<TData>()!;
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    using (data)
+                    {
+                        using var stream = data.ToStream();
+                        BinaryDecoder decoder = new(stream);
+                        TData t = Activator.CreateInstance<TData>()!;
+                        t = SpecificReader.Read(t!, decoder);
+                        return t;
+                    }
                 }
             }
         }
@@ -775,11 +784,14 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-
-                    JsonDecoder decoder = new(AvroValueContainer._SCHEMA, data);
-                    TData t = Activator.CreateInstance<TData>()!;
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    using (data)
+                    {
+                        using var stream = data.ToStream();
+                        JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
+                        TData t = Activator.CreateInstance<TData>()!;
+                        t = SpecificReader.Read(t!, decoder);
+                        return t;
+                    }
                 }
             }
         }

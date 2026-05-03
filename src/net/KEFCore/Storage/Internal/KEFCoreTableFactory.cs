@@ -44,7 +44,17 @@ public class KEFCoreTableFactory(
 
     /// <inheritdoc/>
     public virtual IKEFCoreTable GetOrCreate(IKEFCoreDatabase database, IEntityType entityType)
-        => _factories.GetOrAdd((database.Cluster, entityType.GetKEFCoreTopicName()), e => CreateTable(database, entityType)());
+    {
+        if (!_factories.TryGetValue((database.Cluster, entityType.GetKEFCoreTopicName()), out var table))
+        {
+            table = CreateTable(database, entityType)();
+            if (!_factories.TryAdd((database.Cluster, entityType.GetKEFCoreTopicName()), table))
+            {
+                _factories.TryGetValue((database.Cluster, entityType.GetKEFCoreTopicName()), out table);
+            }
+        }
+        return table!;
+    }
 
     /// <inheritdoc/>
     public virtual IKEFCoreTable Get(IKEFCoreCluster cluster, IEntityType entityType)

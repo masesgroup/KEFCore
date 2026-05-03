@@ -216,10 +216,12 @@ public static class ProtobufKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-
-                KeyContainer container = KeyContainer.Parser.ParseFrom(data.ToStream());
-
-                return (TData)container.GetContent();
+                using (data)
+                {
+                    using var stream = data.ToStream();
+                    KeyContainer container = KeyContainer.Parser.ParseFrom(stream);
+                    return (TData)container.GetContent();
+                }
             }
         }
     }
@@ -385,8 +387,12 @@ public static class ProtobufKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                var container = Storage.ValueContainer.Parser.ParseFrom(data.ToStream());
-                return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                using (data)
+                {
+                    using var stream = data.ToStream();
+                    var container = Storage.ValueContainer.Parser.ParseFrom(stream);
+                    return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                }
             }
         }
     }

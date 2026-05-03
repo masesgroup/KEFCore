@@ -109,7 +109,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         static RecyclableMemoryStreamSupport()
         {
 #if DEBUG
-            _enable = true;
+            //_enable = true;
 #endif
             _options = new RecyclableMemoryStreamManager.Options()
             {
@@ -273,12 +273,20 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, JsonSerializerOptions?)"/>
         public TData Deserialize<TData>(ByteBuffer data)
         {
-            return JsonSerializer.Deserialize<TData>(data.ToStream(), DefautJsonOptions)!;
+            using (data)
+            {
+                using var stream = data.ToStream();
+                return JsonSerializer.Deserialize<TData>(stream, DefautJsonOptions)!;
+            }
         }
         /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, Type, JsonSerializerOptions?)"/>
         public object Deserialize(Type type, ByteBuffer data)
         {
-            return JsonSerializer.Deserialize(data.ToStream(), type, DefautJsonOptions)!;
+            using (data)
+            {
+                using var stream = data.ToStream();
+                return JsonSerializer.Deserialize(stream, type, DefautJsonOptions)!;
+            }
         }
         static readonly JsonSupport _key = new();
         /// <summary>
