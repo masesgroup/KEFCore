@@ -445,6 +445,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else if (_transactionalProducer != null)
         {
+            using var disposeContext = new JCOBridgeDisposeFastScope();
             var txProducer = (IProducer<TJVMKey, TJVMValueContainer>)_transactionalProducer;
             foreach (var record in records)
             {
@@ -485,6 +486,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else
         {
+            using var disposeContext = new JCOBridgeDisposeFastScope();
             foreach (var record in records)
             {
                 Future<RecordMetadata> future;

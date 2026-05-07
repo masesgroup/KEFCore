@@ -598,8 +598,6 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         System.Collections.Generic.Dictionary<IKEFCoreTable, System.Collections.Generic.IList<IKEFCoreRowBag>> dataInTransaction = [];
 
-        using var disposeContext = new JCOBridgeDisposeAsyncScope();
-
         rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger, out var readOnlyViolations);
 
         if (database.TransactionManager?.CurrentTransaction is KEFCoreTransaction currentTx)
