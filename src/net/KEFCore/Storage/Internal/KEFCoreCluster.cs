@@ -26,6 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
@@ -597,10 +598,11 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         System.Collections.Generic.Dictionary<IKEFCoreTable, System.Collections.Generic.IList<IKEFCoreRowBag>> dataInTransaction = [];
 
+        using var disposeContext = new JCOBridgeDisposeAsyncScope();
+
         rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger, out var readOnlyViolations);
 
-        var currentTx = database.TransactionManager?.CurrentTransaction as KEFCoreTransaction;
-        if (currentTx != null)
+        if (database.TransactionManager?.CurrentTransaction is KEFCoreTransaction currentTx)
         {
             var groups = entries
                 .Select(e => e.EntityType.GetTransactionGroup())
@@ -631,7 +633,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (obj is null) return;
-                using (obj.Get()) { };
+                using (obj.Get()) { }
                 return;
             }
             catch (ExecutionException ex) { throw ex.InnerException; }
