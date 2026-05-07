@@ -257,16 +257,16 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             return JsonSerializer.Deserialize(data, type, DefautJsonOptions)!;
         }
         /// <inheritdoc cref="JsonSerializer.Serialize{TValue}(Stream, TValue, JsonSerializerOptions?)"/>
-        public byte[] SerializeAsByteBuffer<TData>(TData data)
+        public ByteBuffer SerializeAsByteBuffer<TData>(TData data)
         {
-            MemoryStream ms = RecyclableMemoryStreamSupport.Rent();
+            var ms = ByteBuffer.Rent();
             JsonSerializer.Serialize(ms, data, DefautJsonOptions);
             return ByteBuffer.From(ms);
         }
         /// <inheritdoc cref="JsonSerializer.Serialize(Stream, object?, Type, JsonSerializerOptions?)"/>
-        public byte[] SerializeAsByteBuffer(Type type, object data)
+        public ByteBuffer SerializeAsByteBuffer(Type type, object data)
         {
-            MemoryStream ms = RecyclableMemoryStreamSupport.Rent();
+            var ms = ByteBuffer.Rent();
             JsonSerializer.Serialize(ms, data, type, DefautJsonOptions);
             return ByteBuffer.From(ms);
         }

@@ -201,9 +201,9 @@ public static class ProtobufKEFCoreSerDes
                     keyContainer = new KeyContainer(dataArray);
                 }
 
-                using MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
-                keyContainer.WriteTo(stream);
-                return stream.ToArray();
+				var memStream = ByteBuffer.Rent();
+				keyContainer.WriteTo(memStream);
+                return ByteBuffer.From(memStream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, ByteBuffer data)
@@ -374,8 +374,8 @@ public static class ProtobufKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
-                data.WriteTo(stream);
+				var stream = ByteBuffer.Rent();
+				data.WriteTo(stream);
                 return ByteBuffer.From(stream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>

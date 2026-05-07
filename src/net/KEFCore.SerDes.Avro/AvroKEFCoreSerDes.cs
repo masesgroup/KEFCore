@@ -208,7 +208,7 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
+                    var memStream = ByteBuffer.Rent();
                     BinaryEncoder encoder = new(memStream);
                     var container = new AvroKeyContainer();
                     if (data is object[] dataArray)
@@ -393,8 +393,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
-                    JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
+					var memStream = ByteBuffer.Rent();
+					JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
                     return ByteBuffer.From(memStream);
@@ -585,8 +585,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
-                    BinaryEncoder encoder = new(memStream);
+					var memStream = ByteBuffer.Rent();
+					BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
                     return ByteBuffer.From(memStream);
                 }
@@ -769,8 +769,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-                    MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
-                    JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
+					var memStream = ByteBuffer.Rent();
+					JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
                     return ByteBuffer.From(memStream);
