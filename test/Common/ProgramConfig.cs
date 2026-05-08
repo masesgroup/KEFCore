@@ -101,8 +101,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
     public class ProgramConfig
     {
-        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "4G" : "2G";
-        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "512M" : "256M";
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "1G" : "512G";
+        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "256M" : "128M";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
