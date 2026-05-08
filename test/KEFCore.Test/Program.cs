@@ -133,14 +133,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 watch.Restart();
                 var post = context.Posts.Single(b => b.BlogId == 2);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 try
                 {
                     watch.Restart();
                     post = context.Posts.Single(b => b.BlogId == 1);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
                 catch
                 {
@@ -150,7 +150,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 watch.Restart();
                 var all = context.Posts.All((o) => true);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
                 Blog blog = null;
                 try
@@ -158,7 +158,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -170,7 +170,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Restart();
                     int count = context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1).Count();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -225,7 +225,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Restart();
                     post = context.Posts.Single(b => b.BlogId == position);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }

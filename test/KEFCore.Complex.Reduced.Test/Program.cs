@@ -116,7 +116,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                     blog = context.Blogs!.Single(b => b.BlogId == 10);
                     watch.Stop();
                     var code = blog.TaxInfoExtended.CodeExtended;
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -128,7 +128,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                     watch.Restart();
                     int count = context.Blogs!.Where(b => b.TaxInfoExtended.PercentageExtended >= 1).Count();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -174,7 +174,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.ReducedComplex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 101);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {

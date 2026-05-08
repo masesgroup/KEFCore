@@ -26,16 +26,17 @@ using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
+using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     internal class KEFCoreClusterAdmin : IDisposable
     {
         static internal bool DisableClusterInvocation = false; // used only to activate an external model builder
+        static readonly ConcurrentDictionary<string, Admin> _configuredAdminClient = new();
 
         readonly string _clusterId;
         private readonly Admin _kafkaAdminClient = null;
-        private readonly Properties _bootstrapProperties;
 
         public static KEFCoreClusterAdmin Create(IKEFCoreSingletonOptions configuration)
         {
@@ -52,17 +53,23 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             if (configuration.SslConfig != null) builder = builder.WithSslConfigs(configuration.SslConfig);
             if (configuration.SaslConfig != null) builder = builder.WithSaslConfigs(configuration.SaslConfig);
 
-            _bootstrapProperties = builder.ToProperties();
-            try
+            var bootstrapProperties = builder.ToProperties();
+            var key = bootstrapProperties.ToString();
+            if (!_configuredAdminClient.TryGetValue(key, out var adminClient))
             {
-                _kafkaAdminClient = Admin.Create(_bootstrapProperties);
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException != null) throw ex.InnerException;
-                throw;
+                try
+                {
+                    adminClient = Admin.Create(bootstrapProperties);
+                }
+                catch (ExecutionException ex)
+                {
+                    if (ex.InnerException != null) throw ex.InnerException;
+                    throw;
+                }         
+                _configuredAdminClient.TryAdd(key, adminClient);
             }
 
+            _kafkaAdminClient = adminClient;
             _clusterId = GetClusterId();
         }
 

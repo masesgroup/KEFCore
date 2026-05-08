@@ -12,6 +12,11 @@ on:
         required: false
         default: false
         type: boolean
+      EnableIntermediateOutput:
+        description: 'Writes more info in output of tests'
+        required: false
+        default: false
+        type: boolean
       ExecuteOnMoreOSes:
         description: 'Executes tests on more Oses'
         required: false
@@ -332,46 +337,51 @@ jobs:
           dotnet-version: |
             10.x
 
+      - if: ${{ inputs.EnableIntermediateOutput == true }}
+        run: |
+          echo "ENABLE_INTERMEDIATE_OUTPUT=$(echo /p:EnableIntermediateOutput=true)" >> $GITHUB_ENV
+        shell: bash
+
       - name: Execute Benchmark.KafkaStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KafkaStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KNetStreams.Raw.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KNetStreams.Buffered on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute Benchmark.KNetReplicator on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000 /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000 /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute only reload Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Transaction.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBTransaction /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Transaction.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBTransaction /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000 ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         with:
@@ -473,13 +483,18 @@ jobs:
         shell: pwsh
         run: New-Item -Path "${{ github.workspace }}" -Name "logfiles" -ItemType Directory
 
+      - if: ${{ inputs.EnableIntermediateOutput == true }}
+        run: |
+          echo "ENABLE_INTERMEDIATE_OUTPUT=$(echo /p:EnableIntermediateOutput=true)" >> $GITHUB_ENV
+        shell: bash
+
       - name: Start Kafka and execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         shell: pwsh
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -508,7 +523,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -537,7 +552,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
       
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -566,7 +581,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -595,7 +610,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -624,7 +639,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -654,7 +669,7 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ inputs.UseKNetCompactedReplicator == true }}  
@@ -685,8 +700,8 @@ jobs:
         run: |
           knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/windows_server.properties
           Start-Process -RSE ${{ github.workspace }}\logfiles\PWSH_kafka_err.log -RSO ${{ github.workspace }}\logfiles\PWSH_kafka_out.log -FilePath knet -ArgumentList ( 'kafkastart',  '-LogPath', '${{ github.workspace }}\logfiles\', '-Log4JConfiguration', '${{ github.workspace }}\bin\${{ matrix.framework }}\log4j2.yaml', '${{ github.workspace }}\bin\${{ matrix.framework }}\windows_server.properties' )
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
-          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
+          dotnet ${{ github.workspace }}\bin\${{ matrix.framework }}\MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}\bin\${{ matrix.framework }}\KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Forcibly stop knet on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: true
@@ -802,6 +817,11 @@ jobs:
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
         run: dotnet tool update -g MASES.KNetCLI --version ${{ inputs.KNetVersion }}
 
+      - if: ${{ inputs.EnableIntermediateOutput == true }}
+        run: |
+          echo "ENABLE_INTERMEDIATE_OUTPUT=$(echo /p:EnableIntermediateOutput=true)" >> $GITHUB_ENV
+        shell: bash
+
       - name: Prepare Kafka on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }}
         run: knet storagetool format --standalone --ignore-formatted -t 6oTi4odMSVSmroqyy5rubw -c ${{ github.workspace }}/bin/${{ matrix.framework }}/server.properties
 
@@ -813,7 +833,7 @@ jobs:
 
       - name: Execute Benchmark.KafkaStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -825,7 +845,7 @@ jobs:
 
       - name: Execute Benchmark.KafkaStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KafkaStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -837,7 +857,7 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -849,7 +869,7 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Raw.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -861,7 +881,7 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Buffered on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -873,7 +893,7 @@ jobs:
 
       - name: Execute Benchmark.KNetStreams.Buffered.Prefetch on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Buffered.Prefetch.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}
@@ -886,7 +906,7 @@ jobs:
       - name: Execute Benchmark.KNetReplicator on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ inputs.UseKNetCompactedReplicator == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Benchmark.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetReplicator.json /p:DatabaseName=TestDBBenchmark /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true && inputs.UseKNetCompactedReplicator == true }}
@@ -898,11 +918,11 @@ jobs:
 
       - name: Execute ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }}
+        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ inputs.UploadServerLogs == true }}

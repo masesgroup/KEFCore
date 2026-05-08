@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      EnableIntermediateOutput:
+        description: 'Writes more info in output of tests'
+        required: false
+        default: false
+        type: boolean
       ExecuteOnMoreOSes:
         description: 'Test on more OSes'
         required: false
@@ -180,6 +185,7 @@ jobs:
     uses: ./.github/workflows/build_common.yaml
     with:
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
+      EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       ExecuteOnMoreOSes: ${{ github.event_name == 'schedule' }}
       ExecuteOnLargerJDKSet: ${{ github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true
