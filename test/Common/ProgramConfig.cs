@@ -27,7 +27,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -80,9 +79,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         {
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog 
-                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
-                                                                                                        : LogLevel.Debug)
+                builder.SetMinimumLevel((!ProgramConfig.Config.ForceDebugLog 
+                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null) 
+                                        || !ProgramConfig.Config.EnableIntermediateOutput ? LogLevel.Information 
+                                                                                          : LogLevel.Debug)
                        .AddProvider(new DebugOutputLoggerProvider());
             });
 
@@ -128,6 +128,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool ManageEvents { get; set; } = true;
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
         public bool ForceDebugLog { get; set; } = false;
+        public bool EnableIntermediateOutput { get; set; } = false;
 
         public void ApplyOnContext(KEFCoreDbContext context)
         {
@@ -213,6 +214,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 property.Key.SetValue(Config, property.Value);
             }
+
+#if DEBUG
+            Config.EnableIntermediateOutput = true;
+#endif
 
             //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
             //    && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)

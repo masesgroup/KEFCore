@@ -129,25 +129,25 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         var post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         post = context.Posts.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         var all = context.Posts.All((o) => true);
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
 
                         Blog blog = null;
                         watch.Restart();
@@ -155,41 +155,41 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
 
-                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
                         watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == 1);
 
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
 
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
 
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
                         int count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
 
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"First execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
 
                         watch.Restart();
                         count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
 
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
-                        ProgramConfig.ReportString($"Second execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
 
                         watch.Restart();
                         var selector = (from op in context.Blogs
@@ -199,7 +199,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
                         var result = selector.ToList();
-                        ProgramConfig.ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
 
                         watch.Restart();
                         var selector2 = (from op in context.Blogs
@@ -209,11 +209,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
                         var result2 = selector2.ToList();
-                        ProgramConfig.ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
                         singleTestWatch.Stop();
                         _tests[execution].QueryTimes.Add(singleTestWatch.Elapsed);
 
-                        ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
                     }
                 }
             }
