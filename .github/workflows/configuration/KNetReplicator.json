@@ -1,5 +1,5 @@
 {
   "UseCompactedReplicator": true,
-  "NumberOfExecutions": 10,
+  "NumberOfExecutions": 100,
   "UseEnumeratorWithPrefetch": false
 }

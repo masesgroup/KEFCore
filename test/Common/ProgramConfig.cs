@@ -27,7 +27,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -80,9 +79,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         {
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(!ProgramConfig.Config.ForceDebugLog 
-                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
-                                                                                                        : LogLevel.Debug)
+                builder.SetMinimumLevel((!ProgramConfig.Config.ForceDebugLog 
+                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null) 
+                                        || !ProgramConfig.Config.EnableIntermediateOutput ? LogLevel.Information 
+                                                                                          : LogLevel.Debug)
                        .AddProvider(new DebugOutputLoggerProvider());
             });
 
@@ -101,8 +101,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
     public class ProgramConfig
     {
-        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "4G" : "2G";
-        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "512M" : "256M";
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "1G" : "512G";
+        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "256M" : "128M";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
@@ -128,6 +128,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool ManageEvents { get; set; } = true;
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
         public bool ForceDebugLog { get; set; } = false;
+        public bool EnableIntermediateOutput { get; set; } = false;
 
         public void ApplyOnContext(KEFCoreDbContext context)
         {
@@ -214,6 +215,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 property.Key.SetValue(Config, property.Value);
             }
 
+#if DEBUG
+            Config.EnableIntermediateOutput = true;
+#endif
+
             //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
             //    && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)
             //{
@@ -253,7 +258,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
         }
 
-        public static int ManageException(System.Exception e)
+        public static int ManageException(System.Exception e, int iteration = -1)
         {
             int retCode = 0;
             if (e is System.Reflection.TargetInvocationException ti)
@@ -280,7 +285,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
             else
             {
-                ReportString($"Failed with {e}");
+                ReportString($"Failed{(iteration == -1 ? string.Empty : $" at iteration {iteration}")} with {e}");
                 retCode = 1;
             }
             return retCode;

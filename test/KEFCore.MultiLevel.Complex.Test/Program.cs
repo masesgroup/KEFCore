@@ -169,7 +169,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 10);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -179,14 +179,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                 watch.Restart();
                 var post = context.Posts.Single(b => b.BlogId == 2);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 try
                 {
                     watch.Restart();
                     post = context.Posts.Single(b => b.BlogId == 100);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 100) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
                 catch
                 {
@@ -196,7 +196,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                 watch.Restart();
                 var all = context.Posts.All((o) => true);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
                 try
                 {
@@ -204,7 +204,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
                     var code = blog.PricingInfo.Tax.TaxInfoExtended.CodeExtended;
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -283,7 +283,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 101);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 101) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -300,7 +300,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex
                         watch.Restart();
                         post = context.Posts.Single(b => b.BlogId == ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1);
                         watch.Stop();
-                        ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == config.NumberOfElements + (config.NumberOfExtraElements != 0 ? 1 : 0)) {watch.ElapsedMilliseconds} ms. Result is {post}");
                     }
                     else
                     {
