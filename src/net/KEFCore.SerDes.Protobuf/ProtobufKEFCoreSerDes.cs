@@ -218,8 +218,7 @@ public static class ProtobufKEFCoreSerDes
                 if (data == null) return default!;
                 using (data)
                 {
-                    using var stream = data.ToStream();
-                    KeyContainer container = KeyContainer.Parser.ParseFrom(stream);
+                    KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
                     return (TData)container.GetContent();
                 }
             }
@@ -389,8 +388,7 @@ public static class ProtobufKEFCoreSerDes
                 if (data == null) return default!;
                 using (data)
                 {
-                    using var stream = data.ToStream();
-                    var container = Storage.ValueContainer.Parser.ParseFrom(stream);
+                    var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
                     return (Activator.CreateInstance(typeof(TData), container) as TData)!;
                 }
             }

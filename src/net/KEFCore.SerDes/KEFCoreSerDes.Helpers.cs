@@ -275,8 +275,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         {
             using (data)
             {
-                using var stream = data.ToStream();
-                return JsonSerializer.Deserialize<TData>(stream, DefautJsonOptions)!;
+                return JsonSerializer.Deserialize<TData>(data.AsSpan(), DefautJsonOptions)!;
             }
         }
         /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, Type, JsonSerializerOptions?)"/>
@@ -284,8 +283,7 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         {
             using (data)
             {
-                using var stream = data.ToStream();
-                return JsonSerializer.Deserialize(stream, type, DefautJsonOptions)!;
+                return JsonSerializer.Deserialize(data.AsSpan(), type, DefautJsonOptions)!;
             }
         }
         static readonly JsonSupport _key = new();
