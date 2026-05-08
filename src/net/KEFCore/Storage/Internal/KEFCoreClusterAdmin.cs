@@ -33,7 +33,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     internal class KEFCoreClusterAdmin : IDisposable
     {
         static internal bool DisableClusterInvocation = false; // used only to activate an external model builder
-        static ConcurrentDictionary<string, Admin> _configuredAdminClient = new();
+        static readonly ConcurrentDictionary<string, Admin> _configuredAdminClient = new();
 
         readonly string _clusterId;
         private readonly Admin _kafkaAdminClient = null;
