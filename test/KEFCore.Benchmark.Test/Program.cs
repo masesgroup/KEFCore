@@ -46,7 +46,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
+            int execution = 0;
             try
             {
                 globalWatcher.Start();
@@ -115,10 +115,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     }
                 }
 
-                for (int execution = 0; execution < ProgramConfig.Config.NumberOfExecutions; execution++)
+                for (execution = 0; execution < ProgramConfig.Config.NumberOfExecutions; execution++)
                 {
                     _tests.Add(execution, new ExecutionData(execution));
-                    ProgramConfig.ReportString($"Starting cycle number {execution}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Starting cycle number {execution}");
                     Stopwatch singleTestWatch = Stopwatch.StartNew();
                     using (context = new BloggingContext())
                     {
@@ -219,7 +219,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             }
             catch (Exception ex)
             {
-                Environment.ExitCode = ProgramConfig.ManageException(ex);
+                Environment.ExitCode = ProgramConfig.ManageException(ex, execution);
             }
             finally
             {
@@ -229,7 +229,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     globalWatcher.Stop();
                     context?.Dispose();
                     ProgramConfig.ReportString(string.Empty);
-                    ProgramConfig.ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
+                    ProgramConfig.ReportString($"All {execution} of tests completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
 
                     int testDone = _tests[0].QueryTimes.Count;
 

@@ -258,7 +258,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
         }
 
-        public static int ManageException(System.Exception e)
+        public static int ManageException(System.Exception e, int iteration = -1)
         {
             int retCode = 0;
             if (e is System.Reflection.TargetInvocationException ti)
@@ -285,7 +285,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
             else
             {
-                ReportString($"Failed with {e}");
+                ReportString($"Failed{(iteration == -1 ? string.Empty : $" at iteration {iteration}")} with {e}");
                 retCode = 1;
             }
             return retCode;
