@@ -217,7 +217,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         {
             using (item)
             {
-                yield return new StoredEventChange(new Tuple<TKey, TValue>(item.Key, item.Value));
+                yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(item.Key, item.Value));
             }
         }
     }

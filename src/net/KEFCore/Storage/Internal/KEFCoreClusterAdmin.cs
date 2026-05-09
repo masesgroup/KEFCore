@@ -162,8 +162,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                 infrastructureLogger?.Logger.LogDebug("Topic {Key} is internal", key);
                                 continue;
                             }
-                            using var partitionsData = value.Partitions();
-                            var numPartition = partitionsData.Size();
 
                             bool write = false;
                             bool read = false;
@@ -180,9 +178,9 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             }
                             if (readOnlyMode)
                             {
-                                if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                                if (!read) throw new InvalidOperationException($"Topic {key} shall support {AclOperation.READ}");
                             }
-                            else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
+                            else if (!(read && write)) { throw new InvalidOperationException($"Topic {key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
                         }
                     }
                 }

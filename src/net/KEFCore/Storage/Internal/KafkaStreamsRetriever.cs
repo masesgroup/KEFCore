@@ -270,7 +270,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             var value = kvSupport.Value;
             using var disposableKey = key as IDisposable;
             using var disposableValue = value as IDisposable;
-            yield return new StoredEventChange(new Tuple<TKey, TValue>(keySerdes.Deserialize(null, key), valueSerdes.Deserialize(null, value)));
+            yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(keySerdes.Deserialize(null, key), valueSerdes.Deserialize(null, value)));
         }
     }
 
