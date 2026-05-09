@@ -51,7 +51,7 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         {
             using (this.Record)
             {
-                _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new Tuple<TKey, TValue>(Record.Key, Record.Value)));
+                _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new FreshEventChangeExtraData<TKey, TValue>(Record.Key, Record.Value)));
                 return Record.DateTime;
             }
         }
@@ -204,8 +204,8 @@ public class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
     void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data)
     {
-        var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Item1, input.Item2);
+        var input = (FreshEventChangeExtraData<TKey, TValue>)data;
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Key, input.Value);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)

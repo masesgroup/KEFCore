@@ -64,13 +64,17 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
             using var record2 = record.CastTo<ConsumerRecord<K, V>>();
-            var topic = record2.Topic();
-            var headers = record2.Headers();
+            using var topic = record2.Topic();
+            using var headers = record2.Headers();
+            var jKey = record2.Key();
+            var jValue = record2.Value();
+            using var disposable1 = jKey as IDisposable;
+            using var disposable2 = jValue as IDisposable;
 
-            var key = _keySerdes.DeserializeWithHeaders(topic, headers, record2.Key());
-            var value = _valueSerdes.DeserializeWithHeaders(topic, headers, record2.Value());
+            var key = _keySerdes.DeserializeWithHeaders(topic, headers, jKey);
+            var value = _valueSerdes.DeserializeWithHeaders(topic, headers, jValue);
 
-            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record.Partition(), record.Offset(), new Tuple<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record.Partition(), record.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
 
             return record.Timestamp();
         }
@@ -198,6 +202,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         using ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         if (keyValueStore == null) return default!;
         var k = _keySerdes.Serialize(null, key);
+        using var disposable = k as IDisposable;
         var v = keyValueStore.Get(k);
         return v;
     }
@@ -206,12 +211,14 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     public bool Exist(TKey key)
     {
         var v = GetV(key);
+        using var disposable = v as IDisposable;
         return v != null;
     }
     /// <inheritdoc/>
     public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
     {
         var v = GetV(key);
+        using var disposable = v as IDisposable;
         if (v == null)
         {
             valueBuffer = ValueBuffer.Empty;
@@ -228,6 +235,7 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     public bool TryGetProperties(TKey key, out TValue valueContainer)
     {
         var v = GetV(key);
+        using var disposable = v as IDisposable;
         if (v == null)
         {
             valueContainer = default!;
@@ -241,8 +249,8 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
     void IStreamsChangeManager.ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data)
     {
-        var input = (Tuple<TKey, TValue>)data;
-        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Item1, input.Item2);
+        var input = (FreshEventChangeExtraData<TKey, TValue>)data;
+        KEFCoreStateHelper.ManageAdded(infrastructureLogger, valueGeneratorSelector, _complexTypeConverterFactory, adapter, metadata, primaryKey, input.Key, input.Value);
     }
 
     static IEnumerable<StoredEventChange> GetStoredData(KafkaStreams streams, string storageId, object optional)
@@ -258,7 +266,11 @@ public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         {
             using KeyValue<K, V> kv = iterator.Next();
             using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
-            yield return new StoredEventChange(new Tuple<TKey, TValue>(keySerdes.Deserialize(null, kvSupport.Key), valueSerdes.Deserialize(null, kvSupport.Value)));
+            var key = kvSupport.Key;
+            var value = kvSupport.Value;
+            using var disposableKey = key as IDisposable;
+            using var disposableValue = value as IDisposable;
+            yield return new StoredEventChange(new Tuple<TKey, TValue>(keySerdes.Deserialize(null, key), valueSerdes.Deserialize(null, value)));
         }
     }
 

@@ -65,7 +65,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (ex.InnerException != null) throw ex.InnerException;
                     throw;
-                }         
+                }
                 _configuredAdminClient.TryAdd(key, adminClient);
             }
 
@@ -82,63 +82,53 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public string GetClusterId(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
-            DescribeClusterResult result = null;
-            KafkaFuture<Java.Lang.String> future = null;
             try
             {
-                result = _kafkaAdminClient?.DescribeCluster();
-                future = result?.ClusterId();
-                return future?.Get();
+                using var result = _kafkaAdminClient?.DescribeCluster();
+                using var future = result?.ClusterId();
+                using var res = future?.Get();
+                return res;
             }
             catch (ExecutionException ex)
             {
                 if (ex.InnerException != null) throw ex.InnerException;
                 throw;
             }
-            finally { future?.Dispose(); result?.Dispose(); }
         }
 
         public void CreateTopic(string topicName, int requestedPartitions, short requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> options, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
-            Set<NewTopic> coll = default;
-            CreateTopicsResult result = default;
-            KafkaFuture<Java.Lang.Void> future = default;
-            NewTopic topic = default;
             try
             {
-                topic = new NewTopic((Java.Lang.String)topicName, requestedPartitions, requestedReplicationFactor);
-                topic.Configs(options);
-                coll = Collections.Singleton(topic);
-                result = _kafkaAdminClient?.CreateTopics(coll);
-                future = result?.All();
-                future?.Get();
+                using var topic1 = new NewTopic((Java.Lang.String)topicName, requestedPartitions, requestedReplicationFactor);
+                using var topic = topic1.Configs(options);
+                using var coll = Collections.Singleton(topic);
+                using var result = _kafkaAdminClient?.CreateTopics(coll);
+                using var future = result?.All();
+                using var res = future?.Get();
             }
             catch (ExecutionException ex)
             {
                 if (ex.InnerException != null) throw ex.InnerException;
                 throw;
             }
-            finally { topic?.Dispose(); future?.Dispose(); result?.Dispose(); coll?.Dispose(); }
         }
 
         public void DeleteTopics(Collection<Java.Lang.String> coll, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
             try
             {
-                DeleteTopicsResult result = default;
-                KafkaFuture<Java.Lang.Void> future = default;
                 try
                 {
-                    result = _kafkaAdminClient?.DeleteTopics(coll);
-                    future = result?.All();
-                    future?.Get();
+                    using var result = _kafkaAdminClient?.DeleteTopics(coll);
+                    using var future = result?.All();
+                    using var res = future?.Get();
                 }
                 catch (ExecutionException ex)
                 {
                     if (ex.InnerException != null) throw ex.InnerException;
                     else throw;
                 }
-                finally { future?.Dispose(); result?.Dispose(); }
             }
             catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
             {
@@ -151,38 +141,49 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             try
             {
                 infrastructureLogger?.Logger.LogInformation("Trying to identify information of topics from the cluster.");
-                DescribeTopicsResult result = default;
-                KafkaFuture<Map<Java.Lang.String, TopicDescription>> future = default;
-                DescribeTopicsOptions describeTopicsOptions = new();
-                describeTopicsOptions.IncludeAuthorizedOperations(true);
+
                 try
                 {
-                    result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
-                    future = result?.AllTopicNames();
-                    foreach (var item in future.Get().EntrySet())
+                    using DescribeTopicsOptions describeTopicsOptions = new();
+                    describeTopicsOptions.IncludeAuthorizedOperations(true);
+
+                    using var result = _kafkaAdminClient?.DescribeTopics(coll, describeTopicsOptions);
+                    using var future = result?.AllTopicNames();
+                    using var map = future.Get();
+                    using var entrySet = map.EntrySet();
+                    foreach (var item in entrySet)
                     {
-                        if (item.Value.IsInternal())
+                        using (item)
                         {
-                            infrastructureLogger?.Logger.LogDebug("Topic {Key} is internal", item.Key);
-                            continue;
-                        }
-                        var partitionsData = item.Value.Partitions();
-                        var numPartition = partitionsData.Size();
+                            using var key = item.Key;
+                            using var value = item.Value;
+                            if (value.IsInternal())
+                            {
+                                infrastructureLogger?.Logger.LogDebug("Topic {Key} is internal", key);
+                                continue;
+                            }
+                            using var partitionsData = value.Partitions();
+                            var numPartition = partitionsData.Size();
 
-                        bool write = false;
-                        bool read = false;
-
-                        foreach (var operation in item.Value.AuthorizedOperations())
-                        {
-                            if (operation == AclOperation.WRITE) write = true;
-                            if (operation == AclOperation.READ) read = true;
-                            infrastructureLogger?.Logger.LogDebug("Topic {Key} supports {Name}", item.Key, operation.Name());
+                            bool write = false;
+                            bool read = false;
+                            using var authOperations = value.AuthorizedOperations();
+                            foreach (var operation in authOperations)
+                            {
+                                using (operation)
+                                {
+                                    if (operation == AclOperation.WRITE) write = true;
+                                    if (operation == AclOperation.READ) read = true;
+                                    using var operationName = operation.Name();
+                                    infrastructureLogger?.Logger.LogDebug("Topic {Key} supports {Name}", key, operationName);
+                                }
+                            }
+                            if (readOnlyMode)
+                            {
+                                if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
+                            }
+                            else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
                         }
-                        if (readOnlyMode)
-                        {
-                            if (!read) throw new InvalidOperationException($"Topic {item.Key} shall support {AclOperation.READ}");
-                        }
-                        else if (!(read && write)) { throw new InvalidOperationException($"Topic {item.Key} shall support both {AclOperation.WRITE} and {AclOperation.READ}"); }
                     }
                 }
                 catch (ExecutionException ex)
@@ -194,7 +195,6 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     else if (ex.InnerException != null) throw ex.InnerException;
                     else throw;
                 }
-                finally { future?.Dispose(); result?.Dispose(); }
             }
             catch (UnknownTopicOrPartitionException ex)
             {
@@ -207,33 +207,49 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             System.Collections.Generic.Dictionary<int, long> dictionary = new();
             try
             {
-                var coll = Collections.Singleton((Java.Lang.String)topicName);
-                DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+                using Java.Lang.String jTopic = topicName;
+                using var coll = Collections.Singleton(jTopic);
+                using DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
                 using var future = describeTopicsResult.AllTopicNames();
-                var result = future.Get();
-                foreach (var item in result.EntrySet())
+                using var result = future.Get();
+                using var entrySet = result.EntrySet();
+                foreach (var item in entrySet)
                 {
-                    if (item.Key.Equals(topicName))
+                    using (item)
                     {
-                        HashMap<TopicPartition, OffsetSpec> hashMap = new();
-                        foreach (var partition in item.Value.Partitions())
+                        using var key = item.Key;
+                        using var value = item.Value;
+                        if (key.Equals(jTopic))
                         {
-                            var partitionIndex = partition.Partition();
-                            TopicPartition topicPartition = new(topicName, partitionIndex);
-                            hashMap.Put(topicPartition, OffsetSpec.Latest());
-                        }
-
-                        var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
-                        using var offsetResultFuture = listOffsetResult.All();
-                        var offsetResult = offsetResultFuture.Get();
-                        foreach (var offsetResultItem in offsetResult.EntrySet())
-                        {
-                            if (offsetResultItem.Key.Topic().Equals(topicName))
+                            using HashMap<TopicPartition, OffsetSpec> hashMap = new();
+                            using var partitions = value.Partitions();
+                            foreach (var partition in partitions)
                             {
-                                dictionary.Add(offsetResultItem.Key.Partition(), offsetResultItem.Value.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                                using (partition)
+                                {
+                                    var partitionIndex = partition.Partition();
+                                    using TopicPartition topicPartition = new(topicName, partitionIndex);
+                                    using var offsetSpec = OffsetSpec.Latest();
+                                    hashMap.Put(topicPartition, offsetSpec);
+                                }
                             }
+
+                            using var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                            using var offsetResultFuture = listOffsetResult.All();
+                            using var offsetResult = offsetResultFuture.Get();
+                            using var offsetResultEntrySet = offsetResult.EntrySet();
+                            foreach (var offsetResultItem in offsetResultEntrySet)
+                            {
+                                using var offsetResultItemKey = offsetResultItem.Key; 
+                                using var offsetResultItemValue = offsetResultItem.Value;
+                                using var offsetResultItemTopic = offsetResultItemKey.Topic();
+                                if (offsetResultItemTopic.Equals(jTopic))
+                                {
+                                    dictionary.Add(offsetResultItemKey.Partition(), offsetResultItemValue.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                                }
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
                 return dictionary;
