@@ -201,9 +201,9 @@ public static class ProtobufKEFCoreSerDes
                     keyContainer = new KeyContainer(dataArray);
                 }
 
-                using MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
-                keyContainer.WriteTo(stream);
-                return stream.ToArray();
+				var memStream = ByteBuffer.Rent();
+				keyContainer.WriteTo(memStream);
+                return ByteBuffer.From(memStream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
             public override TData Deserialize(string topic, ByteBuffer data)
@@ -216,10 +216,11 @@ public static class ProtobufKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-
-                KeyContainer container = KeyContainer.Parser.ParseFrom(data.ToStream());
-
-                return (TData)container.GetContent();
+                using (data)
+                {
+                    KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
+                    return (TData)container.GetContent();
+                }
             }
         }
     }
@@ -372,8 +373,8 @@ public static class ProtobufKEFCoreSerDes
 
                 if (data == null) return null!;
 
-                MemoryStream stream = RecyclableMemoryStreamSupport.Rent();
-                data.WriteTo(stream);
+				var stream = ByteBuffer.Rent();
+				data.WriteTo(stream);
                 return ByteBuffer.From(stream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
@@ -385,8 +386,11 @@ public static class ProtobufKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                var container = Storage.ValueContainer.Parser.ParseFrom(data.ToStream());
-                return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                using (data)
+                {
+                    var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
+                    return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                }
             }
         }
     }

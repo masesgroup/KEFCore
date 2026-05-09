@@ -26,6 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
@@ -588,7 +589,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         return rowsAffected;
     }
 
-    IEnumerable<Task<RecordMetadata>> ExecuteTransaction(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, out int rowsAffected, CancellationToken cancellationToken = default)
+    IEnumerable<Task> ExecuteTransaction(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, out int rowsAffected, CancellationToken cancellationToken = default)
     {
         if (database.Options.ReadOnlyMode)
         {
@@ -599,8 +600,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         rowsAffected = PrepareTransaction(database, dataInTransaction, entries, updateLogger, out var readOnlyViolations);
 
-        var currentTx = database.TransactionManager?.CurrentTransaction as KEFCoreTransaction;
-        if (currentTx != null)
+        if (database.TransactionManager?.CurrentTransaction is KEFCoreTransaction currentTx)
         {
             var groups = entries
                 .Select(e => e.EntityType.GetTransactionGroup())
@@ -630,10 +630,16 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return obj.Get();
+                if (obj is null) return;
+                using (obj.Get()) { }
+                return;
             }
             catch (ExecutionException ex) { throw ex.InnerException; }
-            catch (OperationCanceledException) { return null; }
+            catch (OperationCanceledException) { return; }
+            finally
+            {
+                obj?.Dispose();
+            }
         }, cancellationToken));
     }
 
