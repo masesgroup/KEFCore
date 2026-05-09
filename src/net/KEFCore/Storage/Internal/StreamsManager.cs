@@ -57,10 +57,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     #endregion
 
     #region IStreamsChangeManager
-
-    interface IStreamsChangeManager
+    /// <summary>
+    /// Interface used to finalize event management
+    /// </summary>
+    public interface IStreamsChangeManager
     {
+        /// <summary>
+        /// The associated <see cref="IEntityTypeProducer"/>
+        /// </summary>
         IEntityTypeProducer Producer { get; }
+        /// <summary>
+        /// The method implement the change finalization
+        /// </summary>
+        /// <param name="infrastructureLogger"></param>
+        /// <param name="valueGeneratorSelector"></param>
+        /// <param name="adapter"></param>
+        /// <param name="metadata"></param>
+        /// <param name="primaryKey"></param>
+        /// <param name="data"></param>
         void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data);
     }
 
@@ -70,7 +84,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     /// <summary>
     /// Central interface for stream management
     /// </summary>
-    interface IStreamsManager
+    public interface IStreamsManager
     {
         /// <summary>
         /// Register an instance of <see cref="IKEFCoreDatabase"/>
