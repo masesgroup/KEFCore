@@ -47,7 +47,7 @@ jobs:
           echo "PRE_N=$preN" >> $env:GITHUB_ENV
 
       # Common.props: uses dash-prefixed pre-release tag
-      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}${{ env.PRE_C }}</Version>', '<Version>${{ inputs.NewVersion }}${{ env.PRE_N }}</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
+      - run: (Get-Content ${{ github.workspace }}\src\net\Common\Common.props).Replace('<Version>${{ inputs.CurrentVersion }}.0${{ env.PRE_C }}</Version>', '<Version>${{ inputs.NewVersion }}.0${{ env.PRE_N }}</Version>') | Set-Content ${{ github.workspace }}\src\net\Common\Common.props
 
       # csproj templates: uses dash-prefixed pre-release tag
       - run: (Get-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj).Replace('${{ inputs.CurrentVersion }}${{ env.PRE_C }}', '${{ inputs.NewVersion }}${{ env.PRE_N }}') | Set-Content ${{ github.workspace }}\src\net\templates\templates\kefcoreApp\kefcoreApp.csproj
