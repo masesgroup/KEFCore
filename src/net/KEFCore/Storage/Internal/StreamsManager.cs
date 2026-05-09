@@ -58,7 +58,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
     #region IStreamsChangeManager
 
-    internal interface IStreamsChangeManager
+    interface IStreamsChangeManager
     {
         IEntityTypeProducer Producer { get; }
         void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data);
@@ -70,21 +70,21 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     /// <summary>
     /// Central interface for stream management
     /// </summary>
-    public interface IStreamsManager
+    interface IStreamsManager
     {
         /// <summary>
         /// Register an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IStreamsChangeManager"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
         /// <param name="entity">Associated <see cref="IEntityType"/></param>
-        void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity);
+        void Register(IStreamsChangeManager producer, IKEFCoreDatabase database, IEntityType entity);
         /// <summary>
         /// Unregister an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IStreamsChangeManager"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
-        void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database);
+        void Unregister(IStreamsChangeManager producer, IKEFCoreDatabase database);
         /// <summary>
         /// Creates and start the topology
         /// </summary>
@@ -216,7 +216,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
             {
                 var manager = ChangeManager;
-                var updaters = StreamsManager._updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == manager.Producer);
+                var updaters = StreamsManager._updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == manager);
 
                 foreach (var storedEvent in factory(streams, StorageId, Optional))
                 {
@@ -239,7 +239,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         #region Read-only private
 
-        private readonly ConcurrentDictionary<(IEntityTypeProducer Producer, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
+        private readonly ConcurrentDictionary<(IStreamsChangeManager ChangeManager, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
         // enqueues changes from cluster when are send
         private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
         // enqueues changes from cluster when are send
@@ -470,7 +470,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
                         if (!_freshDataFromCluster.TryDequeue(out var current)) break;
-                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == current.Manager))
+                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
                             IKEFCoreDatabase database = item.Key.Database;
                             KEFCoreDatabaseLocalData localData = item.Value;
@@ -499,7 +499,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity)
+        public void Register(IStreamsChangeManager producer, IKEFCoreDatabase database, IEntityType entity)
         {
             if (!_updaters.TryAdd((producer, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
@@ -507,7 +507,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database)
+        public void Unregister(IStreamsChangeManager producer, IKEFCoreDatabase database)
         {
             if (!_updaters.TryRemove((producer, database), out _))
             {

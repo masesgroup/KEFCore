@@ -414,7 +414,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else
         {
-            _streamsManager?.Register(this, database, _entityType);
+            _streamsManager?.Register(_streamData as IStreamsChangeManager, database, _entityType);
         }
     }
     /// <inheritdoc/>
@@ -429,7 +429,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
         else if (_streamsManager != null)
         {
-            _streamsManager.Unregister(this, database);
+            _streamsManager.Unregister(_streamData as IStreamsChangeManager, database);
         }
     }
     /// <inheritdoc/>

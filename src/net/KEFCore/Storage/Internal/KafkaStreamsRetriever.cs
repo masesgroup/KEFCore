@@ -41,7 +41,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 ///     any release. You should only use it directly in your code with extreme caution and knowing that
 ///     doing so can result in application failures when updating to a new Entity Framework Core release.
 /// </summary>
-public class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey, TValue>, IStreamsChangeManager
+sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetriever<TKey, TValue>, IStreamsChangeManager
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
