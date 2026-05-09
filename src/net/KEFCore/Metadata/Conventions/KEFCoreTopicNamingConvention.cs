@@ -70,7 +70,18 @@ public class KEFCoreTopicNamingConvention : IModelFinalizingConvention
                                : entityType.Name);
 
             var entityPrefixAttr = clrType.GetCustomAttribute<KEFCoreTopicPrefixAttribute>();
-            string? prefix = entityPrefixAttr != null ? entityPrefixAttr.Prefix : contextPrefix;
+            string? prefix;
+            if (entityPrefixAttr != null)
+            {
+                prefix = entityPrefixAttr.Prefix;
+            }
+            else
+            {
+                var entityPrefixAnnotation = entityType.FindAnnotation(KEFCoreAnnotationNames.TopicPrefix);
+                prefix = entityPrefixAnnotation != null
+                    ? entityPrefixAnnotation.Value as string
+                    : contextPrefix;
+            }
 
             var fullTopicName = string.IsNullOrEmpty(prefix) ? baseName : $"{prefix}.{baseName}";
 
