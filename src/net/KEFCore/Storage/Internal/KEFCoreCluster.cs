@@ -648,24 +648,34 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     {
         database.InfrastructureLogger.Logger.LogInformation("Invoking ExecuteTransaction for {number} entries", entries.Count);
 
-        Register(database);
+        int rowsAffected = 0;
 
-        using var ctSource = new CancellationTokenSource();
-        var tasks = ExecuteTransaction(database, entries, updateLogger, out var rowsAffected, ctSource.Token);
-        var result = Task.WhenAll(tasks);
-        result.Wait();
-        if (result.IsFaulted)
+        try
         {
-            updateLogger.ChangesSaved(entries, rowsAffected); // check entries not saved and update rowsAffected
+            database.Lock();
 
-            throw result.Exception;
+            Register(database);
+
+            using var ctSource = new CancellationTokenSource();
+            var tasks = ExecuteTransaction(database, entries, updateLogger, out rowsAffected, ctSource.Token);
+            var result = Task.WhenAll(tasks);
+            result.Wait();
+            if (result.IsFaulted)
+            {
+                updateLogger.ChangesSaved(entries, rowsAffected); // check entries not saved and update rowsAffected
+
+                throw result.Exception;
+            }
+
+            if (result.IsCompleted)
+            {
+                updateLogger.ChangesSaved(entries, rowsAffected);
+            }
         }
-
-        if (result.IsCompleted)
+        finally
         {
-            updateLogger.ChangesSaved(entries, rowsAffected);
+            database.Release();
         }
-
         return rowsAffected;
     }
 
@@ -673,18 +683,23 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     public async Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
         database.InfrastructureLogger.Logger.LogInformation("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
-
-        Register(database);
-
-        var tasks = ExecuteTransaction(database, entries, updateLogger, out var rowsAffected, cancellationToken);
-
+        int rowsAffected = 0;
         try
         {
+            database.Lock(cancellationToken);
+            Register(database);
+
+            var tasks = ExecuteTransaction(database, entries, updateLogger, out rowsAffected, cancellationToken);
+
             await Task.WhenAll(tasks);
         }
         catch
         {
             updateLogger.ChangesSaved(entries, rowsAffected); // check for unsaved entries and update rowsAffected!
+        }
+        finally
+        {
+            database.Release();
         }
 
         return rowsAffected;

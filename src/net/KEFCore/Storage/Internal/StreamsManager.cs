@@ -236,9 +236,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     foreach (var updater in updaters)
                     {
-                        IKEFCoreDatabase database = updater.Key.Database;
-                        KEFCoreDatabaseLocalData localData = updater.Value;
-                        manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        updater.Key.Database.Lock();
+                        try
+                        {
+                            IKEFCoreDatabase database = updater.Key.Database;
+                            KEFCoreDatabaseLocalData localData = updater.Value;
+                            manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        }
+                        finally
+                        {
+                            updater.Key.Database.Release();
+                        }
                     }
                 }
             }
@@ -483,12 +491,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     do
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
-                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;
+                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;             
                         foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
-                            IKEFCoreDatabase database = item.Key.Database;
-                            KEFCoreDatabaseLocalData localData = item.Value;
-                            current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, current.Data);
+                            item.Key.Database.Lock();
+                            try
+                            {
+                                IKEFCoreDatabase database = item.Key.Database;
+                                KEFCoreDatabaseLocalData localData = item.Value;
+                                current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, current.Data);
+                            }
+                            finally { item.Key.Database.Release(); }
                         }
                     }
                     while (!_freshDataFromCluster.IsEmpty);

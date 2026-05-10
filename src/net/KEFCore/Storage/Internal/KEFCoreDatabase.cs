@@ -37,6 +37,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
     private readonly IDiagnosticsLogger<DbLoggerCategory.Update> _updateLogger;
     private readonly IDbContextTransactionManager _transactionManager;
     private readonly List<IKEFCoreTable> _tables;
+    private readonly SemaphoreSlim _semaphoreSlim = new(1);
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -96,11 +97,22 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         }
     }
     /// <inheritdoc/>
+    public virtual void Lock(CancellationToken cancellationToken = default)
+    {
+        _semaphoreSlim.Wait(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public virtual void Release()
+    {
+        _semaphoreSlim.Release();
+    }
+    /// <inheritdoc/>
     public override int SaveChanges(IList<IUpdateEntry> entries) => _cluster.ExecuteTransaction(this, entries, _updateLogger);
     /// <inheritdoc/>
     public override Task<int> SaveChangesAsync(
         IList<IUpdateEntry> entries,
-        CancellationToken cancellationToken = default) 
+        CancellationToken cancellationToken = default)
         => cancellationToken.IsCancellationRequested ? Task.FromCanceled<int>(cancellationToken)
                                                      : _cluster.ExecuteTransactionAsync(this, entries, _updateLogger, cancellationToken);
     /// <inheritdoc/>
