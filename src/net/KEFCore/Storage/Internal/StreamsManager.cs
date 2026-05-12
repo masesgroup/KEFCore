@@ -36,7 +36,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
     #region FreshEventChange
 
-    internal readonly struct FreshEventChange(IStreamsChangeManager manager, string topic, int partition, long offset, object data)
+    readonly struct FreshEventChangeExtraData<TKey, TValue>(TKey key, TValue value)
+        where TKey : notnull
+        where TValue : IValueContainer<TKey>
+    {
+        public readonly TKey Key = key;
+        public readonly TValue Value = value;
+    }
+
+    readonly struct FreshEventChange(IStreamsChangeManager manager, string topic, int partition, long offset, object data)
     {
         public readonly IStreamsChangeManager Manager = manager;
         public readonly string Topic = topic;
@@ -49,7 +57,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
     #region StoredEventChange
 
-    internal readonly struct StoredEventChange(object data)
+    readonly struct StoredEventChange(object data)
     {
         public readonly object Data = data;
     }
