@@ -29,8 +29,6 @@ using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
-using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -398,10 +396,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
                     _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
-                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
-                    return StreamThreadExceptionResponse.REPLACE_THREAD;
+                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD));
+                    return Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+                return Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
             _stateListener ??= new(this, (_This, newState, oldState) =>
@@ -795,7 +793,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private static bool EnsureSynchronized(StreamsAssociatedData storage, long timeout, Stopwatch watcher = null)
         {
             do

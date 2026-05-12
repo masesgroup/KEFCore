@@ -210,14 +210,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
             else Config = new();
 
+#if DEBUG
+            Config.EnableIntermediateOutput = true;
+#endif
+
             foreach (var property in properties)
             {
                 property.Key.SetValue(Config, property.Value);
             }
-
-#if DEBUG
-            Config.EnableIntermediateOutput = true;
-#endif
 
             //if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)
             //    && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)
