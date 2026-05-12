@@ -29,8 +29,6 @@ using MASES.KNet.Streams;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
-using static Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -65,10 +63,24 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
     #endregion
 
     #region IStreamsChangeManager
-
-    internal interface IStreamsChangeManager
+    /// <summary>
+    /// Interface used to finalize event management
+    /// </summary>
+    public interface IStreamsChangeManager
     {
+        /// <summary>
+        /// The associated <see cref="IEntityTypeProducer"/>
+        /// </summary>
         IEntityTypeProducer Producer { get; }
+        /// <summary>
+        /// The method implement the change finalization
+        /// </summary>
+        /// <param name="infrastructureLogger"></param>
+        /// <param name="valueGeneratorSelector"></param>
+        /// <param name="adapter"></param>
+        /// <param name="metadata"></param>
+        /// <param name="primaryKey"></param>
+        /// <param name="data"></param>
         void ManageChange(IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IUpdateAdapter adapter, IValueContainerMetadata metadata, IKey primaryKey, object data);
     }
 
@@ -83,16 +95,16 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         /// <summary>
         /// Register an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IStreamsChangeManager"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
         /// <param name="entity">Associated <see cref="IEntityType"/></param>
-        void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity);
+        void Register(IStreamsChangeManager producer, IKEFCoreDatabase database, IEntityType entity);
         /// <summary>
         /// Unregister an instance of <see cref="IKEFCoreDatabase"/>
         /// </summary>
-        /// <param name="producer">The <see cref="IEntityTypeProducer"/> requesting the operation</param>
+        /// <param name="producer">The <see cref="IStreamsChangeManager"/> requesting the operation</param>
         /// <param name="database"><see cref="IKEFCoreDatabase"/></param>
-        void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database);
+        void Unregister(IStreamsChangeManager producer, IKEFCoreDatabase database);
         /// <summary>
         /// Creates and start the topology
         /// </summary>
@@ -224,15 +236,23 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
             {
                 var manager = ChangeManager;
-                var updaters = StreamsManager._updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == manager.Producer);
+                var updaters = StreamsManager._updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == manager);
 
                 foreach (var storedEvent in factory(streams, StorageId, Optional))
                 {
                     foreach (var updater in updaters)
                     {
-                        IKEFCoreDatabase database = updater.Key.Database;
-                        KEFCoreDatabaseLocalData localData = updater.Value;
-                        manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        updater.Key.Database.Lock();
+                        try
+                        {
+                            IKEFCoreDatabase database = updater.Key.Database;
+                            KEFCoreDatabaseLocalData localData = updater.Value;
+                            manager.ManageChange(database.InfrastructureLogger, selector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, storedEvent.Data);
+                        }
+                        finally
+                        {
+                            updater.Key.Database.Release();
+                        }
                     }
                 }
             }
@@ -247,7 +267,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         #region Read-only private
 
-        private readonly ConcurrentDictionary<(IEntityTypeProducer Producer, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
+        private readonly ConcurrentDictionary<(IStreamsChangeManager ChangeManager, IKEFCoreDatabase Database), KEFCoreDatabaseLocalData> _updaters = new();
         // enqueues changes from cluster when are send
         private readonly ConcurrentQueue<FreshEventChange> _freshDataFromCluster = new();
         // enqueues changes from cluster when are send
@@ -376,10 +396,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
                     _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
-                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(StreamThreadExceptionResponse.REPLACE_THREAD));
-                    return StreamThreadExceptionResponse.REPLACE_THREAD;
+                                                                           nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD));
+                    return Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
-                return StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
+                return Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_APPLICATION;
             });
 
             _stateListener ??= new(this, (_This, newState, oldState) =>
@@ -477,12 +497,17 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     do
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
-                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;
-                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.Producer == current.Manager))
+                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;             
+                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
-                            IKEFCoreDatabase database = item.Key.Database;
-                            KEFCoreDatabaseLocalData localData = item.Value;
-                            current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, current.Data);
+                            item.Key.Database.Lock();
+                            try
+                            {
+                                IKEFCoreDatabase database = item.Key.Database;
+                                KEFCoreDatabaseLocalData localData = item.Value;
+                                current.Manager.ManageChange(database.InfrastructureLogger, _kefcoreCluster.ValueGeneratorSelector, localData.UpdateAdapter, localData.MetadataForChanges, localData.PrimaryKeyForChanges, current.Data);
+                            }
+                            finally { item.Key.Database.Release(); }
                         }
                     }
                     while (!_freshDataFromCluster.IsEmpty);
@@ -507,7 +532,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Register(IEntityTypeProducer producer, IKEFCoreDatabase database, IEntityType entity)
+        public void Register(IStreamsChangeManager producer, IKEFCoreDatabase database, IEntityType entity)
         {
             if (!_updaters.TryAdd((producer, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
@@ -515,7 +540,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
         }
 
-        public void Unregister(IEntityTypeProducer producer, IKEFCoreDatabase database)
+        public void Unregister(IStreamsChangeManager producer, IKEFCoreDatabase database)
         {
             if (!_updaters.TryRemove((producer, database), out _))
             {
@@ -768,7 +793,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         private static bool EnsureSynchronized(StreamsAssociatedData storage, long timeout, Stopwatch watcher = null)
         {
             do

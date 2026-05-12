@@ -61,6 +61,14 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// <param name="tables">The set of <see cref="IKEFCoreTable"/> to register</param>
     void RegisterTables(IEnumerable<IKEFCoreTable> tables);
     /// <summary>
+    /// Locks the instance during updates
+    /// </summary>
+    void Lock(CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Release the instance at the end of the update
+    /// </summary>
+    void Release();
+    /// <summary>
     /// Execute the <see cref="IDatabaseCreator.EnsureDeleted"/>
     /// </summary>
     bool EnsureDatabaseDeleted();
@@ -76,4 +84,6 @@ public interface IKEFCoreDatabase : IDatabase, IDisposable
     /// Verify if local instance is synchronized with the <see cref="Cluster"/>
     /// </summary>
     bool? EnsureDatabaseSynchronized(long timeout);
+
+
 }
