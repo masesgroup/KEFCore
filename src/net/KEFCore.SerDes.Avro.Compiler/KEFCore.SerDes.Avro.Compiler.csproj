@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet.Serialization.Avro" Version="3.2.3-rc9" />
+		<PackageReference Include="MASES.KNet.Serialization.Avro" Version="3.2.3-rc91" />
 	</ItemGroup>
 
 </Project>
