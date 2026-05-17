@@ -131,6 +131,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 context.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
             }
 
+            context.DatabaseName = databaseName;
             context.StreamsConfig = streamConfig;
             context.BootstrapServers = BootstrapServers;
             context.ApplicationId = ApplicationId;
