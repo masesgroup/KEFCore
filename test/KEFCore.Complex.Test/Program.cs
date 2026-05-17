@@ -244,7 +244,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.TopicPrefix);
             }
             else
             {

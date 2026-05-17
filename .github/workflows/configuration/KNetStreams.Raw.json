@@ -1,6 +1,5 @@
 {
   "UseByteBufferDataTransfer": false,
-  "BootstrapServers": "localhost:9092",
-  "NumberOfExecutions": 10,
+  "NumberOfExecutions": 100,
   "UseEnumeratorWithPrefetch": false
 }

@@ -16,27 +16,81 @@
 *  Refer to LICENSE for more information.
 */
 
+using Java.Lang;
+using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 using MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 using MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.Storage;
 using MASES.KNet.Streams;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
-using System.Text.Json;
-using Java.Lang;
-using Java.Util.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text.Json;
+using System.Threading;
 
 namespace MASES.EntityFrameworkCore.KNet.Test.Common
 {
+    public class DebugOutputLoggerProvider : ILoggerProvider
+    {
+        public ILogger CreateLogger(string categoryName) => new DebugOutputLogger(categoryName);
+        public void Dispose() { }
+    }
+
+    public class DebugOutputLogger(string category) : ILogger
+    {
+        private readonly string _category = category;
+        private readonly LogLevel _minLogLevel = !ProgramConfig.Config.ForceDebugLog 
+                                                 && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null ? LogLevel.Information 
+                                                                                                                 : LogLevel.Debug; 
+ 
+        public IDisposable BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public bool IsEnabled(LogLevel logLevel) =>
+            logLevel >= _minLogLevel &&
+            _category == DbLoggerCategory.Infrastructure.Name;
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, System.Exception exception, Func<TState, System.Exception, string> formatter)
+        {
+            Console.WriteLine($"[{logLevel}] {DateTime.Now:HH::mm::ss:ffff} {_category}: {formatter(state, exception)}");
+        }
+    }
+
+    public class TestContext : KafkaDbContext
+    {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.SetMinimumLevel((!ProgramConfig.Config.ForceDebugLog 
+                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null) 
+                                        || !ProgramConfig.Config.EnableIntermediateOutput ? LogLevel.Information 
+                                                                                          : LogLevel.Debug)
+                       .AddProvider(new DebugOutputLoggerProvider());
+            });
+
+            optionsBuilder.UseLoggerFactory(loggerFactory);
+
+            if (ProgramConfig.Config.UseInMemoryProvider)
+            {
+                optionsBuilder.UseInMemoryDatabase("InMemory");
+            }
+            else
+            {
+                base.OnConfiguring(optionsBuilder);
+            }
+        }
+    }
+
     public class ProgramConfig
     {
-        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem? "4G" : "2G";
-        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "512M" : "256M";
+        public string ApplicationHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "1G" : "512G";
+        public string ApplicationInitialHeapSize { get; set; } = Environment.Is64BitOperatingSystem ? "256M" : "128M";
         public bool UseJson { get; set; } = false;
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
@@ -47,11 +101,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseCompactedReplicator { get; set; } = false;
         public bool UseKNetStreams { get; set; } = true;
         public bool UseEnumeratorWithPrefetch { get; set; } = true;
-        public bool UseByteBufferDataTransfer { get; set; } = true;
-        public bool PreserveStreamsAcrossContexts { get; set; } = true;
+        public bool UseValueContainerByteBufferDataTransfer { get; set; } = true;
         public bool UsePersistentStorage { get; set; } = false;
-        public string DatabaseName { get; set; } = "TestDB";
-        public string DatabaseNameWithModel { get; set; } = "TestDBWithModel";
+        public string TopicPrefix { get; set; } = "TestDB";
+        public string TopicPrefixWithModel { get; set; } = "TestDBWithModel";
         public string ApplicationId { get; set; } = "TestApplication";
         public bool DeleteApplicationData { get; set; } = true;
         public bool LoadApplicationData { get; set; } = true;
@@ -60,20 +113,24 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public int NumberOfElements { get; set; } = 1000;
         public int NumberOfExecutions { get; set; } = 1;
         public int NumberOfExtraElements { get; set; } = 100;
-        public bool WithEvents { get; set; } = false;
+        public bool ManageEvents { get; set; } = true;
+        public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
+        public bool ForceDebugLog { get; set; } = false;
+        public bool EnableIntermediateOutput { get; set; } = false;
 
         public void ApplyOnContext(KafkaDbContext context)
         {
-            var databaseName = UseModelBuilder ? DatabaseNameWithModel : DatabaseName;
+            var databaseName = UseModelBuilder ? TopicPrefixWithModel : TopicPrefix;
 
             StreamsConfigBuilder streamConfig = null;
             if (!UseInMemoryProvider)
             {
                 streamConfig = StreamsConfigBuilder.Create();
                 streamConfig = streamConfig.WithAcceptableRecoveryLag(100);
+                context.TopicConfig = KafkaDbContext.DefaultTopicConfig;
+                context.TopicConfig.RetentionBytes = 1024 * 1024 * 1024;
             }
 
-            context.DatabaseName = databaseName;
             context.StreamsConfig = streamConfig;
             context.BootstrapServers = BootstrapServers;
             context.ApplicationId = ApplicationId;
@@ -81,7 +138,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             context.UseCompactedReplicator = UseCompactedReplicator;
             context.UseKNetStreams = UseKNetStreams;
             context.UseEnumeratorWithPrefetch = UseEnumeratorWithPrefetch;
-            context.UseByteBufferDataTransfer = UseByteBufferDataTransfer;
 
             if (UseJson)
             { // default
@@ -140,6 +196,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
             else Config = new();
 
+#if DEBUG
+            Config.EnableIntermediateOutput = true;
+#endif
+
             foreach (var property in properties)
             {
                 property.Key.SetValue(Config, property.Value);
@@ -157,10 +217,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
 
             if (!Config.UseInMemoryProvider)
             {
+                if (Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)  // for GitHub problem with Linux container
+                {
+                    KEFCore.ApplicationIgnoreUnrecognized = true; // add this condition if the JVM does not support the UseContainerSupport
+                    KEFCore.AddJVMOption("-XX:-UseContainerSupport");
+                }
                 KEFCore.ApplicationHeapSize = Config.ApplicationHeapSize;
                 KEFCore.ApplicationInitialHeapSize = Config.ApplicationInitialHeapSize;
                 KEFCore.CreateGlobalInstance();
-                KEFCore.PreserveStreamsAcrossContexts = Config.PreserveStreamsAcrossContexts;
             }
         }
 
@@ -180,7 +244,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
         }
 
-        public static int ManageException(System.Exception e)
+        public static int ManageException(System.Exception e, int iteration = -1)
         {
             int retCode = 0;
             if (e is System.Reflection.TargetInvocationException ti)
@@ -207,7 +271,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             }
             else
             {
-                ReportString($"Failed with {e}");
+                ReportString($"Failed{(iteration == -1 ? string.Empty : $" at iteration {iteration}")} with {e}");
                 retCode = 1;
             }
             return retCode;

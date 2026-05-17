@@ -16,13 +16,10 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
-using MASES.EntityFrameworkCore.KNet.Storage;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -46,30 +43,43 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             try
             {
                 globalWatcher.Start();
-                context = new BloggingContext()
-                {
-                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
-                };
-
+                context = new BloggingContext();
                 ProgramConfig.Config.ApplyOnContext(context);
+
+                if (ProgramConfig.Config.ManageEvents)
+                {
+                    context.ChangeTracker.Tracked += (sender, e) =>
+                    {
+
+                    };
+                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
+                    {
+
+                    };
+                }
 
                 if (ProgramConfig.Config.DeleteApplicationData)
                 {
                     ProgramConfig.ReportString("Process EnsureDeleted");
                     context.Database.EnsureDeleted();
                     ProgramConfig.ReportString("EnsureDeleted deleted database");
-                    if (context.Database.EnsureCreated())
-                    {
-                        ProgramConfig.ReportString("EnsureCreated created database");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString("EnsureCreated does not created database");
-                    }
                 }
 
+                Stopwatch watch = new();
+                watch.Start();
+                if (context.Database.EnsureCreated()) // call always for initialization
+                {
+                    watch.Stop();
+                    ProgramConfig.ReportString($"EnsureCreated created database in {watch.ElapsedMilliseconds} ms");
+                }
+                else
+                {
+                    watch.Stop();
+                    ProgramConfig.ReportString($"EnsureCreated does not created database in {watch.ElapsedMilliseconds} ms");
+                }
+                watch.Start();
+
                 testWatcher.Start();
-                Stopwatch watch = new Stopwatch();
                 if (ProgramConfig.Config.LoadApplicationData)
                 {
                     watch.Start();
@@ -112,14 +122,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 watch.Restart();
                 var post = context.Posts.Single(b => b.BlogId == 2);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 2) {watch.ElapsedMilliseconds} ms. Result is {post}");
 
                 try
                 {
                     watch.Restart();
                     post = context.Posts.Single(b => b.BlogId == 1);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
                 catch
                 {
@@ -129,7 +139,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 watch.Restart();
                 var all = context.Posts.All((o) => true);
                 watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
                 Blog blog = null;
                 try
@@ -137,7 +147,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     watch.Restart();
                     blog = context.Blogs!.Single(b => b.BlogId == 1);
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Single(b => b.BlogId == 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
+                }
+                catch
+                {
+                    if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
+
+                try
+                {
+                    watch.Restart();
+                    int count = context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1).Count();
+                    watch.Stop();
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Blogs!.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 1) {watch.ElapsedMilliseconds} ms. Result is {blog}");
                 }
                 catch
                 {
@@ -153,24 +175,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     ProgramConfig.ReportString($"Elapsed data remove {watch.ElapsedMilliseconds} ms");
 
                     watch.Restart();
-                    context.SaveChanges();
-                    watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
                     for (int i = ProgramConfig.Config.NumberOfElements; i < ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements; i++)
                     {
                         context.Add(new Blog
                         {
                             Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                            Posts = new List<Post>()
-                            {
+                            Posts =
+                            [
                                 new Post()
                                 {
                                     Title = "title",
                                     Content = i.ToString()
                                 }
-                            },
+                            ],
                             Rating = i,
                         });
                     }
@@ -180,14 +197,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                     context.SaveChanges();
                     watch.Stop();
                     ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+
+                    var position = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
+                    watch.Restart();
+                    post = context.Posts.Single(b => b.BlogId == position);
+                    watch.Stop();
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {position}) {watch.ElapsedMilliseconds} ms. Result is {post}");
                 }
-
-                var postion = ProgramConfig.Config.NumberOfElements + ProgramConfig.Config.NumberOfExtraElements - 1;
-                watch.Restart();
-                post = context.Posts.Single(b => b.BlogId == postion);
-                watch.Stop();
-                ProgramConfig.ReportString($"Elapsed context.Posts.Single(b => b.BlogId == {postion}) {watch.ElapsedMilliseconds} ms. Result is {post}");
-
                 var value = context.Blogs.AsQueryable().ToQueryString();
             }
             catch (Exception ex)
@@ -202,43 +218,20 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 Console.WriteLine($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
             }
         }
-
-        static void OnEvent(EntityTypeChanged change)
-        {
-            object value = null;
-            try
-            {
-                value = context.Find(change.EntityType.ClrType, change.Key);
-            }
-            catch (ObjectDisposedException) { }
-            catch (InvalidOperationException) { }
-
-            ProgramConfig.ReportString($"{change.EntityType.Name} -> {(change.KeyRemoved ? "removed" : "updated/added")}: {change.Key} - {value}");
-        }
     }
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : TestContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (ProgramConfig.Config.UseInMemoryProvider)
-            {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
-            }
-            else
-            {
-                base.OnConfiguring(optionsBuilder);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

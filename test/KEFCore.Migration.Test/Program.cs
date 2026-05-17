@@ -47,7 +47,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 globalWatcher.Start();
                 context = new BloggingContext()
                 {
-                    OnChangeEvent = ProgramConfig.Config.WithEvents ? OnEvent : null,
+                    OnChangeEvent = ProgramConfig.Config.ManageEvents ? OnEvent : null,
                 };
 
                 ProgramConfig.Config.ApplyOnContext(context);
@@ -193,7 +193,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.TopicPrefix);
             }
             else
             {

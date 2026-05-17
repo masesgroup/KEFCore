@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
@@ -29,15 +28,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 {
     partial class Program
     {
-        struct ExecutionData
+        readonly struct ExecutionData(int executionIndex)
         {
-            public ExecutionData(int executionIndex, int maxTests)
-            {
-                ExecutionIndex = executionIndex;
-                QueryTimes = new TimeSpan[maxTests];
-            }
-            public int ExecutionIndex;
-            public TimeSpan[] QueryTimes;
+            public readonly int ExecutionIndex = executionIndex;
+            public readonly List<TimeSpan> QueryTimes = [];
         }
 
         static void Main(string[] args)
@@ -48,12 +42,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
         static void ExecuteTests()
         {
-            int maxTests = ProgramConfig.Config.NumberOfExecutions;
             Dictionary<int, ExecutionData> _tests = new();
             BloggingContext context = null;
             var testWatcher = new Stopwatch();
             var globalWatcher = new Stopwatch();
-
+            int execution = 0;
             try
             {
                 globalWatcher.Start();
@@ -66,18 +59,23 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         ProgramConfig.ReportString("Process EnsureDeleted");
                         context.Database.EnsureDeleted();
                         ProgramConfig.ReportString("EnsureDeleted deleted database");
-                        if (context.Database.EnsureCreated())
-                        {
-                            ProgramConfig.ReportString("EnsureCreated created database");
-                        }
-                        else
-                        {
-                            ProgramConfig.ReportString("EnsureCreated does not created database");
-                        }
                     }
 
+                    Stopwatch watch = new();
+                    watch.Start();
+                    if (context.Database.EnsureCreated()) // call always for initialization
+                    {
+                        watch.Stop();
+                        ProgramConfig.ReportString($"EnsureCreated created database in {watch.ElapsedMilliseconds} ms");
+                    }
+                    else
+                    {
+                        watch.Stop();
+                        ProgramConfig.ReportString($"EnsureCreated does not created database in {watch.ElapsedMilliseconds} ms");
+                    }
+                    watch.Start();
+
                     testWatcher.Start();
-                    Stopwatch watch = new Stopwatch();
                     if (ProgramConfig.Config.LoadApplicationData)
                     {
                         watch.Start();
@@ -86,14 +84,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             context.Add(new Blog
                             {
                                 Url = "http://blogs.msdn.com/adonet" + i.ToString(),
-                                Posts = new List<Post>()
-                                {
+                                Posts =
+                                [
                                     new Post()
                                     {
                                         Title = "title",
                                         Content = i.ToString()
                                     }
-                                },
+                                ],
                                 Rating = i,
                             });
                         }
@@ -106,10 +104,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     }
                 }
 
-                for (int execution = 0; execution < maxTests; execution++)
+                for (execution = 0; execution < ProgramConfig.Config.NumberOfExecutions; execution++)
                 {
-                    _tests.Add(execution, new ExecutionData(execution, maxTests));
-                    ProgramConfig.ReportString($"Starting cycle number {execution}");
+                    _tests.Add(execution, new ExecutionData(execution));
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Starting cycle number {execution}");
                     Stopwatch singleTestWatch = Stopwatch.StartNew();
                     using (context = new BloggingContext())
                     {
@@ -119,40 +117,68 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         watch.Restart();
                         var post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
-                        _tests[execution].QueryTimes[0] = watch.Elapsed;
-                        ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         post = context.Posts.SingleOrDefault(b => b.BlogId == 2);
                         watch.Stop();
-                        _tests[execution].QueryTimes[1] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Posts.Single(b => b.BlogId == 2) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         post = context.Posts.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
                         watch.Stop();
-                        _tests[execution].QueryTimes[2] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
                         var all = context.Posts.All((o) => true);
                         watch.Stop();
-                        _tests[execution].QueryTimes[3] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
 
                         Blog blog = null;
                         watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == 1);
                         watch.Stop();
-                        _tests[execution].QueryTimes[4] = watch.Elapsed;
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
 
-                        ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
                         watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == 1);
 
                         watch.Stop();
-                        _tests[execution].QueryTimes[5] = watch.Elapsed;
-                        ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
+
+                        watch.Restart();
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+
+                        watch.Restart();
+                        blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {blog}", blog == default);
+
+                        watch.Restart();
+                        int count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"First execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
+
+                        watch.Restart();
+                        count = context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < ProgramConfig.Config.NumberOfElements - 10).Count();
+
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Where(b => b.BlogId > 1 && b.BlogId < {ProgramConfig.Config.NumberOfElements - 10}).Count() takes {watch.Elapsed}. Result is {count}", count == 0);
 
                         watch.Restart();
                         var selector = (from op in context.Blogs
@@ -160,9 +186,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                                         where pg.BlogId == op.BlogId
                                         select new { pg, op });
                         watch.Stop();
-                        _tests[execution].QueryTimes[6] = watch.Elapsed;
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
                         var result = selector.ToList();
-                        ProgramConfig.ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of first complex query takes {watch.Elapsed}. Result is {result.Count} element{(result.Count == 1 ? string.Empty : "s")}");
 
                         watch.Restart();
                         var selector2 = (from op in context.Blogs
@@ -170,18 +196,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                                          where op.Rating >= 100
                                          select new { pg, op });
                         watch.Stop();
-                        _tests[execution].QueryTimes[7] = watch.Elapsed;
-                        var result2 = selector.ToList();
-                        ProgramConfig.ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        var result2 = selector2.ToList();
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of second complex query takes {watch.Elapsed}. Result is {result2.Count} element{(result2.Count == 1 ? string.Empty : "s")}");
                         singleTestWatch.Stop();
-                        _tests[execution].QueryTimes[8] = singleTestWatch.Elapsed;
-                        ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
+                        _tests[execution].QueryTimes.Add(singleTestWatch.Elapsed);
+
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Test {execution} takes {singleTestWatch.Elapsed}.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Environment.ExitCode = ProgramConfig.ManageException(ex);
+                Environment.ExitCode = ProgramConfig.ManageException(ex, execution);
             }
             finally
             {
@@ -191,19 +218,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     globalWatcher.Stop();
                     context?.Dispose();
                     ProgramConfig.ReportString(string.Empty);
-                    ProgramConfig.ReportString($"Full test completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
+                    ProgramConfig.ReportString($"All {execution} of tests completed in {globalWatcher.Elapsed}, only tests completed in {testWatcher.Elapsed}");
 
-                    TimeSpan[] max = new TimeSpan[maxTests];
+                    int testDone = _tests[0].QueryTimes.Count;
+
+                    TimeSpan[] max = new TimeSpan[testDone];
                     for (int i = 0; i < max.Length; i++) { max[i] = TimeSpan.Zero; }
-                    TimeSpan[] min = new TimeSpan[maxTests];
+                    TimeSpan[] min = new TimeSpan[testDone];
                     for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
-                    TimeSpan[] total = new TimeSpan[maxTests];
+                    TimeSpan[] total = new TimeSpan[testDone];
                     for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
-                    for (int i = 0; i < _tests.Count; i++)
+                    for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
                     {
                         var item = _tests[i].QueryTimes;
 
-                        for (int testId = 0; testId < maxTests; testId++)
+                        for (int testId = 0; testId < testDone; testId++)
                         {
                             max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
                             min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
@@ -211,9 +240,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         }
                     }
 
-                    for (int testId = 0; testId < maxTests; testId++)
+                    for (int testId = 0; testId < testDone; testId++)
                     {
-                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / maxTests}");
+                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
@@ -222,28 +251,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
     }
 
 
-    public class BloggingContext : KafkaDbContext
+    public class BloggingContext : TestContext
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (ProgramConfig.Config.UseInMemoryProvider)
-            {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
-            }
-            else
-            {
-                base.OnConfiguring(optionsBuilder);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

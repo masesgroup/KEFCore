@@ -206,7 +206,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
         {
             if (ProgramConfig.Config.UseInMemoryProvider)
             {
-                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.DatabaseName);
+                optionsBuilder.UseInMemoryDatabase(ProgramConfig.Config.TopicPrefix);
             }
             else
             {
