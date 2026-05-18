@@ -30,7 +30,7 @@ on:
       ExecuteOnLargerJDKSet:
         description: 'Executes tests on more JDK'
         required: false
-        default: true
+        default: false
         type: boolean
       ExecuteOnWindows:
         description: 'Executes tests on Windows'
