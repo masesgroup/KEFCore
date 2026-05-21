@@ -469,7 +469,7 @@ jobs:
 
       - name: Use latest local version of KNetCLI
         if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
-        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}\KNetNuGet\"
+        run: dotnet tool update -g MASES.KNetCLI --prerelease --source "${{ github.workspace }}\KNetNuGet\"
 
       - name: Authenticate to GitHub
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
@@ -807,7 +807,7 @@ jobs:
 
       - name: Use latest local version of KNetCLI
         if: ${{ success() && inputs.UseLastRepositoryBuildKNet == true }}
-        run: dotnet tool update -g MASES.KNetCLI --source "${{ github.workspace }}/KNetNuGet/"
+        run: dotnet tool update -g MASES.KNetCLI --prerelease --source "${{ github.workspace }}/KNetNuGet/"
 
       - name: Authenticate to GitHub
         if: ${{ inputs.UseLastRepositoryBuildKNet != true }}
