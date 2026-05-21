@@ -34,6 +34,25 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 public static class AvroKEFCoreSerDes
 {
     /// <summary>
+    /// Caches a compiled delegate for the parameterless constructor of <typeparamref name="TData"/>,
+    /// eliminating repeated reflection overhead from Activator.CreateInstance.
+    /// </summary>
+    static class ValueContainerFactory<TData>
+    {
+        public static readonly Func<TData> Create;
+
+        static ValueContainerFactory()
+        {
+            var ctor = typeof(TData).GetConstructor(Type.EmptyTypes)
+                ?? throw new InvalidOperationException($"{typeof(TData).Name} does not have a public parameterless constructor");
+
+            Create = System.Linq.Expressions.Expression
+                .Lambda<Func<TData>>(System.Linq.Expressions.Expression.New(ctor))
+                .Compile();
+        }
+    }
+
+    /// <summary>
     /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
     public static readonly Type DefaultKeySerialization = typeof(Key.Binary<>);
@@ -343,7 +362,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, memStream);
-                    TData t = Activator.CreateInstance<TData>()!;
+                    TData t = ValueContainerFactory<TData>.Create();
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -393,8 +412,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-					var memStream = ByteBuffer.Rent();
-					JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
+                    var memStream = ByteBuffer.Rent();
+                    JsonEncoder encoder = new(AvroKeyContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
                     return ByteBuffer.From(memStream);
@@ -414,7 +433,7 @@ public static class AvroKEFCoreSerDes
                     {
                         using var stream = data.ToStream();
                         JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
-                        TData t = Activator.CreateInstance<TData>()!;
+                        TData t = ValueContainerFactory<TData>.Create();
                         t = SpecificReader.Read(t!, decoder);
                         return t;
                     }
@@ -532,7 +551,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
-                    TData t = Activator.CreateInstance<TData>()!;
+                    TData t = ValueContainerFactory<TData>.Create();
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -585,8 +604,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-					var memStream = ByteBuffer.Rent();
-					BinaryEncoder encoder = new(memStream);
+                    var memStream = ByteBuffer.Rent();
+                    BinaryEncoder encoder = new(memStream);
                     SpecificWriter.Write(data, encoder);
                     return ByteBuffer.From(memStream);
                 }
@@ -603,7 +622,7 @@ public static class AvroKEFCoreSerDes
                     {
                         using var stream = data.ToStream();
                         BinaryDecoder decoder = new(stream);
-                        TData t = Activator.CreateInstance<TData>()!;
+                        TData t = ValueContainerFactory<TData>.Create();
                         t = SpecificReader.Read(t!, decoder);
                         return t;
                     }
@@ -716,7 +735,7 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     JsonDecoder decoder = new(AvroValueContainer._SCHEMA, memStream);
-                    TData t = Activator.CreateInstance<TData>()!;
+                    TData t = ValueContainerFactory<TData>.Create();
                     t = SpecificReader.Read(t!, decoder);
                     return t;
                 }
@@ -769,8 +788,8 @@ public static class AvroKEFCoreSerDes
 
                     if (data == null) return null!;
 
-					var memStream = ByteBuffer.Rent();
-					JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
+                    var memStream = ByteBuffer.Rent();
+                    JsonEncoder encoder = new(AvroValueContainer._SCHEMA, memStream);
                     SpecificWriter.Write(data, encoder);
                     encoder.Flush();
                     return ByteBuffer.From(memStream);
@@ -788,7 +807,7 @@ public static class AvroKEFCoreSerDes
                     {
                         using var stream = data.ToStream();
                         JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
-                        TData t = Activator.CreateInstance<TData>()!;
+                        TData t = ValueContainerFactory<TData>.Create();
                         t = SpecificReader.Read(t!, decoder);
                         return t;
                     }
