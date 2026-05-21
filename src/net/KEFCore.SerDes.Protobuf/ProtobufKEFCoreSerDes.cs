@@ -32,6 +32,23 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Protobuf;
 /// </summary>
 public static class ProtobufKEFCoreSerDes
 {
+    static class ValueContainerFactory<TData> where TData : class, IMessage<TData>
+    {
+        public static readonly Func<Storage.ValueContainer, TData> Create;
+
+        static ValueContainerFactory()
+        {
+            var ctor = typeof(TData).GetConstructor(new[] { typeof(Storage.ValueContainer) })
+                ?? throw new InvalidOperationException($"{typeof(TData).Name} does not have a constructor accepting Storage.ValueContainer");
+
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(Storage.ValueContainer));
+            var newExpr = System.Linq.Expressions.Expression.New(ctor, param);
+            Create = System.Linq.Expressions.Expression
+                .Lambda<Func<Storage.ValueContainer, TData>>(newExpr, param)
+                .Compile();
+        }
+    }
+
     /// <summary>
     /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
@@ -201,8 +218,8 @@ public static class ProtobufKEFCoreSerDes
                     keyContainer = new KeyContainer(dataArray);
                 }
 
-				var memStream = ByteBuffer.Rent();
-				keyContainer.WriteTo(memStream);
+                var memStream = ByteBuffer.Rent();
+                keyContainer.WriteTo(memStream);
                 return ByteBuffer.From(memStream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
@@ -324,7 +341,7 @@ public static class ProtobufKEFCoreSerDes
             {
                 if (data == null || data.Length == 0) return default!;
                 var container = Storage.ValueContainer.Parser.ParseFrom(data);
-                return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                return ValueContainerFactory<TData>.Create(container);
             }
         }
 
@@ -373,8 +390,8 @@ public static class ProtobufKEFCoreSerDes
 
                 if (data == null) return null!;
 
-				var stream = ByteBuffer.Rent();
-				data.WriteTo(stream);
+                var stream = ByteBuffer.Rent();
+                data.WriteTo(stream);
                 return ByteBuffer.From(stream);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
@@ -389,7 +406,7 @@ public static class ProtobufKEFCoreSerDes
                 using (data)
                 {
                     var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
-                    return (Activator.CreateInstance(typeof(TData), container) as TData)!;
+                    return ValueContainerFactory<TData>.Create(container);
                 }
             }
         }
