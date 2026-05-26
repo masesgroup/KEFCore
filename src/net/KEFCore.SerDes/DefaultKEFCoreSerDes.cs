@@ -115,8 +115,25 @@ public static class DefaultKEFCoreSerDes
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(Java.Lang.String, TData)"/>
+            public override byte[] Serialize(Java.Lang.String topic, TData data)
+            {
+                return SerializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
+            {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+
+                if (data == null) return null!;
+
+                return JsonSupport.Key.SerializeAsBytes(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
+            public override byte[] SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
@@ -132,8 +149,21 @@ public static class DefaultKEFCoreSerDes
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(Java.Lang.String, TJVM)"/>
+            public override TData Deserialize(Java.Lang.String topic, byte[] data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            {
+                if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+
+                if (data == null || data.Length == 0) return default!;
+                return JsonSupport.Key.Deserialize<TData>(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, byte[] data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
@@ -174,8 +204,25 @@ public static class DefaultKEFCoreSerDes
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(Java.Lang.String, TData)"/>
+            public override ByteBuffer Serialize(Java.Lang.String topic, TData data)
+            {
+                return SerializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
+            {
+                if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
+
+                headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+
+                if (data == null) return null!;
+
+                return JsonSupport.Key.SerializeAsByteBuffer(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
+            public override ByteBuffer SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
@@ -191,8 +238,21 @@ public static class DefaultKEFCoreSerDes
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(Java.Lang.String, TJVM)"/>
+            public override TData Deserialize(Java.Lang.String topic, ByteBuffer data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
+            {
+                if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
+
+                if (data == null) return default!;
+                return JsonSupport.Key.Deserialize<TData>(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
             {
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
@@ -279,8 +339,23 @@ public static class DefaultKEFCoreSerDes
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(Java.Lang.String, TData)"/>
+            public override byte[] Serialize(Java.Lang.String topic, TData data)
+            {
+                return SerializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
+            {
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+
+                if (data == null) return null!;
+
+                return JsonSupport.ValueContainer.SerializeAsBytes(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
+            public override byte[] SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
@@ -294,8 +369,19 @@ public static class DefaultKEFCoreSerDes
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(Java.Lang.String, TJVM)"/>
+            public override TData Deserialize(Java.Lang.String topic, byte[] data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, byte[] data)
+            {
+                if (data == null || data.Length == 0) return default!;
+                return JsonSupport.ValueContainer.Deserialize<TData>(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, byte[] data)
             {
                 if (data == null || data.Length == 0) return default!;
                 return JsonSupport.ValueContainer.Deserialize<TData>(data);
@@ -339,8 +425,23 @@ public static class DefaultKEFCoreSerDes
             {
                 return SerializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Serialize(Java.Lang.String, TData)"/>
+            public override ByteBuffer Serialize(Java.Lang.String topic, TData data)
+            {
+                return SerializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
             public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
+            {
+                headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+
+                if (data == null) return null!;
+
+                return JsonSupport.ValueContainer.SerializeAsByteBuffer(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
+            public override ByteBuffer SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
             {
                 headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
                 headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
@@ -354,8 +455,19 @@ public static class DefaultKEFCoreSerDes
             {
                 return DeserializeWithHeaders(topic, null!, data);
             }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(Java.Lang.String, TJVM)"/>
+            public override TData Deserialize(Java.Lang.String topic, ByteBuffer data)
+            {
+                return DeserializeWithHeaders(topic, null!, data);
+            }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(string, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
+            {
+                if (data == null) return default!;
+                return JsonSupport.ValueContainer.Deserialize<TData>(data);
+            }
+            /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
+            public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
                 return JsonSupport.ValueContainer.Deserialize<TData>(data);
