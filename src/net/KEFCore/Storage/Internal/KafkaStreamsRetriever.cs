@@ -201,7 +201,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     {
         using ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
         if (keyValueStore == null) return default!;
-        var k = _keySerdes.Serialize(null, key);
+        var k = _keySerdes.Serialize((Java.Lang.String)null!, key);
         using var disposable = k as IDisposable;
         var v = keyValueStore.Get(k);
         return v;
@@ -224,7 +224,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             valueBuffer = ValueBuffer.Empty;
             return false;
         }
-        var entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, v!);
+        var entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, v!);
 
         object[] propertyValues = null!;
         entityTypeData?.GetData(_metadata, ref propertyValues, _complexTypeConverterFactory);
@@ -241,7 +241,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             valueContainer = default!;
             return false;
         }
-        valueContainer = _valueSerdes.DeserializeWithHeaders(null, null, v!);
+        valueContainer = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, v!);
         return true;
     }
 
@@ -270,7 +270,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             var value = kvSupport.Value;
             using var disposableKey = key as IDisposable;
             using var disposableValue = value as IDisposable;
-            yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(keySerdes.Deserialize(null, key), valueSerdes.Deserialize(null, value)));
+            yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(keySerdes.Deserialize((Java.Lang.String)null!, key), valueSerdes.Deserialize((Java.Lang.String)null!, value)));
         }
     }
 
@@ -309,8 +309,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _valueSerdes = valueSerdes;
             _isReverse = isReverse;
             _useRange = true;
-            _rangeStart = _keySerdes.Serialize(null, rangeStart!);
-            _rangeEnd = _keySerdes.Serialize(null, rangeEnd!);
+            _rangeStart = _keySerdes.Serialize((Java.Lang.String)null!, rangeStart!);
+            _rangeEnd = _keySerdes.Serialize((Java.Lang.String)null!, rangeEnd!);
             _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
@@ -324,7 +324,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _keySerdes = keySerdes;
             _valueSerdes = valueSerdes;
             _withPrefix = true;
-            _prefix = _keySerdes.Serialize(null, prefix!);
+            _prefix = _keySerdes.Serialize((Java.Lang.String)null!, prefix!);
             _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
@@ -495,7 +495,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                         using (KeyValue<K, V> kv = _keyValueIterator.Next())
                         {
                             using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
-                            data = kvSupport.Value != null ? (V)(object)kvSupport.Value! : default;
+                            data = kvSupport.Value != null ? kvSupport.Value! : default;
                         }
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
@@ -504,7 +504,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 #if DEBUG_PERFORMANCE
                         _valueSerdesSw.Start();
 #endif
-                        entityTypeData = _valueSerdes.DeserializeWithHeaders(null, null, data!);
+                        entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, data!);
 #if DEBUG_PERFORMANCE
                         _valueSerdesSw.Stop();
 #endif
