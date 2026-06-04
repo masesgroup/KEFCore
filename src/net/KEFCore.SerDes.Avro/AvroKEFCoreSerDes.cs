@@ -153,8 +153,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -174,8 +174,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -270,8 +270,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -291,8 +291,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -430,8 +430,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -446,8 +446,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -537,8 +537,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -553,8 +553,8 @@ public static class AvroKEFCoreSerDes
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.SerializeWithHeaders(topic, headers, data);
 
-                    headers?.Add(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
-                    headers?.Add(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
+                    headers?.AddVoid(KNetSerialization.KeyTypeIdentifierJVM, keyTypeName);
+                    headers?.AddVoid(KNetSerialization.KeySerializerIdentifierJVM, keySerDesName);
 
                     if (data == null) return null!;
 
@@ -700,8 +700,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -713,8 +713,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -804,8 +804,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -817,8 +817,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -953,8 +953,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -967,8 +967,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
                 public override byte[] SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -1059,8 +1059,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(string, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(string topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 
@@ -1073,8 +1073,8 @@ public static class AvroKEFCoreSerDes
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
                 public override ByteBuffer SerializeWithHeaders(Java.Lang.String topic, Headers headers, TData data)
                 {
-                    headers?.Add(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
-                    headers?.Add(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
+                    headers?.AddVoid(KNetSerialization.ValueSerializerIdentifierJVM, valueContainerSerDesName);
+                    headers?.AddVoid(KNetSerialization.ValueTypeIdentifierJVM, valueContainerName);
 
                     if (data == null) return null!;
 

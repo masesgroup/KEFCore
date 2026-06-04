@@ -265,7 +265,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
-            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+            using var kvSupport = MASES.KNet.Streams.KeyValueSupport<K, V>.Create(kv);
             var key = kvSupport.Key;
             var value = kvSupport.Value;
             using var disposableKey = key as IDisposable;
@@ -494,7 +494,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                         V? data;
                         using (KeyValue<K, V> kv = _keyValueIterator.Next())
                         {
-                            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
+                            using var kvSupport = MASES.KNet.Streams.KeyValueSupport<K, V>.Create(kv);
                             data = kvSupport.Value != null ? kvSupport.Value! : default;
                         }
 #if DEBUG_PERFORMANCE
