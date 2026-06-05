@@ -135,12 +135,12 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         }
         else
         {
-            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
-            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
-            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetFlattenedProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetComplexProperties()]);
 
             var propertyValues = new object?[flattenedProperties.Length];
-            var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
+            var complexPropertyValues = complexProperties != null ? (complexProperties.Length == 0 ? Array.Empty<object>() : new object?[complexProperties.Length]) : null;
             var nullabilityErrors = new List<IProperty>();
             for (int index = 0; index < flattenedProperties.Length; index++)
             {
@@ -155,7 +155,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
                 ThrowNullabilityErrorException(entry, nullabilityErrors);
             }
 
-            if (complexProperties != null)
+            if (complexProperties != null && complexProperties.Length != 0)
             {
                 for (int index = 0; index < complexProperties.Length; index++)
                 {
@@ -175,9 +175,9 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         }
         else
         {
-            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
-            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
-            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetFlattenedProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetComplexProperties()]);
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
 
             for (var index = 0; index < flattenedProperties.Length; index++)
@@ -235,13 +235,13 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         }
         else
         {
-            var properties = _propertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetProperties()]);
-            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetFlattenedProperties()]);
-            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, (type) => [.. type.GetComplexProperties()]);
+            var properties = _propertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetProperties()]);
+            var flattenedProperties = _flattenedPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetFlattenedProperties()]);
+            var complexProperties = _complexPropertiesCache.GetOrAdd(entry.EntityType, static (type) => [.. type.GetComplexProperties()]);
 
             var comparers = GetKeyComparers(flattenedProperties);
             var propertyValues = new object?[flattenedProperties.Length];
-            var complexPropertyValues = complexProperties != null ? new object?[complexProperties.Length] : null;
+            var complexPropertyValues = complexProperties != null ? (complexProperties.Length == 0 ? Array.Empty<object>() : new object?[complexProperties.Length]) : null;
             var concurrencyConflicts = new Dictionary<IProperty, object?>();
             var nullabilityErrors = new List<IProperty>();
             for (int index = 0; index < flattenedProperties.Length; index++)
@@ -271,7 +271,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
                 ThrowNullabilityErrorException(entry, nullabilityErrors);
             }
 
-            if (complexProperties != null)
+            if (complexProperties != null && complexProperties.Length != 0)
             {
                 for (int index = 0; index < complexProperties.Length; index++)
                 {

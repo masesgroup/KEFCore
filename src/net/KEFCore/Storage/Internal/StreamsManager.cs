@@ -230,7 +230,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         index++;
                     }
                 }
-                return bools.All((o) => o == true);
+                return bools.All(static (o) => o == true);
             }
 
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
@@ -555,7 +555,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var latestAdded = CreateAndStartTopology();
                 // new added item will update IKEFCoreDatabase using the standard behavior
                 // items was managed due to other IKEFCoreDatabase instances shall update the requesting
-                var storedEntities = database.Tables.Select((t) => t.AssociatedTopicName).Where((t) => !latestAdded.Contains(t));
+                var storedEntities = database.Tables.Select(static (t) => t.AssociatedTopicName).Where((t) => !latestAdded.Contains(t));
                 foreach (var item in storedEntities)
                 {
                     if (_storagesForEntities.TryGetValue(item, out var storage))

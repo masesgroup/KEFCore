@@ -183,7 +183,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 }
 
                 watch.Restart();
-                var all = context.Posts.All((o) => true);
+                var all = context.Posts.All(static (o) => true);
                 watch.Stop();
                 if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 

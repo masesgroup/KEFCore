@@ -57,5 +57,5 @@ public class KEFCoreEntityFinderSource(IKEFCoreClusterCache kefcoreClusterCache)
 
     private static Func<IStateManager, IDbSetSource, IDbSetCache, IEntityType, IKEFCoreClusterCache, IEntityFinder> CreateConstructor<TEntity>()
         where TEntity : class
-        => (s, src, c, t, cluster) => new KEFCoreEntityFinder<TEntity>(s, src, c, t, cluster);
+        => static (s, src, c, t, cluster) => new KEFCoreEntityFinder<TEntity>(s, src, c, t, cluster);
 }
