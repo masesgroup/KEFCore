@@ -470,7 +470,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Start();
 #endif
 #endif
-                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
+                        using KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _useEnumeratorWithPrefetch ? _enumerator?.Current : _keyValueIterator?.Next();
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();
@@ -556,7 +556,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                         _valueGetSw.Start();
 #endif
 #endif
-                        KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
+                        using KeyValue<TKey, TValue, TJVMKey, TJVMValue>? kv = _asyncEnumerator?.Current;
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
                         _valueGet2Sw.Start();

@@ -1,5 +1,5 @@
 {
-  "UseByteBufferDataTransfer": false,
+  "UseValueContainerByteBufferDataTransfer": false,
   "NumberOfExecutions": 100,
   "UseEnumeratorWithPrefetch": false
 }

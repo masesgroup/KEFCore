@@ -1,4 +1,4 @@
 {
-  "UseByteBufferDataTransfer": false,
+  "UseValueContainerByteBufferDataTransfer": false,
   "NumberOfExecutions": 100
 }
