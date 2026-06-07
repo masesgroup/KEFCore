@@ -273,18 +273,12 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
         /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, JsonSerializerOptions?)"/>
         public TData Deserialize<TData>(ByteBuffer data)
         {
-            using (data)
-            {
-                return JsonSerializer.Deserialize<TData>(data.AsSpan(), DefautJsonOptions)!;
-            }
+            return JsonSerializer.Deserialize<TData>(data.AsSpan(), DefautJsonOptions)!;
         }
         /// <inheritdoc cref="JsonSerializer.Deserialize(Stream, Type, JsonSerializerOptions?)"/>
         public object Deserialize(Type type, ByteBuffer data)
         {
-            using (data)
-            {
-                return JsonSerializer.Deserialize(data.AsSpan(), type, DefautJsonOptions)!;
-            }
+            return JsonSerializer.Deserialize(data.AsSpan(), type, DefautJsonOptions)!;
         }
         static readonly JsonSupport _key = new();
         /// <summary>
