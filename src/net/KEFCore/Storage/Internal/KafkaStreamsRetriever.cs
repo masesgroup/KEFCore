@@ -511,8 +511,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                         V? data;
                         using (KeyValue<K, V> kv = _keyValueIterator.Next())
                         {
-                            using var kvSupport = MASES.KNet.Streams.KeyValueSupport<K, V>.Create(kv);
-                            data = kvSupport.Value != null ? kvSupport.Value! : default;
+                            //using var kvSupport = MASES.KNet.Streams.KeyValueSupport<K, V>.Create(kv);
+                            data = kv.value;
                         }
 #if DEBUG_PERFORMANCE
                         _valueGetSw.Stop();
@@ -521,7 +521,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 #if DEBUG_PERFORMANCE
                         _valueSerdesSw.Start();
 #endif
-                        using (var diposable = data as IDisposable)
+                        using (var disposable = data as IDisposable)
                         {
                             entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, data!);
                         }

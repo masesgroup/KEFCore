@@ -304,11 +304,8 @@ public static class ProtobufKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                using (data)
-                {
-                    KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
-                    return (TData)container.GetContent();
-                }
+                KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
+                return (TData)container.GetContent();
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
@@ -316,11 +313,8 @@ public static class ProtobufKEFCoreSerDes
                 if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                 if (data == null) return default!;
-                using (data)
-                {
-                    KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
-                    return (TData)container.GetContent();
-                }
+                KeyContainer container = KeyContainer.Parser.ParseFrom(data.AsSpan());
+                return (TData)container.GetContent();
             }
         }
     }
@@ -537,21 +531,15 @@ public static class ProtobufKEFCoreSerDes
             public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                using (data)
-                {
-                    var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
-                    return ValueContainerFactory<TData>.Create(container);
-                }
+                var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
+                return ValueContainerFactory<TData>.Create(container);
             }
             /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
             public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
             {
                 if (data == null) return default!;
-                using (data)
-                {
-                    var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
-                    return ValueContainerFactory<TData>.Create(container);
-                }
+                var container = Storage.ValueContainer.Parser.ParseFrom(data.AsSpan());
+                return ValueContainerFactory<TData>.Create(container);
             }
         }
     }
