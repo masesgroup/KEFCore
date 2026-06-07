@@ -504,7 +504,10 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 #if DEBUG_PERFORMANCE
                         _valueSerdesSw.Start();
 #endif
-                        entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, data!);
+                        using (var diposable = data as IDisposable)
+                        {
+                            entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, data!);
+                        }
 #if DEBUG_PERFORMANCE
                         _valueSerdesSw.Stop();
 #endif
