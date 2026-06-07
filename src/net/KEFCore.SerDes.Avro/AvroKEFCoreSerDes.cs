@@ -321,27 +321,21 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        BinaryDecoder decoder = new(stream);
-                        AvroKeyContainer t = new();
-                        t = SpecificReader.Read(t!, decoder);
-                        return (TData)(object)(t.PrimaryKey.ToArray());
-                    }
+                    using var stream = data.ToStream();
+                    BinaryDecoder decoder = new(stream);
+                    AvroKeyContainer t = new();
+                    t = SpecificReader.Read(t!, decoder);
+                    return (TData)(object)(t.PrimaryKey.ToArray());
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
                 {
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        BinaryDecoder decoder = new(stream);
-                        AvroKeyContainer t = new();
-                        t = SpecificReader.Read(t!, decoder);
-                        return (TData)(object)(t.PrimaryKey.ToArray());
-                    }
+                    using var stream = data.ToStream();
+                    BinaryDecoder decoder = new(stream);
+                    AvroKeyContainer t = new();
+                    t = SpecificReader.Read(t!, decoder);
+                    return (TData)(object)(t.PrimaryKey.ToArray());
                 }
             }
         }
@@ -580,14 +574,11 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
@@ -595,14 +586,11 @@ public static class AvroKEFCoreSerDes
                     if (_defaultSerDes != null) return _defaultSerDes.DeserializeWithHeaders(topic, headers, data);
 
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    JsonDecoder decoder = new(AvroKeyContainer._SCHEMA, stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
             }
         }
@@ -841,27 +829,21 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        BinaryDecoder decoder = new(stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    BinaryDecoder decoder = new(stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        BinaryDecoder decoder = new(stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    BinaryDecoder decoder = new(stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
             }
         }
@@ -1098,27 +1080,21 @@ public static class AvroKEFCoreSerDes
                 public override TData DeserializeWithHeaders(string topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
                 {
                     if (data == null) return default!;
-                    using (data)
-                    {
-                        using var stream = data.ToStream();
-                        JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
-                        TData t = ValueContainerFactory<TData>.Create();
-                        t = SpecificReader.Read(t!, decoder);
-                        return t;
-                    }
+                    using var stream = data.ToStream();
+                    JsonDecoder decoder = new(AvroValueContainer._SCHEMA, stream);
+                    TData t = ValueContainerFactory<TData>.Create();
+                    t = SpecificReader.Read(t!, decoder);
+                    return t;
                 }
             }
         }
