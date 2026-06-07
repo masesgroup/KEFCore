@@ -175,6 +175,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     /// <inheritdoc/>
     public void Dispose()
     {
+        _keyValueStore?.Dispose();
         _streamsManager!.Dispose(_metadata.EntityType);
     }
 
