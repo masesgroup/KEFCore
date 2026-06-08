@@ -229,7 +229,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         }
     }
 
-    class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
+    sealed class KafkaEnumberable : IEnumerable<ValueBuffer>, IAsyncEnumerable<ValueBuffer>
     {
         private readonly KEFCoreOptionsExtension _options;
         private readonly bool _withPrefix;
@@ -361,7 +361,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         }
     }
 
-    class KafkaEnumerator : IEnumerator<ValueBuffer>
+    sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
         , IAsyncEnumerator<ValueBuffer>
     {
         private readonly bool _useEnumeratorWithPrefetch;

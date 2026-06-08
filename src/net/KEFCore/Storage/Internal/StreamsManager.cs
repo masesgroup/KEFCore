@@ -131,7 +131,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
     #region StreamsManager
 
-    internal class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> : IStreamsManager
+    sealed class StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> : IStreamsManager
         where TStream : class
         where TStreamBuilder : class
         where TTopology : class

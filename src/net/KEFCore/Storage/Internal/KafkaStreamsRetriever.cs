@@ -291,7 +291,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         }
     }
 
-    class KafkaEnumberable : IEnumerable<ValueBuffer>
+    sealed class KafkaEnumberable : IEnumerable<ValueBuffer>
     {
         private readonly bool _withPrefix;
         private readonly bool _isReverse;
@@ -423,7 +423,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         }
     }
 
-    class KafkaEnumerator : IEnumerator<ValueBuffer>
+    sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
     {
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
