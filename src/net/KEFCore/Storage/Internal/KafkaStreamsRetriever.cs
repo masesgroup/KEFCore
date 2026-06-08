@@ -278,8 +278,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         using var scope = new JCOBridgeDisposeFastScope();
         using var storeType = QueryableStoreTypes.KeyValueStore<K, V>();
         using var storeQueryParameter = StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, storeType);
-        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(storeQueryParameter);
-        using var iterator = keyValueStore?.All();
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams.Store(storeQueryParameter);
+        using var iterator = keyValueStore!.All();
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
