@@ -283,9 +283,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
-            using var kvSupport = MASES.KNet.Streams.KeyValueSupport<K, V>.Create(kv);
-            var key = kvSupport.Key;
-            var value = kvSupport.Value;
+            var key = kv.key;
+            var value = kv.value;
             using var disposableKey = key as IDisposable;
             using var disposableValue = value as IDisposable;
             yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(keySerdes.Deserialize((Java.Lang.String)null!, key), valueSerdes.Deserialize((Java.Lang.String)null!, value)));
