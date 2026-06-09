@@ -631,8 +631,8 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (obj is null) return;
-                using (obj.Get()) { }
-                return;
+                var metadata = obj.Get();
+                using (metadata) { }
             }
             catch (ExecutionException ex) { throw ex.InnerException; }
             catch (OperationCanceledException) { return; }

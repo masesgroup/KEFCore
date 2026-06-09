@@ -498,8 +498,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
                         if (!_freshDataFromCluster.TryDequeue(out var current)) break;             
-                        foreach (var item in _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
+                        foreach (var item in _updaters) // removed since it generates a new Func<,> on each access _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
+                            if (!item.Value.ManageEvents || item.Key.ChangeManager != current.Manager)
+                                continue;
+
                             item.Key.Database.Lock();
                             try
                             {

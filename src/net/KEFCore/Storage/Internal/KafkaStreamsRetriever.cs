@@ -65,7 +65,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         {
             using (record)
             {
-                using var record2 = record.CastDirectAndDetach<ConsumerRecord<K, V>>();
+                using var record2 = record.CastDirectAndDispose<ConsumerRecord<K, V>>();
                 using var topic = record2.Topic();
                 using var headers = record2.Headers();
                 var jKey = record2.Key();
