@@ -63,23 +63,20 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
-            using (record)
-            {
-                using var record2 = record.CastDirectAndDispose<ConsumerRecord<K, V>>();
-                using var topic = record2.Topic();
-                using var headers = record2.Headers();
-                var jKey = record2.Key();
-                var jValue = record2.Value();
-                using var disposable1 = jKey as IDisposable;
-                using var disposable2 = jValue as IDisposable;
+            using var record2 = record.CastDirectAndDispose<ConsumerRecord<K, V>>();
+            using var topic = record2.Topic();
+            using var headers = record2.Headers();
+            var jKey = record2.Key();
+            var jValue = record2.Value();
+            using var disposable1 = jKey as IDisposable;
+            using var disposable2 = jValue as IDisposable;
 
-                var key = _keySerdes.DeserializeWithHeaders(topic, headers, jKey);
-                var value = _valueSerdes.DeserializeWithHeaders(topic, headers, jValue);
+            var key = _keySerdes.DeserializeWithHeaders(topic, headers, jKey);
+            var value = _valueSerdes.DeserializeWithHeaders(topic, headers, jValue);
 
-                _pushChanges.Invoke(new FreshEventChange(_manager, topic, record2.Partition(), record2.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record2.Partition(), record2.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
 
-                return record2.Timestamp();
-            }
+            return record2.Timestamp();
         }
     }
 
@@ -465,7 +462,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                 {
                     _currentSw.Start();
 #endif
-                    return _current;
+                return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally
