@@ -165,7 +165,7 @@ jobs:
       - name: Compute KNet version variants
         id: compute
         run: |
-          VERSION="3.2.3-rc97"
+          VERSION="3.2.3-rc99"
           # KNetCLI uses the version as-is (e.g. 3.2.3 or 3.2.3-rc)
           echo "knet_cli_version=$VERSION" >> $GITHUB_OUTPUT
           # Docker tag: split on '-', prepend V and append .0 to the numeric part
