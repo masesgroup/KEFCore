@@ -218,7 +218,9 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     static IEnumerable<StoredEventChange> GetStoredData(KNetStreams streams, string storageId)
     {
         using var scope = new JCOBridgeDisposeFastScope();
-        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams.Store(storageId, QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>());
+        var storeType = QueryableStoreTypes.KeyValueStore<TKey, TValue, TJVMKey, TJVMValue>();
+        using var disposable = storeType as IDisposable;
+        using ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? keyValueStore = streams.Store(storageId, storeType);
         using var iterator = keyValueStore!.All();
         foreach (var item in iterator)
         {
