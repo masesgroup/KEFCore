@@ -230,7 +230,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         index++;
                     }
                 }
-                return bools.All(static (o) => o == true);
+                return bools.All(static (o) => o);
             }
 
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
