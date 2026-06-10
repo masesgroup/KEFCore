@@ -63,7 +63,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
-            using var record2 = record.CastTo<ConsumerRecord<K, V>>();
+            using var record2 = record.CastDirectAndDispose<ConsumerRecord<K, V>>();
             using var topic = record2.Topic();
             using var headers = record2.Headers();
             var jKey = record2.Key();
@@ -74,9 +74,9 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, jKey);
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, jValue);
 
-            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record.Partition(), record.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record2.Partition(), record2.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
 
-            return record.Timestamp();
+            return record2.Timestamp();
         }
     }
 
@@ -142,6 +142,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     private readonly ISerDes<TValue, V> _valueSerdes;
     private readonly string _storageId;
 
+    private ReadOnlyKeyValueStore<K, V>? _keyValueStore;
+
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -156,16 +158,28 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         _storageId = _streamsManager!.AddEntity(this, _metadata.EntityType, new Tuple<ISerDes<TKey, K>, ISerDes<TValue, V>>(_keySerdes, _valueSerdes));
     }
 
+    ReadOnlyKeyValueStore<K, V> GetKeyValueStore()
+    {
+        if (_keyValueStore == null)
+        {
+            using var storeType = QueryableStoreTypes.KeyValueStore<K, V>();
+            using var storeQueryParameter = StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, storeType);
+            _keyValueStore = _streamsManager!.Streams.Store(storeQueryParameter);
+        }
+        return _keyValueStore;
+    }
+
     /// <inheritdoc/>
     public void Dispose()
     {
+        _keyValueStore?.Dispose();
         _streamsManager!.Dispose(_metadata.EntityType);
     }
 
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, false);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), false);
     }
 
     /// <inheritdoc/>
@@ -173,13 +187,13 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     {
         TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
         TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, false, start, end);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), false, start, end);
     }
 
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
     {
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, true);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), true);
     }
 
     /// <inheritdoc/>
@@ -187,23 +201,22 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     {
         TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
         TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, true, start, end);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), true, start, end);
     }
 
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues)
     {
         TKey? prefix = (TKey)keyValueFactory.CreateFromKeyValues(prefixValues!)!;
-        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, _storageId, prefix);
+        return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), prefix);
     }
 
     V GetV(TKey key)
     {
-        using ReadOnlyKeyValueStore<K, V>? keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(_storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-        if (keyValueStore == null) return default!;
+        if (GetKeyValueStore() == null) return default!;
         var k = _keySerdes.Serialize((Java.Lang.String)null!, key);
         using var disposable = k as IDisposable;
-        var v = keyValueStore.Get(k);
+        var v = GetKeyValueStore().Get(k);
         return v;
     }
 
@@ -260,21 +273,22 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         ISerDes<TValue, V> valueSerdes = serdes.Item2;
 
         using var scope = new JCOBridgeDisposeFastScope();
-        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
-        using var iterator = keyValueStore?.All();
+        using var storeType = QueryableStoreTypes.KeyValueStore<K, V>();
+        using var storeQueryParameter = StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, storeType);
+        using ReadOnlyKeyValueStore<K, V>? keyValueStore = streams.Store(storeQueryParameter);
+        using var iterator = keyValueStore!.All();
         while (iterator!.HasNext())
         {
             using KeyValue<K, V> kv = iterator.Next();
-            using var kvSupport = new MASES.KNet.Streams.KeyValueSupport<K, V>(kv);
-            var key = kvSupport.Key;
-            var value = kvSupport.Value;
+            var key = kv.key;
+            var value = kv.value;
             using var disposableKey = key as IDisposable;
             using var disposableValue = value as IDisposable;
             yield return new StoredEventChange(new FreshEventChangeExtraData<TKey, TValue>(keySerdes.Deserialize((Java.Lang.String)null!, key), valueSerdes.Deserialize((Java.Lang.String)null!, value)));
         }
     }
 
-    class KafkaEnumberable : IEnumerable<ValueBuffer>
+    sealed class KafkaEnumberable : IEnumerable<ValueBuffer>
     {
         private readonly bool _withPrefix;
         private readonly bool _isReverse;
@@ -288,20 +302,20 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly ReadOnlyKeyValueStore<K, V>? _keyValueStore = null;
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId, bool isReverse)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore, bool isReverse)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keySerdes = keySerdes;
             _valueSerdes = valueSerdes;
             _isReverse = isReverse;
-            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+            _keyValueStore = keyValueStore;
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
         }
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId, bool isReverse, TKey? rangeStart, TKey? rangeEnd)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore, bool isReverse, TKey? rangeStart, TKey? rangeEnd)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
@@ -311,13 +325,13 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _useRange = true;
             _rangeStart = _keySerdes.Serialize((Java.Lang.String)null!, rangeStart!);
             _rangeEnd = _keySerdes.Serialize((Java.Lang.String)null!, rangeEnd!);
-            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+            _keyValueStore = keyValueStore;
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
         }
 
-        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, string storageId, TKey? prefix)
+        public KafkaEnumberable(IValueContainerMetadata metadata, IComplexTypeConverterFactory complexTypeConverterFactory, ISerDes<TKey, K> keySerdes, ISerDes<TValue, V> valueSerdes, ReadOnlyKeyValueStore<K, V>? keyValueStore, TKey? prefix)
         {
             _metadata = metadata;
             _complexTypeConverterFactory = complexTypeConverterFactory;
@@ -325,7 +339,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             _valueSerdes = valueSerdes;
             _withPrefix = true;
             _prefix = _keySerdes.Serialize((Java.Lang.String)null!, prefix!);
-            _keyValueStore = _streamsManager!.Streams?.Store(StoreQueryParameters<ReadOnlyKeyValueStore<K, V>>.FromNameAndType(storageId, QueryableStoreTypes.KeyValueStore<K, V>()));
+            _keyValueStore = keyValueStore;
 #if DEBUG_PERFORMANCE
             KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator for {_metadata.EntityType.Name} - ApproximateNumEntries {_keyValueStore?.ApproximateNumEntries()}");
 #endif
@@ -406,7 +420,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         }
     }
 
-    class KafkaEnumerator : IEnumerator<ValueBuffer>
+    sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
     {
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -448,7 +462,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
                 {
                     _currentSw.Start();
 #endif
-                    return _current;
+                return _current;
 #if DEBUG_PERFORMANCE
                 }
                 finally

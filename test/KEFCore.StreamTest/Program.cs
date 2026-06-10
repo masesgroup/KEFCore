@@ -125,7 +125,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Stream
                 }
 
                 watch.Restart();
-                var all = context.Posts.All((o) => true);
+                var all = context.Posts.All(static (o) => true);
                 watch.Stop();
                 ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 

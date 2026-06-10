@@ -48,11 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
                 if (ProgramConfig.Config.ManageEvents)
                 {
-                    context.ChangeTracker.Tracked += (sender, e) =>
+                    context.ChangeTracker.Tracked += static (sender, e) =>
                     {
 
                     };
-                    context.ChangeTracker.DetectedEntityChanges += (sender, e) =>
+                    context.ChangeTracker.DetectedEntityChanges += static (sender, e) =>
                     {
 
                     };
@@ -148,9 +148,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test
                 }
 
                 watch.Restart();
-                var all = context.Posts.All((o) => true);
+                var all = context.Posts.All(static (o) => true);
                 watch.Stop();
-                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All((o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
+                if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed context.Posts.All(static (o) => true) {watch.ElapsedMilliseconds} ms. Result is {all}");
 
                 Blog blog = null;
                 try

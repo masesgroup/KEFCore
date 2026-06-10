@@ -144,7 +144,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.Single(b => b.BlogId == {ProgramConfig.Config.NumberOfElements - 1}) takes {watch.Elapsed}. Result is {post}", post == default);
 
                         watch.Restart();
-                        var all = context.Posts.All((o) => true);
+                        var all = context.Posts.All(static (o) => true);
                         watch.Stop();
                         _tests[execution].QueryTimes.Add(watch.Elapsed);
                         if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Posts.All((o) => true) takes {watch.Elapsed}. Result is {all}");
