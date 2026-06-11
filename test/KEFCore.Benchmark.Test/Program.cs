@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Base;
 using Microsoft.EntityFrameworkCore;
@@ -269,6 +270,9 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Blog>().HasKEFCoreValueBufferCache(TimeSpan.FromSeconds(ProgramConfig.Config.ForwardCacheTimeout), TimeSpan.FromSeconds(ProgramConfig.Config.ReverseCacheTimeout));
+            modelBuilder.Entity<Post>().HasKEFCoreValueBufferCache(TimeSpan.FromSeconds(ProgramConfig.Config.ForwardCacheTimeout), TimeSpan.FromSeconds(ProgramConfig.Config.ReverseCacheTimeout));
+
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<Blog>().HasKey(c => new { c.BlogId, c.Rating });
