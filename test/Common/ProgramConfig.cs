@@ -129,6 +129,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public long DefaultSynchronizationTimeout { get; set; } = Timeout.Infinite;
         public bool ForceDebugLog { get; set; } = false;
         public bool EnableIntermediateOutput { get; set; } = false;
+        public int ForwardCacheTimeout { get; set; } = -1;
+        public int ReverseCacheTimeout { get; set; } = -1;
 
         public void ApplyOnContext(KEFCoreDbContext context)
         {
