@@ -72,6 +72,8 @@ Currently the project tries to support, at our best, the [official supported Apa
 
 | KEFCore | State | KNet | Apache Kafka™ | .NET | JVM™ |
 |:---:	|:---:	|:---:	|:---:	|:---:	|:---:	|
+| 4.* | Pre-release | 3.* | 4.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
+| 3.* | Pre-release | 2.9.* | 3.9.* | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
 | 2.6.*+ | Active | 3.2.x | 4.2.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 17+](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/) |
 | 2.5.* | Deprecated | 2.9.x | 3.9.x | [![.NET 8+](https://img.shields.io/badge/.NET-8%2B-purple)](https://dotnet.microsoft.com/) | [![Java 11+](https://img.shields.io/badge/Java-11%2B-blue)](https://www.oracle.com/java/) |
 
