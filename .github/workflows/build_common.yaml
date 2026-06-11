@@ -291,7 +291,7 @@ jobs:
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
-        use_cache: [ 'true', 'false' ]
+        use_cache: [ true, false ]
         
     runs-on: ${{ matrix.os }}
     env:
@@ -414,7 +414,7 @@ jobs:
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
-        use_cache: [ 'true', 'false' ]
+        use_cache: [ true, false ]
 
     runs-on: ${{ matrix.os }}
     env:
@@ -762,7 +762,7 @@ jobs:
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: [ '17', '21', '25' ] # only LTS versions
-        use_cache: [ 'true', 'false' ]
+        use_cache: [ true, false ]
         
     runs-on: ${{ matrix.os }}
     env:
