@@ -261,6 +261,101 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 <p>The storage directory is keyed on <code>StorageIdForTable</code> which includes the entity topic name and the cluster ID. Changing <code>ApplicationId</code>, the topic name, or the cluster will produce a different storage ID and trigger a full rebuild.</p>
 </div>
 <hr>
+<h2 id="value-buffer-cache">Value buffer cache</h2>
+<p>For entities queried with full scans but written infrequently, KEFCore supports an in-memory result cache that eliminates deserialization and JNI boundary cost on repeated queries. Two independent caches are maintained per entity type — one for forward enumeration and one for reverse — each a <code>SortedList&lt;TKey, ValueBuffer&gt;</code> keyed on the entity primary key.</p>
+<h3 id="how-it-works">How it works</h3>
+<p>Each cache is populated lazily on the first <strong>complete</strong> enumeration in its direction. The <code>PopulatingEnumerator</code> accumulates <code>(key, ValueBuffer)</code> pairs as the caller iterates. On <code>Dispose</code>, if the enumeration was complete (<code>MoveNext</code> returned <code>false</code>), the <code>SortedList</code> is committed to the cache with the configured expiry. If the caller stopped early, the accumulated data is discarded — no partial population.</p>
+<p>Once warm, the <code>SortedList</code> serves all access paths in that direction:</p>
+<table>
+<thead>
+<tr>
+<th>Access path</th>
+<th>Forward cache</th>
+<th>Reverse cache</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GetValueBuffers()</code> — full scan</td>
+<td>Populates on first complete enumeration; hits on subsequent</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>GetValueBuffersReverse()</code> — full reverse scan</td>
+<td>—</td>
+<td>Populates on first complete enumeration; hits on subsequent; cold → native RocksDB reverse iterator</td>
+</tr>
+<tr>
+<td>Single key lookup</td>
+<td><code>O(log n)</code> binary search on <code>Keys</code> array, zero JNI</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Key range</td>
+<td>Index scan lower→upper bound, zero JNI</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Reverse range</td>
+<td>—</td>
+<td>Index scan upper→lower bound, zero JNI</td>
+</tr>
+<tr>
+<td>Prefix scan</td>
+<td>Scan from first matching key, zero JNI</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>SortedList</code> is backed by two parallel arrays (<code>keys[]</code> and <code>values[]</code>). Reverse iteration is direct index traversal — <code>O(n)</code>, zero allocation, no buffering.</p>
+<h3 id="invalidation">Invalidation</h3>
+<p>Both caches are invalidated together when new data from the cluster arrives via <code>FreshEventChange</code>, which fires after any <code>SaveChanges</code> reaches the Streams state store. <code>IsWarm</code> is checked as a guard before constructing key objects — key construction has a non-trivial allocation cost and is skipped when the cache is definitely cold.</p>
+<h3 id="memory-considerations">Memory considerations</h3>
+<p>Enabling both forward and reverse caches doubles memory consumption for that entity — each holds an independent copy of all <code>ValueBuffer</code> objects. For large entities, enable only the direction that is actually queried frequently.</p>
+<h3 id="configuration">Configuration</h3>
+<pre><code class="lang-csharp">// Attribute — same TTL for forward and reverse (default: reverseTtlSeconds = ttlSeconds)
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 30)]
+[Table(&quot;Country&quot;)]
+public class Country { ... }
+
+// Attribute — different TTLs
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 15)]
+[Table(&quot;Product&quot;)]
+public class Product { ... }
+
+// Attribute — only forward cache
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 60, reverseTtlSeconds: 0)]
+[Table(&quot;PriceList&quot;)]
+public class PriceList { ... }
+
+// Attribute — only reverse cache (entity always queried OrderByDescending)
+[KEFCoreValueBufferCacheAttribute(ttlSeconds: 0, reverseTtlSeconds: 30)]
+[Table(&quot;EventLog&quot;)]
+public class EventLog { ... }
+
+// Fluent API — same TTL for both (reverseTtl defaults to ttl)
+modelBuilder.Entity&lt;Country&gt;()
+            .HasKEFCoreValueBufferCache(ttl: TimeSpan.FromSeconds(30));
+
+// Fluent API — different TTLs
+modelBuilder.Entity&lt;Product&gt;()
+            .HasKEFCoreValueBufferCache(
+                ttl: TimeSpan.FromSeconds(60),
+                reverseTtl: TimeSpan.FromSeconds(15));
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>This cache is most effective for reference data and lookup tables — entities queried frequently but written rarely. For entities with high write frequency the cache is invalidated often and the benefit diminishes.</p>
+</div>
+<div class="NOTE">
+<h5>Note</h5>
+<p>A TTL of zero or negative disables that cache direction. The internal <code>CachedValueBufferStore&lt;TKey&gt;</code> proxy is always created but acts as a transparent pass-through with no allocation overhead.</p>
+</div>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Both caches are shared across all <code>DbContext</code> instances on the same cluster and <code>ApplicationId</code>. A write from any context invalidates both caches for all contexts sharing the same producer.</p>
+</div>
+<hr>
 <h2 id="enumerator-prefetch">Enumerator prefetch</h2>
 <p><code>UseEnumeratorWithPrefetch</code> (context-scoped, default: <code>true</code>) activates enumerator instances that prefetch data from the state store in batches, reducing JVM boundary crossings during enumeration.</p>
 <p>This is beneficial when iterating large result sets. Disable it only if you observe ordering or consistency issues during enumeration (which should be rare).</p>

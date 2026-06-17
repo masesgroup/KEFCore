@@ -103,6 +103,16 @@
 <li>[x] <code>StreamsManager</code> factory — lifecycle managed per <code>ApplicationId</code> via <code>IKEFCoreCluster</code> (#501)</li>
 <li>[x] ComplexType LINQ binding — <code>TryBindMember</code> extension, <code>KEFCoreComplexTypeProjectionExpression</code> (#491)</li>
 <li>[x] <code>TranslateRightJoin</code> implementation — EF Core 10 requirement (#514)</li>
+<li>[x] Per-entity topic partitions and replication factor — <code>KEFCoreTopicPartitionsConvention</code>, <code>KEFCoreTopicReplicationFactorConvention</code> (#417)</li>
+<li>[x] Per-entity topic retention — <code>KEFCoreTopicRetentionConvention</code>, <code>KEFCoreTopicRetentionAttribute</code> (#417)</li>
+<li>[x] Per-entity read-only mode — <code>KEFCoreReadOnlyConvention</code>, <code>KEFCoreReadOnlyAttribute</code> (#417)</li>
+<li>[x] Per-entity store lookup optimization flags — <code>KEFCoreStoreLookupConvention</code>, <code>KEFCoreStoreLookupAttribute</code> (#417)</li>
+<li>[x] Per-entity serialization override — <code>KEFCoreSerDesConvention</code>, <code>KEFCoreSerDesAttribute</code> (#417)</li>
+<li>[x] Per-entity producer configuration — <code>KEFCoreProducerConvention</code>, <code>KEFCoreProducerAttribute</code> (#417)</li>
+<li>[x] Kafka transactional producer support — <code>KEFCoreTransactionalConvention</code>, <code>KEFCoreTransactionalAttribute</code>, <code>ITransactionalEntityTypeProducer</code> (#544, #545)</li>
+<li>[x] Per-entity RocksDB lifecycle handler — <code>KEFCoreRocksDbLifecycleAttributeConvention</code>, <code>KEFCoreRocksDbLifecycleAttribute</code> (#551, #552)</li>
+<li>[x] SSL/SASL broker authentication — <code>SslConfig</code>, <code>SaslConfig</code>, <code>SecurityProtocol</code> singleton options; <code>SslConfigsBuilder</code>, <code>SaslConfigsBuilder</code> from KNet (#1465)</li>
+<li>[x] Value buffer result cache — <code>KEFCoreValueBufferCacheConvention</code>, <code>KEFCoreValueBufferCacheAttribute</code>, <code>CachedValueBufferEnumerable</code> proxy with TTL and auto-invalidation on <code>FreshEventChange</code></li>
 <li>[ ] Remove deprecated options: <code>UseCompactedReplicator</code>, <code>UseGlobalTable</code>, <code>ManageEvents</code>, <code>ConsumerConfig</code>, <code>DefaultConsumerInstances</code></li>
 <li>[ ] Full documentation update for new conventions and options architecture</li>
 </ul>

@@ -198,22 +198,6 @@ any release. You should only use it directly in your code with extreme caution a
 doing so can result in application failures when updating to a new Entity Framework Core release.</p>
 </dd>
     </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html">KNetStreamsRetriever&lt;TKey, TValue, TJVMKey, TJVMValue&gt;</a></dt>
-      <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-the same compatibility standards as public APIs. It may be changed or removed without notice in
-any release. You should only use it directly in your code with extreme caution and knowing that
-doing so can result in application failures when updating to a new Entity Framework Core release.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.html">KafkaStreamsRetriever&lt;TKey, TValue, K, V&gt;</a></dt>
-      <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
-the same compatibility standards as public APIs. It may be changed or removed without notice in
-any release. You should only use it directly in your code with extreme caution and knowing that
-doing so can result in application failures when updating to a new Entity Framework Core release.</p>
-</dd>
-    </dl>
     <h3 id="interfaces">
 Interfaces
 </h3>
@@ -266,7 +250,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </dd>
     </dl>
     <dl class="jumplist">
-      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html">IKEFCoreStreamsRetriever&lt;TKey&gt;</a></dt>
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html">IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;</a></dt>
       <dd><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
 the same compatibility standards as public APIs. It may be changed or removed without notice in
 any release. You should only use it directly in your code with extreme caution and knowing that
@@ -292,6 +276,11 @@ doing so can result in application failures when updating to a new Entity Framew
 the same compatibility standards as public APIs. It may be changed or removed without notice in
 any release. You should only use it directly in your code with extreme caution and knowing that
 doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsChangeManager.html">IStreamsChangeManager</a></dt>
+      <dd><p>Interface used to finalize event management</p>
 </dd>
     </dl>
     <dl class="jumplist">

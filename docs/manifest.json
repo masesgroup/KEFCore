@@ -358,7 +358,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.yml\" sourcestartlinenumber=\"1\">A <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> instance represents a session with the Apache Kafka� cluster and can be used to query and save\ninstances of your entities. <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> extends <xref href=\"Microsoft.EntityFrameworkCore.DbContext\" data-throw-if-not-resolved=\"false\"></xref> and it is a combination of the Unit Of Work and Repository patterns.</p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.yml\" sourcestartlinenumber=\"1\">A <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> instance represents a session with the Apache Kafka™ cluster and can be used to query and save\ninstances of your entities. <xref href=\"MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext\" data-throw-if-not-resolved=\"false\"></xref> extends <xref href=\"Microsoft.EntityFrameworkCore.DbContext\" data-throw-if-not-resolved=\"false\"></xref> and it is a combination of the Unit Of Work and Repository patterns.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -656,6 +656,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreValueBufferCacheConvention.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreValueBufferCacheConvention.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreValueBufferCacheConvention",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.KEFCoreValueBufferCacheConvention.yml\" sourcestartlinenumber=\"1\">Resolves per-entity value buffer cache TTL configuration at model finalization time.\nReads <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute\" data-throw-if-not-resolved=\"false\"></xref> from the entity CLR type and\nstores forward and reverse TTLs as model annotations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.Conventions.yml",
       "output": {
         ".html": {
@@ -905,6 +919,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.yml\" sourcestartlinenumber=\"1\">Assigns this entity type to a Kafka transaction group, enabling exactly-once semantics\nfor all entities sharing the same <xref href=\"MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.TransactionGroup\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute.yml\" sourcestartlinenumber=\"1\">Configures an in-memory result cache for this entity type's Kafka Streams state store.</p>\n<p>\nTwo independent caches are maintained: one for forward enumeration\n(<code>GetValueBuffers</code>, <code>GetValueBuffersRange</code>, single key lookup)\nand one for reverse enumeration (<code>GetValueBuffersReverse</code>,\n<code>GetValueBuffersReverseRange</code>). Each is backed by its own\n<xref href=\"System.Collections.Generic.SortedList%602\" data-throw-if-not-resolved=\"false\"></xref> and populated independently on the first\ncomplete enumeration in the respective direction.\n</p>\n<p>\nPartial enumerations (e.g. <code>First()</code>, <code>Take(n)</code>) never populate the cache.\nBoth caches are invalidated automatically when new data arrives from the cluster via\n<code>FreshEventChange</code>.\n</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2140,17 +2168,17 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.yml",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html"
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html"
         }
       },
       "version": "",
       "Uid": null,
       "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever<TKey>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever<TKey, TValueContainer>",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2193,6 +2221,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsChangeManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsChangeManager.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsChangeManager",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsChangeManager.yml\" sourcestartlinenumber=\"1\">Interface used to finalize event management</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2389,34 +2431,6 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTypeMappingSource",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTypeMappingSource.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KNetStreamsRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever<TKey, TValue, K, V>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Storage.Internal.KafkaStreamsRetriever-4.yml\" sourcestartlinenumber=\"1\">This is an internal API that supports the Entity Framework Core infrastructure and not subject to\nthe same compatibility standards as public APIs. It may be changed or removed without notice in\nany release. You should only use it directly in your code with extreme caution and knowing that\ndoing so can result in application failures when updating to a new Entity Framework Core release.</p>\n"
     },
     {
       "type": "ManagedReference",

@@ -220,7 +220,7 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
 <ul>
 <li>must implements the <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs"><code>IValueContainer&lt;T&gt;</code> interface</a></li>
 <li>must be a generic type</li>
-<li>must have at least a default constructor and a constructor which accept six parameters in this order:
+<li>must have at least a default constructor and a constructor which accept two parameters in this order:
 <ol>
 <li><code>IValueContainerData</code> -&gt; the reference containing support information and data</li>
 <li><code>IComplexTypeConverterFactory?</code> -&gt; an optional reference to the factory where the instance will retrieve specialized serializer, see <a href="#complex-type-serialization">Complex type serialization</a></li>
@@ -262,19 +262,19 @@ The schema of the Apache Kafka™ record value follows the code definition in <c
     /// &lt;summary&gt;
     /// Returns back a dictionary of properties (PropertyName, Value) associated to the Entity
     /// &lt;/summary&gt;
-    /// &lt;param name=&quot;entityType&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; can be used to retrieve metadata, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
+    /// &lt;param name=&quot;metadata&quot;&gt;The &lt;see cref=&quot;IValueContainerMetadata&quot;/&gt; can be used to retrieve data, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
     /// &lt;returns&gt;A dictionary of properties (PropertyName, Value) filled in with the data stored in the &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance&lt;/returns&gt;
-    public IDictionary&lt;string, object?&gt; GetProperties(IEntityType? entityType)
+    public IDictionary&lt;string, object?&gt; GetProperties(IValueContainerMetadata? metadata)
     {
         // add specific logic
     }
     /// &lt;summary&gt;
     /// Returns back a dictionary of complex properties (PropertyName, Value) associated to the Entity
     /// &lt;/summary&gt;
-    /// &lt;param name=&quot;entityType&quot;&gt;The &lt;see cref=&quot;IEntityType&quot;/&gt; can be used to retrieve metadata, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
+    /// &lt;param name=&quot;metadata&quot;&gt;The &lt;see cref=&quot;IValueContainerMetadata&quot;/&gt; can be used to retrieve data, if &lt;see langword=&quot;null&quot;/&gt; shall be done an inference from stored data&lt;/param&gt;
     /// &lt;param name=&quot;complexTypeFactory&quot;&gt;The optional &lt;see cref=&quot;IComplexTypeConverterFactory&quot;/&gt; instance to manage conversion of &lt;see cref=&quot;IComplexType&quot;/&gt;&lt;/param&gt;
     /// &lt;returns&gt;A dictionary of properties (PropertyName, Value) filled in with the data stored in the &lt;see cref=&quot;IValueContainer{T}&quot;/&gt; instance&lt;/returns&gt;
-    public IDictionary&lt;string, object?&gt; GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)
+    public IDictionary&lt;string, object?&gt; GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory)
     {
         // add specific logic
     }

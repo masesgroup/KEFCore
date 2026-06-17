@@ -214,8 +214,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreSingletonOptions_ApplicationId_remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka� cluster of previous running application.
-If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka� cluster and local stores does not contains the expected information.</p>
+  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
+If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</p>
 </div>
 
 
@@ -228,7 +228,7 @@ If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDb
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka� cluster</p>
+  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka™ cluster</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -460,7 +460,7 @@ at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MAS
 
   <div class="markdown level1 summary"><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SecurityProtocol">SecurityProtocol</a> configuration applied to all Kafka clients (producer, streams).
 When set, it is merged into <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">ProducerConfig</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig">StreamsConfig</a>
-at connection time via <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">WithSecurityProtocol(string)</a>.</p>
+at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.CommonClientConfigsBuilder-1.html#MASES_KNet_CommonClientConfigsBuilder_1_WithSecurityProtocol_Org_Apache_Kafka_Common_Security_Auth_SecurityProtocol_">WithSecurityProtocol(SecurityProtocol)</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -590,7 +590,7 @@ at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MAS
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L105"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -655,7 +655,7 @@ public virtual bool UseCompactedReplicator { get; }</code></pre>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L111"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka� Streams instead of standard Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -719,7 +719,7 @@ public virtual bool UseCompactedReplicator { get; }</code></pre>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreSingletonOptions.cs/#L113"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka� Streams is in use</p>
+  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka™ Streams is in use</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

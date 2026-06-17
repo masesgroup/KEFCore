@@ -372,7 +372,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseConnected" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.EnsureDatabaseConnected">
   EnsureDatabaseConnected()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L82"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.idatabasecreator.canconnect">CanConnect()</a></p>
@@ -404,7 +404,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseCreated" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.EnsureDatabaseCreated">
   EnsureDatabaseCreated()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.idatabasecreator.ensurecreated">EnsureCreated()</a></p>
@@ -436,7 +436,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseDeleted" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.EnsureDatabaseDeleted">
   EnsureDatabaseDeleted()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L66"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L74"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Execute the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.idatabasecreator.ensuredeleted">EnsureDeleted()</a></p>
@@ -468,7 +468,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_EnsureDatabaseSynchronized_System_Int64_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.EnsureDatabaseSynchronized(System.Int64)">
   EnsureDatabaseSynchronized(long)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L78"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L86"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Verify if local instance is synchronized with the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Cluster">Cluster</a></p>
@@ -501,6 +501,38 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Lock_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.Lock*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Lock_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.Lock(System.Threading.CancellationToken)">
+  Lock(CancellationToken)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L66"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locks the instance during updates</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Lock(CancellationToken cancellationToken = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cancellationToken</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken">CancellationToken</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_RegisterTables_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.RegisterTables*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_RegisterTables_System_Collections_Generic_IEnumerable_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTable__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.RegisterTables(System.Collections.Generic.IEnumerable{MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable})">
@@ -522,6 +554,33 @@ doing so can result in application failures when updating to a new Entity Framew
     <dd><p>The set of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTable.html">IKEFCoreTable</a> to register</p>
 </dd>
   </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Release_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.Release*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Release" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase.Release">
+  Release()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreDatabase.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Release the instance at the end of the update</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Release()</code></pre>
+  </div>
+
 
 
 

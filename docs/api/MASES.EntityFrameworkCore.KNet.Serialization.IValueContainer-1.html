@@ -197,8 +197,8 @@ Interface IValueContainer&lt;T&gt;  <a class="header-action link-secondary" titl
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetComplexProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetComplexProperties*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetComplexProperties_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetComplexProperties(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
-  GetComplexProperties(IEntityType?, IComplexTypeConverterFactory?)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetComplexProperties_MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetComplexProperties(MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
+  GetComplexProperties(IValueContainerMetadata?, IComplexTypeConverterFactory?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs/#L56"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -207,13 +207,13 @@ Interface IValueContainer&lt;T&gt;  <a class="header-action link-secondary" titl
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IDictionary&lt;string, object?&gt; GetComplexProperties(IEntityType? entityType, IComplexTypeConverterFactory? complexTypeFactory)</code></pre>
+    <pre><code class="lang-csharp hljs">IDictionary&lt;string, object?&gt; GetComplexProperties(IValueContainerMetadata? metadata, IComplexTypeConverterFactory? complexTypeFactory)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
-    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> can be used to retrieve metadata, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> shall be done an inference from stored data</p>
+    <dt><code>metadata</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a> can be used to retrieve data, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> shall be done an inference from stored data</p>
 </dd>
     <dt><code>complexTypeFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a></dt>
     <dd><p>The optional <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory.html">IComplexTypeConverterFactory</a> instance to manage conversion of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplextype">IComplexType</a></p>
@@ -278,8 +278,8 @@ Interface IValueContainer&lt;T&gt;  <a class="header-action link-secondary" titl
 
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetProperties*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetProperties_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetProperties(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
-  GetProperties(IEntityType?)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_IValueContainer_1_GetProperties_MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer`1.GetProperties(MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata)">
+  GetProperties(IValueContainerMetadata?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/IValueContainer.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -288,13 +288,13 @@ Interface IValueContainer&lt;T&gt;  <a class="header-action link-secondary" titl
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IDictionary&lt;string, object?&gt; GetProperties(IEntityType? entityType)</code></pre>
+    <pre><code class="lang-csharp hljs">IDictionary&lt;string, object?&gt; GetProperties(IValueContainerMetadata? metadata)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
-    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a> can be used to retrieve metadata, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> shall be done an inference from stored data</p>
+    <dt><code>metadata</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html">IValueContainerMetadata</a> can be used to retrieve data, if <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> shall be done an inference from stored data</p>
 </dd>
   </dl>
 

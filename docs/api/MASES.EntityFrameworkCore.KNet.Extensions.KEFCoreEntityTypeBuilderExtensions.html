@@ -567,6 +567,119 @@ in the same Kafka transaction. Must be non-empty.</p>
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreValueBufferCache_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreValueBufferCache*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreValueBufferCache_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_System_TimeSpan_System_Nullable_System_TimeSpan__" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreValueBufferCache(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder,System.TimeSpan,System.Nullable{System.TimeSpan})">
+  HasKEFCoreValueBufferCache(EntityTypeBuilder, TimeSpan, TimeSpan?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L291"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures independent in-memory result caches for forward and reverse enumeration
+of this entity type's Kafka Streams state store.</p>
+<p>
+Forward cache: populated by the first complete <code>GetValueBuffers()</code> enumeration.
+Also serves single key lookup and range queries when warm.
+</p>
+<p>
+Reverse cache: populated by the first complete <code>GetValueBuffersReverse()</code>
+enumeration. Also serves reverse range queries when warm.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder HasKEFCoreValueBufferCache(this EntityTypeBuilder builder, TimeSpan ttl, TimeSpan? reverseTtl = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd><p>The entity type builder.</p>
+</dd>
+    <dt><code>ttl</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>TTL for the forward cache. Zero or negative disables it.</p>
+</dd>
+    <dt><code>reverseTtl</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a>?</dt>
+    <dd><p>TTL for the reverse cache. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> defaults to the same value as
+<code class="paramref">ttl</code>. Zero or negative disables it.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder">EntityTypeBuilder</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreValueBufferCache_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreValueBufferCache*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_HasKEFCoreValueBufferCache__1_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder___0__System_TimeSpan_System_Nullable_System_TimeSpan__" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.HasKEFCoreValueBufferCache``1(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{``0},System.TimeSpan,System.Nullable{System.TimeSpan})">
+  HasKEFCoreValueBufferCache&lt;TEntity&gt;(EntityTypeBuilder&lt;TEntity&gt;, TimeSpan, TimeSpan?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeBuilderExtensions.cs/#L309"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Configures independent in-memory result caches for forward and reverse enumeration
+of this entity type's Kafka Streams state store.</p>
+<p>
+Forward cache: populated by the first complete <code>GetValueBuffers()</code> enumeration.
+Also serves single key lookup and range queries when warm.
+</p>
+<p>
+Reverse cache: populated by the first complete <code>GetValueBuffersReverse()</code>
+enumeration. Also serves reverse range queries when warm.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EntityTypeBuilder&lt;TEntity&gt; HasKEFCoreValueBufferCache&lt;TEntity&gt;(this EntityTypeBuilder&lt;TEntity&gt; builder, TimeSpan ttl, TimeSpan? reverseTtl = null) where TEntity : class</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>builder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder-1">EntityTypeBuilder</a>&lt;TEntity&gt;</dt>
+    <dd><p>The entity type builder.</p>
+</dd>
+    <dt><code>ttl</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>TTL for the forward cache. Zero or negative disables it.</p>
+</dd>
+    <dt><code>reverseTtl</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a>?</dt>
+    <dd><p>TTL for the reverse cache. <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> defaults to the same value as
+<code class="paramref">ttl</code>. Zero or negative disables it.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.builders.entitytypebuilder-1">EntityTypeBuilder</a>&lt;TEntity&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TEntity</code></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_IsKEFCoreReadOnly_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeBuilderExtensions_IsKEFCoreReadOnly_Microsoft_EntityFrameworkCore_Metadata_Builders_EntityTypeBuilder_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeBuilderExtensions.IsKEFCoreReadOnly(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder)">

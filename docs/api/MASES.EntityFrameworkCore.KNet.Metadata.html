@@ -180,6 +180,24 @@ Applied at topic creation time (<a class="xref" href="https://learn.microsoft.co
 for all entities sharing the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreTransactionalAttribute.html#MASES_EntityFrameworkCore_KNet_Metadata_KEFCoreTransactionalAttribute_TransactionGroup">TransactionGroup</a>.</p>
 </dd>
     </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCoreValueBufferCacheAttribute.html">KEFCoreValueBufferCacheAttribute</a></dt>
+      <dd><p>Configures an in-memory result cache for this entity type's Kafka Streams state store.</p>
+<p>
+Two independent caches are maintained: one for forward enumeration
+(<code>GetValueBuffers</code>, <code>GetValueBuffersRange</code>, single key lookup)
+and one for reverse enumeration (<code>GetValueBuffersReverse</code>,
+<code>GetValueBuffersReverseRange</code>). Each is backed by its own
+<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.sortedlist-2">SortedList&lt;TKey, TValue&gt;</a> and populated independently on the first
+complete enumeration in the respective direction.
+</p>
+<p>
+Partial enumerations (e.g. <code>First()</code>, <code>Take(n)</code>) never populate the cache.
+Both caches are invalidated automatically when new data arrives from the cluster via
+<code>FreshEventChange</code>.
+</p>
+</dd>
+    </dl>
 
 
 </article>
