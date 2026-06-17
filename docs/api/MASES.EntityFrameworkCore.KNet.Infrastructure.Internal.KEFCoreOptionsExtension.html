@@ -284,8 +284,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_ApplicationId_remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka� cluster of previous running application.
-If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka� cluster and local stores does not contains the expected information.</p>
+  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
+If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</p>
 </div>
 
 
@@ -298,7 +298,7 @@ If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDb
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L128"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka� cluster</p>
+  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka™ cluster</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -492,7 +492,7 @@ public virtual int? DefaultConsumerInstances { get; set; }</code></pre>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L169"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka� cluster.
+  <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
 Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> to <code>0</code> the synchronization will be disabled</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -515,7 +515,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_DefaultSynchronizationTimeout_remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>The KEFCore provider try to synchronize with Apache Kafka� cluster waiting at least <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> when <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.database">Database</a> is invoked.</p>
+  <div class="markdown level1 remarks"><p>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> when <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.database">Database</a> is invoked.</p>
 </div>
 
 
@@ -695,7 +695,7 @@ at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MAS
 
   <div class="markdown level1 summary"><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SecurityProtocol">SecurityProtocol</a> configuration applied to all Kafka clients (producer, streams).
 When set, it is merged into <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">ProducerConfig</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig">StreamsConfig</a>
-at connection time via <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">WithSecurityProtocol(string)</a>.</p>
+at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.CommonClientConfigsBuilder-1.html#MASES_KNet_CommonClientConfigsBuilder_1_WithSecurityProtocol_Org_Apache_Kafka_Common_Security_Auth_SecurityProtocol_">WithSecurityProtocol(SecurityProtocol)</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -825,7 +825,7 @@ at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MAS
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -966,7 +966,7 @@ are managed from multiple instances.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L136"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka� Streams instead of standard Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1030,7 +1030,7 @@ are managed from multiple instances.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka� Streams is in use</p>
+  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka™ Streams is in use</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1654,8 +1654,8 @@ If options are invalid, then an exception should be thrown.</p>
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithApplicationId_System_String__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka� cluster of previous running application.
-If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka� cluster and local stores does not contains the expected information.</p>
+  <div class="markdown level1 remarks"><p>Choose the value carefully: upon restart its value is used to identify information on Apache Kafka™ cluster of previous running application.
+If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_UseGlobalTable">UseGlobalTable</a> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> the partitions associated to each topic are shared across all instances with the same <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ApplicationId">ApplicationId</a> so be carefull to avoid other application consumes the data from Apache Kafka™ cluster and local stores does not contains the expected information.</p>
 </div>
 
 
@@ -1668,7 +1668,7 @@ If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDb
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L229"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka� cluster</p>
+  <div class="markdown level1 summary"><p>The bootstrap servers of the Apache Kafka™ cluster</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1705,7 +1705,7 @@ If <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDb
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L236"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Replicator.KNetCompactedReplicator-2.html">KNetCompactedReplicator&lt;K, V&gt;</a> instead of Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -1893,7 +1893,7 @@ public virtual KEFCoreOptionsExtension WithDefaultConsumerInstances(int? default
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L353"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka� cluster.
+  <div class="markdown level1 summary"><p>The default timeout, expressed in milliseconds, KEFCore will wait for backend to be in-sync with Apache Kafka™ cluster.
 Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> to <code>0</code> the synchronization will be disabled</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1921,7 +1921,7 @@ Setting <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFC
 
 
   <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_WithDefaultSynchronizationTimeout_System_Int64__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>The KEFCore provider try to synchronize with Apache Kafka� cluster waiting at least <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> when <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.database">Database</a> is invoked.</p>
+  <div class="markdown level1 remarks"><p>The KEFCore provider try to synchronize with Apache Kafka™ cluster waiting at least <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_DefaultSynchronizationTimeout">DefaultSynchronizationTimeout</a> when <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade.ensurecreated">EnsureCreated()</a> of <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext.database">Database</a> is invoked.</p>
 </div>
 
 
@@ -2057,7 +2057,7 @@ are managed from multiple instances.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L252"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka� Streams instead of standard Apache Kafka� Streams</p>
+  <div class="markdown level1 summary"><p>Use KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -2171,7 +2171,7 @@ Default value is <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serializat
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Infrastructure/Internal/KEFCoreOptionsExtension.cs/#L259"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka� Streams is in use</p>
+  <div class="markdown level1 summary"><p>Use persistent storage when Apache Kafka™ Streams is in use</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -2323,7 +2323,7 @@ at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MAS
 
   <div class="markdown level1 summary"><p><a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_SecurityProtocol">SecurityProtocol</a> configuration applied to all Kafka clients (producer, streams).
 When set, it is merged into <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_ProducerConfig">ProducerConfig</a> and <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.KEFCoreDbContext.html#MASES_EntityFrameworkCore_KNet_Infrastructure_KEFCoreDbContext_StreamsConfig">StreamsConfig</a>
-at connection time via <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">WithSecurityProtocol(string)</a>.</p>
+at connection time via <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.CommonClientConfigsBuilder-1.html#MASES_KNet_CommonClientConfigsBuilder_1_WithSecurityProtocol_Org_Apache_Kafka_Common_Security_Auth_SecurityProtocol_">WithSecurityProtocol(SecurityProtocol)</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 

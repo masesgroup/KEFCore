@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-      <title>Interface IKEFCoreStreamsRetriever&lt;TKey&gt; | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
+      <title>Interface IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka™ </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Interface IKEFCoreStreamsRetriever&lt;TKey&gt; | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
+      <meta name="title" content="Interface IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt; | MASES Group - Entity Framework Core provider for Apache Kafka™ ">
       <meta name="description" content="This is a descriptive page of Entity Framework Core provider for Apache Kafka">
       <meta name="description" content="This is an internal API that supports the Entity Framework Core infrastructure and not subject to the same compatibility standards as public APIs. It may be changed or removed without notice in any release. You should only use it directly in your code with extreme caution and knowing that doing so can result in application failures when updating to a new Entity Framework Core release.">
       <link rel="icon" href="../images/favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/masesgroup/KEFCore/new/master/apiSpec/new?filename=MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2.md&amp;value=---%0Auid%3A%20MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever%602%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,12 +84,12 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1">
+        <article data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2">
 
 
 
-  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1" class="text-break">
-Interface IKEFCoreStreamsRetriever&lt;TKey&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2" class="text-break">
+Interface IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -105,7 +105,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IKEFCoreStreamsRetriever&lt;TKey&gt; : IDisposable where TKey : notnull</code></pre>
+    <pre><code class="lang-csharp hljs">public interface IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt; : IDisposable where TKey : notnull where TValueContainer : IValueContainer&lt;TKey&gt;</code></pre>
   </div>
 
 
@@ -113,6 +113,8 @@ doing so can result in application failures when updating to a new Entity Framew
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>TKey</code></dt>
+    <dd></dd>
+    <dt><code>TValueContainer</code></dt>
     <dd></dd>
   </dl>
 
@@ -136,11 +138,11 @@ doing so can result in application failures when updating to a new Entity Framew
 </h2>
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_Exist_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.Exist*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_Exist_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.Exist*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_Exist__0_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.Exist(`0)">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_Exist__0_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.Exist(`0)">
   Exist(TKey)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L73"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Check if a <code class="paramref">key</code> exist</p>
@@ -175,14 +177,14 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffers*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffers_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffers*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffers_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffers(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffers_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffers(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
   GetValueBuffers(IKEFCoreDatabase)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html">IKEFCoreStreamsRetriever&lt;TKey&gt;</a> instance</p>
+  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html">IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -214,11 +216,11 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersByPrefix_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersByPrefix*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersByPrefix_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersByPrefix*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersByPrefix_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersByPrefix(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[])">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersByPrefix_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersByPrefix(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[])">
   GetValueBuffersByPrefix(IKEFCoreDatabase, IPrincipalKeyValueFactory&lt;TKey&gt;, object?[]?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L71"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieve the <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> using prefix scan</p>
@@ -259,14 +261,14 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersRange*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersRange*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[],System.Object[])">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[],System.Object[])">
   GetValueBuffersRange(IKEFCoreDatabase, IPrincipalKeyValueFactory&lt;TKey&gt;, object?[]?, object?[]?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> in the range <code class="paramref">rangeStart</code>/<code class="paramref">rangeEnd</code> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html">IKEFCoreStreamsRetriever&lt;TKey&gt;</a> instance</p>
+  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> in the range <code class="paramref">rangeStart</code>/<code class="paramref">rangeEnd</code> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html">IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -307,14 +309,14 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersReverse_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersReverse*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersReverse_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersReverse*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersReverse_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersReverse(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersReverse_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersReverse(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase)">
   GetValueBuffersReverse(IKEFCoreDatabase)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieve a reverse order <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html">IKEFCoreStreamsRetriever&lt;TKey&gt;</a> instance</p>
+  <div class="markdown level1 summary"><p>Retrieve a reverse order <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html">IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -346,14 +348,14 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersReverseRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersReverseRange*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersReverseRange_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersReverseRange*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_GetValueBuffersReverseRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.GetValueBuffersReverseRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[],System.Object[])">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_GetValueBuffersReverseRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_Microsoft_EntityFrameworkCore_ChangeTracking_IPrincipalKeyValueFactory__0__System_Object___System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.GetValueBuffersReverseRange(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreDatabase,Microsoft.EntityFrameworkCore.ChangeTracking.IPrincipalKeyValueFactory{`0},System.Object[],System.Object[])">
   GetValueBuffersReverseRange(IKEFCoreDatabase, IPrincipalKeyValueFactory&lt;TKey&gt;, object?[]?, object?[]?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L63"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> in the reverse range <code class="paramref">rangeStart</code>/<code class="paramref">rangeEnd</code> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-1.html">IKEFCoreStreamsRetriever&lt;TKey&gt;</a> instance</p>
+  <div class="markdown level1 summary"><p>Retrieve an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> in the reverse range <code class="paramref">rangeStart</code>/<code class="paramref">rangeEnd</code> from the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever-2.html">IKEFCoreStreamsRetriever&lt;TKey, TValueContainer&gt;</a> instance</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -394,11 +396,11 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_TryGetProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.TryGetProperties*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_TryGetProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.TryGetProperties*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_TryGetProperties__0_System_Collections_Generic_IDictionary_System_String_System_Object___System_Collections_Generic_IDictionary_System_String_System_Object___" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.TryGetProperties(`0,System.Collections.Generic.IDictionary{System.String,System.Object}@,System.Collections.Generic.IDictionary{System.String,System.Object}@)">
-  TryGetProperties(TKey, out IDictionary&lt;string, object?&gt;, out IDictionary&lt;string, object?&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_TryGetProperties__0__1__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.TryGetProperties(`0,`1@)">
+  TryGetProperties(TKey, out TValueContainer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L91"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the values associated to the <code class="paramref">key</code></p>
@@ -406,7 +408,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">bool TryGetProperties(TKey key, out IDictionary&lt;string, object?&gt; properties, out IDictionary&lt;string, object?&gt; complexProperties)</code></pre>
+    <pre><code class="lang-csharp hljs">bool TryGetProperties(TKey key, out TValueContainer valueContainer)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -414,11 +416,8 @@ doing so can result in application failures when updating to a new Entity Framew
     <dt><code>key</code> <span class="xref">TKey</span></dt>
     <dd><p>The key to retrieve</p>
 </dd>
-    <dt><code>properties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;</dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary&lt;TKey, TValue&gt;</a> containing the property name and associated value, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> otherwise</p>
-</dd>
-    <dt><code>complexProperties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;</dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary&lt;TKey, TValue&gt;</a> containing the complex property name and associated value, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> otherwise</p>
+    <dt><code>valueContainer</code> <span class="xref">TValueContainer</span></dt>
+    <dd><p>The <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer-1.html">IValueContainer&lt;T&gt;</a> containing the properties associated to <code class="paramref">key</code>, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> otherwise</p>
 </dd>
   </dl>
 
@@ -439,11 +438,11 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_TryGetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.TryGetValue*"></a>
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_TryGetValue_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.TryGetValue*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_1_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`1.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)">
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreStreamsRetriever_2_TryGetValue__0_Microsoft_EntityFrameworkCore_Storage_ValueBuffer__" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreStreamsRetriever`2.TryGetValue(`0,Microsoft.EntityFrameworkCore.Storage.ValueBuffer@)">
   TryGetValue(TKey, out ValueBuffer)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L84"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns the values associated to the <code class="paramref">key</code></p>
@@ -485,7 +484,7 @@ doing so can result in application failures when updating to a new Entity Framew
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L28" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IKEFCoreStreamsRetriever.cs/#L30" class="edit-link">Edit this page</a>
         </div>
 
 

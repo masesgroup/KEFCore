@@ -200,7 +200,7 @@ Class KEFCoreEntityTypeExtensions  <a class="header-action link-secondary" title
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_BuildConsumerConfig_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.BuildConsumerConfig(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   BuildConsumerConfig(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L260"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L278"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Builds the <a class="xref" href="https://knet.masesgroup.com/api/MASES.KNet.Consumer.ConsumerConfigBuilder.html">ConsumerConfigBuilder</a> for this entity type, merging the global
@@ -330,7 +330,7 @@ Per-entity values take precedence over the global config.</p>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_ConsumerInstances_Microsoft_EntityFrameworkCore_Metadata_IEntityType_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.ConsumerInstances(Microsoft.EntityFrameworkCore.Metadata.IEntityType,MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
   ConsumerInstances(IEntityType, KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L271"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L289"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets consumer instances</p>
@@ -834,6 +834,82 @@ falling back to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastruct
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueBufferCacheTtl_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueBufferCacheTtl*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueBufferCacheTtl_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueBufferCacheTtl(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  GetValueBufferCacheTtl(IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L258"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the forward cache TTL for this entity type.
+Returns <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan.zero">Zero</a> when not configured (caching disabled).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimeSpan GetValueBufferCacheTtl(this IEntityType entityType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueBufferReverseCacheTtl_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueBufferReverseCacheTtl*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Extensions_KEFCoreEntityTypeExtensions_GetValueBufferReverseCacheTtl_Microsoft_EntityFrameworkCore_Metadata_IEntityType_" data-uid="MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeExtensions.GetValueBufferReverseCacheTtl(Microsoft.EntityFrameworkCore.Metadata.IEntityType)">
+  GetValueBufferReverseCacheTtl(IEntityType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Extensions/KEFCoreEntityTypeExtensions.cs/#L267"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the reverse cache TTL for this entity type.
+Returns <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan.zero">Zero</a> when not configured (reverse caching disabled).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TimeSpan GetValueBufferReverseCacheTtl(this IEntityType entityType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entityType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ientitytype">IEntityType</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
     <dd></dd>
   </dl>
 

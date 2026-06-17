@@ -100,6 +100,15 @@
 <li>[x] ComplexType equality enforcement via <code>KEFCoreComplexTypeEquatableConvention</code> with opt-out via <code>KEFCoreIgnoreEquatableCheckAttribute</code></li>
 <li>[x] ComplexType converter registration via <code>KEFCoreComplexTypeConverterConvention</code> — supports <code>KEFCoreComplexTypeConverterAttribute</code> and fluent API (<code>HasKEFCoreComplexTypeConverter</code>)</li>
 <li>[x] <code>StreamsManager</code> lifecycle managed per <code>ApplicationId</code> via <code>IKEFCoreCluster.GetOrCreateStreamsManager</code></li>
+<li>[x] Per-entity topic partitions, replication factor, and retention — <code>KEFCoreTopicPartitionsConvention</code>, <code>KEFCoreTopicRetentionConvention</code></li>
+<li>[x] Per-entity read-only mode — <code>KEFCoreReadOnlyConvention</code>, <code>KEFCoreReadOnlyAttribute</code></li>
+<li>[x] Per-entity store lookup optimization flags — <code>KEFCoreStoreLookupConvention</code>, <code>KEFCoreStoreLookupAttribute</code></li>
+<li>[x] Per-entity serialization override — <code>KEFCoreSerDesConvention</code>, <code>KEFCoreSerDesAttribute</code></li>
+<li>[x] Per-entity producer configuration — <code>KEFCoreProducerConvention</code>, <code>KEFCoreProducerAttribute</code></li>
+<li>[x] Kafka transactional producer support — <code>KEFCoreTransactionalConvention</code>, <code>ITransactionalEntityTypeProducer</code>, <code>KEFCoreTransactionManager</code></li>
+<li>[x] Per-entity RocksDB lifecycle handler — <code>KEFCoreRocksDbLifecycleAttributeConvention</code>, <code>KEFCoreRocksDbLifecycleAttribute</code> (requires KNet with <code>IRocksDbLifecycleHandler</code>)</li>
+<li>[x] SSL/SASL broker authentication — <code>SslConfig</code>, <code>SaslConfig</code>, <code>SecurityProtocol</code> singleton options applied to all internal Kafka clients</li>
+<li>[x] Value buffer result cache — <code>KEFCoreValueBufferCacheConvention</code>, <code>KEFCoreValueBufferCacheAttribute</code>, TTL-based <code>CachedValueBufferEnumerable</code> with automatic invalidation on writes</li>
 </ul>
 
 </article>
