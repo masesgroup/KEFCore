@@ -107,6 +107,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool UseProtobuf { get; set; } = false;
         public bool UseAvro { get; set; } = false;
         public bool UseAvroBinary { get; set; } = true;
+        public bool UseAvroBinaryLegacy { get; set; } = false;
         public bool EnableKEFCoreTracing { get; set; } = false;
         public bool UseInMemoryProvider { get; set; } = false;
         public bool UseModelBuilder { get; set; } = false;
@@ -171,6 +172,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 context.ValueContainerType = typeof(AvroValueContainer<>);
                 context.ValueSerDesSelectorType = UseAvroBinary ? typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>)
                                                                 : typeof(AvroKEFCoreSerDes.ValueContainer.Json<>);
+            }
+            else if (UseAvroBinaryLegacy)
+            {
+                context.KeySerDesSelectorType = typeof(AvroKEFCoreSerDes.Key.Binary<>);
+                context.ValueContainerType = typeof(AvroValueContainer<>);
+                context.ValueSerDesSelectorType = typeof(AvroKEFCoreSerDes.ValueContainer.Binary<>);
+                AvroKEFCoreSerDes.UseLegacyCodec = true;
             }
         }
 
