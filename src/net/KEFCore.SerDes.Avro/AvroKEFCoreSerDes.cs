@@ -29,7 +29,7 @@ using System.Text;
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro;
 
 /// <summary>
-/// Avro base class to define extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Avro base class to define extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
 /// </summary>
 public static class AvroKEFCoreSerDes
 {
@@ -53,6 +53,10 @@ public static class AvroKEFCoreSerDes
     }
 
     /// <summary>
+    /// Set to <see langword="true"/> to use legacy codec (generated)
+    /// </summary>
+    public static bool UseLegacyCodec = false;
+    /// <summary>
     /// Returns the default serializer <see cref="Type"/> for keys
     /// </summary>
     public static readonly Type DefaultKeySerialization = typeof(Key.Binary<>);
@@ -65,12 +69,12 @@ public static class AvroKEFCoreSerDes
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(AvroValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
     /// </summary>
     public static class Key
     {
         /// <summary>
-        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
         /// </summary>
         public class Binary<T> : ISerDesSelector<T>
         {
@@ -110,7 +114,7 @@ public static class AvroKEFCoreSerDes
             ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
             /// <summary>
-            /// Avro Key Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+            /// Avro Key Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class BinaryRaw<TData> : SerDesRaw<TData>
@@ -227,7 +231,7 @@ public static class AvroKEFCoreSerDes
             }
 
             /// <summary>
-            /// Avro Key Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+            /// Avro Key Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class BinaryBuffered<TData> : SerDesBuffered<TData>
@@ -341,7 +345,7 @@ public static class AvroKEFCoreSerDes
         }
 
         /// <summary>
-        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
         /// </summary>
         public class Json<T> : ISerDesSelector<T>
         {
@@ -381,7 +385,7 @@ public static class AvroKEFCoreSerDes
             ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
             /// <summary>
-            /// Avro Key Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+            /// Avro Key Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class JsonRaw<TData> : SerDesRaw<TData>
@@ -488,7 +492,7 @@ public static class AvroKEFCoreSerDes
             }
 
             /// <summary>
-            /// Avro Key Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+            /// Avro Key Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class JsonBuffered<TData> : SerDesBuffered<TData>
@@ -597,14 +601,14 @@ public static class AvroKEFCoreSerDes
     }
 
     /// <summary>
-    /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
     /// </summary>
     public static class ValueContainer
     {
         /// <summary>
-        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
         /// </summary>
-        public class Binary<T> : ISerDesSelector<T>
+        public class Binary<T> : ISerDesSelector<T> where T: AvroValueContainer
         {
             /// <summary>
             /// Returns a new instance of <see cref="Binary{T}"/>
@@ -642,10 +646,10 @@ public static class AvroKEFCoreSerDes
             ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
             /// <summary>
-            /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+            /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
             /// </summary>
             /// <typeparam name="TData"></typeparam>
-            sealed class BinaryRaw<TData> : SerDesRaw<TData>
+            sealed class BinaryRaw<TData> : SerDesRaw<TData> where TData : AvroValueContainer
             {
                 readonly byte[] valueContainerSerDesName;
                 readonly byte[] valueContainerName = null!;
@@ -695,7 +699,14 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
-                    SpecificWriter.Write(data, encoder);
+                    if (!UseLegacyCodec)
+                    {
+                        AvroValueContainerCodec.Write(data, encoder);
+                    }
+                    else
+                    {
+                        SpecificWriter.Write(data, encoder);
+                    }
                     return memStream.ToArray();
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
@@ -708,7 +719,14 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = RecyclableMemoryStreamSupport.Rent();
                     BinaryEncoder encoder = new(memStream);
-                    SpecificWriter.Write(data, encoder);
+                    if (!UseLegacyCodec)
+                    {
+                        AvroValueContainerCodec.Write(data, encoder);
+                    }
+                    else
+                    {
+                        SpecificWriter.Write(data, encoder);
+                    }
                     return memStream.ToArray();
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
@@ -728,9 +746,15 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
-                    TData t = ValueContainerFactory<TData>.Create();
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    if (!UseLegacyCodec)
+                    {
+                        return AvroValueContainerCodec.Read(decoder, static () => ValueContainerFactory<TData>.Create());
+                    }
+                    else
+                    {
+                        TData t = ValueContainerFactory<TData>.Create();
+                        return SpecificReader.Read(t!, decoder);
+                    }
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, byte[] data)
@@ -739,17 +763,23 @@ public static class AvroKEFCoreSerDes
 
                     using MemoryStream memStream = new(data);
                     BinaryDecoder decoder = new(memStream);
-                    TData t = ValueContainerFactory<TData>.Create();
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    if (!UseLegacyCodec)
+                    {
+                        return AvroValueContainerCodec.Read(decoder, static () => ValueContainerFactory<TData>.Create());
+                    }
+                    else
+                    {
+                        TData t = ValueContainerFactory<TData>.Create();
+                        return SpecificReader.Read(t!, decoder);
+                    }
                 }
             }
 
             /// <summary>
-            /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+            /// Avro ValueContainer Binary encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
             /// </summary>
             /// <typeparam name="TData"></typeparam>
-            sealed class BinaryBuffered<TData> : SerDesBuffered<TData>
+            sealed class BinaryBuffered<TData> : SerDesBuffered<TData> where TData : AvroValueContainer
             {
                 readonly byte[] valueContainerSerDesName;
                 readonly byte[] valueContainerName = null!;
@@ -799,7 +829,14 @@ public static class AvroKEFCoreSerDes
 
                     var memStream = ByteBuffer.Rent();
                     BinaryEncoder encoder = new(memStream);
-                    SpecificWriter.Write(data, encoder);
+                    if (!UseLegacyCodec)
+                    {
+                        AvroValueContainerCodec.Write(data, encoder);
+                    }
+                    else
+                    {
+                        SpecificWriter.Write(data, encoder);
+                    }
                     return ByteBuffer.From(memStream);
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.SerializeWithHeaders(Java.Lang.String, Headers, TData)"/>
@@ -812,7 +849,14 @@ public static class AvroKEFCoreSerDes
 
                     var memStream = ByteBuffer.Rent();
                     BinaryEncoder encoder = new(memStream);
-                    SpecificWriter.Write(data, encoder);
+                    if (!UseLegacyCodec)
+                    {
+                        AvroValueContainerCodec.Write(data, encoder);
+                    }
+                    else
+                    {
+                        SpecificWriter.Write(data, encoder);
+                    }
                     return ByteBuffer.From(memStream);
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.Deserialize(string, TJVM)"/>
@@ -831,9 +875,15 @@ public static class AvroKEFCoreSerDes
                     if (data == null) return default!;
                     using var stream = data.ToStream();
                     BinaryDecoder decoder = new(stream);
-                    TData t = ValueContainerFactory<TData>.Create();
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    if (!UseLegacyCodec)
+                    {
+                        return AvroValueContainerCodec.Read(decoder, static () => ValueContainerFactory<TData>.Create());
+                    }
+                    else
+                    {
+                        TData t = ValueContainerFactory<TData>.Create();
+                        return SpecificReader.Read(t!, decoder);
+                    }
                 }
                 /// <inheritdoc cref="SerDes{TData, TJVM}.DeserializeWithHeaders(Java.Lang.String, Headers, TJVM)"/>
                 public override TData DeserializeWithHeaders(Java.Lang.String topic, Headers headers, ByteBuffer data)
@@ -841,15 +891,21 @@ public static class AvroKEFCoreSerDes
                     if (data == null) return default!;
                     using var stream = data.ToStream();
                     BinaryDecoder decoder = new(stream);
-                    TData t = ValueContainerFactory<TData>.Create();
-                    t = SpecificReader.Read(t!, decoder);
-                    return t;
+                    if (!UseLegacyCodec)
+                    {
+                        return AvroValueContainerCodec.Read(decoder, static () => ValueContainerFactory<TData>.Create());
+                    }
+                    else
+                    {
+                        TData t = ValueContainerFactory<TData>.Create();
+                        return SpecificReader.Read(t!, decoder);
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+        /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
         /// </summary>
         public class Json<T> : ISerDesSelector<T>
         {
@@ -889,7 +945,7 @@ public static class AvroKEFCoreSerDes
             ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
             /// <summary>
-            /// Avro ValueContainer Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+            /// Avro ValueContainer Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class JsonRaw<TData> : SerDesRaw<TData>
@@ -995,7 +1051,7 @@ public static class AvroKEFCoreSerDes
             }
 
             /// <summary>
-            /// Avro ValueContainer Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+            /// Avro ValueContainer Json encoder extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
             /// </summary>
             /// <typeparam name="TData"></typeparam>
             sealed class JsonBuffered<TData> : SerDesBuffered<TData>

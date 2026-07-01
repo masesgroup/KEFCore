@@ -26,7 +26,7 @@ using System.Text;
 
 namespace MASES.EntityFrameworkCore.KNet.Serialization.Json;
 /// <summary>
-/// Default base class to define extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+/// Default base class to define extensions of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
 /// </summary>
 public static class DefaultKEFCoreSerDes
 {
@@ -43,7 +43,7 @@ public static class DefaultKEFCoreSerDes
     /// </summary>
     public static readonly Type DefaultValueContainer = typeof(DefaultValueContainer<>);
     /// <summary>
-    /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define key extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
     /// </summary>
     public class Key<T> : ISerDesSelector<T>
     {
@@ -83,7 +83,7 @@ public static class DefaultKEFCoreSerDes
         ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         sealed class JsonRaw<TData> : SerDesRaw<TData>
@@ -173,7 +173,7 @@ public static class DefaultKEFCoreSerDes
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         sealed class JsonBuffered<TData> : SerDesBuffered<TData>
@@ -263,7 +263,7 @@ public static class DefaultKEFCoreSerDes
     }
 
     /// <summary>
-    /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/>
+    /// Base class to define ValueContainer extensions of <see cref="ISerDesSelector{T}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/>
     /// </summary>
     public class ValueContainer<T> : ISerDesSelector<T>
     {
@@ -303,7 +303,7 @@ public static class DefaultKEFCoreSerDes
         ISerDesBuffered<T> ISerDesSelector<T>.NewByteBufferSerDes() => NewByteBufferSerDes();
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="byte"/> array
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="byte"/> array
         /// </summary>
         /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         sealed class JsonRaw<TData> : SerDesRaw<TData>
@@ -389,7 +389,7 @@ public static class DefaultKEFCoreSerDes
         }
 
         /// <summary>
-        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://masesgroup.github.io/KNet/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
+        /// Json extension of <see cref="SerDes{TData, TJVM}"/>, for example <see href="https://knet.masesgroup.com/articles/usageSerDes.html"/> based on <see cref="ByteBuffer"/>
         /// </summary>
         /// <typeparam name="TData">The type to be serialized or deserialized. It can be a Primary Key or a ValueContainer like <see cref="DefaultValueContainer{TKey}"/></typeparam>
         sealed class JsonBuffered<TData> : SerDesBuffered<TData>
