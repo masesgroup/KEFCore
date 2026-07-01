@@ -48,7 +48,11 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
     public static class AvroValueContainerCodec
     {
         // --- WRITE -----------------------------------------------------------
-
+        /// <summary>
+        /// Encodes <paramref name="container"/> into <paramref name="container"/>
+        /// </summary>
+        /// <param name="container">The <see cref="AvroValueContainer"/> to be written</param>
+        /// <param name="encoder">The <see cref="Encoder"/> instance used for write</param>
         public static void Write(AvroValueContainer container, Encoder encoder)
         {
             encoder.WriteString(container.EntityName);
@@ -147,7 +151,13 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage
         }
 
         // --- READ ------------------------------------------------------------
-
+        /// <summary>
+        /// Decodes <typeparamref name="T"/> using <paramref name="decoder"/> allocating objects using <paramref name="factory"/>
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> to be decoded</typeparam>
+        /// <param name="decoder">The <see cref="Decoder"/> instance with data</param>
+        /// <param name="factory">The factory used to create new object instance of <typeparamref name="T"/></param>
+        /// <returns>A new filled instance of <typeparamref name="T"/></returns>
         public static T Read<T>(Decoder decoder, Func<T> factory) where T : AvroValueContainer
         {
             var container = factory();
