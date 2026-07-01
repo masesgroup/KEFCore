@@ -105,7 +105,7 @@ KEFCore.CreateGlobalInstance();
 ```
 
 The previous command identify the JVM™ and start it, loads the needed libraries and setup the environment. Browsing the [repository](https://github.com/masesgroup/KEFCore) within the test folder there are some examples.
-KEFCore accepts many command-line switches to customize its behavior, the full list is available at [Command line switch](https://masesgroup.github.io/KNet/articles/commandlineswitch.html) of KNet.
+KEFCore accepts many command-line switches to customize its behavior, the full list is available at [Command line switch](https://knet.masesgroup.com/articles/commandlineswitch.html) of KNet.
 
 ### JVM™ identification
 
