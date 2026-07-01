@@ -64,7 +64,6 @@ jobs:
             Original PR: ${{ github.event.pull_request.html_url }}
 
             fix #${{ matrix.issue }}
-          reviewers: masesdevelopers
           assignees: masesdevelopers
           labels: cherry-pick
 
