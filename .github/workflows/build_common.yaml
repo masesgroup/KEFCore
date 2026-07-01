@@ -293,7 +293,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        serialization: [ 'Json', 'Protobuf', 'Avro' ]
+        serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_linux_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
@@ -416,7 +416,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        serialization: [ 'Json', 'Protobuf', 'Avro' ]
+        serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_win_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
@@ -764,7 +764,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        serialization: [ 'Json', 'Protobuf', 'Avro' ]
+        serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_mac_os) }}
         framework: [ 'net8.0', 'net9.0', 'net10.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
