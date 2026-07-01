@@ -21,9 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: 'release/3.x'
+          - target: 'release/3.X'
             issue: 683
-          - target: 'release/4.x'
+          - target: 'release/4.X'
             issue: 684
 
     steps:
