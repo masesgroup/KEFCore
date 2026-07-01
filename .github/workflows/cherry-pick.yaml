@@ -3,6 +3,11 @@
 
 name: Cherry-pick to release branches
 
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
 on:
   pull_request:
     types:
