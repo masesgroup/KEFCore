@@ -1,0 +1,70 @@
+# Automatically cherry-picks merged PRs from master to release/3.x and release/4.x.
+# Dependabot PRs are excluded.
+
+name: Cherry-pick to release branches
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  cherry_pick:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: 'release/3.X'
+            issue: 683
+          - target: 'release/4.X'
+            issue: 684
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Cherry-pick merged commit onto ${{ matrix.target }}
+        id: cherry_pick
+        run: |
+          git fetch origin ${{ matrix.target }}
+          git checkout -b cherry-pick/${{ matrix.target }}/${{ github.event.pull_request.number }} origin/${{ matrix.target }}
+          git cherry-pick ${{ github.event.pull_request.merge_commit_sha }} || echo "CONFLICT=true" >> $GITHUB_ENV
+
+      - name: Create PR (no conflict)
+        if: env.CONFLICT != 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: cherry-pick/${{ matrix.target }}/${{ github.event.pull_request.number }}
+          base: ${{ matrix.target }}
+          commit-message: "${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+          title: "[cherry-pick → ${{ matrix.target }}] ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+          body: |
+            Automated cherry-pick of PR #${{ github.event.pull_request.number }} onto `${{ matrix.target }}`.
+
+            Original PR: ${{ github.event.pull_request.html_url }}
+
+            fix #${{ matrix.issue }}
+          reviewers: masesdevelopers
+          assignees: masesdevelopers
+          labels: cherry-pick
+
+      - name: Warn on conflict
+        if: env.CONFLICT == 'true'
+        run: |
+          echo "::warning::Cherry-pick of PR #${{ github.event.pull_request.number }} onto ${{ matrix.target }} has conflicts — manual intervention required."
