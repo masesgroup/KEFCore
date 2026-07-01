@@ -39,10 +39,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Cherry-pick merged commit onto ${{ matrix.target }}
-        id: cherry_pick
         run: |
           git fetch origin ${{ matrix.target }}
-          git checkout -b cherry-pick/${{ matrix.target }}/${{ github.event.pull_request.number }} origin/${{ matrix.target }}
+          git checkout ${{ matrix.target }}
           git cherry-pick ${{ github.event.pull_request.merge_commit_sha }} || echo "CONFLICT=true" >> $GITHUB_ENV
 
       - name: Create PR (no conflict)
