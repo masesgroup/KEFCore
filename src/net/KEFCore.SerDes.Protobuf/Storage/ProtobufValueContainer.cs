@@ -292,9 +292,9 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is ProtobufValueContainer<TKey>)
+        if (obj is ProtobufValueContainer<TKey> container)
         {
-            return _innerMessage.Equals((obj as ProtobufValueContainer<TKey>)?._innerMessage);
+            return _innerMessage.Equals(container._innerMessage);
         }
 
         return false;
