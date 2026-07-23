@@ -356,8 +356,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             // Only project when the forward cache is disabled for this entity (TTL == 0): when it's
             // enabled, a full row is always fetched and cached so future queries with a different
-            // projection can still reuse it — see the design note on _forwardCacheEnabled.
-            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            // projection can still reuse it — see KEFCoreCachedValueBufferStore.IsEnabled (TTL > TimeSpan.Zero).
+            var effectiveProjection = _forwardCache!.IsEnabled ? null : projectedProperties;
             return _streamData.TryGetValue(key, effectiveProjection, out valueBuffer);
         }
         else if (_knetCompactedReplicator != null)
@@ -579,7 +579,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            var effectiveProjection = _forwardCache!.IsEnabled ? null : projectedProperties;
             return _forwardCache!.GetAllPopulating(() => _streamData.GetValueBuffers(_database, effectiveProjection));
         }
         else if (_knetCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _knetCompactedReplicator);
@@ -592,7 +592,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (keyValues == null) return null;
-        var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+        var effectiveProjection = _forwardCache!.IsEnabled ? null : projectedProperties;
         if (_streamData != null)
         {
             if (_forwardCache!.IsWarm)
@@ -629,7 +629,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _forwardCache?.TryGetRange(from, to);
                 if (cached != null) return cached;
             }
-            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            var effectiveProjection = _forwardCache!.IsEnabled ? null : projectedProperties;
             return _streamData.GetValueBuffersRange(database, _keyValueFactory, rangeStart, rangeEnd, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
@@ -643,7 +643,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     {
         if (_streamData != null)
         {
-            var effectiveProjection = _reverseCacheEnabled ? null : projectedProperties;
+            var effectiveProjection = _reverseCache!.IsEnabled ? null : projectedProperties;
             // reverse cache: populated by this method, serves reverse range when warm.
             // cold → native RocksDB reverse iterator (more efficient than any .NET alternative)
             return _reverseCache!.GetAllPopulating(() => _streamData.GetValueBuffersReverse(_database, effectiveProjection));
@@ -667,7 +667,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _reverseCache?.TryGetReverseRange(from, to);
                 if (cached != null) return cached;
             }
-            var effectiveProjection = _reverseCacheEnabled ? null : projectedProperties;
+            var effectiveProjection = _reverseCache!.IsEnabled ? null : projectedProperties;
             return _streamData.GetValueBuffersReverseRange(database, _keyValueFactory, rangeStart, rangeEnd, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
@@ -688,7 +688,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _forwardCache?.TryGetPrefix(prefix, prefixValues.Length);
                 if (cached != null) return cached;
             }
-            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            var effectiveProjection = _forwardCache!.IsEnabled ? null : projectedProperties;
             return _streamData.GetValueBuffersByPrefix(database, _keyValueFactory, prefixValues, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support prefix iteration");
