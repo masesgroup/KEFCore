@@ -327,12 +327,12 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             {
                 // Both sub-cases below operate on the "Properties" (current) storage format and always
                 // address `allPropertyValues` via IProperty.GetIndex(), which is relative to the entity
-                // type's FULL flattened property set — independent of any projection filtering applied to
+                // type's FULL flattened property set â€” independent of any projection filtering applied to
                 // metadata.FlattenedProperties/ComplexProperties. The output array is therefore always sized
                 // to the full set (`fullLength`), even when `metadata` only requests a subset: unrequested
                 // slots are simply left at their default value and are never read by the query shaper, since
                 // the shaper only emits read expressions for the properties it actually projects.
-                int fullLength = tName.GetFlattenedProperties().Count();
+                int fullLength = metadata.FullFlattenedProperties.Length;
 
                 if (propertiesInfo == null || complexPropertiesInfo == null)
                 {

@@ -293,10 +293,10 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #endif
             // See DefaultValueContainer.GetData for full rationale. Both sub-cases operate on the "Data"
             // storage format and always address `allPropertyValues` via IProperty.GetIndex(), relative to the
-            // entity type's FULL flattened property set — independent of any projection filtering applied to
+            // entity type's FULL flattened property set â€” independent of any projection filtering applied to
             // metadata.FlattenedProperties/ComplexProperties. Unrequested slots are left at their default and
             // are never read by the query shaper.
-            int fullLength = tName.GetFlattenedProperties().Count();
+            int fullLength = metadata.FullFlattenedProperties.Length;
 
             if (propertiesInfo == null || complexPropertiesInfo == null)
             {
@@ -304,8 +304,8 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
                 complexPropertiesInfo = [];
 
                 // Precompute which root complex properties have at least one requested flattened sub-property.
-                // Skipping ConvertInnerData for the rest avoids its complex-type deserialization/ConvertBack —
-                // the most expensive part of this method — for properties outside the current projection.
+                // Skipping ConvertInnerData for the rest avoids its complex-type deserialization/ConvertBack â€”
+                // the most expensive part of this method â€” for properties outside the current projection.
                 HashSet<IComplexProperty>? neededComplexProperties = null;
                 if (complexProperties != null && complexProperties.Length > 0)
                 {
