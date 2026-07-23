@@ -112,15 +112,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly KEFCoreCachedValueBufferStore<TKey>? _forwardCache = null;
     /// <summary>Reverse cache — populated by GetValueBuffersReverse(), serves reverse range.</summary>
     private readonly KEFCoreCachedValueBufferStore<TKey>? _reverseCache = null;
-    /// <summary>
-    /// <see langword="true"/> when <see cref="KEFCoreEntityTypeExtensions.GetValueBufferCacheTtl"/> is non-zero for this entity,
-    /// i.e. <see cref="_forwardCache"/> is actually caching full rows. In that case, projection filtering is intentionally
-    /// skipped in favor of always fetching/caching the full <see cref="ValueBuffer"/> — see the "Gate the new path on the
-    /// existing per-entity cache switch" design note in the projection push-down issue.
-    /// </summary>
-    private readonly bool _forwardCacheEnabled;
-    /// <summary>Same as <see cref="_forwardCacheEnabled"/> but for <see cref="_reverseCache"/> / <see cref="KEFCoreEntityTypeExtensions.GetValueBufferReverseCacheTtl"/>.</summary>
-    private readonly bool _reverseCacheEnabled;
 
     readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
@@ -334,8 +325,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
             _forwardCache = new KEFCoreCachedValueBufferStore<TKey>(_primaryKey!, _keyValueFactory, _entityType.GetValueBufferCacheTtl());
             _reverseCache = new KEFCoreCachedValueBufferStore<TKey>(_primaryKey!, _keyValueFactory, _entityType.GetValueBufferReverseCacheTtl());
-            _forwardCacheEnabled = _entityType.GetValueBufferCacheTtl() != TimeSpan.Zero;
-            _reverseCacheEnabled = _entityType.GetValueBufferReverseCacheTtl() != TimeSpan.Zero;
         }
     }
 
