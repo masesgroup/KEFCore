@@ -220,7 +220,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
     /// </summary>
     private IValueContainerMetadata EffectiveMetadata(IReadOnlyList<IProperty>? projectedProperties)
         => projectedProperties is { Count: > 0 }
-            ? new ValueContainerMetadata(_metadata.EntityType, FlattenedProperties: [.. projectedProperties])
+            ? new ValueContainerMetadata(_metadata.EntityType, flattenedProperties: [.. projectedProperties])
             : _metadata;
 
     /// <inheritdoc/>
