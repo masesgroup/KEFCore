@@ -41,4 +41,16 @@ public interface IValueContainerMetadata
     /// The <see cref="IComplexProperty"/> associated to <see cref="EntityType"/>
     /// </summary>
     IComplexProperty[]? ComplexProperties { get; }
+    /// <summary>
+    /// The full, unfiltered flattened <see cref="IProperty"/> set of <see cref="EntityType"/> — i.e. what
+    /// <c>EntityType.GetFlattenedProperties()</c> returns, independent of any projection narrowing applied to
+    /// <see cref="FlattenedProperties"/>. Exposed as the array itself (not just its length) so it can be reused
+    /// for other purposes beyond sizing a buffer. Implementations should compute this once when the metadata
+    /// instance is built (once per query for a projected/filtered metadata, once per entity type for the shared
+    /// full metadata), not on every call: <c>IValueContainer.GetData</c> reads <c>FullFlattenedProperties.Length</c>
+    /// once per deserialized record to size its output <see cref="ValueBuffer"/>, since flattened properties are
+    /// addressed by <see cref="IProperty.GetIndex"/>, an index relative to the full flattened set regardless of
+    /// any projection.
+    /// </summary>
+    IProperty[] FullFlattenedProperties { get; }
 }

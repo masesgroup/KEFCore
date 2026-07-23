@@ -35,7 +35,17 @@ public record ValueContainerMetadata(IEntityType EntityType, IProperty[]? Proper
     /// <inheritdoc/>
     public IProperty[] Properties { get; init; } = Properties ?? [.. EntityType.GetProperties()];
     /// <inheritdoc/>
-    public IProperty[] FlattenedProperties { get; init; } = FlattenedProperties ?? [.. EntityType.GetFlattenedProperties()];
+    /// <remarks>
+    /// Always derived from <see cref="EntityType"/> directly, computed once here at construction — deliberately NOT
+    /// derived from the (possibly projected) <see cref="FlattenedProperties"/> constructor argument, which may be a
+    /// narrower subset when this metadata was built to restrict deserialization to a query's projection (see the
+    /// projection push-down design). This must always be the entity's true, full flattened property set. Declared
+    /// before <see cref="FlattenedProperties"/> so the latter's initializer can reuse this same array instance
+    /// (rather than re-enumerating) whenever no projected subset was supplied.
+    /// </remarks>
+    public IProperty[] FullFlattenedProperties { get; init; } = [.. EntityType.GetFlattenedProperties()];
+    /// <inheritdoc/>
+    public IProperty[] FlattenedProperties { get; init; } = FlattenedProperties ?? FullFlattenedProperties;
     /// <inheritdoc/>
     public IComplexProperty[]? ComplexProperties { get; init; } = ComplexProperties ?? [.. EntityType.GetComplexProperties()];
 }
