@@ -23,17 +23,33 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization;
 /// <summary>
 /// Implements <see cref="IValueContainerMetadata"/>
 /// </summary>
-/// <param name="EntityType"><see cref="IValueContainerMetadata.EntityType"/></param>
-/// <param name="Properties"><see cref="IValueContainerMetadata.Properties"/></param>
-/// <param name="FlattenedProperties"><see cref="IValueContainerMetadata.FlattenedProperties"/></param>
-/// <param name="ComplexProperties"><see cref="IValueContainerMetadata.ComplexProperties"/></param>
-public record ValueContainerMetadata(IEntityType EntityType, IProperty[]? Properties = null, IProperty[]? FlattenedProperties = null, IComplexProperty[]? ComplexProperties = null) 
+public record ValueContainerMetadata 
     : IValueContainerMetadata
 {
+    /// <summary>
+    /// Initialize <see cref="ValueContainerMetadata"/>
+    /// </summary>
+    /// <param name="entityType"><see cref="IValueContainerMetadata.EntityType"/></param>
+    /// <param name="properties"><see cref="IValueContainerMetadata.Properties"/></param>
+    /// <param name="flattenedProperties"><see cref="IValueContainerMetadata.FlattenedProperties"/></param>
+    /// <param name="complexProperties"><see cref="IValueContainerMetadata.ComplexProperties"/></param>
+    public ValueContainerMetadata(
+        IEntityType entityType,
+        IProperty[]? properties = null,
+        IProperty[]? flattenedProperties = null,
+        IComplexProperty[]? complexProperties = null)
+    {
+        EntityType = entityType;
+        Properties = properties ?? [.. entityType.GetProperties()];
+        FullFlattenedProperties = [.. entityType.GetFlattenedProperties()];
+        FlattenedProperties = flattenedProperties ?? FullFlattenedProperties;
+        ComplexProperties = complexProperties ?? [.. entityType.GetComplexProperties()];
+    }
+
     /// <inheritdoc/>
-    public IEntityType EntityType { get; init; } = EntityType;
+    public IEntityType EntityType { get; init; }
     /// <inheritdoc/>
-    public IProperty[] Properties { get; init; } = Properties ?? [.. EntityType.GetProperties()];
+    public IProperty[] Properties { get; init; }
     /// <inheritdoc/>
     /// <remarks>
     /// Always derived from <see cref="EntityType"/> directly, computed once here at construction — deliberately NOT
@@ -43,9 +59,9 @@ public record ValueContainerMetadata(IEntityType EntityType, IProperty[]? Proper
     /// before <see cref="FlattenedProperties"/> so the latter's initializer can reuse this same array instance
     /// (rather than re-enumerating) whenever no projected subset was supplied.
     /// </remarks>
-    public IProperty[] FullFlattenedProperties { get; init; } = [.. EntityType.GetFlattenedProperties()];
+    public IProperty[] FullFlattenedProperties { get; init; }
     /// <inheritdoc/>
-    public IProperty[] FlattenedProperties { get; init; } = FlattenedProperties ?? FullFlattenedProperties;
+    public IProperty[] FlattenedProperties { get; init; }
     /// <inheritdoc/>
-    public IComplexProperty[]? ComplexProperties { get; init; } = ComplexProperties ?? [.. EntityType.GetComplexProperties()];
+    public IComplexProperty[]? ComplexProperties { get; init; }
 }

@@ -49,7 +49,7 @@ public interface IValueContainerMetadata
     /// instance is built (once per query for a projected/filtered metadata, once per entity type for the shared
     /// full metadata), not on every call: <c>IValueContainer.GetData</c> reads <c>FullFlattenedProperties.Length</c>
     /// once per deserialized record to size its output <see cref="ValueBuffer"/>, since flattened properties are
-    /// addressed by <see cref="IProperty.GetIndex"/>, an index relative to the full flattened set regardless of
+    /// addressed by <see cref="IPropertyBase.GetIndex"/>, an index relative to the full flattened set regardless of
     /// any projection.
     /// </summary>
     IProperty[] FullFlattenedProperties { get; }
