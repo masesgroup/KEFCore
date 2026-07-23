@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
@@ -165,6 +166,50 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
 
+                // Projection correctness check. BlogId == 10 is never removed later in this file, so it's a safe,
+                // stable record to use here and it also survives across "reload" CI runs (LoadApplicationData=false)
+                // that read back data written by a previous process invocation. Expected values are derived from
+                // blog.Rating itself (== the loop index used at seed time above, e.g. Url = "..." + i, Tax.Code =
+                // char.ConvertFromUtf32(i)[0], TaxInfoExtended.CodeExtended = i * 3) rather than hardcoded, so this
+                // stays correct even if the seeding loop or NumberOfElements changes. Runs regardless of
+                // LoadApplicationData/cache TTL and always throws on mismatch — unlike the tolerant try/catch above
+                // (meant only for "record doesn't exist yet"), a value mismatch here is always a real bug.
+                if (blog != null)
+                {
+                    int seed = blog.Rating;
+                    string expectedUrl = "http://blogs.msdn.com/adonet" + seed;
+                    char expectedTaxCode = char.ConvertFromUtf32(seed)[0];
+                    int expectedCodeExtended = seed * 3;
+
+                    // Scalar-only projection: no property of PricingInfo (a complex type spanning Tax/
+                    // TaxInfoExtended/TaxInfoExtended2/Discounts) is touched, so the projection push-down should
+                    // skip its deserialization entirely. This checks the externally observable result — it doesn't
+                    // directly prove deserialization was skipped, but an indexing/skip-logic bug in that code path
+                    // would surface here as a wrong value or a KeyNotFoundException/IndexOutOfRangeException.
+                    watch.Restart();
+                    var scalarOnly = context.Blogs!.Where(b => b.BlogId == 10).Select(b => b.Url).Single();
+                    watch.Stop();
+                    if (scalarOnly != expectedUrl)
+                        throw new InvalidOperationException($"Projection mismatch: Select(b => b.Url) for BlogId==10 returned '{scalarOnly}', expected '{expectedUrl}'.");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed scalar-only projection {watch.ElapsedMilliseconds} ms. Verified Url == '{scalarOnly}'.");
+
+                    // Nested projection: touches only ONE sub-property (Tax.Code) of a multi-level complex type,
+                    // plus a sub-property nested one level deeper (Tax.TaxInfoExtended.CodeExtended). This is the
+                    // critical regression case for "include the whole complex property if any sub-property is
+                    // requested" — getting this wrong throws KeyNotFoundException inside FillFlattened instead of
+                    // producing a wrong value.
+                    watch.Restart();
+                    var nested = context.Blogs!.Where(b => b.BlogId == 10)
+                        .Select(b => new { b.Url, Code = b.PricingInfo.Tax.Code, CodeExtended = b.PricingInfo.Tax.TaxInfoExtended.CodeExtended })
+                        .Single();
+                    watch.Stop();
+                    if (nested.Url != expectedUrl || nested.Code != expectedTaxCode || nested.CodeExtended != expectedCodeExtended)
+                        throw new InvalidOperationException(
+                            $"Projection mismatch for BlogId==10: Url='{nested.Url}' (expected '{expectedUrl}'), " +
+                            $"Code='{nested.Code}' (expected '{expectedTaxCode}'), CodeExtended={nested.CodeExtended} (expected {expectedCodeExtended}).");
+                    if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Elapsed nested complex-type projection {watch.ElapsedMilliseconds} ms. Verified Url/Code/CodeExtended.");
+                }
+
                 watch.Restart();
                 var post = context.Posts.Single(b => b.BlogId == 2);
                 watch.Stop();
@@ -309,6 +354,16 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Activates the per-entity ValueBuffer cache using the same /p:ForwardCacheTimeout /p:ReverseCacheTimeout
+            // CLI overrides already wired into ProgramConfig and already passed to this exact test executable by the
+            // CI matrix (use_cache: [true, false] in build_common.yaml) — previously a no-op here since nothing
+            // consumed them. Placed before the UseModelBuilder early-return below so it applies in both configurations.
+            // Default is -1 seconds (cache disabled, TimeSpan negative) when the CI leg doesn't override it; see
+            // KEFCoreCachedValueBufferStore.IsEnabled (TTL > TimeSpan.Zero) for the exact enabled/disabled semantics.
+            modelBuilder.Entity<BlogComplex>().HasKEFCoreValueBufferCache(
+                TimeSpan.FromSeconds(ProgramConfig.Config.ForwardCacheTimeout),
+                TimeSpan.FromSeconds(ProgramConfig.Config.ReverseCacheTimeout));
+
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<BlogComplex>().HasKey(c => new { c.BlogId, c.Rating });
