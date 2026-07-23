@@ -211,6 +211,53 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         return new KafkaEnumberable(_metadata, _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), prefix);
     }
 
+    /// <summary>
+    /// Builds a transient, filtered <see cref="IValueContainerMetadata"/> restricted to <paramref name="projectedProperties"/>
+    /// when supplied, otherwise falls back to the full, constructor-injected <see cref="_metadata"/>. `Properties` is left
+    /// at its default (unused by <see cref="IValueContainer{TKey}.GetData"/>); `ComplexProperties` is left at its default
+    /// too (the full set), since it is only consulted as a fast dispatch switch — the precise per-property decision of
+    /// which complex properties to actually deserialize is made downstream from `FlattenedProperties`.
+    /// </summary>
+    private IValueContainerMetadata EffectiveMetadata(IReadOnlyList<IProperty>? projectedProperties)
+        => projectedProperties is { Count: > 0 }
+            ? new ValueContainerMetadata(_metadata.EntityType, FlattenedProperties: [.. projectedProperties])
+            : _metadata;
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
+    {
+        return new KafkaEnumberable(EffectiveMetadata(projectedProperties), _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), false);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
+    {
+        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
+        return new KafkaEnumberable(EffectiveMetadata(projectedProperties), _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), false, start, end);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
+    {
+        return new KafkaEnumberable(EffectiveMetadata(projectedProperties), _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), true);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
+    {
+        TKey? start = (TKey)keyValueFactory.CreateFromKeyValues(rangeStart!)!;
+        TKey? end = (TKey)keyValueFactory.CreateFromKeyValues(rangeEnd!)!;
+        return new KafkaEnumberable(EffectiveMetadata(projectedProperties), _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), true, start, end);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IPrincipalKeyValueFactory<TKey> keyValueFactory, object?[]? prefixValues, IReadOnlyList<IProperty>? projectedProperties)
+    {
+        TKey? prefix = (TKey)keyValueFactory.CreateFromKeyValues(prefixValues!)!;
+        return new KafkaEnumberable(EffectiveMetadata(projectedProperties), _complexTypeConverterFactory, _keySerdes, _valueSerdes, GetKeyValueStore(), prefix);
+    }
+
     V GetV(TKey key)
     {
         if (GetKeyValueStore() == null) return default!;
@@ -228,7 +275,10 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         return v != null;
     }
     /// <inheritdoc/>
-    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer)
+    public bool TryGetValue(TKey key, out ValueBuffer valueBuffer) => TryGetValue(key, null, out valueBuffer);
+
+    /// <inheritdoc/>
+    public bool TryGetValue(TKey key, IReadOnlyList<IProperty>? projectedProperties, out ValueBuffer valueBuffer)
     {
         var v = GetV(key);
         using var disposable = v as IDisposable;
@@ -240,7 +290,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         var entityTypeData = _valueSerdes.DeserializeWithHeaders((Java.Lang.String)null!, null, v!);
 
         object[] propertyValues = null!;
-        entityTypeData?.GetData(_metadata, ref propertyValues, _complexTypeConverterFactory);
+        entityTypeData?.GetData(EffectiveMetadata(projectedProperties), ref propertyValues, _complexTypeConverterFactory);
         valueBuffer = new ValueBuffer(propertyValues);
         return true;
     }

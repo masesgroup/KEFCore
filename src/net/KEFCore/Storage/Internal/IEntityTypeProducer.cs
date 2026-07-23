@@ -104,6 +104,44 @@ public interface IEntityTypeProducer : IDisposable
     /// Verify if local instance is synchronized with the <see cref="IKEFCoreCluster"/> instance
     /// </summary>
     bool? EnsureSynchronized(long timeout);
+
+    // --- Projection-aware overloads -------------------------------------------------------
+    // Additive, non-breaking: each has a default implementation that falls back to the
+    // existing full-metadata overload. `projectedProperties` should be null (no projection
+    // narrowing) or the set of IProperty actually required by the query's shaper. Whether an
+    // implementer honors it (e.g. by skipping deserialization of properties outside the set)
+    // is up to the implementer; callers must not assume the returned ValueBuffer omits
+    // unrequested slots — it does not, see IValueContainer.GetData for details.
+
+    /// <inheritdoc cref="GetValueBuffers(IKEFCoreDatabase)"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffers(database);
+
+    /// <inheritdoc cref="GetValueBuffer(IKEFCoreDatabase, object[])"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffer(database, keyValues);
+
+    /// <inheritdoc cref="GetValueBuffersRange(IKEFCoreDatabase, object[], object[])"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffersRange(database, rangeStart, rangeEnd);
+
+    /// <inheritdoc cref="GetValueBuffersReverse(IKEFCoreDatabase)"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffersReverse(database);
+
+    /// <inheritdoc cref="GetValueBuffersReverseRange(IKEFCoreDatabase, object[], object[])"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffersReverseRange(database, rangeStart, rangeEnd);
+
+    /// <inheritdoc cref="GetValueBuffersByPrefix(IKEFCoreDatabase, object[])"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues, IReadOnlyList<IProperty>? projectedProperties)
+        => GetValueBuffersByPrefix(database, prefixValues);
 }
 
 /// <summary>
@@ -127,6 +165,10 @@ public interface IEntityTypeProducer<TKey> : IEntityTypeProducer where TKey : no
     /// <param name="valueBuffer">A <see cref="ValueBuffer"/> containing the information, or <see langword="null"/> otherwise</param>
     /// <returns><see langword="true"/> if the <paramref name="key"/> exist, <see langword="false"/> otherwise</returns>
     bool TryGetValueBuffer(TKey key, out ValueBuffer valueBuffer);
+    /// <inheritdoc cref="TryGetValueBuffer(TKey, out ValueBuffer)"/>
+    /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
+    bool TryGetValueBuffer(TKey key, IReadOnlyList<IProperty>? projectedProperties, out ValueBuffer valueBuffer)
+        => TryGetValueBuffer(key, out valueBuffer);
     /// <summary>
     /// Try add a new item based on the values associated to the <paramref name="keyValues"/>
     /// </summary>

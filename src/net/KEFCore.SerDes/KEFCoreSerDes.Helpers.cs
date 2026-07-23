@@ -340,7 +340,14 @@ namespace MASES.EntityFrameworkCore.KNet.Serialization
             }
         }
 
-        static IComplexProperty FindRootProperty(ITypeBase root, IComplexType complexType, System.Collections.Generic.IList<IComplexProperty> traversedProperties)
+        /// <summary>
+        /// Walks up the complex-type ownership chain of <paramref name="complexType"/> until it finds the
+        /// first-level <see cref="IComplexProperty"/> declared directly on <paramref name="root"/>. Public (not
+        /// internal) so it can be reused by other SerDes implementations (Avro, Protobuf, ...) living in separate
+        /// assemblies, to determine from a flattened <see cref="IProperty"/> which root complex property it
+        /// ultimately belongs to — see each <c>IValueContainer.GetData</c> implementation.
+        /// </summary>
+        public static IComplexProperty FindRootProperty(ITypeBase root, IComplexType complexType, System.Collections.Generic.IList<IComplexProperty> traversedProperties)
         {
             if (complexType.ComplexProperty.DeclaringType == root)
             {

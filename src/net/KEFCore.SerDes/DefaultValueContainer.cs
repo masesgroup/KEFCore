@@ -325,62 +325,76 @@ public class DefaultValueContainer<TKey> : IValueContainer<TKey> where TKey : no
             }
             else
             {
-                if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
+                // Both sub-cases below operate on the "Properties" (current) storage format and always
+                // address `allPropertyValues` via IProperty.GetIndex(), which is relative to the entity
+                // type's FULL flattened property set — independent of any projection filtering applied to
+                // metadata.FlattenedProperties/ComplexProperties. The output array is therefore always sized
+                // to the full set (`fullLength`), even when `metadata` only requests a subset: unrequested
+                // slots are simply left at their default value and are never read by the query shaper, since
+                // the shaper only emits read expressions for the properties it actually projects.
+                int fullLength = tName.GetFlattenedProperties().Count();
+
+                if (propertiesInfo == null || complexPropertiesInfo == null)
                 {
-                    if (propertiesInfo != null)
+                    propertiesInfo = [];
+                    complexPropertiesInfo = [];
+
+                    // Precompute which root complex properties have at least one of their flattened
+                    // sub-properties actually requested by `metadata`. Only those are worth deserializing:
+                    // JsonSupport.ValueContainer.Deserialize / IComplexTypeConverter.ConvertBack are the
+                    // most expensive step in this method, so skipping them for complex properties that are
+                    // not part of the current projection is the main point of this optimization. A complex
+                    // property that IS needed must end up in `complexPropertiesInfo`, because FillFlattened
+                    // below reads it via a direct dictionary indexer (not TryGetValue) and would otherwise
+                    // throw KeyNotFoundException.
+                    HashSet<IComplexProperty>? neededComplexProperties = null;
+                    if (complexProperties != null && complexProperties.Length > 0)
                     {
-                        allPropertyValues = [.. propertiesInfo.Values];
-                    }
-                    else
-                    {
-                        allPropertyValues = new object[flattenedProperties!.Length];
-                        propertiesInfo = [];
-                        for (int i = 0; i < Properties.Length; i++)
+                        neededComplexProperties = [];
+                        foreach (var flattenedProperty in flattenedProperties!)
                         {
-                            if (NativeTypeMapper.IsComplex(Properties[i].ManagedType)) continue;
-                            IPropertyBase? prop = tName.FindProperty(Properties[i].PropertyName!);
-                            if (prop == null) continue; // a property was removed from the schema
-                            allPropertyValues[i] = Properties[i]?.Value!;
-                            propertiesInfo.Add(prop, allPropertyValues[i]!);
-                        }
-                    }
-                }
-                else
-                {
-                    if (propertiesInfo == null || complexPropertiesInfo == null)
-                    {
-                        propertiesInfo = [];
-                        complexPropertiesInfo = [];
-                        for (int i = 0; i < Properties.Length; i++)
-                        {
-                            IPropertyBase? prop = NativeTypeMapper.IsComplex(Properties[i].ManagedType)
-                                ? tName.FindComplexProperty(Properties[i].PropertyName!)
-                                : tName.FindProperty(Properties[i].PropertyName!);
-                            if (prop == null) continue; // a property was removed from the schema
-                            if (prop is IComplexProperty complexProperty)
+                            if (flattenedProperty.DeclaringType is IComplexType declaringComplexType)
                             {
-                                var input = Properties[i]?.Value!;
-                                if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && input is string str)
-                                {
-                                    input = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
-                                }
-                                else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
-                                    complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
-                                {
-                                    complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
-                                }
-                                else throw new InvalidCastException($"Cannot manage record value {allPropertyValues[i]}.");
-                                complexPropertiesInfo.Add(complexProperty, input!);
-                            }
-                            else
-                            {
-                                propertiesInfo.Add(prop, Properties[i]?.Value!);
+                                neededComplexProperties.Add(ComplexTypeExtension.FindRootProperty(tName, declaringComplexType, []));
                             }
                         }
                     }
-                    allPropertyValues = new object[flattenedProperties!.Length];
-                    flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
+
+                    for (int i = 0; i < Properties!.Length; i++)
+                    {
+                        bool isComplex = NativeTypeMapper.IsComplex(Properties[i].ManagedType);
+                        IPropertyBase? prop = isComplex
+                            ? tName.FindComplexProperty(Properties[i].PropertyName!)
+                            : tName.FindProperty(Properties[i].PropertyName!);
+                        if (prop == null) continue; // a property was removed from the schema
+
+                        if (prop is IComplexProperty complexProperty)
+                        {
+                            if (neededComplexProperties == null || !neededComplexProperties.Contains(complexProperty))
+                                continue; // not part of the current projection: skip deserialization entirely
+
+                            var input = Properties[i]?.Value!;
+                            if (Properties[i].ManagedType == WellKnownManagedTypes.ComplexTypeAsJson && input is string str)
+                            {
+                                input = JsonSupport.ValueContainer.Deserialize(prop.ClrType, str);
+                            }
+                            else if (Properties[i]?.ManagedType == WellKnownManagedTypes.ComplexType &&
+                                complexTypeFactory != null && complexTypeFactory.TryGet(prop, out var complexTypeHook))
+                            {
+                                complexTypeHook?.ConvertBack(PreferredConversionType.Text, ref input);
+                            }
+                            else throw new InvalidCastException($"Cannot manage record value {input}.");
+                            complexPropertiesInfo.Add(complexProperty, input!);
+                        }
+                        else
+                        {
+                            propertiesInfo.Add(prop, Properties[i]?.Value!);
+                        }
+                    }
                 }
+
+                allPropertyValues = new object[fullLength];
+                flattenedProperties!.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();

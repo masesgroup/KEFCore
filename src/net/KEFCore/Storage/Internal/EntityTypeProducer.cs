@@ -112,6 +112,15 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly KEFCoreCachedValueBufferStore<TKey>? _forwardCache = null;
     /// <summary>Reverse cache — populated by GetValueBuffersReverse(), serves reverse range.</summary>
     private readonly KEFCoreCachedValueBufferStore<TKey>? _reverseCache = null;
+    /// <summary>
+    /// <see langword="true"/> when <see cref="KEFCoreEntityTypeExtensions.GetValueBufferCacheTtl"/> is non-zero for this entity,
+    /// i.e. <see cref="_forwardCache"/> is actually caching full rows. In that case, projection filtering is intentionally
+    /// skipped in favor of always fetching/caching the full <see cref="ValueBuffer"/> — see the "Gate the new path on the
+    /// existing per-entity cache switch" design note in the projection push-down issue.
+    /// </summary>
+    private readonly bool _forwardCacheEnabled;
+    /// <summary>Same as <see cref="_forwardCacheEnabled"/> but for <see cref="_reverseCache"/> / <see cref="KEFCoreEntityTypeExtensions.GetValueBufferReverseCacheTtl"/>.</summary>
+    private readonly bool _reverseCacheEnabled;
 
     readonly ConcurrentDictionary<IKEFCoreDatabase, KEFCoreDatabaseLocalData> _updaters = new();
     private readonly EntityTypeProducerCallback? _producerCallback;
@@ -325,6 +334,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
             _forwardCache = new KEFCoreCachedValueBufferStore<TKey>(_primaryKey!, _keyValueFactory, _entityType.GetValueBufferCacheTtl());
             _reverseCache = new KEFCoreCachedValueBufferStore<TKey>(_primaryKey!, _keyValueFactory, _entityType.GetValueBufferReverseCacheTtl());
+            _forwardCacheEnabled = _entityType.GetValueBufferCacheTtl() != TimeSpan.Zero;
+            _reverseCacheEnabled = _entityType.GetValueBufferReverseCacheTtl() != TimeSpan.Zero;
         }
     }
 
@@ -336,11 +347,18 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public bool TryGetValueBuffer(TKey key, out ValueBuffer valueBuffer)
+    public bool TryGetValueBuffer(TKey key, out ValueBuffer valueBuffer) => TryGetValueBuffer(key, null, out valueBuffer);
+
+    /// <inheritdoc/>
+    public bool TryGetValueBuffer(TKey key, IReadOnlyList<IProperty>? projectedProperties, out ValueBuffer valueBuffer)
     {
         if (_streamData != null)
         {
-            return _streamData.TryGetValue(key, out valueBuffer);
+            // Only project when the forward cache is disabled for this entity (TTL == 0): when it's
+            // enabled, a full row is always fetched and cached so future queries with a different
+            // projection can still reuse it — see the design note on _forwardCacheEnabled.
+            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            return _streamData.TryGetValue(key, effectiveProjection, out valueBuffer);
         }
         else if (_knetCompactedReplicator != null)
         {
@@ -554,17 +572,27 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         _valueSerdes?.Dispose();
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database)
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database) => GetValueBuffers(database, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (_streamData != null)
-            return _forwardCache!.GetAllPopulating(() => _streamData.GetValueBuffers(_database));
+        {
+            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            return _forwardCache!.GetAllPopulating(() => _streamData.GetValueBuffers(_database, effectiveProjection));
+        }
         else if (_knetCompactedReplicator != null) return new KNetCompactedReplicatorEnumerable(_entityMetadata, _complexTypeConverterFactory, _knetCompactedReplicator);
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues)
+    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues) => GetValueBuffer(database, keyValues, null);
+
+    /// <inheritdoc/>
+    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, object?[]? keyValues, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (keyValues == null) return null;
+        var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
         if (_streamData != null)
         {
             if (_forwardCache!.IsWarm)
@@ -573,11 +601,11 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 TKey key = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
                 if (_forwardCache.TryGetValue(key, out var cached)) return cached;
                 // cache warm but miss — fall through to store with the already-constructed key
-                return _streamData.TryGetValue(key, out var vbMiss) ? vbMiss : null;
+                return _streamData.TryGetValue(key, effectiveProjection, out var vbMiss) ? vbMiss : null;
             }
             // cache cold or disabled — go directly to store
             TKey k = (TKey)_keyValueFactory.CreateFromKeyValues(keyValues)!;
-            return _streamData.TryGetValue(k, out var vb) ? vb : null;
+            return _streamData.TryGetValue(k, effectiveProjection, out var vb) ? vb : null;
         }
         else if (_knetCompactedReplicator != null)
         {
@@ -586,7 +614,10 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => GetValueBuffersRange(database, rangeStart, rangeEnd, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (_streamData != null)
         {
@@ -598,23 +629,33 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _forwardCache?.TryGetRange(from, to);
                 if (cached != null) return cached;
             }
-            return _streamData.GetValueBuffersRange(database, _keyValueFactory, rangeStart, rangeEnd);
+            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            return _streamData.GetValueBuffersRange(database, _keyValueFactory, rangeStart, rangeEnd, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database) => GetValueBuffersReverse(database, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (_streamData != null)
+        {
+            var effectiveProjection = _reverseCacheEnabled ? null : projectedProperties;
             // reverse cache: populated by this method, serves reverse range when warm.
             // cold → native RocksDB reverse iterator (more efficient than any .NET alternative)
-            return _reverseCache!.GetAllPopulating(() => _streamData.GetValueBuffersReverse(_database));
+            return _reverseCache!.GetAllPopulating(() => _streamData.GetValueBuffersReverse(_database, effectiveProjection));
+        }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd) => GetValueBuffersReverseRange(database, rangeStart, rangeEnd, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (_streamData != null)
         {
@@ -626,13 +667,17 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _reverseCache?.TryGetReverseRange(from, to);
                 if (cached != null) return cached;
             }
-            return _streamData.GetValueBuffersReverseRange(database, _keyValueFactory, rangeStart, rangeEnd);
+            var effectiveProjection = _reverseCacheEnabled ? null : projectedProperties;
+            return _streamData.GetValueBuffersReverseRange(database, _keyValueFactory, rangeStart, rangeEnd, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support reverse range iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues)
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues) => GetValueBuffersByPrefix(database, prefixValues, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, object?[]? prefixValues, IReadOnlyList<IProperty>? projectedProperties)
     {
         if (_streamData != null)
         {
@@ -643,7 +688,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 var cached = _forwardCache?.TryGetPrefix(prefix, prefixValues.Length);
                 if (cached != null) return cached;
             }
-            return _streamData.GetValueBuffersByPrefix(database, _keyValueFactory, prefixValues);
+            var effectiveProjection = _forwardCacheEnabled ? null : projectedProperties;
+            return _streamData.GetValueBuffersByPrefix(database, _keyValueFactory, prefixValues, effectiveProjection);
         }
         else if (_knetCompactedReplicator != null) throw new InvalidOperationException($"KNetCompactedReplicator does not support prefix iteration");
         else throw new InvalidOperationException("Missing _knetCompactedReplicator or _streamData");
