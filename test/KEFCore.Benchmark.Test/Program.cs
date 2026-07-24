@@ -279,8 +279,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             $"Test {testId}",
                             median[testId],
                             details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions} Median {median[testId]}");
-                            total[testId] / ProgramConfig.Config.NumberOfExecutions,
-                            details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
