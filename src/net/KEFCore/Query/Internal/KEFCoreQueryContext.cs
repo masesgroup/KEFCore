@@ -41,6 +41,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         return cluster.GetValueBuffers(database, entityType);
     }
     /// <inheritdoc cref="GetValueBuffers(IEntityType)"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
     {
@@ -58,6 +59,8 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         return result.HasValue ? [result.Value] : [];
     }
     /// <inheritdoc cref="GetValueBuffer(IEntityType, object[])"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="keyValues">The key values</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffer(IEntityType entityType, object?[] keyValues, IReadOnlyList<IProperty>? projectedProperties)
     {
@@ -77,6 +80,9 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         object?[]? rangeEnd)
         => cluster.GetValueBuffersRange(database, entityType, rangeStart, rangeEnd);
     /// <inheritdoc cref="GetValueBuffersRange(IEntityType, object[], object[])"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersRange(
         IEntityType entityType,
@@ -93,6 +99,7 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType)
         => cluster.GetValueBuffersReverse(database, entityType);
     /// <inheritdoc cref="GetValueBuffersReverse(IEntityType)"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersReverse(IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
         => cluster.GetValueBuffersReverse(database, entityType, projectedProperties);
@@ -110,6 +117,9 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
         object?[]? rangeEnd)
         => cluster.GetValueBuffersReverseRange(database, entityType, rangeStart, rangeEnd);
     /// <inheritdoc cref="GetValueBuffersReverseRange(IEntityType, object[], object[])"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersReverseRange(
         IEntityType entityType,
@@ -127,6 +137,8 @@ public class KEFCoreQueryContext(QueryContextDependencies dependencies, IKEFCore
     public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object?[] prefixValues)
         => cluster.GetValueBuffersByPrefix(database, entityType, prefixValues);
     /// <inheritdoc cref="GetValueBuffersByPrefix(IEntityType, object[])"/>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="prefixValues">The prefix</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     public virtual IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IEntityType entityType, object?[] prefixValues, IReadOnlyList<IProperty>? projectedProperties)
         => cluster.GetValueBuffersByPrefix(database, entityType, prefixValues, projectedProperties);

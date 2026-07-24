@@ -124,31 +124,49 @@ public interface IKEFCoreCluster : IDisposable
     // value-buffer cache is disabled for the relevant direction).
 
     /// <inheritdoc cref="GetValueBuffers(IKEFCoreDatabase, IEntityType)"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffers(database, entityType);
 
     /// <inheritdoc cref="GetValueBuffer(IKEFCoreDatabase, IEntityType, object[])"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="keyValues">The key values</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object?[] keyValues, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffer(database, entityType, keyValues);
 
     /// <inheritdoc cref="GetValueBuffersRange(IKEFCoreDatabase, IEntityType, object[], object[])"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffersRange(database, entityType, rangeStart, rangeEnd);
 
     /// <inheritdoc cref="GetValueBuffersReverse(IKEFCoreDatabase, IEntityType)"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffersReverse(database, entityType);
 
     /// <inheritdoc cref="GetValueBuffersReverseRange(IKEFCoreDatabase, IEntityType, object[], object[])"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="rangeStart">The key values start</param>
+    /// <param name="rangeEnd">The key values end</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffersReverseRange(database, entityType, rangeStart, rangeEnd);
 
     /// <inheritdoc cref="GetValueBuffersByPrefix(IKEFCoreDatabase, IEntityType, object[])"/>
+    /// <param name="database">The <see cref="IKEFCoreDatabase"/> requesting the data</param>
+    /// <param name="entityType">The <see cref="IEntityType"/> to retrieve</param>
+    /// <param name="prefixValues">The prefix</param>
     /// <param name="projectedProperties">The properties actually required by the query, or <see langword="null"/> for the full entity.</param>
     IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object?[] prefixValues, IReadOnlyList<IProperty>? projectedProperties)
         => GetValueBuffersByPrefix(database, entityType, prefixValues);
