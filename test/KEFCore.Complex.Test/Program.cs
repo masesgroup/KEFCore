@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Test.Common;
 using MASES.EntityFrameworkCore.KNet.Test.Common.Model.Complex;
 using Microsoft.EntityFrameworkCore;
@@ -122,22 +123,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         });
                     }
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+                    ProgramConfig.ReportResult("DataLoad", watch.Elapsed, details: $"{ProgramConfig.Config.NumberOfElements} elements");
                     watch.Restart();
                     context.SaveChanges();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                    ProgramConfig.ReportResult("SaveChanges", watch.Elapsed);
                     watch.Restart();
                     var res = context.WaitForSynchronization();
                     watch.Stop();
-                    if (res.HasValue && res.Value)
-                    {
-                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString($"Local store is not synchronized.");
-                    }
+                    ProgramConfig.ReportResult("LocalStoreSynchronized", watch.Elapsed, success: res.HasValue && res.Value);
                 }
 
                 if (ProgramConfig.Config.UseModelBuilder)
@@ -163,6 +157,43 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                 catch
                 {
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
+                }
+
+                // Projection correctness check. BlogId == 10 is never removed later in this file, so it's a safe,
+                // stable record to use here and it also survives across "reload" CI runs (LoadApplicationData=false)
+                // that read back data written by a previous process invocation. Expected values are derived from
+                // blog.Rating itself (== the loop index used at seed time above, e.g. Url = "..." + i, Tax.Code =
+                // char.ConvertFromUtf32(i)[0], TaxInfoExtended.CodeExtended = i * 3) rather than hardcoded, so this
+                // stays correct even if the seeding loop or NumberOfElements changes. Runs regardless of
+                // LoadApplicationData/cache TTL and always throws on mismatch — unlike the tolerant try/catch above
+                // (meant only for "record doesn't exist yet"), a value mismatch here is always a real bug. These
+                // checks are pure LINQ .Select() correctness checks: they hold with or without any projection
+                // push-down optimization in the storage layer, so they're independent of that work and useful here
+                // as a baseline (before/after comparison once such an optimization lands).
+                if (blog != null)
+                {
+                    int seed = blog.Rating;
+                    string expectedUrl = "http://blogs.msdn.com/adonet" + seed;
+                    char expectedTaxCode = char.ConvertFromUtf32(seed)[0];
+                    int expectedCodeExtended = seed * 3;
+
+                    watch.Restart();
+                    var scalarOnly = context.Blogs!.Where(b => b.BlogId == 10).Select(b => b.Url).Single();
+                    watch.Stop();
+                    if (scalarOnly != expectedUrl)
+                        throw new InvalidOperationException($"Projection mismatch: Select(b => b.Url) for BlogId==10 returned '{scalarOnly}', expected '{expectedUrl}'.");
+                    ProgramConfig.ReportResult("ScalarOnlyProjection_BlogId10_Url", watch.Elapsed, details: $"Url='{scalarOnly}'");
+
+                    watch.Restart();
+                    var nested = context.Blogs!.Where(b => b.BlogId == 10)
+                        .Select(b => new { b.Url, Code = b.PricingInfo.Tax.Code, CodeExtended = b.PricingInfo.Tax.TaxInfoExtended.CodeExtended })
+                        .Single();
+                    watch.Stop();
+                    if (nested.Url != expectedUrl || nested.Code != expectedTaxCode || nested.CodeExtended != expectedCodeExtended)
+                        throw new InvalidOperationException(
+                            $"Projection mismatch for BlogId==10: Url='{nested.Url}' (expected '{expectedUrl}'), " +
+                            $"Code='{nested.Code}' (expected '{expectedTaxCode}'), CodeExtended={nested.CodeExtended} (expected {expectedCodeExtended}).");
+                    ProgramConfig.ReportResult("NestedComplexTypeProjection_BlogId10_TaxCode", watch.Elapsed, details: $"Url='{nested.Url}' Code='{nested.Code}' CodeExtended={nested.CodeExtended}");
                 }
 
                 watch.Restart();
@@ -309,6 +340,14 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Activates the per-entity ValueBuffer cache using the same /p:ForwardCacheTimeout /p:ReverseCacheTimeout
+            // CLI overrides already wired into ProgramConfig and already passed to this exact test executable by the
+            // CI matrix (use_cache: [true, false] in build_common.yaml) — previously a no-op here since nothing
+            // consumed them. Placed before the UseModelBuilder early-return below so it applies in both configurations.
+            modelBuilder.Entity<BlogComplex>().HasKEFCoreValueBufferCache(
+                TimeSpan.FromSeconds(ProgramConfig.Config.ForwardCacheTimeout),
+                TimeSpan.FromSeconds(ProgramConfig.Config.ReverseCacheTimeout));
+
             if (!ProgramConfig.Config.UseModelBuilder) return;
 
             modelBuilder.Entity<BlogComplex>().HasKey(c => new { c.BlogId, c.Rating });
