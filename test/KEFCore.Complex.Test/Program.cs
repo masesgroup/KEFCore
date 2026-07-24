@@ -122,22 +122,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                         });
                     }
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed data load {watch.ElapsedMilliseconds} ms");
+                    ProgramConfig.ReportResult("DataLoad", watch.Elapsed, details: $"{ProgramConfig.Config.NumberOfElements} elements");
                     watch.Restart();
                     context.SaveChanges();
                     watch.Stop();
-                    ProgramConfig.ReportString($"Elapsed SaveChanges {watch.ElapsedMilliseconds} ms");
+                    ProgramConfig.ReportResult("SaveChanges", watch.Elapsed);
                     watch.Restart();
                     var res = context.WaitForSynchronization();
                     watch.Stop();
-                    if (res.HasValue && res.Value)
-                    {
-                        ProgramConfig.ReportString($"Local store synchronized in {watch.ElapsedMilliseconds} ms.");
-                    }
-                    else
-                    {
-                        ProgramConfig.ReportString($"Local store is not synchronized.");
-                    }
+                    ProgramConfig.ReportResult("LocalStoreSynchronized", watch.Elapsed, success: res.HasValue && res.Value);
                 }
 
                 if (ProgramConfig.Config.UseModelBuilder)

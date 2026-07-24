@@ -254,7 +254,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                     for (int testId = 0; testId < testDone; testId++)
                     {
-                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
+                        ProgramConfig.ReportResult(
+                            $"Test {testId}",
+                            total[testId] / ProgramConfig.Config.NumberOfExecutions,
+                            details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
