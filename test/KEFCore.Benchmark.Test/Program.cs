@@ -165,6 +165,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Second execution of context.Blogs.Single(b => b.BlogId == 1) takes {watch.Elapsed}. Result is {blog}", blog == default);
 
                         watch.Restart();
+                        var urlOnly = context.Blogs.Where(b => b.BlogId == 1).Select(b => b.Url).SingleOrDefault();
+                        watch.Stop();
+                        _tests[execution].QueryTimes.Add(watch.Elapsed);
+                        if (ProgramConfig.Config.EnableIntermediateOutput) ProgramConfig.ReportString($"Execution of context.Blogs.Where(b => b.BlogId == 1).Select(b => b.Url) takes {watch.Elapsed}. Result is {urlOnly}", urlOnly == default);
+
+                        watch.Restart();
                         blog = context.Blogs.SingleOrDefault(b => b.BlogId == ProgramConfig.Config.NumberOfElements - 1);
 
                         watch.Stop();
@@ -240,6 +246,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                     for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
                     TimeSpan[] total = new TimeSpan[testDone];
                     for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
+                    TimeSpan[] median = new TimeSpan[testDone];
                     for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
                     {
                         var item = _tests[i].QueryTimes;
@@ -252,10 +259,26 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         }
                     }
 
+                    // Median is statistically distinct from the mean above: it's robust to occasional outliers
+                    // (e.g. a cold first iteration, a GC pause) that can otherwise skew the mean. Computed
+                    // separately, per testId, from the same per-execution samples already collected.
+                    for (int testId = 0; testId < testDone; testId++)
+                    {
+                        var values = new TimeSpan[ProgramConfig.Config.NumberOfExecutions];
+                        for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++) { values[i] = _tests[i].QueryTimes[testId]; }
+                        Array.Sort(values);
+                        int mid = values.Length / 2;
+                        median[testId] = values.Length % 2 == 0
+                            ? TimeSpan.FromTicks((values[mid - 1].Ticks + values[mid].Ticks) / 2)
+                            : values[mid];
+                    }
+
                     for (int testId = 0; testId < testDone; testId++)
                     {
                         ProgramConfig.ReportResult(
                             $"Test {testId}",
+                            median[testId],
+                            details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions} Median {median[testId]}");
                             total[testId] / ProgramConfig.Config.NumberOfExecutions,
                             details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions}");
                     }
