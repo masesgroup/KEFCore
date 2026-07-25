@@ -419,7 +419,7 @@ jobs:
         if: always()
         continue-on-error: true
         run: |
-          python3 ${{ github.workspace }}/tools/analyze-test-results/analyze_results.py \
+          python3 ${{ github.workspace }}/test/tools/analyze-test-results/analyze_results.py \
             --input ${{ env.RESULTS_OUTPUT_FILE }} \
             --output ${{ github.workspace }}/test-results-report.md \
             --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
