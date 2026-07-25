@@ -423,17 +423,6 @@ jobs:
           path: ${{ github.workspace }}/**/hs_err_*
           retention-days: 7
 
-      - name: Analyze structured test results
-        if: always()
-        continue-on-error: true
-        run: |
-          python3 ${{ github.workspace }}/bin/${{ matrix.framework }}/analyze_results.py \
-            --input ${{ env.RESULTS_OUTPUT_FILE }} \
-            --output ${{ github.workspace }}/test-results-report.md \
-            --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
-          cat ${{ github.workspace }}/test-results-report.md >> $GITHUB_STEP_SUMMARY
-        shell: bash
-
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -441,7 +430,6 @@ jobs:
           name: test-results_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}_cache-${{ matrix.use_cache }}
           path: |
             ${{ env.RESULTS_OUTPUT_FILE }}
-            ${{ github.workspace }}/test-results-report.md
           retention-days: 30
          
   execute_tests_windows:
@@ -1008,6 +996,48 @@ jobs:
           name: hs_err_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
           path: ${{ github.workspace }}/**/hs_err_*
           retention-days: 7
+
+  aggregate_test_results:
+    needs: execute_tests_linux
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: '1'
+
+      - name: Download all structured test-result artifacts (Linux matrix)
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          pattern: test-results_*
+          path: ${{ github.workspace }}/all-test-results
+          merge-multiple: true
+
+      - name: Aggregate into one combined report
+        if: always()
+        continue-on-error: true
+        run: |
+          shopt -s nullglob
+          files=(${{ github.workspace }}/all-test-results/*.jsonl)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No structured test-result files found (all-test-results/*.jsonl) - nothing to aggregate." >> $GITHUB_STEP_SUMMARY
+          else
+            python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py \
+              --input "${files[@]}" \
+              --output ${{ github.workspace }}/test-results-combined-report.md \
+              --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0, cached/non-cached, all serializations)"
+            cat ${{ github.workspace }}/test-results-combined-report.md >> $GITHUB_STEP_SUMMARY
+          fi
+        shell: bash
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          if-no-files-found: ignore
+          name: test-results-combined-report
+          path: ${{ github.workspace }}/test-results-combined-report.md
+          retention-days: 30
 
   final_cleanup:
     needs: [ execute_tests_linux, execute_tests_windows, execute_tests_macos ]

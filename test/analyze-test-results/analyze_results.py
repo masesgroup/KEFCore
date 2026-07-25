@@ -8,13 +8,19 @@ Each input line is expected to be a JSON object with the shape:
   {
     "timestamp": "2026-07-25T10:00:00.0000000Z",
     "project": "KEFCore.Benchmark.Test",
-    "testId": "Test 4",
+    "framework": "net9.0",
+    "testId": "Blogs.Where(BlogId==1).Select(Url) [scalar projection]",
     "elapsedMs": 12.34,
     "success": true,
     "details": "Max ... Min ... Mean ... Median ...",
     "forwardCacheTimeout": -1,
     "reverseCacheTimeout": -1
   }
+
+"framework" (e.g. "net8.0"/"net9.0"/"net10.0", which corresponds directly to the EF Core major
+version under test) lets this script compare/aggregate results across the different .NET/EF Core
+versions the CI matrix runs against, not just across cache buckets. Records from before this field
+existed are grouped under "unknown".
 
 Usage:
     python analyze_results.py --input run1.jsonl run2.jsonl --output report.md
@@ -39,6 +45,7 @@ from pathlib import Path
 class Record:
     timestamp: str
     project: str
+    framework: str
     testId: str
     elapsedMs: float
     success: bool
@@ -72,6 +79,7 @@ def load_records(paths: list[Path]) -> list[Record]:
                     records.append(Record(
                         timestamp=obj.get("timestamp", ""),
                         project=obj.get("project", "unknown"),
+                        framework=obj.get("framework", "unknown"),
                         testId=obj.get("testId", "unknown"),
                         elapsedMs=float(obj["elapsedMs"]),
                         success=bool(obj.get("success", True)),
@@ -136,51 +144,53 @@ def build_report(records: list[Record], title: str) -> str:
     else:
         lines.append(f"**{len(failures)}** failing record(s):")
         lines.append("")
-        lines.append("| Project | Test | Cache | Elapsed (ms) | Details | Source |")
-        lines.append("|---|---|---|---|---|---|")
+        lines.append("| Project | Framework | Test | Cache | Elapsed (ms) | Details | Source |")
+        lines.append("|---|---|---|---|---|---|---|")
         for r in failures:
             cache = "cached" if r.cache_enabled else "non-cached"
             details = (r.details or "").replace("|", "\\|")
-            lines.append(f"| {r.project} | {r.testId} | {cache} | {fmt_ms(r.elapsedMs)} | {details} | {r.source_file} |")
+            lines.append(f"| {r.project} | {r.framework} | {r.testId} | {cache} | {fmt_ms(r.elapsedMs)} | {details} | {r.source_file} |")
     lines.append("")
 
-    # --- Per (project, testId, cache-bucket) summary ---------------------------------------
-    groups: dict[tuple[str, str, bool], list[Record]] = defaultdict(list)
+    # --- Per (project, framework, testId, cache-bucket) summary -----------------------------
+    groups: dict[tuple[str, str, str, bool], list[Record]] = defaultdict(list)
     for r in records:
-        groups[(r.project, r.testId, r.cache_enabled)].append(r)
+        groups[(r.project, r.framework, r.testId, r.cache_enabled)].append(r)
 
     lines.append("## Summary by test")
     lines.append("")
-    lines.append("Cache bucket is derived from `forwardCacheTimeout`: `cached` means TTL > 0 (see "
-                  "`KEFCoreCachedValueBufferStore.IsEnabled`), `non-cached` covers zero/negative TTL "
-                  "(the default in test configs, e.g. -1 seconds).")
+    lines.append("`Framework` is the .NET runtime the test ran under (e.g. `net9.0`), which corresponds directly "
+                  "to the EF Core major version under test. Cache bucket is derived from `forwardCacheTimeout`: "
+                  "`cached` means TTL > 0 (see `KEFCoreCachedValueBufferStore.IsEnabled`), `non-cached` covers "
+                  "zero/negative TTL (the default in test configs, e.g. -1 seconds).")
     lines.append("")
-    lines.append("| Project | Test | Cache | N | Mean (ms) | Median (ms) | Min (ms) | Max (ms) | Stdev (ms) | Success rate |")
-    lines.append("|---|---|---|---|---|---|---|---|---|---|")
-    for (project, test_id, cached), group_records in sorted(groups.items(), key=lambda kv: (kv[0][0], kv[0][1], kv[0][2])):
+    lines.append("| Project | Framework | Test | Cache | N | Mean (ms) | Median (ms) | Min (ms) | Max (ms) | Stdev (ms) | Success rate |")
+    lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
+    for (project, framework, test_id, cached), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
         s = summarize(group_records)
         stdev = fmt_ms(s.stdev_ms) if s.stdev_ms is not None else "n/a"
         cache_label = "cached" if cached else "non-cached"
         lines.append(
-            f"| {project} | {test_id} | {cache_label} | {s.count} | {fmt_ms(s.mean_ms)} | {fmt_ms(s.median_ms)} | "
+            f"| {project} | {framework} | {test_id} | {cache_label} | {s.count} | {fmt_ms(s.mean_ms)} | {fmt_ms(s.median_ms)} | "
             f"{fmt_ms(s.min_ms)} | {fmt_ms(s.max_ms)} | {stdev} | {s.success_rate:.0%} |"
         )
     lines.append("")
 
-    # --- Cached vs non-cached delta, for (project, testId) pairs present in both buckets ---
+    # --- Cached vs non-cached delta, for (project, framework, testId) present in both buckets
     lines.append("## Cached vs non-cached delta")
     lines.append("")
     lines.append("Positive `delta %` means the cached run was slower than the non-cached run for that same test "
-                  "(higher median). For a test whose non-cached path benefits from projection push-down, a "
-                  "consistently positive delta here is expected — projection is intentionally skipped when the "
-                  "per-entity cache is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch "
-                  "cost in that case.")
+                  "(higher median), computed separately per framework so a difference in EF Core version behavior "
+                  "isn't hidden by averaging across them. For a test whose non-cached path benefits from projection "
+                  "push-down, a consistently positive delta here is expected — projection is intentionally skipped "
+                  "when the per-entity cache is enabled (TTL > 0), so timings should tend back towards the "
+                  "full-entity-fetch cost in that case.")
     lines.append("")
-    test_keys = {(project, test_id) for (project, test_id, _cached) in groups}
+    test_keys = {(project, framework, test_id) for (project, framework, test_id, _cached) in groups}
     delta_rows = []
-    for project, test_id in sorted(test_keys):
-        cached_group = groups.get((project, test_id, True))
-        noncached_group = groups.get((project, test_id, False))
+    for project, framework, test_id in sorted(test_keys):
+        cached_group = groups.get((project, framework, test_id, True))
+        noncached_group = groups.get((project, framework, test_id, False))
         if not cached_group or not noncached_group:
             continue
         cached_stats = summarize(cached_group)
@@ -188,7 +198,7 @@ def build_report(records: list[Record], title: str) -> str:
         if noncached_stats.median_ms == 0:
             continue
         delta_pct = (cached_stats.median_ms - noncached_stats.median_ms) / noncached_stats.median_ms * 100
-        delta_rows.append((project, test_id, noncached_stats.median_ms, cached_stats.median_ms, delta_pct))
+        delta_rows.append((project, framework, test_id, noncached_stats.median_ms, cached_stats.median_ms, delta_pct))
 
     if not delta_rows:
         lines.append("_No test has records in both cache buckets, so no delta can be computed. Run the same "
@@ -196,12 +206,39 @@ def build_report(records: list[Record], title: str) -> str:
                       "`/p:ForwardCacheTimeout=60`) and pass both result files to this script to populate this "
                       "section._")
     else:
-        lines.append("| Project | Test | Non-cached median (ms) | Cached median (ms) | Delta % |")
-        lines.append("|---|---|---|---|---|")
-        for project, test_id, noncached_median, cached_median, delta_pct in delta_rows:
+        lines.append("| Project | Framework | Test | Non-cached median (ms) | Cached median (ms) | Delta % |")
+        lines.append("|---|---|---|---|---|---|")
+        for project, framework, test_id, noncached_median, cached_median, delta_pct in delta_rows:
             lines.append(
-                f"| {project} | {test_id} | {fmt_ms(noncached_median)} | {fmt_ms(cached_median)} | {delta_pct:+.1f}% |"
+                f"| {project} | {framework} | {test_id} | {fmt_ms(noncached_median)} | {fmt_ms(cached_median)} | {delta_pct:+.1f}% |"
             )
+    lines.append("")
+
+    # --- Cross-framework comparison, for (project, testId, cache-bucket) present in 2+ frameworks
+    lines.append("## Cross-framework comparison")
+    lines.append("")
+    lines.append("For the same project/test/cache-bucket, how the median elapsed time compares across the "
+                  ".NET/EF Core versions the CI matrix runs against. Only shown for combinations with data from "
+                  "more than one framework.")
+    lines.append("")
+    by_test_cache: dict[tuple[str, str, bool], dict[str, GroupStats]] = defaultdict(dict)
+    for (project, framework, test_id, cached), group_records in groups.items():
+        by_test_cache[(project, test_id, cached)][framework] = summarize(group_records)
+
+    frameworks_present = sorted({fw for (_p, fw, _t, _c) in groups})
+    multi_framework_rows = {k: v for k, v in by_test_cache.items() if len(v) > 1}
+    if not multi_framework_rows or len(frameworks_present) < 2:
+        lines.append("_No test has records from more than one framework, so no cross-framework comparison can be "
+                      "made. Pass result files from multiple `net*.0` runs together to populate this section._")
+    else:
+        header = "| Project | Test | Cache | " + " | ".join(f"{fw} median (ms)" for fw in frameworks_present) + " |"
+        sep = "|---|---|---|" + "---|" * len(frameworks_present)
+        lines.append(header)
+        lines.append(sep)
+        for (project, test_id, cached), per_fw in sorted(multi_framework_rows.items(), key=lambda kv: kv[0]):
+            cache_label = "cached" if cached else "non-cached"
+            cells = [fmt_ms(per_fw[fw].median_ms) if fw in per_fw else "n/a" for fw in frameworks_present]
+            lines.append(f"| {project} | {test_id} | {cache_label} | " + " | ".join(cells) + " |")
     lines.append("")
 
     return "\n".join(lines)

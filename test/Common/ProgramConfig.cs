@@ -280,10 +280,11 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         /// <summary>
         /// Reports a single measured/verified test outcome. Always logs via <see cref="ReportString"/> for console
         /// output (unchanged behavior). Additionally, when <see cref="ProgramConfig.ResultsOutputPath"/> is
-        /// configured, appends one JSON Lines record to that file: <c>{ timestamp, project, testId, elapsedMs,
-        /// success, details, forwardCacheTimeout, reverseCacheTimeout }</c>. The last two fields make cached/
-        /// non-cached CI matrix legs (see <c>use_cache: [true, false]</c> in build_common.yaml) distinguishable
-        /// in the aggregated output without re-deriving it from the CI job name. Safe to call repeatedly within
+        /// configured, appends one JSON Lines record to that file: <c>{ timestamp, project, framework, testId,
+        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout }</c>. <c>framework</c> (e.g.
+        /// "net9.0") and the TTL fields make it possible to group/compare records across CI matrix legs (different
+        /// .NET/EF Core versions, cached vs non-cached) without needing to parse that information back out of a
+        /// file name. Safe to call repeatedly within
         /// a single process (e.g. inside <see cref="ProgramConfig.NumberOfExecutions"/> loops) and safe if
         /// multiple test processes happen to append to the same configured path (lock-guarded per-process;
         /// <see cref="File.AppendAllText(string, string)"/> append-mode writes are also safe across processes
@@ -303,6 +304,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 timestamp = DateTime.UtcNow.ToString("o"),
                 project = Assembly.GetEntryAssembly()?.GetName().Name,
+                // Self-describing: derived from the actual running .NET runtime rather than relying on
+                // external labeling or parsing it back out of a CI-generated file name. Formatted to match
+                // the "net8.0"/"net9.0"/"net10.0" target-framework monikers used elsewhere (CI matrix,
+                // artifact/cache naming) so records can be grouped/compared by framework (== EF Core major
+                // version) directly, which is exactly what a cross-run aggregate report needs.
+                framework = $"net{Environment.Version.Major}.{Environment.Version.Minor}",
                 testId,
                 elapsedMs = elapsed.TotalMilliseconds,
                 success,
