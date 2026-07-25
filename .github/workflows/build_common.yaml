@@ -419,10 +419,7 @@ jobs:
         if: always()
         continue-on-error: true
         run: |
-          python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py \
-            --input ${{ env.RESULTS_OUTPUT_FILE }} \
-            --output ${{ github.workspace }}/test-results-report.md \
-            --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
+          python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py --input ${{ env.RESULTS_OUTPUT_FILE }} --output ${{ github.workspace }}/test-results-report.md --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
           cat ${{ github.workspace }}/test-results-report.md >> $GITHUB_STEP_SUMMARY
         shell: bash
 
