@@ -204,6 +204,14 @@ jobs:
           Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
 
+      - name: Prepare structured test-results analysis script
+        # execute_tests_* jobs never check out the repository source (they only restore this
+        # bin/<framework> cache), so analyze_results.py must travel here to be reachable there.
+        run: |
+          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net8.0\ -Force
+          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
+          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
+
       - name: Prepare other files
         if: ${{ inputs.UseSpecialSettings == true }}
         shell: cmd
@@ -419,7 +427,10 @@ jobs:
         if: always()
         continue-on-error: true
         run: |
-          python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py --input ${{ env.RESULTS_OUTPUT_FILE }} --output ${{ github.workspace }}/test-results-report.md --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
+          python3 ${{ github.workspace }}/bin/${{ matrix.framework }}/analyze_results.py \
+            --input ${{ env.RESULTS_OUTPUT_FILE }} \
+            --output ${{ github.workspace }}/test-results-report.md \
+            --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — ${{ matrix.serialization }} / ${{ matrix.os }} / ${{ matrix.framework }} / ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} / cache=${{ matrix.use_cache }}"
           cat ${{ github.workspace }}/test-results-report.md >> $GITHUB_STEP_SUMMARY
         shell: bash
 
