@@ -35,6 +35,32 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
             public readonly List<TimeSpan> QueryTimes = [];
         }
 
+        // Stable, descriptive names matching the fixed order of the QueryTimes.Add(...) calls in the
+        // per-execution loop below (position N here == the (N+1)-th QueryTimes.Add call in that loop).
+        // Used instead of opaque "Test {index}" labels in the final report: an index shifts silently if
+        // a query is ever added/removed/reordered in the loop, silently corrupting any historical
+        // cross-run comparison keyed on it. A stable name survives that. The last entry is deliberately
+        // NOT a query timing at all — it's the sum of all the others (the whole iteration's wall-clock
+        // time) — and must never be aggregated/compared alongside the individual query timings above it
+        // (e.g. in a cached-vs-non-cached delta) as if it were one more comparable data point.
+        static readonly string[] TestNames =
+        [
+            "Post.SingleOrDefault(BlogId==2) [cold]",
+            "Post.SingleOrDefault(BlogId==2) [warm]",
+            "Post.SingleOrDefault(BlogId==NumberOfElements-1)",
+            "Posts.All(true)",
+            "Blog.SingleOrDefault(BlogId==1) [cold]",
+            "Blog.SingleOrDefault(BlogId==1) [warm]",
+            "Blogs.Where(BlogId==1).Select(Url) [scalar projection]",
+            "Blog.SingleOrDefault(BlogId==NumberOfElements-1) [cold]",
+            "Blog.SingleOrDefault(BlogId==NumberOfElements-1) [warm]",
+            "Blogs.Where(range).Count() [cold]",
+            "Blogs.Where(range).Count() [warm]",
+            "Join Blogs/Posts on BlogId",
+            "Join Blogs/Posts where Rating>=100",
+            "IterationTotal (sum of all queries above, not comparable to them individually)",
+        ];
+
         static void Main(string[] args)
         {
             ProgramConfig.LoadConfig(args);
@@ -273,9 +299,21 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             : values[mid];
                     }
 
+                    if (testDone != TestNames.Length)
+                    {
+                        ProgramConfig.ReportString(
+                            $"TestNames has {TestNames.Length} entries but {testDone} query timings were recorded per execution " +
+                            "- a query was added/removed in the loop without updating TestNames. Falling back to positional labels for this run.",
+                            noDataReturned: true);
+                    }
+
                     for (int testId = 0; testId < testDone; testId++)
                     {
-                        ProgramConfig.ReportString($"Test {testId} -> Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions} Median {median[testId]}");
+                        var testLabel = testId < TestNames.Length ? TestNames[testId] : $"Test {testId} (unnamed)";
+                        ProgramConfig.ReportResult(
+                            testLabel,
+                            median[testId],
+                            details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions} Median {median[testId]}");
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
