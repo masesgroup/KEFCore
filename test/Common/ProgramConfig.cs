@@ -132,6 +132,13 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         public bool EnableIntermediateOutput { get; set; } = false;
         public int ForwardCacheTimeout { get; set; } = -1;
         public int ReverseCacheTimeout { get; set; } = -1;
+        /// <summary>
+        /// Optional path to a JSON Lines file where <see cref="ReportResult"/> appends one structured record
+        /// per call, in addition to the existing console output. <see langword="null"/>/empty (the default)
+        /// disables structured output entirely — existing behavior and CI commands are unaffected unless this
+        /// is explicitly set via the existing <c>/f:</c>/<c>/p:ResultsOutputPath=...</c> config mechanism.
+        /// </summary>
+        public string ResultsOutputPath { get; set; } = null;
 
         public void ApplyOnContext(KEFCoreDbContext context)
         {
@@ -265,6 +272,56 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 if (noDataReturned) Console.Error.WriteLine(msg);
                 else Console.WriteLine(msg);
+            }
+        }
+
+        private static readonly object _resultsOutputLock = new();
+
+        /// <summary>
+        /// Reports a single measured/verified test outcome. Always logs via <see cref="ReportString"/> for console
+        /// output (unchanged behavior). Additionally, when <see cref="ProgramConfig.ResultsOutputPath"/> is
+        /// configured, appends one JSON Lines record to that file: <c>{ timestamp, project, framework, testId,
+        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout }</c>. <c>framework</c> (e.g.
+        /// "net9.0") and the TTL fields make it possible to group/compare records across CI matrix legs (different
+        /// .NET/EF Core versions, cached vs non-cached) without needing to parse that information back out of a
+        /// file name. Safe to call repeatedly within
+        /// a single process (e.g. inside <see cref="ProgramConfig.NumberOfExecutions"/> loops) and safe if
+        /// multiple test processes happen to append to the same configured path (lock-guarded per-process;
+        /// <see cref="File.AppendAllText(string, string)"/> append-mode writes are also safe across processes
+        /// on the platforms this test suite targets).
+        /// </summary>
+        /// <param name="testId">A short, stable identifier for the specific test/measurement (e.g. the query or scenario name).</param>
+        /// <param name="elapsed">The measured elapsed time for this test.</param>
+        /// <param name="success">Whether the test passed its correctness check, if any. Defaults to <see langword="true"/> for pure timing measurements with no correctness assertion.</param>
+        /// <param name="details">Optional free-form details (e.g. the verified value, or a mismatch description).</param>
+        public static void ReportResult(string testId, TimeSpan elapsed, bool success = true, string details = null)
+        {
+            ReportString($"{testId} -> {elapsed}{(details == null ? string.Empty : $" ({details})")}", !success);
+
+            if (string.IsNullOrWhiteSpace(Config?.ResultsOutputPath)) return;
+
+            var record = new
+            {
+                timestamp = DateTime.UtcNow.ToString("o"),
+                project = Assembly.GetEntryAssembly()?.GetName().Name,
+                // Self-describing: derived from the actual running .NET runtime rather than relying on
+                // external labeling or parsing it back out of a CI-generated file name. Formatted to match
+                // the "net8.0"/"net9.0"/"net10.0" target-framework monikers used elsewhere (CI matrix,
+                // artifact/cache naming) so records can be grouped/compared by framework (== EF Core major
+                // version) directly, which is exactly what a cross-run aggregate report needs.
+                framework = $"net{Environment.Version.Major}.{Environment.Version.Minor}",
+                testId,
+                elapsedMs = elapsed.TotalMilliseconds,
+                success,
+                details,
+                forwardCacheTimeout = Config.ForwardCacheTimeout,
+                reverseCacheTimeout = Config.ReverseCacheTimeout,
+            };
+            var line = JsonSerializer.Serialize(record) + Environment.NewLine;
+
+            lock (_resultsOutputLock)
+            {
+                File.AppendAllText(Config.ResultsOutputPath, line);
             }
         }
 
