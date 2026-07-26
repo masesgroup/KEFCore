@@ -1,8 +1,12 @@
 # Example run (synthetic data, multi-framework)
 
-Generated: 2026-07-25T19:51:46.757460+00:00
+Generated: 2026-07-26T19:11:49.922304+00:00
 
 Total records analyzed: **1207**
+
+## Headline
+
+_No test's `testId` matches the headline pattern (`iterationtotal`), so no single at-a-glance number is available. See "Summary by test" below for the full per-query breakdown._
 
 ## Failures
 

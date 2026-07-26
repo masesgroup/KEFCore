@@ -1014,17 +1014,36 @@ jobs:
           path: ${{ github.workspace }}/all-test-results
           merge-multiple: true
 
-      - name: Aggregate into one combined report
+      - name: Restore previous baseline (latest known-good results from master), if any
+        id: restore-baseline
+        uses: actions/cache/restore@v6
+        continue-on-error: true
+        with:
+          path: ${{ github.workspace }}/baseline-results
+          key: kefcore-test-baseline-none # never matches exactly: forces restore-keys prefix lookup below, so this always resolves to the MOST RECENT baseline saved on master, not a specific run
+          restore-keys: |
+            kefcore-test-baseline-
+
+      - name: Aggregate into one combined report (compared against baseline when available)
         if: always()
         continue-on-error: true
         run: |
           shopt -s nullglob
           files=(${{ github.workspace }}/all-test-results/*.jsonl)
+          baseline_files=(${{ github.workspace }}/baseline-results/*.jsonl)
           if [ ${#files[@]} -eq 0 ]; then
             echo "No structured test-result files found (all-test-results/*.jsonl) - nothing to aggregate." >> $GITHUB_STEP_SUMMARY
           else
+            baseline_args=()
+            if [ ${#baseline_files[@]} -gt 0 ]; then
+              echo "Found ${#baseline_files[@]} baseline file(s) from a previous master run - comparing against them."
+              baseline_args=(--baseline "${baseline_files[@]}")
+            else
+              echo "No baseline found yet (first run establishing one, or restore failed) - reporting without a comparison."
+            fi
             python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py \
               --input "${files[@]}" \
+              "${baseline_args[@]}" \
               --output ${{ github.workspace }}/test-results-combined-report.md \
               --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0, cached/non-cached, all serializations)"
             cat ${{ github.workspace }}/test-results-combined-report.md >> $GITHUB_STEP_SUMMARY
@@ -1038,6 +1057,47 @@ jobs:
           name: test-results-combined-report
           path: ${{ github.workspace }}/test-results-combined-report.md
           retention-days: 30
+
+      - name: Save this run's results as the new baseline
+        # Only master runs establish a new baseline - PR runs compare against it (via restore-keys
+        # above) but must never overwrite it, otherwise a PR could "erase" the real baseline before
+        # its own regressions are ever compared against it.
+        if: ${{ always() && github.ref == 'refs/heads/master' }}
+        run: |
+          mkdir -p ${{ github.workspace }}/new-baseline
+          shopt -s nullglob
+          files=(${{ github.workspace }}/all-test-results/*.jsonl)
+          if [ ${#files[@]} -gt 0 ]; then
+            cp "${files[@]}" ${{ github.workspace }}/new-baseline/
+          fi
+        shell: bash
+
+      - uses: actions/cache/save@v6
+        # Cache keys are immutable once written, so each master run saves under a fresh, unique key
+        # (github.run_id) rather than trying to overwrite kefcore-test-baseline-none above; the
+        # restore-keys prefix match in "Restore previous baseline" always picks up the most recent one.
+        if: ${{ always() && github.ref == 'refs/heads/master' }}
+        with:
+          path: ${{ github.workspace }}/new-baseline
+          key: kefcore-test-baseline-${{ github.run_id }}
+
+      - name: Clean up older baseline caches, keeping only this one
+        if: ${{ always() && github.ref == 'refs/heads/master' }}
+        continue-on-error: true
+        run: |
+          gh extension install actions/gh-actions-cache || true
+          echo "Fetching baseline cache keys..."
+          oldKeys=$(gh actions-cache list --key kefcore-test-baseline- --order desc | cut -f 1 | tail -n +2)
+          set +e
+          for oldKey in $oldKeys
+          do
+              echo "Deleting stale baseline cache: $oldKey"
+              gh actions-cache delete "$oldKey" --confirm
+          done
+          echo "Done"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN_INHERITED }}
+        shell: bash
 
   final_cleanup:
     needs: [ execute_tests_linux, execute_tests_windows, execute_tests_macos ]
