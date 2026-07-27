@@ -182,6 +182,7 @@ jobs:
       attestations: write
       packages: write
       id-token: write
+      actions: write
     uses: ./.github/workflows/build_common.yaml
     with:
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
