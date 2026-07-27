@@ -1,6 +1,6 @@
 # Example: comparison vs baseline (synthetic data)
 
-Generated: 2026-07-26T19:11:37.940950+00:00
+Generated: 2026-07-27T07:47:19.554722+00:00
 
 Total records analyzed: **150**
 
@@ -14,9 +14,9 @@ Median wall-clock time for one full iteration (all queries in that project's fix
 
 ## Comparison vs baseline
 
-Delta % and verdict, per `(project, framework, testId, cache)` present in both runs. Positive delta = current run slower (regression); negative = faster (improvement). Threshold: **�5%** � smaller differences are reported as "no significant change" rather than noise.
+Delta % and verdict, per `(project, framework, testId, cache)` present in both runs. Positive delta = current run slower (regression); negative = faster (improvement). A verdict only fires when **both** thresholds are exceeded: **±5%** **and** **±1.00 ms** absolute — this avoids flagging noise on sub-millisecond queries, where a large percent swing can still be an insignificant absolute difference (e.g. GC pauses, JIT warmup, OS scheduling jitter).
 
-**?? Overall verdict: 1 regression(s) detected** (out of 3 compared tests, 0 improved).
+**⚠️ Overall verdict: 1 regression(s) detected** (out of 3 compared tests, 0 improved).
 
 | Project | Framework | Test | Cache | Baseline median (ms) | Current median (ms) | Delta % | Verdict |
 |---|---|---|---|---|---|---|---|
@@ -40,7 +40,7 @@ None. All reported outcomes had `success: true`.
 
 ## Cached vs non-cached delta
 
-Positive `delta %` means the cached run was slower than the non-cached run for that same test (higher median), computed separately per framework so a difference in EF Core version behavior isn't hidden by averaging across them. For a test whose non-cached path benefits from projection push-down, a consistently positive delta here is expected � projection is intentionally skipped when the per-entity cache is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch cost in that case.
+Positive `delta %` means the cached run was slower than the non-cached run for that same test (higher median), computed separately per framework so a difference in EF Core version behavior isn't hidden by averaging across them. For a test whose non-cached path benefits from projection push-down, a consistently positive delta here is expected — projection is intentionally skipped when the per-entity cache is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch cost in that case.
 
 _No test has records in both cache buckets, so no delta can be computed. Run the same scenario once with `/p:ForwardCacheTimeout=-1` and once with a positive value (e.g. `/p:ForwardCacheTimeout=60`) and pass both result files to this script to populate this section._
 
