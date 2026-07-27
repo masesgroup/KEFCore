@@ -68,9 +68,28 @@ For every `(project, framework, testId, cache bucket)` present in **both** runs,
 "Comparison vs baseline" section right after the Headline, with:
 - an overall verdict banner (✅ no regressions / ⚠️ N regression(s) detected);
 - a table of every compared test, sorted regressions-first, each with its own delta % and
-  verdict (`REGRESSION` / `IMPROVEMENT` / `no significant change`), against `--regression-threshold`
-  (percent, default `5.0`) so small run-to-run noise isn't reported as a real change;
+  verdict (`REGRESSION` / `IMPROVEMENT` / `no significant change`);
 - a note on any test present in only one of the two runs (new/removed tests aren't compared).
+
+A verdict only fires when **both** thresholds are exceeded:
+- `--regression-threshold` (percent, default `5.0`)
+- `--regression-threshold-abs-ms` (absolute milliseconds, default `1.0`)
+
+The absolute floor matters in practice: sub-millisecond queries routinely show large percent
+swings between runs (GC pauses, JIT warmup, OS scheduling jitter) that are not real regressions —
+e.g. a query going from 0.058ms to 0.068ms is a +17% delta but only +0.01ms in absolute terms, and
+is correctly reported as "no significant change" with the default thresholds. A real regression on
+a heavier operation (say 6000ms → 6500ms, +8.3% and +500ms) still fires normally. Tune both flags
+to match the scale of what you're measuring:
+
+```bash
+python analyze_results.py \
+  --input after/*.jsonl \
+  --baseline before/*.jsonl \
+  --output report.md \
+  --regression-threshold 5.0 \
+  --regression-threshold-abs-ms 1.0
+```
 
 This is the natural way to check "did this PR make things faster or slower": run the test suite
 before and after the change with `/p:ResultsOutputPath=...` pointed at two different files, then
