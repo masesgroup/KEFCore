@@ -125,10 +125,16 @@ def fmt_ms(v: float) -> str:
     return f"{v:.3f}"
 
 
-def verdict(delta_pct: float, threshold_pct: float) -> str:
-    if delta_pct > threshold_pct:
+def verdict(delta_pct: float, delta_ms: float, threshold_pct: float, threshold_abs_ms: float) -> str:
+    # Requires BOTH thresholds to be exceeded, not just the percent one. Rationale (found by
+    # inspecting a real CI report): sub-millisecond queries routinely show 10-40% swings between
+    # runs that are just measurement noise (GC pauses, JIT warmup, OS scheduling jitter) - a percent
+    # threshold alone flags these as REGRESSION/IMPROVEMENT even though the absolute difference is
+    # a fraction of a millisecond and not a real change. Requiring an absolute floor too keeps
+    # sensitivity on operations where a real regression would show up as a meaningful number of ms.
+    if delta_pct > threshold_pct and delta_ms > threshold_abs_ms:
         return "REGRESSION"
-    if delta_pct < -threshold_pct:
+    if delta_pct < -threshold_pct and delta_ms < -threshold_abs_ms:
         return "IMPROVEMENT"
     return "no significant change"
 
@@ -142,7 +148,7 @@ HEADLINE_PATTERN = "iterationtotal"
 
 
 def build_report(records: list[Record], title: str, baseline_records: list[Record] | None = None,
-                  regression_threshold_pct: float = 5.0) -> str:
+                  regression_threshold_pct: float = 5.0, regression_threshold_abs_ms: float = 1.0) -> str:
     lines: list[str] = []
     lines.append(f"# {title}")
     lines.append("")
@@ -187,8 +193,10 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
         lines.append("")
         lines.append(f"Delta % and verdict, per `(project, framework, testId, cache)` present in both runs. "
                       f"Positive delta = current run slower (regression); negative = faster (improvement). "
-                      f"Threshold: **±{regression_threshold_pct:.0f}%** — smaller differences are reported as "
-                      f"\"no significant change\" rather than noise.")
+                      f"A verdict only fires when **both** thresholds are exceeded: **±{regression_threshold_pct:.0f}%** "
+                      f"**and** **±{regression_threshold_abs_ms:.2f} ms** absolute — this avoids flagging noise on "
+                      f"sub-millisecond queries, where a large percent swing can still be an insignificant "
+                      f"absolute difference (e.g. GC pauses, JIT warmup, OS scheduling jitter).")
         lines.append("")
 
         current_groups: dict[tuple[str, str, str, bool], list[Record]] = defaultdict(list)
@@ -205,9 +213,10 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             base_stats = summarize(baseline_groups[key])
             if base_stats.median_ms == 0:
                 continue
-            delta_pct = (cur_stats.median_ms - base_stats.median_ms) / base_stats.median_ms * 100
+            delta_ms = cur_stats.median_ms - base_stats.median_ms
+            delta_pct = delta_ms / base_stats.median_ms * 100
             comparison_rows.append((project, framework, test_id, cached, base_stats.median_ms, cur_stats.median_ms,
-                                     delta_pct, verdict(delta_pct, regression_threshold_pct)))
+                                     delta_pct, verdict(delta_pct, delta_ms, regression_threshold_pct, regression_threshold_abs_ms)))
 
         only_in_current = sorted(set(current_groups) - set(baseline_groups))
         only_in_baseline = sorted(set(baseline_groups) - set(current_groups))
@@ -365,6 +374,11 @@ def main() -> int:
     parser.add_argument("--regression-threshold", type=float, default=5.0,
                          help="Percent delta (median elapsed time) beyond which a --baseline comparison is "
                               "called a regression/improvement rather than 'no significant change'. Default: 5.0")
+    parser.add_argument("--regression-threshold-abs-ms", type=float, default=1.0,
+                         help="Absolute delta in milliseconds (median elapsed time) that must ALSO be exceeded, "
+                              "alongside --regression-threshold, for a verdict to be REGRESSION/IMPROVEMENT. "
+                              "Prevents noise on sub-millisecond queries (e.g. a 0.05ms -> 0.07ms swing is a "
+                              "40% delta but an insignificant absolute one) from being flagged. Default: 1.0")
     parser.add_argument("--output", required=True, help="Path to write the Markdown report to")
     parser.add_argument("--title", default="KEFCore test results analysis", help="Report title")
     args = parser.parse_args()
@@ -387,7 +401,8 @@ def main() -> int:
         baseline_records = load_records(baseline_paths)
 
     report = build_report(records, args.title, baseline_records=baseline_records,
-                           regression_threshold_pct=args.regression_threshold)
+                           regression_threshold_pct=args.regression_threshold,
+                           regression_threshold_abs_ms=args.regression_threshold_abs_ms)
 
     out_path = Path(args.output)
     out_path.write_text(report, encoding="utf-8")
