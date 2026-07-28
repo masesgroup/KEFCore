@@ -45,6 +45,9 @@ public class KEFCoreRowBag<TKey>(IUpdateEntry entry, string topicName, TKey key,
     /// <inheritdoc/>
     public IComplexProperty[]? ComplexProperties { get; } = complexProperties;
     /// <inheritdoc/>
+    /// <remarks>On this write-path type, the <c>flattenedProperties</c> constructor argument is always the entity's full set (never a query projection), so it is reused directly.</remarks>
+    public IProperty[] FullFlattenedProperties { get; } = flattenedProperties;
+    /// <inheritdoc/>
     public EntityState EntityState { get; } = entry.EntityState;
     /// <inheritdoc/>
     public string AssociatedTopicName { get; } = topicName;

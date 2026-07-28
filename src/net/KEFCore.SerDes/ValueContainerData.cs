@@ -37,6 +37,8 @@ public record ValueContainerData(IValueContainerMetadata Metadata, object[] Valu
     /// <inheritdoc/>
     public IComplexProperty[]? ComplexProperties => Metadata.ComplexProperties;
     /// <inheritdoc/>
+    public IProperty[] FullFlattenedProperties => Metadata.FullFlattenedProperties;
+    /// <inheritdoc/>
     public object?[] PropertyValues => Values;
     /// <inheritdoc/>
     public object?[]? ComplexPropertyValues => ComplexValues;

@@ -340,7 +340,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     }
 
     /// <inheritdoc/>
-    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType)
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType) => GetValueBuffers(database, entityType, null);
+
+    /// <inheritdoc/>
+    public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffers for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -356,7 +359,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffers(database);
+                return table.GetValueBuffers(database, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -369,7 +372,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
     }
     /// <inheritdoc/>
-    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object[] keyValues)
+    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object[] keyValues) => GetValueBuffer(database, entityType, keyValues, null);
+
+    /// <inheritdoc/>
+    public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object?[] keyValues, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffer for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -385,7 +391,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffer(database, keyValues);
+                return table.GetValueBuffer(database, keyValues, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -398,7 +404,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd) => GetValueBuffersRange(database, entityType, rangeStart, rangeEnd, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersRange for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -414,7 +423,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersRange(database, rangeStart, rangeEnd);
+                return table.GetValueBuffersRange(database, rangeStart, rangeEnd, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -427,7 +436,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
     }
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType) => GetValueBuffersReverse(database, entityType, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersReverse for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -443,7 +455,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersReverse(database);
+                return table.GetValueBuffersReverse(database, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -457,7 +469,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd)
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object[] rangeStart, object[] rangeEnd) => GetValueBuffersReverseRange(database, entityType, rangeStart, rangeEnd, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersReverseRange for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -473,7 +488,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersReverseRange(database, rangeStart, rangeEnd);
+                return table.GetValueBuffersReverseRange(database, rangeStart, rangeEnd, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE
@@ -489,7 +504,10 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <summary>
     /// Retrieve the <see cref="ValueBuffer"/> using prefix scan
     /// </summary>
-    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object[] prefixValues)
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object[] prefixValues) => GetValueBuffersByPrefix(database, entityType, prefixValues, null);
+
+    /// <inheritdoc/>
+    public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object?[] prefixValues, IReadOnlyList<IProperty>? projectedProperties)
     {
         database.InfrastructureLogger.Logger.LogDebug("Invoking GetValueBuffersByPrefix for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
@@ -505,7 +523,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 #endif
             if (table != null)
             {
-                return table.GetValueBuffersByPrefix(database, prefixValues);
+                return table.GetValueBuffersByPrefix(database, prefixValues, projectedProperties);
             }
             throw new InvalidOperationException("No table available");
 #if DEBUG_PERFORMANCE

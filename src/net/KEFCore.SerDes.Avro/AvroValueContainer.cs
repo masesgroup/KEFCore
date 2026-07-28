@@ -291,53 +291,62 @@ public partial class AvroValueContainer<TKey> : AvroValueContainer, IValueContai
 #if DEBUG_PERFORMANCE
             iterationSw.Start();
 #endif
-            if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
+            // See DefaultValueContainer.GetData for full rationale. Both sub-cases operate on the "Data"
+            // storage format and always address `allPropertyValues` via IProperty.GetIndex(), relative to the
+            // entity type's FULL flattened property set — independent of any projection filtering applied to
+            // metadata.FlattenedProperties/ComplexProperties. Unrequested slots are left at their default and
+            // are never read by the query shaper.
+            int fullLength = metadata.FullFlattenedProperties.Length;
+
+            if (propertiesInfo == null || complexPropertiesInfo == null)
             {
-                if (propertiesInfo != null)
+                propertiesInfo = [];
+                complexPropertiesInfo = [];
+
+                // Precompute which root complex properties have at least one requested flattened sub-property.
+                // Skipping ConvertInnerData for the rest avoids its complex-type deserialization/ConvertBack —
+                // the most expensive part of this method — for properties outside the current projection.
+                HashSet<IComplexProperty>? neededComplexProperties = null;
+                if (complexProperties != null && complexProperties.Length > 0)
                 {
-                    allPropertyValues = [.. propertiesInfo.Values];
-                }
-                else
-                {
-                    allPropertyValues = new object[flattenedProperties!.Length];
-                    propertiesInfo = [];
-                    for (int i = 0; i < Data.Count; i++)
+                    neededComplexProperties = [];
+                    foreach (var flattenedProperty in flattenedProperties!)
                     {
-                        if (NativeTypeMapper.IsComplex(Data[i].ManagedType)) continue;
-                        IPropertyBase? prop = tName.FindProperty(Data[i].PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema 
-                        ConvertInnerData(Data[i], ref allPropertyValues[i]!, prop, complexTypeFactory);
-                        propertiesInfo.Add(prop, allPropertyValues[i]!);
+                        if (flattenedProperty.DeclaringType is IComplexType declaringComplexType)
+                        {
+                            neededComplexProperties.Add(ComplexTypeExtension.FindRootProperty(tName, declaringComplexType, []));
+                        }
                     }
                 }
-            }
-            else
-            {
-                if (propertiesInfo == null || complexPropertiesInfo == null)
+
+                for (int i = 0; i < Data.Count; i++)
                 {
-                    propertiesInfo = [];
-                    complexPropertiesInfo = [];
-                    for (int i = 0; i < Data.Count; i++)
+                    bool isComplex = NativeTypeMapper.IsComplex(Data[i].ManagedType);
+                    IPropertyBase? prop = isComplex
+                         ? tName.FindComplexProperty(Data[i].PropertyName!)
+                         : tName.FindProperty(Data[i].PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema
+
+                    if (prop is IComplexProperty complexProperty)
                     {
-                        IPropertyBase? prop = NativeTypeMapper.IsComplex(Data[i].ManagedType)
-                             ? tName.FindComplexProperty(Data[i].PropertyName!)
-                             : tName.FindProperty(Data[i].PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema
+                        if (neededComplexProperties == null || !neededComplexProperties.Contains(complexProperty))
+                            continue; // not part of the current projection: skip deserialization entirely
+
                         object input = null!;
                         ConvertInnerData(Data[i], ref input!, prop, complexTypeFactory);
-                        if (prop is IComplexProperty complexProperty)
-                        {
-                            complexPropertiesInfo.Add(complexProperty, input);
-                        }
-                        else
-                        {
-                            propertiesInfo.Add(prop, input);
-                        }
+                        complexPropertiesInfo.Add(complexProperty, input);
+                    }
+                    else
+                    {
+                        object input = null!;
+                        ConvertInnerData(Data[i], ref input!, prop, complexTypeFactory);
+                        propertiesInfo.Add(prop, input);
                     }
                 }
-                allPropertyValues = new object[flattenedProperties!.Length];
-                flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
+
+            allPropertyValues = new object[fullLength];
+            flattenedProperties!.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
             fullSw.Stop();
