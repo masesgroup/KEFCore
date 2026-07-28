@@ -87,6 +87,9 @@ jobs:
           fi
         shell: bash
 
+      - name: Remove all structured test-result artifacts       
+        run: rm -rf ${{ github.workspace }}/all-test-results/*
+
       - name: Open a pull request with the updated documentation
         if: steps.generate.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
