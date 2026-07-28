@@ -259,6 +259,55 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
             : _clientProjections[projectionBindingExpression.Index!.Value];
 
     /// <summary>
+    /// Collects the set of <see cref="IProperty"/> that this query's projection actually reads, so that it can be
+    /// pushed down to the storage layer to skip deserialization of properties that aren't needed (see the
+    /// projection push-down design). <b>Must be called before <see cref="ApplyProjection"/></b>: that method
+    /// destructively rewrites <see cref="_projectionMapping"/>/<see cref="_clientProjections"/> into plain
+    /// <see cref="ValueBuffer"/> indices, erasing the <see cref="IProperty"/> information this method relies on.
+    /// </summary>
+    /// <returns>
+    /// The properties actually read by the projection, or <see langword="null"/> when no safe narrowing can be
+    /// determined — e.g. when a projection element is bound to a whole <see cref="EntityProjectionExpression"/>
+    /// (the query returns entire entities: <c>.Select(x => x)</c>, <c>context.Set&lt;T&gt;()</c>, or an owned/complex
+    /// sub-object still expressed as a full entity projection — all properties are genuinely needed), when a
+    /// property can't be inferred from a projected expression (e.g. a computed expression, a bound complex-type
+    /// projection, or any shape other than a direct property read), or when the query has no property-level shape
+    /// to narrow at all (e.g. <c>Count()</c>/<c>Any()</c>). <see langword="null"/> means "use the full entity, no
+    /// filtering" — the safe default whenever the projection shape isn't unambiguously recognized.
+    /// </returns>
+    public virtual IReadOnlyList<IProperty>? GetProjectedProperties()
+    {
+        if (_scalarServerQuery) return null; // Count()/Any()/etc — no property-level shape to narrow.
+
+        var sourceProjections = _clientProjections.Count > 0
+            ? (IEnumerable<Expression>)_clientProjections
+            : _projectionMapping.Values;
+
+        var properties = new HashSet<IProperty>();
+        var any = false;
+        foreach (var projection in sourceProjections)
+        {
+            any = true;
+            switch (projection)
+            {
+                case EntityProjectionExpression:
+                    // Whole entity requested — no safe narrowing possible, all properties are needed.
+                    return null;
+                case MethodCallExpression methodCallExpression
+                    when InferPropertyFromInner(methodCallExpression) is IProperty property:
+                    properties.Add(property);
+                    break;
+                default:
+                    // Any other expression shape (constants, computed expressions, bound complex-type
+                    // projections, etc.) can't be attributed to a single property — stay safe, don't filter.
+                    return null;
+            }
+        }
+
+        return any && properties.Count > 0 ? [.. properties] : null;
+    }
+
+    /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
