@@ -163,3 +163,35 @@ python analyze_results.py \
   --output example/sample-drift-adjusted-report.md \
   --title "Example: environment-drift-adjusted comparison (synthetic data)"
 ```
+## generate_perf_docs.py
+
+A separate script, built on top of `analyze_results.py` (imports `Record`, `load_records`,
+`summarize`, and `build_report` from it directly), that turns the same JSON Lines input into
+human-facing documentation instead of a standalone report:
+
+- A condensed "at a glance" table (median whole-iteration time per project/framework/cache bucket,
+  using the same `HEADLINE_PATTERN` matching as `analyze_results.py`'s Headline section), injected
+  into `README.md` and `src/documentation/index.md` between
+  `<!-- PERFORMANCE-SUMMARY:START -->`/`<!-- PERFORMANCE-SUMMARY:END -->` marker comments. The first
+  run inserts the markers (right before `### Project disclaimer`, present in both files today);
+  every later run replaces only what's between them, leaving the rest of each file untouched.
+- A full, dedicated `src/documentation/articles/benchmarks.md` page: the same condensed table plus
+  the complete per-test breakdown (reusing `analyze_results.build_report`'s detailed sections, so
+  the two tools can't drift apart on methodology/wording).
+
+```bash
+python generate_perf_docs.py \
+  --input results/*.jsonl \
+  --readme README.md \
+  --doc-index src/documentation/index.md \
+  --article src/documentation/articles/benchmarks.md \
+  --run-url https://github.com/masesgroup/KEFCore/actions/runs/12345
+```
+
+This script only edits files on disk — it never commits or pushes anything itself. See
+`.github/workflows/performance-docs.yaml` for how CI runs it and opens a pull request with whatever
+changed, so a human reviews the diff before it lands (same as any other change), rather than pushing
+directly to `master`.
+
+An example is under `example/perfdocs-sample.jsonl` → `example/sample-benchmarks-article.md`
+(synthetic data, same disclaimer as the other examples above).
