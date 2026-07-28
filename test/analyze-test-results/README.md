@@ -95,6 +95,35 @@ This is the natural way to check "did this PR make things faster or slower": run
 before and after the change with `/p:ResultsOutputPath=...` pointed at two different files, then
 pass both to this script.
 
+## Separating a real regression from "the runner was just faster/slower"
+
+CI runners vary between runs (different hardware, shared load on GitHub-hosted runners, etc.),
+which can shift *every* test's timing in the same direction regardless of any code change — making
+a real regression on one test invisible (masked by an overall speedup) or a fake one appear (masked
+as a slowdown) on another. If you know some tests exercise a code path the change under test
+provably doesn't touch (e.g. write-path operations like `SaveChanges`/`LocalStoreSynchronized` when
+the change is read-path only), pass them as `--control-tests` to get an environment-drift estimate
+and adjusted verdicts:
+
+```bash
+python analyze_results.py \
+  --input after/*.jsonl \
+  --baseline before/*.jsonl \
+  --control-tests SaveChanges LocalStoreSynchronized DataLoad \
+  --output report.md
+```
+
+This adds an "Environment drift" note (the median delta measured across the matched control tests)
+and, for every other test, an env-adjusted delta/verdict column *alongside* the raw one — nothing
+is hidden, both numbers are always shown. Control tests themselves are excluded from the scored
+regression/improvement count (their adjusted delta is ~0% by construction, since they define the
+drift) but still listed in the table, tagged `(control)`, for transparency.
+
+Matching is a case-insensitive substring against `testId` — with no `--control-tests`, no drift
+adjustment is computed and the report looks exactly as it did before this feature (opt-in only,
+since deciding what's "unaffected by the change under test" requires knowing what the change
+actually is, which this script can't infer on its own).
+
 ## No dependencies
 
 Standard library only (`json`, `statistics`, `argparse`, `pathlib`) — no `pip install` needed,
@@ -107,6 +136,9 @@ runs with any Python 3.10+.
   one with `use_cache: true`, across three frameworks → `sample-report.md`.
 - `baseline-run.jsonl` / `current-run.jsonl` — a "before" and "after" run with a deliberate 2x
   regression injected into one test, to demonstrate the `--baseline` verdict → `sample-comparison-report.md`.
+- `drift-baseline.jsonl` / `drift-current.jsonl` — a "before"/"after" pair where every test shifts
+  ~-10% (simulating a faster runner) while one read-path test has a real +7% regression hidden
+  underneath that shift → `sample-drift-adjusted-report.md`, demonstrating `--control-tests`.
 
 None of this is real benchmark data — it exists to show the tool end-to-end without needing a
 live Kafka cluster. Regenerate it with:
@@ -122,4 +154,12 @@ python analyze_results.py \
   --baseline example/baseline-run.jsonl \
   --output example/sample-comparison-report.md \
   --title "Example: comparison vs baseline (synthetic data)"
+
+python analyze_results.py \
+  --input example/drift-current.jsonl \
+  --baseline example/drift-baseline.jsonl \
+  --control-tests SaveChanges LocalStoreSynchronized DataLoad \
+  --regression-threshold-abs-ms 0.5 \
+  --output example/sample-drift-adjusted-report.md \
+  --title "Example: environment-drift-adjusted comparison (synthetic data)"
 ```

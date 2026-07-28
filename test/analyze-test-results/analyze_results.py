@@ -148,7 +148,8 @@ HEADLINE_PATTERN = "iterationtotal"
 
 
 def build_report(records: list[Record], title: str, baseline_records: list[Record] | None = None,
-                  regression_threshold_pct: float = 5.0, regression_threshold_abs_ms: float = 1.0) -> str:
+                  regression_threshold_pct: float = 5.0, regression_threshold_abs_ms: float = 1.0,
+                  control_test_patterns: list[str] | None = None) -> str:
     lines: list[str] = []
     lines.append(f"# {title}")
     lines.append("")
@@ -206,7 +207,7 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
         for r in baseline_records:
             baseline_groups[(r.project, r.framework, r.testId, r.cache_enabled)].append(r)
 
-        comparison_rows = []
+        raw_rows = []
         for key in sorted(set(current_groups) & set(baseline_groups)):
             project, framework, test_id, cached = key
             cur_stats = summarize(current_groups[key])
@@ -215,8 +216,45 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                 continue
             delta_ms = cur_stats.median_ms - base_stats.median_ms
             delta_pct = delta_ms / base_stats.median_ms * 100
-            comparison_rows.append((project, framework, test_id, cached, base_stats.median_ms, cur_stats.median_ms,
-                                     delta_pct, verdict(delta_pct, delta_ms, regression_threshold_pct, regression_threshold_abs_ms)))
+            is_control = control_test_patterns is not None and any(p in test_id.lower() for p in control_test_patterns)
+            raw_rows.append({"project": project, "framework": framework, "test_id": test_id, "cached": cached,
+                              "base_ms": base_stats.median_ms, "cur_ms": cur_stats.median_ms,
+                              "delta_pct": delta_pct, "is_control": is_control})
+
+        # --- Environment drift: measured from --control-tests (operations known to be unaffected by
+        # the change under test, e.g. write-path operations when the change is read-path only). If the
+        # environment itself got faster/slower between the two runs (different runner hardware, shared
+        # CI load, etc.), these tests should show ~0% delta but won't - that observed shift is the drift
+        # estimate, used below to separate "the code changed" from "the environment changed" for every
+        # OTHER test. Opt-in only: with no --control-tests, no drift adjustment is computed or shown.
+        drift_pct = None
+        if control_test_patterns:
+            control_deltas = [r["delta_pct"] for r in raw_rows if r["is_control"]]
+            lines.append("### Environment drift")
+            lines.append("")
+            if not control_deltas:
+                lines.append(f"_No test matched the given `--control-tests` patterns "
+                              f"(`{', '.join(control_test_patterns)}`), so no drift estimate could be computed._")
+            else:
+                drift_pct = statistics.median(control_deltas)
+                lines.append(f"Median delta across {len(control_deltas)} control test(s) matching "
+                              f"`{', '.join(control_test_patterns)}` (operations assumed unaffected by the change "
+                              f"under test): **{drift_pct:+.1f}%**. This is used as an estimate of environment-only "
+                              f"drift (different runner hardware, shared CI load, etc. between the baseline and "
+                              f"current run) and subtracted from every other test's delta below to get an "
+                              f"\"env-adjusted\" delta and verdict — shown alongside the untouched raw numbers, "
+                              f"never in place of them.")
+            lines.append("")
+
+        comparison_rows = []
+        for r in raw_rows:
+            adj_delta_pct = r["delta_pct"] - drift_pct if drift_pct is not None else None
+            adj_delta_ms = adj_delta_pct / 100 * r["base_ms"] if adj_delta_pct is not None else None
+            raw_verdict = verdict(r["delta_pct"], r["cur_ms"] - r["base_ms"], regression_threshold_pct, regression_threshold_abs_ms)
+            adj_verdict = (verdict(adj_delta_pct, adj_delta_ms, regression_threshold_pct, regression_threshold_abs_ms)
+                           if adj_delta_pct is not None else None)
+            comparison_rows.append((r["project"], r["framework"], r["test_id"], r["cached"], r["base_ms"], r["cur_ms"],
+                                     r["delta_pct"], raw_verdict, adj_delta_pct, adj_verdict, r["is_control"]))
 
         only_in_current = sorted(set(current_groups) - set(baseline_groups))
         only_in_baseline = sorted(set(baseline_groups) - set(current_groups))
@@ -225,26 +263,41 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             lines.append("_No `(project, framework, testId, cache)` combination is present in both the current "
                           "and baseline input, so no comparison can be made._")
         else:
-            regressions = [r for r in comparison_rows if r[7] == "REGRESSION"]
-            improvements = [r for r in comparison_rows if r[7] == "IMPROVEMENT"]
+            # Score using the env-adjusted verdict when available (more meaningful signal), the raw
+            # verdict otherwise. Control tests themselves are excluded from the scored count: by
+            # construction their adjusted delta is ~0 (they define the drift), so counting them as
+            # "compared tests" would just be counting the calibration data as if it were signal too.
+            scored = [r for r in comparison_rows if not r[10]]
+            verdict_index = 9 if drift_pct is not None else 7
+            regressions = [r for r in scored if r[verdict_index] == "REGRESSION"]
+            improvements = [r for r in scored if r[verdict_index] == "IMPROVEMENT"]
+            adjusted_note = " (env-adjusted)" if drift_pct is not None else ""
             if regressions:
-                lines.append(f"**⚠️ Overall verdict: {len(regressions)} regression(s) detected** "
-                              f"(out of {len(comparison_rows)} compared tests, {len(improvements)} improved).")
+                lines.append(f"**⚠️ Overall verdict{adjusted_note}: {len(regressions)} regression(s) detected** "
+                              f"(out of {len(scored)} compared tests, {len(improvements)} improved).")
             else:
-                lines.append(f"**✅ Overall verdict: no regressions detected** "
-                              f"(out of {len(comparison_rows)} compared tests, {len(improvements)} improved).")
+                lines.append(f"**✅ Overall verdict{adjusted_note}: no regressions detected** "
+                              f"(out of {len(scored)} compared tests, {len(improvements)} improved).")
             lines.append("")
-            # Regressions first — the actionable rows — then improvements, then unchanged.
+            # Sort by the same verdict used for scoring; regressions first, then improvements, then unchanged.
             order = {"REGRESSION": 0, "IMPROVEMENT": 1, "no significant change": 2}
-            comparison_rows.sort(key=lambda r: (order[r[7]], r[0], r[1], r[2], r[3]))
-            lines.append("| Project | Framework | Test | Cache | Baseline median (ms) | Current median (ms) | Delta % | Verdict |")
-            lines.append("|---|---|---|---|---|---|---|---|")
-            for project, framework, test_id, cached, base_median, cur_median, delta_pct, v in comparison_rows:
-                cache_label = "cached" if cached else "non-cached"
-                lines.append(
-                    f"| {project} | {framework} | {test_id} | {cache_label} | {fmt_ms(base_median)} | "
-                    f"{fmt_ms(cur_median)} | {delta_pct:+.1f}% | {v} |"
-                )
+            comparison_rows.sort(key=lambda r: (order[r[verdict_index]], r[0], r[1], r[2], r[3]))
+            if drift_pct is None:
+                lines.append("| Project | Framework | Test | Cache | Baseline median (ms) | Current median (ms) | Delta % | Verdict |")
+                lines.append("|---|---|---|---|---|---|---|---|")
+                for project, framework, test_id, cached, base_ms, cur_ms, delta_pct, raw_verdict, _, _, _ in comparison_rows:
+                    cache_label = "cached" if cached else "non-cached"
+                    lines.append(f"| {project} | {framework} | {test_id} | {cache_label} | {fmt_ms(base_ms)} | "
+                                  f"{fmt_ms(cur_ms)} | {delta_pct:+.1f}% | {raw_verdict} |")
+            else:
+                lines.append("| Project | Framework | Test | Cache | Baseline (ms) | Current (ms) | Delta % (raw) | "
+                              "Delta % (env-adjusted) | Verdict (env-adjusted) |")
+                lines.append("|---|---|---|---|---|---|---|---|---|")
+                for project, framework, test_id, cached, base_ms, cur_ms, delta_pct, raw_verdict, adj_pct, adj_v, is_control in comparison_rows:
+                    cache_label = "cached" if cached else "non-cached"
+                    control_tag = " _(control)_" if is_control else ""
+                    lines.append(f"| {project} | {framework} | {test_id}{control_tag} | {cache_label} | {fmt_ms(base_ms)} | "
+                                  f"{fmt_ms(cur_ms)} | {delta_pct:+.1f}% | {adj_pct:+.1f}% | {adj_v} |")
         if only_in_current or only_in_baseline:
             lines.append("")
             if only_in_current:
@@ -379,6 +432,14 @@ def main() -> int:
                               "alongside --regression-threshold, for a verdict to be REGRESSION/IMPROVEMENT. "
                               "Prevents noise on sub-millisecond queries (e.g. a 0.05ms -> 0.07ms swing is a "
                               "40% delta but an insignificant absolute one) from being flagged. Default: 1.0")
+    parser.add_argument("--control-tests", nargs="+", default=None,
+                         help="Optional (used with --baseline): one or more substrings (case-insensitive, matched "
+                              "against testId) identifying tests known to be UNAFFECTED by the change under test "
+                              "(e.g. write-path operations like SaveChanges/LocalStoreSynchronized when the change "
+                              "is read-path only). Their median delta is used as an environment-drift estimate "
+                              "(different runner hardware, shared CI load, etc. between the two runs) and "
+                              "subtracted from every other test's delta to produce an env-adjusted delta/verdict, "
+                              "shown alongside (never instead of) the raw ones.")
     parser.add_argument("--output", required=True, help="Path to write the Markdown report to")
     parser.add_argument("--title", default="KEFCore test results analysis", help="Report title")
     args = parser.parse_args()
@@ -400,9 +461,12 @@ def main() -> int:
             return 1
         baseline_records = load_records(baseline_paths)
 
+    control_test_patterns = [p.lower() for p in args.control_tests] if args.control_tests else None
+
     report = build_report(records, args.title, baseline_records=baseline_records,
                            regression_threshold_pct=args.regression_threshold,
-                           regression_threshold_abs_ms=args.regression_threshold_abs_ms)
+                           regression_threshold_abs_ms=args.regression_threshold_abs_ms,
+                           control_test_patterns=control_test_patterns)
 
     out_path = Path(args.output)
     out_path.write_text(report, encoding="utf-8")

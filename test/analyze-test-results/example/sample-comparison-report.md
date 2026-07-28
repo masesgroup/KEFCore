@@ -1,6 +1,6 @@
 # Example: comparison vs baseline (synthetic data)
 
-Generated: 2026-07-27T07:47:19.554722+00:00
+Generated: 2026-07-28T02:23:32.499167+00:00
 
 Total records analyzed: **150**
 
