@@ -137,63 +137,67 @@ public class ProtobufValueContainer<TKey> : IMessage<ProtobufValueContainer<TKey
             if (_innerMessage.Data == null) { return; }
 #if DEBUG_PERFORMANCE
             newSw.Start();
-#endif
-            allPropertyValues = new object[flattenedProperties!.Length];
-#if DEBUG_PERFORMANCE
             newSw.Stop();
             iterationSw.Start();
 #endif
-            if (complexProperties == null || complexProperties.Length == 0) // avoid complex flux without complex properties
+            // See DefaultValueContainer.GetData for full rationale. Both sub-cases operate on the
+            // "_innerMessage.Data" storage format and always address `allPropertyValues` via
+            // IProperty.GetIndex(), relative to the entity type's FULL flattened property set —
+            // independent of any projection filtering applied to metadata.FlattenedProperties/ComplexProperties.
+            // Unrequested slots are left at their default and are never read by the query shaper.
+            int fullLength = metadata.FullFlattenedProperties.Length;
+
+            if (propertiesInfo == null || complexPropertiesInfo == null)
             {
-                if (propertiesInfo != null)
+                propertiesInfo = [];
+                complexPropertiesInfo = [];
+
+                // Precompute which root complex properties have at least one requested flattened sub-property.
+                // Skipping GetContent for the rest avoids its complex-type deserialization/ConvertBack — the
+                // most expensive part of this method — for properties outside the current projection.
+                HashSet<IComplexProperty>? neededComplexProperties = null;
+                if (complexProperties != null && complexProperties.Length > 0)
                 {
-                    allPropertyValues = [.. propertiesInfo.Values];
-                }
-                else
-                {
-                    allPropertyValues = new object[flattenedProperties!.Length];
-                    propertiesInfo = [];
-                    for (int i = 0; i < _innerMessage.Data.Count; i++)
+                    neededComplexProperties = [];
+                    foreach (var flattenedProperty in flattenedProperties!)
                     {
-                        var item = _innerMessage.Data[i];
-                        if (item == null) continue;
-                        if (NativeTypeMapper.IsComplex(item.Value.ManagedType)) continue;
-                        IPropertyBase? prop = tName.FindProperty(item.PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema 
-                        item.Value.GetContent(prop, complexTypeFactory, ref allPropertyValues[i]!);
-                        propertiesInfo.Add(prop, allPropertyValues[i]!);
+                        if (flattenedProperty.DeclaringType is IComplexType declaringComplexType)
+                        {
+                            neededComplexProperties.Add(ComplexTypeExtension.FindRootProperty(tName, declaringComplexType, []));
+                        }
                     }
                 }
-            }
-            else
-            {
-                if (propertiesInfo == null || complexPropertiesInfo == null)
+
+                for (int i = 0; i < _innerMessage.Data.Count; i++)
                 {
-                    propertiesInfo = [];
-                    complexPropertiesInfo = [];
-                    for (int i = 0; i < _innerMessage.Data.Count; i++)
+                    var item = _innerMessage.Data[i];
+                    if (item == null) continue;
+                    bool isComplex = NativeTypeMapper.IsComplex(item.Value.ManagedType);
+                    IPropertyBase? prop = isComplex
+                        ? tName.FindComplexProperty(item.PropertyName!)
+                        : tName.FindProperty(item.PropertyName!);
+                    if (prop == null) continue; // a property was removed from the schema
+
+                    if (prop is IComplexProperty complexProperty)
                     {
-                        var item = _innerMessage.Data[i];
-                        if (item == null) continue;
-                        IPropertyBase? prop = (NativeTypeMapper.IsComplex(item.Value.ManagedType))
-                            ? tName.FindComplexProperty(item.PropertyName!)
-                            : tName.FindProperty(item.PropertyName!);
-                        if (prop == null) continue; // a property was removed from the schema
+                        if (neededComplexProperties == null || !neededComplexProperties.Contains(complexProperty))
+                            continue; // not part of the current projection: skip deserialization entirely
+
                         object input = null!;
                         item.Value.GetContent(prop, complexTypeFactory, ref input!);
-                        if (prop is IComplexProperty complexProperty)
-                        {
-                            complexPropertiesInfo.Add(complexProperty, input);
-                        }
-                        else
-                        {
-                            propertiesInfo.Add(prop, input);
-                        }
+                        complexPropertiesInfo.Add(complexProperty, input);
+                    }
+                    else
+                    {
+                        object input = null!;
+                        item.Value.GetContent(prop, complexTypeFactory, ref input!);
+                        propertiesInfo.Add(prop, input);
                     }
                 }
-                allPropertyValues = new object[flattenedProperties!.Length];
-                flattenedProperties.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
             }
+
+            allPropertyValues = new object[fullLength];
+            flattenedProperties!.FillFlattened(tName, propertiesInfo, complexPropertiesInfo, ref allPropertyValues);
 #if DEBUG_PERFORMANCE
             iterationSw.Stop();
             fullSw.Stop();

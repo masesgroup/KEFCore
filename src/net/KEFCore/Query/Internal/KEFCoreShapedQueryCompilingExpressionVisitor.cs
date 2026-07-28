@@ -35,6 +35,11 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
 {
     private readonly Type _contextType = queryCompilationContext.ContextType;
     private readonly bool _threadSafetyChecksEnabled = dependencies.CoreSingletonOptions.AreThreadSafetyChecksEnabled;
+    // Set by VisitShapedQuery (before ApplyProjection(), which erases the IProperty information it's computed
+    // from) and consumed by VisitExtension while visiting that same query's ServerQueryExpression. Null means
+    // "no safe narrowing determined — use the full entity". Not thread-shared state: each VisitShapedQuery call
+    // sets it, synchronously triggers the Visit(...) call that reads it, then clears it before returning.
+    private IReadOnlyList<IProperty>? _projectedProperties;
 
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -44,12 +49,14 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
     /// </summary>
     protected override Expression VisitExtension(Expression extensionExpression)
     {
+        var projectedProperties = Constant(_projectedProperties, typeof(IReadOnlyList<IProperty>));
         return extensionExpression switch
         {
             KEFCoreTableExpression kefcoreTableExpression => Call(
                                 TableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
-                                Constant(kefcoreTableExpression.EntityType)),
+                                Constant(kefcoreTableExpression.EntityType),
+                                projectedProperties),
             KEFCoreSingleKeyTableExpression singleKey => Call(
                                 SingleKeyTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
@@ -57,23 +64,27 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
                                 NewArrayInit(
                                     typeof(object),
                                     singleKey.KeyExpressions.Select(e =>
-                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e))),
+                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e)),
+                                projectedProperties),
             KEFCoreRangeTableExpression range => Call(
                                 RangeTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
                                 Constant(range.EntityType),
                                 BuildNullableObjectArray(range.RangeStart),
-                                BuildNullableObjectArray(range.RangeEnd)),
+                                BuildNullableObjectArray(range.RangeEnd),
+                                projectedProperties),
             KEFCoreReverseTableExpression reverse => Call(
                                 ReverseTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
-                                Constant(reverse.EntityType)),
+                                Constant(reverse.EntityType),
+                                projectedProperties),
             KEFCoreReverseRangeTableExpression reverseRange => Call(
                                 ReverseRangeTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
                                 Constant(reverseRange.EntityType),
                                 BuildNullableObjectArray(reverseRange.RangeStart),
-                                BuildNullableObjectArray(reverseRange.RangeEnd)),
+                                BuildNullableObjectArray(reverseRange.RangeEnd),
+                                projectedProperties),
             KEFCorePrefixScanTableExpression prefix => Call(
                                 PrefixScanTableMethodInfo,
                                 QueryCompilationContext.QueryContextParameter,
@@ -81,7 +92,8 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
                                 NewArrayInit(
                                     typeof(object),
                                     prefix.PrefixExpressions.Select(e =>
-                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e))),
+                                        e.Type.IsValueType ? Convert(e, typeof(object)) : e)),
+                                projectedProperties),
                                 _ => base.VisitExtension(extensionExpression),
         };
     }
@@ -102,12 +114,16 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
     protected override Expression VisitShapedQuery(ShapedQueryExpression shapedQueryExpression)
     {
         var kefcoreQueryExpression = (KEFCoreQueryExpression)shapedQueryExpression.QueryExpression;
+        // Must run before ApplyProjection(): that call destructively rewrites the projection state into
+        // plain ValueBuffer indices, erasing the IProperty information GetProjectedProperties() relies on.
+        _projectedProperties = kefcoreQueryExpression.GetProjectedProperties();
         kefcoreQueryExpression.ApplyProjection();
 
         var shaperExpression = new ShaperExpressionProcessingExpressionVisitor(
                 this, kefcoreQueryExpression, QueryCompilationContext.QueryTrackingBehavior == QueryTrackingBehavior.TrackAll)
             .ProcessShaper(shapedQueryExpression.ShaperExpression);
         var innerEnumerable = Visit(kefcoreQueryExpression.ServerQueryExpression);
+        _projectedProperties = null;
 
         return New(
             typeof(QueryingEnumerable<>).MakeGenericType(shaperExpression.ReturnType).GetConstructors()[0],
@@ -141,36 +157,42 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor(
     private static IEnumerable<ValueBuffer> PrefixScanTable(
         QueryContext queryContext,
         IEntityType entityType,
-        object?[] prefixValues)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffersByPrefix(entityType, prefixValues);
+        object?[] prefixValues,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffersByPrefix(entityType, prefixValues, projectedProperties);
 
     private static IEnumerable<ValueBuffer> Table(
         QueryContext queryContext,
-        IEntityType entityType)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffers(entityType);
+        IEntityType entityType,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffers(entityType, projectedProperties);
 
     private static IEnumerable<ValueBuffer> SingleKeyTable(
         QueryContext queryContext,
         IEntityType entityType,
-        object?[] keyValues)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffer(entityType, keyValues);
+        object?[] keyValues,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffer(entityType, keyValues, projectedProperties);
 
     private static IEnumerable<ValueBuffer> RangeTable(
         QueryContext queryContext,
         IEntityType entityType,
         object?[]? rangeStart,
-        object?[]? rangeEnd)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffersRange(entityType, rangeStart, rangeEnd);
+        object?[]? rangeEnd,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffersRange(entityType, rangeStart, rangeEnd, projectedProperties);
 
     private static IEnumerable<ValueBuffer> ReverseTable(
         QueryContext queryContext,
-        IEntityType entityType)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffersReverse(entityType);
+        IEntityType entityType,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffersReverse(entityType, projectedProperties);
 
     private static IEnumerable<ValueBuffer> ReverseRangeTable(
         QueryContext queryContext,
         IEntityType entityType,
         object?[]? rangeStart,
-        object?[]? rangeEnd)
-        => ((KEFCoreQueryContext)queryContext).GetValueBuffersReverseRange(entityType, rangeStart, rangeEnd);
+        object?[]? rangeEnd,
+        IReadOnlyList<IProperty>? projectedProperties)
+        => ((KEFCoreQueryContext)queryContext).GetValueBuffersReverseRange(entityType, rangeStart, rangeEnd, projectedProperties);
 }
