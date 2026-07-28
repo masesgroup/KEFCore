@@ -1049,6 +1049,7 @@ jobs:
             python3 ${{ github.workspace }}/test/analyze-test-results/analyze_results.py \
               --input "${files[@]}" \
               "${baseline_args[@]}" \
+              --control-tests SaveChanges LocalStoreSynchronized DataLoad \
               --output ${{ github.workspace }}/test-results-combined-report.md \
               --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0, cached/non-cached, all serializations)"
             cat ${{ github.workspace }}/test-results-combined-report.md >> $GITHUB_STEP_SUMMARY
