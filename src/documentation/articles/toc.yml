@@ -22,6 +22,8 @@
   href: migration.md
 - name: Performance tips
   href: performancetips.md
+- name: Performance benchmarks
+  href: benchmarks.md
 - name: Troubleshooting
   href: troubleshooting.md
 - name: External application
