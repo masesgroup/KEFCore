@@ -1,0 +1,5 @@
+{"project": "KEFCore.Complex.Test", "framework": "net9.0", "success": true, "details": null, "forwardCacheTimeout": -1, "reverseCacheTimeout": -1, "testId": "SaveChanges", "elapsedMs": 7000.0}
+{"project": "KEFCore.Complex.Test", "framework": "net9.0", "success": true, "details": null, "forwardCacheTimeout": -1, "reverseCacheTimeout": -1, "testId": "LocalStoreSynchronized", "elapsedMs": 3000.0}
+{"project": "KEFCore.Complex.Test", "framework": "net9.0", "success": true, "details": null, "forwardCacheTimeout": -1, "reverseCacheTimeout": -1, "testId": "DataLoad", "elapsedMs": 6000.0}
+{"project": "KEFCore.Complex.Test", "framework": "net9.0", "success": true, "details": null, "forwardCacheTimeout": -1, "reverseCacheTimeout": -1, "testId": "NestedComplexTypeProjection_BlogId10_TaxCode", "elapsedMs": 400.0}
+{"project": "KEFCore.Complex.Test", "framework": "net9.0", "success": true, "details": null, "forwardCacheTimeout": -1, "reverseCacheTimeout": -1, "testId": "ScalarOnlyProjection_BlogId10_Url", "elapsedMs": 8.0}
