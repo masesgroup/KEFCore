@@ -145,7 +145,7 @@ jobs:
         if: ${{ inputs.UseSpecialSettings == true }}
         shell: cmd
         run: |
-          pscp -hostkey "SHA256:mQA3/VBgflmD7lVrJ6Kq90IAFLGzc/0jpHY2A8yrvX4" -pw ${{ secrets.SFTP_PASSWORD }} -batch ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_SERVER }}:/source-files/source.zip "${{ github.workspace }}\source.zip"
+          "%RUNNER_TEMP%\pscp.exe" -hostkey "SHA256:mQA3/VBgflmD7lVrJ6Kq90IAFLGzc/0jpHY2A8yrvX4" -pw ${{ secrets.SFTP_PASSWORD }} -batch ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_SERVER }}:/source-files/source.zip "${{ github.workspace }}\source.zip"
 
       - name: Prepare other files
         if: ${{ inputs.UseSpecialSettings == true }}
