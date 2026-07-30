@@ -135,6 +135,34 @@ jobs:
             9.x
             10.x
 
+      - name: Download pscp directly
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          curl -L -o "%RUNNER_TEMP%\pscp.exe" https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe
+
+      - name: Download source.zip via SFTP
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          pscp -hostkey "SHA256:mQA3/VBgflmD7lVrJ6Kq90IAFLGzc/0jpHY2A8yrvX4" -pw ${{ secrets.SFTP_PASSWORD }} -batch ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_SERVER }}:/source-files/source.zip "${{ github.workspace }}\source.zip"
+
+      - name: Prepare other files
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          7z e ${{ github.workspace }}\source.zip -o"${{ github.workspace }}\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
+          7z x ${{ github.workspace }}\source.info -o"${{ github.workspace }}\Deploy\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
+
+      - name: List NuGet packages downloaded
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: dir .\Deploy\*nupkg
+
+      - name: Add special repo
+        if: ${{ success() && inputs.UseSpecialSettings == true }}
+        run: dotnet nuget add source --name localDeployNuGet "${{ github.workspace }}\Deploy\"
+
       - name: Get last workflow run of JNet
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
         shell: bash
