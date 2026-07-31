@@ -92,7 +92,7 @@ jobs:
 
       - name: Open a pull request with the updated documentation
         if: steps.generate.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "docs: update performance benchmarks"
