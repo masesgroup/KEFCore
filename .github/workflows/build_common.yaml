@@ -252,13 +252,6 @@ jobs:
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
 
-      - name: Prepare other files
-        if: ${{ inputs.UseSpecialSettings == true }}
-        shell: cmd
-        run: |
-          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
-          7z x ${{ github.workspace }}\bin\source.info -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
-
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v6
         with:
