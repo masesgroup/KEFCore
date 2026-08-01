@@ -159,41 +159,68 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Complex
                     if (ProgramConfig.Config.LoadApplicationData) throw; // throw only if the test is loading data otherwise it was removed in a previous run
                 }
 
-                // Projection correctness check. BlogId == 10 is never removed later in this file, so it's a safe,
-                // stable record to use here and it also survives across "reload" CI runs (LoadApplicationData=false)
-                // that read back data written by a previous process invocation. Expected values are derived from
-                // blog.Rating itself (== the loop index used at seed time above, e.g. Url = "..." + i, Tax.Code =
-                // char.ConvertFromUtf32(i)[0], TaxInfoExtended.CodeExtended = i * 3) rather than hardcoded, so this
-                // stays correct even if the seeding loop or NumberOfElements changes. Runs regardless of
-                // LoadApplicationData/cache TTL and always throws on mismatch — unlike the tolerant try/catch above
-                // (meant only for "record doesn't exist yet"), a value mismatch here is always a real bug. These
-                // checks are pure LINQ .Select() correctness checks: they hold with or without any projection
-                // push-down optimization in the storage layer, so they're independent of that work and useful here
-                // as a baseline (before/after comparison once such an optimization lands).
+                // Projection correctness + timing check. BlogId == 10 is never removed later in this file, so
+                // it's a safe, stable record to use here and it also survives across "reload" CI runs
+                // (LoadApplicationData=false) that read back data written by a previous process invocation.
+                // Expected values are derived from blog.Rating itself (== the loop index used at seed time
+                // above) rather than hardcoded, so this stays correct even if the seeding loop or
+                // NumberOfElements changes. Runs regardless of LoadApplicationData/cache TTL and always
+                // throws on mismatch on ANY iteration - unlike the tolerant try/catch above (meant only for
+                // "record doesn't exist yet"), a value mismatch here is always a real bug.
+                //
+                // Looped NumberOfExecutions times (same knob/config already used by Benchmark.Test, and
+                // already set to 100 in the shared CI configuration - previously unused here) to get real
+                // Max/Min/Mean/Median statistics instead of a single N=1 sample, which is too noisy to
+                // distinguish a real regression from run-to-run jitter (see the projection push-down
+                // comparison reports). The data load above is intentionally left as a single pass for now -
+                // only these read queries are repeated.
                 if (blog != null)
                 {
                     int seed = blog.Rating;
                     string expectedUrl = "http://blogs.msdn.com/adonet" + seed;
                     char expectedTaxCode = char.ConvertFromUtf32(seed)[0];
                     int expectedCodeExtended = seed * 3;
+                    int iterations = Math.Max(1, ProgramConfig.Config.NumberOfExecutions);
 
-                    watch.Restart();
-                    var scalarOnly = context.Blogs!.Where(b => b.BlogId == 10).Select(b => b.Url).Single();
-                    watch.Stop();
-                    if (scalarOnly != expectedUrl)
-                        throw new InvalidOperationException($"Projection mismatch: Select(b => b.Url) for BlogId==10 returned '{scalarOnly}', expected '{expectedUrl}'.");
-                    ProgramConfig.ReportResult("ScalarOnlyProjection_BlogId10_Url", watch.Elapsed, details: $"Url='{scalarOnly}'");
+                    var scalarOnlyTimes = new TimeSpan[iterations];
+                    var nestedTimes = new TimeSpan[iterations];
+                    var iterationTotalTimes = new TimeSpan[iterations];
+                    string lastScalarOnly = null;
+                    string lastNestedDetails = null;
 
-                    watch.Restart();
-                    var nested = context.Blogs!.Where(b => b.BlogId == 10)
-                        .Select(b => new { b.Url, Code = b.PricingInfo.Tax.Code, CodeExtended = b.PricingInfo.Tax.TaxInfoExtended.CodeExtended })
-                        .Single();
-                    watch.Stop();
-                    if (nested.Url != expectedUrl || nested.Code != expectedTaxCode || nested.CodeExtended != expectedCodeExtended)
-                        throw new InvalidOperationException(
-                            $"Projection mismatch for BlogId==10: Url='{nested.Url}' (expected '{expectedUrl}'), " +
-                            $"Code='{nested.Code}' (expected '{expectedTaxCode}'), CodeExtended={nested.CodeExtended} (expected {expectedCodeExtended}).");
-                    ProgramConfig.ReportResult("NestedComplexTypeProjection_BlogId10_TaxCode", watch.Elapsed, details: $"Url='{nested.Url}' Code='{nested.Code}' CodeExtended={nested.CodeExtended}");
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        watch.Restart();
+                        var scalarOnly = context.Blogs!.Where(b => b.BlogId == 10).Select(b => b.Url).Single();
+                        watch.Stop();
+                        scalarOnlyTimes[i] = watch.Elapsed;
+                        if (scalarOnly != expectedUrl)
+                            throw new InvalidOperationException($"Projection mismatch: Select(b => b.Url) for BlogId==10 returned '{scalarOnly}', expected '{expectedUrl}' (iteration {i}).");
+                        lastScalarOnly = scalarOnly;
+
+                        watch.Restart();
+                        var nested = context.Blogs!.Where(b => b.BlogId == 10)
+                            .Select(b => new { b.Url, Code = b.PricingInfo.Tax.Code, CodeExtended = b.PricingInfo.Tax.TaxInfoExtended.CodeExtended })
+                            .Single();
+                        watch.Stop();
+                        nestedTimes[i] = watch.Elapsed;
+                        if (nested.Url != expectedUrl || nested.Code != expectedTaxCode || nested.CodeExtended != expectedCodeExtended)
+                            throw new InvalidOperationException(
+                                $"Projection mismatch for BlogId==10: Url='{nested.Url}' (expected '{expectedUrl}'), " +
+                                $"Code='{nested.Code}' (expected '{expectedTaxCode}'), CodeExtended={nested.CodeExtended} (expected {expectedCodeExtended}) (iteration {i}).");
+                        lastNestedDetails = $"Url='{nested.Url}' Code='{nested.Code}' CodeExtended={nested.CodeExtended}";
+
+                        iterationTotalTimes[i] = scalarOnlyTimes[i] + nestedTimes[i];
+                    }
+
+                    ProgramConfig.ReportTimingStats("ScalarOnlyProjection_BlogId10_Url", scalarOnlyTimes, $"Url='{lastScalarOnly}'");
+                    ProgramConfig.ReportTimingStats("NestedComplexTypeProjection_BlogId10_TaxCode", nestedTimes, lastNestedDetails);
+                    // Sum of the two projection queries above, per iteration - matches Benchmark.Test's own
+                    // "IterationTotal" naming (see its TestNames array) so generate_perf_docs.py's
+                    // HEADLINE_PATTERN match ("iterationtotal", case-insensitive substring) picks this up too,
+                    // giving Complex.Test its own row in the condensed README.md/index.md summary table
+                    // instead of only Benchmark.Test appearing there.
+                    ProgramConfig.ReportTimingStats("IterationTotal (sum of the two projection queries measured this run)", iterationTotalTimes);
                 }
 
                 watch.Restart();
