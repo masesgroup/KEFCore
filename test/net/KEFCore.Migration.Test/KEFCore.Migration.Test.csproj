@@ -7,7 +7,6 @@
 		<Title>EntityFrameworkCore KNet Test</Title>
 		<Description>EntityFrameworkCore KNet Test</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Migration.Test</Product>
-		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
