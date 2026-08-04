@@ -227,7 +227,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public virtual bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout)
     {
-        database.InfrastructureLogger.LogInformation("Invoking EnsureSynchronized with {Timeout}", timeout);
+        database.InfrastructureLogger.LogInformation("Invoking EnsureSynchronized with a timeout of {Timeout}", timeout);
 
         Register(database);
 
@@ -245,6 +245,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
                 if (timeout != Timeout.Infinite)
                 {
                     remainingTimeout -= stopwatch.ElapsedMilliseconds;
+                    database.InfrastructureLogger.LogInformation("EnsureSynchronized remaining timeout {Timeout}", remainingTimeout);
                     if (remainingTimeout < 0)
                     {
                         throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.AssociatedTopicName}");
