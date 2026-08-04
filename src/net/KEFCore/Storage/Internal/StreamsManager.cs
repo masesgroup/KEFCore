@@ -477,7 +477,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     table = CreateTable(_builder!, tn, consumed, materialized);
                 }
                 var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entityType);
-                var storage = new StreamsAssociatedData(this, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
+                var storage = new StreamsAssociatedData(this, topicName, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
 
                 _latestAdded.Add(tn);
                 if (_usePersistentStorage)
