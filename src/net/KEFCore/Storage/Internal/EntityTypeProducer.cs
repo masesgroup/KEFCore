@@ -759,6 +759,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     /// <inheritdoc/>
     public bool? EnsureSynchronized(long timeout)
     {
+        _database.InfrastructureLogger.LogInformation("Invoking EntityTypeProducer::EnsureSynchronized with timeout of {Timeout} on {Entity}", timeout, _entityType);
         if (_streamData != null) return _streamsManager!.EnsureSynchronized(_entityType, timeout);
         else if (_knetCompactedReplicator != null)
         {
@@ -768,7 +769,6 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 sw = Stopwatch.StartNew();
 #endif
-                _database.InfrastructureLogger.LogInformation("Invoking EnsureSynchronized with {Timeout}", timeout);
                 return _knetCompactedReplicator.SyncWait((int)timeout);
 #if DEBUG_PERFORMANCE
             }

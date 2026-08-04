@@ -790,6 +790,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public bool? EnsureSynchronized(IEntityType entity, long timeout)
         {
             if (!entity.GetManageEvents() || _useGlobalTable) return null; // cannot deduct synchronization without events or using GlobalKTable
+            _kefcoreCluster.InfrastructureLogger.LogInformation("Invoking StreamsManager::EnsureSynchronized for {Entity} with timeout {Timeout}", entity, timeout);
             Stopwatch watch = null;
             if (timeout != Timeout.Infinite)
             {

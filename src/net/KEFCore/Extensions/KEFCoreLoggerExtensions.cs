@@ -26,6 +26,14 @@ namespace MASES.EntityFrameworkCore.KNet.Extensions;
 public static class KEFCoreLoggerExtensions
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void LogCritical(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.Logger.IsEnabled(LogLevel.Critical))
+        {
+            logger.Logger.LogCritical(exception, message, args);
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void LogCritical(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Critical))
@@ -50,11 +58,27 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void LogWarning(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.Logger.IsEnabled(LogLevel.Warning))
+        {
+            logger.Logger.LogWarning(exception, message, args);
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void LogWarning(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Warning))
         {
             logger.Logger.LogWarning(message, args);
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void LogInformation(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.Logger.IsEnabled(LogLevel.Information))
+        {
+            logger.Logger.LogInformation(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,11 +90,27 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void LogDebug(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.Logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.Logger.LogDebug(exception, message, args);
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void LogDebug(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Debug))
         {
             logger.Logger.LogDebug(message, args);
+        }
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void LogTrace(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.Logger.IsEnabled(LogLevel.Trace))
+        {
+            logger.Logger.LogTrace(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
