@@ -73,7 +73,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
         public override void OnCompletion(RecordMetadata arg0, JVMBridgeException arg1)
         {
-            if (arg1 != null) _entityTypeProducer._database.InfrastructureLogger.Logger.LogError(arg1, "EntityTypeProducerCallback failed with error: {Message}", arg1.Message);
+            if (arg1 != null) _entityTypeProducer._database.InfrastructureLogger.LogError(arg1, "EntityTypeProducerCallback failed with error: {Message}", arg1.Message);
             int? partition = null;
             long? offset = null;
             DateTime? timestmp = null;
@@ -416,7 +416,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (!_updaters.TryAdd(database, new KEFCoreDatabaseLocalData(database, _entityType)))
             {
-                database.InfrastructureLogger.Logger.LogError("EntityTypeProducer: Failed to register database twice");
+                database.InfrastructureLogger.LogError("EntityTypeProducer: Failed to register database twice");
             }
         }
         else
@@ -431,7 +431,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         {
             if (!_updaters.TryRemove(database, out _))
             {
-                database.InfrastructureLogger.Logger.LogError("EntityTypeProducer: Failed to unregister database");
+                database.InfrastructureLogger.LogError("EntityTypeProducer: Failed to unregister database");
             }
         }
         else if (_streamsManager != null)
@@ -738,7 +738,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
                 using var metadata = ownedFuture.Get();
                 _streamsManager!.PartitionOffsetWritten(topicName, metadata.Partition(), metadata.Offset());
             }
-            catch (Exception e) { _database.InfrastructureLogger.Logger.LogError(e, "CommitPendingOffsets failed."); }
+            catch (Exception e) { _database.InfrastructureLogger.LogError(e, "CommitPendingOffsets failed."); }
         }
         _pendingFutures.Clear();
         _forwardCache?.Invalidate();
@@ -768,6 +768,7 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             {
                 sw = Stopwatch.StartNew();
 #endif
+                _database.InfrastructureLogger.LogInformation("Invoking EnsureSynchronized with {Timeout}", timeout);
                 return _knetCompactedReplicator.SyncWait((int)timeout);
 #if DEBUG_PERFORMANCE
             }
