@@ -26,7 +26,7 @@ namespace MASES.EntityFrameworkCore.KNet.Extensions;
 public static class KEFCoreLoggerExtensions
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogCritical(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogCritical(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Critical))
         {
@@ -34,7 +34,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogCritical(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogCritical(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Critical))
         {
@@ -42,7 +42,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogError(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogError(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Error))
         {
@@ -50,7 +50,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogError(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogError(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Error))
         {
@@ -58,7 +58,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogWarning(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogWarning(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Warning))
         {
@@ -66,7 +66,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogWarning(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogWarning(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Warning))
         {
@@ -74,7 +74,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogInformation(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogInformation(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Information))
         {
@@ -82,7 +82,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogInformation(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogInformation(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Information))
         {
@@ -90,7 +90,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogDebug(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogDebug(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Debug))
         {
@@ -98,7 +98,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogDebug(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogDebug(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Debug))
         {
@@ -106,7 +106,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogTrace(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, Exception exception, string? message, params object?[] args)
+    public static void LogTrace(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Trace))
         {
@@ -114,7 +114,7 @@ public static class KEFCoreLoggerExtensions
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogTrace(this IDiagnosticsLogger<DbLoggerCategory.Infrastructure> logger, string? message, params object?[] args)
+    public static void LogTrace(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
         if (logger.Logger.IsEnabled(LogLevel.Trace))
         {
