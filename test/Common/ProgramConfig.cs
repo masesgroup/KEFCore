@@ -76,18 +76,18 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             base.OnModelCreating(modelBuilder);
         }
 
+        private static readonly ILoggerFactory SharedLoggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.SetMinimumLevel((!ProgramConfig.Config.ForceDebugLog
+                                    && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null)
+                                    || !ProgramConfig.Config.EnableIntermediateOutput ? LogLevel.Information
+                                                                                      : LogLevel.Debug)
+                   .AddProvider(new DebugOutputLoggerProvider());
+        });
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.SetMinimumLevel((!ProgramConfig.Config.ForceDebugLog 
-                                        && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") != null) 
-                                        || !ProgramConfig.Config.EnableIntermediateOutput ? LogLevel.Information 
-                                                                                          : LogLevel.Debug)
-                       .AddProvider(new DebugOutputLoggerProvider());
-            });
-
-            optionsBuilder.UseLoggerFactory(loggerFactory);
+            optionsBuilder.UseLoggerFactory(SharedLoggerFactory);
 
             if (ProgramConfig.Config.UseInMemoryProvider)
             {

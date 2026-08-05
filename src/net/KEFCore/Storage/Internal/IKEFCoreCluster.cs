@@ -45,6 +45,11 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     IValueGeneratorSelector ValueGeneratorSelector { get; }
     /// <summary>
+    /// Updates the reference to the instance of <see cref="ILoggerFactory"/> used to retrieve <see cref="Logger"/>
+    /// </summary>
+    /// <param name="loggerFactory">The reference to the current <see cref="ILoggerFactory"/></param>
+    void UpdateLoggerFactory(ILoggerFactory loggerFactory);
+    /// <summary>
     /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
     /// </summary>
     /// <param name="database">The instance of <see cref="IKEFCoreDatabase"/> to be registered</param>

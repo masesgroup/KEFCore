@@ -17,6 +17,7 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -27,10 +28,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// </summary>
 public static class KEFCoreClusterCacheExtensions
 {
-    /// <inheritdoc cref="IKEFCoreClusterCache.CreateCluster(KEFCoreOptionsExtension)"/>
+    /// <inheritdoc cref="IKEFCoreClusterCache.CreateCluster(KEFCoreOptionsExtension, ILoggerFactory)"/>
     public static IKEFCoreCluster CreateCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options)
-        => storeCache.CreateCluster(options.Extensions.OfType<KEFCoreOptionsExtension>().First());
-    /// <inheritdoc cref="IKEFCoreClusterCache.GetCluster(KEFCoreOptionsExtension)"/>
+        => storeCache.CreateCluster(
+            options.Extensions.OfType<KEFCoreOptionsExtension>().First(),
+            options.Extensions.OfType<CoreOptionsExtension>().FirstOrDefault()?.LoggerFactory ?? NullLoggerFactory.Instance);
+
+    /// <inheritdoc cref="IKEFCoreClusterCache.GetCluster(KEFCoreOptionsExtension, ILoggerFactory)"/>
     public static IKEFCoreCluster GetCluster(this IKEFCoreClusterCache storeCache, IDbContextOptions options)
-        => storeCache.GetCluster(options.Extensions.OfType<KEFCoreOptionsExtension>().First());
+        => storeCache.GetCluster(
+            options.Extensions.OfType<KEFCoreOptionsExtension>().First(),
+            options.Extensions.OfType<CoreOptionsExtension>().FirstOrDefault()?.LoggerFactory ?? NullLoggerFactory.Instance);
 }

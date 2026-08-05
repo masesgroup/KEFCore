@@ -26,12 +26,11 @@ using MASES.EntityFrameworkCore.KNet.Diagnostics.Internal;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Producer;
+using Microsoft.Extensions.Logging.Abstractions;
 using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
-using System.Collections.Concurrent;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -47,23 +46,32 @@ public class KEFCoreCluster : IKEFCoreCluster
 {
     private readonly KEFCoreClusterAdmin _kefcoreAdminClient;
     private readonly KEFCoreOptionsExtension _options;
+    private ILoggerFactory _loggerFactory;
     private readonly IKEFCoreTableFactory _tableFactory;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IKEFCoreDatabase, IKEFCoreDatabase> _registeredDatabases = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IStreamsManager> _streamsForApplications = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
 
-    private readonly ConcurrentDictionary<string, (Properties, IProducer)> _transactionalProducers = new();
-    private readonly ConcurrentDictionary<string, System.Collections.Generic.List<ITransactionalEntityTypeProducer>> _producersByGroup = new();
-
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, (Properties, IProducer)> _transactionalProducers = new();
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, System.Collections.Generic.List<ITransactionalEntityTypeProducer>> _producersByGroup = new();
+    /// <summary>
+    ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+    ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
+    ///     any release. You should only use it directly in your code with extreme caution and knowing that
+    ///     doing so can result in application failures when updating to a new Entity Framework Core release.
+    /// </summary>
+    /// <remarks>
+    /// Default initializer
+    /// </remarks>
     public KEFCoreCluster(KEFCoreOptionsExtension options,
-                            ILoggerFactory infrastructureLogger,
+                            ILoggerFactory loggerFactory,
                             IKEFCoreTableFactory tableFactory,
                             IValueGeneratorSelector valueGeneratorSelector,
                             IComplexTypeConverterFactory complexTypeConverterFactory)
     {
         _options = options;
         _kefcoreAdminClient = KEFCoreClusterAdmin.Create(_options);
-        Logger = infrastructureLogger.CreateLogger($"{typeof(KEFCoreCluster).Name}-{_kefcoreAdminClient.ClusterId}");
+        _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         _tableFactory = tableFactory;
         ComplexTypeConverterFactory = complexTypeConverterFactory;
         ValueGeneratorSelector = valueGeneratorSelector;
@@ -77,11 +85,13 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual string ClusterId => _kefcoreAdminClient.ClusterId;
     /// <inheritdoc/>
-    public virtual ILogger Logger { get; init; }
+    public virtual ILogger Logger => _loggerFactory.CreateLogger<KEFCoreCluster>();
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory { get; init; }
     /// <inheritdoc/>
     public virtual IValueGeneratorSelector ValueGeneratorSelector { get; init; }
+    /// <inheritdoc/>
+    public void UpdateLoggerFactory(ILoggerFactory loggerFactory) => _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
     /// <inheritdoc/>
     public virtual void Register(IKEFCoreDatabase db)
     {
