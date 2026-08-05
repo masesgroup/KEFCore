@@ -43,14 +43,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KEFCoreCluster(KEFCoreOptionsExtension options,
-    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
-    IKEFCoreTableFactory tableFactory,
-    IValueGeneratorSelector valueGeneratorSelector,
-    IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreCluster
+public class KEFCoreCluster : IKEFCoreCluster
 {
-    private readonly KEFCoreClusterAdmin _kefcoreAdminClient = KEFCoreClusterAdmin.Create(options);
-
+    private readonly KEFCoreClusterAdmin _kefcoreAdminClient;
+    private readonly KEFCoreOptionsExtension _options;
+    private readonly IKEFCoreTableFactory _tableFactory;
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IKEFCoreDatabase, IKEFCoreDatabase> _registeredDatabases = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IStreamsManager> _streamsForApplications = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<IEntityType, string> _topicForEntity = new();
@@ -58,19 +55,33 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     private readonly ConcurrentDictionary<string, (Properties, IProducer)> _transactionalProducers = new();
     private readonly ConcurrentDictionary<string, System.Collections.Generic.List<ITransactionalEntityTypeProducer>> _producersByGroup = new();
 
+    public KEFCoreCluster(KEFCoreOptionsExtension options,
+                            ILoggerFactory infrastructureLogger,
+                            IKEFCoreTableFactory tableFactory,
+                            IValueGeneratorSelector valueGeneratorSelector,
+                            IComplexTypeConverterFactory complexTypeConverterFactory)
+    {
+        _options = options;
+        _kefcoreAdminClient = KEFCoreClusterAdmin.Create(_options);
+        Logger = infrastructureLogger.CreateLogger($"{typeof(KEFCoreCluster).Name}-{_kefcoreAdminClient.ClusterId}");
+        _tableFactory = tableFactory;
+        ComplexTypeConverterFactory = complexTypeConverterFactory;
+        ValueGeneratorSelector = valueGeneratorSelector;
+    }
+
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        tableFactory?.Dispose();
+        _tableFactory?.Dispose();
     }
     /// <inheritdoc/>
     public virtual string ClusterId => _kefcoreAdminClient.ClusterId;
     /// <inheritdoc/>
-    public virtual IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger => infrastructureLogger;
+    public virtual ILogger Logger { get; init; }
     /// <inheritdoc/>
-    public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory => complexTypeConverterFactory;
+    public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory { get; init; }
     /// <inheritdoc/>
-    public virtual IValueGeneratorSelector ValueGeneratorSelector => valueGeneratorSelector;
+    public virtual IValueGeneratorSelector ValueGeneratorSelector { get; init; }
     /// <inheritdoc/>
     public virtual void Register(IKEFCoreDatabase db)
     {
@@ -82,7 +93,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
             var adapter = database.UpdateAdapterFactory.CreateStandalone();
             var entities = adapter.Model.GetEntityTypes();
-            bool needsNewTables = tableFactory.NeedsNewTables(this, entities);
+            bool needsNewTables = _tableFactory.NeedsNewTables(this, entities);
             if (!db.Options.UseCompactedReplicator && needsNewTables)
             {
                 database.InfrastructureLogger.LogInformation("KEFCore is using Streams, needs to stop topology due to new items to be added.");
@@ -93,9 +104,9 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
                 else database.InfrastructureLogger.LogInformation("Not found a Streams Manager for {AppId}, maybe it is the first start-up.", db.Options.ApplicationId);
             }
 
-            var tables = entities.Select((et) => tableFactory.GetOrCreate(database, et));
+            var tables = entities.Select((et) => _tableFactory.GetOrCreate(database, et));
             database.RegisterTables(tables);
-            tableFactory.Start(database);
+            _tableFactory.Start(database);
 
             return database;
         });
@@ -106,7 +117,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     {
         if (!_registeredDatabases.TryRemove(database, out _))
         {
-            InfrastructureLogger.LogError("KEFCoreCluster: failed to unregister a database never registered before.");
+            Logger.LogError("KEFCoreCluster: failed to unregister a database never registered before.");
         }
     }
 
@@ -184,7 +195,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         var entries = new System.Collections.Generic.List<IUpdateEntry>();
         foreach (var entityType in database.DesignTimeModel.Model.GetEntityTypes())
         {
-            tableFactory.Get(this, entityType); // test existence
+            _tableFactory.Get(this, entityType); // test existence
             IEntityType targetEntityType = null;
             foreach (var targetSeed in entityType.GetSeedData())
             {
@@ -276,7 +287,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     public IKEFCoreTable GetTable(IEntityType entityType)
     {
-        return tableFactory.Get(this, entityType);
+        return _tableFactory.Get(this, entityType);
     }
 
     /// <inheritdoc/>
@@ -318,7 +329,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
     /// <inheritdoc/>
     IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        InfrastructureLogger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
+        Logger.LogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
 
         try
@@ -328,7 +339,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         catch (UnknownTopicOrPartitionException ex)
         {
             if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing LatestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
-            InfrastructureLogger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            Logger.LogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
             Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
             return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
@@ -354,7 +365,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -386,7 +397,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -418,7 +429,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -450,7 +461,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -483,7 +494,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -518,7 +529,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
         {
             tableSw.Start();
 #endif
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 #if DEBUG_PERFORMANCE
             valueBufferSw.Start();
 #endif
@@ -566,7 +577,7 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
                 continue;
             }
 
-            var table = tableFactory.GetOrCreate(database, entityType);
+            var table = _tableFactory.GetOrCreate(database, entityType);
 
             IKEFCoreRowBag record;
 
@@ -731,27 +742,27 @@ public class KEFCoreCluster(KEFCoreOptionsExtension options,
 
         var tmp = _transactionalProducers.GetOrAdd(transactionGroup, group =>
         {
-            var config = options.ProducerOptionsBuilder();
-            config.TransactionalId = $"{options.ApplicationId}.{group}";
+            var config = _options.ProducerOptionsBuilder();
+            config.TransactionalId = $"{_options.ApplicationId}.{group}";
             config.Acks = ProducerConfigBuilder.AcksTypes.All;
             config.EnableIdempotence = true;
             config.Retries = int.MaxValue;
             config.MaxInFlightRequestsPerConnection = 1;
 
-            config.KeySerializerClass = options.UseKeyByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
+            config.KeySerializerClass = _options.UseKeyByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
                                                                              : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
-            config.ValueSerializerClass = options.UseValueContainerByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
+            config.ValueSerializerClass = _options.UseValueContainerByteBufferDataTransfer ? Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteBufferSerializer>()
                                                                                           : Java.Lang.Class.Of<Org.Apache.Kafka.Common.Serialization.ByteArraySerializer>();
 
-            var jvmKeyType = options.UseKeyByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
-            var jvmValueType = options.UseValueContainerByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
+            var jvmKeyType = _options.UseKeyByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
+            var jvmValueType = _options.UseValueContainerByteBufferDataTransfer ? typeof(Java.Nio.ByteBuffer) : typeof(byte[]);
 
             var properties = config.ToProperties();
             var producerType = typeof(KafkaProducer<,>).MakeGenericType(jvmKeyType, jvmValueType);
             var producer = (IProducer)Activator.CreateInstance(producerType, properties)!;
 
             producer.InitTransactions();
-            InfrastructureLogger?.LogInformation("Created transactional producer for group '{Group}' with transactional.id '{TransactionalId}'", group, config.TransactionalId);
+            Logger?.LogInformation("Created transactional producer for group '{Group}' with transactional.id '{TransactionalId}'", group, config.TransactionalId);
             return (properties, producer);
         });
         return tmp.Item2;

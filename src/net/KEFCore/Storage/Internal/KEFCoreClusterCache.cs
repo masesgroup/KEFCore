@@ -30,13 +30,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, 
-                                 IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
+public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory,
+                                 ILoggerFactory infrastructureLogger,
                                  IValueGeneratorSelector valueGeneratorSelector,
                                  IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreClusterCache
 {
     private readonly IKEFCoreTableFactory _tableFactory = tableFactory;
-    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger = infrastructureLogger;
+    private readonly ILoggerFactory _infrastructureLogger = infrastructureLogger;
     private readonly IValueGeneratorSelector _valueGeneratorSelector = valueGeneratorSelector;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory = complexTypeConverterFactory;
     private readonly ConcurrentDictionary<string, IKEFCoreCluster> _namedClusters = new();

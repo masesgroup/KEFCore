@@ -33,9 +33,9 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     string ClusterId { get; }
     /// <summary>
-    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
+    /// Reference to <see cref="ILogger"/> generated from <see cref="ClusterId"/>
     /// </summary>
-    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
+    ILogger Logger { get; }
     /// <summary>
     /// The global <see cref="IComplexTypeConverterFactory"/>
     /// </summary>
