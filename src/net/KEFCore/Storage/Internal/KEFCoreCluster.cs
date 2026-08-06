@@ -85,7 +85,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual string ClusterId => _kefcoreAdminClient.ClusterId;
     /// <inheritdoc/>
-    public virtual ILogger Logger => _loggerFactory.CreateLogger<KEFCoreCluster>();
+    public virtual ILogger Logger => _loggerFactory.CreateLogger(DbLoggerCategory.Infrastructure.Name);
     /// <inheritdoc/>
     public virtual IComplexTypeConverterFactory ComplexTypeConverterFactory { get; init; }
     /// <inheritdoc/>
