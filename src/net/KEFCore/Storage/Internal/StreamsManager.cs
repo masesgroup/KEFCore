@@ -26,6 +26,7 @@ using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
+using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Collections.Concurrent;
@@ -168,14 +169,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+
                 lock (CurrentRemoteKnownOffset)
                 {
                     if (CurrentRemoteKnownOffset.ContainsKey(partition))
                     {
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Update last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
                         CurrentRemoteKnownOffset[partition] = offset;
                     }
                     else
                     {
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Add last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
                         CurrentRemoteKnownOffset.Add(partition, offset);
                     }
                 }
@@ -191,10 +196,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
                         {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Update last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, kv.Key, kv.Value);
                             CurrentRemoteKnownOffset[kv.Key] = kv.Value;
                         }
                         else
                         {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Add last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, kv.Key, kv.Value);
                             CurrentRemoteKnownOffset.Add(kv);
                         }
                         lastKnownPartitions.Remove(kv.Key);
@@ -204,6 +211,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         foreach (var item in lastKnownPartitions)
                         {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug("Removing last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, item);
                             CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
                         }
                     }
