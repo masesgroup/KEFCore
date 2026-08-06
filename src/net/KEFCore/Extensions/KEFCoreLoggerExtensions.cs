@@ -26,99 +26,159 @@ namespace MASES.EntityFrameworkCore.KNet.Extensions;
 public static class KEFCoreLoggerExtensions
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogCritical(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogCritical(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Critical))
+        logger?.Logger.CheckAndLogCritical(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogCritical(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Critical))
         {
-            logger.Logger.LogCritical(exception, message, args);
+            logger.LogCritical(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogCritical(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogCritical(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Critical))
+        logger?.Logger.CheckAndLogCritical(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogCritical(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Critical))
         {
-            logger.Logger.LogCritical(message, args);
+            logger.LogCritical(message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogError(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogError(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Error))
+        logger?.Logger.CheckAndLogError(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogError(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Error))
         {
-            logger.Logger.LogError(exception, message, args);
+            logger.LogError(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogError(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogError(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Error))
+        logger?.Logger.CheckAndLogError(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogError(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Error))
         {
-            logger.Logger.LogError(message, args);
+            logger.LogError(message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogWarning(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogWarning(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Warning))
+        logger?.Logger.CheckAndLogWarning(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogWarning(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Warning))
         {
-            logger.Logger.LogWarning(exception, message, args);
+            logger.LogWarning(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogWarning(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogWarning(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Warning))
+        logger?.Logger.CheckAndLogWarning(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogWarning(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Warning))
         {
-            logger.Logger.LogWarning(message, args);
+            logger.LogWarning(message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogInformation(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogInformation(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Information))
+        logger?.Logger.CheckAndLogInformation(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogInformation(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Information))
         {
-            logger.Logger.LogInformation(exception, message, args);
+            logger.LogInformation(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogInformation(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogInformation(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Information))
+        logger?.Logger.CheckAndLogInformation(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogInformation(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Information))
         {
-            logger.Logger.LogInformation(message, args);
+            logger.LogInformation(message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogDebug(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogDebug(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Debug))
+        logger?.Logger.CheckAndLogDebug(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogDebug(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.Logger.LogDebug(exception, message, args);
+            logger.LogDebug(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogDebug(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogDebug(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Debug))
+        logger?.Logger.CheckAndLogDebug(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogDebug(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.Logger.LogDebug(message, args);
+            logger.LogDebug(message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogTrace(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
+    public static void CheckAndLogTrace(this IDiagnosticsLogger logger, Exception exception, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Trace))
+        logger?.Logger.CheckAndLogTrace(exception, message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogTrace(this ILogger logger, Exception exception, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Trace))
         {
-            logger.Logger.LogTrace(exception, message, args);
+            logger.LogTrace(exception, message, args);
         }
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void LogTrace(this IDiagnosticsLogger logger, string? message, params object?[] args)
+    public static void CheckAndLogTrace(this IDiagnosticsLogger logger, string? message, params object?[] args)
     {
-        if (logger.Logger.IsEnabled(LogLevel.Trace))
+        logger?.Logger.CheckAndLogTrace(message, args);
+    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void CheckAndLogTrace(this ILogger logger, string? message, params object?[] args)
+    {
+        if (logger.IsEnabled(LogLevel.Trace))
         {
-            logger.Logger.LogTrace(message, args);
+            logger.LogTrace(message, args);
         }
     }
 }

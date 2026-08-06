@@ -62,7 +62,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         ILoggingOptions loggingOptions)
     {
         Database = database;
-        Database.InfrastructureLogger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
+        Database.InfrastructureLogger.CheckAndLogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
         _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
         _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
@@ -87,7 +87,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        Database.InfrastructureLogger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
+        Database.InfrastructureLogger.CheckAndLogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
         _producer.Dispose();
     }
     /// <inheritdoc/>
