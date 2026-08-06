@@ -97,7 +97,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     {
         _registeredDatabases.GetOrAdd(db, (database) =>
         {
-            database.InfrastructureLogger.CheckAndLogDebug("Invoking Register");
+            database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking Register");
             var coll = TopicsFromModel(database, out var topics);
             _kefcoreAdminClient.CheckTopics(coll, database.Options.ReadOnlyMode, database.InfrastructureLogger);
 
@@ -106,12 +106,12 @@ public class KEFCoreCluster : IKEFCoreCluster
             bool needsNewTables = _tableFactory.NeedsNewTables(this, entities);
             if (!db.Options.UseCompactedReplicator && needsNewTables)
             {
-                database.InfrastructureLogger.CheckAndLogInformation("KEFCore is using Streams, needs to stop topology due to new items to be added.");
+                database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "KEFCore is using Streams, needs to stop topology due to new items to be added.");
                 if (_streamsForApplications.TryGetValue(db.Options.ApplicationId, out var streamsManager))
                 {
                     streamsManager.StopTopology();
                 }
-                else database.InfrastructureLogger.CheckAndLogInformation("Not found a Streams Manager for {AppId}, maybe it is the first start-up.", db.Options.ApplicationId);
+                else database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Not found a Streams Manager for {AppId}, maybe it is the first start-up.", db.Options.ApplicationId);
             }
 
             var tables = entities.Select((et) => _tableFactory.GetOrCreate(database, et));
@@ -127,13 +127,13 @@ public class KEFCoreCluster : IKEFCoreCluster
     {
         if (!_registeredDatabases.TryRemove(database, out _))
         {
-            Logger.CheckAndLogError("KEFCoreCluster: failed to unregister a database never registered before.");
+            Logger.CheckAndLogError(CallerInfo.CallSite(), "KEFCoreCluster: failed to unregister a database never registered before.");
         }
     }
 
     ArrayList<Java.Lang.String> TopicsFromModel(IKEFCoreDatabase database, out System.Collections.Generic.IList<string> topics)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking TopicsFromModel");
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking TopicsFromModel");
 
         var coll = new ArrayList<Java.Lang.String>();
         topics = new System.Collections.Generic.List<string>();
@@ -152,18 +152,18 @@ public class KEFCoreCluster : IKEFCoreCluster
             coll.Add(topic);
         }
 
-        database.InfrastructureLogger.CheckAndLogDebug("Identified from model {Model} the following topics {Topics}", database.DesignTimeModel.Model, string.Join(", ", topics));
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Identified from model {Model} the following topics {Topics}", database.DesignTimeModel.Model, string.Join(", ", topics));
 
         return coll;
     }
 
     static void ResetStream(IKEFCoreDatabase database, System.Collections.Generic.IList<string> topics)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking ResetStream");
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking ResetStream");
 
         if (!database.Options.UseCompactedReplicator)
         {
-            database.InfrastructureLogger.CheckAndLogInformation("Requesting Streams reset for {Application} with topics {Topics}", database.Options.ApplicationId, string.Join(", ", topics));
+            database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Requesting Streams reset for {Application} with topics {Topics}", database.Options.ApplicationId, string.Join(", ", topics));
             try
             {
                 StreamsResetter.ResetApplicationForced(database.Options.BootstrapServers, database.Options.ApplicationId, topics);
@@ -186,7 +186,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual bool EnsureDeleted(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking EnsureDeleted");
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking EnsureDeleted");
         var coll = TopicsFromModel(database, out var topics);
         ResetStream(database, topics);
 
@@ -197,7 +197,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual bool EnsureCreated(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking EnsureCreated");
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking EnsureCreated");
 
         Register(database);
 
@@ -227,13 +227,13 @@ public class KEFCoreCluster : IKEFCoreCluster
             }
             catch
             {
-                database.InfrastructureLogger.CheckAndLogError("Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
+                database.InfrastructureLogger.CheckAndLogError(CallerInfo.CallSite(), "Failed to execute synchronization within a timeout of {Timeout} for cluster id {ClusterId}", database.Options.DefaultSynchronizationTimeout, database.Options.ClusterId);
                 throw;
             }
             finally
             {
                 stopwatch.Stop();
-                database.InfrastructureLogger.CheckAndLogInformation("Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
+                database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Synchronization of {ApplicationId} with cluster id {ClusterId} done in {Elapsed}", database.Options.ApplicationId, database.Options.ClusterId, stopwatch.Elapsed);
             }
         }
 
@@ -242,13 +242,13 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual bool EnsureConnected(IKEFCoreDatabase database, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking EnsureConnected");
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking EnsureConnected");
         return true;
     }
     /// <inheritdoc/>
     public virtual bool? EnsureSynchronized(IKEFCoreDatabase database, long timeout)
     {
-        database.InfrastructureLogger.CheckAndLogInformation("Invoking EnsureSynchronized with a timeout of {Timeout}", timeout);
+        database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoking EnsureSynchronized with a timeout of {Timeout}", timeout);
 
         Register(database);
 
@@ -266,7 +266,7 @@ public class KEFCoreCluster : IKEFCoreCluster
                 if (timeout != Timeout.Infinite)
                 {
                     remainingTimeout -= stopwatch.ElapsedMilliseconds;
-                    database.InfrastructureLogger.CheckAndLogInformation("EnsureSynchronized remaining timeout {Timeout}", remainingTimeout);
+                    database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "EnsureSynchronized remaining timeout {Timeout}", remainingTimeout);
                     if (remainingTimeout < 0)
                     {
                         throw new System.TimeoutException($"Timeout of {timeout} ms expired evaluating {item.AssociatedTopicName}");
@@ -305,7 +305,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     {
         return _topicForEntity.GetOrAdd(entityType, (et) =>
         {
-            database.InfrastructureLogger.CheckAndLogInformation("Invoking CreateTopicForEntity for {Entity}", entityType.Name);
+            database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoking CreateTopicForEntity for {Entity}", entityType.Name);
             var topicName = entityType.GetKEFCoreTopicName();
             var requestedPartitions = entityType.NumPartitions(database.Options);
             var requestedReplicationFactor = entityType.ReplicationFactor(database.Options);
@@ -317,7 +317,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 
     private string CreateTopicForEntity(IKEFCoreDatabase database, IEntityType entityType, string topicName, int requestedPartitions, short requestedReplicationFactor, Map<Java.Lang.String, Java.Lang.String> map, int waitTime, int maxCycles, int cycle)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking CreateTopicForEntity for {Entity} attempt {Cycle}", entityType.Name, cycle);
         try
         {
             _kefcoreAdminClient.CreateTopic(topicName, requestedPartitions, requestedReplicationFactor, map, database.InfrastructureLogger);
@@ -327,7 +327,7 @@ public class KEFCoreCluster : IKEFCoreCluster
             if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing CreateTopicForEntity on {entityType.Name} after {cycle * waitTime}");
             if (ex.Message.Contains("deletion"))
             {
-                database.InfrastructureLogger.CheckAndLogInformation("Invoke again CreateTopicForEntity for {Entity} at attempt {Cycle} since server reported {Error}", entityType.Name, cycle, ex.Message);
+                database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoke again CreateTopicForEntity for {Entity} at attempt {Cycle} since server reported {Error}", entityType.Name, cycle, ex.Message);
                 Thread.Sleep(waitTime); // wait a while before the server completes topic deletion and try again
                 return CreateTopicForEntity(database, entityType, topicName, requestedPartitions, requestedReplicationFactor, map, waitTime, maxCycles, cycle++);
             }
@@ -339,7 +339,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
-        Logger.CheckAndLogDebug("Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
+        Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
         System.Collections.Generic.Dictionary<int, long> dictionary = new();
 
         try
@@ -349,7 +349,7 @@ public class KEFCoreCluster : IKEFCoreCluster
         catch (UnknownTopicOrPartitionException ex)
         {
             if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing LatestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
-            Logger.CheckAndLogInformation("Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            Logger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoke again LatestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
             Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
             return LatestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
         }
@@ -367,7 +367,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffers for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffers for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -399,7 +399,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public ValueBuffer? GetValueBuffer(IKEFCoreDatabase database, IEntityType entityType, object?[] keyValues, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffer for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffer for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -431,7 +431,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffersRange for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffersRange for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -463,7 +463,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersReverse(IKEFCoreDatabase database, IEntityType entityType, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffersReverse for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffersReverse for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -496,7 +496,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersReverseRange(IKEFCoreDatabase database, IEntityType entityType, object?[]? rangeStart, object?[]? rangeEnd, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffersReverseRange for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffersReverseRange for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -531,7 +531,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffersByPrefix(IKEFCoreDatabase database, IEntityType entityType, object?[] prefixValues, IReadOnlyList<IProperty>? projectedProperties)
     {
-        database.InfrastructureLogger.CheckAndLogDebug("Invoking GetValueBuffersByPrefix for {Entity}", entityType.Name);
+        database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking GetValueBuffersByPrefix for {Entity}", entityType.Name);
 #if DEBUG_PERFORMANCE
         Stopwatch tableSw = new();
         Stopwatch valueBufferSw = new();
@@ -581,7 +581,7 @@ public class KEFCoreCluster : IKEFCoreCluster
             {
                 readOnlyViolations ??= [];
                 readOnlyViolations.Add(entityType.DisplayName());
-                database.InfrastructureLogger?.CheckAndLogWarning(
+                database.InfrastructureLogger?.CheckAndLogWarning(CallerInfo.CallSite(), 
                     "Entity type '{EntityType}' is read-only — entry with state {State} skipped.",
                     entityType.DisplayName(), entry.EntityState);
                 continue;
@@ -661,7 +661,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 
         if (readOnlyViolations?.Count > 0)
         {
-            updateLogger.Logger?.CheckAndLogWarning("SaveChanges completed but {Count} entries were skipped because their entity types are read-only: {Types}.",
+            updateLogger.Logger?.CheckAndLogWarning(CallerInfo.CallSite(), "SaveChanges completed but {Count} entries were skipped because their entity types are read-only: {Types}.",
                                                     readOnlyViolations.Count, string.Join(", ", readOnlyViolations));
         }
 
@@ -686,7 +686,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual int ExecuteTransaction(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger)
     {
-        database.InfrastructureLogger.CheckAndLogInformation("Invoking ExecuteTransaction for {number} entries", entries.Count);
+        database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoking ExecuteTransaction for {number} entries", entries.Count);
 
         int rowsAffected = 0;
 
@@ -722,7 +722,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public async Task<int> ExecuteTransactionAsync(IKEFCoreDatabase database, System.Collections.Generic.IList<IUpdateEntry> entries, IDiagnosticsLogger<DbLoggerCategory.Update> updateLogger, CancellationToken cancellationToken = default)
     {
-        database.InfrastructureLogger.CheckAndLogInformation("Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
+        database.InfrastructureLogger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoking ExecuteTransactionAsync for {number} entries", entries.Count);
         int rowsAffected = 0;
         try
         {
@@ -772,7 +772,7 @@ public class KEFCoreCluster : IKEFCoreCluster
             var producer = (IProducer)Activator.CreateInstance(producerType, properties)!;
 
             producer.InitTransactions();
-            Logger?.CheckAndLogInformation("Created transactional producer for group '{Group}' with transactional.id '{TransactionalId}'", group, config.TransactionalId);
+            Logger?.CheckAndLogInformation(CallerInfo.CallSite(), "Created transactional producer for group '{Group}' with transactional.id '{TransactionalId}'", group, config.TransactionalId);
             return (properties, producer);
         });
         return tmp.Item2;
