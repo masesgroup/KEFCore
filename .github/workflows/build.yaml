@@ -141,12 +141,12 @@ jobs:
                 break
               fi
               if [[ $added_modified_file == "src/net/"* ]]; then
-                echo "$added_modified_file file is under the directory 'src/'."
+                echo "$added_modified_file file is under the directory 'src/net'."
                 echo "run_build=true" >> $GITHUB_OUTPUT
                 break
               fi
-              if [[ $added_modified_file == "test/"* ]]; then
-                echo "$added_modified_file file is under the directory 'src/'."
+              if [[ $added_modified_file == "test/net/"* ]]; then
+                echo "$added_modified_file file is under the directory 'test/net'."
                 echo "run_build=true" >> $GITHUB_OUTPUT
                 break
               fi
