@@ -19,6 +19,11 @@ on:
         required: false
         default: false
         type: boolean
+      UseSpecialSettings:
+        description: 'Use special settings: not available in forks'
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "0 4 * * 3"
 
@@ -39,13 +44,20 @@ jobs:
     with:
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       EnableLinuxTests: true
+      UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
       # Everything else left at build_common.yaml's defaults (false): single OS/JDK-vendor/LTS-version,
       # no Windows/macOS - the lightweight matrix, sufficient for a performance-docs snapshot.
     secrets:
       actor: ${{ github.actor }}
       GITHUB_TOKEN_INHERITED: ${{ secrets.GITHUB_TOKEN }}
       JCOBRIDGE_ENCODED: ${{ secrets.JCOBRIDGE_ENCODED_2_6_9 }}
-
+      SFTP_SERVER: ${{ secrets.SFTP_SERVER }}
+      SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+      SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+      SFTP_HOST_KEY: ${{ secrets.SFTP_HOST_KEY }}
+      FIRST_SPECIAL_SETTINGS_PASSWORD: ${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
+      SPECIAL_SETTINGS_PASSWORD: ${{ secrets.SPECIAL_SETTINGS_PASSWORD }}
+      
   update_docs:
     needs: run_tests
     if: always()
@@ -59,7 +71,7 @@ jobs:
           fetch-depth: '1'
 
       - name: Download all structured test-result artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: test-results_*
@@ -95,7 +107,7 @@ jobs:
 
       - name: Open a pull request with the updated documentation
         if: steps.generate.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "docs: update performance benchmarks"
