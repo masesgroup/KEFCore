@@ -20,9 +20,12 @@
 
 using Java.Util;
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
+using MASES.JNet.Specific.Extensions;
 using MASES.KNet.Admin;
 using Org.Apache.Kafka.Clients.Admin;
+using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Acl;
 using Org.Apache.Kafka.Common.Errors;
 using System.Collections.Concurrent;
@@ -115,7 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
             {
-                infrastructureLogger?.Logger.LogError(utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
+                infrastructureLogger?.CheckAndLogError(CallerInfo.CallSite(), utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
             }
         }
 
@@ -123,7 +126,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             try
             {
-                infrastructureLogger?.Logger.LogInformation("Trying to identify information of topics from the cluster.");
+                infrastructureLogger?.CheckAndLogInformation(CallerInfo.CallSite(), "Trying to identify information of topics from the cluster.");
 
                 try
                 {
@@ -142,7 +145,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             using var value = item.Value;
                             if (value.IsInternal())
                             {
-                                infrastructureLogger?.Logger.LogDebug("Topic {Key} is internal", key);
+                                infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} is internal", key);
                                 continue;
                             }
 
@@ -158,7 +161,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                     if (infrastructureLogger != null && infrastructureLogger.Logger.IsEnabled(LogLevel.Debug))
                                     {
                                         using var operationName = operation.Name();
-                                        infrastructureLogger.Logger.LogDebug("Topic {Key} supports {Name}", key, operationName);
+                                        infrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} supports {Name}", key, operationName);
                                     }
                                 }
                             }
@@ -182,13 +185,72 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (UnknownTopicOrPartitionException ex)
             {
-                infrastructureLogger?.Logger.LogDebug(ex.Message);
+                infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), ex.Message);
             }
         }
 
-        public IDictionary<int, long> LastPartitionOffsetForTopic(string topicName, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
+        public IDictionary<int, long> LatestPartitionOffsetForTopic(string topicName, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
             return _kafkaAdminClient.LastPartitionOffsetForTopic(topicName);
+        }
+
+        public System.Collections.Generic.IDictionary<int, long> EarliestPartitionOffsetForTopic(string topicName, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
+        {
+            System.Collections.Generic.Dictionary<int, long> dictionary = new();
+            try
+            {
+                using Java.Lang.String jTopic = topicName;
+                using var coll = Collections.Singleton(jTopic);
+                using DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
+                using var future = describeTopicsResult.AllTopicNames();
+                using var result = future.Get();
+                using var entrySet = result.EntrySet();
+                foreach (var item in entrySet)
+                {
+                    using (item)
+                    {
+                        using var key = item.Key;
+                        using var value = item.Value;
+                        if (key.Equals(jTopic))
+                        {
+                            using HashMap<TopicPartition, OffsetSpec> hashMap = new();
+                            using var partitions = value.Partitions();
+                            foreach (var partition in partitions)
+                            {
+                                using (partition)
+                                {
+                                    var partitionIndex = partition.Partition();
+                                    using TopicPartition topicPartition = new(topicName, partitionIndex);
+                                    using var offsetSpec = OffsetSpec.Earliest();
+                                    hashMap.Put(topicPartition, offsetSpec).DisposeIfDisposable();
+                                }
+                            }
+
+                            using var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
+                            using var offsetResultFuture = listOffsetResult.All();
+                            using var offsetResult = offsetResultFuture.Get();
+                            using var offsetResultEntrySet = offsetResult.EntrySet();
+                            foreach (var offsetResultItem in offsetResultEntrySet)
+                            {
+                                using var offsetResultItemKey = offsetResultItem.Key;
+                                using var offsetResultItemValue = offsetResultItem.Value;
+                                using var offsetResultItemTopic = offsetResultItemKey.Topic();
+                                if (offsetResultItemTopic.Equals(jTopic))
+                                {
+                                    dictionary.Add(offsetResultItemKey.Partition(), offsetResultItemValue.Offset());
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                return dictionary;
+            }
+            catch (ExecutionException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                else throw;
+            }
         }
     }
 }

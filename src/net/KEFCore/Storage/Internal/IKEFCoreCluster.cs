@@ -33,9 +33,9 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     string ClusterId { get; }
     /// <summary>
-    /// Reference to <see cref="IDiagnosticsLogger{TLoggerCategory}"/> received
+    /// Reference to <see cref="ILogger"/> generated from <see cref="ClusterId"/>
     /// </summary>
-    IDiagnosticsLogger<DbLoggerCategory.Infrastructure> InfrastructureLogger { get; }
+    ILogger Logger { get; }
     /// <summary>
     /// The global <see cref="IComplexTypeConverterFactory"/>
     /// </summary>
@@ -44,6 +44,11 @@ public interface IKEFCoreCluster : IDisposable
     /// The global <see cref="IValueGeneratorSelector"/>
     /// </summary>
     IValueGeneratorSelector ValueGeneratorSelector { get; }
+    /// <summary>
+    /// Updates the reference to the instance of <see cref="ILoggerFactory"/> used to retrieve <see cref="Logger"/>
+    /// </summary>
+    /// <param name="loggerFactory">The reference to the current <see cref="ILoggerFactory"/></param>
+    void UpdateLoggerFactory(ILoggerFactory loggerFactory);
     /// <summary>
     /// Register an instance of <see cref="IKEFCoreDatabase"/> in an instance of <see cref="IKEFCoreCluster"/>
     /// </summary>
@@ -86,6 +91,12 @@ public interface IKEFCoreCluster : IDisposable
     /// Creates a topic for <see cref="IEntityType"/> on Apache Kafka cluster
     /// </summary>
     string CreateTopicForEntity(IKEFCoreDatabase database, IEntityType entityType);
+    /// <summary>
+    /// Returns the earliest offset for each partition associated to <paramref name="entityType"/>
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to check</param>
+    /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the values</returns>
+    IDictionary<int, long> EarliestOffsetForEntity(IEntityType entityType);
     /// <summary>
     /// Returns the latest offset for each partition associated to <paramref name="entityType"/>
     /// </summary>

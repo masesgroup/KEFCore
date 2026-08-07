@@ -30,30 +30,33 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <remarks>
 /// Default initializer
 /// </remarks>
-public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, 
-                                 IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger,
+public class KEFCoreClusterCache(IKEFCoreTableFactory tableFactory,
                                  IValueGeneratorSelector valueGeneratorSelector,
                                  IComplexTypeConverterFactory complexTypeConverterFactory) : IKEFCoreClusterCache
 {
     private readonly IKEFCoreTableFactory _tableFactory = tableFactory;
-    private readonly IDiagnosticsLogger<DbLoggerCategory.Infrastructure> _infrastructureLogger = infrastructureLogger;
     private readonly IValueGeneratorSelector _valueGeneratorSelector = valueGeneratorSelector;
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory = complexTypeConverterFactory;
     private readonly ConcurrentDictionary<string, IKEFCoreCluster> _namedClusters = new();
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options)
+    public virtual IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory)
     {
         if (!_namedClusters.TryGetValue(options.ClusterId, out var cluster))
         {
             throw new InvalidOperationException($"ClusterId {options.ClusterId} not registered yet.");
         }
+        cluster.UpdateLoggerFactory(loggerFactory);
         return cluster;
     }
 
     /// <inheritdoc/>
-    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options)
-        => _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, _infrastructureLogger, _tableFactory, _valueGeneratorSelector, _complexTypeConverterFactory));
+    public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory)
+    {
+        var cluster = _namedClusters.GetOrAdd(options.ClusterId, _ => new KEFCoreCluster(options, loggerFactory, _tableFactory, _valueGeneratorSelector, _complexTypeConverterFactory));
+        cluster.UpdateLoggerFactory(loggerFactory);
+        return cluster;
+    }
 
     /// <inheritdoc/>
     public virtual void Dispose(IKEFCoreCluster cluster)

@@ -17,7 +17,6 @@
 */
 
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
-using System.Transactions;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
@@ -60,7 +59,7 @@ public class KEFCoreDatabase : Database, IKEFCoreDatabase
         _updateLogger = updateLogger;
         _transactionManager = transactionManager;
         _tables = [];
-        _cluster = _clusterCache.CreateCluster(_options);
+        _cluster = _clusterCache.CreateCluster(options);
     }
     /// <inheritdoc/>
     public void Dispose()
