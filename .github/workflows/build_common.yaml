@@ -1047,13 +1047,19 @@ jobs:
           path: ${{ github.workspace }}/all-test-results
           merge-multiple: true
 
-      - name: Find the latest successful build.yaml run on master
+      - name: Find the latest successful performance-docs.yaml run on master
         id: find-baseline-run
         shell: bash
         run: |
-          BASELINE_RUN=$(curl -sL "https://api.github.com/repos/masesgroup/KEFCore/actions/workflows/build.yaml/runs?branch=master&status=success&per_page=1" | jq -r '.workflow_runs[0].id?')
+          # Looks at performance-docs.yaml's own run history rather than build.yaml's: build.yaml also
+          # runs the full Windows/macOS matrix, and an unrelated failure there flips the WHOLE run's
+          # status away from "success" even when aggregate_test_results (and its kefcore-test-baseline-data
+          # artifact) completed fine - so a build.yaml-based lookup found "no baseline" most of the time.
+          # performance-docs.yaml only runs the Linux-only build_common.yaml matrix, so its overall run
+          # status tracks the part we actually care about much more reliably.
+          BASELINE_RUN=$(curl -sL "https://api.github.com/repos/masesgroup/KEFCore/actions/workflows/performance-docs.yaml/runs?branch=master&status=success&per_page=1" | jq -r '.workflow_runs[0].id?')
           echo "run_id=$BASELINE_RUN" >> $GITHUB_OUTPUT
-          echo "Latest successful build.yaml run on master: $BASELINE_RUN"
+          echo "Latest successful performance-docs.yaml run on master: $BASELINE_RUN"
 
       - name: Download previous baseline results from that run, if any
         if: ${{ steps.find-baseline-run.outputs.run_id != '' && steps.find-baseline-run.outputs.run_id != 'null' }}
@@ -1099,9 +1105,9 @@ jobs:
 
       - name: Prepare this run's results as next run's potential baseline
         # Uploaded unconditionally (any branch): whether it's ever actually USED as a baseline is
-        # decided at restore time by "Find the latest successful build.yaml run on master" above,
-        # which only ever looks at master runs - so a PR run uploading this artifact is harmless,
-        # it just never gets selected as anyone's baseline.
+        # decided at restore time by "Find the latest successful performance-docs.yaml run on master"
+        # above, which only ever looks at master runs - so a PR run uploading this artifact is
+        # harmless, it just never gets selected as anyone's baseline.
         if: always()
         run: |
           mkdir -p ${{ github.workspace }}/new-baseline
