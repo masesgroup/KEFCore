@@ -54,6 +54,7 @@ public class KEFCoreCluster : IKEFCoreCluster
 
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, (Properties, IProducer)> _transactionalProducers = new();
     private readonly System.Collections.Concurrent.ConcurrentDictionary<string, System.Collections.Generic.List<ITransactionalEntityTypeProducer>> _producersByGroup = new();
+    volatile int _disposed; // 0 = live, 1 = disposed
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -77,11 +78,29 @@ public class KEFCoreCluster : IKEFCoreCluster
         ValueGeneratorSelector = valueGeneratorSelector;
     }
 
-    /// <inheritdoc/>
-    public virtual void Dispose()
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    public void Dispose()
     {
-        _tableFactory?.Dispose();
+        // Dispose of unmanaged resources.
+        Dispose(true);
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
     }
+    /// <summary>
+    /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+    /// </summary>
+    /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+    void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+            return;
+
+        if (disposing)
+        {
+            _tableFactory?.Dispose();
+        }
+    }
+
     /// <inheritdoc/>
     public virtual string ClusterId => _kefcoreAdminClient.ClusterId;
     /// <inheritdoc/>
@@ -125,7 +144,7 @@ public class KEFCoreCluster : IKEFCoreCluster
     /// <inheritdoc/>
     public virtual void Unregister(IKEFCoreDatabase database)
     {
-        if (!_registeredDatabases.TryRemove(database, out _))
+        if (!_registeredDatabases.IsEmpty && !_registeredDatabases.TryRemove(database, out _))
         {
             Logger.CheckAndLogError(CallerInfo.CallSite(), "KEFCoreCluster: failed to unregister a database never registered before.");
         }
