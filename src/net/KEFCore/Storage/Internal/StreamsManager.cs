@@ -232,7 +232,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void UpdateLatestLocalKnownOffset(int partition, long offset)
             {
-                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Last local received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Latest local received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
                 LatestLocalKnownOffset[partition] = offset;
             }
 
@@ -248,6 +248,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         if (!CurrentRemoteEarliestKnownOffset.TryGetValue(item.Key, out var earliestOffset))
                         {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogWarning(CallerInfo.CallSite(), "Partition {Partition} does not contains an Earliest value, set to -1", item.Key);
                             earliestOffset = -1;
                         }
 
