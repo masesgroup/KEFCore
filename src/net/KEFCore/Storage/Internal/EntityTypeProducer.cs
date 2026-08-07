@@ -120,6 +120,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
     private readonly string? _transactionGroup;
     private readonly List<(Future<RecordMetadata> future, string topicName)> _pendingFutures = new();
 
+    volatile int _disposed; // 0 = live, 1 = disposed
+
     #region KNetCompactedReplicatorEnumerable
     class KNetCompactedReplicatorEnumerable(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? knetCompactedReplicator) : IEnumerable<ValueBuffer>
     {
@@ -139,6 +141,8 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
             readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
             readonly IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? _knetCompactedReplicator;
             readonly IEnumerator<KeyValuePair<TKey, TValueContainer>>? _enumerator;
+
+            volatile int _disposed; // 0 = live, 1 = disposed
             public KNetCompactedReplicatorEnumerator(IValueContainerMetadata entityMetadata, IComplexTypeConverterFactory complexTypeConverterFactory, IKNetCompactedReplicator<TKey, TValueContainer, TJVMKey, TJVMValueContainer>? knetCompactedReplicator)
             {
                 _entityMetadata = entityMetadata;
@@ -179,12 +183,31 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
 
             object IEnumerator.Current => Current;
 
+            /// <inheritdoc cref="IDisposable.Dispose"/>
             public void Dispose()
             {
+                // Dispose of unmanaged resources.
+                Dispose(true);
+                // Suppress finalization.
+                GC.SuppressFinalize(this);
+            }
+
+            /// <summary>
+            /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+            /// </summary>
+            /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+            void Dispose(bool disposing)
+            {
+                if (Interlocked.Exchange(ref _disposed, 1) != 0)
+                    return;
+
+                if (disposing)
+                {
 #if DEBUG_PERFORMANCE
-                KNet.Internal.DebugPerformanceHelper.ReportString($"KNetCompactedReplicatorEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+                    KNet.Internal.DebugPerformanceHelper.ReportString($"KNetCompactedReplicatorEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-                _enumerator?.Dispose();
+                    _enumerator?.Dispose();
+                }
             }
 
 #if DEBUG_PERFORMANCE
@@ -533,33 +556,52 @@ public class EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContain
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()
     {
-        if (_knetCompactedReplicator != null)
-        {
-            _knetCompactedReplicator.OnRemoteAdd -= KNetCompactedReplicator_OnRemoteAdd;
-            _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
-            _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
-            _knetCompactedReplicator?.Dispose();
-        }
-        else if (_transactionalProducer != null)
-        {
-            foreach (var (future, _) in _pendingFutures)
-            {
-                future.Dispose();
-            }
-        }
-        else
-        {
-            _kafkaProducer?.SetCallback(null);
-            _producerCallback?.Dispose();
-            _kafkaProducer?.Dispose();
-            _streamData?.Dispose();
-        }
-        _keySerdes?.Dispose();
-        _valueSerdes?.Dispose();
+        // Dispose of unmanaged resources.
+        Dispose(true);
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+    /// </summary>
+    /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+    void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+            return;
+
+        if (disposing)
+        {
+            if (_knetCompactedReplicator != null)
+            {
+                _knetCompactedReplicator.OnRemoteAdd -= KNetCompactedReplicator_OnRemoteAdd;
+                _knetCompactedReplicator.OnRemoteUpdate -= KNetCompactedReplicator_OnRemoteUpdate;
+                _knetCompactedReplicator.OnRemoteRemove -= KNetCompactedReplicator_OnRemoteRemove;
+                _knetCompactedReplicator?.Dispose();
+            }
+            else if (_transactionalProducer != null)
+            {
+                foreach (var (future, _) in _pendingFutures)
+                {
+                    future.Dispose();
+                }
+            }
+            else
+            {
+                _kafkaProducer?.SetCallback(null);
+                _producerCallback?.Dispose();
+                _kafkaProducer?.Dispose();
+                _streamData?.Dispose();
+            }
+            _keySerdes?.Dispose();
+            _valueSerdes?.Dispose();
+        }
+    }
+
     /// <inheritdoc/>
     public IEnumerable<ValueBuffer> GetValueBuffers(IKEFCoreDatabase database) => GetValueBuffers(database, null);
 
