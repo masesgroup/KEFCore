@@ -16,6 +16,7 @@
 *  Refer to LICENSE for more information.
 */
 
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal;
 
@@ -43,7 +44,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             if (container is null)
             {
-                logger.Logger.LogDebug("Record with key {key} removed (tombstone) try delete", key);
+                logger.CheckAndLogDebug(CallerInfo.CallSite(), "Record with key {key} removed (tombstone) try delete", key);
                 try
                 {
                     // maybe a record removed (tombstone) and it is still in kafka, try a delete
@@ -53,15 +54,15 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
             {
-                logger.Logger.LogDebug("Record with key {key} added", key);
+                logger.CheckAndLogDebug(CallerInfo.CallSite(), "Record with key {key} added", key);
                 try
                 {
                     ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, container.GetProperties(metadata), container.GetComplexProperties(metadata, converterFactory));
@@ -70,10 +71,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageDelete for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
@@ -96,10 +97,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
@@ -108,7 +109,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry == null)
             {
-                logger.Logger.LogDebug("ManageAddedInternal: Record not available, adding");
+                logger.CheckAndLogTrace(CallerInfo.CallSite(), "ManageAddedInternal: Record not available, adding");
                 var properties = metadata.EntityType.GetValueGeneratingProperties();
                 foreach (var item in properties)
                 {
@@ -136,7 +137,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             else
             {
-                logger.Logger.LogDebug("ManageAddedInternal: Record available, try update");
+                logger.CheckAndLogTrace(CallerInfo.CallSite(), "ManageAddedInternal: Record available, try update");
                 ManageUpdateInternal(logger, valueGeneratorSelector, entry, propertyValues, complexPropertyValues);
             }
         }
@@ -160,34 +161,34 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 try
                 {
-                    logger.Logger.LogDebug("ManageUpdate: Record with key {key} exist, update", key);
+                    logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageUpdate: Record with key {key} exist, update", key);
                     ManageUpdateInternal(logger, valueGeneratorSelector, entry, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
             {
                 try
                 {
-                    logger.Logger.LogDebug("ManageUpdate: Record with key {key} does not exists, add", key);
+                    logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageUpdate: Record with key {key} does not exists, add", key);
                     ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {             
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
@@ -210,34 +211,34 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 try
                 {
-                    logger.Logger.LogDebug("ManageUpdate: Record exists, update");
+                    logger.CheckAndLogTrace(CallerInfo.CallSite(), "ManageUpdate: Record exists, update");
                     ManageUpdateInternal(logger, valueGeneratorSelector, entry, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageUpdateInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
             else
             {
                 try
                 {
-                    logger.Logger.LogDebug("ManageUpdate: Record does not exists, add");
+                    logger.CheckAndLogTrace(CallerInfo.CallSite(), "ManageUpdate: Record does not exists, add");
                     ManageAddedInternal(logger, valueGeneratorSelector, adapter, metadata, ikey, keyValues, properties, complexProperties);
                 }
                 catch (Exception ex)
                 {         
                     if (IsCriticalException(ex))
                     {
-                        logger.Logger.LogCritical(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                        logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                         throw;
                     }
-                    logger.Logger.LogError(ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageAddedInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                 }
             }
         }
@@ -253,7 +254,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 if (!Equals(item.Value, currentValue)) // if received data introduced a null value while current value is not null or received data is different from current value
                 {
                     changed = true;
-                    logger.Logger.LogDebug("ManageUpdateInternal: Entry {entry} Property {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
+                    logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageUpdateInternal: Entry {entry} Property {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
                     entry.SetOriginalValue(prop, item.Value);
                 }
             }
@@ -266,7 +267,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 if (!Equals(item.Value, currentValue)) // if received data introduced a null value while current value is not null or received data is different from current value
                 {
                     changedComplex = true;
-                    logger.Logger.LogDebug("ManageUpdateInternal: Entry {entry} ComplexProperty {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
+                    logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageUpdateInternal: Entry {entry} ComplexProperty {key} changed from {value} to {newValue}", entry, item.Key, currentValue, item.Value);
                     entry.ToEntityEntry().ComplexProperty(prop).CurrentValue = item.Value;
                 }
             }
@@ -285,7 +286,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             try
             {
-                logger.Logger.LogDebug("ManageDelete: Record {key} try delete", key);
+                logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageDelete: Record {key} try delete", key);
                 var adapter = factory.Create();
                 ManageDeleteInternal(logger, adapter, ikey, keyValues);
             }
@@ -293,10 +294,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
@@ -315,10 +316,10 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (IsCriticalException(ex))
                 {
-                    logger.Logger.LogCritical(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                    logger.CheckAndLogCritical(CallerInfo.CallSite(), ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
                     throw;
                 }
-                logger.Logger.LogError(ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
+                logger.CheckAndLogError(CallerInfo.CallSite(), ex, "Failed to execute ManageDeleteInternal for {Entity} with Key={Key}: {Message}", metadata.EntityType, key, ex.Message);
             }
         }
 
@@ -327,7 +328,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             IUpdateEntry? entry = adapter.TryGetEntry(ikey, keyValues);
             if (entry != null && entry.EntityState != EntityState.Deleted)
             {
-                logger.Logger.LogDebug("ManageDeleteInternal: Record exists, delete with cascade");
+                logger.CheckAndLogDebug(CallerInfo.CallSite(), "ManageDeleteInternal: Record exists, delete with cascade");
                 adapter.CascadeDelete(entry);
             }
         }
@@ -338,7 +339,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             IUpdateEntry? entry = adapter.TryGetEntry(key, keyValues);
             if (entry == null)
             {
-                logger.Logger.LogDebug("ManageFind: Record does not exist exists, add in state as Unchanged");
+                logger.CheckAndLogTrace(CallerInfo.CallSite(), "ManageFind: Record does not exists, add in state as Unchanged");
                 var entity2 = adapter.Model.FindEntityType(metadata.EntityType.ClrType);
                 // the key does not exist
                 var newEntry = adapter.CreateEntry(propertyValues!, entity2!);
