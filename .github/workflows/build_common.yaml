@@ -104,6 +104,18 @@ on:
         required: true
       JCOBRIDGE_ENCODED:
         required: true
+      SFTP_SERVER:
+        required: true
+      SFTP_USERNAME:
+        required: true
+      SFTP_PASSWORD:
+        required: true
+      SFTP_HOST_KEY:
+        required: true
+      FIRST_SPECIAL_SETTINGS_PASSWORD:
+        required: true
+      SPECIAL_SETTINGS_PASSWORD:
+        required: true
 
 concurrency:
   group: '${{ github.workflow }}-child-${{ github.event.pull_request.number || github.ref }}'
@@ -134,6 +146,34 @@ jobs:
           dotnet-version: |
             9.x
             10.x
+
+      - name: Download pscp directly
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          curl -L -o "%RUNNER_TEMP%\pscp.exe" https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe
+
+      - name: Download source.zip via SFTP
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          %RUNNER_TEMP%\pscp.exe -hostkey "${{ secrets.SFTP_HOST_KEY }}" -pw ${{ secrets.SFTP_PASSWORD }} -batch ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_SERVER }}:/source-files/source.zip "${{ github.workspace }}\source.zip"
+
+      - name: Prepare other files
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          7z e ${{ github.workspace }}\source.zip -o"${{ github.workspace }}\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
+          7z x ${{ github.workspace }}\source.info -o"${{ github.workspace }}\Deploy\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
+
+      - name: List NuGet packages downloaded
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: dir .\Deploy\*nupkg
+
+      - name: Add special repo
+        if: ${{ success() && inputs.UseSpecialSettings == true }}
+        run: dotnet nuget add source --name localDeployNuGet "${{ github.workspace }}\Deploy\"
 
       - name: Get last workflow run of JNet
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
@@ -211,13 +251,6 @@ jobs:
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net8.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
-
-      - name: Prepare other files
-        if: ${{ inputs.UseSpecialSettings == true }}
-        shell: cmd
-        run: |
-          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
-          7z x ${{ github.workspace }}\bin\source.info -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
 
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v6
@@ -1007,7 +1040,7 @@ jobs:
           fetch-depth: '1'
 
       - name: Download all structured test-result artifacts (Linux matrix)
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: test-results_*
