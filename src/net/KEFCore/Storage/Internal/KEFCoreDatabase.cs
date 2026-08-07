@@ -16,7 +16,6 @@
 *  Refer to LICENSE for more information.
 */
 
-using Java.Security;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;

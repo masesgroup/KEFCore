@@ -27,7 +27,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
-using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Kstream;

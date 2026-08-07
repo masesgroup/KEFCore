@@ -28,7 +28,6 @@ using MASES.KNet.Producer;
 using MASES.KNet.Replicator;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common;
 using System.Collections;
 using System.Collections.Concurrent;
 

@@ -24,7 +24,6 @@ using Java.Util.Concurrent;
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using Org.Apache.Kafka.Clients.Admin;
 using Org.Apache.Kafka.Clients.Producer;
 using System.Collections;
 using System.Collections.Concurrent;

@@ -29,7 +29,6 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Producer;
 using Microsoft.Extensions.Logging.Abstractions;
 using Org.Apache.Kafka.Clients.Producer;
-using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Errors;
 using Org.Apache.Kafka.Tools;
 

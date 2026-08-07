@@ -19,10 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Org.Apache.Kafka.Connect.Util;
 using System.Collections.Concurrent;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal;
 /// <summary>
