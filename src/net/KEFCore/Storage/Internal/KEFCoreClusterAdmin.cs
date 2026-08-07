@@ -237,7 +237,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                 using var offsetResultItemTopic = offsetResultItemKey.Topic();
                                 if (offsetResultItemTopic.Equals(jTopic))
                                 {
-                                    dictionary.Add(offsetResultItemKey.Partition(), offsetResultItemValue.Offset() - 1); // since latest means the latest used offset (a record in kafka) + 1, here we remove 1 to be in sync with received offset from kafka
+                                    dictionary.Add(offsetResultItemKey.Partition(), offsetResultItemValue.Offset());
                                 }
                             }
                             break;
