@@ -19,6 +19,7 @@
 using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.Apache.Kafka.Connect.Util;
 using System.Collections.Concurrent;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -39,6 +40,7 @@ public class KEFCoreTableFactory(
 {
     private readonly ILoggingOptions _loggingOptions = loggingOptions;
     private readonly IKEFCoreSingletonOptions _options = options;
+    volatile int _disposed; // 0 = live, 1 = disposed
 
     private readonly ConcurrentDictionary<(IKEFCoreCluster Cluster, string topicName), IKEFCoreTable> _factories = new();
 
@@ -85,12 +87,30 @@ public class KEFCoreTableFactory(
             table.Start(database);
         }
     }
-    /// <inheritdoc/>
+
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()
     {
-        foreach (var item in _factories)
+        // Dispose of unmanaged resources.
+        Dispose(true);
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
+    }
+    /// <summary>
+    /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+    /// </summary>
+    /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+    void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+            return;
+
+        if (disposing)
         {
-            item.Value.Dispose();
+            foreach (var item in _factories)
+            {
+                item.Value.Dispose();
+            }
         }
     }
 

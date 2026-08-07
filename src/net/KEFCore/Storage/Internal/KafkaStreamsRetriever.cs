@@ -27,6 +27,7 @@ using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.JCOBridge.C2JBridge;
 using MASES.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Consumer;
+using Org.Apache.Kafka.Common;
 using Org.Apache.Kafka.Common.Utils;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.Kstream;
@@ -144,6 +145,8 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
     private ReadOnlyKeyValueStore<K, V>? _keyValueStore;
 
+    volatile int _disposed; // 0 = live, 1 = disposed
+
     /// <summary>
     /// Default initializer
     /// </summary>
@@ -169,11 +172,28 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         return _keyValueStore;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()
     {
-        _keyValueStore?.Dispose();
-        _streamsManager!.Dispose(_metadata.EntityType);
+        // Dispose of unmanaged resources.
+        Dispose(true);
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
+    }
+    /// <summary>
+    /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+    /// </summary>
+    /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+    void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+            return;
+
+        if (disposing)
+        {
+            _keyValueStore?.Dispose();
+            _streamsManager!.Dispose(_metadata.EntityType);
+        }
     }
 
     /// <inheritdoc/>
@@ -478,6 +498,7 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
         private readonly ISerDes<TValue, V> _valueSerdes;
         private readonly Org.Apache.Kafka.Streams.State.KeyValueIterator<K, V>? _keyValueIterator = null;
         private readonly JCOBridgeDisposeFastScope _disposeScope;
+        volatile int _disposed; // 0 = live, 1 = disposed
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -525,13 +546,31 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         object System.Collections.IEnumerator.Current => Current;
 
+        /// <inheritdoc cref="IDisposable.Dispose"/>
         public void Dispose()
         {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+        /// </summary>
+        /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+        void Dispose(bool disposing)
+        {
+            if (Interlocked.Exchange(ref _disposed, 1) != 0)
+                return;
+
+            if (disposing)
+            {
 #if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueSerdesSw: {_valueSerdesSw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-            _keyValueIterator?.Dispose();
-            _disposeScope?.Dispose();
+                _keyValueIterator?.Dispose();
+                _disposeScope?.Dispose();
+            }
         }
 
         public bool MoveNext()
