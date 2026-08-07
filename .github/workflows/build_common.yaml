@@ -318,6 +318,7 @@ jobs:
   execute_tests_linux:
     if: ${{ inputs.EnableLinuxTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     services:
       kafka:
         # Private registry image
@@ -436,7 +437,46 @@ jobs:
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
+        shell: bash
+        run: |
+          set +e
+          dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }} &
+          PID=$!
+
+          TIMEOUT_SECONDS=180
+          ELAPSED=0
+          while kill -0 $PID 2>/dev/null; do
+            if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
+              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s - dumping JVM thread state before killing"
+              # SIGQUIT makes the embedded JVM print a full thread dump (incl. deadlock detection) to stdout
+              kill -QUIT $PID
+              sleep 5
+              # also grab a jstack copy to a file, in case stdout capture missed something
+              jstack -l $PID > "${{ github.workspace }}/threaddump_reload_${{ matrix.serialization }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}.txt" 2>&1
+              sleep 2
+              kill -9 $PID 2>/dev/null
+              echo "STUCK=true" >> $GITHUB_ENV
+              break
+            fi
+            sleep 2
+            ELAPSED=$((ELAPSED + 2))
+          done
+
+          wait $PID
+          exit $?
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          if-no-files-found: ignore
+          name: threaddump_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/threaddump_*.txt
+          retention-days: 7
+
+      #- name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      #  continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+      #  timeout-minutes: 5
+      #  run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
 
       - name: Execute Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -468,6 +508,7 @@ jobs:
   execute_tests_windows:
     if: ${{ inputs.EnableWindowsTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -816,6 +857,7 @@ jobs:
   execute_tests_macos:
     if: ${{ inputs.EnableMacOSTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -1002,6 +1044,7 @@ jobs:
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        timeout-minutes: 5
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }}
 
       - name: Execute Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
