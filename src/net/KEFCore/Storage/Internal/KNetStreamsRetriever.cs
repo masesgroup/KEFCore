@@ -111,6 +111,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
     private readonly string _storageId;
     private ReadOnlyKeyValueStore<TKey, TValue, TJVMKey, TJVMValue>? _keyValueStore;
+    volatile int _disposed; // 0 = live, 1 = disposed
 
     /// <summary>
     /// Default initializer
@@ -130,10 +131,27 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         return _keyValueStore;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()
     {
-        _streamsManager!.Dispose(_metadata.EntityType);
+        // Dispose of unmanaged resources.
+        Dispose(true);
+        // Suppress finalization.
+        GC.SuppressFinalize(this);
+    }
+    /// <summary>
+    /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+    /// </summary>
+    /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+    void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+            return;
+
+        if (disposing)
+        {
+            _streamsManager!.Dispose(_metadata.EntityType);
+        }
     }
 
     /// <inheritdoc/>
@@ -373,6 +391,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         private readonly IAsyncEnumerator<KeyValue<TKey, TValue, TJVMKey, TJVMValue>>? _asyncEnumerator = null;
         private readonly CancellationToken _cancellationToken = default;
         private readonly IDisposable _disposeScope;
+        volatile int _disposed; // 0 = live, 1 = disposed
 #if DEBUG_PERFORMANCE
         Stopwatch _moveNextSw = new Stopwatch();
         Stopwatch _currentSw = new Stopwatch();
@@ -420,13 +439,31 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 
         object System.Collections.IEnumerator.Current => Current;
 
+        /// <inheritdoc cref="IDisposable.Dispose"/>
         public void Dispose()
         {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+        /// </summary>
+        /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+        void Dispose(bool disposing)
+        {
+            if (Interlocked.Exchange(ref _disposed, 1) != 0)
+                return;
+
+            if (disposing)
+            {
 #if DEBUG_PERFORMANCE
-            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
-            _enumerator?.Dispose();
-            _disposeScope?.Dispose();
+                _enumerator?.Dispose();
+                _disposeScope?.Dispose();
+            }
         }
 
         public ValueTask DisposeAsync()
