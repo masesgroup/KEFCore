@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading;
@@ -323,6 +324,33 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
             {
                 File.AppendAllText(Config.ResultsOutputPath, line);
             }
+        }
+
+        /// <summary>
+        /// Computes Max/Min/Mean/Median across a set of repeated timing samples for the same measurement and
+        /// reports them via <see cref="ReportResult"/>, using the median as the reported elapsed value (more
+        /// robust to occasional outliers - a cold first iteration, a GC pause - than the mean). Shared by every
+        /// test project that repeats a measurement across <see cref="NumberOfExecutions"/> iterations (e.g.
+        /// KEFCore.Benchmark.Test's per-query loop, KEFCore.Complex.Test's projection-correctness checks), so
+        /// the statistics/format are computed in exactly one place rather than duplicated per project.
+        /// </summary>
+        /// <param name="testId">A short, stable identifier for the specific test/measurement.</param>
+        /// <param name="samples">The repeated elapsed-time samples for this measurement. A no-op if empty.</param>
+        /// <param name="extraDetails">Optional free-form details (e.g. a verified value) prepended to the computed statistics in the reported details string.</param>
+        public static void ReportTimingStats(string testId, TimeSpan[] samples, string extraDetails = null)
+        {
+            if (samples == null || samples.Length == 0) return;
+            var sorted = (TimeSpan[])samples.Clone();
+            Array.Sort(sorted);
+            var max = sorted[^1];
+            var min = sorted[0];
+            var mean = TimeSpan.FromTicks((long)sorted.Select(t => t.Ticks).Average());
+            int mid = sorted.Length / 2;
+            var median = sorted.Length % 2 == 0
+                ? TimeSpan.FromTicks((sorted[mid - 1].Ticks + sorted[mid].Ticks) / 2)
+                : sorted[mid];
+            var stats = $"N={samples.Length} Max {max} Min {min} Mean {mean} Median {median}";
+            ReportResult(testId, median, details: extraDetails == null ? stats : $"{extraDetails} | {stats}");
         }
 
         public static int ManageException(System.Exception e, int iteration = -1)
