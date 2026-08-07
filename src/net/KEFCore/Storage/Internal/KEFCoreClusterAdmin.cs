@@ -161,7 +161,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                     if (infrastructureLogger != null && infrastructureLogger.Logger.IsEnabled(LogLevel.Debug))
                                     {
                                         using var operationName = operation.Name();
-                                        infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} supports {Name}", key, operationName);
+                                        infrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} supports {Name}", key, operationName);
                                     }
                                 }
                             }
