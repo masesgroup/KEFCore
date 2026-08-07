@@ -21,6 +21,7 @@
 #nullable enable
 
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using Org.Apache.Kafka.Clients.Producer;
@@ -61,7 +62,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
         ILoggingOptions loggingOptions)
     {
         Database = database;
-        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
+        Database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "KEFCoreTable Creating new KafkaTable for {Name}", entityType.Name);
         _tableAssociatedTopicName = Database.Cluster.CreateTopicForEntity(Database, entityType);
         _producer = new EntityTypeProducer<TKey, TValueContainer, TJVMKey, TJVMValueContainer>(database, entityType);
         _primaryKey = entityType.FindPrimaryKey();
@@ -86,7 +87,7 @@ public class KEFCoreTable<TKey, TValueContainer, TJVMKey, TJVMValueContainer> : 
     /// <inheritdoc/>
     public virtual void Dispose()
     {
-        Database.InfrastructureLogger.Logger.LogDebug("KEFCoreTable::Dispose for {Name}", EntityType.Name);
+        Database.InfrastructureLogger.CheckAndLogDebug(CallerInfo.CallSite(), "KEFCoreTable::Dispose for {Name}", EntityType.Name);
         _producer.Dispose();
     }
     /// <inheritdoc/>

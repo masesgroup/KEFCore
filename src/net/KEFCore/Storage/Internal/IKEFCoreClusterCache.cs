@@ -30,11 +30,11 @@ public interface IKEFCoreClusterCache
     /// <summary>
     /// Create new or get a previously allocated <see cref="IKEFCoreCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
-    IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options);
+    IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory);
     /// <summary>
     /// Gets an <see cref="IKEFCoreCluster"/> instance associated to the <paramref name="options"/>
     /// </summary>
-    IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options);
+    IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory);
     /// <summary>
     /// Dispose an <see cref="IKEFCoreCluster"/> referenced from <paramref name="cluster"/>
     /// </summary>
