@@ -20,6 +20,7 @@
 
 using Java.Util;
 using Java.Util.Concurrent;
+using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.JNet.Specific.Extensions;
 using MASES.KNet.Admin;
@@ -117,7 +118,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (Org.Apache.Kafka.Common.Errors.UnknownTopicOrPartitionException utpe)
             {
-                infrastructureLogger?.Logger.LogError(utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
+                infrastructureLogger?.CheckAndLogError(CallerInfo.CallSite(), utpe, "EnsureDeleted reports the following: {Error}", utpe.Message);
             }
         }
 
@@ -125,7 +126,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             try
             {
-                infrastructureLogger?.Logger.LogInformation("Trying to identify information of topics from the cluster.");
+                infrastructureLogger?.CheckAndLogInformation(CallerInfo.CallSite(), "Trying to identify information of topics from the cluster.");
 
                 try
                 {
@@ -144,7 +145,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                             using var value = item.Value;
                             if (value.IsInternal())
                             {
-                                infrastructureLogger?.Logger.LogDebug("Topic {Key} is internal", key);
+                                infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} is internal", key);
                                 continue;
                             }
 
@@ -160,7 +161,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                     if (infrastructureLogger != null && infrastructureLogger.Logger.IsEnabled(LogLevel.Debug))
                                     {
                                         using var operationName = operation.Name();
-                                        infrastructureLogger.Logger.LogDebug("Topic {Key} supports {Name}", key, operationName);
+                                        infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {Key} supports {Name}", key, operationName);
                                     }
                                 }
                             }
