@@ -203,11 +203,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     foreach (var kv in keyValuePairs)
                     {
-                        if (reference.ContainsKey(kv.Key))
+                        if (reference.TryGetValue(kv.Key, out var currentValue))
                         {
-                            if (reference[kv.Key] != kv.Value)
+                            if (currentValue != kv.Value)
                             {
-                                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, kv.Key, kv.Value);
+                                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update {Type} remote received offset for Topic {TopicName} and Partition {Partition} from {currentValue} to {Offset}", type, TopicName, kv.Key, currentValue, kv.Value);
                                 reference[kv.Key] = kv.Value;
                             }
                         }
