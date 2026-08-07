@@ -19,18 +19,18 @@ Based on [KNet client-side features](https://github.com/masesgroup/KNet) it allo
 
 | Project | Framework | Cache | Median iteration time (ms) |
 |---|---|---|---|
-| Benchmark | net10.0 | non-cached | 114.200 |
-| Benchmark | net10.0 | cached | 17.130 |
-| Benchmark | net8.0 | non-cached | 140.600 |
-| Benchmark | net8.0 | cached | 21.090 |
-| Benchmark | net9.0 | non-cached | 132.000 |
-| Benchmark | net9.0 | cached | 19.800 |
-| Complex | net10.0 | non-cached | 0.240 |
-| Complex | net10.0 | cached | 0.744 |
-| Complex | net8.0 | non-cached | 0.320 |
-| Complex | net8.0 | cached | 0.992 |
-| Complex | net9.0 | non-cached | 0.290 |
-| Complex | net9.0 | cached | 0.899 |
+| Benchmark | net10.0 | non-cached | 120.906 |
+| Benchmark | net10.0 | cached | 25.114 |
+| Benchmark | net8.0 | non-cached | 133.992 |
+| Benchmark | net8.0 | cached | 20.765 |
+| Benchmark | net9.0 | non-cached | 126.087 |
+| Benchmark | net9.0 | cached | 21.692 |
+| Complex | net10.0 | non-cached | 251.687 |
+| Complex | net10.0 | cached | 236.006 |
+| Complex | net8.0 | non-cached | 245.823 |
+| Complex | net8.0 | cached | 244.107 |
+| Complex | net9.0 | non-cached | 232.232 |
+| Complex | net9.0 | cached | 250.915 |
 
 Full breakdown: [performance benchmarks](src/documentation/articles/benchmarks.md).
 <!-- PERFORMANCE-SUMMARY:END -->
