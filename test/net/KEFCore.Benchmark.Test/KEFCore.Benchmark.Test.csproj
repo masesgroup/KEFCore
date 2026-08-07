@@ -7,7 +7,6 @@
 		<Title>EntityFrameworkCore KNet Test Benchmark</Title>
 		<Description>EntityFrameworkCore KNet Test Benchmark</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Test.Benchmark</Product>
-		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
