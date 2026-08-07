@@ -87,7 +87,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         context.Database.EnsureDeleted();
                         ProgramConfig.ReportString("EnsureDeleted deleted database");
                     }
-
+                    else if (!ProgramConfig.Config.LoadApplicationData)
+                    {
+                        ProgramConfig.ReportString("Process ResetStreams");
+                        context.ResetStreams();
+                        ProgramConfig.ReportString("ResetStreams completed");
+                    }
                     Stopwatch watch = new();
                     watch.Start();
                     if (context.Database.EnsureCreated()) // call always for initialization
