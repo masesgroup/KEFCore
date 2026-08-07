@@ -186,6 +186,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void UpdateCurrentRemoteKnownPartitionOffset(IEntityType entityType)
             {
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Retrieving Earliest/Latest offsets for Topic {TopicName}", TopicName);
+
                 IDictionary<int, long> keyValuePairs = StreamsManager._kefcoreCluster.EarliestOffsetForEntity(entityType);
                 UpdateCurrentRemoteKnownPartitionOffset("Earliest", CurrentRemoteEarliestKnownOffset, keyValuePairs);
 
@@ -244,13 +246,18 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     int index = 0;
                     foreach (var item in CurrentRemoteLatestKnownOffset)
                     {
-                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Checking IsSynchronized for Partition {Partition} with current offset {Offset}", item.Key, item.Value);
+                        if (!CurrentRemoteEarliestKnownOffset.TryGetValue(item.Key, out var earliestOffset))
+                        {
+                            earliestOffset = -1;
+                        }
+
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Checking IsSynchronized for Partition {Partition} with known Latest={LatestOffset} and Earliest={EarliestOffset} offsets", item.Key, item.Value, earliestOffset);
                         if (item.Value < 0)
                         {
                             StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} is empty", TopicName);
                             bools[index] = true; // the topic is empty
                         }
-                        else if (item.Value == CurrentRemoteEarliestKnownOffset[item.Key])
+                        else if (item.Value == earliestOffset)
                         {
                             StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} has Partition {Partition} with Earliest=Latest={Offset}", TopicName, item.Key, item.Value);
                             bools[index] = true; // the topic has no data to receive
@@ -530,7 +537,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     do
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
-                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;             
+                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;
                         foreach (var item in _updaters) // removed since it generates a new Func<,> on each access _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
                             if (!item.Value.ManageEvents || item.Key.ChangeManager != current.Manager)
@@ -820,20 +827,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             if (_storagesForEntities.TryGetValue(entity.GetKEFCoreTopicName(), out var storage))
             {
-                if (entity.GetTransactionGroup() == null)
-                {
-                    storage.UpdateCurrentRemoteKnownPartitionOffset(entity);
-                }
-                return EnsureSynchronized(storage, timeout, watch) // received data are aligned
+                return EnsureSynchronized(storage, entity, timeout, watch) // received data are aligned
                        && _freshDataFromCluster.IsEmpty; // and all data are processed
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        private static bool EnsureSynchronized(StreamsAssociatedData storage, long timeout, Stopwatch watcher = null)
+        private static bool EnsureSynchronized(StreamsAssociatedData storage, IEntityType entity, long timeout, Stopwatch watcher = null)
         {
             do
             {
+                if (entity.GetTransactionGroup() == null)
+                {
+                    storage.UpdateCurrentRemoteKnownPartitionOffset(entity);
+                }
                 if (storage.IsSynchronized()) return true;
                 System.Threading.Thread.Sleep(1000);
             }
