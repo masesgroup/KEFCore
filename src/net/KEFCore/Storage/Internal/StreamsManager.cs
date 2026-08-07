@@ -145,11 +145,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         #region StreamsAssociatedData
 
         readonly struct StreamsAssociatedData(StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> streamsManager,
-                                              string storageId, object optional, IStreamsChangeManager changeManager,
+                                              IEntityType entityType, string storageId, object optional, IStreamsChangeManager changeManager,
                                               TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed,
-                                              TMaterialized materialized, TGlobalKTable globalTable, TKTable table,
-                                              IDictionary<int, long> creationKnownOffset) : IDisposable
+                                              TMaterialized materialized, TGlobalKTable globalTable, TKTable table) : IDisposable
         {
+            public readonly string TopicName = entityType.GetKEFCoreTopicName();
             public readonly string StorageId = storageId;
             public readonly object Optional = optional;
             public readonly IStreamsChangeManager ChangeManager = changeManager;
@@ -161,39 +161,60 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             readonly TMaterialized Materialized = materialized;
             readonly TGlobalKTable GlobalTable = globalTable;
             readonly TKTable Table = table;
-            readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
+            readonly IDictionary<int, long> CurrentRemoteEarliestKnownOffset = streamsManager._kefcoreCluster.EarliestOffsetForEntity(entityType); // expected to be invariant
+            readonly IDictionary<int, long> CurrentRemoteLatestKnownOffset = streamsManager._kefcoreCluster.LatestOffsetForEntity(entityType); // expected to be invariant
             readonly ConcurrentDictionary<int, long> LatestLocalKnownOffset = new();
 
             public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
-                lock (CurrentRemoteKnownOffset)
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+
+                lock (CurrentRemoteLatestKnownOffset)
                 {
-                    if (CurrentRemoteKnownOffset.ContainsKey(partition))
+                    if (CurrentRemoteLatestKnownOffset.ContainsKey(partition))
                     {
-                        CurrentRemoteKnownOffset[partition] = offset;
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                        CurrentRemoteLatestKnownOffset[partition] = offset;
                     }
                     else
                     {
-                        CurrentRemoteKnownOffset.Add(partition, offset);
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                        CurrentRemoteLatestKnownOffset.Add(partition, offset);
                     }
                 }
             }
 
-            public void UpdateCurrentRemoteKnownPartitionOffset(IDictionary<int, long> keyValuePairs)
+            public void UpdateCurrentRemoteKnownPartitionOffset(IEntityType entityType)
+            {
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Retrieving Earliest/Latest offsets for Topic {TopicName}", TopicName);
+
+                IDictionary<int, long> keyValuePairs = StreamsManager._kefcoreCluster.EarliestOffsetForEntity(entityType);
+                UpdateCurrentRemoteKnownPartitionOffset("Earliest", CurrentRemoteEarliestKnownOffset, keyValuePairs);
+
+                keyValuePairs = StreamsManager._kefcoreCluster.LatestOffsetForEntity(entityType);
+                UpdateCurrentRemoteKnownPartitionOffset("Latest", CurrentRemoteLatestKnownOffset, keyValuePairs);
+            }
+
+            void UpdateCurrentRemoteKnownPartitionOffset(string type, IDictionary<int, long> reference, IDictionary<int, long> keyValuePairs)
             {
                 var lastKnownPartitions = keyValuePairs.Keys.ToList();
 
-                lock (CurrentRemoteKnownOffset)
+                lock (reference)
                 {
                     foreach (var kv in keyValuePairs)
                     {
-                        if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
+                        if (reference.TryGetValue(kv.Key, out var currentValue))
                         {
-                            CurrentRemoteKnownOffset[kv.Key] = kv.Value;
+                            if (currentValue != kv.Value)
+                            {
+                                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update {Type} remote received offset for Topic {TopicName} and Partition {Partition} from {currentValue} to {Offset}", type, TopicName, kv.Key, currentValue, kv.Value);
+                                reference[kv.Key] = kv.Value;
+                            }
                         }
                         else
                         {
-                            CurrentRemoteKnownOffset.Add(kv);
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, kv.Key, kv.Value);
+                            reference.Add(kv);
                         }
                         lastKnownPartitions.Remove(kv.Key);
                     }
@@ -202,7 +223,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         foreach (var item in lastKnownPartitions)
                         {
-                            CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Removing {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, item);
+                            reference.Remove(item);  // ...then remove them
                         }
                     }
                 }
@@ -210,27 +232,48 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             public void UpdateLatestLocalKnownOffset(int partition, long offset)
             {
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Latest local received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
                 LatestLocalKnownOffset[partition] = offset;
             }
 
             public bool IsSynchronized()
             {
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Requested IsSynchronized for {TopicName}", TopicName);
                 bool[] bools;
-                lock (CurrentRemoteKnownOffset)
+                lock (CurrentRemoteLatestKnownOffset)
                 {
-                    bools = new bool[CurrentRemoteKnownOffset.Count];
+                    bools = new bool[CurrentRemoteLatestKnownOffset.Count];
                     int index = 0;
-                    foreach (var item in CurrentRemoteKnownOffset)
+                    foreach (var item in CurrentRemoteLatestKnownOffset)
                     {
-                        if (item.Value < 0) bools[index] = true; // the topic is empty
+                        if (!CurrentRemoteEarliestKnownOffset.TryGetValue(item.Key, out var earliestOffset))
+                        {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogWarning(CallerInfo.CallSite(), "Partition {Partition} does not contains an Earliest value, set to -1", item.Key);
+                            earliestOffset = -1;
+                        }
+
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Checking IsSynchronized for Partition {Partition} with known Latest={LatestOffset} and Earliest={EarliestOffset} offsets", item.Key, item.Value, earliestOffset);
+                        if (item.Value < 0)
+                        {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} is empty", TopicName);
+                            bools[index] = true; // the topic is empty
+                        }
+                        else if (item.Value == earliestOffset)
+                        {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} has Partition {Partition} with Earliest=Latest={Offset}", TopicName, item.Key, item.Value);
+                            bools[index] = true; // the topic has no data to receive
+                        }
                         else if (LatestLocalKnownOffset.TryGetValue(item.Key, out var lastOffset))
                         {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Last local known offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, item.Key, lastOffset);
                             bools[index] = lastOffset >= item.Value;
                         }
                         index++;
                     }
                 }
-                return bools.All(static (o) => o);
+                var isSynch = bools.All(static (o) => o);
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} is in synch {isSynch}", TopicName, isSynch);
+                return isSynch;
             }
 
             public void PushLocalStoredData(IValueGeneratorSelector selector, TStream streams, Func<TStream, string, object, IEnumerable<StoredEventChange>> factory)
@@ -391,11 +434,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
             _errorHandler ??= new(this, (_This, exception) =>
             {
-                _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
+                _kefcoreCluster.Logger.CheckAndLogCritical(CallerInfo.CallSite(), "StreamsUncaughtExceptionHandler received a new Exception {Exception}", exception);
                 if (exception is Org.Apache.Kafka.Streams.Errors.StreamsException streamsException
                     && streamsException.Message.Contains("TimestampExtractor", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _kefcoreCluster.InfrastructureLogger.Logger?.LogCritical("StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
+                    _kefcoreCluster.Logger.CheckAndLogCritical(CallerInfo.CallSite(), "StreamsUncaughtExceptionHandler received an exception of type {Exception} try with {Action}",
                                                                            nameof(Org.Apache.Kafka.Streams.Errors.StreamsException), nameof(Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD));
                     return Org.Apache.Kafka.Streams.Errors.StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD;
                 }
@@ -405,7 +448,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _stateListener ??= new(this, (_This, newState, oldState) =>
             {
                 _currentState = newState ?? throw new InvalidOperationException("New state cannot be null.");
-                _kefcoreCluster.InfrastructureLogger.Logger?.LogInformation("StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
+                _kefcoreCluster.Logger.CheckAndLogInformation(CallerInfo.CallSite(), "StateListener reports a state change from {OldState} to {NewState}", oldState, newState);
                 if (_stateChanged != null && !_stateChanged.SafeWaitHandle.IsClosed) _stateChanged.Set();
             });
         }
@@ -459,15 +502,13 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 TKTable table = null;
                 if (_useGlobalTable)
                 {
-                    globalTable = CreateGlobalTable(_builder!, topicName, materialized);
+                    globalTable = CreateGlobalTable(_builder!, tn, materialized);
                 }
                 else
                 {
-                    table = CreateTable(_builder!, topicName, consumed, materialized);
+                    table = CreateTable(_builder!, tn, consumed, materialized);
                 }
-                var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entityType);
-                var storage = new StreamsAssociatedData(this, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
-
+                var storage = new StreamsAssociatedData(this, entityType, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table);
                 _latestAdded.Add(tn);
                 if (_usePersistentStorage)
                 {
@@ -497,7 +538,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     do
                     {
                         if (Interlocked.Read(ref canExecute) == 0) { System.Threading.Thread.Sleep(10); continue; }
-                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;             
+                        if (!_freshDataFromCluster.TryDequeue(out var current)) break;
                         foreach (var item in _updaters) // removed since it generates a new Func<,> on each access _updaters.Where(item => item.Value.ManageEvents && item.Key.ChangeManager == current.Manager))
                         {
                             if (!item.Value.ManageEvents || item.Key.ChangeManager != current.Manager)
@@ -516,7 +557,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     while (!_freshDataFromCluster.IsEmpty);
                     System.Threading.Thread.Sleep(10);
                 }
-                catch (System.Exception ex) { _kefcoreCluster.InfrastructureLogger.Logger.LogError(ex, "FreshEventChangePusher catched an exception: open an issue on GitHub."); } // final catch
+                catch (System.Exception ex) { _kefcoreCluster.Logger.CheckAndLogError(CallerInfo.CallSite(), ex, "FreshEventChangePusher catched an exception: open an issue on GitHub."); } // final catch
             }
         }
 
@@ -528,7 +569,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     if (!KNetRocksDBConfigSetter.Unregister(data.StorageId, true))
                     {
-                        _kefcoreCluster.InfrastructureLogger.Logger.LogError("Dispose: failed to unregister {Storage}.", data.StorageId);
+                        _kefcoreCluster.Logger.CheckAndLogError(CallerInfo.CallSite(), "Dispose: failed to unregister {Storage}.", data.StorageId);
                     }
                 }
                 data.Dispose();
@@ -539,7 +580,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (!_updaters.TryAdd((producer, database), new KEFCoreDatabaseLocalData(database, entity)))
             {
-                database.InfrastructureLogger.Logger.LogError($"StreamsManager: Failed to register database for {entity} twice");
+                database.InfrastructureLogger.CheckAndLogError(CallerInfo.CallSite(), $"StreamsManager: Failed to register database for {entity} twice");
             }
         }
 
@@ -547,7 +588,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         {
             if (!_updaters.TryRemove((producer, database), out _))
             {
-                database.InfrastructureLogger.Logger.LogError("StreamsManager: Failed to unregister database");
+                database.InfrastructureLogger.CheckAndLogError(CallerInfo.CallSite(), "StreamsManager: Failed to unregister database");
             }
         }
 
@@ -565,7 +606,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         storage.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _streams, GetStoredData);
                     }
-                    else _kefcoreCluster.InfrastructureLogger.Logger.LogError("{Item} was available in latest added, but it is missing in stored entities", item);
+                    else _kefcoreCluster.Logger.CheckAndLogError(CallerInfo.CallSite(), "{Item} was available in latest added, but it is missing in stored entities", item);
                 }
             }
         }
@@ -594,7 +635,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                                     {
                                         storage.PushLocalStoredData(_kefcoreCluster.ValueGeneratorSelector, _streams, GetStoredData);
                                     }
-                                    else _kefcoreCluster.InfrastructureLogger.Logger.LogError("{Item} was available in latest added, but it is missing in stored entities", item);
+                                    else _kefcoreCluster.Logger.CheckAndLogError(CallerInfo.CallSite(), "{Item} was available in latest added, but it is missing in stored entities", item);
                                 }
                             }
                             finally
@@ -678,7 +719,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                         {
                             if (index == WaitHandle.WaitTimeout)
                             {
-                                _kefcoreCluster.InfrastructureLogger.Logger.LogInformation("State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
+                                _kefcoreCluster.Logger.CheckAndLogInformation(CallerInfo.CallSite(), "State: {CurrentState} No handle set within {WaitingTime} ms", _currentState, waitingTime);
                                 continue;
                             }
                         }
@@ -779,6 +820,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         public bool? EnsureSynchronized(IEntityType entity, long timeout)
         {
             if (!entity.GetManageEvents() || _useGlobalTable) return null; // cannot deduct synchronization without events or using GlobalKTable
+            _kefcoreCluster.Logger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoking StreamsManager::EnsureSynchronized for {Entity} with timeout {Timeout}", entity, timeout);
             Stopwatch watch = null;
             if (timeout != Timeout.Infinite)
             {
@@ -786,21 +828,20 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             if (_storagesForEntities.TryGetValue(entity.GetKEFCoreTopicName(), out var storage))
             {
-                if (entity.GetTransactionGroup() == null)
-                {
-                    var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entity);
-                    storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
-                }
-                return EnsureSynchronized(storage, timeout, watch) // received data are aligned
+                return EnsureSynchronized(storage, entity, timeout, watch) // received data are aligned
                        && _freshDataFromCluster.IsEmpty; // and all data are processed
             }
             else throw new InvalidOperationException($"{entity} not found in managed entities.");
         }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        private static bool EnsureSynchronized(StreamsAssociatedData storage, long timeout, Stopwatch watcher = null)
+        private static bool EnsureSynchronized(StreamsAssociatedData storage, IEntityType entity, long timeout, Stopwatch watcher = null)
         {
             do
             {
+                if (entity.GetTransactionGroup() == null)
+                {
+                    storage.UpdateCurrentRemoteKnownPartitionOffset(entity);
+                }
                 if (storage.IsSynchronized()) return true;
                 System.Threading.Thread.Sleep(1000);
             }

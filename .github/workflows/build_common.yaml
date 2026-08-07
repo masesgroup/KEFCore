@@ -104,6 +104,18 @@ on:
         required: true
       JCOBRIDGE_ENCODED:
         required: true
+      SFTP_SERVER:
+        required: true
+      SFTP_USERNAME:
+        required: true
+      SFTP_PASSWORD:
+        required: true
+      SFTP_HOST_KEY:
+        required: true
+      FIRST_SPECIAL_SETTINGS_PASSWORD:
+        required: true
+      SPECIAL_SETTINGS_PASSWORD:
+        required: true
 
 concurrency:
   group: '${{ github.workflow }}-child-${{ github.event.pull_request.number || github.ref }}'
@@ -134,6 +146,34 @@ jobs:
           dotnet-version: |
             9.x
             10.x
+
+      - name: Download pscp directly
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          curl -L -o "%RUNNER_TEMP%\pscp.exe" https://the.earth.li/~sgtatham/putty/latest/w64/pscp.exe
+
+      - name: Download source.zip via SFTP
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          %RUNNER_TEMP%\pscp.exe -hostkey "${{ secrets.SFTP_HOST_KEY }}" -pw ${{ secrets.SFTP_PASSWORD }} -batch ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_SERVER }}:/source-files/source.zip "${{ github.workspace }}\source.zip"
+
+      - name: Prepare other files
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: |
+          7z e ${{ github.workspace }}\source.zip -o"${{ github.workspace }}\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
+          7z x ${{ github.workspace }}\source.info -o"${{ github.workspace }}\Deploy\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
+
+      - name: List NuGet packages downloaded
+        if: ${{ inputs.UseSpecialSettings == true }}
+        shell: cmd
+        run: dir .\Deploy\*nupkg
+
+      - name: Add special repo
+        if: ${{ success() && inputs.UseSpecialSettings == true }}
+        run: dotnet nuget add source --name localDeployNuGet "${{ github.workspace }}\Deploy\"
 
       - name: Get last workflow run of JNet
         if: ${{ inputs.UseLastRepositoryBuildJNet == true }}
@@ -212,13 +252,6 @@ jobs:
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
 
-      - name: Prepare other files
-        if: ${{ inputs.UseSpecialSettings == true }}
-        shell: cmd
-        run: |
-          7z e ${{ github.workspace }}\.github\workflows\configuration\source.zip -o"${{ github.workspace }}\bin\" -p${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
-          7z x ${{ github.workspace }}\bin\source.info -o"${{ github.workspace }}\bin\" -p${{ secrets.SPECIAL_SETTINGS_PASSWORD }} -y
-
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v6
         with:
@@ -285,6 +318,7 @@ jobs:
   execute_tests_linux:
     if: ${{ inputs.EnableLinuxTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     services:
       kafka:
         # Private registry image
@@ -403,7 +437,46 @@ jobs:
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
-        run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
+        shell: bash
+        run: |
+          set +e
+          dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }} &
+          PID=$!
+
+          TIMEOUT_SECONDS=180
+          ELAPSED=0
+          while kill -0 $PID 2>/dev/null; do
+            if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
+              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s - dumping JVM thread state before killing"
+              # SIGQUIT makes the embedded JVM print a full thread dump (incl. deadlock detection) to stdout
+              kill -QUIT $PID
+              sleep 5
+              # also grab a jstack copy to a file, in case stdout capture missed something
+              jstack -l $PID > "${{ github.workspace }}/threaddump_reload_${{ matrix.serialization }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}.txt" 2>&1
+              sleep 2
+              kill -9 $PID 2>/dev/null
+              echo "STUCK=true" >> $GITHUB_ENV
+              break
+            fi
+            sleep 2
+            ELAPSED=$((ELAPSED + 2))
+          done
+
+          wait $PID
+          exit $?
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          if-no-files-found: ignore
+          name: threaddump_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
+          path: ${{ github.workspace }}/threaddump_*.txt
+          retention-days: 7
+
+      #- name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+      #  continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+      #  timeout-minutes: 5
+      #  run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
 
       - name: Execute Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
@@ -435,6 +508,7 @@ jobs:
   execute_tests_windows:
     if: ${{ inputs.EnableWindowsTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -783,6 +857,7 @@ jobs:
   execute_tests_macos:
     if: ${{ inputs.EnableMacOSTests == true }}
     needs: prepare_matrix_data
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -969,6 +1044,7 @@ jobs:
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
+        timeout-minutes: 5
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }}
 
       - name: Execute Transaction.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
@@ -1007,20 +1083,26 @@ jobs:
           fetch-depth: '1'
 
       - name: Download all structured test-result artifacts (Linux matrix)
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: test-results_*
           path: ${{ github.workspace }}/all-test-results
           merge-multiple: true
 
-      - name: Find the latest successful build.yaml run on master
+      - name: Find the latest successful performance-docs.yaml run on master
         id: find-baseline-run
         shell: bash
         run: |
-          BASELINE_RUN=$(curl -sL "https://api.github.com/repos/masesgroup/KEFCore/actions/workflows/build.yaml/runs?branch=master&status=success&per_page=1" | jq -r '.workflow_runs[0].id?')
+          # Looks at performance-docs.yaml's own run history rather than build.yaml's: build.yaml also
+          # runs the full Windows/macOS matrix, and an unrelated failure there flips the WHOLE run's
+          # status away from "success" even when aggregate_test_results (and its kefcore-test-baseline-data
+          # artifact) completed fine - so a build.yaml-based lookup found "no baseline" most of the time.
+          # performance-docs.yaml only runs the Linux-only build_common.yaml matrix, so its overall run
+          # status tracks the part we actually care about much more reliably.
+          BASELINE_RUN=$(curl -sL "https://api.github.com/repos/masesgroup/KEFCore/actions/workflows/performance-docs.yaml/runs?branch=master&status=success&per_page=1" | jq -r '.workflow_runs[0].id?')
           echo "run_id=$BASELINE_RUN" >> $GITHUB_OUTPUT
-          echo "Latest successful build.yaml run on master: $BASELINE_RUN"
+          echo "Latest successful performance-docs.yaml run on master: $BASELINE_RUN"
 
       - name: Download previous baseline results from that run, if any
         if: ${{ steps.find-baseline-run.outputs.run_id != '' && steps.find-baseline-run.outputs.run_id != 'null' }}
@@ -1066,9 +1148,9 @@ jobs:
 
       - name: Prepare this run's results as next run's potential baseline
         # Uploaded unconditionally (any branch): whether it's ever actually USED as a baseline is
-        # decided at restore time by "Find the latest successful build.yaml run on master" above,
-        # which only ever looks at master runs - so a PR run uploading this artifact is harmless,
-        # it just never gets selected as anyone's baseline.
+        # decided at restore time by "Find the latest successful performance-docs.yaml run on master"
+        # above, which only ever looks at master runs - so a PR run uploading this artifact is
+        # harmless, it just never gets selected as anyone's baseline.
         if: always()
         run: |
           mkdir -p ${{ github.workspace }}/new-baseline
