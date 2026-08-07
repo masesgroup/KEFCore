@@ -6,8 +6,11 @@ name: Update performance documentation
 # the benchmarks article) doesn't require - and doesn't duplicate the cost of - that full sweep.
 # Runs the default (lightweight) Linux-only matrix from build_common.yaml instead.
 #
-# On-demand only by default (workflow_dispatch). Uncomment the `schedule` trigger below if a fixed
-# cadence is wanted later; pick a time that doesn't overlap with build.yaml's Saturday 04:00 UTC run.
+# On-demand via workflow_dispatch, and on a weekly schedule so a fresh baseline is reliably
+# available for aggregate_test_results' "Find the latest successful performance-docs.yaml run on
+# master" lookup (build_common.yaml) - without a regular cadence, that lookup would rarely find
+# anything and every comparison would fall back to "no baseline". Wednesday 04:00 UTC, offset from
+# build.yaml's existing Saturday 04:00 UTC schedule so the two don't compete for the same runners.
 on:
   workflow_dispatch:
     inputs:
@@ -21,8 +24,8 @@ on:
         required: false
         default: false
         type: boolean
-  # schedule:
-  #   - cron: "0 4 * * 3" # e.g. Wednesday 04:00 UTC
+  schedule:
+    - cron: "0 4 * * 3"
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.ref }}'
