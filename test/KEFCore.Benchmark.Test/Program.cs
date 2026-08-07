@@ -87,7 +87,12 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                         context.Database.EnsureDeleted();
                         ProgramConfig.ReportString("EnsureDeleted deleted database");
                     }
-
+                    else if (!ProgramConfig.Config.LoadApplicationData)
+                    {
+                        ProgramConfig.ReportString("Process ResetStreams");
+                        context.ResetStreams();
+                        ProgramConfig.ReportString("ResetStreams completed");
+                    }
                     Stopwatch watch = new();
                     watch.Start();
                     if (context.Database.EnsureCreated()) // call always for initialization
@@ -266,39 +271,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
 
                     int testDone = _tests[0].QueryTimes.Count;
 
-                    TimeSpan[] max = new TimeSpan[testDone];
-                    for (int i = 0; i < max.Length; i++) { max[i] = TimeSpan.Zero; }
-                    TimeSpan[] min = new TimeSpan[testDone];
-                    for (int i = 0; i < min.Length; i++) { min[i] = TimeSpan.MaxValue; }
-                    TimeSpan[] total = new TimeSpan[testDone];
-                    for (int i = 0; i < total.Length; i++) { total[i] = TimeSpan.Zero; }
-                    TimeSpan[] median = new TimeSpan[testDone];
-                    for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++)
-                    {
-                        var item = _tests[i].QueryTimes;
-
-                        for (int testId = 0; testId < testDone; testId++)
-                        {
-                            max[testId] = item[testId] > max[testId] ? item[testId] : max[testId];
-                            min[testId] = item[testId] < min[testId] ? item[testId] : min[testId];
-                            total[testId] += item[testId];
-                        }
-                    }
-
-                    // Median is statistically distinct from the mean above: it's robust to occasional outliers
-                    // (e.g. a cold first iteration, a GC pause) that can otherwise skew the mean. Computed
-                    // separately, per testId, from the same per-execution samples already collected.
-                    for (int testId = 0; testId < testDone; testId++)
-                    {
-                        var values = new TimeSpan[ProgramConfig.Config.NumberOfExecutions];
-                        for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++) { values[i] = _tests[i].QueryTimes[testId]; }
-                        Array.Sort(values);
-                        int mid = values.Length / 2;
-                        median[testId] = values.Length % 2 == 0
-                            ? TimeSpan.FromTicks((values[mid - 1].Ticks + values[mid].Ticks) / 2)
-                            : values[mid];
-                    }
-
                     if (testDone != TestNames.Length)
                     {
                         ProgramConfig.ReportString(
@@ -307,13 +279,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Benchmark
                             noDataReturned: true);
                     }
 
+                    // Extract the per-testId column of samples across all executions and report Max/Min/Mean/
+                    // Median via the shared ProgramConfig.ReportTimingStats (also used by KEFCore.Complex.Test),
+                    // so both projects compute and format these statistics in exactly one place.
                     for (int testId = 0; testId < testDone; testId++)
                     {
                         var testLabel = testId < TestNames.Length ? TestNames[testId] : $"Test {testId} (unnamed)";
-                        ProgramConfig.ReportResult(
-                            testLabel,
-                            median[testId],
-                            details: $"Max {max[testId]} Min {min[testId]} Mean {total[testId] / ProgramConfig.Config.NumberOfExecutions} Median {median[testId]}");
+                        var values = new TimeSpan[ProgramConfig.Config.NumberOfExecutions];
+                        for (int i = 0; i < ProgramConfig.Config.NumberOfExecutions; i++) { values[i] = _tests[i].QueryTimes[testId]; }
+                        ProgramConfig.ReportTimingStats(testLabel, values);
                     }
                 }
                 catch { ProgramConfig.ReportString($"Failed to report test execution"); }
