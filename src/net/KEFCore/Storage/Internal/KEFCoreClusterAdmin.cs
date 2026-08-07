@@ -185,7 +185,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             }
             catch (UnknownTopicOrPartitionException ex)
             {
-                infrastructureLogger?.Logger.LogDebug(ex.Message);
+                infrastructureLogger?.CheckAndLogDebug(CallerInfo.CallSite(), ex.Message);
             }
         }
 
