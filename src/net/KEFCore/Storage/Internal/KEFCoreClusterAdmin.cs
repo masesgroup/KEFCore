@@ -39,6 +39,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         readonly string _clusterId;
         private readonly Admin _kafkaAdminClient = null;
+        volatile int _disposed; // 0 = live, 1 = disposed
 
         public static KEFCoreClusterAdmin Create(IKEFCoreSingletonOptions configuration)
         {
@@ -75,9 +76,27 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             _clusterId = _kafkaAdminClient.GetClusterId();
         }
 
+        /// <inheritdoc cref="IDisposable.Dispose"/>
         public void Dispose()
         {
-            _kafkaAdminClient?.Dispose();
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+        /// <summary>
+        /// Implements the pattern described in https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose
+        /// </summary>
+        /// <param name="disposing">The disposing parameter is a <see langword="bool"/> that indicates whether the method call comes from a <see cref="IDisposable.Dispose"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>)</param>
+        void Dispose(bool disposing)
+        {
+            if (Interlocked.Exchange(ref _disposed, 1) != 0)
+                return;
+
+            if (disposing)
+            {
+                _kafkaAdminClient?.Dispose();
+            }
         }
 
         public string ClusterId => _clusterId;
