@@ -92,6 +92,12 @@ public interface IKEFCoreCluster : IDisposable
     /// </summary>
     string CreateTopicForEntity(IKEFCoreDatabase database, IEntityType entityType);
     /// <summary>
+    /// Returns the earliest offset for each partition associated to <paramref name="entityType"/>
+    /// </summary>
+    /// <param name="entityType">The <see cref="IEntityType"/> to check</param>
+    /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the values</returns>
+    IDictionary<int, long> EarliestOffsetForEntity(IEntityType entityType);
+    /// <summary>
     /// Returns the latest offset for each partition associated to <paramref name="entityType"/>
     /// </summary>
     /// <param name="entityType">The <see cref="IEntityType"/> to check</param>

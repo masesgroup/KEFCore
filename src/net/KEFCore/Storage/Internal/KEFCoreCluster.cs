@@ -337,14 +337,35 @@ public class KEFCoreCluster : IKEFCoreCluster
     }
 
     /// <inheritdoc/>
+    IDictionary<int, long> EarliestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
+    {
+        Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking EarliestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
+        try
+        {
+            return _kefcoreAdminClient.EarliestPartitionOffsetForTopic(entityType.GetKEFCoreTopicName());
+        }
+        catch (UnknownTopicOrPartitionException ex)
+        {
+            if (cycle >= maxCycles) throw new System.TimeoutException($"Timeout occurred executing EarliestOffsetForEntity on {entityType.Name} after {cycle * waitTime}");
+            Logger.CheckAndLogInformation(CallerInfo.CallSite(), "Invoke again EarliestOffsetForEntity for {Entity} at attempt {Cycle} since server reported {Error}. This can be a normal condition on clean start-up.", entityType.Name, cycle, ex.Message);
+            Thread.Sleep(waitTime); // wait a while before the server completes topic creation and try again
+            return EarliestOffsetForEntity(entityType, waitTime, maxCycles, cycle++);
+        }
+    }
+
+    /// <inheritdoc/>
+    public IDictionary<int, long> EarliestOffsetForEntity(IEntityType entityType)
+    {
+        return EarliestOffsetForEntity(entityType, 100, 10, 0);
+    }
+
+    /// <inheritdoc/>
     IDictionary<int, long> LatestOffsetForEntity(IEntityType entityType, int waitTime, int maxCycles, int cycle)
     {
         Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Invoking LatestOffsetForEntity {Entity} attempt {Cycle}", entityType.Name, cycle);
-        System.Collections.Generic.Dictionary<int, long> dictionary = new();
-
         try
         {
-            return _kefcoreAdminClient.LastPartitionOffsetForTopic(entityType.GetKEFCoreTopicName());
+            return _kefcoreAdminClient.LatestPartitionOffsetForTopic(entityType.GetKEFCoreTopicName());
         }
         catch (UnknownTopicOrPartitionException ex)
         {

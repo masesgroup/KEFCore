@@ -26,11 +26,9 @@ using MASES.EntityFrameworkCore.KNet.Extensions;
 using MASES.EntityFrameworkCore.KNet.Infrastructure.Internal;
 using MASES.EntityFrameworkCore.KNet.Serialization;
 using MASES.KNet.Streams;
-using Org.Apache.Kafka.Clients.Producer;
 using Org.Apache.Kafka.Streams;
 using Org.Apache.Kafka.Streams.State;
 using System.Collections.Concurrent;
-using static Org.Apache.Kafka.Clients.Admin.StreamsGroupMemberDescription;
 
 namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 {
@@ -147,12 +145,11 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
         #region StreamsAssociatedData
 
         readonly struct StreamsAssociatedData(StreamsManager<TStream, TStreamBuilder, TTopology, TStoreSupplier, TTimestampExtractor, TConsumed, TMaterialized, TGlobalKTable, TKTable> streamsManager,
-                                              string topicName, string storageId, object optional, IStreamsChangeManager changeManager,
+                                              IEntityType entityType, string storageId, object optional, IStreamsChangeManager changeManager,
                                               TStoreSupplier storeSupplier, TTimestampExtractor extractor, TConsumed consumed,
-                                              TMaterialized materialized, TGlobalKTable globalTable, TKTable table,
-                                              IDictionary<int, long> creationKnownOffset) : IDisposable
+                                              TMaterialized materialized, TGlobalKTable globalTable, TKTable table) : IDisposable
         {
-            public readonly string TopicName = topicName;
+            public readonly string TopicName = entityType.GetKEFCoreTopicName();
             public readonly string StorageId = storageId;
             public readonly object Optional = optional;
             public readonly IStreamsChangeManager ChangeManager = changeManager;
@@ -164,45 +161,58 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             readonly TMaterialized Materialized = materialized;
             readonly TGlobalKTable GlobalTable = globalTable;
             readonly TKTable Table = table;
-            readonly IDictionary<int, long> CurrentRemoteKnownOffset = creationKnownOffset; // expected to be invariant
+            readonly IDictionary<int, long> CurrentRemoteEarliestKnownOffset = streamsManager._kefcoreCluster.EarliestOffsetForEntity(entityType); // expected to be invariant
+            readonly IDictionary<int, long> CurrentRemoteLatestKnownOffset = streamsManager._kefcoreCluster.LatestOffsetForEntity(entityType); // expected to be invariant
             readonly ConcurrentDictionary<int, long> LatestLocalKnownOffset = new();
 
             public void UpdateCurrentRemoteKnownPartitionOffset(int partition, long offset)
             {
-                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
 
-                lock (CurrentRemoteKnownOffset)
+                lock (CurrentRemoteLatestKnownOffset)
                 {
-                    if (CurrentRemoteKnownOffset.ContainsKey(partition))
+                    if (CurrentRemoteLatestKnownOffset.ContainsKey(partition))
                     {
-                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
-                        CurrentRemoteKnownOffset[partition] = offset;
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                        CurrentRemoteLatestKnownOffset[partition] = offset;
                     }
                     else
                     {
-                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
-                        CurrentRemoteKnownOffset.Add(partition, offset);
+                        StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add Latest remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, partition, offset);
+                        CurrentRemoteLatestKnownOffset.Add(partition, offset);
                     }
                 }
             }
 
-            public void UpdateCurrentRemoteKnownPartitionOffset(IDictionary<int, long> keyValuePairs)
+            public void UpdateCurrentRemoteKnownPartitionOffset(IEntityType entityType)
+            {
+                IDictionary<int, long> keyValuePairs = StreamsManager._kefcoreCluster.EarliestOffsetForEntity(entityType);
+                UpdateCurrentRemoteKnownPartitionOffset("Earliest", CurrentRemoteEarliestKnownOffset, keyValuePairs);
+
+                keyValuePairs = StreamsManager._kefcoreCluster.LatestOffsetForEntity(entityType);
+                UpdateCurrentRemoteKnownPartitionOffset("Latest", CurrentRemoteLatestKnownOffset, keyValuePairs);
+            }
+
+            void UpdateCurrentRemoteKnownPartitionOffset(string type, IDictionary<int, long> reference, IDictionary<int, long> keyValuePairs)
             {
                 var lastKnownPartitions = keyValuePairs.Keys.ToList();
 
-                lock (CurrentRemoteKnownOffset)
+                lock (reference)
                 {
                     foreach (var kv in keyValuePairs)
                     {
-                        if (CurrentRemoteKnownOffset.ContainsKey(kv.Key))
+                        if (reference.ContainsKey(kv.Key))
                         {
-                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, kv.Key, kv.Value);
-                            CurrentRemoteKnownOffset[kv.Key] = kv.Value;
+                            if (reference[kv.Key] != kv.Value)
+                            {
+                                StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Update {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, kv.Key, kv.Value);
+                                reference[kv.Key] = kv.Value;
+                            }
                         }
                         else
                         {
-                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, kv.Key, kv.Value);
-                            CurrentRemoteKnownOffset.Add(kv);
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Add {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, kv.Key, kv.Value);
+                            reference.Add(kv);
                         }
                         lastKnownPartitions.Remove(kv.Key);
                     }
@@ -211,8 +221,8 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                     {
                         foreach (var item in lastKnownPartitions)
                         {
-                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Removing last remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", TopicName, item);
-                            CurrentRemoteKnownOffset.Remove(item);  // ...then remove them
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Removing {Type} remote received offset for Topic {TopicName} and Partition {Partition} is {Offset}", type, TopicName, item);
+                            reference.Remove(item);  // ...then remove them
                         }
                     }
                 }
@@ -228,17 +238,22 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Requested IsSynchronized for {TopicName}", TopicName);
                 bool[] bools;
-                lock (CurrentRemoteKnownOffset)
+                lock (CurrentRemoteLatestKnownOffset)
                 {
-                    bools = new bool[CurrentRemoteKnownOffset.Count];
+                    bools = new bool[CurrentRemoteLatestKnownOffset.Count];
                     int index = 0;
-                    foreach (var item in CurrentRemoteKnownOffset)
+                    foreach (var item in CurrentRemoteLatestKnownOffset)
                     {
                         StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Checking IsSynchronized for Partition {Partition} with current offset {Offset}", item.Key, item.Value);
                         if (item.Value < 0)
                         {
                             StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} is empty", TopicName);
                             bools[index] = true; // the topic is empty
+                        }
+                        else if (item.Value == CurrentRemoteEarliestKnownOffset[item.Key])
+                        {
+                            StreamsManager._kefcoreCluster.Logger.CheckAndLogDebug(CallerInfo.CallSite(), "Topic {TopicName} has Partition {Partition} with Earliest=Latest={Offset}", TopicName, item.Key, item.Value);
+                            bools[index] = true; // the topic has no data to receive
                         }
                         else if (LatestLocalKnownOffset.TryGetValue(item.Key, out var lastOffset))
                         {
@@ -485,9 +500,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 {
                     table = CreateTable(_builder!, tn, consumed, materialized);
                 }
-                var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entityType);
-                var storage = new StreamsAssociatedData(this, topicName, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table, currentKnownOffsets);
-
+                var storage = new StreamsAssociatedData(this, entityType, storageId, optional, changeManager, storeSupplier, timestampExtractor, consumed, materialized, globalTable, table);
                 _latestAdded.Add(tn);
                 if (_usePersistentStorage)
                 {
@@ -809,8 +822,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
             {
                 if (entity.GetTransactionGroup() == null)
                 {
-                    var currentKnownOffsets = _kefcoreCluster.LatestOffsetForEntity(entity);
-                    storage.UpdateCurrentRemoteKnownPartitionOffset(currentKnownOffsets);
+                    storage.UpdateCurrentRemoteKnownPartitionOffset(entity);
                 }
                 return EnsureSynchronized(storage, timeout, watch) // received data are aligned
                        && _freshDataFromCluster.IsEmpty; // and all data are processed
