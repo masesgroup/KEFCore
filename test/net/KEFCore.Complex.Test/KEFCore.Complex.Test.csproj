@@ -2,34 +2,33 @@
 	<Import Project="..\Common\Common.props" />
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Stream</AssemblyName>
-		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Stream</RootNamespace>
-		<Title>EntityFrameworkCore KNet Test Stream</Title>
-		<Description>EntityFrameworkCore KNet Test Stream</Description>
-		<Product>MASES.EntityFrameworkCore.KNet.Test.Stream</Product>
-		<OutputPath>..\..\bin\</OutputPath>
+		<AssemblyName>MASES.EntityFrameworkCore.KNet.Test.Complex</AssemblyName>
+		<RootNamespace>MASES.EntityFrameworkCore.KNet.Test.Complex</RootNamespace>
+		<Title>EntityFrameworkCore KNet Complex Test</Title>
+		<Description>EntityFrameworkCore KNet Test.Complex</Description>
+		<Product>MASES.EntityFrameworkCore.KNet.Test.Complex</Product>
 	</PropertyGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="StreamTest.KafkaStreams.json">
+	  <None Update="ComplexTest.Avro.KafkaStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="StreamTest.KafkaStreamsModelBuilder.json">
+	  <None Update="ComplexTest.Avro.KNetStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="StreamTest.KafkaStreamsNoLoad.json">
+	  <None Update="ComplexTest.KNetStreams.Raw.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="StreamTest.KafkaStreamsPersisted.json">
+	  <None Update="ComplexTest.Protobuf.KafkaStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicator.json">
+	  <None Update="ComplexTest.Protobuf.KNetStreams.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Test.KNetReplicatorNoLoad.json">
+	  <None Update="ComplexTest.KNetReplicator.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

@@ -38,12 +38,12 @@ jobs:
                 break
               fi
               if [[ $added_modified_file == "src/net/"* ]]; then
-                echo "$added_modified_file file is under the directory 'src/'."
+                echo "$added_modified_file file is under the directory 'src/net/'."
                 echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
               fi
-              if [[ $added_modified_file == "test/"* ]]; then
-                echo "$added_modified_file file is under the directory 'src/'."
+              if [[ $added_modified_file == "test/net/"* ]]; then
+                echo "$added_modified_file file is under the directory 'test/net/'."
                 echo "run_build_windows=true" >> $GITHUB_OUTPUT
                 break
               fi
@@ -77,7 +77,7 @@ jobs:
             10.x
 
       - name: Precompile tests
-        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\KEFCore.Test.sln
+        run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\net\KEFCore.Test.sln
 
       - name: Compile code
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" src\net\KEFCore.sln

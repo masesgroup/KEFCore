@@ -7,7 +7,6 @@
 		<Title>EntityFrameworkCore KNet MultiLevel Complex Test</Title>
 		<Description>EntityFrameworkCore KNet Test.MultiLevelComplex</Description>
 		<Product>MASES.EntityFrameworkCore.KNet.Test.MultiLevelComplex</Product>
-		<OutputPath>..\..\bin\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Common\KEFCore.Common.Test.csproj" />
