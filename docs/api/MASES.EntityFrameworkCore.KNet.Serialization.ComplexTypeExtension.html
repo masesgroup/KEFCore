@@ -198,6 +198,51 @@ Class ComplexTypeExtension  <a class="header-action link-secondary" title="View 
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_ComplexTypeExtension_FindRootProperty_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ComplexTypeExtension.FindRootProperty*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_ComplexTypeExtension_FindRootProperty_Microsoft_EntityFrameworkCore_Metadata_ITypeBase_Microsoft_EntityFrameworkCore_Metadata_IComplexType_System_Collections_Generic_IList_Microsoft_EntityFrameworkCore_Metadata_IComplexProperty__" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ComplexTypeExtension.FindRootProperty(Microsoft.EntityFrameworkCore.Metadata.ITypeBase,Microsoft.EntityFrameworkCore.Metadata.IComplexType,System.Collections.Generic.IList{Microsoft.EntityFrameworkCore.Metadata.IComplexProperty})">
+  FindRootProperty(ITypeBase, IComplexType, IList&lt;IComplexProperty&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/KEFCoreSerDes.Helpers.cs/#L350"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Walks up the complex-type ownership chain of <code class="paramref">complexType</code> until it finds the
+first-level <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a> declared directly on <code class="paramref">root</code>. Public (not
+internal) so it can be reused by other SerDes implementations (Avro, Protobuf, ...) living in separate
+assemblies, to determine from a flattened <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a> which root complex property it
+ultimately belongs to — see each <code>IValueContainer.GetData</code> implementation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IComplexProperty FindRootProperty(ITypeBase root, IComplexType complexType, IList&lt;IComplexProperty&gt; traversedProperties)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>root</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.itypebase">ITypeBase</a></dt>
+    <dd></dd>
+    <dt><code>complexType</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplextype">IComplexType</a></dt>
+    <dd></dd>
+    <dt><code>traversedProperties</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.icomplexproperty">IComplexProperty</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
