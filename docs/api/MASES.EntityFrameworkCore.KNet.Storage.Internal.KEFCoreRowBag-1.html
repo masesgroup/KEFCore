@@ -232,7 +232,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_AssociatedTopicName" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.AssociatedTopicName">
   AssociatedTopicName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The topic data will be stored</p>
@@ -296,7 +296,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_ComplexPropertyValues" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.ComplexPropertyValues">
   ComplexPropertyValues
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L57"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> containing all indexed values of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_ComplexProperties">ComplexProperties</a></p>
@@ -328,7 +328,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_EntityState" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.EntityState">
   EntityState
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L51"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.entitystate">EntityState</a> associated to the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_EntityType">EntityType</a></p>
@@ -420,6 +420,49 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_FullFlattenedProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.FullFlattenedProperties*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_FullFlattenedProperties" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.FullFlattenedProperties">
+  FullFlattenedProperties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The full, unfiltered flattened <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a> set of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_EntityType">EntityType</a> — i.e. what
+<code>EntityType.GetFlattenedProperties()</code> returns, independent of any projection narrowing applied to
+<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_FlattenedProperties">FlattenedProperties</a>. Exposed as the array itself (not just its length) so it can be reused
+for other purposes beyond sizing a buffer. Implementations should compute this once when the metadata
+instance is built (once per query for a projected/filtered metadata, once per entity type for the shared
+full metadata), not on every call: <code>IValueContainer.GetData</code> reads <code>FullFlattenedProperties.Length</code>
+once per deserialized record to size its output <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>, since flattened properties are
+addressed by <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ipropertybase.getindex">GetIndex()</a>, an index relative to the full flattened set regardless of
+any projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProperty[] FullFlattenedProperties { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_FullFlattenedProperties_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>On this write-path type, the <code>flattenedProperties</code> constructor argument is always the entity's full set (never a query projection), so it is reused directly.</p>
+</div>
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_Properties_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.Properties*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_Properties" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.Properties">
@@ -456,7 +499,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_PropertyValues" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.PropertyValues">
   PropertyValues
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> containing all indexed values of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_FlattenedProperties">FlattenedProperties</a></p>
@@ -495,7 +538,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_GetKey__1" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.GetKey``1">
   GetKey&lt;TKeyLocal&gt;()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The key associated to the current <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreRowBag.html">IKEFCoreRowBag</a></p>
@@ -532,7 +575,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreRowBag_1_GetValue__2_System_Func_MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerData_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory___1__MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreRowBag`1.GetValue``2(System.Func{MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerData,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory,``1},MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
   GetValue&lt;TKeyLocal, TValueContainer&gt;(Func&lt;IValueContainerData, IComplexTypeConverterFactory?, TValueContainer&gt;, IComplexTypeConverterFactory)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreRowBag.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The value associated to the current <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreRowBag.html">IKEFCoreRowBag</a></p>

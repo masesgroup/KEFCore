@@ -89,7 +89,7 @@
 
 
   <h1 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_ITransactionalEntityTypeProducer" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer" class="text-break">
-Interface ITransactionalEntityTypeProducer  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L141"><i class="bi bi-code-slash"></i></a>
+Interface ITransactionalEntityTypeProducer  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L197"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -153,6 +153,24 @@ declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCo
       <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_EnsureSynchronized_System_Int64_">IEntityTypeProducer.EnsureSynchronized(long)</a>
     </div>
     <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffers_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffers(IKEFCoreDatabase, IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffer_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Object___System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffer(IKEFCoreDatabase, object[], IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Object___System_Object___System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffersRange(IKEFCoreDatabase, object[], object[], IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersReverse_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffersReverse(IKEFCoreDatabase, IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersReverseRange_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Object___System_Object___System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffersReverseRange(IKEFCoreDatabase, object[], object[], IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IEntityTypeProducer.html#MASES_EntityFrameworkCore_KNet_Storage_Internal_IEntityTypeProducer_GetValueBuffersByPrefix_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreDatabase_System_Object___System_Collections_Generic_IReadOnlyList_Microsoft_EntityFrameworkCore_Metadata_IProperty__">IEntityTypeProducer.GetValueBuffersByPrefix(IKEFCoreDatabase, object[], IReadOnlyList&lt;IProperty&gt;)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable.dispose">IDisposable.Dispose()</a>
     </div>
   </dd></dl>
@@ -170,7 +188,7 @@ declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_ITransactionalEntityTypeProducer_TransactionGroup" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.TransactionGroup">
   TransactionGroup
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L146"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L202"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The transaction group this producer belongs to.</p>
@@ -206,7 +224,7 @@ declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_ITransactionalEntityTypeProducer_AbortPendingOffsets" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.AbortPendingOffsets">
   AbortPendingOffsets()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L157"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L213"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Discards accumulated pending offsets after a Kafka transaction abort.</p>
@@ -233,7 +251,7 @@ declared via <a class="xref" href="MASES.EntityFrameworkCore.KNet.Metadata.KEFCo
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_ITransactionalEntityTypeProducer_CommitPendingOffsets" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.ITransactionalEntityTypeProducer.CommitPendingOffsets">
   CommitPendingOffsets()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L208"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Forwards accumulated pending offsets to <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IStreamsManager.html">IStreamsManager</a>
@@ -261,7 +279,7 @@ after a Kafka transaction commit.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L141" class="edit-link">Edit this page</a>
+          <a href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/IEntityTypeProducer.cs/#L197" class="edit-link">Edit this page</a>
         </div>
 
 

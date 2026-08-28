@@ -240,7 +240,7 @@ Class ValueContainerData  <a class="header-action link-secondary" title="View so
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_ComplexPropertyValues" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.ComplexPropertyValues">
   ComplexPropertyValues
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/ValueContainerData.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/ValueContainerData.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> containing all indexed values of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_ComplexProperties">ComplexProperties</a></p>
@@ -364,6 +364,46 @@ Class ValueContainerData  <a class="header-action link-secondary" title="View so
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_FullFlattenedProperties_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.FullFlattenedProperties*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_FullFlattenedProperties" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.FullFlattenedProperties">
+  FullFlattenedProperties
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/ValueContainerData.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The full, unfiltered flattened <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a> set of <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_EntityType">EntityType</a> — i.e. what
+<code>EntityType.GetFlattenedProperties()</code> returns, independent of any projection narrowing applied to
+<a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_FlattenedProperties">FlattenedProperties</a>. Exposed as the array itself (not just its length) so it can be reused
+for other purposes beyond sizing a buffer. Implementations should compute this once when the metadata
+instance is built (once per query for a projected/filtered metadata, once per entity type for the shared
+full metadata), not on every call: <code>IValueContainer.GetData</code> reads <code>FullFlattenedProperties.Length</code>
+once per deserialized record to size its output <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a>, since flattened properties are
+addressed by <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.ipropertybase.getindex">GetIndex()</a>, an index relative to the full flattened set regardless of
+any projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IProperty[] FullFlattenedProperties { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.iproperty">IProperty</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_Metadata_" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.Metadata*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_Metadata" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.Metadata">
@@ -432,7 +472,7 @@ Class ValueContainerData  <a class="header-action link-secondary" title="View so
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Serialization_ValueContainerData_PropertyValues" data-uid="MASES.EntityFrameworkCore.KNet.Serialization.ValueContainerData.PropertyValues">
   PropertyValues
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/ValueContainerData.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore.SerDes/ValueContainerData.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.storage.valuebuffer">ValueBuffer</a> containing all indexed values of the <a class="xref" href="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainerMetadata.html#MASES_EntityFrameworkCore_KNet_Serialization_IValueContainerMetadata_FlattenedProperties">FlattenedProperties</a></p>
