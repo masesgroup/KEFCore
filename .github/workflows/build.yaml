@@ -203,7 +203,7 @@ jobs:
       UseLastRepositoryBuildKNet: ${{ inputs.UseLastRepositoryBuildKNet || false }}
       UseKNetCompactedReplicator: ${{ inputs.UseKNetCompactedReplicator || false }}
       ForceContinueOnError: ${{ inputs.ForceContinueOnError || false }}
-      UploadServerLogs: ${{ inputs.ForceContinueOnError || false }}
+      UploadServerLogs: ${{ inputs.UploadServerLogs || false }}
       EnableProcessDump: ${{ inputs.EnableProcessDump || '0' }}
       ProcessDumpType: ${{ inputs.ProcessDumpType || '3' }}
       EnableVerboseDiagnosticProcessDump: ${{ inputs.EnableVerboseDiagnosticProcessDump || '0' }}
