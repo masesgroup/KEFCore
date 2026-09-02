@@ -124,6 +124,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.CallerInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.CallerInfo.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.CallerInfo",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.CallerInfo.yml\" sourcestartlinenumber=\"1\">Helper class to identify caller members</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreComplexPropertyBuilderExtensions.yml",
       "output": {
         ".html": {
@@ -219,6 +233,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreEntityTypeRocksDbExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for KEFCore RocksDB lifecycle metadata associated to entity types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreLoggerExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreLoggerExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreLoggerExtensions",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Extensions.KEFCoreLoggerExtensions.yml\" sourcestartlinenumber=\"1\">KEFCore specific extension methods for <xref href=\"Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"Microsoft.Extensions.Logging.ILogger\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1282,7 +1310,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1296,7 +1324,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1310,7 +1338,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.Key.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1324,7 +1352,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Binary-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1338,7 +1366,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.Json-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1352,7 +1380,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.ValueContainer.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1366,7 +1394,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Avro base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.AvroKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Avro base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1437,6 +1465,20 @@
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer",
       "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer.yml\" sourcestartlinenumber=\"1\">Represents the storage container type to be used from KEFCore values</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainerCodec.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainerCodec.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainerCodec",
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainerCodec.yml\" sourcestartlinenumber=\"1\">Hand-written direct codec for <xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.AvroValueContainer\" data-throw-if-not-resolved=\"false\"></xref> and its nested\n<xref href=\"MASES.EntityFrameworkCore.KNet.Serialization.Avro.Storage.PropertyDataRecord\" data-throw-if-not-resolved=\"false\"></xref> entries. Bypasses ISpecificRecord.Get(int)/Put(int, object),\navoiding one boxing allocation per scalar field per property per entity.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1618,7 +1660,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1632,7 +1674,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1646,7 +1688,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Default base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Json.DefaultKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Default base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1758,7 +1800,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.Key-1.yml\" sourcestartlinenumber=\"1\">Base class to define key extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1772,7 +1814,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer<T>",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.ValueContainer-1.yml\" sourcestartlinenumber=\"1\">Base class to define ValueContainer extensions of <xref href=\"MASES.KNet.Serialization.ISerDesSelector%601\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1786,7 +1828,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes",
-      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Protobuf base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://masesgroup.github.io/KNet/articles/usageSerDes.html\">https://masesgroup.github.io/KNet/articles/usageSerDes.html</a></p>\n"
+      "Summary": "<p sourcefile=\"api/MASES.EntityFrameworkCore.KNet.Serialization.Protobuf.ProtobufKEFCoreSerDes.yml\" sourcestartlinenumber=\"1\">Protobuf base class to define extensions of <xref href=\"MASES.KNet.Serialization.SerDes%602\" data-throw-if-not-resolved=\"false\"></xref>, for example <a href=\"https://knet.masesgroup.com/articles/usageSerDes.html\">https://knet.masesgroup.com/articles/usageSerDes.html</a></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -2629,6 +2671,16 @@
       "output": {
         ".html": {
           "relative_path": "articles/backends.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/benchmarks.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/benchmarks.html"
         }
       },
       "version": ""

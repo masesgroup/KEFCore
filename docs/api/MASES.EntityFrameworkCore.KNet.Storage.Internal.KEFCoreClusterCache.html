@@ -177,8 +177,8 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.#ctor*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory,Microsoft.EntityFrameworkCore.Diagnostics.IDiagnosticsLogger{Microsoft.EntityFrameworkCore.DbLoggerCategory.Infrastructure},Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
-  KEFCoreClusterCache(IKEFCoreTableFactory, IDiagnosticsLogger&lt;Infrastructure&gt;, IValueGeneratorSelector, IComplexTypeConverterFactory)
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.#ctor(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory,Microsoft.EntityFrameworkCore.ValueGeneration.IValueGeneratorSelector,MASES.EntityFrameworkCore.KNet.Serialization.IComplexTypeConverterFactory)">
+  KEFCoreClusterCache(IKEFCoreTableFactory, IValueGeneratorSelector, IComplexTypeConverterFactory)
   <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L33"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -190,14 +190,12 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IDiagnosticsLogger&lt;DbLoggerCategory.Infrastructure&gt; infrastructureLogger, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory complexTypeConverterFactory)</code></pre>
+    <pre><code class="lang-csharp hljs">public KEFCoreClusterCache(IKEFCoreTableFactory tableFactory, IValueGeneratorSelector valueGeneratorSelector, IComplexTypeConverterFactory complexTypeConverterFactory)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>tableFactory</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreTableFactory.html">IKEFCoreTableFactory</a></dt>
-    <dd></dd>
-    <dt><code>infrastructureLogger</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.diagnostics.idiagnosticslogger-1">IDiagnosticsLogger</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory">DbLoggerCategory</a>.<a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbloggercategory.infrastructure">Infrastructure</a>&gt;</dt>
     <dd></dd>
     <dt><code>valueGeneratorSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.valuegeneration.ivaluegeneratorselector">IValueGeneratorSelector</a></dt>
     <dd></dd>
@@ -212,7 +210,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
-  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_Diagnostics_IDiagnosticsLogger_Microsoft_EntityFrameworkCore_DbLoggerCategory_Infrastructure__Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory__remarks">Remarks</h4>
+  <h4 class="section" id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache__ctor_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreTableFactory_Microsoft_EntityFrameworkCore_ValueGeneration_IValueGeneratorSelector_MASES_EntityFrameworkCore_KNet_Serialization_IComplexTypeConverterFactory__remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>Default initializer</p>
 </div>
 
@@ -225,9 +223,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_CreateCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.CreateCluster*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_CreateCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.CreateCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
-  CreateCluster(KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_CreateCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_Extensions_Logging_ILoggerFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.CreateCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension,Microsoft.Extensions.Logging.ILoggerFactory)">
+  CreateCluster(KEFCoreOptionsExtension, ILoggerFactory)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L54"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Create new or get a previously allocated <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance associated to the <code class="paramref">options</code></p>
@@ -235,12 +233,14 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster CreateCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
+    <dd></dd>
+    <dt><code>loggerFactory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.iloggerfactory">ILoggerFactory</a></dt>
     <dd></dd>
   </dl>
 
@@ -264,7 +264,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_Dispose_MASES_EntityFrameworkCore_KNet_Storage_Internal_IKEFCoreCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.Dispose(MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster)">
   Dispose(IKEFCoreCluster)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L62"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Dispose an <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> referenced from <code class="paramref">cluster</code></p>
@@ -294,9 +294,9 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_GetCluster_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.GetCluster*"></a>
 
-  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_GetCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.GetCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension)">
-  GetCluster(KEFCoreOptionsExtension)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreClusterCache_GetCluster_MASES_EntityFrameworkCore_KNet_Infrastructure_Internal_KEFCoreOptionsExtension_Microsoft_Extensions_Logging_ILoggerFactory_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreClusterCache.GetCluster(MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension,Microsoft.Extensions.Logging.ILoggerFactory)">
+  GetCluster(KEFCoreOptionsExtension, ILoggerFactory)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreClusterCache.cs/#L43"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets an <a class="xref" href="MASES.EntityFrameworkCore.KNet.Storage.Internal.IKEFCoreCluster.html">IKEFCoreCluster</a> instance associated to the <code class="paramref">options</code></p>
@@ -304,12 +304,14 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IKEFCoreCluster GetCluster(KEFCoreOptionsExtension options, ILoggerFactory loggerFactory)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>options</code> <a class="xref" href="MASES.EntityFrameworkCore.KNet.Infrastructure.Internal.KEFCoreOptionsExtension.html">KEFCoreOptionsExtension</a></dt>
+    <dd></dd>
+    <dt><code>loggerFactory</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.iloggerfactory">ILoggerFactory</a></dt>
     <dd></dd>
   </dl>
 

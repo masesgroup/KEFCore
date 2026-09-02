@@ -210,66 +210,12 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
 
         public IDictionary<int, long> LatestPartitionOffsetForTopic(string topicName, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
-            return _kafkaAdminClient.LastPartitionOffsetForTopic(topicName);
+            return _kafkaAdminClient.LatestPartitionOffsetForTopic(topicName);
         }
 
         public System.Collections.Generic.IDictionary<int, long> EarliestPartitionOffsetForTopic(string topicName, IDiagnosticsLogger<DbLoggerCategory.Infrastructure> infrastructureLogger = null)
         {
-            System.Collections.Generic.Dictionary<int, long> dictionary = new();
-            try
-            {
-                using Java.Lang.String jTopic = topicName;
-                using var coll = Collections.Singleton(jTopic);
-                using DescribeTopicsResult describeTopicsResult = _kafkaAdminClient.DescribeTopics(coll);
-                using var future = describeTopicsResult.AllTopicNames();
-                using var result = future.Get();
-                using var entrySet = result.EntrySet();
-                foreach (var item in entrySet)
-                {
-                    using (item)
-                    {
-                        using var key = item.Key;
-                        using var value = item.Value;
-                        if (key.Equals(jTopic))
-                        {
-                            using HashMap<TopicPartition, OffsetSpec> hashMap = new();
-                            using var partitions = value.Partitions();
-                            foreach (var partition in partitions)
-                            {
-                                using (partition)
-                                {
-                                    var partitionIndex = partition.Partition();
-                                    using TopicPartition topicPartition = new(topicName, partitionIndex);
-                                    using var offsetSpec = OffsetSpec.Earliest();
-                                    hashMap.Put(topicPartition, offsetSpec).DisposeIfDisposable();
-                                }
-                            }
-
-                            using var listOffsetResult = _kafkaAdminClient.ListOffsets(hashMap);
-                            using var offsetResultFuture = listOffsetResult.All();
-                            using var offsetResult = offsetResultFuture.Get();
-                            using var offsetResultEntrySet = offsetResult.EntrySet();
-                            foreach (var offsetResultItem in offsetResultEntrySet)
-                            {
-                                using var offsetResultItemKey = offsetResultItem.Key;
-                                using var offsetResultItemValue = offsetResultItem.Value;
-                                using var offsetResultItemTopic = offsetResultItemKey.Topic();
-                                if (offsetResultItemTopic.Equals(jTopic))
-                                {
-                                    dictionary.Add(offsetResultItemKey.Partition(), offsetResultItemValue.Offset());
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-                return dictionary;
-            }
-            catch (ExecutionException ex)
-            {
-                if (ex.InnerException != null) throw ex.InnerException;
-                else throw;
-            }
+            return _kafkaAdminClient.EarliestPartitionOffsetForTopic(topicName);
         }
     }
 }

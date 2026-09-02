@@ -168,7 +168,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_TransactionId" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.TransactionId">
   TransactionId
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L33"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the transaction identifier.</p>
@@ -207,7 +207,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_Commit" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.Commit">
   Commit()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Commits all changes made to the database in the current transaction.</p>
@@ -237,7 +237,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_CommitAsync_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.CommitAsync(System.Threading.CancellationToken)">
   CommitAsync(CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L60"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Commits all changes made to the database in the current transaction asynchronously.</p>
@@ -285,7 +285,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_Dispose" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.Dispose">
   Dispose()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L91"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
@@ -308,11 +308,44 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_Dispose_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.Dispose*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_Dispose_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.Dispose(System.Boolean)">
+  Dispose(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Implements the pattern described in <a href="https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose">https://learn.microsoft.com/en-en/dotnet/standard/garbage-collection/implementing-dispose</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Dispose(bool disposing)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>disposing</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>The disposing parameter is a <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">bool</a> that indicates whether the method call comes from a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable.dispose">Dispose()</a> method (its value is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>) or from a finalizer (its value is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>)</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_DisposeAsync_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.DisposeAsync*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_DisposeAsync" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.DisposeAsync">
   DisposeAsync()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L114"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.</p>
@@ -345,7 +378,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_Rollback" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.Rollback">
   Rollback()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L70"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Discards all changes made to the database in the current transaction.</p>
@@ -375,7 +408,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Storage_Internal_KEFCoreTransaction_RollbackAsync_System_Threading_CancellationToken_" data-uid="MASES.EntityFrameworkCore.KNet.Storage.Internal.KEFCoreTransaction.RollbackAsync(System.Threading.CancellationToken)">
   RollbackAsync(CancellationToken)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L79"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Storage/Internal/KEFCoreTransaction.cs/#L80"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Discards all changes made to the database in the current transaction asynchronously.</p>
