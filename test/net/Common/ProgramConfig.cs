@@ -282,10 +282,15 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         /// Reports a single measured/verified test outcome. Always logs via <see cref="ReportString"/> for console
         /// output (unchanged behavior). Additionally, when <see cref="ProgramConfig.ResultsOutputPath"/> is
         /// configured, appends one JSON Lines record to that file: <c>{ timestamp, project, framework, testId,
-        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout }</c>. <c>framework</c> (e.g.
-        /// "net9.0") and the TTL fields make it possible to group/compare records across CI matrix legs (different
-        /// .NET/EF Core versions, cached vs non-cached) without needing to parse that information back out of a
-        /// file name. Safe to call repeatedly within
+        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout, loadApplicationData }</c>.
+        /// <c>framework</c> (e.g. "net9.0") and the TTL fields make it possible to group/compare records across CI
+        /// matrix legs (different .NET/EF Core versions, cached vs non-cached) without needing to parse that
+        /// information back out of a file name. <c>loadApplicationData</c> mirrors <see cref="LoadApplicationData"/>
+        /// at the time of the call, so a "reload" CI leg (data already written by a previous process invocation,
+        /// <c>/p:LoadApplicationData=false</c>) can be told apart from the initial "load" leg that produced it -
+        /// without this, headline/aggregate reports silently merge measurements taken against a warm local store
+        /// (reload) with measurements taken right after the initial seed (load), which skews any cached-vs-non-cached
+        /// comparison toward "similar" numbers regardless of the actual cache setting. Safe to call repeatedly within
         /// a single process (e.g. inside <see cref="ProgramConfig.NumberOfExecutions"/> loops) and safe if
         /// multiple test processes happen to append to the same configured path (lock-guarded per-process;
         /// <see cref="File.AppendAllText(string, string)"/> append-mode writes are also safe across processes
@@ -317,6 +322,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 details,
                 forwardCacheTimeout = Config.ForwardCacheTimeout,
                 reverseCacheTimeout = Config.ReverseCacheTimeout,
+                loadApplicationData = Config.LoadApplicationData,
             };
             var line = JsonSerializer.Serialize(record) + Environment.NewLine;
 

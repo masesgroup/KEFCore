@@ -9,8 +9,14 @@ Aggregates and analyzes the JSON Lines files produced by `ProgramConfig.ReportRe
 JSON object per line, e.g.:
 
 ```json
-{"timestamp":"2026-07-25T10:00:00.0000000Z","project":"KEFCore.Benchmark.Test","testId":"Test 4","elapsedMs":12.34,"success":true,"details":"Max ... Min ... Mean ... Median ...","forwardCacheTimeout":-1,"reverseCacheTimeout":-1}
+{"timestamp":"2026-07-25T10:00:00.0000000Z","project":"KEFCore.Benchmark.Test","testId":"Test 4","elapsedMs":12.34,"success":true,"details":"Max ... Min ... Mean ... Median ...","forwardCacheTimeout":-1,"reverseCacheTimeout":-1,"loadApplicationData":true}
 ```
+
+`loadApplicationData` mirrors `ProgramConfig.LoadApplicationData` at the time of the call: `true` for a
+"load" leg (data seeded fresh this process invocation), `false` for a "reload" leg (data already written
+by a previous invocation and read back — see `KEFCore.Complex.Test`'s `/p:LoadApplicationData=false` CI
+step in `build_common.yaml`). Records from before this field existed default to `true` ("load"), matching
+the field's actual default in `ProgramConfig`.
 
 ## Usage
 
@@ -31,25 +37,32 @@ python analyze_results.py \
 
 ## What the report contains
 
-1. **Headline** — one at-a-glance median, per `(project, framework, cache bucket)`: the whole-iteration
-   wall-clock time (matched by pattern against `testId`, see `HEADLINE_PATTERN` — today that's
-   Benchmark.Test's `IterationTotal (sum of all queries above, ...)` entry). Meant to be the single
-   number you check first, before any detailed table.
+1. **Headline** — one at-a-glance median, per `(project, framework, cache bucket, scenario)`: the
+   whole-iteration wall-clock time (matched by pattern against `testId`, see `HEADLINE_PATTERN` —
+   today that's Benchmark.Test's `IterationTotal (sum of all queries above, ...)` entry, also
+   produced by Complex.Test). Meant to be the single number you check first, before any detailed
+   table. `scenario` (`load`/`reload`, from `loadApplicationData` above) is kept as its own column
+   rather than folded into `cache bucket`: Complex.Test reports this same headline measurement on
+   both its "load" CI leg and its "reload" leg (rerun with `/p:LoadApplicationData=false` against
+   data written by the load leg — see `build_common.yaml`), and a reload leg hits an already-warm
+   local store regardless of the cache TTL setting. Averaging the two together — which is what
+   happened before this field existed — silently flattens any real cached-vs-non-cached difference
+   the load leg would otherwise show.
 2. **Comparison vs baseline** *(only when `--baseline` is given)* — see below.
 3. **Failures** — every record with `success: false`, listed first and prominently, regardless
-   of which test or cache bucket it came from.
+   of which test, cache bucket, or scenario it came from.
 4. **Summary by test** — count / mean / median / min / max / stdev / success rate, grouped by
-   `(project, testId, cache bucket)`. The cache bucket is derived from `forwardCacheTimeout`
+   `(project, testId, cache bucket, scenario)`. The cache bucket is derived from `forwardCacheTimeout`
    using the same `> TimeSpan.Zero` semantics as `KEFCoreCachedValueBufferStore.IsEnabled` in
    the actual provider code — not a naive `!= 0` check (see the projection push-down design
    notes for why that distinction matters: the default TTL in test configs is `-1`, not `0`).
-5. **Cached vs non-cached delta** — for any `(project, testId)` pair that has records in both
-   cache buckets, the percentage difference in median elapsed time. A consistently positive
-   delta (cached slower than non-cached) for a projection-related test is the expected signature
-   of the per-entity cache gate correctly suppressing projection push-down when the cache is
-   enabled.
+5. **Cached vs non-cached delta** — for any `(project, testId, scenario)` combination that has
+   records in both cache buckets *for that same scenario*, the percentage difference in median
+   elapsed time. A consistently positive delta (cached slower than non-cached) for a
+   projection-related test is the expected signature of the per-entity cache gate correctly
+   suppressing projection push-down when the cache is enabled.
 6. **Cross-framework comparison** — side-by-side median elapsed time for the same
-   project/test/cache-bucket across every `net*.0` framework present in the input.
+   project/test/cache-bucket/scenario across every `net*.0` framework present in the input.
 
 ## Comparing against a previous run (regression check)
 

@@ -46,24 +46,31 @@ BOOTSTRAP_ANCHOR = "### Project disclaimer"
 
 
 def condensed_table_md(records: list[Record]) -> str:
-    """The same 'Headline' grouping as analyze_results.py, rendered as a compact standalone table."""
-    groups: dict[tuple[str, str, bool], list[Record]] = defaultdict(list)
+    """The same 'Headline' grouping as analyze_results.py, rendered as a compact standalone table.
+
+    Grouped by (project, framework, cache, scenario) rather than dropping scenario: a "reload" leg
+    (data read back from a previous process invocation, local store already warm - see
+    Record.scenario_label) measures something different from a "load" leg even for the same project/
+    framework/cache combination, and averaging the two together silently flattens any real
+    cached-vs-non-cached difference the "load" rows would otherwise show.
+    """
+    groups: dict[tuple[str, str, bool, str], list[Record]] = defaultdict(list)
     for r in records:
         if HEADLINE_PATTERN in r.testId.lower():
-            groups[(r.project, r.framework, r.cache_enabled)].append(r)
+            groups[(r.project, r.framework, r.cache_enabled, r.scenario_label)].append(r)
 
     lines = []
     if not groups:
         lines.append("_No headline-pattern test found in the input; performance summary unavailable._")
         return "\n".join(lines)
 
-    lines.append("| Project | Framework | Cache | Median iteration time (ms) |")
-    lines.append("|---|---|---|---|")
-    for (project, framework, cached), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
+    lines.append("| Project | Framework | Cache | Scenario | Median iteration time (ms) |")
+    lines.append("|---|---|---|---|---|")
+    for (project, framework, cached, scenario), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
         s = summarize(group_records)
         cache_label = "cached" if cached else "non-cached"
         short_project = project.rsplit(".", 1)[-1]  # e.g. "MASES...Test.Benchmark" -> "Benchmark"
-        lines.append(f"| {short_project} | {framework} | {cache_label} | {fmt_ms(s.median_ms)} |")
+        lines.append(f"| {short_project} | {framework} | {cache_label} | {scenario} | {fmt_ms(s.median_ms)} |")
     return "\n".join(lines)
 
 
