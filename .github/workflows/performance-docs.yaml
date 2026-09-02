@@ -111,9 +111,13 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "docs: update performance benchmarks"
-          branch: docs/update-performance-benchmarks
+          # Unique per run (rather than a fixed branch name) so this never collides with a still-open
+          # PR from a previous run - the fixed name forced every later run to either reuse/force-push
+          # that branch (silently replacing an unreviewed PR's diff) or fail outright if branch
+          # protection/permissions didn't allow the push.
+          branch: docs/update-performance-benchmarks-${{ github.run_id }}
           delete-branch: true
-          title: "docs: update performance benchmarks"
+          title: "docs: update performance benchmarks (run ${{ github.run_id }})"
           body: |
             Automated update of the performance documentation (README.md, documentation index,
             [benchmarks article](src/documentation/articles/benchmarks.md)) from the latest
