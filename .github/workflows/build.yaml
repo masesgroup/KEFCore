@@ -12,6 +12,16 @@ on:
       - 'docs/**'
   workflow_dispatch:
     inputs:
+      UseSpecialSettings:
+        description: 'Use special settings: not available in forks'
+        required: false
+        default: false
+        type: boolean
+      SpecialSettingsSource:
+        description: 'Name of special settings file: not available in forks'
+        required: false
+        default: 'source.zip'
+        type: string
       EnableDebugLogging:
         description: 'Enable debug logs in tests'
         required: false
@@ -39,11 +49,6 @@ on:
         type: boolean
       ExecuteOnMacOS:
         description: 'Executes tests on MacOS'
-        required: false
-        default: false
-        type: boolean
-      UseSpecialSettings:
-        description: 'Use special settings: not available in forks'
         required: false
         default: false
         type: boolean
@@ -185,12 +190,13 @@ jobs:
       actions: write # required by final_cleanup's `gh actions-cache delete` (and any gh run download/artifact calls) - without it, cache/artifact API calls fail with "Resource not accessible by integration"
     uses: ./.github/workflows/build_common.yaml
     with:
+      UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
+      SpecialSettingsSource: ${{ inputs.SpecialSettingsSource || 'source.zip' }}
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       ExecuteOnMoreOSes: ${{ inputs.ExecuteOnMoreOSes || github.event_name == 'schedule' }}
       ExecuteOnLargerJDKSet: ${{ inputs.ExecuteOnLargerJDKSet || github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableLinuxTests: true
-      UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
       EnableWindowsTests: ${{ inputs.ExecuteOnWindows || github.ref_name == 'master' || github.event_name == 'schedule' }}
       EnableMacOSTests: ${{ inputs.ExecuteOnMacOS || github.event_name == 'schedule' }}
       UseLastRepositoryBuildJNet: ${{ inputs.UseLastRepositoryBuildJNet || false }}
@@ -211,5 +217,6 @@ jobs:
       SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
       SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
       SFTP_HOST_KEY: ${{ secrets.SFTP_HOST_KEY }}
+      SFTP_KNOWN_HOST: ${{ secrets.SFTP_KNOWN_HOST }}
       FIRST_SPECIAL_SETTINGS_PASSWORD: ${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
       SPECIAL_SETTINGS_PASSWORD: ${{ secrets.SPECIAL_SETTINGS_PASSWORD }}

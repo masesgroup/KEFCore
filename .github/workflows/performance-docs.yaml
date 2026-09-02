@@ -24,6 +24,11 @@ on:
         required: false
         default: false
         type: boolean
+      SpecialSettingsSource:
+        description: 'Name of special settings file: not available in forks'
+        required: false
+        default: 'source.zip'
+        type: string
   schedule:
     - cron: "0 4 * * 3"
 
@@ -42,9 +47,10 @@ jobs:
       actions: write
     uses: ./.github/workflows/build_common.yaml
     with:
+      UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
+      SpecialSettingsSource: ${{ inputs.SpecialSettingsSource || 'source.zip' }}
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       EnableLinuxTests: true
-      UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
       # Everything else left at build_common.yaml's defaults (false): single OS/JDK-vendor/LTS-version,
       # no Windows/macOS - the lightweight matrix, sufficient for a performance-docs snapshot.
     secrets:
@@ -55,6 +61,7 @@ jobs:
       SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
       SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
       SFTP_HOST_KEY: ${{ secrets.SFTP_HOST_KEY }}
+      SFTP_KNOWN_HOST: ${{ secrets.SFTP_KNOWN_HOST }}
       FIRST_SPECIAL_SETTINGS_PASSWORD: ${{ secrets.FIRST_SPECIAL_SETTINGS_PASSWORD }}
       SPECIAL_SETTINGS_PASSWORD: ${{ secrets.SPECIAL_SETTINGS_PASSWORD }}
       
