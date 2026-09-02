@@ -37,12 +37,19 @@ python analyze_results.py \
 
 ## What the report contains
 
-1. **Headline** — one at-a-glance median, per `(project, framework, cache bucket, scenario)`: the
-   whole-iteration wall-clock time (matched by pattern against `testId`, see `HEADLINE_PATTERN` —
-   today that's Benchmark.Test's `IterationTotal (sum of all queries above, ...)` entry, also
-   produced by Complex.Test). Meant to be the single number you check first, before any detailed
-   table. `scenario` (`load`/`reload`, from `loadApplicationData` above) is kept as its own column
-   rather than folded into `cache bucket`: Complex.Test reports this same headline measurement on
+1. **Headline** — one at-a-glance median, per `(project, framework, test, cache bucket, scenario)`:
+   the headline-worthy synthetic/scalar measurements (matched by pattern against `testId`, see
+   `HEADLINE_PATTERNS` — today that's Benchmark.Test's and Complex.Test's `IterationTotal (sum of
+   all queries above, ...)` entry, plus Complex.Test's `ScalarOnlyProjection_BlogId10_Url` on its
+   own). Meant to be the single set of numbers you check first, before any detailed table. `test`
+   is its own column rather than merged away, because different headline tests for the same
+   project can have genuinely different cached-vs-non-cached behavior — `ScalarOnlyProjection` is
+   push-down eligible (a plain scalar property read), but `IterationTotal` sums in
+   `NestedComplexTypeProjection`, which never is (it reads into a complex-type property, so
+   `KEFCoreQueryExpression.GetProjectedProperties()` always falls back to "use the full entity");
+   summing them together would dilute whatever real cache signal `ScalarOnlyProjection` shows.
+   `scenario` (`load`/`reload`, from `loadApplicationData` above) is likewise kept as its own
+   column rather than folded into `cache bucket`: Complex.Test reports its headline measurements on
    both its "load" CI leg and its "reload" leg (rerun with `/p:LoadApplicationData=false` against
    data written by the load leg — see `build_common.yaml`), and a reload leg hits an already-warm
    local store regardless of the cache TTL setting. Averaging the two together — which is what
@@ -58,9 +65,13 @@ python analyze_results.py \
    notes for why that distinction matters: the default TTL in test configs is `-1`, not `0`).
 5. **Cached vs non-cached delta** — for any `(project, testId, scenario)` combination that has
    records in both cache buckets *for that same scenario*, the percentage difference in median
-   elapsed time. A consistently positive delta (cached slower than non-cached) for a
-   projection-related test is the expected signature of the per-entity cache gate correctly
-   suppressing projection push-down when the cache is enabled.
+   elapsed time. A consistently positive delta (cached slower than non-cached) is the expected
+   signature of the per-entity cache gate correctly suppressing projection push-down when the
+   cache is enabled — but only for a test that's actually push-down eligible in the first place
+   (see `HEADLINE_PATTERNS` above). A test bound to a complex-type property, like
+   `NestedComplexTypeProjection_BlogId10_TaxCode`, is never eligible, so its delta here should
+   hover near zero regardless of framework; a nonzero-looking value there is measurement noise,
+   not a caching effect.
 6. **Cross-framework comparison** — side-by-side median elapsed time for the same
    project/test/cache-bucket/scenario across every `net*.0` framework present in the input.
 
@@ -182,9 +193,9 @@ A separate script, built on top of `analyze_results.py` (imports `Record`, `load
 `summarize`, and `build_report` from it directly), that turns the same JSON Lines input into
 human-facing documentation instead of a standalone report:
 
-- A condensed "at a glance" table (median whole-iteration time per project/framework/cache bucket,
-  using the same `HEADLINE_PATTERN` matching as `analyze_results.py`'s Headline section), injected
-  into `README.md` and `src/documentation/index.md` between
+- A condensed "at a glance" table (median headline-test time per project/framework/test/cache
+  bucket/scenario, using the same `HEADLINE_PATTERNS` matching as `analyze_results.py`'s Headline
+  section), injected into `README.md` and `src/documentation/index.md` between
   `<!-- PERFORMANCE-SUMMARY:START -->`/`<!-- PERFORMANCE-SUMMARY:END -->` marker comments. The first
   run inserts the markers (right before `### Project disclaimer`, present in both files today);
   every later run replaces only what's between them, leaving the rest of each file untouched.

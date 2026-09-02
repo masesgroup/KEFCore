@@ -155,12 +155,35 @@ def verdict(delta_pct: float, delta_ms: float, threshold_pct: float, threshold_a
     return "no significant change"
 
 
-# Case-insensitive substring match against testId: identifies the "whole iteration" synthetic
-# measurement (see Benchmark.Test's TestNames — "IterationTotal (sum of all queries above, not
-# comparable to them individually)") as the single at-a-glance headline number for a run, distinct
-# from the per-query breakdown in "Summary by test". Matched by pattern, not an exact/hardcoded
-# name, so it keeps working if the exact wording changes.
-HEADLINE_PATTERN = "iterationtotal"
+# Case-insensitive substring match against testId: identifies the headline-worthy synthetic
+# measurements (see Benchmark.Test's TestNames "IterationTotal (sum of all queries above, not
+# comparable to them individually)", and Complex.Test's "ScalarOnlyProjection_BlogId10_Url") as
+# at-a-glance numbers for a run, distinct from the per-query breakdown in "Summary by test".
+# Matched by pattern, not an exact/hardcoded name, so it keeps working if the exact wording changes.
+#
+# ScalarOnlyProjection is included separately from IterationTotal (rather than only appearing
+# summed into IterationTotal) because it is the only one of Complex.Test's two projection queries
+# where a cached-vs-non-cached delta can mean anything: KEFCoreQueryExpression.GetProjectedProperties()
+# falls back to "no narrowing possible, use the full entity" whenever a projection element binds to a
+# complex-type property (see its docstring), which NestedComplexTypeProjection always does (it reads
+# b.PricingInfo.Tax.Code / TaxInfoExtended.CodeExtended). So push-down never engages for that query
+# regardless of the cache TTL, and any cached/non-cached difference on it is measurement noise, not
+# signal. Summing it into IterationTotal drowns out whatever real push-down signal ScalarOnlyProjection
+# (a plain scalar property read, narrowing-eligible) would otherwise show. IterationTotal is kept too,
+# since it's still the right number for "how long does a full pass over this project's queries take".
+HEADLINE_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("iterationtotal", "IterationTotal"),
+    ("scalaronlyprojection", "ScalarOnlyProjection"),
+)
+
+
+def headline_label(test_id: str) -> str | None:
+    """Returns the short display label for `test_id` if it's headline-worthy, else None."""
+    tl = test_id.lower()
+    for pattern, label in HEADLINE_PATTERNS:
+        if pattern in tl:
+            return label
+    return None
 
 
 def build_report(records: list[Record], title: str, baseline_records: list[Record] | None = None,
@@ -178,35 +201,39 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
         lines.append("_No records to report._")
         return "\n".join(lines)
 
-    # --- Headline: one at-a-glance number per (project, framework, cache-bucket, scenario) --
-    # The single most useful number to eyeball first, before any detailed table. Uses the
-    # "whole iteration" synthetic measurement (see HEADLINE_PATTERN) when present. Scenario
-    # ("load" vs "reload") is kept as its own key column rather than folded into cache, so a
-    # reload leg (already-warm local store) never gets silently averaged together with a load
-    # leg under the same cache setting - see Record.scenario_label.
-    headline_groups: dict[tuple[str, str, bool, str], list[Record]] = defaultdict(list)
+    # --- Headline: one at-a-glance number per (project, framework, test, cache-bucket, scenario)
+    # The single most useful numbers to eyeball first, before any detailed table. Uses the
+    # headline-worthy synthetic/scalar measurements (see HEADLINE_PATTERNS) when present. `Test`
+    # is its own key column (not merged away) because different headline tests can have genuinely
+    # different cached-vs-non-cached behavior for the same project - see HEADLINE_PATTERNS'
+    # docstring re: IterationTotal vs ScalarOnlyProjection on Complex.Test. Scenario ("load" vs
+    # "reload") is likewise its own key column rather than folded into cache, so a reload leg
+    # (already-warm local store) never gets silently averaged together with a load leg under the
+    # same cache setting - see Record.scenario_label.
+    headline_groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
     for r in records:
-        if HEADLINE_PATTERN in r.testId.lower():
-            headline_groups[(r.project, r.framework, r.cache_enabled, r.scenario_label)].append(r)
+        label = headline_label(r.testId)
+        if label is not None:
+            headline_groups[(r.project, r.framework, label, r.cache_enabled, r.scenario_label)].append(r)
 
     lines.append("## Headline")
     lines.append("")
     if not headline_groups:
-        lines.append(f"_No test's `testId` matches the headline pattern (`{HEADLINE_PATTERN}`), so no "
-                      "single at-a-glance number is available. See \"Summary by test\" below for the "
-                      "full per-query breakdown._")
+        lines.append("_No test's `testId` matches any headline pattern, so no at-a-glance number is "
+                      "available. See \"Summary by test\" below for the full per-query breakdown._")
     else:
-        lines.append("Median wall-clock time for one full iteration (all queries in that project's fixed "
-                      "sequence), the single most useful number to check first. `Scenario` is `load` (data "
-                      "seeded this run) or `reload` (data read back from a previous invocation, local store "
-                      "already warm) - see the module docstring.")
+        lines.append("Median wall-clock time for the headline-worthy queries, the numbers most useful "
+                      "to check first. `IterationTotal` is the sum of all queries in that project's fixed "
+                      "sequence; other rows are individual queries worth watching on their own — see the "
+                      "module docstring for why. `Scenario` is `load` (data seeded this run) or `reload` "
+                      "(data read back from a previous invocation, local store already warm).")
         lines.append("")
-        lines.append("| Project | Framework | Cache | Scenario | Median (ms) | N |")
-        lines.append("|---|---|---|---|---|---|")
-        for (project, framework, cached, scenario), group_records in sorted(headline_groups.items(), key=lambda kv: kv[0]):
+        lines.append("| Project | Framework | Test | Cache | Scenario | Median (ms) | N |")
+        lines.append("|---|---|---|---|---|---|---|")
+        for (project, framework, label, cached, scenario), group_records in sorted(headline_groups.items(), key=lambda kv: kv[0]):
             s = summarize(group_records)
             cache_label = "cached" if cached else "non-cached"
-            lines.append(f"| {project} | {framework} | {cache_label} | {scenario} | {fmt_ms(s.median_ms)} | {s.count} |")
+            lines.append(f"| {project} | {framework} | {label} | {cache_label} | {scenario} | {fmt_ms(s.median_ms)} | {s.count} |")
     lines.append("")
 
     # --- Comparison vs baseline, when --baseline was supplied -------------------------------
@@ -383,7 +410,12 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                   "of the comparison, which would otherwise flatten a real cached-vs-non-cached difference seen on "
                   "`load`. For a test whose non-cached path benefits from projection push-down, a consistently "
                   "positive delta here is expected — projection is intentionally skipped when the per-entity cache "
-                  "is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch cost in that case.")
+                  "is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch cost in that "
+                  "case. Not every test qualifies: `KEFCoreQueryExpression.GetProjectedProperties()` falls back to "
+                  "\"use the full entity, no narrowing\" whenever a projection element binds to a complex-type "
+                  "property, so a test like `NestedComplexTypeProjection_BlogId10_TaxCode` is never push-down "
+                  "eligible in the first place — its delta here should hover near zero regardless of framework, "
+                  "and a nonzero-looking value is measurement noise, not a caching effect.")
     lines.append("")
     test_keys = {(project, framework, test_id, scenario) for (project, framework, test_id, _cached, scenario) in groups}
     delta_rows = []
