@@ -39,10 +39,13 @@ MARKER_END = "<!-- PERFORMANCE-SUMMARY:END -->"
 
 # Anchor used only on the very first run, to decide where to insert the markers if they don't exist
 # yet in a target file. Chosen because it's present, verbatim, in both README.md and
-# src/documentation/index.md today. If it's ever renamed, later runs are unaffected (the markers,
-# once inserted once, are what every subsequent run looks for) — only a fresh bootstrap would need
-# updating.
-BOOTSTRAP_ANCHOR = "### Project disclaimer"
+# src/documentation/index.md today, right after the "## Summary" table of contents section - the
+# table is long (one row per project/framework/test/cache/scenario/backend combination) and pushing
+# it further down the page, past the introductory sections and table of contents, means a visitor who
+# opens the repo lands on the actual description first instead of scrolling past pages of numbers. If
+# it's ever renamed, later runs are unaffected (the markers, once inserted once, are what every
+# subsequent run looks for) — only a fresh bootstrap would need updating.
+BOOTSTRAP_ANCHOR = "## Runtime engine"
 
 
 def condensed_table_md(records: list[Record]) -> str:
@@ -90,7 +93,7 @@ def readme_block_md(records: list[Record]) -> str:
     """condensed_table_md wrapped with a heading and a link to the full article, for injection into
     README.md/index.md — context that's useful whether the numbers are real or (as in this repo's own
     example) synthetic."""
-    lines = ["### Performance", ""]
+    lines = ["## Performance", ""]
     lines.append(condensed_table_md(records))
     lines.append("")
     lines.append("Full breakdown: [performance benchmarks](src/documentation/articles/benchmarks.md).")
@@ -107,9 +110,12 @@ def inject_between_markers(path: Path, new_content: str, bootstrap_anchor: str) 
         end = original.index(MARKER_END) + len(MARKER_END)
         updated = original[:start] + block + original[end:]
     elif bootstrap_anchor in original:
-        # First run: insert the block right before the anchor, with a blank line on each side.
+        # First run: insert the block right before the anchor, with the same "---\n\n...\n\n---\n\n"
+        # separator convention already used between every other top-level section in these two files
+        # (whatever already precedes the anchor supplies the separator on this side; add one after,
+        # so the new section is symmetrically set off from the one that follows it).
         idx = original.index(bootstrap_anchor)
-        updated = original[:idx] + block + "\n\n" + original[idx:]
+        updated = original[:idx] + block + "\n\n---\n\n" + original[idx:]
     else:
         print(f"warning: neither markers nor bootstrap anchor found in {path}; leaving it untouched.", file=sys.stderr)
         return False
