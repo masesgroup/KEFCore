@@ -48,7 +48,8 @@ BOOTSTRAP_ANCHOR = "### Project disclaimer"
 def condensed_table_md(records: list[Record]) -> str:
     """The same 'Headline' grouping as analyze_results.py, rendered as a compact standalone table.
 
-    Grouped by (project, framework, test, cache, scenario) rather than dropping scenario or test:
+    Grouped by (project, framework, test, cache, scenario, backend) rather than dropping any of
+    these dimensions:
     - a "reload" leg (data read back from a previous process invocation, local store already warm
       - see Record.scenario_label) measures something different from a "load" leg even for the
       same project/framework/cache combination, and averaging the two together silently flattens
@@ -57,25 +58,31 @@ def condensed_table_md(records: list[Record]) -> str:
       cached-vs-non-cached behavior (e.g. Complex.Test's ScalarOnlyProjection is push-down eligible,
       IterationTotal sums in a query that never is - see headline_label's docstring), so summing
       them into one row would dilute whatever real signal the eligible one shows.
+    - Benchmark.Test's Linux CI leg reports up to 7 different Kafka Streams backend configs per
+      matrix cell (native Kafka Streams vs KNetStreams, Raw vs Buffered persistence, with/without
+      prefetch - see Record.backend_group_label and backendLabel in analyze_results.py's module
+      docstring), all appending to the same result file; without splitting on backend, those
+      genuinely different performance profiles collapse into one uninformative median (observed:
+      a non-cached IterationTotal spread of 123ms-197ms across backends in a single matrix cell).
     """
-    groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
+    groups: dict[tuple[str, str, str, bool, str, str], list[Record]] = defaultdict(list)
     for r in records:
         label = headline_label(r.testId)
         if label is not None:
-            groups[(r.project, r.framework, label, r.cache_enabled, r.scenario_label)].append(r)
+            groups[(r.project, r.framework, label, r.cache_enabled, r.scenario_label, r.backend_group_label)].append(r)
 
     lines = []
     if not groups:
         lines.append("_No headline-pattern test found in the input; performance summary unavailable._")
         return "\n".join(lines)
 
-    lines.append("| Project | Framework | Test | Cache | Scenario | Median iteration time (ms) |")
-    lines.append("|---|---|---|---|---|---|")
-    for (project, framework, label, cached, scenario), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
+    lines.append("| Project | Framework | Test | Cache | Scenario | Backend | Median iteration time (ms) |")
+    lines.append("|---|---|---|---|---|---|---|")
+    for (project, framework, label, cached, scenario, backend), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
         s = summarize(group_records)
         cache_label = "cached" if cached else "non-cached"
         short_project = project.rsplit(".", 1)[-1]  # e.g. "MASES...Test.Benchmark" -> "Benchmark"
-        lines.append(f"| {short_project} | {framework} | {label} | {cache_label} | {scenario} | {fmt_ms(s.median_ms)} |")
+        lines.append(f"| {short_project} | {framework} | {label} | {cache_label} | {scenario} | {backend} | {fmt_ms(s.median_ms)} |")
     return "\n".join(lines)
 
 

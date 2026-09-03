@@ -15,7 +15,8 @@ Each input line is expected to be a JSON object with the shape:
     "details": "Max ... Min ... Mean ... Median ...",
     "forwardCacheTimeout": -1,
     "reverseCacheTimeout": -1,
-    "loadApplicationData": true
+    "loadApplicationData": true,
+    "backendLabel": "KafkaStreams.Raw"
   }
 
 "framework" (e.g. "net8.0"/"net9.0"/"net10.0", which corresponds directly to the EF Core major
@@ -29,6 +30,18 @@ the default) from a "reload" leg (data already written by a previous process inv
 same (project, framework, cache) combination, but a reload leg hits an already-warm local store, so mixing
 the two together in the same group understates any real cached-vs-non-cached difference. Records from
 before this field existed default to True (load), matching the field's actual default in ProgramConfig.
+
+"backendLabel" identifies which Kafka Streams backend/topology config produced this record - the file name
+(without extension) of the /f: config file the process was launched with, e.g. "KafkaStreams.Raw",
+"KNetStreams.Buffered.Prefetch", "KNetReplicator". KEFCore.Benchmark.Test's Linux CI leg (build_common.yaml)
+runs the same binary up to 7 times per matrix cell, once per backend config, all appending to the same
+--input file - without this field there is nothing in the record itself distinguishing native Kafka Streams
+from KNetStreams, Raw from Buffered persistence, or prefetch on/off, so every report that groups by
+(project, framework, testId, cache, scenario) alone silently averages backends with genuinely different
+performance profiles into one number (observed spread: a non-cached IterationTotal median ranging
+123ms-197ms across the 6 backends in a single matrix cell). Records from before this field existed, or from
+projects/legs that only ever run one backend (KEFCore.Complex.Test's CI legs, non-Linux runners), have
+backendLabel None and are grouped under the "(single backend)" label - see backend_group_label below.
 
 Usage:
     python analyze_results.py --input run1.jsonl run2.jsonl --output report.md
@@ -64,6 +77,7 @@ class Record:
     forwardCacheTimeout: float
     reverseCacheTimeout: float
     loadApplicationData: bool
+    backendLabel: str | None
     source_file: str
 
     @property
@@ -78,6 +92,14 @@ class Record:
         # "load": data seeded fresh this process invocation. "reload": data read back from a previous
         # invocation (process restarted, local store already warm) - see loadApplicationData above.
         return "load" if self.loadApplicationData else "reload"
+
+    @property
+    def backend_group_label(self) -> str:
+        # "(single backend)" for records with no backendLabel (older records, or a leg that only ever
+        # runs one backend, e.g. KEFCore.Complex.Test) so they still form one clean group instead of a
+        # confusing "None" - real multi-backend legs (KEFCore.Benchmark.Test on Linux) get their actual
+        # backendLabel instead, so distinct backends never collapse into that shared "no label" bucket.
+        return self.backendLabel if self.backendLabel else "(single backend)"
 
 
 def load_records(paths: list[Path]) -> list[Record]:
@@ -105,6 +127,7 @@ def load_records(paths: list[Path]) -> list[Record]:
                         forwardCacheTimeout=float(obj.get("forwardCacheTimeout", -1)),
                         reverseCacheTimeout=float(obj.get("reverseCacheTimeout", -1)),
                         loadApplicationData=bool(obj.get("loadApplicationData", True)),
+                        backendLabel=obj.get("backendLabel"),
                         source_file=str(path),
                     ))
                 except (KeyError, TypeError, ValueError) as e:
@@ -201,7 +224,7 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
         lines.append("_No records to report._")
         return "\n".join(lines)
 
-    # --- Headline: one at-a-glance number per (project, framework, test, cache-bucket, scenario)
+    # --- Headline: one at-a-glance number per (project, framework, test, cache-bucket, scenario, backend)
     # The single most useful numbers to eyeball first, before any detailed table. Uses the
     # headline-worthy synthetic/scalar measurements (see HEADLINE_PATTERNS) when present. `Test`
     # is its own key column (not merged away) because different headline tests can have genuinely
@@ -209,12 +232,17 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
     # docstring re: IterationTotal vs ScalarOnlyProjection on Complex.Test. Scenario ("load" vs
     # "reload") is likewise its own key column rather than folded into cache, so a reload leg
     # (already-warm local store) never gets silently averaged together with a load leg under the
-    # same cache setting - see Record.scenario_label.
-    headline_groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
+    # same cache setting - see Record.scenario_label. `Backend` (Record.backend_group_label) is
+    # kept separate too: KEFCore.Benchmark.Test's Linux CI leg reports up to 7 different Kafka
+    # Streams backend configs per matrix cell (native Kafka Streams vs KNetStreams, Raw vs Buffered,
+    # with/without prefetch), and those have genuinely different performance profiles - averaging
+    # them away is what made a non-cached IterationTotal spread of 123ms-197ms collapse into one
+    # uninformative median. See backendLabel in the module docstring.
+    headline_groups: dict[tuple[str, str, str, bool, str, str], list[Record]] = defaultdict(list)
     for r in records:
         label = headline_label(r.testId)
         if label is not None:
-            headline_groups[(r.project, r.framework, label, r.cache_enabled, r.scenario_label)].append(r)
+            headline_groups[(r.project, r.framework, label, r.cache_enabled, r.scenario_label, r.backend_group_label)].append(r)
 
     lines.append("## Headline")
     lines.append("")
@@ -226,21 +254,25 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                       "to check first. `IterationTotal` is the sum of all queries in that project's fixed "
                       "sequence; other rows are individual queries worth watching on their own — see the "
                       "module docstring for why. `Scenario` is `load` (data seeded this run) or `reload` "
-                      "(data read back from a previous invocation, local store already warm).")
+                      "(data read back from a previous invocation, local store already warm). `Backend` is "
+                      "the Kafka Streams config the run used (e.g. `KafkaStreams.Raw`, "
+                      "`KNetStreams.Buffered.Prefetch`), or `(single backend)` for a project/leg that only "
+                      "ever exercises one.")
         lines.append("")
-        lines.append("| Project | Framework | Test | Cache | Scenario | Median (ms) | N |")
-        lines.append("|---|---|---|---|---|---|---|")
-        for (project, framework, label, cached, scenario), group_records in sorted(headline_groups.items(), key=lambda kv: kv[0]):
+        lines.append("| Project | Framework | Test | Cache | Scenario | Backend | Median (ms) | N |")
+        lines.append("|---|---|---|---|---|---|---|---|")
+        for (project, framework, label, cached, scenario, backend), group_records in sorted(headline_groups.items(), key=lambda kv: kv[0]):
             s = summarize(group_records)
             cache_label = "cached" if cached else "non-cached"
-            lines.append(f"| {project} | {framework} | {label} | {cache_label} | {scenario} | {fmt_ms(s.median_ms)} | {s.count} |")
+            lines.append(f"| {project} | {framework} | {label} | {cache_label} | {scenario} | {backend} | {fmt_ms(s.median_ms)} | {s.count} |")
     lines.append("")
 
     # --- Comparison vs baseline, when --baseline was supplied -------------------------------
     if baseline_records is not None:
         lines.append("## Comparison vs baseline")
         lines.append("")
-        lines.append(f"Delta % and verdict, per `(project, framework, testId, cache, scenario)` present in both runs. "
+        lines.append(f"Delta % and verdict, per `(project, framework, testId, cache, scenario, backend)` present "
+                      f"in both runs. "
                       f"Positive delta = current run slower (regression); negative = faster (improvement). "
                       f"A verdict only fires when **both** thresholds are exceeded: **±{regression_threshold_pct:.0f}%** "
                       f"**and** **±{regression_threshold_abs_ms:.2f} ms** absolute — this avoids flagging noise on "
@@ -248,16 +280,16 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                       f"absolute difference (e.g. GC pauses, JIT warmup, OS scheduling jitter).")
         lines.append("")
 
-        current_groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
+        current_groups: dict[tuple[str, str, str, bool, str, str], list[Record]] = defaultdict(list)
         for r in records:
-            current_groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label)].append(r)
-        baseline_groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
+            current_groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label, r.backend_group_label)].append(r)
+        baseline_groups: dict[tuple[str, str, str, bool, str, str], list[Record]] = defaultdict(list)
         for r in baseline_records:
-            baseline_groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label)].append(r)
+            baseline_groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label, r.backend_group_label)].append(r)
 
         raw_rows = []
         for key in sorted(set(current_groups) & set(baseline_groups)):
-            project, framework, test_id, cached, scenario = key
+            project, framework, test_id, cached, scenario, backend = key
             cur_stats = summarize(current_groups[key])
             base_stats = summarize(baseline_groups[key])
             if base_stats.median_ms == 0:
@@ -266,8 +298,8 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             delta_pct = delta_ms / base_stats.median_ms * 100
             is_control = control_test_patterns is not None and any(p in test_id.lower() for p in control_test_patterns)
             raw_rows.append({"project": project, "framework": framework, "test_id": test_id, "cached": cached,
-                              "scenario": scenario, "base_ms": base_stats.median_ms, "cur_ms": cur_stats.median_ms,
-                              "delta_pct": delta_pct, "is_control": is_control})
+                              "scenario": scenario, "backend": backend, "base_ms": base_stats.median_ms,
+                              "cur_ms": cur_stats.median_ms, "delta_pct": delta_pct, "is_control": is_control})
 
         # --- Environment drift: measured from --control-tests (operations known to be unaffected by
         # the change under test, e.g. write-path operations when the change is read-path only). If the
@@ -302,8 +334,8 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             adj_verdict = (verdict(adj_delta_pct, adj_delta_ms, regression_threshold_pct, regression_threshold_abs_ms)
                            if adj_delta_pct is not None else None)
             comparison_rows.append((r["project"], r["framework"], r["test_id"], r["cached"], r["scenario"],
-                                     r["base_ms"], r["cur_ms"], r["delta_pct"], raw_verdict, adj_delta_pct,
-                                     adj_verdict, r["is_control"]))
+                                     r["backend"], r["base_ms"], r["cur_ms"], r["delta_pct"], raw_verdict,
+                                     adj_delta_pct, adj_verdict, r["is_control"]))
 
         only_in_current = sorted(set(current_groups) - set(baseline_groups))
         only_in_baseline = sorted(set(baseline_groups) - set(current_groups))
@@ -316,8 +348,8 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             # verdict otherwise. Control tests themselves are excluded from the scored count: by
             # construction their adjusted delta is ~0 (they define the drift), so counting them as
             # "compared tests" would just be counting the calibration data as if it were signal too.
-            scored = [r for r in comparison_rows if not r[11]]
-            verdict_index = 10 if drift_pct is not None else 8
+            scored = [r for r in comparison_rows if not r[12]]
+            verdict_index = 11 if drift_pct is not None else 9
             regressions = [r for r in scored if r[verdict_index] == "REGRESSION"]
             improvements = [r for r in scored if r[verdict_index] == "IMPROVEMENT"]
             adjusted_note = " (env-adjusted)" if drift_pct is not None else ""
@@ -332,20 +364,20 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
             order = {"REGRESSION": 0, "IMPROVEMENT": 1, "no significant change": 2}
             comparison_rows.sort(key=lambda r: (order[r[verdict_index]], r[0], r[1], r[2], r[3]))
             if drift_pct is None:
-                lines.append("| Project | Framework | Test | Cache | Scenario | Baseline median (ms) | Current median (ms) | Delta % | Verdict |")
-                lines.append("|---|---|---|---|---|---|---|---|---|")
-                for project, framework, test_id, cached, scenario, base_ms, cur_ms, delta_pct, raw_verdict, _, _, _ in comparison_rows:
+                lines.append("| Project | Framework | Test | Cache | Scenario | Backend | Baseline median (ms) | Current median (ms) | Delta % | Verdict |")
+                lines.append("|---|---|---|---|---|---|---|---|---|---|")
+                for project, framework, test_id, cached, scenario, backend, base_ms, cur_ms, delta_pct, raw_verdict, _, _, _ in comparison_rows:
                     cache_label = "cached" if cached else "non-cached"
-                    lines.append(f"| {project} | {framework} | {test_id} | {cache_label} | {scenario} | {fmt_ms(base_ms)} | "
+                    lines.append(f"| {project} | {framework} | {test_id} | {cache_label} | {scenario} | {backend} | {fmt_ms(base_ms)} | "
                                   f"{fmt_ms(cur_ms)} | {delta_pct:+.1f}% | {raw_verdict} |")
             else:
-                lines.append("| Project | Framework | Test | Cache | Scenario | Baseline (ms) | Current (ms) | Delta % (raw) | "
+                lines.append("| Project | Framework | Test | Cache | Scenario | Backend | Baseline (ms) | Current (ms) | Delta % (raw) | "
                               "Delta % (env-adjusted) | Verdict (env-adjusted) |")
-                lines.append("|---|---|---|---|---|---|---|---|---|---|")
-                for project, framework, test_id, cached, scenario, base_ms, cur_ms, delta_pct, raw_verdict, adj_pct, adj_v, is_control in comparison_rows:
+                lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
+                for project, framework, test_id, cached, scenario, backend, base_ms, cur_ms, delta_pct, raw_verdict, adj_pct, adj_v, is_control in comparison_rows:
                     cache_label = "cached" if cached else "non-cached"
                     control_tag = " _(control)_" if is_control else ""
-                    lines.append(f"| {project} | {framework} | {test_id}{control_tag} | {cache_label} | {scenario} | {fmt_ms(base_ms)} | "
+                    lines.append(f"| {project} | {framework} | {test_id}{control_tag} | {cache_label} | {scenario} | {backend} | {fmt_ms(base_ms)} | "
                                   f"{fmt_ms(cur_ms)} | {delta_pct:+.1f}% | {adj_pct:+.1f}% | {adj_v} |")
         if only_in_current or only_in_baseline:
             lines.append("")
@@ -366,18 +398,18 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
     else:
         lines.append(f"**{len(failures)}** failing record(s):")
         lines.append("")
-        lines.append("| Project | Framework | Test | Cache | Scenario | Elapsed (ms) | Details | Source |")
-        lines.append("|---|---|---|---|---|---|---|---|")
+        lines.append("| Project | Framework | Test | Cache | Scenario | Backend | Elapsed (ms) | Details | Source |")
+        lines.append("|---|---|---|---|---|---|---|---|---|")
         for r in failures:
             cache = "cached" if r.cache_enabled else "non-cached"
             details = (r.details or "").replace("|", "\\|")
-            lines.append(f"| {r.project} | {r.framework} | {r.testId} | {cache} | {r.scenario_label} | {fmt_ms(r.elapsedMs)} | {details} | {r.source_file} |")
+            lines.append(f"| {r.project} | {r.framework} | {r.testId} | {cache} | {r.scenario_label} | {r.backend_group_label} | {fmt_ms(r.elapsedMs)} | {details} | {r.source_file} |")
     lines.append("")
 
-    # --- Per (project, framework, testId, cache-bucket, scenario) summary -------------------
-    groups: dict[tuple[str, str, str, bool, str], list[Record]] = defaultdict(list)
+    # --- Per (project, framework, testId, cache-bucket, scenario, backend) summary ----------
+    groups: dict[tuple[str, str, str, bool, str, str], list[Record]] = defaultdict(list)
     for r in records:
-        groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label)].append(r)
+        groups[(r.project, r.framework, r.testId, r.cache_enabled, r.scenario_label, r.backend_group_label)].append(r)
 
     lines.append("## Summary by test")
     lines.append("")
@@ -386,16 +418,20 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                   "`cached` means TTL > 0 (see `KEFCoreCachedValueBufferStore.IsEnabled`), `non-cached` covers "
                   "zero/negative TTL (the default in test configs, e.g. -1 seconds). `Scenario` is `load` (data "
                   "seeded this run) or `reload` (data read back from a previous invocation, local store already "
-                  "warm) - kept separate from Cache so the two axes are never silently averaged together.")
+                  "warm) - kept separate from Cache so the two axes are never silently averaged together. "
+                  "`Backend` is the Kafka Streams config the run used (from `backendLabel` - e.g. "
+                  "`KafkaStreams.Raw`, `KNetStreams.Buffered.Prefetch`), or `(single backend)` when the "
+                  "project/leg only ever exercises one - see the module docstring for why this matters "
+                  "(KEFCore.Benchmark.Test's Linux CI leg runs up to 7 different backends per matrix cell).")
     lines.append("")
-    lines.append("| Project | Framework | Test | Cache | Scenario | N | Mean (ms) | Median (ms) | Min (ms) | Max (ms) | Stdev (ms) | Success rate |")
-    lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
-    for (project, framework, test_id, cached, scenario), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
+    lines.append("| Project | Framework | Test | Cache | Scenario | Backend | N | Mean (ms) | Median (ms) | Min (ms) | Max (ms) | Stdev (ms) | Success rate |")
+    lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    for (project, framework, test_id, cached, scenario, backend), group_records in sorted(groups.items(), key=lambda kv: kv[0]):
         s = summarize(group_records)
         stdev = fmt_ms(s.stdev_ms) if s.stdev_ms is not None else "n/a"
         cache_label = "cached" if cached else "non-cached"
         lines.append(
-            f"| {project} | {framework} | {test_id} | {cache_label} | {scenario} | {s.count} | {fmt_ms(s.mean_ms)} | {fmt_ms(s.median_ms)} | "
+            f"| {project} | {framework} | {test_id} | {cache_label} | {scenario} | {backend} | {s.count} | {fmt_ms(s.mean_ms)} | {fmt_ms(s.median_ms)} | "
             f"{fmt_ms(s.min_ms)} | {fmt_ms(s.max_ms)} | {stdev} | {s.success_rate:.0%} |"
         )
     lines.append("")
@@ -404,11 +440,16 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
     lines.append("## Cached vs non-cached delta")
     lines.append("")
     lines.append("Positive `delta %` means the cached run was slower than the non-cached run for that same test "
-                  "(higher median), computed separately per framework **and per scenario** so neither a difference "
-                  "in EF Core version behavior nor a `load` vs `reload` leg (see \"Summary by test\" above) is "
-                  "hidden by averaging across them - a `reload` leg hits an already-warm local store on both sides "
-                  "of the comparison, which would otherwise flatten a real cached-vs-non-cached difference seen on "
-                  "`load`. For a test whose non-cached path benefits from projection push-down, a consistently "
+                  "(higher median), computed separately per framework, **per scenario**, and **per backend** so "
+                  "none of a difference in EF Core version behavior, a `load` vs `reload` leg (see \"Summary by "
+                  "test\" above), or a difference between Kafka Streams backend configs is hidden by averaging "
+                  "across them - a `reload` leg hits an already-warm local store on both sides of the comparison, "
+                  "which would otherwise flatten a real cached-vs-non-cached difference seen on `load`; likewise, "
+                  "KEFCore.Benchmark.Test's Linux CI leg reports up to 7 backends per matrix cell (native Kafka "
+                  "Streams vs KNetStreams, Raw vs Buffered persistence, with/without prefetch — see `backendLabel` "
+                  "in the module docstring), and those have different enough performance profiles on their own "
+                  "that averaging them together can swamp a real caching effect. For a test whose non-cached path "
+                  "benefits from projection push-down, a consistently "
                   "positive delta here is expected — projection is intentionally skipped when the per-entity cache "
                   "is enabled (TTL > 0), so timings should tend back towards the full-entity-fetch cost in that "
                   "case. Not every test qualifies: `KEFCoreQueryExpression.GetProjectedProperties()` falls back to "
@@ -417,11 +458,12 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
                   "eligible in the first place — its delta here should hover near zero regardless of framework, "
                   "and a nonzero-looking value is measurement noise, not a caching effect.")
     lines.append("")
-    test_keys = {(project, framework, test_id, scenario) for (project, framework, test_id, _cached, scenario) in groups}
+    test_keys = {(project, framework, test_id, scenario, backend)
+                 for (project, framework, test_id, _cached, scenario, backend) in groups}
     delta_rows = []
-    for project, framework, test_id, scenario in sorted(test_keys):
-        cached_group = groups.get((project, framework, test_id, True, scenario))
-        noncached_group = groups.get((project, framework, test_id, False, scenario))
+    for project, framework, test_id, scenario, backend in sorted(test_keys):
+        cached_group = groups.get((project, framework, test_id, True, scenario, backend))
+        noncached_group = groups.get((project, framework, test_id, False, scenario, backend))
         if not cached_group or not noncached_group:
             continue
         cached_stats = summarize(cached_group)
@@ -429,48 +471,49 @@ def build_report(records: list[Record], title: str, baseline_records: list[Recor
         if noncached_stats.median_ms == 0:
             continue
         delta_pct = (cached_stats.median_ms - noncached_stats.median_ms) / noncached_stats.median_ms * 100
-        delta_rows.append((project, framework, test_id, scenario, noncached_stats.median_ms, cached_stats.median_ms, delta_pct))
+        delta_rows.append((project, framework, test_id, scenario, backend, noncached_stats.median_ms,
+                            cached_stats.median_ms, delta_pct))
 
     if not delta_rows:
-        lines.append("_No test has records in both cache buckets for the same scenario, so no delta can be "
-                      "computed. Run the same scenario once with `/p:ForwardCacheTimeout=-1` and once with a "
-                      "positive value (e.g. `/p:ForwardCacheTimeout=60`), keeping `/p:LoadApplicationData` "
-                      "consistent between the two, and pass both result files to this script to populate this "
-                      "section._")
+        lines.append("_No test has records in both cache buckets for the same scenario and backend, so no delta "
+                      "can be computed. Run the same scenario/backend once with `/p:ForwardCacheTimeout=-1` and "
+                      "once with a positive value (e.g. `/p:ForwardCacheTimeout=60`), keeping "
+                      "`/p:LoadApplicationData` and the `/f:` config file consistent between the two, and pass "
+                      "both result files to this script to populate this section._")
     else:
-        lines.append("| Project | Framework | Test | Scenario | Non-cached median (ms) | Cached median (ms) | Delta % |")
-        lines.append("|---|---|---|---|---|---|---|")
-        for project, framework, test_id, scenario, noncached_median, cached_median, delta_pct in delta_rows:
+        lines.append("| Project | Framework | Test | Scenario | Backend | Non-cached median (ms) | Cached median (ms) | Delta % |")
+        lines.append("|---|---|---|---|---|---|---|---|")
+        for project, framework, test_id, scenario, backend, noncached_median, cached_median, delta_pct in delta_rows:
             lines.append(
-                f"| {project} | {framework} | {test_id} | {scenario} | {fmt_ms(noncached_median)} | {fmt_ms(cached_median)} | {delta_pct:+.1f}% |"
+                f"| {project} | {framework} | {test_id} | {scenario} | {backend} | {fmt_ms(noncached_median)} | {fmt_ms(cached_median)} | {delta_pct:+.1f}% |"
             )
     lines.append("")
 
-    # --- Cross-framework comparison, for (project, testId, cache-bucket, scenario) present in 2+ frameworks
+    # --- Cross-framework comparison, for (project, testId, cache-bucket, scenario, backend) present in 2+ frameworks
     lines.append("## Cross-framework comparison")
     lines.append("")
-    lines.append("For the same project/test/cache-bucket/scenario, how the median elapsed time compares across "
-                  "the .NET/EF Core versions the CI matrix runs against. Only shown for combinations with data "
-                  "from more than one framework.")
+    lines.append("For the same project/test/cache-bucket/scenario/backend, how the median elapsed time compares "
+                  "across the .NET/EF Core versions the CI matrix runs against. Only shown for combinations with "
+                  "data from more than one framework.")
     lines.append("")
-    by_test_cache: dict[tuple[str, str, bool, str], dict[str, GroupStats]] = defaultdict(dict)
-    for (project, framework, test_id, cached, scenario), group_records in groups.items():
-        by_test_cache[(project, test_id, cached, scenario)][framework] = summarize(group_records)
+    by_test_cache: dict[tuple[str, str, bool, str, str], dict[str, GroupStats]] = defaultdict(dict)
+    for (project, framework, test_id, cached, scenario, backend), group_records in groups.items():
+        by_test_cache[(project, test_id, cached, scenario, backend)][framework] = summarize(group_records)
 
-    frameworks_present = sorted({fw for (_p, fw, _t, _c, _s) in groups})
+    frameworks_present = sorted({fw for (_p, fw, _t, _c, _s, _b) in groups})
     multi_framework_rows = {k: v for k, v in by_test_cache.items() if len(v) > 1}
     if not multi_framework_rows or len(frameworks_present) < 2:
         lines.append("_No test has records from more than one framework, so no cross-framework comparison can be "
                       "made. Pass result files from multiple `net*.0` runs together to populate this section._")
     else:
-        header = "| Project | Test | Cache | Scenario | " + " | ".join(f"{fw} median (ms)" for fw in frameworks_present) + " |"
-        sep = "|---|---|---|---|" + "---|" * len(frameworks_present)
+        header = "| Project | Test | Cache | Scenario | Backend | " + " | ".join(f"{fw} median (ms)" for fw in frameworks_present) + " |"
+        sep = "|---|---|---|---|---|" + "---|" * len(frameworks_present)
         lines.append(header)
         lines.append(sep)
-        for (project, test_id, cached, scenario), per_fw in sorted(multi_framework_rows.items(), key=lambda kv: kv[0]):
+        for (project, test_id, cached, scenario, backend), per_fw in sorted(multi_framework_rows.items(), key=lambda kv: kv[0]):
             cache_label = "cached" if cached else "non-cached"
             cells = [fmt_ms(per_fw[fw].median_ms) if fw in per_fw else "n/a" for fw in frameworks_present]
-            lines.append(f"| {project} | {test_id} | {cache_label} | {scenario} | " + " | ".join(cells) + " |")
+            lines.append(f"| {project} | {test_id} | {cache_label} | {scenario} | {backend} | " + " | ".join(cells) + " |")
     lines.append("")
 
     return "\n".join(lines)
