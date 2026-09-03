@@ -215,7 +215,9 @@ human-facing documentation instead of a standalone report:
   bucket/scenario/backend, using the same `HEADLINE_PATTERNS` matching as `analyze_results.py`'s
   Headline section), injected into `README.md` and `src/documentation/index.md` between
   `<!-- PERFORMANCE-SUMMARY:START -->`/`<!-- PERFORMANCE-SUMMARY:END -->` marker comments. The first
-  run inserts the markers (right before `### Project disclaimer`, present in both files today);
+  run inserts the markers (right before `## Runtime engine`, present in both files today — chosen so
+  the table sits after the introductory sections and table of contents, rather than being the first
+  thing a visitor scrolls into);
   every later run replaces only what's between them, leaving the rest of each file untouched.
 - A full, dedicated `src/documentation/articles/benchmarks.md` page: the same condensed table plus
   the complete per-test breakdown (reusing `analyze_results.build_report`'s detailed sections, so
