@@ -141,6 +141,24 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         /// </summary>
         public string ResultsOutputPath { get; set; } = null;
 
+        /// <summary>
+        /// The backend/topology label this run is exercising - the file name (without extension) of the
+        /// <c>/f:</c> config file passed on the command line, e.g. <c>"KafkaStreams.Raw"</c>,
+        /// <c>"KNetStreams.Buffered.Prefetch"</c>, <c>"KNetReplicator"</c>. Populated by <see cref="LoadConfig"/>,
+        /// <see langword="null"/> if no config file was given (e.g. defaults-only invocation).
+        /// <para>
+        /// Exists because CI's Linux leg (see <c>build_common.yaml</c>) invokes <c>Benchmark.Test.dll</c> up to
+        /// 7 times per matrix cell - once per backend config file - all appending to the <em>same</em>
+        /// <see cref="ResultsOutputPath"/> file via the same <c>/p:ResultsOutputPath=...</c> value. Without a
+        /// field identifying which invocation produced which record, those genuinely different backends (native
+        /// Kafka Streams vs KNetStreams, Raw vs Buffered persistence, with/without prefetch) get silently
+        /// averaged together by any report that groups on <c>(project, framework, testId, cache, scenario)</c>
+        /// alone - e.g. a non-cached <c>IterationTotal</c> spread of 123ms-197ms across backends collapsing into
+        /// one uninformative median. This field lets reports add "backend" as its own group-by key instead.
+        /// </para>
+        /// </summary>
+        public string BackendLabel { get; private set; } = null;
+
         public void ApplyOnContext(KEFCoreDbContext context)
         {
             var databaseName = UseModelBuilder ? TopicPrefixWithModel : TopicPrefix;
@@ -227,7 +245,10 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 Config = JsonSerializer.Deserialize<ProgramConfig>(File.ReadAllText(file));
             }
             else Config = new();
-
+            // Deliberately set after deserialization (not sourced from the config file's own JSON content):
+            // this is the file's identity, not a tunable setting, and must survive regardless of what the
+            // config file itself contains.
+            Config.BackendLabel = file == null ? null : Path.GetFileNameWithoutExtension(file);
 #if DEBUG
             Config.EnableIntermediateOutput = true;
 #endif
@@ -282,10 +303,19 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
         /// Reports a single measured/verified test outcome. Always logs via <see cref="ReportString"/> for console
         /// output (unchanged behavior). Additionally, when <see cref="ProgramConfig.ResultsOutputPath"/> is
         /// configured, appends one JSON Lines record to that file: <c>{ timestamp, project, framework, testId,
-        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout }</c>. <c>framework</c> (e.g.
-        /// "net9.0") and the TTL fields make it possible to group/compare records across CI matrix legs (different
-        /// .NET/EF Core versions, cached vs non-cached) without needing to parse that information back out of a
-        /// file name. Safe to call repeatedly within
+        /// elapsedMs, success, details, forwardCacheTimeout, reverseCacheTimeout, loadApplicationData, backendLabel }</c>.
+        /// <c>framework</c> (e.g. "net9.0") and the TTL fields make it possible to group/compare records across CI
+        /// matrix legs (different .NET/EF Core versions, cached vs non-cached) without needing to parse that
+        /// information back out of a file name. <c>loadApplicationData</c> mirrors <see cref="LoadApplicationData"/>
+        /// at the time of the call, so a "reload" CI leg (data already written by a previous process invocation,
+        /// <c>/p:LoadApplicationData=false</c>) can be told apart from the initial "load" leg that produced it -
+        /// without this, headline/aggregate reports silently merge measurements taken against a warm local store
+        /// (reload) with measurements taken right after the initial seed (load), which skews any cached-vs-non-cached
+        /// comparison toward "similar" numbers regardless of the actual cache setting. <c>backendLabel</c> mirrors
+        /// <see cref="BackendLabel"/> - see its docstring for why CI's Linux Benchmark.Test leg needs this to keep
+        /// its up-to-7 backend configs (native Kafka Streams vs KNetStreams, Raw vs Buffered, with/without
+        /// prefetch) from being silently averaged into one meaningless median per matrix cell. Safe to call
+        /// repeatedly within
         /// a single process (e.g. inside <see cref="ProgramConfig.NumberOfExecutions"/> loops) and safe if
         /// multiple test processes happen to append to the same configured path (lock-guarded per-process;
         /// <see cref="File.AppendAllText(string, string)"/> append-mode writes are also safe across processes
@@ -317,6 +347,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 details,
                 forwardCacheTimeout = Config.ForwardCacheTimeout,
                 reverseCacheTimeout = Config.ReverseCacheTimeout,
+                loadApplicationData = Config.LoadApplicationData,
+                backendLabel = Config.BackendLabel,
             };
             var line = JsonSerializer.Serialize(record) + Environment.NewLine;
 
