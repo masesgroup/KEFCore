@@ -6,6 +6,7 @@ _description: Describes how to start to use Entity Framework Core provider for A
 # KEFCore: Getting started
 
 To use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/) you must have at least:
+
 - an installed JRE/JDK (17+)
 - an accessible Apache Kafka™ broker (a full cluster or a local Dockerized version)
 
@@ -22,19 +23,19 @@ See [Supported Backends](backends.md) for the full compatibility matrix covering
 
 - Create a new simple empty project:
 
-```pwsh
+```bash
 dotnet new console
 ```
 
 - Entity Framework Core provider for Apache Kafka™ is available on [NuGet](https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet). Execute the following command to add the package to the newly created project:
 
-```pwsh
+```bash
 dotnet add package MASES.EntityFrameworkCore.KNet
 ```
 
 - Edit Program.cs and replace the content with the following code:
 
-```c#
+```csharp
 using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,7 +51,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             {
                 BootstrapServers = "MY-KAFKA-BROKER:9092",
                 ApplicationId = "MyAppId",   // mandatory — must be unique per process on the cluster
-                DbName = "MyDBName",
             };
             // add standard EFCore queries
         }
@@ -60,6 +60,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     // [Table] stabilizes the Kafka topic name across namespace refactorings.
     // Without it the topic name includes the full CLR namespace.
+    // An optional topic prefix can be layered on top via [KEFCoreTopicPrefixAttribute]
+    // or modelBuilder.UseKEFCoreTopicPrefix() — see KEFCore usage for an example.
     [Table("Blog", Schema = "Blogging")]
     public class Blog
     {
@@ -82,17 +84,17 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 }
 ```
 
-The previous code follows the example of https://learn.microsoft.com/ef/core/. See [KEFCore usage](usage.md) and [KEFCoreDbContext](kefcoredbcontext.md) to find more information.
+The previous code follows the example of <https://learn.microsoft.com/ef/core/>. See [KEFCore usage](usage.md) and [KEFCoreDbContext](kefcoredbcontext.md) to find more information.
 
 > [!NOTE]
 > The example above connects to the broker without authentication or encryption. For production environments, KEFCore supports TLS and SASL via `WithSecurityProtocol()`, `WithSslConfig()`, and `WithSaslConfig()`. See [options — secure broker connections](options.md#secure-broker-connections) for details.
 
 > [!IMPORTANT]
-> Always apply `[Table]` or `[KEFCoreTopicAttribute]` to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See [conventions](conventions.md#topic-naming-convention) for details.
+> Always apply `[Table]` or `[KEFCoreTopicAttribute]` to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See [conventions](conventions.md#topic-naming-convention) for details. `BootstrapServers` and `ApplicationId` are the only two mandatory `KEFCoreDbContext` properties — there is no `DbName`/`DatabaseName` property; an optional topic *prefix* is configured separately via `[KEFCoreTopicPrefixAttribute]` or `UseKEFCoreTopicPrefix()`, not through a context property.
 
 - Build the project
 
-```pwsh
+```bash
 dotnet build
 ```
 
@@ -100,7 +102,7 @@ dotnet build
 
 KEFCore shall initialize the environment before any operation can be done. The initialization is done executing the following command at first stages of your application:
 
-```c#
+```csharp
 KEFCore.CreateGlobalInstance();
 ```
 
@@ -112,24 +114,24 @@ KEFCore accepts many command-line switches to customize its behavior, the full l
 One of the most important command-line switch is **JVMPath** and it is available in [JCOBridge switches](https://www.jcobridge.com/net-examples/command-line-options/): it can be used to set-up the location of the JVM™ library if JCOBridge is not able to identify a suitable JRE/JDK installation.
 If a developer is using KEFCore within its own product it is possible to override the **JVMPath** property with a snippet like the following one:
 
-```c#
-    class MyKEFCore : KEFCore
+```csharp
+class MyKEFCore : KEFCore
+{
+    public override string JVMPath
     {
-        public override string JVMPath
+        get
         {
-            get
-            {
-                string pathToJVM = "Set here the path to JVM library or use your own search method";
-                return pathToJVM;
-            }
+            string pathToJVM = "Set here the path to JVM library or use your own search method";
+            return pathToJVM;
         }
     }
+}
 ```
 
 **IMPORTANT NOTE**: `pathToJVM` shall be escaped
+
 1. `string pathToJVM = "C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.18.10-hotspot\\bin\\server\\jvm.dll";`
 2. `string pathToJVM = @"C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\bin\server\jvm.dll";`
-
 
 ### Special initialization conditions
 
@@ -137,12 +139,14 @@ If a developer is using KEFCore within its own product it is possible to overrid
 However it is possible, on Windows operating systems, that the library raises an **InvalidOperationException: Missing Java Key in registry: Couldn't find Java installed on the machine**.
 This means that neither `JAVA_HOME` nor Windows registry contains information about a default installed JRE/JDK: some vendors may not setup them.
 If the developer/user encounter this condition can do the following steps:
+
 1. On a command prompt execute `set | findstr JAVA_HOME` and verify the result;
 2. If something was reported maybe the `JAVA_HOME` environment variable is not set at system level, but at a different level like user level which is not visible from the KEFCore process that raised the exception;
 3. Try to set `JAVA_HOME` at system level e.g. `JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\`;
 4. Try to set `JCOBRIDGE_JVMPath` at system level e.g. `JCOBRIDGE_JVMPath=C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\`.
 
 **IMPORTANT NOTES**:
+
 - One of `JCOBRIDGE_JVMPath` or `JAVA_HOME` environment variables or Windows registry (on Windows OSes) shall be available
 - `JCOBRIDGE_JVMPath` environment variable takes precedence over `JAVA_HOME` and Windows registry: you can set `JCOBRIDGE_JVMPath` to `C:\Program Files\Eclipse Adoptium\jdk-11.0.18.10-hotspot\bin\server\jvm.dll` and avoid to override `JVMPath` in your code
 - After first initialization steps, `JVMPath` takes precedence over `JCOBRIDGE_JVMPath`/`JAVA_HOME` environment variables or Windows registry
