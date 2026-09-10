@@ -116,7 +116,6 @@ using var context = new BloggingContext()
 {
     BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
     ApplicationId = &quot;MyAppId&quot;,  // mandatory — must be unique per process on the cluster
-    DbName = &quot;TestDB&quot;,
 };
 
 // Ensure topics exist (standard EF Core)
@@ -145,6 +144,8 @@ public class BloggingContext : KEFCoreDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Optional: layer a topic prefix on top of [Table] resolution.
+        // Without this call, topics would simply be named &quot;Blog&quot; / &quot;Post&quot;.
         modelBuilder.UseKEFCoreTopicPrefix(&quot;TestDB&quot;);
         base.OnModelCreating(modelBuilder);
     }
@@ -194,6 +195,7 @@ public class Post
 <li><code>TestDB.Blog</code> (prefix <code>TestDB</code> + <code>[Table(&quot;Blog&quot;)]</code>)</li>
 <li><code>TestDB.Post</code> (prefix <code>TestDB</code> + <code>[Table(&quot;Post&quot;)]</code>)</li>
 </ul>
+<p>The <code>TestDB</code> prefix comes entirely from <code>modelBuilder.UseKEFCoreTopicPrefix(&quot;TestDB&quot;)</code> above — it is not a <code>DbName</code>/<code>DatabaseName</code> property on the context. If no prefix is configured, the topics are simply <code>Blog</code> and <code>Post</code>.</p>
 <p>Without <code>[Table]</code>, the topic name includes the full .NET namespace — a namespace refactoring would break alignment with existing data. See <a href="conventions.html#topic-naming-convention">conventions</a> for the full resolution priority.</p>
 <h2 id="event-management">Event management</h2>
 <p>By default, KEFCore enables real-time event management for all entity types. The local state is updated as new records arrive from the cluster, and post-<code>SaveChanges</code> synchronization is available.</p>
@@ -210,8 +212,38 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 }
 </code></pre>
 <p>See <a href="conventions.html#event-management-convention">conventions</a> for full details.</p>
+<h2 id="resetting-local-and-cluster-side-state">Resetting local and cluster-side state</h2>
+<p>KEFCore's Kafka Streams topology (identified by <code>ApplicationId</code>) keeps state both on the cluster (consumer-group membership and offsets) and, when <code>UsePersistentStorage = true</code>, in a local RocksDB store. Restarting an application — especially soon after a crash, a forced shutdown, or a heavy load test — can leave that state stale: Kafka may not have expired the previous session yet, and/or the local RocksDB store may be out of sync with what the topology expects on the next startup.</p>
+<p><code>ResetStreams</code> on <code>KEFCoreDbContext</code> clears <strong>both</strong> sides in one call:</p>
+<ul>
+<li>cluster-side consumer-group/Streams application state associated with the context's <code>ApplicationId</code></li>
+<li>the local RocksDB-backed state store, if <code>UsePersistentStorage = true</code></li>
+</ul>
+<pre><code class="lang-csharp">using var context = new BloggingContext()
+{
+    BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
+    ApplicationId = &quot;MyAppId&quot;,
+    UsePersistentStorage = true,
+};
+
+context.ResetStreams();       // clear stale cluster + local state before (re)starting the topology
+context.Database.EnsureCreated();
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><code>ResetStreams</code> is <strong>not</strong> the same as <code>context.Database.EnsureDeleted()</code>. <code>EnsureDeleted()</code> deletes the underlying Kafka topics themselves — all data, for every application sharing them. <code>ResetStreams</code> only clears this application's own Streams/consumer-group state and local cache; it never touches topic data.</p>
+</div>
+<p>Typical situations where <code>ResetStreams</code> is needed:</p>
+<ul>
+<li><strong>Same-application restarts</strong>, not just switching between different applications: e.g. a test-reload run immediately after a load test can hit consumer-group state Kafka hasn't cleaned up yet for that <code>ApplicationId</code>. Calling <code>ResetStreams</code> before re-initializing clears it explicitly instead of waiting on Kafka's own session-timeout expiry.</li>
+<li><strong>Local development/testing</strong> where you want a clean local RocksDB cache without wiping the shared topic data other applications rely on.</li>
+</ul>
+<p>See <a href="kefcoredbcontext.html#resetting-local-and-cluster-side-state">KEFCoreDbContext</a> for the full API reference, and the note on <code>ApplicationId</code> uniqueness below.</p>
+<h3 id="applicationid-must-be-unique-per-application-process"><code>ApplicationId</code> must be unique per application process</h3>
+<p><code>ApplicationId</code> identifies the Kafka Streams application/topology and doubles as the underlying consumer-group id. <strong>It must be distinct per application process</strong>, even when multiple applications intentionally read and write the same entities/topics on the same cluster (the &quot;distributed cache&quot; pattern — see <a href="usecases.html">use cases</a>).</p>
+<p>Giving two application processes the <em>same</em> <code>ApplicationId</code> does not make them cooperate on one shared, fully-replicated view. Instead, Kafka treats them as members of a single consumer group and divides partitions between them — each process only sees a subset of the data, and a process can appear to receive no data at all if Kafka still considers a previous instance an active group member. This is the scenario <code>ResetStreams</code> is designed to recover from (see above).</p>
 <h2 id="complextype-usage">ComplexType usage</h2>
-<p>EF Core <a href="https://learn.microsoft.com/ef/core/modeling/complex-types">ComplexTypes</a> are fully supported. KEFCore requires ComplexTypes to implement value equality. A converter can be registered for types not natively supported by the underlying serializer:</p>
+<p>EF Core <a href="https://learn.microsoft.com/ef/core/modeling/complex-types">ComplexTypes</a> are fully supported. KEFCore requires ComplexTypes to implement value equality. A converter can be registered for types that need explicit control over their serializer-native representation — with JSON serialization this is optional (an unconverted ComplexType falls back to being handled as a plain POCO); with Avro/Protobuf a converter is recommended for anything beyond a trivial POCO, though even there an unconverted ComplexType still round-trips via an internal JSON-string fallback rather than failing:</p>
 <pre><code class="lang-csharp">[ComplexType]
 [KEFCoreComplexTypeConverterAttribute(typeof(AddressConverter))]
 public class Address : IEquatable&lt;Address&gt;
