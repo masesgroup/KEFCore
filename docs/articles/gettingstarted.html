@@ -101,17 +101,17 @@ All examples in this page use standard Producer, Consumer, and Admin Client APIs
 <ul>
 <li>Create a new simple empty project:</li>
 </ul>
-<pre><code class="lang-pwsh">dotnet new console
+<pre><code class="lang-bash">dotnet new console
 </code></pre>
 <ul>
 <li>Entity Framework Core provider for Apache Kafka™ is available on <a href="https://www.nuget.org/packages/MASES.EntityFrameworkCore.KNet">NuGet</a>. Execute the following command to add the package to the newly created project:</li>
 </ul>
-<pre><code class="lang-pwsh">dotnet add package MASES.EntityFrameworkCore.KNet
+<pre><code class="lang-bash">dotnet add package MASES.EntityFrameworkCore.KNet
 </code></pre>
 <ul>
 <li>Edit Program.cs and replace the content with the following code:</li>
 </ul>
-<pre><code class="lang-c#">using MASES.EntityFrameworkCore.KNet.Infrastructure;
+<pre><code class="lang-csharp">using MASES.EntityFrameworkCore.KNet.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -126,7 +126,6 @@ namespace MASES.EntityFrameworkCore.KNet.Test
             {
                 BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
                 ApplicationId = &quot;MyAppId&quot;,   // mandatory — must be unique per process on the cluster
-                DbName = &quot;MyDBName&quot;,
             };
             // add standard EFCore queries
         }
@@ -136,6 +135,8 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 
     // [Table] stabilizes the Kafka topic name across namespace refactorings.
     // Without it the topic name includes the full CLR namespace.
+    // An optional topic prefix can be layered on top via [KEFCoreTopicPrefixAttribute]
+    // or modelBuilder.UseKEFCoreTopicPrefix() — see KEFCore usage for an example.
     [Table(&quot;Blog&quot;, Schema = &quot;Blogging&quot;)]
     public class Blog
     {
@@ -164,33 +165,33 @@ namespace MASES.EntityFrameworkCore.KNet.Test
 </div>
 <div class="IMPORTANT">
 <h5>Important</h5>
-<p>Always apply <code>[Table]</code> or <code>[KEFCoreTopicAttribute]</code> to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See <a href="conventions.html#topic-naming-convention">conventions</a> for details.</p>
+<p>Always apply <code>[Table]</code> or <code>[KEFCoreTopicAttribute]</code> to your entity classes. Without them, the Kafka topic name is derived from the full CLR type name including namespace — a namespace refactoring will silently change the topic name and break alignment with existing data in the cluster. See <a href="conventions.html#topic-naming-convention">conventions</a> for details. <code>BootstrapServers</code> and <code>ApplicationId</code> are the only two mandatory <code>KEFCoreDbContext</code> properties — there is no <code>DbName</code>/<code>DatabaseName</code> property; an optional topic <em>prefix</em> is configured separately via <code>[KEFCoreTopicPrefixAttribute]</code> or <code>UseKEFCoreTopicPrefix()</code>, not through a context property.</p>
 </div>
 <ul>
 <li>Build the project</li>
 </ul>
-<pre><code class="lang-pwsh">dotnet build
+<pre><code class="lang-bash">dotnet build
 </code></pre>
 <h2 id="environment-initialization">Environment initialization</h2>
 <p>KEFCore shall initialize the environment before any operation can be done. The initialization is done executing the following command at first stages of your application:</p>
-<pre><code class="lang-c#">KEFCore.CreateGlobalInstance();
+<pre><code class="lang-csharp">KEFCore.CreateGlobalInstance();
 </code></pre>
 <p>The previous command identify the JVM™ and start it, loads the needed libraries and setup the environment. Browsing the <a href="https://github.com/masesgroup/KEFCore">repository</a> within the test folder there are some examples.
 KEFCore accepts many command-line switches to customize its behavior, the full list is available at <a href="https://masesgroup.github.io/KNet/articles/commandlineswitch.html">Command line switch</a> of KNet.</p>
 <h3 id="jvm-identification">JVM™ identification</h3>
 <p>One of the most important command-line switch is <strong>JVMPath</strong> and it is available in <a href="https://www.jcobridge.com/net-examples/command-line-options/">JCOBridge switches</a>: it can be used to set-up the location of the JVM™ library if JCOBridge is not able to identify a suitable JRE/JDK installation.
 If a developer is using KEFCore within its own product it is possible to override the <strong>JVMPath</strong> property with a snippet like the following one:</p>
-<pre><code class="lang-c#">    class MyKEFCore : KEFCore
+<pre><code class="lang-csharp">class MyKEFCore : KEFCore
+{
+    public override string JVMPath
     {
-        public override string JVMPath
+        get
         {
-            get
-            {
-                string pathToJVM = &quot;Set here the path to JVM library or use your own search method&quot;;
-                return pathToJVM;
-            }
+            string pathToJVM = &quot;Set here the path to JVM library or use your own search method&quot;;
+            return pathToJVM;
         }
     }
+}
 </code></pre>
 <p><strong>IMPORTANT NOTE</strong>: <code>pathToJVM</code> shall be escaped</p>
 <ol>
