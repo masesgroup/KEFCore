@@ -6,6 +6,7 @@ _description: Describe what is and how use KEFCoreDbContext class from Entity Fr
 # KEFCore: KEFCoreDbContext
 
 `KEFCoreDbContext` is a special class which helps to define the `DbContext` and use [Entity Framework Core](https://learn.microsoft.com/ef/core/) provider for [Apache Kafka™](https://kafka.apache.org/):
+
 - `KEFCoreDbContext` inherits from `DbContext`: to define the model, and/or creating the database, see [getting started](https://docs.microsoft.com/ef/core/get-started/) in the docs and [KEFCore usage](usage.md)
 
 ## Singleton vs context-scoped options
@@ -26,7 +27,7 @@ The following options are singleton-scoped and must be consistent across all `Db
 - **UseKeyByteBufferDataTransfer**: set to **true** to prefer `Java.Nio.ByteBuffer` data exchange in serializer instances for keys
 - **UseValueContainerByteBufferDataTransfer**: set to **true** to prefer `Java.Nio.ByteBuffer` data exchange in serializer instances for value containers
 - **BootstrapServers**: the server hosting the broker of Apache Kafka™ — used to resolve the `ClusterId` which is the actual Service Provider cache key
-- **ApplicationId**: the application identifier used for the Apache Kafka™ Streams topology — must be unique per process on the same cluster
+- **ApplicationId**: the application identifier used for the Apache Kafka™ Streams topology — **must be unique per process on the same cluster**, even when multiple application processes intentionally read and write the same entities/topics (see [Resetting local and cluster-side state](#resetting-local-and-cluster-side-state) below for why this matters in practice)
 - **UseKNetStreams**: set to **true** (default) to use the KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams
 - **UsePersistentStorage**: set to **true** to use persistent storage (RocksDB) between multiple application startups; set to **false** (default) for in-memory storage
 - **UseDeletePolicyForTopic**: set to **true** to enable [delete cleanup policy](https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy) on topic creation
@@ -65,10 +66,13 @@ The following options are scoped to each `DbContext` instance:
 Topic names are no longer configured via a `TopicPrefix` option. Instead, KEFCore resolves the topic name for each entity at model finalization time using `KEFCoreTopicNamingConvention`. See [conventions](conventions.md) for the full resolution priority.
 
 In short:
+
 - Apply `[KEFCoreTopicAttribute("my-topic")]` on the entity class to set the topic name explicitly
 - Apply `[KEFCoreTopicPrefixAttribute("myprefix")]` on the entity class or the `DbContext` class to set a prefix
 - Call `modelBuilder.UseKEFCoreTopicPrefix("myprefix")` in `OnModelCreating` for a global prefix
 - Call `modelBuilder.Entity<T>().ToKEFCoreTopic("my-topic")` for a per-entity override
+
+There is no `DbName`/`DatabaseName` property on `KEFCoreDbContext` — some older examples elsewhere in this documentation set still show one; it is stale and should not be used. `BootstrapServers` and `ApplicationId` are the only two mandatory options (see Singleton options above); topic naming/prefixing is entirely handled by the conventions listed here.
 
 ## Event management conventions
 
@@ -92,14 +96,46 @@ Several context-level options can be overridden per entity type via conventions,
 
 See [conventions](conventions.md) for full documentation and examples.
 
+## Resetting local and cluster-side state
+
+KEFCore's Kafka Streams topology — identified by `ApplicationId` — keeps state on two sides: the cluster (consumer-group membership and offsets tied to that `ApplicationId`) and, when `UsePersistentStorage = true`, a local RocksDB store. Both can become stale, most commonly on process restarts:
+
+- shortly after a crash or forced shutdown, Kafka may not yet have expired the previous session for that `ApplicationId`
+- after a heavy load test, a subsequent run (e.g. a test-reload pipeline) can start before Kafka has finished cleaning up the prior run's consumer-group state
+- a local RocksDB store from a previous run can be out of sync with what the topology expects on the next startup
+
+`context.ResetStreams()` clears **both** sides in one call: the cluster-side consumer-group/Streams application state associated with the context's `ApplicationId`, and — if `UsePersistentStorage = true` — the local RocksDB-backed state store. It does not touch topic data.
+
+```csharp
+using var context = new BloggingContext()
+{
+    BootstrapServers = "MY-KAFKA-BROKER:9092",
+    ApplicationId = "MyAppId",
+    UsePersistentStorage = true,
+};
+
+context.ResetStreams();       // clear stale cluster + local state before (re)starting the topology
+context.Database.EnsureCreated();
+```
+
+> [!IMPORTANT]
+> `ResetStreams` is **not** the same as `context.Database.EnsureDeleted()`. `EnsureDeleted()` deletes the underlying Kafka topics themselves — all data, for every application sharing them, since topics are shared infrastructure. `ResetStreams` only clears this `ApplicationId`'s own Streams/consumer-group state and local cache; it never touches topic data, so other applications reading the same topics are unaffected.
+
+### Why `ApplicationId` uniqueness matters here
+
+`ApplicationId` doubles as the underlying Kafka consumer-group id for the Streams topology. It must be a **distinct value per application process**, even when multiple application processes intentionally read and write the same entities/topics on the same cluster (the "distributed cache" pattern — see [use cases](usecases.md)).
+
+Giving two application processes the *same* `ApplicationId` does not make them cooperate on one shared, fully-replicated view. Instead, Kafka treats them as members of a single consumer group and divides partitions between them — each process only sees a subset of the data, and a process can appear to receive no data at all if Kafka still considers a previous instance an active group member for that id. `ResetStreams` recovers from the latter case (stale membership under the same `ApplicationId`), but the underlying fix for the "each app needs its own full view" requirement is simply to assign each application process its own distinct `ApplicationId` in the first place.
+
 ## How to use `KEFCoreDbContext` class
 
 The most simple example of usage can be found in [KEFCore usage](usage.md). By default, `KEFCoreDbContext` automatically manages the `OnConfiguring` method of `DbContext`:
+
 - `KEFCoreDbContext` checks the mandatory options like **BootstrapServers** and **ApplicationId**
 - `KEFCoreDbContext` sets up the options needed to use an Apache Kafka™ cluster:
-  - default `ProducerConfig` can be overridden using **ProducerConfig** property
-  - default `StreamsConfig` can be overridden using **StreamsConfig** property
-  - default `TopicConfig` can be overridden using **TopicConfig** property
+  * default `ProducerConfig` can be overridden using **ProducerConfig** property
+  * default `StreamsConfig` can be overridden using **StreamsConfig** property
+  * default `TopicConfig` can be overridden using **TopicConfig** property
 
 Kafka transactional producers are supported via `Database.BeginTransaction()` when entity types are assigned to a transaction group via `KEFCoreTransactionalAttribute` or `HasKEFCoreTransactionGroup()`. The standard EF Core transaction pattern applies — `tx.Commit()` or `tx.Rollback()` maps to `CommitTransaction()`/`AbortTransaction()` on the Kafka transactional producer. See [conventions](conventions.md#transactional-producer-convention) for full details.
 
@@ -141,3 +177,6 @@ Over the [Apache Kafka™ defaults](https://kafka.apache.org/documentation/#topi
 - MinCleanableDirtyRatio set to 0.01
 - SegmentMs set to 100 ms
 - RetentionBytes set to 1073741824 bytes (1 Gb)
+
+> [!NOTE]
+> These defaults favor aggressive, low-latency compaction — reflecting KEFCore's "always reflect latest state" model rather than long retention of historical records. If a use case needs to retain history, override `TopicConfig` (or `[KEFCoreTopicRetentionAttribute]` per entity) explicitly.
