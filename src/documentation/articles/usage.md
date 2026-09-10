@@ -49,7 +49,6 @@ using var context = new BloggingContext()
 {
     BootstrapServers = "MY-KAFKA-BROKER:9092",
     ApplicationId = "MyAppId",  // mandatory — must be unique per process on the cluster
-    DbName = "TestDB",
 };
 
 // Ensure topics exist (standard EF Core)
@@ -78,6 +77,8 @@ public class BloggingContext : KEFCoreDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Optional: layer a topic prefix on top of [Table] resolution.
+        // Without this call, topics would simply be named "Blog" / "Post".
         modelBuilder.UseKEFCoreTopicPrefix("TestDB");
         base.OnModelCreating(modelBuilder);
     }
@@ -130,8 +131,11 @@ See [options — secure broker connections](options.md#secure-broker-connections
 ## Topic naming
 
 Each entity maps to a Kafka topic. The topic name is resolved at model build time by `KEFCoreTopicNamingConvention`. With the example above the topics are:
+
 - `TestDB.Blog` (prefix `TestDB` + `[Table("Blog")]`)
 - `TestDB.Post` (prefix `TestDB` + `[Table("Post")]`)
+
+The `TestDB` prefix comes entirely from `modelBuilder.UseKEFCoreTopicPrefix("TestDB")` above — it is not a `DbName`/`DatabaseName` property on the context. If no prefix is configured, the topics are simply `Blog` and `Post`.
 
 Without `[Table]`, the topic name includes the full .NET namespace — a namespace refactoring would break alignment with existing data. See [conventions](conventions.md#topic-naming-convention) for the full resolution priority.
 
@@ -156,9 +160,46 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 See [conventions](conventions.md#event-management-convention) for full details.
 
+## Resetting local and cluster-side state
+
+KEFCore's Kafka Streams topology (identified by `ApplicationId`) keeps state both on the cluster (consumer-group membership and offsets) and, when `UsePersistentStorage = true`, in a local RocksDB store. Restarting an application — especially soon after a crash, a forced shutdown, or a heavy load test — can leave that state stale: Kafka may not have expired the previous session yet, and/or the local RocksDB store may be out of sync with what the topology expects on the next startup.
+
+`ResetStreams` on `KEFCoreDbContext` clears **both** sides in one call:
+
+- cluster-side consumer-group/Streams application state associated with the context's `ApplicationId`
+- the local RocksDB-backed state store, if `UsePersistentStorage = true`
+
+```csharp
+using var context = new BloggingContext()
+{
+    BootstrapServers = "MY-KAFKA-BROKER:9092",
+    ApplicationId = "MyAppId",
+    UsePersistentStorage = true,
+};
+
+context.ResetStreams();       // clear stale cluster + local state before (re)starting the topology
+context.Database.EnsureCreated();
+```
+
+> [!IMPORTANT]
+> `ResetStreams` is **not** the same as `context.Database.EnsureDeleted()`. `EnsureDeleted()` deletes the underlying Kafka topics themselves — all data, for every application sharing them. `ResetStreams` only clears this application's own Streams/consumer-group state and local cache; it never touches topic data.
+
+Typical situations where `ResetStreams` is needed:
+
+- **Same-application restarts**, not just switching between different applications: e.g. a test-reload run immediately after a load test can hit consumer-group state Kafka hasn't cleaned up yet for that `ApplicationId`. Calling `ResetStreams` before re-initializing clears it explicitly instead of waiting on Kafka's own session-timeout expiry.
+- **Local development/testing** where you want a clean local RocksDB cache without wiping the shared topic data other applications rely on.
+
+See [KEFCoreDbContext](kefcoredbcontext.md#resetting-local-and-cluster-side-state) for the full API reference, and the note on `ApplicationId` uniqueness below.
+
+### `ApplicationId` must be unique per application process
+
+`ApplicationId` identifies the Kafka Streams application/topology and doubles as the underlying consumer-group id. **It must be distinct per application process**, even when multiple applications intentionally read and write the same entities/topics on the same cluster (the "distributed cache" pattern — see [use cases](usecases.md)).
+
+Giving two application processes the *same* `ApplicationId` does not make them cooperate on one shared, fully-replicated view. Instead, Kafka treats them as members of a single consumer group and divides partitions between them — each process only sees a subset of the data, and a process can appear to receive no data at all if Kafka still considers a previous instance an active group member. This is the scenario `ResetStreams` is designed to recover from (see above).
+
 ## ComplexType usage
 
-EF Core [ComplexTypes](https://learn.microsoft.com/ef/core/modeling/complex-types) are fully supported. KEFCore requires ComplexTypes to implement value equality. A converter can be registered for types not natively supported by the underlying serializer:
+EF Core [ComplexTypes](https://learn.microsoft.com/ef/core/modeling/complex-types) are fully supported. KEFCore requires ComplexTypes to implement value equality. A converter can be registered for types that need explicit control over their serializer-native representation — with JSON serialization this is optional (an unconverted ComplexType falls back to being handled as a plain POCO); with Avro/Protobuf a converter is recommended for anything beyond a trivial POCO, though even there an unconverted ComplexType still round-trips via an internal JSON-string fallback rather than failing:
 
 ```csharp
 [ComplexType]
