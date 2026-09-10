@@ -104,7 +104,7 @@
 <li><strong>UseKeyByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <code>Java.Nio.ByteBuffer</code> data exchange in serializer instances for keys</li>
 <li><strong>UseValueContainerByteBufferDataTransfer</strong>: set to <strong>true</strong> to prefer <code>Java.Nio.ByteBuffer</code> data exchange in serializer instances for value containers</li>
 <li><strong>BootstrapServers</strong>: the server hosting the broker of Apache Kafka™ — used to resolve the <code>ClusterId</code> which is the actual Service Provider cache key</li>
-<li><strong>ApplicationId</strong>: the application identifier used for the Apache Kafka™ Streams topology — must be unique per process on the same cluster</li>
+<li><strong>ApplicationId</strong>: the application identifier used for the Apache Kafka™ Streams topology — <strong>must be unique per process on the same cluster</strong>, even when multiple application processes intentionally read and write the same entities/topics (see <a href="#resetting-local-and-cluster-side-state">Resetting local and cluster-side state</a> below for why this matters in practice)</li>
 <li><strong>UseKNetStreams</strong>: set to <strong>true</strong> (default) to use the KNet version of Apache Kafka™ Streams instead of standard Apache Kafka™ Streams</li>
 <li><strong>UsePersistentStorage</strong>: set to <strong>true</strong> to use persistent storage (RocksDB) between multiple application startups; set to <strong>false</strong> (default) for in-memory storage</li>
 <li><strong>UseDeletePolicyForTopic</strong>: set to <strong>true</strong> to enable <a href="https://kafka.apache.org/documentation/#topicconfigs_cleanup.policy">delete cleanup policy</a> on topic creation</li>
@@ -147,6 +147,7 @@
 <li>Call <code>modelBuilder.UseKEFCoreTopicPrefix(&quot;myprefix&quot;)</code> in <code>OnModelCreating</code> for a global prefix</li>
 <li>Call <code>modelBuilder.Entity&lt;T&gt;().ToKEFCoreTopic(&quot;my-topic&quot;)</code> for a per-entity override</li>
 </ul>
+<p>There is no <code>DbName</code>/<code>DatabaseName</code> property on <code>KEFCoreDbContext</code> — some older examples elsewhere in this documentation set still show one; it is stale and should not be used. <code>BootstrapServers</code> and <code>ApplicationId</code> are the only two mandatory options (see Singleton options above); topic naming/prefixing is entirely handled by the conventions listed here.</p>
 <h2 id="event-management-conventions">Event management conventions</h2>
 <p>By default, KEFCore enables event management (i.e. <code>TimestampExtractor</code> activation for real-time change tracking) for all entity types via <code>KEFCoreManageEventsConvention</code>. To opt out:</p>
 <ul>
@@ -166,6 +167,31 @@
 <li><strong>Store lookup optimizations</strong> — <code>KEFCoreStoreLookupAttribute</code> or <code>HasKEFCoreStoreLookup()</code> to enable or disable specific query optimization paths per entity</li>
 </ul>
 <p>See <a href="conventions.html">conventions</a> for full documentation and examples.</p>
+<h2 id="resetting-local-and-cluster-side-state">Resetting local and cluster-side state</h2>
+<p>KEFCore's Kafka Streams topology — identified by <code>ApplicationId</code> — keeps state on two sides: the cluster (consumer-group membership and offsets tied to that <code>ApplicationId</code>) and, when <code>UsePersistentStorage = true</code>, a local RocksDB store. Both can become stale, most commonly on process restarts:</p>
+<ul>
+<li>shortly after a crash or forced shutdown, Kafka may not yet have expired the previous session for that <code>ApplicationId</code></li>
+<li>after a heavy load test, a subsequent run (e.g. a test-reload pipeline) can start before Kafka has finished cleaning up the prior run's consumer-group state</li>
+<li>a local RocksDB store from a previous run can be out of sync with what the topology expects on the next startup</li>
+</ul>
+<p><code>context.ResetStreams()</code> clears <strong>both</strong> sides in one call: the cluster-side consumer-group/Streams application state associated with the context's <code>ApplicationId</code>, and — if <code>UsePersistentStorage = true</code> — the local RocksDB-backed state store. It does not touch topic data.</p>
+<pre><code class="lang-csharp">using var context = new BloggingContext()
+{
+    BootstrapServers = &quot;MY-KAFKA-BROKER:9092&quot;,
+    ApplicationId = &quot;MyAppId&quot;,
+    UsePersistentStorage = true,
+};
+
+context.ResetStreams();       // clear stale cluster + local state before (re)starting the topology
+context.Database.EnsureCreated();
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><code>ResetStreams</code> is <strong>not</strong> the same as <code>context.Database.EnsureDeleted()</code>. <code>EnsureDeleted()</code> deletes the underlying Kafka topics themselves — all data, for every application sharing them, since topics are shared infrastructure. <code>ResetStreams</code> only clears this <code>ApplicationId</code>'s own Streams/consumer-group state and local cache; it never touches topic data, so other applications reading the same topics are unaffected.</p>
+</div>
+<h3 id="why-applicationid-uniqueness-matters-here">Why <code>ApplicationId</code> uniqueness matters here</h3>
+<p><code>ApplicationId</code> doubles as the underlying Kafka consumer-group id for the Streams topology. It must be a <strong>distinct value per application process</strong>, even when multiple application processes intentionally read and write the same entities/topics on the same cluster (the &quot;distributed cache&quot; pattern — see <a href="usecases.html">use cases</a>).</p>
+<p>Giving two application processes the <em>same</em> <code>ApplicationId</code> does not make them cooperate on one shared, fully-replicated view. Instead, Kafka treats them as members of a single consumer group and divides partitions between them — each process only sees a subset of the data, and a process can appear to receive no data at all if Kafka still considers a previous instance an active group member for that id. <code>ResetStreams</code> recovers from the latter case (stale membership under the same <code>ApplicationId</code>), but the underlying fix for the &quot;each app needs its own full view&quot; requirement is simply to assign each application process its own distinct <code>ApplicationId</code> in the first place.</p>
 <h2 id="how-to-use-kefcoredbcontext-class">How to use <code>KEFCoreDbContext</code> class</h2>
 <p>The most simple example of usage can be found in <a href="usage.html">KEFCore usage</a>. By default, <code>KEFCoreDbContext</code> automatically manages the <code>OnConfiguring</code> method of <code>DbContext</code>:</p>
 <ul>
@@ -208,6 +234,10 @@
 <li>SegmentMs set to 100 ms</li>
 <li>RetentionBytes set to 1073741824 bytes (1 Gb)</li>
 </ul>
+<div class="NOTE">
+<h5>Note</h5>
+<p>These defaults favor aggressive, low-latency compaction — reflecting KEFCore's &quot;always reflect latest state&quot; model rather than long retention of historical records. If a use case needs to retain history, override <code>TopicConfig</code> (or <code>[KEFCoreTopicRetentionAttribute]</code> per entity) explicitly.</p>
+</div>
 
 </article>
 
