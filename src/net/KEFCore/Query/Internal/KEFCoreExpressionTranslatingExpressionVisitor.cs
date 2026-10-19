@@ -37,7 +37,7 @@ namespace MASES.EntityFrameworkCore.KNet.Query.Internal;
 /// </summary>
 public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
 {
-#if NET10_0
+#if NET10_0_OR_GREATER
     private const string LocalParameterPrefix = "__";
     private const string RuntimeParameterPrefix = "entity_equality_";
 #else
