@@ -506,7 +506,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
         {
             EntityProjectionExpression or StructuralTypeReferenceExpression
                 => extensionExpression,
-#if NET10_0
+#if NET10_0_OR_GREATER
             QueryParameterExpression queryParameter
                 => Expression.Call(
                     GetParameterValueMethodInfo.MakeGenericMethod(queryParameter.Type),
@@ -1301,7 +1301,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     [UsedImplicitly]
     private static T GetParameterValue<T>(QueryContext queryContext, string parameterName)
-#if NET10_0
+#if NET10_0_OR_GREATER
         => (T)queryContext.Parameters[parameterName]!;
 #else
         => (T)queryContext.ParameterValues[parameterName]!;
@@ -1570,7 +1570,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
 
     private static T? ParameterValueExtractor<T>(QueryContext context, string baseParameterName, IProperty property)
     {
-#if NET10_0
+#if NET10_0_OR_GREATER
         var baseParameter = context.Parameters[baseParameterName];
 #else
         var baseParameter = context.ParameterValues[baseParameterName];
@@ -1583,7 +1583,7 @@ public class KEFCoreExpressionTranslatingExpressionVisitor : ExpressionVisitor
         string baseParameterName,
         IProperty property)
     {
-#if NET10_0
+#if NET10_0_OR_GREATER
         if (!(context.Parameters[baseParameterName] is IEnumerable<TEntity> baseListParameter))
         {
             return null;
