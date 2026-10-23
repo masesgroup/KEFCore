@@ -22,6 +22,11 @@ on:
         required: false
         default: 'source.zip'
         type: string
+      AddsExtraCompilationSymbols:
+        description: 'Adds extra symbols in compilation'
+        required: false
+        default: ''
+        type: string
       EnableDebugLogging:
         description: 'Enable debug logs in tests'
         required: false
@@ -197,6 +202,7 @@ jobs:
     with:
       UseSpecialSettings: ${{ inputs.UseSpecialSettings || false }}
       SpecialSettingsSource: ${{ inputs.SpecialSettingsSource || 'source.zip' }}
+      AddsExtraCompilationSymbols: ${{ inputs.AddsExtraCompilationSymbols || '' }}
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       ExecuteOnMoreOSes: ${{ inputs.ExecuteOnMoreOSes || github.event_name == 'schedule' }}

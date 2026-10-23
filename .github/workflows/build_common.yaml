@@ -17,6 +17,11 @@ on:
         required: false
         default: 'source.zip'
         type: string
+      AddsExtraCompilationSymbols:
+        description: 'Adds extra symbols in compilation'
+        required: false
+        default: ''
+        type: string
       EnableDebugLogging:
         description: 'Enable debug logs in tests'
         required: false
@@ -243,6 +248,8 @@ jobs:
 
       - name: Compile tests
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\net\KEFCore.Test.sln
+        env:
+          EXTRA_CONSTANTS: ${{ inputs.AddsExtraCompilationSymbols }}
 
       - name: Prepare configuration files
         run: |

@@ -25,6 +25,9 @@
 	<!--<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
 		<DefineConstants>$(DefineConstants);DEBUG_PERFORMANCE</DefineConstants>
 	</PropertyGroup>-->
+	<PropertyGroup>
+		<DefineConstants Condition="'$(EXTRA_CONSTANTS)' != ''">$(DefineConstants);$(EXTRA_CONSTANTS)</DefineConstants>
+	</PropertyGroup>
 	<ItemGroup Condition="True">
 		<kefcorefiles_config Include="$(ProjectDir)\..\..\config\**\*.*" />
 	</ItemGroup>
