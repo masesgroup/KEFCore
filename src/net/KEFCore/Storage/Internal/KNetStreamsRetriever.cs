@@ -383,6 +383,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
         , IAsyncEnumerator<ValueBuffer>
     {
+        private readonly bool _isAsync;
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -409,10 +410,11 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
-            if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
-            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
+            _isAsync = isAsync;
+            if (_useEnumeratorWithPrefetch && !_isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
+            if (_isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
-            _disposeScope = isAsync ? new JCOBridgeDisposeAsyncScope() : new JCOBridgeDisposeFastScope();
+            _disposeScope = _isAsync ? new JCOBridgeDisposeAsyncScope() : new JCOBridgeDisposeFastScope();
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -557,7 +559,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if VERIFY_WHERE_ENUMERATOR_STOPS
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Enumerator stops at cycle {_cycles} with InnerException", ex);
+                throw new InvalidOperationException($"Enumerator _isAsync={_isAsync} _useEnumeratorWithPrefetch={_useEnumeratorWithPrefetch} stops at cycle {_cycles} with InnerException", ex);
             }
 #endif
 #if DEBUG_PERFORMANCE
@@ -575,9 +577,11 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         public async ValueTask<bool> MoveNextAsync()
         {
             _cancellationToken.ThrowIfCancellationRequested();
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
             try
+#endif
             {
+#if DEBUG_PERFORMANCE
                 _moveNextSw.Start();
 #endif
                 bool hasNext = false;
@@ -639,8 +643,14 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                     _current = ValueBuffer.Empty;
                 }
                 return await ValueTask.FromResult(hasNext);
-#if DEBUG_PERFORMANCE
             }
+#if VERIFY_WHERE_ENUMERATOR_STOPS
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Enumerator _isAsync={_isAsync} _useEnumeratorWithPrefetch={_useEnumeratorWithPrefetch} stops at cycle {_cycles} with InnerException", ex);
+            }
+#endif
+#if DEBUG_PERFORMANCE
             finally
             {
                 _moveNextSw.Stop();
