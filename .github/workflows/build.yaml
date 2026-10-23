@@ -37,6 +37,11 @@ on:
         required: false
         default: false
         type: boolean
+      EnableReloadTests:
+        description: 'Enable reload tests'
+        required: false
+        default: true
+        type: boolean
       ExecuteOnMoreOSes:
         description: 'Test on more OSes'
         required: false
@@ -205,6 +210,7 @@ jobs:
       AddsExtraCompilationSymbols: ${{ inputs.AddsExtraCompilationSymbols || '' }}
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
+      EnableReloadTests: ${{ inputs.EnableReloadTests || false }}
       ExecuteOnMoreOSes: ${{ inputs.ExecuteOnMoreOSes || github.event_name == 'schedule' }}
       ExecuteOnLargerJDKSet: ${{ (github.event_name == 'workflow_dispatch' && inputs.ExecuteOnLargerJDKSet) || (github.event_name != 'workflow_dispatch' && (github.ref_name == 'master' || github.event_name == 'schedule')) }}
       EnableLinuxTests: ${{ github.event_name != 'workflow_dispatch' || inputs.ExecuteOnLinux }}
