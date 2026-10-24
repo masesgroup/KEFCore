@@ -57,6 +57,9 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public KafkaStreamsBaseRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager, object optional)
         {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaStreamsBaseRetrieverTimestampExtractor - Initializing");
+#endif
             _pushChanges = pushChanges;
             _manager = manager;
             var serdes = (Tuple<ISerDes<TKey, K>, ISerDes<TValue, V>>)optional;

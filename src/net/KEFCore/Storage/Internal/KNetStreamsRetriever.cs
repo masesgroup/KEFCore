@@ -42,14 +42,22 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
-        : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
+    class KNetStreamsRetrieverTimestampExtractor : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
 #if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
         long _cycles = 0;
 #endif
-        private readonly Action<FreshEventChange> _pushChanges = pushChanges;
-        private readonly IStreamsChangeManager _manager = manager;
+        private readonly Action<FreshEventChange> _pushChanges;
+        private readonly IStreamsChangeManager _manager;
+
+        public KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
+        {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Initializing");
+#endif
+            _pushChanges = pushChanges;
+            _manager = manager;
+        }
 
         public override DateTime Extract()
         {
