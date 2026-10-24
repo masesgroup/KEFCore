@@ -256,6 +256,13 @@ jobs:
           name: KEFCoreNuGet
           path: .\bin\*nupkg
 
+      - name: Upload diagnostic data
+        if: ${{ inputs.EnableAdvancedDiagnostic == true }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: KEFCoreNuGet
+          path: .\bin\
+
       - name: Compile tests
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\net\KEFCore.Test.sln
         env:
