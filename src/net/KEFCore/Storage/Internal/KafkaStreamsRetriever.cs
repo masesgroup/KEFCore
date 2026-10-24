@@ -47,6 +47,9 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 {
     class KafkaStreamsBaseRetrieverTimestampExtractor : TimestampExtractor
     {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+        long _cycles = 0;
+#endif
         private readonly Action<FreshEventChange> _pushChanges;
         private readonly IStreamsChangeManager _manager;
         private readonly ISerDes<TKey, K> _keySerdes;
@@ -63,6 +66,9 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
 
         public override long Extract(ConsumerRecord<object, object> record, long timestamp)
         {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaStreamsBaseRetrieverTimestampExtractor - Entering cycle number={_cycles++}");
+#endif
             using var record2 = record.CastDirectAndDispose<ConsumerRecord<K, V>>();
             using var topic = record2.Topic();
             using var headers = record2.Headers();
@@ -74,8 +80,13 @@ sealed class KafkaStreamsRetriever<TKey, TValue, K, V> : IKEFCoreStreamsRetrieve
             var key = _keySerdes.DeserializeWithHeaders(topic, headers, jKey);
             var value = _valueSerdes.DeserializeWithHeaders(topic, headers, jValue);
 
-            _pushChanges.Invoke(new FreshEventChange(_manager, topic, record2.Partition(), record2.Offset(), new FreshEventChangeExtraData<TKey, TValue>(key, value)));
+            int partition = record2.Partition();
+            long offset = record2.Offset();
 
+            _pushChanges.Invoke(new FreshEventChange(_manager, topic, partition, offset, new FreshEventChangeExtraData<TKey, TValue>(key, value)));
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaStreamsBaseRetrieverTimestampExtractor - Topic={topic}, Partition={partition}, Offset={offset}");
+#endif
             return record2.Timestamp();
         }
     }
