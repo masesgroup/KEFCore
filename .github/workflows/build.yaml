@@ -92,6 +92,11 @@ on:
         required: false
         default: false
         type: boolean
+      EnableAdvancedDiagnostic:
+        description: 'Enable advanced diagnostic around test'
+        required: false
+        default: false
+        type: boolean
       EnableProcessDump:
         description: 'Enable .NET process dump'
         required: false
@@ -221,6 +226,7 @@ jobs:
       UseKNetCompactedReplicator: ${{ inputs.UseKNetCompactedReplicator || false }}
       ForceContinueOnError: ${{ inputs.ForceContinueOnError || false }}
       UploadServerLogs: ${{ inputs.UploadServerLogs || false }}
+      EnableAdvancedDiagnostic: ${{ inputs.EnableAdvancedDiagnostic || false }}
       EnableProcessDump: ${{ inputs.EnableProcessDump || '0' }}
       ProcessDumpType: ${{ inputs.ProcessDumpType || '3' }}
       EnableVerboseDiagnosticProcessDump: ${{ inputs.EnableVerboseDiagnosticProcessDump || '0' }}

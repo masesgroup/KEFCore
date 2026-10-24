@@ -87,6 +87,11 @@ on:
         required: false
         default: false
         type: boolean
+      EnableAdvancedDiagnostic:
+        description: 'Enable advanced diagnostic around test'
+        required: false
+        default: false
+        type: boolean
       EnableProcessDump:
         description: 'Enable .NET process dump'
         required: false
@@ -450,26 +455,53 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000 /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
 
+      - name: Install diagnostic tools
+        if: ${{ inputs.EnableAdvancedDiagnostic == true }}
+        shell: bash
+        run: |
+          dotnet tool install -g dotnet-stack || true
+          dotnet tool install -g dotnet-dump || true
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          which gdb || sudo apt-get install -y gdb
+
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
         if: ${{ inputs.EnableReloadTests == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         shell: bash
         run: |
           set +e
+          TAG="reload_${{ matrix.serialization }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}"
+          OUT="${{ github.workspace }}"
+          ADVANCED="${{ inputs.EnableAdvancedDiagnostic }}"
+
+          dump_all() {
+            [ "$ADVANCED" == "true" ] || return 0
+            local SUFFIX=$1
+            echo "::notice::Dumping state of $PID ($SUFFIX)"
+            timeout 60 dotnet-stack report -p $PID > "$OUT/dotnetstack_${TAG}_${SUFFIX}.txt" 2>&1
+            timeout 90 sudo gdb -p $PID -batch -ex "thread apply all bt" > "$OUT/nativedump_${TAG}_${SUFFIX}.txt" 2>&1
+            timeout 60 jstack -l $PID > "$OUT/threaddump_${TAG}_${SUFFIX}.txt" 2>&1
+          }
+
           dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }} &
           PID=$!
 
           TIMEOUT_SECONDS=180
+          FIRST_DUMP_AT=60
           ELAPSED=0
+          FIRST_DONE=0
           while kill -0 $PID 2>/dev/null; do
+            # an early dump plus a final one: if the stacks differ the process is moving, if identical it is stuck
+            if [ $FIRST_DONE -eq 0 ] && [ $ELAPSED -ge $FIRST_DUMP_AT ]; then
+              dump_all "${ELAPSED}s"
+              FIRST_DONE=1
+            fi
             if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
-              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s - dumping JVM thread state before killing"
-              # SIGQUIT makes the embedded JVM print a full thread dump (incl. deadlock detection) to stdout
-              kill -QUIT $PID
-              sleep 5
-              # also grab a jstack copy to a file, in case stdout capture missed something
-              jstack -l $PID > "${{ github.workspace }}/threaddump_reload_${{ matrix.serialization }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}.txt" 2>&1
-              sleep 2
+              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s"
+              dump_all "final"
+              if [ "$ADVANCED" == "true" ]; then
+                timeout 120 dotnet-dump collect -p $PID -o "$OUT/dotnetdump_${TAG}.dmp" > "$OUT/dotnetdump_${TAG}.log" 2>&1
+              fi
               kill -9 $PID 2>/dev/null
               echo "STUCK=true" >> $GITHUB_ENV
               break
@@ -486,7 +518,11 @@ jobs:
         with:
           if-no-files-found: ignore
           name: threaddump_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/threaddump_*.txt
+          path: |
+            ${{ github.workspace }}/threaddump_*.txt
+            ${{ github.workspace }}/nativedump_*.txt
+            ${{ github.workspace }}/dotnetstack_*.txt
+            ${{ github.workspace }}/dotnetdump_*
           retention-days: 7
 
       #- name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
