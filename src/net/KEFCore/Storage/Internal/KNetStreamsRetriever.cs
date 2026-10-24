@@ -18,6 +18,7 @@
 
 //#define DEBUG_PERFORMANCE
 //#define VERIFY_WHERE_ENUMERATOR_STOPS
+//#define VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
 
 #nullable enable
 
@@ -44,14 +45,23 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
         : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+        long _cycles = 0;
+#endif
         private readonly Action<FreshEventChange> _pushChanges = pushChanges;
         private readonly IStreamsChangeManager _manager = manager;
 
         public override DateTime Extract()
         {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Entering cycle number={_cycles++}");
+#endif
             using (this.Record)
             {
                 _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new FreshEventChangeExtraData<TKey, TValue>(Record.Key, Record.Value)));
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Topic={Record.Topic}, Partition={Record.Partition}, Offset={Record.Offset}");
+#endif
                 return Record.DateTime;
             }
         }

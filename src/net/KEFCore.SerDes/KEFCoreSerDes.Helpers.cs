@@ -16,6 +16,10 @@
 *  Refer to LICENSE for more information.
 */
 
+//#define DEBUG_PERFORMANCE
+//#define VERIFY_WHERE_ENUMERATOR_STOPS
+//#define VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+
 #nullable enable
 
 using Java.Nio;
@@ -38,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
     /// </summary>
     public class DebugPerformanceHelper
     {
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
         const bool perf = true;
         /// <summary>
         /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(Serialization.IValueContainerMetadata, ref object[], Serialization.IComplexTypeConverterFactory?)"/>
