@@ -260,7 +260,7 @@ jobs:
         if: ${{ inputs.EnableAdvancedDiagnostic == true }}
         uses: actions/upload-artifact@v7
         with:
-          name: KEFCoreNuGet
+          name: KEFCoreBinFolder
           path: .\bin\
 
       - name: Compile tests
