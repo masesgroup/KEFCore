@@ -99,12 +99,10 @@ jobs:
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
     # Install .NET SDKs
-    - name: Setup .NET 9.0
-      uses: actions/setup-dotnet@v6
+    - uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: |
-          9.x
-          10.x
+        dotnet-version: '11.0.x'
+        dotnet-quality: 'preview'
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
