@@ -200,9 +200,9 @@ jobs:
       EnableDebugLogging: ${{ inputs.EnableDebugLogging || false }}
       EnableIntermediateOutput: ${{ inputs.EnableIntermediateOutput || false }}
       ExecuteOnMoreOSes: ${{ inputs.ExecuteOnMoreOSes || github.event_name == 'schedule' }}
-      ExecuteOnLargerJDKSet: ${{ (github.event_name == 'workflow_dispatch' && inputs.ExecuteOnLargerJDKSet) || (github.event_name != 'workflow_dispatch' && (github.ref_name == 'master' || github.event_name == 'schedule')) }}
+      ExecuteOnLargerJDKSet: ${{ (github.event_name == 'workflow_dispatch' && inputs.ExecuteOnLargerJDKSet) || (github.event_name != 'workflow_dispatch' && (github.ref_name == 'release/3.X' || github.event_name == 'schedule')) }}
       EnableLinuxTests: ${{ github.event_name != 'workflow_dispatch' || inputs.ExecuteOnLinux }}
-      EnableWindowsTests: ${{ (github.event_name == 'workflow_dispatch' && inputs.ExecuteOnWindows) || (github.event_name != 'workflow_dispatch' && (github.ref_name == 'master' || github.event_name == 'schedule')) }}
+      EnableWindowsTests: ${{ (github.event_name == 'workflow_dispatch' && inputs.ExecuteOnWindows) || (github.event_name != 'workflow_dispatch' && (github.ref_name == 'release/3.X' || github.event_name == 'schedule')) }}
       EnableMacOSTests: ${{ inputs.ExecuteOnMacOS || github.event_name == 'schedule' }}
       UseLastRepositoryBuildJNet: ${{ inputs.UseLastRepositoryBuildJNet || false }}
       UseLastRepositoryBuildKNet: ${{ inputs.UseLastRepositoryBuildKNet || false }}
