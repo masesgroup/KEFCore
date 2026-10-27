@@ -44,11 +44,12 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.32" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net8.0'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.21" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net9.0'" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net10.0'" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="11.0.0-rc.2.26504.105" PrivateAssets="none" Condition="'$(TargetFramework)' == 'net11.0'" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="2.9.13">
+		<PackageReference Include="MASES.KNet" Version="2.9.14-preview20261027">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
