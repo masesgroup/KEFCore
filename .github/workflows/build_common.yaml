@@ -150,9 +150,8 @@ jobs:
 
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: |
-            9.x
-            10.x
+          dotnet-version: '11.0.x'
+          dotnet-quality: 'preview'
 
       - name: Download pscp directly
         if: ${{ inputs.UseSpecialSettings == true }}
@@ -344,7 +343,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_linux_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -377,22 +376,10 @@ jobs:
           check-latest: true
 
       - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net8.0' }}
+        if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: |
-            8.x
-
-      - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net9.0' }}
-        with:
-          dotnet-version: |
-            9.x
-
-      - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net10.0' }}
-        with:
-          dotnet-version: |
-            10.x
+          dotnet-version: '11.0.x'
+          dotnet-quality: 'preview'
 
       - if: ${{ inputs.EnableIntermediateOutput == true }}
         run: |
@@ -521,7 +508,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_win_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -554,10 +541,10 @@ jobs:
           check-latest: true
 
       - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net10.0' }}
+        if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: |
-            10.x
+          dotnet-version: '11.0.x'
+          dotnet-quality: 'preview'
 
       - name: Disable CET for dotnet process
         run: |
@@ -870,7 +857,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_mac_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0' ]
+        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -903,22 +890,10 @@ jobs:
           check-latest: true
 
       - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net8.0' }}
+        if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: |
-            8.x
-
-      - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net9.0' }}
-        with:
-          dotnet-version: |
-            9.x
-
-      - uses: actions/setup-dotnet@v6
-        if: ${{ matrix.framework == 'net10.0' }}
-        with:
-          dotnet-version: |
-            10.x
+          dotnet-version: '11.0.x'
+          dotnet-quality: 'preview'
 
       - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
