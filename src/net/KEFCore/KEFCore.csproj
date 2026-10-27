@@ -23,7 +23,7 @@
 	<Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
 		<Copy SourceFiles="@(kefcorefiles_config)" DestinationFolder="$(OutDir)\config\%(RecursiveDir)" />
 	</Target>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0' Or '$(TargetFramework)' == 'net11.0'">
 	  <Compile Remove="Shared\**" />
 	  <EmbeddedResource Remove="Shared\**" />
 	  <None Remove="Shared\**" />
