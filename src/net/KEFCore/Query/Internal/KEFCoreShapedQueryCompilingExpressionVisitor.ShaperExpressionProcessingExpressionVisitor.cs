@@ -93,7 +93,7 @@ public partial class KEFCoreShapedQueryCompilingExpressionVisitor
                     {
                         variable = Parameter(shaper.StructuralType.ClrType);
                         _variables.Add(variable);
-#if NET10_0
+#if NET10_0_OR_GREATER
                             var innerShaper =
                             _kefcoreShapedQueryCompilingExpressionVisitor.InjectStructuralTypeMaterializers(shaper);
 #else

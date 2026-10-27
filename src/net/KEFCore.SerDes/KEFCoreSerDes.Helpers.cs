@@ -16,6 +16,10 @@
 *  Refer to LICENSE for more information.
 */
 
+//#define DEBUG_PERFORMANCE
+//#define VERIFY_WHERE_ENUMERATOR_STOPS
+//#define VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+
 #nullable enable
 
 using Java.Nio;
@@ -38,7 +42,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
     /// </summary>
     public class DebugPerformanceHelper
     {
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
         const bool perf = true;
         /// <summary>
         /// Enable tracing of <see cref="MASES.EntityFrameworkCore.KNet.Serialization.IValueContainer{T}.GetData(Serialization.IValueContainerMetadata, ref object[], Serialization.IComplexTypeConverterFactory?)"/>
@@ -68,7 +72,7 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
         /// Reports if the library was compiled to reports performance information
         /// </summary>
         public const bool IsPerformanceVersion = perf;
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
         static bool _enableKEFCoreTracing = true;
 #else
         static bool _enableKEFCoreTracing = false;
@@ -83,8 +87,8 @@ namespace MASES.EntityFrameworkCore.KNet.Internal
             set
             {
                 _enableKEFCoreTracing = value;
-#if DEBUG_PERFORMANCE
-                if (_enableKEFCoreTracing) throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE preprocessor directive");
+#if DEBUG_PERFORMANCE|| VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+                if (_enableKEFCoreTracing) throw new InvalidOperationException("Compile KEFCore using DEBUG_PERFORMANCE or VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS preprocessor directive");
 #endif
             }
         }

@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Apache.Avro" Version="1.12.2" />
-		<PackageReference Include="MASES.KNet.Serialization.Avro" Version="3.3.1-preview20261019" />
+		<PackageReference Include="MASES.KNet.Serialization.Avro" Version="3.3.1-preview20261027" />
 	</ItemGroup>
 
 </Project>

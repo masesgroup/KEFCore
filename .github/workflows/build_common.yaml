@@ -17,6 +17,11 @@ on:
         required: false
         default: 'source.zip'
         type: string
+      AddsExtraCompilationSymbols:
+        description: 'Adds extra symbols in compilation'
+        required: false
+        default: ''
+        type: string
       EnableDebugLogging:
         description: 'Enable debug logs in tests'
         required: false
@@ -26,6 +31,11 @@ on:
         description: 'Writes more info in output of tests'
         required: false
         default: false
+        type: boolean
+      EnableReloadTests:
+        description: 'Enable reload tests'
+        required: false
+        default: true
         type: boolean
       ExecuteOnMoreOSes:
         description: 'Executes tests on more Oses'
@@ -74,6 +84,11 @@ on:
         type: boolean
       UploadServerLogs:
         description: 'Upload server logs'
+        required: false
+        default: false
+        type: boolean
+      EnableAdvancedDiagnostic:
+        description: 'Enable advanced diagnostic around test'
         required: false
         default: false
         type: boolean
@@ -241,14 +256,24 @@ jobs:
           name: KEFCoreNuGet
           path: .\bin\*nupkg
 
+      - name: Upload diagnostic data
+        if: ${{ inputs.EnableAdvancedDiagnostic == true }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: KEFCoreBinFolder
+          path: .\bin\
+
       - name: Compile tests
         run: dotnet build --no-incremental --configuration Release /p:Platform="Any CPU" test\net\KEFCore.Test.sln
+        env:
+          EXTRA_CONSTANTS: ${{ inputs.AddsExtraCompilationSymbols }}
 
       - name: Prepare configuration files
         run: |
           Copy-Item .github\workflows\configuration\* -Destination bin\net8.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
+          Copy-Item .github\workflows\configuration\* -Destination bin\net11.0\ -Force
 
       - name: Prepare structured test-results analysis script
         # execute_tests_* jobs never check out the repository source (they only restore this
@@ -257,6 +282,7 @@ jobs:
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net8.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
+          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net11.0\ -Force
 
       - name: Save KEFCore net8.0 bin in cache
         uses: actions/cache/save@v6
@@ -278,6 +304,13 @@ jobs:
           enableCrossOsArchive: true
           path: ./bin/net10.0/
           key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net10.0_bin_${{ github.sha }}
+
+      - name: Save KEFCore net11.0 bin in cache
+        uses: actions/cache/save@v6
+        with:
+          enableCrossOsArchive: true
+          path: ./bin/net11.0/
+          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net11.0_bin_${{ github.sha }}
 
   # prepare matrix info
   prepare_matrix_data:
@@ -429,25 +462,53 @@ jobs:
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:NumberOfElements=10000 /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }}
 
+      - name: Install diagnostic tools
+        if: ${{ inputs.EnableAdvancedDiagnostic == true }}
+        shell: bash
+        run: |
+          dotnet tool install -g dotnet-stack || true
+          dotnet tool install -g dotnet-dump || true
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          which gdb || sudo apt-get install -y gdb
+
       - name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.EnableReloadTests == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         shell: bash
         run: |
           set +e
+          TAG="reload_${{ matrix.serialization }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}"
+          OUT="${{ github.workspace }}"
+          ADVANCED="${{ inputs.EnableAdvancedDiagnostic }}"
+
+          dump_all() {
+            [ "$ADVANCED" == "true" ] || return 0
+            local SUFFIX=$1
+            echo "::notice::Dumping state of $PID ($SUFFIX)"
+            timeout 60 dotnet-stack report -p $PID > "$OUT/dotnetstack_${TAG}_${SUFFIX}.txt" 2>&1
+            timeout 90 sudo gdb -p $PID -batch -ex "thread apply all bt" > "$OUT/nativedump_${TAG}_${SUFFIX}.txt" 2>&1
+            timeout 60 jstack -l $PID > "$OUT/threaddump_${TAG}_${SUFFIX}.txt" 2>&1
+          }
+
           dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }} ${{ env.RESULTS_OUTPUT }} &
           PID=$!
 
           TIMEOUT_SECONDS=180
+          FIRST_DUMP_AT=60
           ELAPSED=0
+          FIRST_DONE=0
           while kill -0 $PID 2>/dev/null; do
+            # an early dump plus a final one: if the stacks differ the process is moving, if identical it is stuck
+            if [ $FIRST_DONE -eq 0 ] && [ $ELAPSED -ge $FIRST_DUMP_AT ]; then
+              dump_all "${ELAPSED}s"
+              FIRST_DONE=1
+            fi
             if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
-              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s - dumping JVM thread state before killing"
-              # SIGQUIT makes the embedded JVM print a full thread dump (incl. deadlock detection) to stdout
-              kill -QUIT $PID
-              sleep 5
-              # also grab a jstack copy to a file, in case stdout capture missed something
-              jstack -l $PID > "${{ github.workspace }}/threaddump_reload_${{ matrix.serialization }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}.txt" 2>&1
-              sleep 2
+              echo "::warning::Process $PID still running after ${TIMEOUT_SECONDS}s"
+              dump_all "final"
+              if [ "$ADVANCED" == "true" ]; then
+                timeout 120 dotnet-dump collect -p $PID -o "$OUT/dotnetdump_${TAG}.dmp" > "$OUT/dotnetdump_${TAG}.log" 2>&1
+              fi
               kill -9 $PID 2>/dev/null
               echo "STUCK=true" >> $GITHUB_ENV
               break
@@ -464,7 +525,11 @@ jobs:
         with:
           if-no-files-found: ignore
           name: threaddump_${{ matrix.serialization }}_${{ matrix.os }}_${{ matrix.framework }}_${{ matrix.jdk_vendor }}_${{ matrix.jdk_version }}
-          path: ${{ github.workspace }}/threaddump_*.txt
+          path: |
+            ${{ github.workspace }}/threaddump_*.txt
+            ${{ github.workspace }}/nativedump_*.txt
+            ${{ github.workspace }}/dotnetstack_*.txt
+            ${{ github.workspace }}/dotnetdump_*
           retention-days: 7
 
       #- name: Execute only reload ComplexTest.KNetStreams.Raw on Ubuntu with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
@@ -1025,6 +1090,7 @@ jobs:
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }}
 
       - name: Execute only reload ComplexTest.KNetStreams.Raw on ${{ matrix.os }} with ${{ matrix.jdk_vendor }} ${{ matrix.jdk_version }} based on ${{ matrix.serialization }}
+        if: ${{ inputs.EnableReloadTests == true }}
         continue-on-error: ${{ inputs.ForceContinueOnError == true }}
         timeout-minutes: 5
         run: dotnet ${{ github.workspace }}/bin/${{ matrix.framework }}/MASES.EntityFrameworkCore.KNet.Test.Complex.dll ${{ github.workspace }}/bin/${{ matrix.framework }}/KNetStreams.Raw.json /p:DatabaseName=TestDBComplex /p:Use${{ matrix.serialization }}=true /p:DeleteApplicationData=false /p:LoadApplicationData=false /p:ForceDebugLog=${{ inputs.EnableDebugLogging }} ${{ env.ENABLE_INTERMEDIATE_OUTPUT }} ${{ env.ENABLE_CACHING }}
@@ -1115,7 +1181,7 @@ jobs:
               "${baseline_args[@]}" \
               --control-tests SaveChanges LocalStoreSynchronized DataLoad \
               --output ${{ github.workspace }}/test-results-combined-report.md \
-              --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0, cached/non-cached, all serializations)"
+              --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0/net11.0, cached/non-cached, all serializations)"
             cat ${{ github.workspace }}/test-results-combined-report.md >> $GITHUB_STEP_SUMMARY
           fi
         shell: bash
