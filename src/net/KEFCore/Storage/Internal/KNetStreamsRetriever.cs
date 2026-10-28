@@ -18,6 +18,7 @@
 
 //#define DEBUG_PERFORMANCE
 //#define VERIFY_WHERE_ENUMERATOR_STOPS
+//#define VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
 
 #nullable enable
 
@@ -41,17 +42,34 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     where TKey : notnull
     where TValue : IValueContainer<TKey>
 {
-    class KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
-        : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
+    class KNetStreamsRetrieverTimestampExtractor : TimestampExtractor<TKey, TValue, TJVMKey, TJVMValue>
     {
-        private readonly Action<FreshEventChange> _pushChanges = pushChanges;
-        private readonly IStreamsChangeManager _manager = manager;
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+        long _cycles = 0;
+#endif
+        private readonly Action<FreshEventChange> _pushChanges;
+        private readonly IStreamsChangeManager _manager;
+
+        public KNetStreamsRetrieverTimestampExtractor(Action<FreshEventChange> pushChanges, IStreamsChangeManager manager)
+        {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Initializing");
+#endif
+            _pushChanges = pushChanges;
+            _manager = manager;
+        }
 
         public override DateTime Extract()
         {
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+            KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Entering cycle number={_cycles++}");
+#endif
             using (this.Record)
             {
                 _pushChanges.Invoke(new FreshEventChange(_manager, Record.Topic, Record.Partition, Record.Offset, new FreshEventChangeExtraData<TKey, TValue>(Record.Key, Record.Value)));
+#if VERIFY_WHERE_TIMESTAMP_EXTRACTOR_STOPS
+                KNet.Internal.DebugPerformanceHelper.ReportString($"KNetStreamsRetrieverTimestampExtractor - Topic={Record.Topic}, Partition={Record.Partition}, Offset={Record.Offset}");
+#endif
                 return Record.DateTime;
             }
         }
@@ -383,6 +401,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
     sealed class KafkaEnumerator : IEnumerator<ValueBuffer>
         , IAsyncEnumerator<ValueBuffer>
     {
+        private readonly bool _isAsync;
         private readonly bool _useEnumeratorWithPrefetch;
         private readonly IValueContainerMetadata _metadata;
         private readonly IComplexTypeConverterFactory _complexTypeConverterFactory;
@@ -409,10 +428,11 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
             _complexTypeConverterFactory = complexTypeConverterFactory;
             _keyValueIterator = keyValueIterator ?? throw new ArgumentNullException(nameof(keyValueIterator));
             _useEnumeratorWithPrefetch = useEnumeratorWithPrefetch;
-            if (_useEnumeratorWithPrefetch && !isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
-            if (isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
+            _isAsync = isAsync;
+            if (_useEnumeratorWithPrefetch && !_isAsync) _enumerator = _keyValueIterator.ToIEnumerator();
+            if (_isAsync) _asyncEnumerator = _keyValueIterator.GetAsyncEnumerator(cancellationToken);
             _cancellationToken = cancellationToken;
-            _disposeScope = isAsync ? new JCOBridgeDisposeAsyncScope() : new JCOBridgeDisposeFastScope();
+            _disposeScope = _isAsync ? new JCOBridgeDisposeAsyncScope() : new JCOBridgeDisposeFastScope();
         }
 
         ValueBuffer _current = ValueBuffer.Empty;
@@ -462,6 +482,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                 KNet.Internal.DebugPerformanceHelper.ReportString($"KafkaEnumerator _moveNextSw: {_moveNextSw.Elapsed} _currentSw: {_currentSw.Elapsed} _valueGetSw: {_valueGetSw.Elapsed} _valueGet2Sw: {_valueGet2Sw.Elapsed} _valueBufferSw: {_valueBufferSw.Elapsed}");
 #endif
                 _enumerator?.Dispose();
+                _keyValueIterator?.Dispose();
                 _disposeScope?.Dispose();
             }
         }
@@ -557,7 +578,7 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
 #if VERIFY_WHERE_ENUMERATOR_STOPS
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Enumerator stops at cycle {_cycles} with InnerException", ex);
+                throw new InvalidOperationException($"Enumerator _isAsync={_isAsync} _useEnumeratorWithPrefetch={_useEnumeratorWithPrefetch} stops at cycle {_cycles} with InnerException", ex);
             }
 #endif
 #if DEBUG_PERFORMANCE
@@ -575,9 +596,11 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
         public async ValueTask<bool> MoveNextAsync()
         {
             _cancellationToken.ThrowIfCancellationRequested();
-#if DEBUG_PERFORMANCE
+#if DEBUG_PERFORMANCE || VERIFY_WHERE_ENUMERATOR_STOPS
             try
+#endif
             {
+#if DEBUG_PERFORMANCE
                 _moveNextSw.Start();
 #endif
                 bool hasNext = false;
@@ -639,8 +662,14 @@ sealed class KNetStreamsRetriever<TKey, TValue, TJVMKey, TJVMValue> : IKEFCoreSt
                     _current = ValueBuffer.Empty;
                 }
                 return await ValueTask.FromResult(hasNext);
-#if DEBUG_PERFORMANCE
             }
+#if VERIFY_WHERE_ENUMERATOR_STOPS
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Enumerator _isAsync={_isAsync} _useEnumeratorWithPrefetch={_useEnumeratorWithPrefetch} stops at cycle {_cycles} with InnerException", ex);
+            }
+#endif
+#if DEBUG_PERFORMANCE
             finally
             {
                 _moveNextSw.Stop();

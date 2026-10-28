@@ -32,7 +32,7 @@ public class KEFCoreValueGeneratorSelector(ValueGeneratorSelectorDependencies de
 {
     private ConcurrentDictionary<IProperty, IKEFCoreValueGenerator>? _generators;
 
-#if NET9_0 || NET10_0
+#if NET9_0_OR_GREATER
     /// <inheritdoc/>
     public override bool TrySelect(IProperty property, ITypeBase typeBase, out ValueGenerator? valueGenerator)
     {
@@ -104,7 +104,7 @@ public class KEFCoreValueGeneratorSelector(ValueGeneratorSelectorDependencies de
             {
                 return GetIntegerValueGenerator<sbyte>(property);
             }
-#if NET8_0 || NET9_0 || NET10_0
+#if NET9_0_OR_GREATER
             throw new ArgumentException(
                 CoreStrings.InvalidValueGeneratorFactoryProperty(
                     "KEFCoreIntegerValueGeneratorFactory", property.Name, property.DeclaringType.DisplayName()));
