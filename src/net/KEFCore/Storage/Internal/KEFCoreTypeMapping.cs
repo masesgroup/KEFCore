@@ -47,7 +47,7 @@ public class KEFCoreTypeMapping : CoreTypeMapping
         : base(parameters)
     {
     }
-#if NET8_0 || NET9_0 || NET10_0
+#if NET8_0_OR_GREATER
     /// <inheritdoc/>
     protected override CoreTypeMapping Clone(CoreTypeMappingParameters parameters)
         => new KEFCoreTypeMapping(parameters);
@@ -58,5 +58,9 @@ public class KEFCoreTypeMapping : CoreTypeMapping
     /// <inheritdoc/>
     public override CoreTypeMapping Clone(ValueConverter? converter)
         => new KEFCoreTypeMapping(Parameters.WithComposedConverter(converter));
+#endif
+
+#if NET11_0_OR_GREATER
+
 #endif
 }

@@ -113,7 +113,7 @@ namespace MASES.EntityFrameworkCore.KNet.Storage.Internal
                 var properties = metadata.EntityType.GetValueGeneratingProperties();
                 foreach (var item in properties)
                 {
-#if NET9_0 || NET10_0
+#if NET9_0_OR_GREATER
                     if (!valueGeneratorSelector.TrySelect(item, metadata.EntityType, out ValueGenerator? valueGenerator)) valueGenerator = null;
 #else
                     ValueGenerator? valueGenerator = valueGeneratorSelector?.Select(item, metadata.EntityType);

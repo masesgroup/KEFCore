@@ -5,7 +5,7 @@
 		<Authors>MASES s.r.l.</Authors>
 		<Company>MASES s.r.l.</Company>
 		<Version>4.1.1.0-preview20261027</Version>
-		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -25,6 +25,9 @@
 	<!--<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
 		<DefineConstants>$(DefineConstants);DEBUG_PERFORMANCE</DefineConstants>
 	</PropertyGroup>-->
+	<PropertyGroup>
+		<DefineConstants Condition="'$(EXTRA_CONSTANTS)' != ''">$(DefineConstants);$(EXTRA_CONSTANTS)</DefineConstants>
+	</PropertyGroup>
 	<ItemGroup Condition="True">
 		<kefcorefiles_config Include="$(ProjectDir)\..\..\config\**\*.*" />
 	</ItemGroup>
