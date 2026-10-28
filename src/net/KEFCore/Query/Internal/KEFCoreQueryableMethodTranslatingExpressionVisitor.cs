@@ -740,7 +740,7 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         return TranslateTwoParameterSelector(outer, resultSelector);
     }
-#if NET10_0
+#if NET10_0_OR_GREATER
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -777,6 +777,17 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
             resultSelector.Parameters[1]);
 
         return TranslateTwoParameterSelector(inner, reversedResultSelector);
+    }
+#endif
+#if NET11_0_OR_GREATER
+    protected override ShapedQueryExpression? TranslateFullJoin(
+        ShapedQueryExpression outer,
+        ShapedQueryExpression inner,
+        LambdaExpression outerKeySelector,
+        LambdaExpression innerKeySelector,
+        LambdaExpression resultSelector)
+    {
+        throw new NotImplementedException();
     }
 #endif
     /// <summary>
