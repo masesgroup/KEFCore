@@ -46,7 +46,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="MASES.KNet" Version="3.3.1-preview20261111">
+		<PackageReference Include="MASES.KNet" Version="3.3.1-preview20261112">
 			<IncludeAssets>All</IncludeAssets>
 			<PrivateAssets>None</PrivateAssets>
 		</PackageReference>
