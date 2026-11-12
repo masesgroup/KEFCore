@@ -165,8 +165,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '11.0.x'
-          dotnet-quality: 'preview'
+          dotnet-version: '11.x'
 
       - name: Download pscp directly
         if: ${{ inputs.UseSpecialSettings == true }}
@@ -270,8 +269,6 @@ jobs:
 
       - name: Prepare configuration files
         run: |
-          Copy-Item .github\workflows\configuration\* -Destination bin\net8.0\ -Force
-          Copy-Item .github\workflows\configuration\* -Destination bin\net9.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net10.0\ -Force
           Copy-Item .github\workflows\configuration\* -Destination bin\net11.0\ -Force
 
@@ -279,24 +276,8 @@ jobs:
         # execute_tests_* jobs never check out the repository source (they only restore this
         # bin/<framework> cache), so analyze_results.py must travel here to be reachable there.
         run: |
-          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net8.0\ -Force
-          Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net9.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net10.0\ -Force
           Copy-Item test\analyze-test-results\analyze_results.py -Destination bin\net11.0\ -Force
-
-      - name: Save KEFCore net8.0 bin in cache
-        uses: actions/cache/save@v6
-        with:
-          enableCrossOsArchive: true
-          path: ./bin/net8.0/
-          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net8.0_bin_${{ github.sha }}
-          
-      - name: Save KEFCore net9.0 bin in cache
-        uses: actions/cache/save@v6
-        with:
-          enableCrossOsArchive: true
-          path: ./bin/net9.0/
-          key: KEFCore_${{ github.run_number }}_${{ github.run_attempt }}_net9.0_bin_${{ github.sha }}
 
       - name: Save KEFCore net10.0 bin in cache
         uses: actions/cache/save@v6
@@ -376,7 +357,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_linux_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
+        framework: [ 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -411,8 +392,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: '11.0.x'
-          dotnet-quality: 'preview'
+          dotnet-version: '11.x'
 
       - if: ${{ inputs.EnableIntermediateOutput == true }}
         run: |
@@ -573,7 +553,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_win_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
+        framework: [ 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -608,8 +588,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: '11.0.x'
-          dotnet-quality: 'preview'
+          dotnet-version: '11.x'
 
       - name: Disable CET for dotnet process
         run: |
@@ -922,7 +901,7 @@ jobs:
       matrix:
         serialization: [ 'Json', 'Protobuf', 'Avro', 'AvroBinaryLegacy' ]
         os: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_mac_os) }}
-        framework: [ 'net8.0', 'net9.0', 'net10.0', 'net11.0' ]
+        framework: [ 'net10.0', 'net11.0' ]
         jdk_vendor: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_vendor) }}
         jdk_version: ${{ fromJSON(needs.prepare_matrix_data.outputs.matrix_jdk_version) }}
         use_cache: [ true, false ]
@@ -957,8 +936,7 @@ jobs:
       - uses: actions/setup-dotnet@v6
         if: ${{ matrix.framework == 'net11.0' }}
         with:
-          dotnet-version: '11.0.x'
-          dotnet-quality: 'preview'
+          dotnet-version: '11.x'
 
       - name: Restore MASES.KNetCLI in cache
         if: ${{ inputs.UseLastRepositoryBuildKNet == true }}
@@ -1181,7 +1159,7 @@ jobs:
               "${baseline_args[@]}" \
               --control-tests SaveChanges LocalStoreSynchronized DataLoad \
               --output ${{ github.workspace }}/test-results-combined-report.md \
-              --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net8.0/net9.0/net10.0/net11.0, cached/non-cached, all serializations)"
+              --title "KEFCore.Benchmark.Test / KEFCore.Complex.Test — combined across all Linux matrix legs (net10.0/net11.0, cached/non-cached, all serializations)"
             cat ${{ github.workspace }}/test-results-combined-report.md >> $GITHUB_STEP_SUMMARY
           fi
         shell: bash
