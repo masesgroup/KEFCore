@@ -19,7 +19,7 @@ Each input line is expected to be a JSON object with the shape:
     "backendLabel": "KafkaStreams.Raw"
   }
 
-"framework" (e.g. "net8.0"/"net9.0"/"net10.0", which corresponds directly to the EF Core major
+"framework" (e.g. "net10.0"/"net11.0", which corresponds directly to the EF Core major
 version under test) lets this script compare/aggregate results across the different .NET/EF Core
 versions the CI matrix runs against, not just across cache buckets. Records from before this field
 existed are grouped under "unknown".
