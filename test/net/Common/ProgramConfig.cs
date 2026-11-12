@@ -337,7 +337,7 @@ namespace MASES.EntityFrameworkCore.KNet.Test.Common
                 project = Assembly.GetEntryAssembly()?.GetName().Name,
                 // Self-describing: derived from the actual running .NET runtime rather than relying on
                 // external labeling or parsing it back out of a CI-generated file name. Formatted to match
-                // the "net8.0"/"net9.0"/"net10.0" target-framework monikers used elsewhere (CI matrix,
+                // the "net10.0"/"net11.0" target-framework monikers used elsewhere (CI matrix,
                 // artifact/cache naming) so records can be grouped/compared by framework (== EF Core major
                 // version) directly, which is exactly what a cross-run aggregate report needs.
                 framework = $"net{Environment.Version.Major}.{Environment.Version.Minor}",
