@@ -771,10 +771,13 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
 
         inner = inner.UpdateShaperExpression(innerShaperExpression);
 
+        // outer and inner were swapped above, so the first element of the joined shaper is now the ORIGINAL
+        // inner and the second one the ORIGINAL outer: the parameters must be swapped too, otherwise an
+        // asymmetric result selector (e.g. (o, i) => new { o.A, i.B }) would read from the wrong side.
         var reversedResultSelector = Expression.Lambda(
             resultSelector.Body,
-            resultSelector.Parameters[0],
-            resultSelector.Parameters[1]);
+            resultSelector.Parameters[1],
+            resultSelector.Parameters[0]);
 
         return TranslateTwoParameterSelector(inner, reversedResultSelector);
     }
@@ -787,7 +790,26 @@ public class KEFCoreQueryableMethodTranslatingExpressionVisitor : QueryableMetho
         LambdaExpression innerKeySelector,
         LambdaExpression resultSelector)
     {
-        throw new NotImplementedException();
+        var (newOuterKeySelector, newInnerKeySelector) = ProcessJoinKeySelector(outer, inner, outerKeySelector, innerKeySelector);
+
+        if (newOuterKeySelector == null
+            || newInnerKeySelector == null)
+        {
+            return null;
+        }
+
+        (outerKeySelector, innerKeySelector) = (newOuterKeySelector, newInnerKeySelector);
+
+        var outerShaperExpression = ((KEFCoreQueryExpression)outer.QueryExpression).AddFullJoin(
+            (KEFCoreQueryExpression)inner.QueryExpression,
+            outerKeySelector,
+            innerKeySelector,
+            outer.ShaperExpression,
+            inner.ShaperExpression);
+
+        outer = outer.UpdateShaperExpression(outerShaperExpression);
+
+        return TranslateTwoParameterSelector(outer, resultSelector);
     }
 #endif
     /// <summary>
