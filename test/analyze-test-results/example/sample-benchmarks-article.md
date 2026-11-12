@@ -16,18 +16,14 @@ Source run: [https://github.com/masesgroup/KEFCore/actions/runs/12345](https://g
 
 | Project | Framework | Test | Cache | Scenario | Backend | Median iteration time (ms) |
 |---|---|---|---|---|---|---|
+| Benchmark | net11.0 | IterationTotal | non-cached | load | (single backend) | 114.200 |
+| Benchmark | net11.0 | IterationTotal | cached | load | (single backend) | 17.130 |
 | Benchmark | net10.0 | IterationTotal | non-cached | load | (single backend) | 114.200 |
 | Benchmark | net10.0 | IterationTotal | cached | load | (single backend) | 17.130 |
-| Benchmark | net8.0 | IterationTotal | non-cached | load | (single backend) | 140.600 |
-| Benchmark | net8.0 | IterationTotal | cached | load | (single backend) | 21.090 |
-| Benchmark | net9.0 | IterationTotal | non-cached | load | (single backend) | 132.000 |
-| Benchmark | net9.0 | IterationTotal | cached | load | (single backend) | 19.800 |
+| Complex | net11.0 | IterationTotal | non-cached | load | (single backend) | 0.240 |
+| Complex | net11.0 | IterationTotal | cached | load | (single backend) | 0.744 |
 | Complex | net10.0 | IterationTotal | non-cached | load | (single backend) | 0.240 |
 | Complex | net10.0 | IterationTotal | cached | load | (single backend) | 0.744 |
-| Complex | net8.0 | IterationTotal | non-cached | load | (single backend) | 0.320 |
-| Complex | net8.0 | IterationTotal | cached | load | (single backend) | 0.992 |
-| Complex | net9.0 | IterationTotal | non-cached | load | (single backend) | 0.290 |
-| Complex | net9.0 | IterationTotal | cached | load | (single backend) | 0.899 |
 
 ## Full breakdown
 
