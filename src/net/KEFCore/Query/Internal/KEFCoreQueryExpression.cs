@@ -41,6 +41,9 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
     private static readonly MethodInfo LeftJoinMethodInfo = typeof(KEFCoreQueryExpression).GetTypeInfo()
         .GetDeclaredMethods(nameof(LeftJoin)).Single(mi => mi.GetParameters().Length == 7);
 
+    private static readonly MethodInfo FullJoinMethodInfo = typeof(KEFCoreQueryExpression).GetTypeInfo()
+        .GetDeclaredMethods(nameof(FullJoin)).Single(mi => mi.GetParameters().Length == 8);
+
     private static readonly ConstructorInfo ResultEnumerableConstructor
         = typeof(ResultEnumerable).GetConstructors().Single();
 
@@ -704,6 +707,16 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
             innerQueryExpression, outerKeySelector, innerKeySelector, outerShaperExpression, innerShaperExpression,
             innerNullable: true);
 
+    public virtual Expression AddFullJoin(
+        KEFCoreQueryExpression innerQueryExpression,
+        LambdaExpression outerKeySelector,
+        LambdaExpression innerKeySelector,
+        Expression outerShaperExpression,
+        Expression innerShaperExpression)
+        => AddJoin(
+            innerQueryExpression, outerKeySelector, innerKeySelector, outerShaperExpression, innerShaperExpression,
+            innerNullable: true, outerNullable: true);
+
     /// <summary>
     ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
     ///     the same compatibility standards as public APIs. It may be changed or removed without notice in
@@ -968,7 +981,8 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
         LambdaExpression? innerKeySelector,
         Expression outerShaperExpression,
         Expression innerShaperExpression,
-        bool innerNullable)
+        bool innerNullable,
+        bool outerNullable = false)
     {
         var transparentIdentifierType = TransparentIdentifierFactory.Create(outerShaperExpression.Type, innerShaperExpression.Type);
         var outerMemberInfo = transparentIdentifierType.GetTypeInfo().GetDeclaredField("Outer")!;
@@ -1050,13 +1064,13 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
                 if (expression is EntityProjectionExpression entityProjectionExpression)
                 {
                     projectionMapping[newProjectionMember] = TraverseEntityProjection(
-                        resultSelectorExpressions, entityProjectionExpression, makeNullable: false);
+                        resultSelectorExpressions, entityProjectionExpression, makeNullable: outerNullable);
                 }
                 else
                 {
                     resultSelectorExpressions.Add(expression);
                     projectionMapping[newProjectionMember] = CreateReadValueExpression(
-                        expression.Type, resultSelectorExpressions.Count - 1, InferPropertyFromInner(expression));
+                        MakeNullable(expression, outerNullable).Type, resultSelectorExpressions.Count - 1, InferPropertyFromInner(expression));
                 }
             }
 
@@ -1106,6 +1120,12 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
                             expression = MakeReadValueNullable(expression);
                         }
 
+                        if (outerNullable
+                            && i < outerIndex)
+                        {
+                            expression = MakeReadValueNullable(expression);
+                        }
+
                         if (expression.Type.IsValueType)
                         {
                             expression = Convert(expression, typeof(object));
@@ -1128,7 +1148,21 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
                 comparer = null;
             }
 
-            if (innerNullable)
+            if (outerNullable && innerNullable)
+            {
+                ServerQueryExpression = Call(
+                    FullJoinMethodInfo.MakeGenericMethod(
+                        typeof(ValueBuffer), typeof(ValueBuffer), outerKeySelector.ReturnType, typeof(ValueBuffer)),
+                    ServerQueryExpression,
+                    innerQueryExpression.ServerQueryExpression,
+                    outerKeySelector,
+                    innerKeySelector,
+                    resultSelector,
+                    Constant(new ValueBuffer(Enumerable.Repeat((object?)null, outerIndex).ToArray())),
+                    Constant(new ValueBuffer(Enumerable.Repeat((object?)null, resultSelectorExpressions.Count - outerIndex).ToArray())),
+                    Constant(comparer, typeof(IEqualityComparer<>).MakeGenericType(outerKeySelector.ReturnType)));
+            }
+            else if (innerNullable)
             {
                 ServerQueryExpression = Call(
                     LeftJoinMethodInfo.MakeGenericMethod(
@@ -1173,6 +1207,11 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
                 ServerQueryExpression,
                 Lambda(innerQueryExpression.ServerQueryExpression, CurrentParameter),
                 resultSelector);
+        }
+
+        if (outerNullable)
+        {
+            outerShaperExpression = new EntityShaperNullableMarkingExpressionVisitor().Visit(outerShaperExpression);
         }
 
         if (innerNullable)
@@ -1339,6 +1378,49 @@ public partial class KEFCoreQueryExpression : Expression, IPrintableExpression
             : Call(
                 ExpressionExtensions.ValueBufferTryReadValueMethod.MakeGenericMethod(methodCallExpression.Type.MakeNullable()),
                 methodCallExpression.Arguments);
+    }
+
+    // Full outer join: every outer row (paired with the matching inner rows, or with defaultInner when none),
+    // followed by the inner rows that were matched by no outer row (paired with defaultOuter).
+    private static IEnumerable<TResult> FullJoin<TOuter, TInner, TKey, TResult>(
+        IEnumerable<TOuter> outer,
+        IEnumerable<TInner> inner,
+        Func<TOuter, TKey> outerKeySelector,
+        Func<TInner, TKey> innerKeySelector,
+        Func<TOuter, TInner, TResult> resultSelector,
+        TOuter defaultOuter,
+        TInner defaultInner,
+        IEqualityComparer<TKey>? comparer)
+    {
+        var innerItems = inner.ToList();
+        var matched = new bool[innerItems.Count];
+        var lookup = innerItems
+            .Select((item, index) => (Item: item, Index: index))
+            .ToLookup(t => innerKeySelector(t.Item), comparer);
+
+        foreach (var outerItem in outer)
+        {
+            var any = false;
+            foreach (var (item, index) in lookup[outerKeySelector(outerItem)])
+            {
+                any = true;
+                matched[index] = true;
+                yield return resultSelector(outerItem, item);
+            }
+
+            if (!any)
+            {
+                yield return resultSelector(outerItem, defaultInner);
+            }
+        }
+
+        for (var index = 0; index < innerItems.Count; index++)
+        {
+            if (!matched[index])
+            {
+                yield return resultSelector(defaultOuter, innerItems[index]);
+            }
+        }
     }
 
     private EntityProjectionExpression TraverseEntityProjection(
