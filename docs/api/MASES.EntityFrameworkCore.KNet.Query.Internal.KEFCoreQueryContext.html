@@ -93,7 +93,7 @@ Class KEFCoreQueryContext  <a class="header-action link-secondary" title="View s
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.html">Query</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">Internal</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><span class="xref">MASES</span>.<span class="xref">EntityFrameworkCore</span>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<span class="xref">Query</span>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">Internal</a></dd></dl>
   <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
   </div>
 
@@ -105,7 +105,7 @@ doing so can result in application failures when updating to a new Entity Framew
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class KEFCoreQueryContext : QueryContext, IParameterValues</code></pre>
+    <pre><code class="lang-csharp hljs">public class KEFCoreQueryContext : QueryContext</code></pre>
   </div>
 
 
@@ -120,12 +120,6 @@ doing so can result in application failures when updating to a new Entity Framew
     </dd>
   </dl>
 
-  <dl class="typelist implements">
-    <dt>Implements</dt>
-    <dd>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.internal.iparametervalues">IParameterValues</a></div>
-    </dd>
-  </dl>
 
 
   <dl class="typelist inheritedMembers">
@@ -135,19 +129,19 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.setnavigationisloaded">QueryContext.SetNavigationIsLoaded(object, INavigationBase)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.addparameter">QueryContext.AddParameter(string, object)</a>
-    </div>
-    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.initializestatemanager">QueryContext.InitializeStateManager(bool)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.trygetentry">QueryContext.TryGetEntry(IKey, object[], bool, out bool)</a>
     </div>
     <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.starttracking">QueryContext.StartTracking(IEntityType, object, ValueBuffer)</a>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.starttracking">QueryContext.StartTracking(IEntityType, object, in ISnapshot)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.context">QueryContext.Context</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.parameters">QueryContext.Parameters</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.dependencies">QueryContext.Dependencies</a>
@@ -169,9 +163,6 @@ doing so can result in application failures when updating to a new Entity Framew
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.querylogger">QueryContext.QueryLogger</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.querycontext.parametervalues">QueryContext.ParameterValues</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
