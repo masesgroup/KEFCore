@@ -93,7 +93,7 @@ Class KEFCoreQueryableMethodTranslatingExpressionVisitor  <a class="header-actio
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><a class="xref" href="MASES.html">MASES</a>.<a class="xref" href="MASES.EntityFrameworkCore.html">EntityFrameworkCore</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.html">Query</a>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">Internal</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><span class="xref">MASES</span>.<span class="xref">EntityFrameworkCore</span>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.html">KNet</a>.<span class="xref">Query</span>.<a class="xref" href="MASES.EntityFrameworkCore.KNet.Query.Internal.html">Internal</a></dd></dl>
   <dl><dt>Assembly</dt><dd>MASES.EntityFrameworkCore.KNet.dll</dd></dl>
   </div>
 
@@ -133,10 +133,28 @@ doing so can result in application failures when updating to a new Entity Framew
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.addtranslationerrordetails">QueryableMethodTranslatingExpressionVisitor.AddTranslationErrorDetails(string)</a>
     </div>
     <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.visitmember">QueryableMethodTranslatingExpressionVisitor.VisitMember(MemberExpression)</a>
+    </div>
+    <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.markshapernullable">QueryableMethodTranslatingExpressionVisitor.MarkShaperNullable(Expression)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translatesubquery">QueryableMethodTranslatingExpressionVisitor.TranslateSubquery(Expression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translatememberaccess">QueryableMethodTranslatingExpressionVisitor.TranslateMemberAccess(Expression, MemberIdentity)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translateinlinequeryroot">QueryableMethodTranslatingExpressionVisitor.TranslateInlineQueryRoot(InlineQueryRootExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translateparameterqueryroot">QueryableMethodTranslatingExpressionVisitor.TranslateParameterQueryRoot(ParameterQueryRootExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translateexecutedelete">QueryableMethodTranslatingExpressionVisitor.TranslateExecuteDelete(ShapedQueryExpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.translateexecuteupdate">QueryableMethodTranslatingExpressionVisitor.TranslateExecuteUpdate(ShapedQueryExpression, IReadOnlyList&lt;QueryableMethodTranslatingExpressionVisitor.ExecuteUpdateSetter&gt;)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.queryablemethodtranslatingexpressionvisitor.dependencies">QueryableMethodTranslatingExpressionVisitor.Dependencies</a>
@@ -209,9 +227,6 @@ doing so can result in application failures when updating to a new Entity Framew
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitloop">ExpressionVisitor.VisitLoop(LoopExpression)</a>
-    </div>
-    <div>
-      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitmember">ExpressionVisitor.VisitMember(MemberExpression)</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expressionvisitor.visitmemberassignment">ExpressionVisitor.VisitMemberAssignment(MemberAssignment)</a>
@@ -1233,7 +1248,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateLongCount_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateLongCount(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateLongCount(ShapedQueryExpression, LambdaExpression?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L788"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L821"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1275,7 +1290,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateMax_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateMax(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Type)">
   TranslateMax(ShapedQueryExpression, LambdaExpression?, Type)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L823"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L856"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1319,7 +1334,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateMin_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateMin(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Type)">
   TranslateMin(ShapedQueryExpression, LambdaExpression?, Type)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L835"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L868"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1363,7 +1378,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateOfType_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateOfType(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Type)">
   TranslateOfType(ShapedQueryExpression, Type)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L844"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L877"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1405,7 +1420,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateOrderBy_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateOrderBy(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Boolean)">
   TranslateOrderBy(ShapedQueryExpression, LambdaExpression, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L897"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L930"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1449,7 +1464,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateReverse_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateReverse(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression)">
   TranslateReverse(ShapedQueryExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L928"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L961"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1485,11 +1500,59 @@ doing so can result in application failures when updating to a new Entity Framew
 
 
 
+  <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateRightJoin_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin*"></a>
+
+  <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateRightJoin_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression)">
+  TranslateRightJoin(ShapedQueryExpression, ShapedQueryExpression, LambdaExpression, LambdaExpression, LambdaExpression)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L750"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
+the same compatibility standards as public APIs. It may be changed or removed without notice in
+any release. You should only use it directly in your code with extreme caution and knowing that
+doing so can result in application failures when updating to a new Entity Framework Core release.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override ShapedQueryExpression? TranslateRightJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>outer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.shapedqueryexpression">ShapedQueryExpression</a></dt>
+    <dd></dd>
+    <dt><code>inner</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.shapedqueryexpression">ShapedQueryExpression</a></dt>
+    <dd></dd>
+    <dt><code>outerKeySelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.lambdaexpression">LambdaExpression</a></dt>
+    <dd></dd>
+    <dt><code>innerKeySelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.lambdaexpression">LambdaExpression</a></dt>
+    <dd></dd>
+    <dt><code>resultSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.lambdaexpression">LambdaExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.query.shapedqueryexpression">ShapedQueryExpression</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSelect_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSelect*"></a>
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSelect_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSelect(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateSelect(ShapedQueryExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L946"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L979"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1531,7 +1594,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSelectMany_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSelectMany(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateSelectMany(ShapedQueryExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1018"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1051"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1573,7 +1636,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSelectMany_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSelectMany(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateSelectMany(ShapedQueryExpression, LambdaExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L966"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L999"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1617,7 +1680,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSingleOrDefault_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Type_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSingleOrDefault(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Type,System.Boolean)">
   TranslateSingleOrDefault(ShapedQueryExpression, LambdaExpression?, Type, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1033"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1066"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1663,7 +1726,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSkip_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSkip(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.Expression)">
   TranslateSkip(ShapedQueryExpression, Expression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1052"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1085"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1705,7 +1768,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSkipWhile_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSkipWhile(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateSkipWhile(ShapedQueryExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1078"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1111"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1747,7 +1810,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSum_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Type_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSum(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Type)">
   TranslateSum(ShapedQueryExpression, LambdaExpression?, Type)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1087"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1120"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1791,7 +1854,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateTake_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_Expression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateTake(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.Expression)">
   TranslateTake(ShapedQueryExpression, Expression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1096"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1129"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1833,7 +1896,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateTakeWhile_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateTakeWhile(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateTakeWhile(ShapedQueryExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1122"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1155"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1875,7 +1938,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateThenBy_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Boolean_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateThenBy(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Boolean)">
   TranslateThenBy(ShapedQueryExpression, LambdaExpression, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1131"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1164"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1919,7 +1982,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateUnion_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateUnion(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression)">
   TranslateUnion(ShapedQueryExpression, ShapedQueryExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1161"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1194"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -1961,7 +2024,7 @@ doing so can result in application failures when updating to a new Entity Framew
 
   <h3 id="MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateWhere_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_" data-uid="MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateWhere(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)">
   TranslateWhere(ShapedQueryExpression, LambdaExpression)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1170"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/masesgroup/KEFCore/blob/master/src/net/KEFCore/Query/Internal/KEFCoreQueryableMethodTranslatingExpressionVisitor.cs/#L1203"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>This is an internal API that supports the Entity Framework Core infrastructure and not subject to
