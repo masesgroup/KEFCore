@@ -6929,6 +6929,19 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.New
   nameWithType: KEFCoreQueryExpression.KEFCoreQueryExpression
   nameWithType.vb: KEFCoreQueryExpression.New
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin(MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)
+  name: AddFullJoin(KEFCoreQueryExpression, LambdaExpression, LambdaExpression, Expression, Expression)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryExpression_AddFullJoin_MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_Expression_System_Linq_Expressions_Expression_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin(MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin(MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression, System.Linq.Expressions.LambdaExpression, System.Linq.Expressions.LambdaExpression, System.Linq.Expressions.Expression, System.Linq.Expressions.Expression)
+  nameWithType: KEFCoreQueryExpression.AddFullJoin(KEFCoreQueryExpression, LambdaExpression, LambdaExpression, Expression, Expression)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin*
+  name: AddFullJoin
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryExpression_AddFullJoin_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddFullJoin
+  nameWithType: KEFCoreQueryExpression.AddFullJoin
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.AddInnerJoin(MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)
   name: AddInnerJoin(KEFCoreQueryExpression, LambdaExpression, LambdaExpression, Expression, Expression)
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryExpression.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryExpression_AddInnerJoin_MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_Expression_System_Linq_Expressions_Expression_
@@ -7232,6 +7245,19 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.New
   nameWithType: KEFCoreQueryTranslationPreprocessor.KEFCoreQueryTranslationPreprocessor
   nameWithType.vb: KEFCoreQueryTranslationPreprocessor.New
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+  name: IsEfConstantSupported
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryTranslationPreprocessor_IsEfConstantSupported
+  commentId: P:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+  nameWithType: KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported*
+  name: IsEfConstantSupported
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryTranslationPreprocessor_IsEfConstantSupported_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
+  nameWithType: KEFCoreQueryTranslationPreprocessor.IsEfConstantSupported
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.Process(System.Linq.Expressions.Expression)
   name: Process(Expression)
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryTranslationPreprocessor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryTranslationPreprocessor_Process_System_Linq_Expressions_Expression_
@@ -7704,6 +7730,19 @@ references:
   isSpec: "True"
   fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateReverse
   nameWithType: KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateReverse
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression)
+  name: TranslateRightJoin(ShapedQueryExpression, ShapedQueryExpression, LambdaExpression, LambdaExpression, LambdaExpression)
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateRightJoin_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_System_Linq_Expressions_LambdaExpression_
+  commentId: M:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.LambdaExpression)
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression, Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression, System.Linq.Expressions.LambdaExpression, System.Linq.Expressions.LambdaExpression, System.Linq.Expressions.LambdaExpression)
+  nameWithType: KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin(ShapedQueryExpression, ShapedQueryExpression, LambdaExpression, LambdaExpression, LambdaExpression)
+- uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin*
+  name: TranslateRightJoin
+  href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateRightJoin_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin
+  isSpec: "True"
+  fullName: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin
+  nameWithType: KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateRightJoin
 - uid: MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.TranslateSelect(Microsoft.EntityFrameworkCore.Query.ShapedQueryExpression,System.Linq.Expressions.LambdaExpression)
   name: TranslateSelect(ShapedQueryExpression, LambdaExpression)
   href: api/MASES.EntityFrameworkCore.KNet.Query.Internal.KEFCoreQueryableMethodTranslatingExpressionVisitor.html#MASES_EntityFrameworkCore_KNet_Query_Internal_KEFCoreQueryableMethodTranslatingExpressionVisitor_TranslateSelect_Microsoft_EntityFrameworkCore_Query_ShapedQueryExpression_System_Linq_Expressions_LambdaExpression_
@@ -19279,16 +19318,19 @@ references:
   fullName.vb: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.New
   nameWithType: KEFCoreValueGeneratorSelector.KEFCoreValueGeneratorSelector
   nameWithType.vb: KEFCoreValueGeneratorSelector.New
-- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
-  name: Select(IProperty, ITypeBase)
-  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KEFCoreValueGeneratorSelector_Select_Microsoft_EntityFrameworkCore_Metadata_IProperty_Microsoft_EntityFrameworkCore_Metadata_ITypeBase_
-  commentId: M:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
-  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select(Microsoft.EntityFrameworkCore.Metadata.IProperty, Microsoft.EntityFrameworkCore.Metadata.ITypeBase)
-  nameWithType: KEFCoreValueGeneratorSelector.Select(IProperty, ITypeBase)
-- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select*
-  name: Select
-  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KEFCoreValueGeneratorSelector_Select_
-  commentId: Overload:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select
+- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase,Microsoft.EntityFrameworkCore.ValueGeneration.ValueGenerator@)
+  name: TrySelect(IProperty, ITypeBase, out ValueGenerator?)
+  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KEFCoreValueGeneratorSelector_TrySelect_Microsoft_EntityFrameworkCore_Metadata_IProperty_Microsoft_EntityFrameworkCore_Metadata_ITypeBase_Microsoft_EntityFrameworkCore_ValueGeneration_ValueGenerator__
+  commentId: M:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect(Microsoft.EntityFrameworkCore.Metadata.IProperty,Microsoft.EntityFrameworkCore.Metadata.ITypeBase,Microsoft.EntityFrameworkCore.ValueGeneration.ValueGenerator@)
+  name.vb: TrySelect(IProperty, ITypeBase, ValueGenerator)
+  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect(Microsoft.EntityFrameworkCore.Metadata.IProperty, Microsoft.EntityFrameworkCore.Metadata.ITypeBase, out Microsoft.EntityFrameworkCore.ValueGeneration.ValueGenerator?)
+  fullName.vb: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect(Microsoft.EntityFrameworkCore.Metadata.IProperty, Microsoft.EntityFrameworkCore.Metadata.ITypeBase, Microsoft.EntityFrameworkCore.ValueGeneration.ValueGenerator)
+  nameWithType: KEFCoreValueGeneratorSelector.TrySelect(IProperty, ITypeBase, out ValueGenerator?)
+  nameWithType.vb: KEFCoreValueGeneratorSelector.TrySelect(IProperty, ITypeBase, ValueGenerator)
+- uid: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect*
+  name: TrySelect
+  href: api/MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.html#MASES_EntityFrameworkCore_KNet_ValueGeneration_Internal_KEFCoreValueGeneratorSelector_TrySelect_
+  commentId: Overload:MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect
   isSpec: "True"
-  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.Select
-  nameWithType: KEFCoreValueGeneratorSelector.Select
+  fullName: MASES.EntityFrameworkCore.KNet.ValueGeneration.Internal.KEFCoreValueGeneratorSelector.TrySelect
+  nameWithType: KEFCoreValueGeneratorSelector.TrySelect
